@@ -42,7 +42,7 @@
     (define-key map "\C-y" 'navi2ch-history-yank)
     (define-key map "d" 'navi2ch-history-cut)
     (define-key map "D" 'navi2ch-history-delete)
-    ;(define-key map "md" 'navi2ch-history-cut-mark-article)
+    (define-key map "md" 'navi2ch-history-cut-mark-article)
     (define-key map "mD" 'navi2ch-history-delete-mark-article)
     (define-key map "s" 'navi2ch-history-sync)
     (setq navi2ch-history-mode-map map)))
@@ -214,6 +214,10 @@ key は (concat uri artid)。
 	    (push (assoc item navi2ch-history-alist) navi2ch-history-cut-stack)
 	    (navi2ch-history-delete))
 	(message "Can't select this line!")))))
+
+(defun navi2ch-history-cut-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-history-cut))
 
 (defun navi2ch-history-yank ()
   (interactive)

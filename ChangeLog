@@ -1,3 +1,13 @@
+2004-10-06  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-history.el (navi2ch-history-cut-mark-article): 新関数。
+	(navi2ch-history-mode-map): 上記関数をバインド。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/550
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): 新関
+	数。
+	(navi2ch-bookmark-mode-map): 上記関数をバインド。 
+
 2004-09-28  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p):
