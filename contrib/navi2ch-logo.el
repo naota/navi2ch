@@ -24,241 +24,148 @@
 
 ;;; Commentary:
 ;; レス一覧の先頭にその板のロゴを貼りつける。
+;;
+;; Emacs 21 なら navi2ch-logo.elc? に load-path を通してこうしる！
+;;
+;; (require 'navi2ch-logo)
+;; (add-hook 'navi2ch-hook 'navi2ch-logo-init)
+;;
+;; いまのところ外部プログラム `gifsicle' と `convert' が必須。
+;;
+;; gifsicle はアニメーション GIF の非アニメーション化に使う。
+;; convert は各種画像フォーマットを問答無用に XPM にコンバート
+;; するために使ってる。ハードコードしているのは直さなくちゃ。
+;;
+;; 板一覧の読み込みは、ロゴを持ってくるぶん当然遅くなる。
+;; ファイル取得は wget とかに任せて非同期化すればいいのかも。
+;;
 
 ;;; Code:
+(provide 'navi2ch-logo)
+
+(eval-when-compile (require 'cl))
 
 (require 'navi2ch-board)
 (require 'navi2ch-board-misc)
+(require 'navi2ch-net)
 
-(defun navi2ch-board-display-logo ()
-  (interactive)
-  (overlay-put inline-logo 'before-string nil)
-  (when (eq major-mode 'navi2ch-board-mode)
-    (let* ((file (navi2ch-bm-get-logo))
-	   (image (navi2ch-board-create-logo-image file))
-	   (string " "))
-      (when image
-	(setq string (concat (propertize string 'display image) "\n"))
-	(let ((buffer-read-only nil))
-	  (overlay-put inline-logo 'before-string string))))))
+(defvar navi2ch-logo-temp-directory nil
+  "コンバートした画像ファイルを入れるテンポラリディレクトリ。")
+(defvar navi2ch-logo-temp-directory-prefix ".navi2ch-logo-"
+  "テンポラリティレクトリのサフィックス。これにランダムな文字列を
+足したものがディレクトリ名になる")
+(defvar navi2ch-logo-temp-name-prefix "img-"
+  "テンポラリファイルのサフィックス。")
+(defvar navi2ch-logo-image-alist nil
+  "\`(板のid  その板のロゴのimage)\' からなる alist。
+いちど create-image した画像はここに追加して再利用する。")
 
-(defun navi2ch-board-init-logo ()
-  (if (boundp 'inline-logo)
-      (delete-overlay inline-logo))
-  (make-variable-frame-local 'inline-logo)
-  (setq inline-logo (make-overlay (point-min) (point-min))))
+(defun navi2ch-logo-init ()
+  "navi2ch-logo を初期化して使えるようにする。"
+  (when (and navi2ch-on-emacs21 (not navi2ch-logo-temp-directory))
+    (setq navi2ch-logo-temp-directory
+          (file-name-as-directory
+           (make-temp-file navi2ch-logo-temp-directory-prefix t)))
+    (add-hook 'navi2ch-exit-hook 'navi2ch-logo-cleanup)
+    (add-hook 'navi2ch-board-select-board-hook 'navi2ch-logo-remove-image)
+    (add-hook 'navi2ch-board-after-sync-hook 'navi2ch-logo-update)))
 
-(defun navi2ch-board-create-logo-image (file &rest props)
-  (and file
-       (condition-case nil;;
+(defun navi2ch-logo-cleanup ()
+  "テンポラリファイルの後始末などをして、変数を初期値に戻す。"
+  (when (and navi2ch-logo-temp-directory
+             (file-directory-p navi2ch-logo-temp-directory))
+    (dolist (file (directory-files navi2ch-logo-temp-directory t))
+      (and (file-regular-p file)
+           (delete-file file)))
+    (delete-directory navi2ch-logo-temp-directory))
+  (setq navi2ch-logo-temp-directory nil
+        navi2ch-logo-image-alist nil))
 
-	   (or (apply 'create-image (append (li;;;
-;;; レス一覧の先頭にその板のロゴを貼りつける。
-;;;
-(defun navi2ch-board-display-logo ()
-  (interactive)
-  (overlay-put inline-logo 'before-string nil)
-  (when (eq major-mode 'navi2ch-board-mode)
-    (let* ((file (navi2ch-bm-get-logo))
-	   (image (navi2ch-board-create-logo-image file))
-	   (string " "))
-      (when image
-	(setq string (concat (propertize string 'display image) "\n"))
-	(let ((buffer-read-only nil))
-	  (overlay-put inline-logo 'before-string string))))))
+(defun navi2ch-logo-update ()
+  "`navi2ch-board-mode' で動作し、ロゴを読み込んでバッファ上部に貼り付ける。
+`navi2ch-board-select-board-hook' から呼ばれる。"
+  (if (eq major-mode 'navi2ch-board-mode)
+      (catch 'quit
+        (let* ((id (cdr (assq 'id navi2ch-board-current-board)))
+               (image (cdr (assoc id navi2ch-logo-image-alist))))
+          (unless image
+            (setq image (navi2ch-logo-create-logo-image))
+            (unless image (throw 'quit nil))
+            (setq navi2ch-logo-image-alist
+                  (put-alist id image navi2ch-logo-image-alist)))
+          (navi2ch-logo-remove-image)
+          (navi2ch-logo-put-image (point-min) image)))))
 
-(defun navi2ch-board-init-logo ()
-  (if (boundp 'inline-logo)
-      (delete-overlay inline-logo))
-  (make-variable-frame-local 'inline-logo)
-  (setq inline-logo (make-overlay (point-min) (point-min))))
+(defun navi2ch-logo-put-image (point image)
+  "POINT 位置に IMAGE を貼り付ける。
 
-(defun navi2ch-board-create-logo-image (file &rest props)
-  (and file
-       (condition-case nil
-	   (or (apply 'create-image (append (list file nil) props))
-	       ;; その画像フォーマットに Emacs が対応してないとき
-	       (catch 'found
-		 (let ((newfile))
-		   (dolist (format '(png xpm xbm))
-		     (setq newfile (concat (file-name-sans-extension file)
-					   "." (symbol-name format)))
-		     (when (file-newer-than-file-p file newfile)
-		       (call-process "convert" nil nil nil file newfile)
-		       (throw 'found
-			      (create-image newfile format props)))))))
-	 (error . nil)))) 
+IMAGE を直接バッファテキストの display property にするのはマズい。
+なぜならこの画像は文字とは独立したものだから。
 
-(add-hook 'navi2ch-board-select-board-hook
-	  'navi2ch-board-init-logo)
+そこで、
+ (1) まず POINT 位置に長さ 0 のオーバーレイを作る
+ (2) 適当な文字列の text property (の `display' property) に IMAGE を
+     指定して、テキストとして扱えるようにする
+ (3) (1) で作ったオーバーレイの `before-string' 属性に、(2) の文字列を
+     指定する
+という手順を踏んでいる。"
+  (let ((overlay (make-overlay point point))
+        (str (propertize (concat (propertize " " 'display image)
+                                 "\n")
+                         'face 'default)))
+    ;; 画像の上へのポイント移動を禁止。
+    (overlay-put overlay 'intangible t)
 
-(add-hook 'navi2ch-board-after-sync-hook
-	  'navi2ch-board-display-logo)
+    ;; `face' に `default' を指定して、近くの文字のテキスト
+    ;; プロパティの underline や stroke の影響を排除。
+    (overlay-put overlay 'face 'default)  
 
-(defun navi2ch-bm-get-logo ()
-  "そのロゴを替新する。返り値はキャッシュのフルパス。
-ロゴを取得できなくて、キャッシュにもないときは、nil を返す。"
-  (interactive)
-  (let ((board (funcall navi2ch-bm-get-board-function
-			(funcall navi2ch-bm-get-property-function (point))))
-	(board-mode-p (eq major-mode 'navi2ch-board-mode))
-	file old-file)
-    (unless board-mode-p
-      (setq board (navi2ch-board-load-info board)))
-    (setq old-file (cdr (assq 'logo board)))
-    (if navi2ch-offline
-	(setq file old-file)
-      (setq file (file-name-nondirectory (navi2ch-net-download-logo board)))
-      (when file
-	(when (and old-file navi2ch-board-delete-old-logo
-		   (not (string-equal file old-file)))
-	  (delete-file (navi2ch-board-get-file-name board old-file)))
-	(if board-mode-p
-	    (setq navi2ch-board-current-board board)
-	  (navi2ch-board-save-info board))))
-    (if file
-	(navi2ch-board-get-file-name board file))))
+    ;; navi2ch-logo が作ったということがわかるように。
+    (overlay-put overlay 'navi2ch-logo t) 
 
-(defun navi2ch-bm-view-logo ()
-  "その板のロゴを見る"
-  (interactive)
-  (let ((file (navi2ch-bm-get-logo)))
-    (if file
-	(apply 'start-process "navi2ch view logo"
-	       nil navi2ch-board-view-logo-program
-	       (append navi2ch-board-view-logo-args
-		       (list file)))
-      (message "Can't find logo file")))) 
-st file nil) props))
-	       ;; その画像フォーマットに Emacs が対応してないとき
-	       (catch 'found
-		 (let ((newfile))
-		   (dolist (format '(png xpm xbm))
-		     (setq newfile (concat (file-name-sans-extension file)
-					   "." (symbol-name format)))
-		     (when (file-newer-than-file-p file newfile)
-		       (call-process "convert" nil nil nil file newfile)
-		       (throw 'found
-			      (create-image newfile format props)))))))
-	 (error . nil)))) 
+    (overlay-put overlay 'before-string str)))
 
-(add-hook 'navi2ch-board-select-board-hook
-	  'navi2ch-board-init-logo)
+(defun navi2ch-logo-remove-image (&optional point)
+  "`navi2ch-logo-put-image' が置いた画像を POINT 位置から消す。
+消すべき画像がなければ何もしない。"
+  (unless point
+    (setq point (point-min)))
+  (let ((ls (overlays-in point point))
+        overlay)
+    (while (and ls (not overlay))
+      (when (overlay-get (car ls) 'navi2ch-logo)
+        (setq overlay (car ls)))
+      (setq ls (cdr ls)))
+    (when overlay
+      (delete-overlay overlay))))
 
-(add-hook 'navi2ch-board-after-sync-hook
-	  'navi2ch-board-display-logo)
+(defun navi2ch-logo-create-logo-image ()
+  "ロゴをダウンロードして `create-image' した結果を返す。
 
-(defun navi2ch-bm-get-logo ()
-  "そのロゴを替新する。返り値はキャッシュのフルパス。
-ロゴを取得できなくて、キャッシュにもないときは、nil を返す。"
-  (interactive)
-  (let ((board (funcall navi2ch-bm-get-board-function
-			(funcall navi2ch-bm-get-property-function (point))))
-	(board-mode-p (eq major-mode 'navi2ch-board-mode))
-	file old-file)
-    (unless board-mode-p
-      (setq board (navi2ch-board-load-info board)))
-    (setq old-file (cdr (assq 'logo board)))
-    (if navi2ch-offline
-	(setq file old-file)
-      (setq file (file-name-nondirectory (navi2ch-net-download-logo board)))
-      (when file
-	(when (and old-file navi2ch-board-delete-old-logo
-		   (not (string-equal file old-file)))
-	  (delete-file (navi2ch-board-get-file-name board old-file)))
-	(if board-mode-p
-	    (setq navi2ch-board-current-board board)
-	  (navi2ch-board-save-info board))))
-    (if file
-	(navi2ch-board-get-file-name board file))))
+外部プログラム \`gifsicle\' はアニメーション GIF を非アニメ化
+するために使う。\`convert\' は画像を一律に XPM に変換するために使ってる。
 
-(defun navi2ch-bm-view-logo ()
-  "その板のロゴを見る"
-  (interactive)
-  (let ((file (navi2ch-bm-get-logo)))
-    (if file
-	(apply 'start-process "navi2ch view logo"
-	       nil navi2ch-board-view-logo-program
-	       (append navi2ch-board-view-logo-args
-		       (list file)))
-      (message "Can't find logo file"))));;;
-;;; レス一覧の先頭にその板のロゴを貼りつける。
-;;;
-(defun navi2ch-board-display-logo ()
-  (interactive)
-  (overlay-put inline-logo 'before-string nil)
-  (when (eq major-mode 'navi2ch-board-mode)
-    (let* ((file (navi2ch-bm-get-logo))
-	   (image (navi2ch-board-create-logo-image file))
-	   (string " "))
-      (when image
-	(setq string (concat (propertize string 'display image) "\n"))
-	(let ((buffer-read-only nil))
-	  (overlay-put inline-logo 'before-string string))))))
-
-(defun navi2ch-board-init-logo ()
-  (if (boundp 'inline-logo)
-      (delete-overlay inline-logo))
-  (make-variable-frame-local 'inline-logo)
-  (setq inline-logo (make-overlay (point-min) (point-min))))
-
-(defun navi2ch-board-create-logo-image (file &rest props)
-  (and file
-       (condition-case nil
-	   (or (apply 'create-image (append (list file nil) props))
-	       ;; その画像フォーマットに Emacs が対応してないとき
-	       (catch 'found
-		 (let ((newfile))
-		   (dolist (format '(png xpm xbm))
-		     (setq newfile (concat (file-name-sans-extension file)
-					   "." (symbol-name format)))
-		     (when (file-newer-than-file-p file newfile)
-		       (call-process "convert" nil nil nil file newfile)
-		       (throw 'found
-			      (create-image newfile format props)))))))
-	 (error . nil)))) 
-
-(add-hook 'navi2ch-board-select-board-hook
-	  'navi2ch-board-init-logo)
-
-(add-hook 'navi2ch-board-after-sync-hook
-	  'navi2ch-board-display-logo)
-
-(defun navi2ch-bm-get-logo ()
-  "そのロゴを替新する。返り値はキャッシュのフルパス。
-ロゴを取得できなくて、キャッシュにもないときは、nil を返す。"
-  (interactive)
-  (let ((board (funcall navi2ch-bm-get-board-function
-			(funcall navi2ch-bm-get-property-function (point))))
-	(board-mode-p (eq major-mode 'navi2ch-board-mode))
-	file old-file)
-    (unless board-mode-p
-      (setq board (navi2ch-board-load-info board)))
-    (setq old-file (cdr (assq 'logo board)))
-    (if navi2ch-offline
-	(setq file old-file)
-      (setq file (file-name-nondirectory (navi2ch-net-download-logo board)))
-      (when file
-	(when (and old-file navi2ch-board-delete-old-logo
-		   (not (string-equal file old-file)))
-	  (delete-file (navi2ch-board-get-file-name board old-file)))
-	(if board-mode-p
-	    (setq navi2ch-board-current-board board)
-	  (navi2ch-board-save-info board))))
-    (if file
-	(navi2ch-board-get-file-name board file))))
-
-(defun navi2ch-bm-view-logo ()
-  "その板のロゴを見る"
-  (interactive)
-  (let ((file (navi2ch-bm-get-logo)))
-    (if file
-	(apply 'start-process "navi2ch view logo"
-	       nil navi2ch-board-view-logo-program
-	       (append navi2ch-board-view-logo-args
-		       (list file)))
-      (message "Can't find logo file")))) 
-
-(provide 'navi2ch-logo)
+Emacs は XPM 以外ももちろんサポートしてるから、本来は全部 XPM に
+することはない。`image-types' を参照するなり `create-image' の
+返り値を見るなりして、外部プログラムの起動は必要最少限にとどめた
+ほうがいい。"
+  (let ((logo-file (navi2ch-net-download-logo navi2ch-board-current-board))
+        (xpm-file (concat navi2ch-logo-temp-directory
+                          (make-temp-name navi2ch-logo-temp-name-prefix)
+                          ".xpm"))
+        temp-file)
+    (unless logo-file (throw 'quit nil))
+    (when (string-match "\\.gif$" logo-file)
+      (setq temp-file (concat navi2ch-logo-temp-directory
+                              (make-temp-name navi2ch-logo-temp-name-prefix)
+                              ".gif"))
+      (when (/= 0 (call-process "gifsicle" logo-file nil nil
+                                "#-1" "--output" temp-file))
+        (throw 'quit nil))
+      (setq logo-file temp-file))
+    (when (/= 0 (call-process "convert" nil nil nil logo-file xpm-file))
+      (throw 'quit nil))
+    (if temp-file (delete-file temp-file))
+    (create-image xpm-file 'xpm)))
 
 ;;; navi2ch-logo.el ends here

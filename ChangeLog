@@ -1,3 +1,30 @@
+2002-02-05  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
+	* contrib/navi2ch-logo.el: 全面的に書き換え。前のコードは
+	われながら厨すぎた。
+	(navi2ch-bm-get-logo): 削除。
+	(navi2ch-bm-view-logo): 削除。
+	(navi2ch-board-create-logo-image): 削除。
+	(navi2ch-board-display-logo): 削除。
+	(navi2ch-board-init-logo): 削除。
+
+	(navi2ch-logo-init): 新関数。board/board-misc 系フックへの
+	フック追加、変数の初期化など。
+	(navi2ch-logo-cleanup): 新関数。テンポラリファイルの後始末など。
+	(navi2ch-logo-update): 新関数。フックから呼ばれてロゴを貼り付ける。
+	(navi2ch-logo-put-image): 新関数。任意の位置に画像を貼り付ける。
+	(navi2ch-logo-remove-image): 新関数。貼り付けた画像を消す。
+	(navi2ch-logo-create-logo-image): 新関数。ロゴをダウンロードして
+	Emacs で扱える image を作る。
+
+	(navi2ch-logo-temp-directory): 新変数。コンバートした画像ファイル
+	などを置くテンポラリティレクトリのパス。
+	(navi2ch-logo-temp-directory-prefix): 新変数。
+	(navi2ch-logo-temp-name-prefix): 新変数。テンポラリディレクトリに
+	置くテンポラリファイルのプレフィックス。
+	(navi2ch-logo-image-alist): 新変数。ダウンロードしたロゴを navi2ch
+	終了時まで覚えておくための alist。
+
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-vars.el: defcustom の説明文字列に赤入れ。
