@@ -1,8 +1,30 @@
 2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-show-url): lambda の前の邪魔
+	な quote をはずした。
+
+	* navi2ch-board-misc.el (navi2ch-bm-show-url): 同上。
+
+	* navi2ch-vars.el (navi2ch-message-aa-default-alist): 新変数。デフォ
+	ルトの AA はこっちに。
+	(navi2ch-message-aa-alist): AA を上記変数に移動。
+
+	* navi2ch-message.el (navi2ch-message-aa-map): 新キーマップ。
+	? 以外を押すと全部 navi2ch-message-self-insert-aa を呼び出す。
+	(navi2ch-message-mode-map): navi2ch-message-aa-prefix-key
+	に上記キーマップをバインドするように。
+	(navi2ch-message-add-aa): 削除。
+	(navi2ch-message-self-insert-aa): 新関数。
+	とりあえず、C-c C-a KEY は全部バインドしちゃって、呼び出された関数
+	の方で alist から引くようにしました。これで、単に aa-alist に値を
+	設定するだけで自動的に AA の追加削除が可能になった。
+	(navi2ch-message-insert-aa-list): navi2ch-message-aa-default-alist
+	も使うように。
+	(navi2ch-message-popup-aa-list): ignore-errors を使ってみる。
+
 	* navi2ch-article.el (navi2ch-article-add-board-bookmark): 新関数。
 	(navi2ch-article-add-important-message): C-u a で上記関数を呼ぶ。
-	article-mode から board-bookmark に登録できるようになります	た。
+	article-mode から board-bookmark に登録できるようになりますた。
 	FR#531322
 
 	* navi2ch-board.el (navi2ch-board-update-buffer): 新関数。

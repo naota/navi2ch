@@ -23,7 +23,18 @@
 ;;; Code:
 (provide 'navi2ch-message)
 
+(eval-when-compile (require 'cl))
+
 (require 'navi2ch)
+
+(defvar navi2ch-message-aa-map nil)
+(unless navi2ch-message-aa-map
+  (let ((map (make-sparse-keymap "Type ? for further options")))
+    ;; define-key で t にマップできないので。。。
+    (setcdr map (cons '(t . navi2ch-message-self-insert-aa)
+		      (cdr map)))
+    (define-key map "?" 'navi2ch-message-insert-aa)
+    (setq navi2ch-message-aa-map map)))
 
 (defvar navi2ch-message-mode-map nil)
 (unless navi2ch-message-mode-map
@@ -36,8 +47,7 @@
     (define-key map "\C-c\C-i" 'navi2ch-message-insert-backup)
     (define-key map "\C-c\C-b" 'navi2ch-base64-insert-file)
     (define-key map "\et" 'navi2ch-toggle-offline)
-    (define-key map (concat navi2ch-message-aa-prefix-key "?")
-      'navi2ch-message-insert-aa)
+    (define-key map navi2ch-message-aa-prefix-key navi2ch-message-aa-map)
     (setq navi2ch-message-mode-map map)))
 
 (defvar navi2ch-message-mode-menu-spec
@@ -294,18 +304,22 @@
   (run-hooks 'navi2ch-message-mode-hook)
   (force-mode-line-update))
 
-(defun navi2ch-message-add-aa (alist)
-  "aa を追加する"
-  (dolist (pair alist)
-    (define-key
-      navi2ch-message-mode-map
-      (concat navi2ch-message-aa-prefix-key (car pair))
-      `(lambda () (interactive) (insert ,(cdr pair))))))
+(defun navi2ch-message-self-insert-aa ()
+  "最後入力したキーにしたがって AA を入力する。"
+  (interactive)
+  (let ((event last-command-event) aa)
+    (if (and (char-valid-p event)
+	     (setq aa (cdr (assoc (string last-command-event)
+				  (append navi2ch-message-aa-alist
+					  navi2ch-message-aa-default-alist)))))
+	(insert aa)
+    (ding))))
 
 (defun navi2ch-message-insert-aa-list ()
   (let ((aa-width navi2ch-message-popup-aa-width)
 	(nl nil))
-    (dolist (elt navi2ch-message-aa-alist)
+    (dolist (elt (append navi2ch-message-aa-alist 
+			 navi2ch-message-aa-default-alist))
       (let* ((key (car elt))
 	     (val (cdr elt))
 	     string width)
@@ -338,13 +352,9 @@
 		       "Type key for AA (or SPC forward, DEL back): "))
 	      (cond
 	       ((memq c '(?\  ?\C-v))
-		(condition-case nil
-		    (scroll-up)
-		  (error nil)))
+		(ignore-errors (scroll-up)))
 	       ((memq c '(?\C-h ?\177))
-		(condition-case nil
-		    (scroll-down)
-		  (error nil)))
+		(ignore-errors (scroll-down)))
 	       ((eq c ?\C-l)
 		(recenter))
 	       (t (setq continue nil)))))
@@ -356,13 +366,12 @@
   "aa を入力する。"
   (interactive)
   (let* ((char (navi2ch-message-popup-aa-list))
-	 (aa (cdr (assoc (char-to-string char) navi2ch-message-aa-alist))))
+	 (aa (cdr (assoc (char-to-string char) 
+			 (append navi2ch-message-aa-alist
+				 navi2ch-message-aa-default-alist)))))
     (if (stringp aa)
 	(insert aa)
       (ding))))
 
-;; ロードした時に呼ばれる
-(navi2ch-message-add-aa navi2ch-message-aa-alist)
-				    
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

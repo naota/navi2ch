@@ -613,7 +613,7 @@ nil なら、書きかけを破棄していいか問い合わせる。
   :type 'string
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-aa-alist
+(defvar navi2ch-message-aa-default-alist
   '(("a" . "(´Д｀)")
     ("b" . "ヽ(`Д´)ﾉ")
     ("B" . "(((；ﾟДﾟ))ｶﾞｸｶﾞｸﾌﾞﾙﾌﾞﾙ")
@@ -637,10 +637,15 @@ nil なら、書きかけを破棄していいか問い合わせる。
     ("S" . "(´･ω･`)ｼｮﾎﾞｰﾝ")
     ("u" . "(ﾟдﾟ)ｳﾏｰ")
     ("U" . "(-＿-)ｳﾂﾀﾞ"))
+  "AA を入力するときのキーバインドと AA の alist。
+`navi2ch-message-aa-alist' から値が見付からない場合はこっちから探す。")
+
+(defcustom navi2ch-message-aa-alist nil
   "*AA を入力するときのキーバインドと AA の alist。
-message mode で prefix-key key と入力する事で AA を入力できる。
-SPC、C-l、C-g、C-vはリスト表示の際に使用されるのでキーには使用しないこと。
-"
+たとえば、((\"Z\" . \"ＺZｚz...\")) のように設定すると、Message Mode 
+でprefix-key (デフォルトでは (C-c C-a) あとに Z を入力すると
+ＺZｚz... と入力できる。
+SPC、C-l、C-g、C-vはリスト表示の際に使用されるのでキーには使用しないこと。"
   :type '(repeat (cons string string))
   :group 'navi2ch-message)
 
@@ -843,11 +848,11 @@ X11 上で見るために作られたフリーのフォントです。
 
 (defcustom navi2ch-mona-enable nil
   "*non-nil なら、モナーフォントを使ってスレを表示する。"
-  :set (function (lambda (symbol value)
-		   (if value
-		       (navi2ch-mona-setup)
-		     (navi2ch-mona-undo-setup))
-		   (set-default symbol value)))
+  :set (lambda (symbol value)
+	 (if value
+	     (navi2ch-mona-setup)
+	   (navi2ch-mona-undo-setup))
+	 (set-default symbol value))
   :initialize 'custom-initialize-default
   :type 'boolean
   :group 'navi2ch-mona)
