@@ -200,15 +200,14 @@
 	      (set-buffer (get-buffer-create
 			   navi2ch-message-backup-buffer-name))
 	      (erase-buffer)
-	      (insert-buffer buffer)
-	      (bury-buffer)))
+	      (insert-buffer buffer)))
 	  (when navi2ch-message-trip
 	    (setq from (concat from "#" navi2ch-message-trip)))
 	  (let ((board navi2ch-message-current-board)
 		(article navi2ch-message-current-article)
 		result)
-					; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
-					; ↓   navi2ch-2ch-send-message で処理する。
+	    ;; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
+	    ;; ↓   navi2ch-2ch-send-message で処理する。
 	    (setq result (navi2ch-multibbs-send-message
 			  from mail message subject board article))
 	    (when result
@@ -222,7 +221,9 @@
 		      (navi2ch-board-sync))
 		  (when (buffer-live-p navi2ch-message-current-article-buffer)
 		    (set-buffer navi2ch-message-current-article-buffer)
-		    (navi2ch-article-sync navi2ch-message-force-sync))))))))
+		    (navi2ch-article-sync navi2ch-message-force-sync)))))
+	    (when (get-buffer navi2ch-message-backup-buffer-name)
+	      (bury-buffer navi2ch-message-backup-buffer-name)))))
       (run-hooks 'navi2ch-message-after-send-hook)
       (navi2ch-message-exit 'after-send))))
 

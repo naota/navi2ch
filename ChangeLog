@@ -1,5 +1,17 @@
 2002-10-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-net.el (navi2ch-net-update-file-diff): コメントの位置を
+	変えといた。
+	(navi2ch-net-update-file-with-readcgi): status が 200 のときだけレ
+	スを取得するように。
+
+2002-10-06  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* navi2ch-message.el (navi2ch-message-send-message): `bury-buffer'
+	のタイミングを送信後に変更。
+
+2002-10-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* navi2ch-net.el (navi2ch-net-update-file-diff): aborn とか
 	not-updated のとこを調整。作りを navi2ch-net-update-file に合わせ
 	てみた。

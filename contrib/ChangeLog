@@ -1,3 +1,7 @@
+2002-10-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* README: navi2ch-jisx0213 の typo を修正。
+
 2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-jisx0213.el: XEmacs に対応。

@@ -504,10 +504,10 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
-  ;; ファイルサイズと等しい値を range にするとファイルを全部送ってくる
-  ;; ので 1- する。
   (let* ((coding-system-for-write 'binary)
 	 (coding-system-for-read 'binary)
+	 ;; ファイルサイズと等しい値を range にするとファイルを全部送っ
+	 ;; てくるので 1- する。
 	 (size (max 0 (1- (nth 7 (file-attributes file)))))
 	 proc header status aborn-p)
     (setq proc (navi2ch-net-download-file-range url (format "%d-" size) time))
@@ -586,7 +586,7 @@ DIFF が non-nil ならば差分を取得する。
 	   (setq header (navi2ch-net-add-state 'kako header)))
 	  ((string= status "304")
 	   (setq header (navi2ch-net-add-state 'not-updated header)))
-	  (t
+	  ((string= status "200")
 	   (let ((coding-system-for-write 'binary)
 		 (coding-system-for-read 'binary)
 		 cont)
@@ -635,9 +635,12 @@ DIFF が non-nil ならば差分を取得する。
 ;;; 		       (navi2ch-net-update-file-with-readcgi
 ;;; 			url file time diff))
 		      (t
-		       (setq header
-			     (navi2ch-net-add-state 'not-updated header))))
-		     ))))))))
+		       (setq header (navi2ch-net-add-state
+				     'not-updated header)))))))))))
+	  (t
+	   ;; ここに来るはずないけど一応
+	   (setq header (navi2ch-net-add-state 'kako header))
+	   (setq header (navi2ch-net-add-state 'not-updated header))))
     header))
 
 ;; from Emacs/W3
