@@ -495,16 +495,19 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
       (kill-buffer buf))))
 
 (defun navi2ch-article-view-article (board article
-				     &optional force number max-line)
+				     &optional force number max-line dont-display)
   "スレを見る。FORCE で強制読み込み MAX-LINE で読み込む行数を指定。
-だた `navi2ch-article-max-line' とは逆で t で全部読み込み"
+ただ `navi2ch-article-max-line' とは逆で t で全部読み込み。
+DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (let ((buf-name (navi2ch-article-get-buffer-name board article))
 	(navi2ch-article-max-line (cond ((numberp max-line) max-line)
 					(max-line nil)
 					(t navi2ch-article-max-line))))
     (if (get-buffer buf-name)
-        (progn
-          (switch-to-buffer buf-name)
+	(progn
+	  (if dont-display
+	      (set-buffer buf-name)
+	    (switch-to-buffer buf-name))
 	  (prog1 (navi2ch-article-sync force nil number)
 	    (navi2ch-history-add navi2ch-article-current-board
 				 navi2ch-article-current-article)))
@@ -671,11 +674,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 (defun navi2ch-article-fetch-article (board article &optional force)
   (if (get-buffer (navi2ch-article-get-buffer-name
                    board article))
-      (let ((buf (current-buffer))
-            state)
-        (setq state (navi2ch-article-view-article board article force))
-        (switch-to-buffer buf)
-        state)
+      (save-excursion
+	(navi2ch-article-view-article board article force nil nil t))
     (let (ret state file)
       (setq article (navi2ch-article-load-info board article)
 	    file (navi2ch-article-get-file-name board article))
@@ -1055,7 +1055,8 @@ state はあぼーんされてれば aborn というシンボル。
       (condition-case nil
 	  (goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
 	(error nil))
-      (if navi2ch-article-goto-number-recenter
+      (if (and navi2ch-article-goto-number-recenter
+	       (eq (window-buffer) (current-buffer)))
 	  (navi2ch-article-recenter (navi2ch-article-get-current-number))))
     (force-mode-line-update t)))
 

@@ -28,6 +28,16 @@
 	* navi2ch-article.el (navi2ch-article-fetch-link): 新関数。
 	(navi2ch-article-mode-map): 上記関数を "i" にバインド。
 
+	fetch 時にスレバッファがあっても表示しないように。
+	* navi2ch-article.el (navi2ch-article-view-article): 
+	引数 dont-display を追加。
+	non-nil のときは switch-to-buffer ではなく set-buffer する。
+	(navi2ch-article-fetch-article): 
+	save-excursion し、もとのバッファに switch-to-buffer しない。
+	(navi2ch-article-goto-number):
+	current buffer を表示していないときは navi2ch-article-recenter
+	しない。
+
 2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	久々の commit。mami さんすんません。
