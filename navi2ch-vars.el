@@ -530,6 +530,18 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B aa $B$rF~NO$G$-$k!#(
 		 (const :tag "proxy $B$r;H$o$J$$(B" nil))
   :group 'navi2ch-net)
 
+(defcustom navi2ch-net-http-proxy-userid nil
+  "Proxy $BG'>Z$K;H$&%f!<%6L>!#(B"
+  :type '(choice (string :tag "$B%f!<%6L>$r;XDj(B")
+		 (const :tag "$B%f!<%6L>$r;H$o$J$$(B" nil))
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-net-http-proxy-password nil
+  "Proxy $BG'>Z$K;H$&%Q%9%o!<%I!#(B"
+  :type '(choice (string :tag "$B%Q%9%o!<%I$r;XDj(B")
+		 (const :tag "$B%Q%9%o!<%I$r;H$o$J$$(B" nil))
+  :group 'navi2ch-net)
+
 (defcustom navi2ch-net-force-update nil
   "*$B99?7$,$"$C$?$+$r3NG'$;$:$K99?7$9$k$+!#(B
 `non-nil' $B$J$i$P3NG'$7$J$$(B"

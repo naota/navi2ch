@@ -38,12 +38,16 @@
         (process-connection-type nil)
 	(inherit-process-coding-system
 	 navi2ch-net-inherit-process-coding-system)
-        host file port host2ch)
+        host file port host2ch credentials)
     (let ((list (navi2ch-net-split-url url navi2ch-net-http-proxy)))
       (setq host (cdr (assq 'host list))
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
+    (when navi2ch-net-http-proxy
+      (setq credentials (navi2ch-net-http-proxy-basic-credentials
+			 navi2ch-net-http-proxy-userid
+			 navi2ch-net-http-proxy-password)))
     (save-excursion
         (set-buffer buf)
         (erase-buffer))
@@ -51,7 +55,7 @@
     (let ((proc (open-network-stream
                  navi2ch-net-connection-name buf host port)))
       (set-process-coding-system proc 'binary 'binary)
-      (set-process-sentinel proc (lambda (p s))) ; exited abnormary を出さなくする
+      (set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
       (process-send-string
        proc
        (format (concat
@@ -64,15 +68,11 @@
                 "\r\n")
                method file
                host2ch
-               (if other-header
-                   (concat (mapconcat
-                            (function
-                             (lambda (x)
-                               (concat (car x) ": " (cdr x))))
-                            (delq nil other-header) "\r\n")
-                           "\r\n")
-                 "")
-               (if content
+	       (or (navi2ch-net-make-request-header
+		    (cons (cons "Proxy-Authorization" credentials)
+			  other-header))
+		   "")
+	       (if content
                    (format "Content-length: %d\r\n\r\n%s"
                            (length content) content)
                  "")))
@@ -97,6 +97,23 @@
        (cons 'file (match-string 2 url))
        (cons 'port  80)
        (cons 'host2ch host2ch)))))
+
+(defun navi2ch-net-http-proxy-basic-credentials (user pass)
+  "USER と PASS から Proxy 認証の証明書(？)部分を返す。"
+  (setq test
+  (when (and user pass)
+    (concat "Basic "
+	    (base64-encode-string
+	     (concat user ":" pass))))))
+
+(defun navi2ch-net-make-request-header (header-alist)
+  "'((NAME . VALUE)...) な HEADER-ALIST からリクエストヘッダを作る。"
+  (let (header)
+    (dolist (pair header-alist)
+      (when (and pair (cdr pair))
+	(setq header (concat header
+			     (car pair) ": " (cdr pair) "\r\n"))))
+    header))
 
 (defun navi2ch-net-get-status (proc)
   "PROC の接続のステータス部を返す"

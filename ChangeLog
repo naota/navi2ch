@@ -1,3 +1,15 @@
+2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-net.el 
+	(navi2ch-net-http-proxy-basic-credentials): 新関数。
+	(navi2ch-net-make-request-header): 新関数。
+	(navi2ch-net-split-url): 上記関数を使うように。Proxy 認証に対応。
+
+	* navi2ch-vars.el　 
+	上記 Proxy 認証につかう。
+	(navi2ch-net-http-proxy-userid): 新変数。
+	(navi2ch-net-http-proxy-password): 同上。
+
 2002-01-10  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el
