@@ -162,6 +162,15 @@ Message モード
 * Message Mode Key Bindings::   Message モードでのキーバインド
 * Message Mode AA List::        Message モードでのアスキーアート一覧
 
+よくある質問とその答え
+
+* General Qestions::            全般
+* How to Read::                 読む
+* Can not Read::                読めない
+* Board Questions::             板関連
+* How to Write::                書き込む
+* Misc Questions::              その他
+
 @end detailmenu
 @end menu
 
@@ -1567,8 +1576,21 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 
 @node FAQ
 @appendix よくある質問とその答え
+
+@menu
+* General Qestions::            全般
+* How to Read::                 読む
+* Can not Read::                読めない
+* Board Questions::             板関連
+* How to Write::                書き込む
+* Misc Questions::              その他
+@end menu
+
+@node General Qestions
+@appendixsec 全般
+
 @table @asis
-@c 全般
+
 @item Q.
 Navi2ch って何？
 
@@ -1630,7 +1652,13 @@ Navi2ch を同時に複数起動すると、@file{~/.navi2ch/} の整合性が取れなく
 問いに @code{n} (この問いはバージョンによっては削除されています)、
 「危険を承知で続けますか?」の問いに @code{yes} と答えてください。
 
-@c 読む
+@end table
+
+@node How to Read
+@appendixsec 読む
+
+@table @asis
+
 @item Q.
 @code{>>1} みたいなリンクで飛んでったあとに元のレスに戻りたいんだけど。
 
@@ -1685,7 +1713,13 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @code{nil} 以外 (@code{t} とか) に設定すると
 スレを開いたときに自動的にバッファの最大数が上記の値に制限される。@xref{Customize}.
 
-@c 読めない
+@end table
+
+@node Can not Read
+@appendixsec 読めない
+
+@table @asis
+
 @item Q.
 鯖がご機嫌斜めみたいで @code{now connect...} のまま止まってんだけど、
 どうにかならない?
@@ -1735,7 +1769,13 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 (setq navi2ch-enable-readcgi t)
 @end lisp
 
-@c 板関連
+@end table
+
+@node Board Questions
+@appendixsec 板関連
+
+@table @asis
+
 @item Q.
 ○○板がサーバ移転で見られなくなったみたい。どうしたらいい?
 
@@ -1789,7 +1829,13 @@ Boards File}.
 (setq navi2ch-auto-update nil)
 @end lisp
 
-@c 書き込む
+@end table
+
+@node How to Write
+@appendixsec 書き込む
+
+@table @asis
+
 @item Q.
 せっかく長文のレスを書いたのに、書き込みに失敗して書いたレスのバッファが
 消えちゃった。
@@ -1836,7 +1882,14 @@ Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
 @item A.
 時計を合わせましょう。
 
+@end table
+
+@node Misc Questions
+@appendixsec その他
 @c 未分類、環境依存、細かい話、など
+
+@table @asis
+
 @item Q.
 使ってると @file{~/.navi2ch/} がどんどん大きくなるんだけど。
 

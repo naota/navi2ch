@@ -1,3 +1,7 @@
+2003-06-07  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): @appendixsec でセクション分け。
+
 2003-05-13  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode Key Bindings): "!" を追加。
