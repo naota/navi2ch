@@ -99,12 +99,16 @@
   (let ((url         (navi2ch-js-get-writecgi-url board))
 	(referer     (navi2ch-board-get-uri board))
 	(param-alist (list
-		      (cons "submit" "書き込む")
+		      (cons "submit" (if subject
+					 "新規書き込み"
+				       "書き込む"))
 		      (cons "NAME" (or from ""))
 		      (cons "MAIL" (or mail ""))
 		      (cons "MESSAGE" message)
 		      (cons "BBS" bbs)
-		      (cons "KEY" key)
+		      (if subject
+			  (cons "SUBJECT" subject)
+			(cons "KEY" key))
 		      (cons "TIME" time))))
     (navi2ch-net-send-request
      url "POST"

@@ -1,3 +1,10 @@
+2002-07-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message):
+	スレ立てをサポート。
+	スレ立てのときは KEY でなく SUBJECT を送るように。
+	念のため submit の文字列も変更。
+
 2002-07-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: EMACS の出力から空行を取り除くようにした。
