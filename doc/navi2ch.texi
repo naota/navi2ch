@@ -1,4 +1,4 @@
-\input texinfo @c -*-texinfo-*-
+\input texinfo @c -*- mode: texinfo; coding: euc-jp -*-
 @comment %**start of header
 @setfilename navi2ch.info
 @settitle Navi2ch, Navigator for 2ch for Emacsen
@@ -226,7 +226,7 @@ XEmacs を使っていて、ホームディレクトリにインストールしたい場合は以下
 
 @example
 @group
-./configure --with-xemacs --with-packagedir=$HOME/.xemacs
+./configure --with-xemacs --with-packagedir=$HOME/.xemacs/mule-packages
 @end group
 @end example
 

@@ -1,3 +1,9 @@
+2002-07-07  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Compile): XEmacs 21.4.8 だと ~/.xemacs 直下はパッ
+	ケージディレクトリとみなさないようなので、configure の例を 
+	~/.xemacs/mule-packages に変更。
+
 2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (navi2ch-doc-update-aa-list):
