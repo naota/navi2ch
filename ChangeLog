@@ -1,3 +1,9 @@
+2003-03-08  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
+	ヘッダで引用しようとしたらエラーにする。
+	set-mark を push-mark に変更。
+
 2003-03-06  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-get-updated-subject-list): 新関数。

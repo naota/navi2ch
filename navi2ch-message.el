@@ -292,6 +292,8 @@
 (defun navi2ch-message-cite-original-from-number (num &optional arg)
   "番号を選んで、引用する。"
   (interactive "ninput number: \nP")
+  (when (< (point) (navi2ch-message-header-end))
+    (error "Cannot cite in header"))
   (let (same msg board article)
     (save-excursion
       (set-buffer (navi2ch-article-current-buffer))
@@ -306,7 +308,7 @@
 	(insert ">>" (number-to-string num) "\n")
       (insert (navi2ch-article-to-url board article num num nil) "\n"))
     (unless arg
-      (set-mark (point))
+      (push-mark)
       (let ((point (point)))
 	(insert msg "\n")
 	(string-rectangle point (point) navi2ch-message-cite-prefix)))))
