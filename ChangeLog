@@ -1,3 +1,9 @@
+2004-08-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	[(shift iso-lefttab)] に navi2ch-article-previous-link をバインド。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/325
+
 2004-08-03  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-select-current-link-number):

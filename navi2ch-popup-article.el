@@ -51,6 +51,7 @@
     (define-key map "p" 'navi2ch-article-previous-message)
     (define-key map "n" 'navi2ch-article-next-message)
     (define-key map [(shift tab)] 'navi2ch-article-previous-link)
+    (define-key map [(shift iso-lefttab)] 'navi2ch-article-previous-link)
     (define-key map "\e\C-i" 'navi2ch-article-previous-link)
     (define-key map "\C-\i" 'navi2ch-article-next-link)
     (define-key map ">" 'navi2ch-article-goto-last-message)
