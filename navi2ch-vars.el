@@ -663,7 +663,7 @@ ask なら明示的に移動する時以外なら質問する
 ;;       mark          = "-" | "_" | "." | "!" | "~" | "*" | "'" |
 ;;                       "(" | ")"
 (defcustom navi2ch-article-url-regexp
-  "\\(h?t?tps?\\|x-localbbs\\|ftp\\)\\(://[-a-zA-Z0-9_.!~*'();/?:@&=+$,#]+\\)"
+  "\\(h?t?tps?\\|x-localbbs\\|ftp\\)\\(://[-a-zA-Z0-9_.!~*'();/?:@&=+$,%#]+\\)"
   "*レスのテキストのうち URL とみなす部分の正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
