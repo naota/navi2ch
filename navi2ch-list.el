@@ -73,6 +73,7 @@
 (defvar navi2ch-list-buffer-name "*navi2ch list*")
 (defvar navi2ch-list-current-list nil)
 (defvar navi2ch-list-category-list nil)
+(defvar navi2ch-list-old-category-list nil)
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
 (defvar navi2ch-list-changed-category-name "$BJQ$o$C$?HD(B")
@@ -439,13 +440,14 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  (navi2ch-net-force-update (or navi2ch-net-force-update
 					force))
 	  (file (navi2ch-list-get-file-name))
-	  updated old-category-list)
-      (if first
-	  (progn
-	    (navi2ch-list-load-info)
-	    (setq old-category-list (navi2ch-list-get-category-list file)))
-	(setq old-category-list (navi2ch-list-get-normal-category-list
-				 navi2ch-list-category-list)))
+	  updated)
+      (setq navi2ch-list-old-category-list
+	    (if first
+		(progn
+		  (navi2ch-list-load-info)
+		  (navi2ch-list-get-category-list file))
+	      (navi2ch-list-get-normal-category-list
+	       navi2ch-list-category-list)))
       (unless (or navi2ch-offline
 		  (and first
 		       (not navi2ch-list-sync-update-on-boot)
@@ -453,13 +455,13 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	(setq updated (navi2ch-net-update-file
 		       navi2ch-list-bbstable-url file nil
 		       'navi2ch-list-make-board-txt)))
-      (when t ;(or first updated)
+      (when t				;(or first updated)
 	(erase-buffer)
 	(let ((category-list (navi2ch-list-get-category-list file)))
 	  (when updated
 	    (navi2ch-list-apply-changed-status
 	     (navi2ch-list-get-changed-status
-	      old-category-list category-list)))
+	      navi2ch-list-old-category-list category-list)))
 	  (setq navi2ch-list-category-list
 		(append
 		 (delq nil
@@ -485,12 +487,25 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 
 (defun navi2ch-list-make-board-txt ()
   "bbstable.html $B$+$i(B (navi2ch $BMQ$N(B) board.txt $B$r:n$k(B
-`navi2ch-net-update-file' $B$N%O%s%I%i!#(B"
+`navi2ch-net-update-file' $B$N%O%s%I%i!#(B
+`navi2ch-list-old-category-list' $B$,$"$k>l9g$O!"$=$l$rM%@h$7$F(B id $B$rF@$k!#(B"
   (let ((coding-system-for-read 'binary)
 	(coding-system-for-write 'binary)
 	(case-fold-search t)
 	(beg (point))
+	id-to-url-alist
 	ignore)
+    ;; id-to-url-alist $B$r:n$k!#(B
+    ;; rassoc $B$b;H$&$?$a!"F1$8(B id $B$GJ#?t$N(B url $B$,EPO?$5$l$J$$$h$&!"(B
+    ;; mapcar $B$G$O$J$/(B dolist $B$G>e=q$-$7$F$$$/!#(B
+    (when navi2ch-list-old-category-list
+      (dolist (x (navi2ch-list-get-board-name-list
+		  navi2ch-list-old-category-list))
+	(let ((id (cdr (assq 'id x)))
+	      (url (cdr (assq 'uri x))))
+	  (when (and id url)
+	    (setq id-to-url-alist
+		  (navi2ch-put-alist id url id-to-url-alist))))))
     (when (re-search-forward "<b>[^>]+</b>" nil t)
       (goto-char (match-beginning 0))
       (while (re-search-forward
@@ -500,14 +515,28 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	      (cont (match-string 3)))
 	  (delete-region beg (point))
 	  (if (string-match "a" tag)
-	      (when (and (not ignore)
-			 (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
-			 (navi2ch-list-board-id-from-url (match-string 1 attr))
-			 (navi2ch-list-valid-board (match-string 1 attr)))
-		(insert cont "\n"
-			(match-string 1 attr) "\n"
-			(navi2ch-list-board-id-from-url (match-string 1 attr))
-			"\n"))
+	      (let (url id u)
+		(when (and (not ignore)
+			   (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
+			   (setq url (match-string 1 attr))
+			   ;; $B0JA0IU$1$?(B ID $B$rM%@h$9$k(B
+			   (setq id (or (car (rassoc url id-to-url-alist))
+					(navi2ch-list-board-id-from-url url)))
+			   (navi2ch-list-valid-board url))
+		  (when (and (setq u (cdr (assoc id id-to-url-alist)))
+			     (not (string= u url)))
+		    ;; $BF1$8(B ID $B$G(B URL $B$,0c$&HD$,$"$k>l9g(B
+		    (let ((i 2))
+		      (while (and (setq u (cdr (assoc (format "%s:%d" id i)
+						      id-to-url-alist)))
+				  (not (string= u url)))
+			(setq i (1+ i)))
+		      (setq id (format "%s:%d" id i))))
+		  (setq id-to-url-alist
+			(navi2ch-put-alist id url id-to-url-alist))
+		  (insert cont "\n"
+			  url "\n"
+			  id "\n")))
 	    (setq ignore
 		  (member (decode-coding-string
 			   cont navi2ch-coding-system)
