@@ -46,6 +46,7 @@
 
 (defconst navi2ch-splash-copyright-notice
   (concat "Copyright (C) 2000-2004  Navi2ch Project.
+This software includes some fragments from other softwares;
 Copyright (C) 1993-2000 Free Software Foundation, Inc.
 Copyright (C) 1998-2001 Yuuichi Teranishi <teranisi@gohome.org>
 Copyright (C) 2000,2001 Katsumi Yamaoka <yamaoka@jpl.org>\n"
@@ -274,18 +275,21 @@ Return a number of lines that an image occupies in the buffer."
   "Insert a version and the copyright message after a logo image.  HEIGHT
 should be a number of lines that an image occupies in the buffer."
   (let* ((height (- (window-height) height 1))
-	 (text (format (cond ((<= height 2)
+	 (notice-height (length (split-string navi2ch-splash-copyright-notice
+					      "\n")))
+	 (text (format (cond ((<= (- height notice-height) 1)
 			      "version %s - \"%s\"\n%s")
-			     ((eq height 3)
+			     ((eq (- height notice-height) 2)
 			      "version %s - \"%s\"\n\n%s")
 			     (t
 			      "\nversion %s - \"%s\"\n\n%s"))
                        navi2ch-version
                        "オマエモナー"
 		       navi2ch-splash-copyright-notice))
+	 (text-height (length (split-string text "\n")))
 	 start)
     (goto-char (point-min))
-    (insert-char ?\n (max 0 (/ (- height 4) 2)))
+    (insert-char ?\n (max 0 (/ (- height text-height) 2)))
     (setq start (goto-char (point-max)))
     (if navi2ch-on-emacs21
 	(let ((bg (face-background 'navi2ch-splash-screen-face))

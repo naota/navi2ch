@@ -1,5 +1,13 @@
 2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-popup-dialog): "" だとセパレー
+	タになってしまうそうなので。
+	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/465>
+
+	* navi2ch-splash.el (navi2ch-splash-copyright-notice): Navi2ch
+	Project 以外の Copyright holder についての説明文を挿入。
+	(navi2ch-splash-insert-text): 縦センタリングの計算方法を変更。
+
 	* navi2ch-vars.el (navi2ch-global-view-map): delete 系のキーをキー
 	ボードマクロとして登録するのをやめる。
 
