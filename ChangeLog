@@ -1,3 +1,14 @@
+2002-07-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-send-message): 送信後に書き
+	込み先スレのバッファに移動するよう変更。移動はバッファが存在すると
+	きのみ。
+	(navi2ch-message-exit): 送信後に書き込み先スレのバッファに移動する
+	よう変更。バッファが存在しないときは作る。
+	(navi2ch-message-set-name): 書き込み先スレのバッファが存在しないと
+	きは作る。
+	(navi2ch-message-set-mail): 同上。
+
 2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* README: 書き直し。

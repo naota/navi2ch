@@ -177,27 +177,35 @@
 		  (progn
 		    (set-buffer navi2ch-board-buffer-name)
 		    (navi2ch-board-sync))
-		(set-buffer (navi2ch-article-current-buffer))
-		(navi2ch-article-sync navi2ch-message-force-sync)))))))
+		(when (buffer-live-p navi2ch-message-current-article-buffer)
+		  (set-buffer navi2ch-message-current-article-buffer)
+		  (navi2ch-article-sync navi2ch-message-force-sync))))))))
     (run-hooks 'navi2ch-message-after-send-hook)
     (navi2ch-message-exit 'after-send)))
 
 (defun navi2ch-message-set-name (name)
   (save-excursion
-    (set-buffer navi2ch-message-current-article-buffer)
+    (if (buffer-live-p navi2ch-message-current-article-buffer)
+	(set-buffer navi2ch-message-current-article-buffer)
+      (navi2ch-article-view-article navi2ch-message-current-board
+				    navi2ch-message-current-article
+				    nil))
     (setq navi2ch-article-current-article
-          (navi2ch-put-alist 'name name
-                             navi2ch-article-current-article))))
+	  (navi2ch-put-alist 'name name
+			     navi2ch-article-current-article))))
 
 (defun navi2ch-message-set-mail (mail)
   (let ((case-fold-search t))
     (unless (string-match "sage" mail)
       (save-excursion
-	(set-buffer navi2ch-message-current-article-buffer)
+	(if (buffer-live-p navi2ch-message-current-article-buffer)
+	    (set-buffer navi2ch-message-current-article-buffer)
+	  (navi2ch-article-view-article navi2ch-message-current-board
+					navi2ch-message-current-article
+					nil))
 	(setq navi2ch-article-current-article
 	      (navi2ch-put-alist 'mail mail
 				 navi2ch-article-current-article))))))
-      
 
 (defun navi2ch-message-cite-original (&optional arg)
   "引用する"
@@ -238,7 +246,11 @@
     (set-window-configuration navi2ch-message-window-configuration)
     (when (and (not navi2ch-message-new-message-p)
                after-send)
-      (set-buffer (navi2ch-article-current-buffer))
+      (if (buffer-live-p navi2ch-message-current-article-buffer)
+	  (set-buffer navi2ch-message-current-article-buffer)
+	(navi2ch-article-view-article navi2ch-message-current-board
+				      navi2ch-message-current-article
+				      navi2ch-message-force-sync))
       (navi2ch-article-load-number))))
 
 (defun navi2ch-message-kill-message (&optional no-ask)
