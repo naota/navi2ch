@@ -272,16 +272,16 @@
 ;;; goto-*-column
 (defun navi2ch-bm-goto-updated-mark-column ()
   (beginning-of-line)
-  (looking-at "\\( *[0-9]+ \\)")
-  (goto-char (match-end 1)))
+  (when (looking-at " *[0-9]+ ")
+    (goto-char (match-end 0))))
 
 (defun navi2ch-bm-goto-state-column ()
-  (navi2ch-bm-goto-updated-mark-column)
-  (forward-char 1))
+  (when (navi2ch-bm-goto-updated-mark-column)
+    (forward-char 1)))
 
 (defun navi2ch-bm-goto-mark-column ()
-  (navi2ch-bm-goto-updated-mark-column)
-  (forward-char 2))
+  (when (navi2ch-bm-goto-updated-mark-column)
+    (forward-char 2)))
 
 (defun navi2ch-bm-goto-other-column ()
   (let ((sbj (cdr
@@ -324,9 +324,9 @@
   "その位置の updated-mark を調べる"
   (save-excursion
     (and point (goto-char point))
-    (navi2ch-bm-goto-updated-mark-column)
-    (car (rassoc (char-to-string (char-after))
-		 navi2ch-bm-updated-mark-alist))))
+    (when (navi2ch-bm-goto-updated-mark-column)
+      (car (rassoc (char-to-string (char-after))
+		   navi2ch-bm-updated-mark-alist)))))
 
 (defun navi2ch-bm-select-article (&optional max-line)
   (interactive "P")
@@ -565,14 +565,24 @@
       (message "Can't select this line!"))))
 
 ;;; move
-(defun navi2ch-bm-next-line ()
-  (interactive)
-  (forward-line 1)
+(defun navi2ch-bm-forward-line (&optional n)
+  (interactive "p")
+  (let ((ret (forward-line n)))
+    (when (eobp)
+      (forward-line -1)
+      (setq ret (1+ ret)))
+    ret))
+
+(defun navi2ch-bm-next-line (num)
+  (interactive "p")
+  (unless (zerop (navi2ch-bm-forward-line num))
+    (message "No more articles"))
   (setq navi2ch-bm-move-downward t))
 
-(defun navi2ch-bm-previous-line ()
-  (interactive)
-  (forward-line -1)
+(defun navi2ch-bm-previous-line (num)
+  (interactive "p")
+  (unless (zerop (navi2ch-bm-forward-line (- num)))
+    (message "No more articles"))
   (setq navi2ch-bm-move-downward nil))
 
 ;;; mark
@@ -608,9 +618,7 @@ ARG が non-nil なら移動方向を逆にする。"
 		       navi2ch-bm-move-downward)))
 	      ((eq navi2ch-bm-mark-and-move t)
 	       (setq downward (not arg))))
-	(if downward
-	    (navi2ch-bm-next-line)
-	  (navi2ch-bm-previous-line))))))
+	(navi2ch-bm-forward-line (if downward 1 -1))))))
 
 (defun navi2ch-bm-mark (&optional arg)
   (interactive "P")

@@ -120,6 +120,11 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-window-configuretion nil)
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
+(defvar navi2ch-article-through-forward-line-function 'navi2ch-bm-forward-line
+  "前後のスレに移動するために実行される関数。
+一つの整数を引数にとり、その数だけ後ろ(引数が負のときは前)のスレに移動し、
+移動できたら 0、できなければ 0 以外の整数を返す関数であること。")
+
 (defvar navi2ch-article-save-info-keys
   '(number name time hide important unfilter mail kako))
 
@@ -1571,7 +1576,9 @@ article buffer から抜けるなら 'quit を返す。"
 	       (save-excursion
 		 (set-buffer navi2ch-board-buffer-name)
 		 (save-excursion
-		   (when (eq (forward-line num) 0)
+		   (when (zerop
+			  (funcall
+			   navi2ch-article-through-forward-line-function num))
 		     (cdr (assq 'subject
 				(navi2ch-bm-get-article-internal
 				 (navi2ch-bm-get-property-internal
@@ -1596,19 +1603,23 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 					   navi2ch-board-current-board))))
 	(let ((ret (navi2ch-article-through-ask interactive-flag num)))
 	  (cond ((eq ret 'quit)
+		 (goto-char (if (> num 0) (point-max) (point-min)))
 		 (navi2ch-article-exit))
 		(ret
+		 (goto-char (if (> num 0) (point-max) (point-min)))
 		 (let ((window (get-buffer-window navi2ch-board-buffer-name)))
 		   (if window
 		       (progn
 			 (delete-window)
 			 (select-window window))
 		     (switch-to-buffer navi2ch-board-buffer-name)))
-		 (if (eq num 1)
-		     (navi2ch-bm-next-line)
-		   (navi2ch-bm-previous-line))
-		 (recenter (/ navi2ch-board-window-height 2))
-		 (navi2ch-bm-select-article))
+		 (if (zerop
+		      (funcall navi2ch-article-through-forward-line-function
+			       num))
+		     (progn
+		       (recenter (/ navi2ch-board-window-height 2))
+		       (navi2ch-bm-select-article))
+		   (message "Can't through article")))
 		(t
 		 (message "Don't through article"))))
       (message "Don't through article"))))

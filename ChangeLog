@@ -1,3 +1,21 @@
+2003-03-14  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-through-forward-line-function):
+	新変数。
+	(navi2ch-article-through-ask): 上記変数を使うように。
+	(navi2ch-article-through-subr): 同上。
+	article-mode を抜ける前に バッファの先頭か末尾に移動。
+
+	* navi2ch-board-misc.el (navi2ch-bm-goto-updated-mark-column):
+	board-mode の最終行で実行できるように。
+	(navi2ch-bm-goto-state-column): 同上。
+	(navi2ch-bm-goto-mark-column): 同上。
+	(navi2ch-bm-get-updated-mark): 同上。
+	(navi2ch-bm-forward-line): 新関数。
+	(navi2ch-bm-next-line): 上記関数を使うように。
+	(navi2ch-bm-previous-line): 同上。
+	(navi2ch-bm-mark-subr): 同上。
+
 2003-03-13  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-no-logging-message): 定義位置を移動。
