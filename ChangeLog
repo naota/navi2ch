@@ -1,3 +1,16 @@
+2002-05-16    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-through-ask): 1 か -1 を引き
+	数にとり、挙動を変えるように。
+	移動先のスレタイトルを表示するように。
+	(navi2ch-article-through-next): 1 か -1 を引き数にとり、挙動を変え
+	るように。
+	board バッファを recenter するように。
+	(navi2ch-article-through-previous): navi2ch-article-through-next
+	を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/708
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/742
+
 2002-05-15    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el

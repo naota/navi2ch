@@ -1144,7 +1144,7 @@ state はあぼーんされてれば aborn というシンボル。
      (funcall navi2ch-article-through-previous-function)))
   (force-mode-line-update t))
 
-(defun navi2ch-article-through-ask (no-ask)
+(defun navi2ch-article-through-ask (no-ask num)
   "次のスレに移動するか聞く。
 次のスレに移動するなら t を返す。
 移動しないなら nil を返す。
@@ -1152,51 +1152,56 @@ article buffer から抜けるなら 'quit を返す。"
   (if (or (eq navi2ch-article-enable-through 'ask-always)
 	  (and (not no-ask)
 	       (eq navi2ch-article-enable-through 'ask)))
-      (navi2ch-y-or-n-p "Through next article or quit?" 'quit)
+      (navi2ch-y-or-n-p
+       (concat (save-excursion
+		 (set-buffer navi2ch-board-buffer-name)
+		 (save-excursion 
+		   (forward-line num)
+		   (cdr (assq 'subject
+			      (navi2ch-bm-get-article-internal
+			       (navi2ch-bm-get-property-internal
+				(point)))))))
+	       " --- Through "
+	       (if (< num 0) "previous" "next")
+	       " article or quit?")
+       'quit)
     (or no-ask
 	navi2ch-article-enable-through)))
 
-(defun navi2ch-article-through-next ()
+(defun navi2ch-article-through-next (&optional num)
+  "次のスレに移動する。
+NUM が -1 のときは前のスレに移動する。"
   (interactive)
+  (or num (setq num 1))
+  (if (and (not (eq num 1))
+	   (not (eq num -1)))
+      (error "arg error"))
   (let ((mode (navi2ch-get-major-mode navi2ch-board-buffer-name)))
     (if (and mode
 	     (or (not (eq mode 'navi2ch-board-mode))
 		 (and (eq mode 'navi2ch-board-mode)
 		      (navi2ch-board-equal navi2ch-article-current-board
 					   navi2ch-board-current-board))))
-	(let ((ret (navi2ch-article-through-ask (interactive-p))))
+	(let ((ret (navi2ch-article-through-ask (interactive-p) num)))
 	  (cond ((eq ret 'quit)
 		 (navi2ch-article-exit))
 		(ret
 		 (if (get-buffer-window navi2ch-board-buffer-name)
 		     (select-window (get-buffer-window navi2ch-board-buffer-name))
 		   (switch-to-buffer navi2ch-board-buffer-name))
-		 (navi2ch-bm-next-line)
+		 (if (eq num 1)
+		     (navi2ch-bm-next-line)
+		   (navi2ch-bm-previous-line))
+		 (recenter)
 		 (navi2ch-bm-select-article))
 		(t
-		 (message "Don't through next article"))))
-      (message "Don't through next article"))))
+		 (message "Don't through article"))))
+      (message "Don't through article"))))
 
 (defun navi2ch-article-through-previous ()
+  "前のスレに移動する。"
   (interactive)
-  (let ((mode (navi2ch-get-major-mode navi2ch-board-buffer-name)))
-    (if (and mode
-             (or (not (eq mode 'navi2ch-board-mode))
-                 (and (eq mode 'navi2ch-board-mode)
-		      (navi2ch-board-equal navi2ch-article-current-board
-					   navi2ch-board-current-board))))
-	(let ((ret (navi2ch-article-through-ask (interactive-p))))
-	  (cond ((eq ret 'quit)
-		 (navi2ch-article-exit))
-		(ret
-		 (if (get-buffer-window navi2ch-board-buffer-name)
-		     (select-window (get-buffer-window navi2ch-board-buffer-name))
-		   (switch-to-buffer navi2ch-board-buffer-name))
-		 (navi2ch-bm-previous-line)
-		 (navi2ch-bm-select-article))
-      		(t
-		 (message "Don't through previous article"))))
-      (message "Don't through previous article"))))
+  (navi2ch-article-through-next -1))
 
 (defun navi2ch-article-two-pane ()
   (interactive)
