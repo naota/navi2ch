@@ -1,3 +1,9 @@
+2002-12-20  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-view-article): バッファが無
+	い時のカーソルの位置が変だったので元に戻した。
+	↓ここ、単純にそうやるとうまくないんですよ。。。
+
 2002-12-19  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-view-article):
