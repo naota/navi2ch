@@ -306,8 +306,8 @@
 	  (set-buffer navi2ch-message-current-article-buffer)
 	(navi2ch-article-view-article navi2ch-message-current-board
 				      navi2ch-message-current-article
-				      navi2ch-message-force-sync))
-      (navi2ch-article-load-number))))
+				      navi2ch-message-force-sync)))
+    (navi2ch-article-load-number)))
 
 (defun navi2ch-message-kill-message (&optional no-ask)
   (when (or no-ask

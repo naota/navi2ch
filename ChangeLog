@@ -1,3 +1,8 @@
+2002-12-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-exit): 元のレス番号に戻らな
+	いことがあったのを修正。
+
 2002-12-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-lock): 不評なのでもう一度試すかどうかを聞く
