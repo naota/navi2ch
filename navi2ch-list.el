@@ -125,10 +125,10 @@
 
 (defun navi2ch-list-get-global-bookmark-board-list ()
   (mapcar (lambda (x)
-	     (list (cons 'name (cadr x))
-		   (cons 'type 'bookmark)
-		   (cons 'id (car x))))
-	   navi2ch-bookmark-list))
+	    (list (cons 'name (cadr x))
+		  (cons 'type 'bookmark)
+		  (cons 'id (car x))))
+	  navi2ch-bookmark-list))
 
 (defun navi2ch-list-get-global-bookmark-category ()
   (navi2ch-list-get-category
@@ -459,21 +459,21 @@ changed-list は '((board-id old-board new-board) ...) な alist。
   (message "applying board changes...")
   (let ((added-list (cdr (assq 'add changed-status)))
 	(changed-list (cdr (assq 'change changed-status))))
-  (when changed-status
-    (setq navi2ch-list-current-list
-	  (navi2ch-put-alist 'change
-			     (append (mapcar (lambda (id)
-					       (cons id 'add))
-					     added-list)
-				     (mapcar (lambda (pair)
-					       (cons (car pair) 'change))
-					     changed-list))
-			     navi2ch-list-current-list))
-    (navi2ch-change-log-directory changed-list)
-    (navi2ch-bookmark-change changed-list)
-    (navi2ch-history-change changed-list)
-    (navi2ch-list-change changed-list)
-    (message "applying board changes...done"))))
+    (when changed-status
+      (setq navi2ch-list-current-list
+	    (navi2ch-put-alist 'change
+			       (append (mapcar (lambda (id)
+						 (cons id 'add))
+					       added-list)
+				       (mapcar (lambda (pair)
+						 (cons (car pair) 'change))
+					       changed-list))
+			       navi2ch-list-current-list))
+      (navi2ch-change-log-directory changed-list)
+      (navi2ch-bookmark-change changed-list)
+      (navi2ch-history-change changed-list)
+      (navi2ch-list-change changed-list)
+      (message "applying board changes...done"))))
 
 (defun navi2ch-list-get-changed-category (category-list)
   (let ((alist (navi2ch-alist-list-to-alist

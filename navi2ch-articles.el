@@ -1,6 +1,6 @@
 ;;; navi2ch-articles.el --- Article List Module for Navi2ch
 
-;; Copyright (C) 2001-2003 by Navi2ch Project
+;; Copyright (C) 2001-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -50,8 +50,8 @@
 
 (defvar navi2ch-articles-board
   '((name . "表示スレ一覧")
-     (type . articles)
-     (id . "articles")))
+    (type . articles)
+    (id . "articles")))
 
 ;;; navi2ch-bm callbacks
 (defun navi2ch-articles-set-property (begin end item)

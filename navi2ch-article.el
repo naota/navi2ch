@@ -706,7 +706,7 @@ START, END, NOFIRST で範囲を指定する"
 	     (/= (/ progress len) percent)
 	     (navi2ch-no-logging-message "%s%d%%" msg (setq percent (/ progress len))))))
     (message "Garbage collecting...")
-    (garbage-collect)			; navi2ch-parse-message は大量にゴミを残す
+    (garbage-collect)	    ; navi2ch-parse-message は大量にゴミを残す
     (message "Garbage collecting...done")
     (message "%sdone" msg)))
 
@@ -951,24 +951,24 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。
 NUM が 0 以上のときは sticky バッファは削除しない。
 NUM が -1 のときは sticky バッファも含めてすべて削除。"
   (interactive "P")
-  (when (not (numberp num))		; C-u のみの時4個にしたいわけじゃないと思われ
+  (when (not (numberp num)) ; C-u のみの時4個にしたいわけじゃないと思われ
     (setq num navi2ch-article-max-buffers))
   (let ((buffer-num (length (navi2ch-article-buffer-list)))
 	buffer-list)
     (when (> buffer-num num)
-	(if (< num 0)
-	    (setq buffer-list (navi2ch-article-buffer-list))
-	  (save-excursion
-	    (dolist (buf (navi2ch-article-buffer-list))
-	      (set-buffer buf)
-	      (unless navi2ch-article-sticky-mode
-		(push buf buffer-list)))))
-	(catch 'loop
-	  (dolist (buf buffer-list)
-	    (kill-buffer buf)
-	    (setq buffer-num (1- buffer-num))
-	    (when (<= buffer-num num)
-	      (throw 'loop nil)))))))
+      (if (< num 0)
+	  (setq buffer-list (navi2ch-article-buffer-list))
+	(save-excursion
+	  (dolist (buf (navi2ch-article-buffer-list))
+	    (set-buffer buf)
+	    (unless navi2ch-article-sticky-mode
+	      (push buf buffer-list)))))
+      (catch 'loop
+	(dolist (buf buffer-list)
+	  (kill-buffer buf)
+	  (setq buffer-num (1- buffer-num))
+	  (when (<= buffer-num num)
+	    (throw 'loop nil)))))))
 
 (defun navi2ch-article-view-article (board
 				     article
@@ -1145,7 +1145,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
       (navi2ch-article-set-mode-line)
       (if (and (cdr (assq 'kako article))
 	       (file-exists-p file)
-	       (not (and force		; force が指定されない限りsyncしない
+	       (not (and force	  ; force が指定されない限りsyncしない
 			 (y-or-n-p "re-sync kako article?"))))
 	  (setq navi2ch-article-current-article article)
 	(let ((ret (navi2ch-article-update-file board article force)))
@@ -1215,7 +1215,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	    file (navi2ch-article-get-file-name board article))
       (unless (and (cdr (assq 'kako article))
 		   (file-exists-p file)
-		   (not (and force      ; force が指定されない限り sync しない
+		   (not (and force ; force が指定されない限り sync しない
 			     (y-or-n-p "re-sync kako article?"))))
 	(setq ret (navi2ch-article-update-file board article force)
 	      article (nth 0 ret)
@@ -1542,11 +1542,11 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 			     (string-match (regexp-quote
 					    (match-string 1 date))
 					   number-property))
-			 (and name
-			      (string-match "◆\\([^ ]+\\)" name)
-			      (string-match (regexp-quote
-					     (match-string 1 name))
-					    number-property)))
+			(and name
+			     (string-match "◆\\([^ ]+\\)" name)
+			     (string-match (regexp-quote
+					    (match-string 1 name))
+					   number-property)))
 		(if (and (numberp limit)
 			 (>= (car msg) limit)
 			 nums)
@@ -1754,14 +1754,14 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 (defun navi2ch-article-rotate-point ()
   "stack へ push した位置を巡回する。"
   (interactive)
-  (let ((cur (navi2ch-article-get-point nil))		; 現在地
-	(top (pop navi2ch-article-point-stack)))	; トップ
+  (let ((cur (navi2ch-article-get-point nil)) ; 現在地
+	(top (pop navi2ch-article-point-stack))) ; トップ
     (if top
         (progn
 	  (setq navi2ch-article-point-stack
 		(append navi2ch-article-point-stack (list cur))) ; 最後尾へ保存
-          (navi2ch-article-goto-number (car top))	; トップの
-          (forward-char (cdr top)))			; 以前いた文字へ
+          (navi2ch-article-goto-number (car top)) ; トップの
+          (forward-char (cdr top)))	; 以前いた文字へ
       (message "stack is empty"))))
 
 (defun navi2ch-article-goto-last-message ()
@@ -2110,7 +2110,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-cached-subject (board article)
   "キャッシュされている dat ファイルからスレタイトルを得る。"
-;  "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
+  ;; "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
   (let ((state (navi2ch-article-check-cached board article))
 	subject)
     (if (eq state 'view)
@@ -2144,7 +2144,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 			     (cdr (assq 'artid s)))
 		      (throw 'subject (cdr (assq 'subject s)))))))))
     (when (not subject)
-      (setq subject "navi2ch: ???"))	; 変数にして navi2ch-vars.el に入れるべき?
+      (setq subject "navi2ch: ???")) ; 変数にして navi2ch-vars.el に入れるべき?
     subject))
 
 (eval-when-compile
@@ -2154,7 +2154,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-get-link-text-subr (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を得る。"
   (setq point (or point (point)))
-  (let (mark-active deactivate-mark)	; transient-mark-mode が切れないよう
+  (let (mark-active deactivate-mark) ; transient-mark-mode が切れないよう
     (catch 'ret
       (when (or (eq major-mode 'navi2ch-article-mode)
 		(eq major-mode 'navi2ch-popup-article-mode))
@@ -2203,7 +2203,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 結果を help-echo プロパティに設定してキャッシュする。"
   (setq point (or point (point)))
   (let ((help-echo-prop (get-text-property point 'help-echo))
-	mark-active deactivate-mark)	; transient-mark-mode が切れないよう
+	mark-active deactivate-mark) ; transient-mark-mode が切れないよう
     (unless (or (null help-echo-prop)
 		(stringp help-echo-prop))
       (setq help-echo-prop (navi2ch-article-get-link-text-subr point))
@@ -2309,8 +2309,8 @@ start: エンコードされた領域の先頭(デリミタを含む)のポイント
   end: エンコードされた領域の末尾(デリミタの次の行の行頭)のポイント
 である。
 end が nil の場合末尾のデリミタが無く先頭のデリミタのみあることを意味する。"
-;; start が nil の場合先頭のデリミタが無く末尾のデリミタのみあることを意味し、
-;; ↑ すると、誤判定が多そうなのでやめ。
+  ;; start が nil の場合先頭のデリミタが無く末尾のデリミタのみあることを意味し、
+  ;; ↑ すると、誤判定が多そうなのでやめ。
   (let ((dels (list (cons 'base64
 			  (cons navi2ch-base64-begin-delimiter-regexp
 				navi2ch-base64-end-delimiter-regexp))

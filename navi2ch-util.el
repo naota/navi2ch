@@ -1247,7 +1247,7 @@ STRING2 の方が大きい場合は負数を返す。
       ;; て表示しておく
       (while (not (eobp))
 	(let ((s (buffer-substring (navi2ch-line-beginning-position)
-					(navi2ch-line-end-position))))
+				   (navi2ch-line-end-position))))
 	  (when (> (length s) 0)
 	    (message "%s" s)))
 	(forward-line)))

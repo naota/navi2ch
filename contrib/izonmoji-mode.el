@@ -1,6 +1,6 @@
 ;;; izonmoji-mode.el --- Visualize Windows and Macintosh izonmoji
 
-;; Copyright (C) 2002, 2003 by Navi2ch Project
+;; Copyright (C) 2002-2004 by Navi2ch Project
 
 ;; Author: SAITO Takuya <tabmore@users.sourceforge.net>
 ;; Keywords: 2ch, charset
@@ -203,10 +203,10 @@
     "♤" "♧" "♡" "♢" "♠" "♣" "♥" "♦"
     "〠" "☎" "JIS"			;JISマーク
     "→" "←" "↑" "↓"			;指差し矢印
-    "⇄" "⇄" "↑↓" "↓↑"		;偶数番目は、上下、左右の向きが逆
+    "⇄" "⇄" "↑↓" "↓↑"	     ;偶数番目は、上下、左右の向きが逆
     "⇨" "⇦" "⇧" "⇩" "⇨" "⇦" "⇧" "⇩" ;後半は塗り潰し
     "(日)" "(月)" "(火)" "(水)" "(木)" "(金)" "(土)"
-    "(祭)" "(祝)" "(自)" "(至)" "㈹" "(呼)" "㈱" "(資)" "(名)" 
+    "(祭)" "(祝)" "(自)" "(至)" "㈹" "(呼)" "㈱" "(資)" "(名)"
     "㈲" "(学)" "(財)" "(社)" "(特)" "(監)" "(企)" "(協)" "(労)"
     "(大)" "(小)" "㊤" "㊥" "㊦" "㊧" "㊨"
     "(医)" "(財)" "(優)" "(労)" "(印)" "(控)" "(秘)" ;本当は丸付き

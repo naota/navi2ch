@@ -46,7 +46,7 @@
   '((aborn . "X-Navi2ch-Aborn")		; あぼーんされてる
     (kako . "X-Navi2ch-Kako")		; 過去ログになってる
     (not-updated . "X-Navi2ch-Not-Updated") ; 更新されていない
-    (error . "X-Navi2ch-Error"))	; エラー(ファイルが取得できないとか)
+    (error . "X-Navi2ch-Error"))  ; エラー(ファイルが取得できないとか)
 
   "STATE のシンボルと 実際にヘッダに書かれる文字列の alist")
 

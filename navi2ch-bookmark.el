@@ -1,6 +1,6 @@
 ;;; navi2ch-bookmark.el --- global bookmark module for navi2ch
 
-;; Copyright (C) 2001-2003 by Navi2ch Project
+;; Copyright (C) 2001-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -213,7 +213,7 @@ KEY は (concat URI ARTID) ")
   "ブックマーク BOOKMARK-ID からスレッドを削除する。
 削除されるのは KEY で表わされるスレッド。"
   (let* ((bookmark (assoc bookmark-id navi2ch-bookmark-list))
-	(node (assoc key (cddr bookmark))))
+	 (node (assoc key (cddr bookmark))))
     (when bookmark
       (setcdr bookmark
 	      (delete node (cdr bookmark)))
@@ -223,8 +223,8 @@ KEY は (concat URI ARTID) ")
 (defun navi2ch-bookmark-delete-article (bookmark-id board article)
   "ブックマーク BOOKMARK-ID からスレッドを削除する。
 削除されるのは BOARD, ARTICLE で表わされるスレッド。"
- (navi2ch-bookmark-delete-key bookmark-id
-			     (navi2ch-bookmark-get-key board article)))
+  (navi2ch-bookmark-delete-key bookmark-id
+			       (navi2ch-bookmark-get-key board article)))
 
 (defun navi2ch-bookmark-delete-article-all (board article)
   "BOARD, ARTICLE で表わされるスレッドを全てのブックマークから削除する。"
@@ -298,7 +298,7 @@ KEY は (concat URI ARTID) ")
   (interactive)
   (let ((pair (pop navi2ch-bookmark-cut-stack))
 	(bookmark (assoc navi2ch-bookmark-current-bookmark-id
-			   navi2ch-bookmark-list)))
+			 navi2ch-bookmark-list)))
     (if pair
 	(progn
 	  (if (eobp)
@@ -392,8 +392,8 @@ KEY は (concat URI ARTID) ")
 	(navi2ch-load-info navi2ch-bookmark-file)))
 
 (defun navi2ch-bookmark-fetch-article (&optional force)
-;; navi2ch-bm-fetch-article の wrapper として働き、subject が nil なら
-;; ファイルから subject を見つけて更新する。
+  ;; navi2ch-bm-fetch-article の wrapper として働き、subject が nil なら
+  ;; ファイルから subject を見つけて更新する。
   (interactive "P")
   (let* ((item (navi2ch-bookmark-get-property (point)))
          (board (navi2ch-bookmark-get-board item))

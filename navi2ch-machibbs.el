@@ -1,6 +1,6 @@
 ;;; navi2ch-machibbs.el --- View machiBBS module for Navi2ch.
 
-;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
+;; Copyright (C) 2002-2004 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -92,7 +92,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 
 (defun navi2ch-machibbs-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
-START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
+START, END, NOFIRST で範囲を指定する" ; 効かなかったら教えてください。
   (let ((uri   (cdr (assq 'uri board)))
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri) ; \\/ --> / ?

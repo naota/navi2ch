@@ -391,7 +391,7 @@
 				  (append navi2ch-message-aa-alist
 					  navi2ch-message-aa-default-alist)))))
 	(insert aa)
-    (ding))))
+      (ding))))
 
 (defun navi2ch-message-insert-aa-list ()
   (let ((aa-width navi2ch-message-popup-aa-width)

@@ -1,6 +1,6 @@
 ;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch.
 
-;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
+;; Copyright (C) 2002-2004 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -120,8 +120,8 @@ CODING-SYSTEM-VAR:
 
 (defun navi2ch-multibbs-set-bbstype (board type)
   (when (consp board)
-      (setcdr board
-	      (cons (cons 'bbstype type) (cdr board)))))
+    (setcdr board
+	    (cons (cons 'bbstype type) (cdr board)))))
 
 (defun navi2ch-multibbs-get-bbstype (board)
   (let ((type (cdr (assq 'bbstype board))))
@@ -146,8 +146,8 @@ SPEC は (BBSTYPE [ARG]...)。
 	(decoding (gensym "--decoding--"))
 	docstring)
     (when (stringp (car body))
-	  (setq docstring (car body))
-	  (setq body (cdr body)))
+      (setq docstring (car body))
+      (setq body (cdr body)))
     `(defun ,name (,@(cdr spec))
        ,docstring
        (let* ((coding-system-for-read 'binary)
@@ -262,7 +262,7 @@ START, END, NOFIRST で範囲を指定する"
 	 (navi2ch-net-http-proxy-password (if navi2ch-net-http-proxy-for-send-message
 					      navi2ch-net-http-proxy-password-for-send-message
 					    navi2ch-net-http-proxy-password))
-	 (tries 2)	; 送信試行の最大回数
+	 (tries 2)			; 送信試行の最大回数
 	 (message-str "send message...")
 	 (result 'retry))
     (dotimes (i tries)

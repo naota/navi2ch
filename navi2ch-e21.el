@@ -1,6 +1,6 @@
 ;;; navi2ch-e21.el --- GNU Emacs 21 module for navi2ch
 
-;; Copyright (C) 2001, 2002 by Navi2ch Project
+;; Copyright (C) 2001, 2002, 2004 by Navi2ch Project
 ;; Copyright (C) 2000,2001 Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Copyright (C) 2000,2001 Yuuichi Teranishi <teranisi@gohome.org>
 
@@ -54,13 +54,13 @@
 	  (unless navi2ch-online-image
 	    (let ((load-path (cons navi2ch-icon-directory load-path)))
 	      (setq navi2ch-online-image (find-image
-                                             `((:type xpm
-                                                      :file ,navi2ch-online-icon
-                                                      :ascent center)))
+					  `((:type xpm
+						   :file ,navi2ch-online-icon
+						   :ascent center)))
 		    navi2ch-offline-image (find-image
-                                              `((:type xpm
-                                                       :file ,navi2ch-offline-icon
-                                                       :ascent center))))))
+					   `((:type xpm
+						    :file ,navi2ch-offline-icon
+						    :ascent center))))))
 	  (setq navi2ch-modeline-online
 		(apply 'propertize navi2ch-online-indicator
 		       `(display ,navi2ch-online-image ,@props))

@@ -1,6 +1,6 @@
 ;;; navi2ch-http-date.el --- parser / generator of HTTP-date format
 
-;; Copyright (C) 2002  Navi2ch Project
+;; Copyright (C) 2002, 2004  Navi2ch Project
 
 ;; Author: Nanashi San <nanashi@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -106,8 +106,8 @@
 						(aref now 2)))
 	 (wkday (nth (% abs 7) navi2ch-http-date-wkday-list))
 	 (month (nth (1- (aref now 1)) navi2ch-http-date-month-list)))
-	    ;; しかし、なんで標準に locale 依存の曜日や月名を入れるかねぇ。
-	    ;; ISO 8601 形式の yyyy-mm-dd HH:MM:SS でいーじゃんよ。
+    ;; しかし、なんで標準に locale 依存の曜日や月名を入れるかねぇ。
+    ;; ISO 8601 形式の yyyy-mm-dd HH:MM:SS でいーじゃんよ。
     (format "%s, %02d %s %04d %02d:%02d:%02d GMT"
 	    wkday (aref now 2) month (aref now 0)
 	    (aref now 3) (aref now 4) (aref now 5))))
