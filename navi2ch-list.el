@@ -85,7 +85,8 @@
   "Menu definition for navi2ch-list.")
 
 (defvar navi2ch-list-ignore-category-list
-  '("チャット" "お絵かき" "運営" "ツール類" "他の掲示板" "まちＢＢＳ"))
+  '("チャット" "お絵かき" "運営" "ツール類" "他の掲示板" "まちＢＢＳ"
+    "他のサイト"))
 (defvar navi2ch-list-buffer-name "*navi2ch list*")
 (defvar navi2ch-list-current-list nil)
 (defvar navi2ch-list-category-list nil)

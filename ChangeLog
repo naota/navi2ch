@@ -1,5 +1,8 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-list.el (navi2ch-list-ignore-category-list): カテゴリが
+	「他の掲示板」から「他のサイト」に変わってたので追加。
+
 	* navi2ch-article.el (navi2ch-article-sync): kako log を re-sync
 	しない時に navi2ch-article-current-article が nil のままだったので
 	修正。
