@@ -1,3 +1,16 @@
+2004-04-03  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): 複数の正
+	規表現をまとめて検索するように。navi2ch-article-link-regexp-alist
+	を使用して URL ではない物にもリンクを貼れるように。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): 新変数。
+
+	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): 新関数。
+	(navi2ch-re-search-forward-regexp-alist): 新関数。
+	(navi2ch-string-match-regexp-alist): 新関数。
+	(navi2ch-replace-regexp-alist): 新関数。
+
 2004-03-30  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-2ch-host-list):

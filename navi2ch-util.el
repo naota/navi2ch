@@ -1120,5 +1120,75 @@ This function is a cutdown version of cl-seq's one."
 (defun navi2ch-right-aligned-string= (s1 s2)
   (apply #'string= (navi2ch-right-align-strings s1 s2)))
 
+(defsubst navi2ch-match-regexp-alist-subr (match-function regexp-alist)
+  "REGEXP-ALIST 各要素の car を正規表現とし、MATCH-FUNCTION を呼び出す。
+マッチした要素を返す。
+REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
+back reference は有効に動作しない。"
+  (let* ((number-alist
+	  (let ((n 1))
+	    (mapcar (lambda (elt)
+		      (let ((r (concat "\\(" (car elt) "\\)")))
+			(prog1
+			    (list n r elt)
+			  (setq n (+ n (regexp-opt-depth r))))))
+		    regexp-alist)))
+	 (number-list (mapcar #'car number-alist))
+	 (combined-regexp (mapconcat #'cadr number-alist "\\|")))
+    (when (funcall match-function combined-regexp)
+      (catch 'result
+	(dolist (n number-list)
+	  (when (match-beginning n)
+	    (throw 'result (nth 2 (assoc n number-alist)))))))))
+
+(defun navi2ch-re-search-forward-regexp-alist
+  (regexp-alist &optional bound noerror count)
+  "REGEXP-ALIST の各要素の car を正規表現とし、`re-search-forward' を呼び出す。
+`match-data' をマッチした正規表現の物にし、マッチした要素を返す。
+REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
+back reference は有効に動作しない。
+BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
+  (let* ((p (point))
+	 (matched-elt (navi2ch-match-regexp-alist-subr
+		       (lambda (regexp)
+			 (re-search-forward regexp bound noerror count))
+		       regexp-alist)))
+    (when matched-elt
+      (goto-char p)
+      (re-search-forward (car matched-elt) bound noerror count))
+    matched-elt))
+
+(defun navi2ch-string-match-regexp-alist (regexp-alist string &optional start)
+  "REGEXP-ALIST の key を正規表現とし、`string-match' を呼び出す。
+`match-data' をマッチした正規表現の物にし、マッチした要素を返す。
+REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
+back reference は有効に動作しない。
+START は `string-match' にそのまま渡される。"
+  (let ((matched-elt (navi2ch-match-regexp-alist-subr
+		      (lambda (regexp)
+			(string-match regexp string start))
+		      regexp-alist)))
+    (when matched-elt
+      (string-match (car matched-elt) string start))
+    matched-elt))
+
+(defun navi2ch-replace-regexp-alist (regexp-alist &optional fixedcase literal)
+  "REGEXP-ALIST の各要素の car を正規表現とし、cdr で置き換える。
+cdr が文字列の場合はそれ自身と、関数の場合はマッチした正規表現を引数
+として呼び出した結果と置き換える。
+REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
+back reference は有効に動作しない。
+FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
+  (let (elt rep)
+    (while (setq elt
+		 (navi2ch-re-search-forward-regexp-alist regexp-alist nil t))
+      (setq rep (cdr elt))
+      (replace-match (cond ((stringp rep) rep)
+			   ((functionp rep) (funcall rep (car elt)))
+			   (t (signal 'wrong-type-argument
+				      (list 'stringp-or-functionp
+					    rep))))
+		     fixedcase literal))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

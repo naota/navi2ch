@@ -660,6 +660,17 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
+;; '(("\\[FreeBSD-users-jp \\([0-9]+\\)\\]" .
+;;    "http://home.jp.freebsd.org/cgi-bin/showmail/FreeBSD-users-jp/\\1"))
+;; とかすれば、URL じゃない物にもリンクを貼れる。
+(defcustom navi2ch-article-link-regexp-alist
+  '(("<\\(UR[IL]:\\)?\\([^>]+\\)>" . "\\2"))
+  "*各要素の car を正規表現とし、マッチしたテキストに cdr へのリンクを張る。
+navi2ch-article-url-regexp より優先される。"
+  :type '(repeat (cons (regexp :tag "マッチする正規表現")
+		       (string :tag "置換する文字列")))
+  :group 'navi2ch-article)
+
 (defcustom navi2ch-article-filter-list nil
   "*スレッドの記事をいじるフィルターのリスト。
 それぞれのフィルターは elisp の関数ならば その symbol、

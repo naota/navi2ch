@@ -460,28 +460,42 @@ START, END, NOFIRST で範囲を指定する"
 (defsubst navi2ch-article-set-link-property ()
   ">>1 とか http:// に property を付ける"
   (goto-char (point-min))
-  (let ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
-	(sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp)))
-    (while (re-search-forward (concat navi2ch-article-number-prefix-regexp
-				      navi2ch-article-number-number-regexp)
-			      nil t)
-      (navi2ch-article-set-link-property-subr
-       (match-beginning 0) (match-end 0)
-       'number (navi2ch-match-string-no-properties (1+ pref-depth)))
-      (while (looking-at (concat navi2ch-article-number-separator-regexp
-				 navi2ch-article-number-number-regexp))
-	(navi2ch-article-set-link-property-subr
-	 (match-beginning (1+ sep-depth)) (match-end (1+ sep-depth))
-	 'number (navi2ch-match-string-no-properties (1+ sep-depth)))
-	(goto-char (match-end 0)))))
-  (goto-char (point-min))
-  (while (re-search-forward navi2ch-article-url-regexp nil t)
-    (let ((start (match-beginning 0))
-	  (end (match-end 0))
-	  (url (navi2ch-match-string-no-properties 0)))
-      (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
-	(setq url (replace-match "http\\2" nil nil url)))
-      (navi2ch-article-set-link-property-subr start end 'url url))))
+  (let* ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
+	 (sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp))
+	 (number-func
+	  (lambda ()
+	    (navi2ch-article-set-link-property-subr
+	     (match-beginning 0) (match-end 0)
+	     'number (navi2ch-match-string-no-properties (1+ pref-depth)))
+	    (while (looking-at (concat navi2ch-article-number-separator-regexp
+				       navi2ch-article-number-number-regexp))
+	      (navi2ch-article-set-link-property-subr
+	       (match-beginning (1+ sep-depth)) (match-end (1+ sep-depth))
+	       'number (navi2ch-match-string-no-properties (1+ sep-depth)))
+	      (goto-char (match-end 0)))))
+	 (url-func
+	  (lambda ()
+	    (let ((start (match-beginning 0))
+		  (end (match-end 0))
+		  (url (navi2ch-match-string-no-properties 0)))
+	      (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
+		(setq url (replace-match "http\\2" nil nil url)))
+	      (navi2ch-article-set-link-property-subr start end 'url url))))
+	 (alist (append navi2ch-article-link-regexp-alist
+			`((,(concat navi2ch-article-number-prefix-regexp
+				    navi2ch-article-number-number-regexp)
+			   . ,number-func)
+			  (,navi2ch-article-url-regexp . ,url-func))))
+	 match)
+    (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
+      (if (functionp (cdr match))
+	  (funcall (cdr match))
+	(let ((start (match-beginning 0))
+	      (end (match-end 0))
+	      (url (navi2ch-match-string-no-properties 0)))
+	  (when (string-match (car match) url)
+	    (setq url (replace-match (cdr match) nil nil url))
+	    (navi2ch-article-set-link-property-subr start end 'url url)))))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))
