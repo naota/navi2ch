@@ -1,3 +1,12 @@
+2004-03-18  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el
+	(navi2ch-article-default-message-filter-by-message-alist): 新変数。
+	(navi2ch-article-message-filter-by-message): 上記変数を使うように。
+
+	* navi2ch-vars.el (navi2ch-global-map): Navi2ch 内では C-xC-e を
+	unbound。
+
 2004-03-18  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch.el: eval-last-sexp, shell-command に advice 追加。

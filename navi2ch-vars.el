@@ -1758,6 +1758,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
   "navi2ch のどのモードでも使える keymap。")
 (unless navi2ch-global-map
   (let ((map (make-sparse-keymap)))
+    (define-key map "\C-x\C-e" 'ignore)	; Navi2ch 内では無効に
     (define-key map "\C-c\C-f" 'navi2ch-find-file)
     ;; (define-key map "\C-c\C-g" 'navi2ch-list-goto-board)
     (define-key map "\C-c\C-t" 'navi2ch-toggle-offline)

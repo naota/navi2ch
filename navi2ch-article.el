@@ -170,6 +170,12 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-save-message-filter-cache-keys
   '(cache replace hide important aborn))
 
+;; defcustom にしないでおく
+(defvar navi2ch-article-default-message-filter-by-message-alist
+  `(((,(regexp-opt '("(mule-caesar" "(base64-decode"
+		     "(shell-command" "(call-process" "(delete-file")) r)
+     . hide)))
+
 ;; sticky mode
 (defvar navi2ch-article-sticky-mode nil)
 (make-variable-buffer-local 'navi2ch-article-sticky-mode)
@@ -767,9 +773,11 @@ START, END, NOFIRST で範囲を指定する"
      (cdr (assq 'name alist)))))
 
 (defun navi2ch-article-message-filter-by-message (alist)
-  (when navi2ch-article-message-filter-by-message-alist
+  (when (or navi2ch-article-default-message-filter-by-message-alist
+	    navi2ch-article-message-filter-by-message-alist)
     (navi2ch-article-message-filter-subr
-     navi2ch-article-message-filter-by-message-alist
+     (append navi2ch-article-default-message-filter-by-message-alist
+	     navi2ch-article-message-filter-by-message-alist)
      (cdr (assq 'data alist)))))
 
 (defun navi2ch-article-message-filter-by-id (alist)
