@@ -590,6 +590,13 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B aa $B$rF~NO$G$-$k!#(
 		 (const :tag "$B%Q%9%o!<%I$r;H$o$J$$(B" nil))
   :group 'navi2ch-net)
 
+(defcustom navi2ch-net-send-message-use-http-proxy t
+  "*$B%l%9$r=q$/:]$K$b(B Proxy $B$r;HMQ$9$k$+!#(B
+`non-nil' $B$G$"$C$F$b(B navi2ch-net-http-proxy $B$,(B `nil' $B$N>l9g$K$O(B Proxy 
+$B$O;HMQ$7$J$$!#(B"
+  :type 'boolean
+  :group 'navi2ch-net)
+
 (defcustom navi2ch-net-force-update nil
   "*$B99?7$,$"$C$?$+$r3NG'$;$:$K99?7$9$k$+!#(B
 `non-nil' $B$J$i$P3NG'$7$J$$(B"
@@ -642,6 +649,11 @@ non-nil $B$J$iIU2C$9$k!#(B"
 (defcustom navi2ch-net-gunzip-args '("-d" "-c" "-q")
   "*gunzip $B$r8F=P$9$H$-$N0z?t!#(B"
   :type '(repeat :tag "$B0z?t(B" string)
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-net-enable-http11 nil
+  "*HTTP/1.1 $B$r;HMQ$9$k$+$I$&$+!#(B"
+  :type 'boolean
   :group 'navi2ch-net)
 
 ;;; update variables

@@ -38,9 +38,6 @@
 (defvar navi2ch-net-header nil)
 (defvar navi2ch-net-content nil)
 
-(defvar navi2ch-net-enable-http11 nil
-  "たぶんまだ不具合山盛り")
-
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
 (defun navi2ch-net-cleanup ()
@@ -572,8 +569,10 @@ internet drafts directory for a copy.")
 (defun navi2ch-net-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)
 				   navi2ch-coding-system)))
-    (when (string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
-      (match-string 1 str))))
+    (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
+	   (match-string 1 str))
+	  ((string-match "<b>\\([^<]+\\)" str)
+	   (match-string 1 str)))))
 		   
 (defun navi2ch-net-send-message (from mail message subject url referer bbs key)
   "メッセージを送る。
@@ -594,7 +593,9 @@ internet drafts directory for a copy.")
           (cons "MESSAGE" message)
           (if subject
               (cons "subject" subject)
-            (cons "key" key)))))
+            (cons "key" key))))
+	(navi2ch-net-http-proxy (if navi2ch-net-send-message-use-http-proxy
+				    navi2ch-net-http-proxy)))
     (let (proc)
       (setq proc (navi2ch-net-send-request
 		  url "POST"

@@ -1,3 +1,15 @@
+2002-01-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-enable-http11): navi2ch-vars へ移動。
+	(navi2ch-net-send-message-error-string): Proxy 規制のエラーメッセー
+	ジに対応。
+	(navi2ch-net-send-message):
+	navi2ch-net-send-message-use-http-proxy を見るように。
+
+	* navi2ch-vars.el (navi2ch-net-send-message-use-http-proxy): 新変数。
+	(navi2ch-net-enable-http11): navi2ch-net.el から移動。俺的にはそろ
+	そろ stable なんで customize 可能にしてみた。
+
 2002-01-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-goto-board): default 値の代入方法
