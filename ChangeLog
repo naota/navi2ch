@@ -1,3 +1,9 @@
+2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* icons/plugged.xpm: 上下の空白を削って高さを 12 dot にした。
+
+	* icons/unplugged.xpm: 同上。
+
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode):

@@ -1,6 +1,6 @@
 /* XPM */
 static char *plugged[] = {
-"32 16 8 1",
+"32 12 8 1",
 "  c None",
 ". c #a6caf0",
 "# c #8fa5cf",
@@ -9,8 +9,6 @@ static char *plugged[] = {
 "c c #8488ca",
 "d c #9f9f9f",
 "e c #7f8080",
-"                                ",
-"                                ",
 "            ...                 ",
 "           .ccb....             ",
 "           accb####.            ",
@@ -22,7 +20,5 @@ static char *plugged[] = {
 "          aaccb####aaa          ",
 "           accbaaaaa            ",
 "           aaaaaaaa             ",
-"            aaa                 ",
-"                                ",
-"                                "
+"            aaa                 "
 };

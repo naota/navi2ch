@@ -1,6 +1,6 @@
 /* XPM */
 static char * unplugged_xpm[] = {
-"32 16 9 1",
+"32 12 9 1",
 " 	s None	c None",
 ".	c tomato",
 "X	c #a6caf0",
@@ -10,8 +10,6 @@ static char * unplugged_xpm[] = {
 "@	c #717171",
 "#	c #7f8080",
 "$	c #9f9f9f",
-"                                ",
-"                                ",
 "          XXX......             ",
 "           ...    ...           ",
 "          ..O     ....X         ",
@@ -23,6 +21,5 @@ static char * unplugged_xpm[] = {
 "         ..o...   @++..@@       ",
 "          ....    @@..@         ",
 "           ...    ...@          ",
-"             ......             ",
-"                                ",
-"                                "};
+"             ......             "
+};
