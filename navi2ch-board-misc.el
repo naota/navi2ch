@@ -611,6 +611,7 @@ ARG が non-nil なら移動方向を逆にする。"
 					       (beginning-of-line)
 					       (point))
 			       (save-excursion (goto-char end)
+					       (backward-char 1)
 					       (end-of-line)
 					       (point))
 			       (if arg " " "*")))

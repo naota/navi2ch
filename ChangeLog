@@ -2,6 +2,8 @@
 
 	* navi2ch-board-misc.el (navi2ch-bm-goto-other-column):
 	スレタイトルが nil の場合は navi2ch-bm-empty-subject で検索。
+	(navi2ch-bm-mark-region): end が行頭のときは前の行までを mark する
+	ように。
 
 2002-03-27    mami  <mami@users.sourceforge.net>
 
