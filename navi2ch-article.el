@@ -244,20 +244,21 @@ LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5(B"
   "BODY $BFb$G8=:_I=<($7$F$$$k%9%l$rI=<($7$J$*$9$H$-$K!"(B
 $B%&%#%s%I%&Fb$N%+!<%=%k$N0LCV$r$G$-$k$@$10];}$9$k!#(B"
   (let ((num (make-symbol "num"))
+	(buf (make-symbol "buf"))
 	(win (make-symbol "win"))
 	(bol (make-symbol "bol"))
 	(col (make-symbol "col"))
 	(win-lin (make-symbol "win-lin"))
 	(msg-lin (make-symbol "msg-lin"))
 	(visible (make-symbol "visible")))
-    `(let ((navi2ch-article-goto-number-recenter nil)
-	   (,num (navi2ch-article-get-current-number))
-	   (,win (if (eq (window-buffer) (current-buffer))
-		     (selected-window)
-		   (get-buffer-window (current-buffer))))
-	   (,bol (navi2ch-line-beginning-position))
-	   (,col (current-column))
-	   ,win-lin ,msg-lin ,visible)
+    `(let* ((,num (navi2ch-article-get-current-number))
+	    (,buf (current-buffer))
+	    (,win (if (eq (window-buffer) ,buf)
+		      (selected-window)
+		    (get-buffer-window ,buf)))
+	    (,bol (navi2ch-line-beginning-position))
+	    (,col (current-column))
+	    ,win-lin ,msg-lin ,visible)
        (save-excursion
 	 (goto-char (window-start ,win))
 	 (setq ,win-lin (count-lines (navi2ch-line-beginning-position) ,bol))
@@ -267,17 +268,19 @@ LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5(B"
 	   (setq ,msg-lin
 		 (count-lines (navi2ch-line-beginning-position) ,bol))))
        (prog1 (progn ,@body)
-	 (when ,num
-	   (setq ,visible (navi2ch-article-get-visible-numbers))
-	   (while (and (cdr ,visible)
-		       (< (car ,visible) ,num))
-	     (setq ,visible (cdr ,visible))))
-	 (navi2ch-article-goto-number (or (car ,visible)
-					  1))
-	 (forward-line ,msg-lin)
-	 (move-to-column ,col)
-	 (set-window-start ,win
-			   (navi2ch-line-beginning-position (- 1 ,win-lin)))))))
+	 (with-current-buffer ,buf
+	   (when ,num
+	     (setq ,visible (navi2ch-article-get-visible-numbers))
+	     (while (and (cdr ,visible)
+			 (< (car ,visible) ,num))
+	       (setq ,visible (cdr ,visible))))
+	   (navi2ch-article-goto-number (or (car ,visible) 1))
+	   (forward-line ,msg-lin)
+	   (move-to-column ,col)
+	   (set-window-start ,win
+			     (navi2ch-line-beginning-position (- 1 ,win-lin)))
+	   (unless (eq (navi2ch-article-get-current-number) (car ,visible))
+	     (navi2ch-article-goto-number (or (car ,visible) 1))))))))
 
 (put 'navi2ch-article-save-view 'lisp-indent-function 0)
 
@@ -521,7 +524,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
       (let* ((num (car x))
 	     (alist (cdr x))
 	     (rep (cdr (assq num reps)))
-	     supress)
+	     suppress)
         (when (and alist
 		   (cond (navi2ch-article-hide-mode
 			  (memq num hide))
@@ -599,7 +602,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 			      (navi2ch-put-alist 'hide
 						 hide
 						 navi2ch-article-current-article))
-			(setq supress t)
+			(setq suppress t)
 			(when navi2ch-article-use-message-filter-cache
 			  (setq f-hide (cons num f-hide))
 			  (setq navi2ch-article-message-filter-cache
@@ -644,7 +647,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 					     navi2ch-article-message-filter-cache)))))))
 	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
 	  ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
-	  (unless supress
+	  (unless suppress
 	    (navi2ch-article-insert-message num alist)))
 	;; $B?JD=I=<((B
 	(and (> (setq progress (+ progress 100)) 10000)
@@ -1034,7 +1037,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
       (navi2ch-article-set-mode-line)
       (if (and (cdr (assq 'kako article))
 	       (file-exists-p file)
-	       (not (and force ; force $B$,;XDj$5$l$J$$8B$j(Bsync$B$7$J$$(B
+	       (not (and force		; force $B$,;XDj$5$l$J$$8B$j(Bsync$B$7$J$$(B
 			 (y-or-n-p "re-sync kako article?"))))
 	  (setq navi2ch-article-current-article article)
 	(let ((ret (navi2ch-article-update-file board article force)))
@@ -1052,12 +1055,9 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		    (navi2ch-net-get-state 'kako header)
 		    (not navi2ch-article-enable-diff))
 		(setq list (navi2ch-article-get-message-list file))
-	      (unless (or (null (cdr list))
-			  navi2ch-article-hide-mode
-			  navi2ch-article-important-mode)
-		(setq start (- (length list)
-			       (or (cdr navi2ch-article-view-range) 0)
-			       -1)))
+	      (setq start (max 1
+			       (- (1+ (length list))
+				  (or (cdr navi2ch-article-view-range) 0))))
 	      (setq list (navi2ch-article-append-message-list
 			  list (navi2ch-article-get-message-list
 				file old-size))))
@@ -1067,12 +1067,17 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		(navi2ch-article-fix-range num)
 		(when (and navi2ch-article-view-range
 			   start)
-		  (setq start (min start
-				   (- (length list)
-				      (cdr navi2ch-article-view-range)
-				      -1))))))
+		  (setq start
+			(min start
+			     (max 1
+				  (- (1+ (length list))
+				     (cdr navi2ch-article-view-range))))))))
 	    (unless first
 	      (navi2ch-article-save-number))
+	    (when (or (eq start 1)
+		      navi2ch-article-hide-mode
+		      navi2ch-article-important-mode)
+	      (setq start nil))
 	    (setq navi2ch-article-hide-mode nil
 		  navi2ch-article-important-mode nil)
 	    (let ((buffer-read-only nil))
@@ -1758,9 +1763,10 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (let (list prev)
     (save-excursion
       (goto-char (point-max))
-      (while (setq prev (navi2ch-previous-property (point) 'current-number))
-	(goto-char prev)
-	(setq list (cons (get-text-property (point) 'current-number) list))))
+      (unless (bobp)
+	(while (setq prev (navi2ch-previous-property (point) 'current-number))
+	  (goto-char prev)
+	  (setq list (cons (get-text-property (point) 'current-number) list)))))
     list))
 
 (defun navi2ch-article-show-url ()
@@ -2856,8 +2862,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 			       navi2ch-article-current-article))
       (let ((buffer-read-only nil))
 	(navi2ch-article-save-view
-	  (save-excursion
-	    (navi2ch-article-reinsert-partial-messages num num))))
+	  (navi2ch-article-reinsert-partial-messages num num)))
       (when (and prefix
 		 (memq num unfilter))
 	(navi2ch-put-alist num
@@ -2910,11 +2915,10 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
   (force-mode-line-update)
   (let ((buffer-read-only nil))
     (navi2ch-article-save-view
-      (save-excursion
-	(erase-buffer)
-	(navi2ch-article-insert-messages
-	 navi2ch-article-message-list
-	 navi2ch-article-view-range))))
+      (erase-buffer)
+      (navi2ch-article-insert-messages
+       navi2ch-article-message-list
+       navi2ch-article-view-range)))
   navi2ch-article-message-filter-mode)
 
 (run-hooks 'navi2ch-article-load-hook)

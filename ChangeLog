@@ -1,3 +1,16 @@
+2003-04-28  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-save-view): 本体処理後の
+	カーソル位置の復帰方法を強化。
+	(navi2ch-article-insert-messages): `suppress' の綴り間違いを訂正。
+	(navi2ch-article-sync): レスの数が navi2ch-article-view-range の
+	cdr 部より少ない場合の差分挿入に対応。
+	(navi2ch-article-get-visible-numbers): 空のバッファでもエラーに
+	ならないように。
+	(navi2ch-article-toggle-replace-message):
+	navi2ch-article-save-view() の中の save-excursion() を削除。
+	(navi2ch-article-toggle-message-filter): 同上。
+
 2003-04-23  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-get-visible-numbers): 
