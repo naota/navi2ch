@@ -1,5 +1,10 @@
 2002-07-13  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch.el (navi2ch-2ch-url-p): board か article にならない場合
+	は nil を返すようにした。
+
+	* navi2ch-multibbs.el (navi2ch-2ch-url-to-board): 比較を厳密にした。
+
 	他のパッケージ (GNUS とか) から URL を開く時、2ch は Navi2ch で見
 	られるといいよね、ってことで。
 	~/.emacs で、

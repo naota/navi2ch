@@ -370,17 +370,20 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 	   (navi2ch-directory-find-directory file)))))
 
 (defun navi2ch-2ch-url-p (url)
-  "URL が 2ch 内の url かを返す。"
+  "URL が 2ch 内の url であれば non-nil を返す。"
   (let ((host (navi2ch-url-to-host url)))
-    (or (member host navi2ch-2ch-host-list)
-	(let (list)
-	  (setq list
-		(mapcar
-		 (lambda (x)
-		   (navi2ch-url-to-host (cdr (assq 'uri x))))
-		 (navi2ch-list-get-board-name-list
-		  navi2ch-list-category-list)))
-	  (member host list)))))
+    (and (or (member host navi2ch-2ch-host-list)
+	     (let (list)
+	       (setq list
+		     (mapcar
+		      (lambda (x)
+			(navi2ch-url-to-host (cdr (assq 'uri x))))
+		      (navi2ch-list-get-board-name-list
+		       navi2ch-list-category-list)))
+	       (member host list)))
+	 (or (navi2ch-article-url-to-article url)
+	     (navi2ch-board-url-to-board url))
+	 t)))
 
 (defun navi2ch-change-log-directory (changed-list)
   "変更された板のログを保存するディレクトリを修正する。
