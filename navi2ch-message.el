@@ -408,10 +408,10 @@
 	(setq string (format "%s: %s" (key-description key) val)
 	      width (string-width string))
 	(if (> width aa-width)
-	    (setq string (concat (truncate-string-to-width string
-							   (- aa-width 3))
+	    (setq string (concat (navi2ch-truncate-string-to-width
+				  string (- aa-width 3))
 				 "...")))
-	(insert (truncate-string-to-width string aa-width nil ?\ )
+	(insert (navi2ch-truncate-string-to-width string aa-width nil ?\ )
 		(if nl "\n" " "))
 	(setq nl (not nl))))))
 

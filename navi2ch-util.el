@@ -1195,5 +1195,22 @@ FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
 					    rep))))
 		     fixedcase literal))))
 
+(defun navi2ch-truncate-string-to-width
+  (str end-column &optional start-column padding)
+  (let ((col 0)
+	(start-column (or start-column 0))
+	r)
+    (dolist (c (string-to-list str))
+      (when (and (>= col start-column)
+		 (< col end-column))
+	(push c r)
+	(setq col (+ col (char-width c)))))
+    (when padding
+      (while (and (>= col start-column)
+		 (< col end-column))
+	(push padding r)
+	(setq col (+ col (char-width padding)))))
+    (concat (nreverse r))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
