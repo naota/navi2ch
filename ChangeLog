@@ -1,3 +1,12 @@
+2002-07-01  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): `mR' に
+	navi2ch-bm-remove-mark-article をバインド。
+	(navi2ch-bm-remove-article-subr): 2 番目の引数に複数のスレを指定で
+	きるようにした。そのうち expire のファイル消去関係もここに集めると
+	きれいかも。(そーすると navi2ch-board.el に移動したほうがいいかな?)
+	(navi2ch-bm-remove-mark-article): 新関数。
+
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-copy-title): 引数を取るよう

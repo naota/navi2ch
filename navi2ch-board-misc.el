@@ -63,6 +63,7 @@
     (define-key map "mm" 'navi2ch-bm-mark-marks)
     (define-key map "m?" 'navi2ch-bm-mark-by-query)
     (define-key map "mb" 'navi2ch-bm-add-bookmark-mark-article)
+    (define-key map "mR" 'navi2ch-bm-remove-mark-article)
     (setq navi2ch-bm-mode-map map)))
 
 (defvar navi2ch-bm-mode-menu-spec
@@ -765,35 +766,45 @@ ARG が non-nil なら移動方向を逆にする。"
   (setq navi2ch-bm-fetched-article-list
         (navi2ch-load-info navi2ch-bm-fetched-info-file)))
 
-(defun navi2ch-bm-remove-article-subr (board article)
-  "BOARD と ARTICLE で指定されるスレの情報を消す。"
-  (let ((same-board nil)
-	(artid (cdr (assq 'artid article))))
+(defun navi2ch-bm-remove-article-subr (board articles)
+  "BOARD と ARTICLES で指定されるスレの情報を消す。
+ARTILCES が alist の場合はそのスレのみを、alist の list の場合は指定さ
+れるすべてのスレを対象にする。"
+  (let ((summary (navi2ch-article-load-article-summary board))
+	(same-board nil))
+    (setq articles
+	  (cond ((cdr (assq 'artid articles)) ; スレ alist
+		 (setq articles (list articles)))
+		((cdr (assq 'artid (car articles))) ; スレ alist の list
+		 articles)
+		(t nil)))
     (if (eq board navi2ch-board-current-board)
 	(setq same-board t)
       (setq board (navi2ch-board-load-info board)))
-    (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board
-							       article))))
-      (when buffer
-	(delete-windows-on buffer)
-	(kill-buffer buffer)))
-    (dolist (file (list (navi2ch-article-get-info-file-name board article)
-			(navi2ch-article-get-file-name board article)))
-      (condition-case nil
-	  (if (file-exists-p file)
-	      (delete-file file))
-	(error nil)))
-    (navi2ch-bm-remove-fetched-article board article)
-    (let ((summary (navi2ch-article-load-article-summary board))
-	  elt)
-      (when summary
-	(while (setq elt (assoc artid summary)) ; クドい?
-	  (setq summary (delq elt summary)))
-	(navi2ch-article-save-article-summary board summary)))
-    (dolist (elt board)
-      (if (listp (cdr elt))
-	  (while (member artid (cdr elt))
-	    (setcdr elt (delete artid (cdr elt))))))
+    (dolist (article articles)
+      (let ((artid (cdr (assq 'artid article))))
+	(let ((buffer (get-buffer (navi2ch-article-get-buffer-name board
+								   article))))
+	  (when buffer
+	    (delete-windows-on buffer)
+	    (kill-buffer buffer)))
+	(dolist (file (list (navi2ch-article-get-info-file-name board article)
+			    (navi2ch-article-get-file-name board article)))
+	  (condition-case nil
+	      (if (file-exists-p file)
+		  (delete-file file))
+	    (error nil)))
+	(navi2ch-bm-remove-fetched-article board article)
+	(when summary
+	  (let (elt)
+	    (while (setq elt (assoc artid summary)) ; クドい?
+	      (setq summary (delq elt summary)))))
+	(dolist (elt board)
+	  (if (listp (cdr elt))
+	      (while (member artid (cdr elt))
+		(setcdr elt (delete artid (cdr elt))))))))
+    (when summary
+      (navi2ch-article-save-article-summary board summary))
     (if same-board
 	(setq navi2ch-board-current-board board))
     (navi2ch-board-save-info board)))
@@ -808,6 +819,10 @@ ARG が non-nil なら移動方向を逆にする。"
       (save-excursion
 	(let ((buffer-read-only nil))
 	  (navi2ch-bm-insert-state item nil nil))))))
+
+(defun navi2ch-bm-remove-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-bm-remove-article))
 
 (run-hooks 'navi2ch-board-misc-load-hook)
 ;;; navi2ch-board-misc.el ends here
