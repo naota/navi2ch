@@ -23,10 +23,13 @@ Copyright (C) 2000-2003 Navi2ch Project
   Windows、Macの機種依存文字を表示。
   Emacs20 では Mule-UCS の jisx0213.el が必要。
   XEmacs の場合は Commentary にある設定をしてあげてね。
-  
+
 * navi2ch-pizaunix.el
   http://piza.2ch.net/log/unix/0008251/ の
   Unix 板過去ログ倉庫を見るための multibbs module です。
 
+* navi2ch-spamfilter.el
+  http://www.geocities.co.jp/SiliconValley-PaloAlto/7043/#spamfilter.el
+  を Navi2ch から利用します。
 
 $Id$

@@ -1,3 +1,11 @@
+2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-spamfilter.el: 新ファイル。
+
+	* Makefile.am (EXTRA_DIST): 上記を追加。
+
+	* README: 同上。
+
 2003-07-16  mami  <mami@users.sourceforge.net>
 
 	* README: Copyright 更新。
