@@ -292,6 +292,19 @@ nil なら expire しない。"
 		 (const :tag "expire しない" nil))
   :group 'navi2ch-board)
 
+(defcustom navi2ch-board-expire-bookmark-p nil
+  "*expire するときに bookmark されているスレも expire するかどうか。
+non-nil ならば expire する。"
+  :type 'boolean
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-board-expire-orphan-only nil
+  "*non-nil ならオルファンなスレのみを expire する。
+オルファンなスレとは、板の subject.txt にもグローバルブックマークにも
+登録されてないスレのこと。"
+  :type 'boolean
+  :group 'navi2ch-board)
+
 (defcustom navi2ch-board-window-height 10
   "*スレの一覧を表示する board window の高さ。"
   :type 'integer
@@ -386,12 +399,6 @@ non-nil ならば記憶する。"
                                  "history.txt")
   "*ヒストリを保存しておくファイル。"
   :type 'file
-  :group 'navi2ch-board)
-
-(defcustom navi2ch-board-expire-bookmark-p nil
-  "*expire するときに bookmark されているスレも expire するかどうか。
-non-nil ならば expire する。"
-  :type 'boolean
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-name-from-file "From File"

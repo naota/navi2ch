@@ -795,10 +795,20 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (navi2ch-search-cache-subr
    (navi2ch-list-get-current-category-list)))
 
+(defun navi2ch-list-search-current-board-orphan ()
+  (interactive)
+  (navi2ch-search-orphan-subr (list (get-text-property (point) 'board))))
+
+(defun navi2ch-list-search-current-category-orphan ()
+  (interactive)
+  (navi2ch-search-orphan-subr
+   (navi2ch-list-get-current-category-list)))
+
 (defun navi2ch-list-search ()
   (interactive)
   (let ((ch (navi2ch-read-char-with-retry
-	     "Search for: s)ubject a)rticle c)ache: " nil '(?s ?a ?c)))
+	     "Search for: s)ubject a)rticle c)ache o)rphan: "
+	     nil '(?s ?a ?c ?o)))
 	(ch2 (if (get-text-property (point) 'board)
 		 (navi2ch-read-char-with-retry
 		  "Search from: b)oard c)ategory a)ll: " nil '(?b ?c ?a))
@@ -815,7 +825,11 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  ((eq ch ?c)
 	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-cache))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-cache))
-		 ((eq ch2 ?a) (navi2ch-search-all-cache)))))))
+		 ((eq ch2 ?a) (navi2ch-search-all-cache))))
+	  ((eq ch ?o)
+	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-orphan))
+		 ((eq ch2 ?c) (navi2ch-list-search-current-category-orphan))
+		 ((eq ch2 ?a) (navi2ch-search-all-orphan)))))))
 
 ;;; expire
 (defun navi2ch-list-expire-current-board (&optional ask)

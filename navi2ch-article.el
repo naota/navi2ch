@@ -3276,5 +3276,18 @@ PREFIX が与えられた場合は、
 		'navi2ch-board-mode)
 	(navi2ch-board-update-buffer navi2ch-board-buffer-name)))))
 
+(defun navi2ch-article-orphan-p (board article)
+  "BOARD と ARTICLE で指定されるスレがオルファンな場合、non-nil を返す。"
+  (cond ((navi2ch-bookmark-exist-all board article) nil)
+	((let ((subject-list (navi2ch-board-get-subject-list
+			      (navi2ch-board-get-file-name board)))
+	       (artid (cdr (assq 'artid article))))
+	   (catch 'break
+	     (dolist (s subject-list)
+	       (if (equal (cdr (assq 'artid s)) artid)
+		   (throw 'break t)))))
+	 nil)
+	(t t)))
+
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

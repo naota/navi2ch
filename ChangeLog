@@ -1,3 +1,27 @@
+2003-10-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	板の subject.txt からもグローバルブックマークからも参照されていな
+	いスレを orphan とし、expire や検索時に参照できるようにした。
+
+	* navi2ch-article.el (navi2ch-article-orphan-p): 新関数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-search-current-board-orphan):
+	新関数。
+	(navi2ch-bm-search): 選択肢に orphan を追加。
+
+	* navi2ch-board.el (navi2ch-board-expire):
+	navi2ch-board-expire-orphan-only を参照するように。
+
+	* navi2ch-list.el (navi2ch-list-search-current-board-orphan): 新関数。
+	(navi2ch-list-search-current-category-orphan): 新関数。
+	(navi2ch-list-search): 選択肢に orphan を追加。
+
+	* navi2ch-search.el (navi2ch-search-orphan): 新関数。
+	(navi2ch-search-orphan-subr): 新関数。
+	(navi2ch-search-all-orphan): 新関数。
+
+	* navi2ch-vars.el (navi2ch-board-expire-orphan-only): 新変数。
+
 2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-cached-subject): 同じ板のス

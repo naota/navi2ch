@@ -166,6 +166,18 @@
 	     (cons 'artid (file-name-sans-extension file)))))
    board-list))
 
+(defun navi2ch-search-orphan (board-list)
+  (navi2ch-search-for-each-article
+   (lambda (board file)
+     (let ((article (list (cons 'artid (file-name-sans-extension file)))))
+       (if (navi2ch-article-orphan-p board article)
+	   (let ((subject (assq 'subject
+				(navi2ch-article-get-first-message-from-file
+				 file))))
+	     (nconc (list board subject)
+		    article)))))
+   board-list))
+
 (easy-menu-define navi2ch-search-mode-menu
   navi2ch-search-mode-map
   "Menu used in navi2ch-search"
@@ -243,6 +255,18 @@
 (defun navi2ch-search-all-cache ()
   (interactive)
   (navi2ch-search-cache-subr
+   (navi2ch-list-get-board-name-list
+    (navi2ch-list-get-normal-category-list
+     navi2ch-list-category-list))))
+
+(defun navi2ch-search-orphan-subr (board-list)
+  (setq navi2ch-search-searched-subject-list
+	(navi2ch-search-orphan board-list))
+  (navi2ch-bm-select-board navi2ch-search-board))
+
+(defun navi2ch-search-all-orphan ()
+  (interactive)
+  (navi2ch-search-orphan-subr
    (navi2ch-list-get-board-name-list
     (navi2ch-list-get-normal-category-list
      navi2ch-list-category-list))))
