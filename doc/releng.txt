@@ -6,6 +6,7 @@ $Id$
 * 使っている道具
   GNU Automake 1.5
   GNU Autoconf 2.53
+  GNU Emacs 20.7
 
 * リリース日時を宣言する
   適当に決める。リリースの一日前くらいから commit 禁止にする。
@@ -14,18 +15,21 @@ $Id$
 
 * β版のリリース
   configure.in の AM_INIT_AUTOMAKE を x.y.z-BETA に変えて
-  % aclocal && autoconf && automake && make Makefiles && make dist
+  % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
   する。tar 玉を http://navi2ch.sf.net/beta/ に置いて 2ch のスレで案内。
+  .elc の tar 玉には作成したホスト名・ユーザ名が埋め込まれるので注意。
 
 * リリース版作成
   configure.in の AM_INIT_AUTOMAKE を x.y.z に変えて ChangeLog を記載、
-  % aclocal && autoconf && automake && make Makefiles && make dist
+  % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
   する。うまくいったら
-  % cvs commit
+  % cvs commit -m 'bump version to x.y.z'
   % cvs tag navi2ch-x_y_z
-  でリリース元の準備をする。commit 忘れ等の確認のため、別ディレクトリで
-  cvs export して
-  % ./configure && make dist elcdist
+  でリリース元の準備をする。
+  commit 忘れ等の確認のため、別ディレクトリで
+  % cvs -d:pserver:anonymous@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch export -r navi2ch-x_y_z -d navi2ch-x.y.z navi2ch
+  して
+  % cd navi2ch-x.y.z && ./configure && make dist elcdist
   で tar 玉を作る。またまたよそのディレクトリに展開して配布物を確認、
   よさげなら SourceForge の File Release に置く。
   (置き方は以下の URL からヘルプを見ながら。
@@ -34,3 +38,10 @@ $Id$
 * リリースのアナウンス
   2ch のスレ、http://navi2ch.sf.net/、
   https://sourceforge.net/news/?group_id=39552 あたりでアナウンスをする。
+
+* バージョンを開発版に変更
+  configure.in の AM_INIT_AUTOMAKE を x.y.z-DEV に変えて ChangeLog を記載、
+  % aclocal && autoconf && automake
+  して
+  % cvs commit -m 'bump version to x.y.z-DEV'
+  で commit する。
