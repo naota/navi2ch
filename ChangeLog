@@ -1,3 +1,10 @@
+2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-define-mouse-key): toplevel if 排除。
+	(navi2ch-set-buffer-multibyte): 同上。
+	(navi2ch-set-buffer-multibyte): 同名関数をマクロに。同上。
+	(navi2ch-string-as-unibyte): 同上。
+
 2002-01-12  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	navi2ch-util, navi2ch-net から list, board, article 依存のコードを
 	はずしてみた。また、それに伴なしいくつかの変数、関数名も変更。

@@ -88,10 +88,9 @@
       (setq str (replace-match new nil nil str))))
   str)
 
-(if (featurep 'xemacs)
-    (defmacro navi2ch-define-mouse-key (map num command)
-      `(define-key ,map ',(intern (format "button%d" num)) ,command))
-  (defmacro navi2ch-define-mouse-key (map num command)
+(defmacro navi2ch-define-mouse-key (map num command)
+  (if (featurep 'xemacs)
+      `(define-key ,map ',(intern (format "button%d" num)) ,command)
     `(define-key ,map ,(vector (intern (format "mouse-%d" num))) ,command)))
 
 (defun navi2ch-bigint-int-to-list (i)
@@ -314,18 +313,16 @@ return new alist whose car is the new pair and cdr is ALIST.
 	    navi2ch-enable-readcgi-host-list)))
 
 ;; from apel
-(if (featurep 'xemacs)
-    (defun navi2ch-set-buffer-multibyte (flag)
-      flag)
-  (defun navi2ch-set-buffer-multibyte (flag)
-    (set-buffer-multibyte flag)))
+(defmacro navi2ch-set-buffer-multibyte (flag)
+  (if (featurep 'xemacs)
+      flag
+    `(set-buffer-multibyte ,flag)))
 
 ;; from apel
-(if (featurep 'xemacs)
-    (defun navi2ch-string-as-unibyte (string)
-      string)
-  (defun navi2ch-string-as-unibyte (string)
-    (string-as-unibyte string)))
+(defmacro navi2ch-string-as-unibyte (string)
+  (if (featurep 'xemacs)
+      string
+    `(string-as-unibyte ,string)))
 
 (defun navi2ch-get-major-mode (buffer)
   (when (get-buffer buffer)
