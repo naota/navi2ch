@@ -1,3 +1,8 @@
+2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (navi2ch-doc-update-aa-list):
+	navi2ch-message-aa-default-alist から値を取って来るようにした。
+
 2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi: @ifinfo -> @ifnottex

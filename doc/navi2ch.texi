@@ -1630,8 +1630,10 @@ Navi2ch を作ってくれた (not 1) さん、どうもありがとう。
 カーソルを以下の関数の上に置いて
 M-x eval-defun RET M-x navi2ch-doc-update-aa-list RET
 すると、AA リストのアップデートが楽になるよ。
+@lisp
 (defun navi2ch-doc-update-aa-list ()
   (interactive)
+  (makunbound 'navi2ch-message-aa-default-alist)
   (load (expand-file-name "../navi2ch-vars.el" default-directory))
   (let (start end)
     (goto-char (point-min))
@@ -1642,8 +1644,9 @@ M-x eval-defun RET M-x navi2ch-doc-update-aa-list RET
     (setq end (match-beginning 0))
     (delete-region start end)
     (goto-char start)
-    (dolist (elt navi2ch-message-aa-alist)
+    (dolist (elt navi2ch-message-aa-default-alist)
       (let ((item (car elt))
 	    (aa (cdr elt)))
 	(insert (format "@item %s\n@samp{%s}\n\n" item aa))))
     (japanese-zenkaku-region start (point) t)))
+@end lisp
