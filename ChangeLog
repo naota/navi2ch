@@ -1,3 +1,10 @@
+2002-09-19  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-state): 2002-09-18 の
+	変更を取り消し。
+	state (U/V/C) のみで sort するように、また、rev から (not rev) に、
+	戻した。
+
 2002-09-18  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-goto-updated-mark-column):
