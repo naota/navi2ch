@@ -1,5 +1,15 @@
 2002-10-21  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el
+	(navi2ch-article-default-header-format-function): インデント変更な
+	ど。
+	(navi2ch-article-view-article): 同上。
+	(navi2ch-article-select-current-link): 同上。
+	(navi2ch-article-cached-subject): 同上。
+	(navi2ch-article-auto-decode-base64-section): 同上。
+
+2002-10-21  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-fetch-link): ↓で引き数を変
 	え忘れたのを修正。
 

@@ -526,10 +526,8 @@ START, END, NOFIRST で範囲を指定する"
         str p)
     ;;曜日表示する？
     (if navi2ch-article-dispweek
-	    (setq date (navi2ch-article-appendweek date))
-      )
+	(setq date (navi2ch-article-appendweek date)))
     (setq str (concat from-header from date-header date "\n\n"))
-
     (setq p (length from-header))
     (put-text-property 0 p
 		       'face 'navi2ch-article-header-face str)
@@ -571,7 +569,8 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
     (dolist (buf (nthcdr num (navi2ch-article-buffer-list)))
       (kill-buffer buf))))
 
-(defun navi2ch-article-view-article (board article
+(defun navi2ch-article-view-article (board
+				     article
 				     &optional force number max-line dont-display)
   "スレを見る。FORCE で強制読み込み MAX-LINE で読み込む行数を指定。
 ただ `navi2ch-article-max-line' とは逆で t で全部読み込み。
@@ -1027,18 +1026,18 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
                (setq filename (expand-file-name default-filename filename)))
              (if (not (file-writable-p filename))
                  (error "File not writable: %s" filename)
-             (with-temp-buffer
-               (let ((buffer-file-coding-system 'binary)
-                     (coding-system-for-write 'binary)
-                     ;; auto-compress-mode を disable にする
-                     (inhibit-file-name-operation 'write-region)
-                     (inhibit-file-name-handlers (cons 'jka-compr-handler
-                                                       inhibit-file-name-handlers)))
-                 (insert prop)
-                 (if (or (not (file-exists-p filename))
-                         (y-or-n-p (format "File `%s' exists; overwrite? "
-                                           filename)))
-                     (write-region (point-min) (point-max) filename))))))))))
+	       (with-temp-buffer
+		 (let ((buffer-file-coding-system 'binary)
+		       (coding-system-for-write 'binary)
+		       ;; auto-compress-mode を disable にする
+		       (inhibit-file-name-operation 'write-region)
+		       (inhibit-file-name-handlers (cons 'jka-compr-handler
+							 inhibit-file-name-handlers)))
+		   (insert prop)
+		   (if (or (not (file-exists-p filename))
+			   (y-or-n-p (format "File `%s' exists; overwrite? "
+					     filename)))
+		       (write-region (point-min) (point-max) filename))))))))))
 
 (defun navi2ch-article-mouse-select (e)
   (interactive "e")
@@ -1481,7 +1480,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 ;	    (setq subject (cdr (assq 'subject (car subject-list)))))
 ;	(pop subject-list)))
     (when (not subject)
-      (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
+      (setq subject "navi2ch: ???"))	; 変数にして navi2ch-vars.el に入れるべき?
     subject))
 
 (eval-when-compile
@@ -1709,7 +1708,7 @@ gunzip に通してから文字コードの推測を試みる。"
 					    (navi2ch-ifxemacs
 						(let ((result (detect-coding-region (point-min) (point-max))))
 						  (if (listp result)
-						       (car result)
+						      (car result)
 						    result))
 					      (detect-coding-region (point-min) (point-max) t))
                                             'mime-charset)))
