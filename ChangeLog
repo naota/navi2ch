@@ -1,3 +1,9 @@
+2003-02-19  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-insert-aa-list): キーが多重
+	に設定されていても有効な一つのみ表示するように。
+	キーで sort するように。
+
 2003-02-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-board-get-subject-list-hook): 新変数。
