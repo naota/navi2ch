@@ -603,5 +603,15 @@ TAG は正規表現。"
 (defun navi2ch-filename-to-url (filename)
   (concat "file://" (expand-file-name filename)))
 
+(defun navi2ch-chop-/ (dirname)
+  (save-match-data
+    (if (string-match "/\\'" dirname)
+	(replace-match "" nil t dirname)
+      dirname)))
+
+(defun navi2ch-rename-file (file newname &optional ok-if-already-exists)
+  (rename-file (navi2ch-chop-/ file)
+	       (navi2ch-chop-/ newname) ok-if-already-exists))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

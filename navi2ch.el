@@ -345,9 +345,9 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 			     (navi2ch-temp-directory)))
 	      (unless (file-exists-p tmp-dir)
 		(throw 'loop nil))))
-	  (rename-file new-dir tmp-dir))
+	  (navi2ch-rename-file new-dir tmp-dir))
 	(make-directory (expand-file-name ".." new-dir) t)
-	(rename-file old-dir new-dir)))))
+	(navi2ch-rename-file old-dir new-dir)))))
                       
 (defun navi2ch-update ()
   "navi2ch-update.el をダウンロードして実行する。"
@@ -370,7 +370,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 			   (buffer-string)))))
 	       (yes-or-no-p
 		"navi2ch-update.elが更新されました。保存して実行しますか? "))
-      (rename-file new navi2ch-update-file t)
+      (navi2ch-rename-file new navi2ch-update-file t)
       (load navi2ch-update-file))
     (if (file-exists-p new)
 	(delete-file new))))
