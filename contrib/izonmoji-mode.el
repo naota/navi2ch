@@ -41,7 +41,7 @@
 ;;      ad-do-it))
 ;; でごまかせます。 string-widthも同様です。
 
-;; XEmacsではinit-fileに以下のように書いてください。
+;; XEmacs 21.4以前ではinit-fileに以下のように書いてください。
 ;; (make-charset
 ;;  'japanese-jisx0213-1
 ;;  "JIS X 0213:2000 Plain 1"
@@ -61,6 +61,7 @@
 ;; [navi2ch] ~/.navi2ch/init.el へ
 ;;  (add-hook 'navi2ch-bm-mode-hook      'izonmoji-mode-on)
 ;;  (add-hook 'navi2ch-article-mode-hook 'izonmoji-mode-on)
+;;  (add-hook 'navi2ch-popup-article-mode-hook 'izonmoji-mode-on)
 
 ;; [Mew] ~/.mew.el へ
 ;;  (add-hook 'mew-message-mode-hook 'izonmoji-mode-on)
@@ -82,6 +83,10 @@
 ;;  izonmoji-win-face, izonmoji-mac-face の適用方法を知らない。
 
 ;;; Code:
+
+(eval-when-compile
+  (defvar buffer-display-table)
+  (defvar current-display-table))
 
 (defvar izonmoji-priority-list '(win mac)
   "*表示の優先順位。

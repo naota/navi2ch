@@ -1,3 +1,8 @@
+2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (toplevel): 設定例に
+	navi2ch-popup-article-mode-hook を追加。
+
 2002-10-09  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-jisx0213.el: 削除。

@@ -1,5 +1,9 @@
 2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-cancel-hide-message): Fix typo.
+
+2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
 	* navi2ch-popup-article.el (navi2ch-popup-article-current-board):
 	新変数。
 	(navi2ch-popup-article-current-article): 新変数。

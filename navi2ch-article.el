@@ -1971,7 +1971,7 @@ gunzip に通してから文字コードの推測を試みる。"
 (defun navi2ch-article-cancel-hide-message ()
   (interactive)
   (navi2ch-article-delete-message 'hide 'delq
-                                  "Cansel hide message"))
+                                  "Cancel hide message"))
 
 (defun navi2ch-article-toggle-hide ()
   (interactive)
