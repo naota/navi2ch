@@ -189,10 +189,10 @@ LEN は RANGE で範囲を指定される list の長さ"
   `(plist-get ,element :access-time))
 
 (defmacro navi2ch-article-summary-element-set-seen (element seen)
-  `(setq element (plist-put ,element :seen ,seen)))
+  `(setq ,element (plist-put ,element :seen ,seen)))
 
 (defmacro navi2ch-article-summary-element-set-access-time (element time)
-  `(setq element (plist-put ,element :access-time ,time)))
+  `(setq ,element (plist-put ,element :access-time ,time)))
 
 (defsubst navi2ch-article-parse-message (str &optional sep)
   (or sep (setq sep navi2ch-article-separator))
