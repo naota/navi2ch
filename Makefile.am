@@ -30,8 +30,8 @@ snap:
 
 recompile: $(lisp_LISP)
 	rm -f $(ELCFILES) && \
-	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP) && \
-	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
+	EMACS="$(EMACS)" $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP) && \
+	EMACS="$(EMACS)" $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
 
 elcdist: $(ELCFILES)
 	rm -rf $(distdir) && \

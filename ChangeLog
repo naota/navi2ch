@@ -1,5 +1,8 @@
 2002-07-18  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* Makefile.am (recompile): $(EMACS) に空白が入っても大丈夫なよう、
+	クオートした。
+
 	* navi2ch-util.el (navi2ch-replace-html-tag-to-string):
 	case-fold-search が non-nil の時は assoc-ignore-case を使うように。
 	見付からなかった時は nil ではなく "" を返すように。
