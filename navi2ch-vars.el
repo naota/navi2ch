@@ -481,6 +481,13 @@ window の幅と同じにしたいなら
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-display-link-width '(1- (window-width))
+  "*`navi2ch-article-display-link-minibuffer' で minibuffer に表示する
+文字列の幅。関数とかを指定する事もできる。"
+  :type '(choice (integer :tag "数値で指定")
+		 (sexp :tag "関数とか"))
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")

@@ -1292,11 +1292,15 @@ article buffer から抜けるなら 'quit を返す。"
 	     (setq num num-list))
 	    (t
 	     (setq num (car num-list))))
-      (message "[%d]: %s"
-	       num
-	       (navi2ch-replace-string
-		"\n" ""
-		(navi2ch-article-get-message-string num) t)))))
+      (let ((msg (navi2ch-article-get-message-string num)))
+	(setq msg (navi2ch-replace-string
+		   navi2ch-article-citation-regexp "" msg t))
+	(setq msg (navi2ch-replace-string
+		   "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
+	(setq msg (navi2ch-replace-string "\n+" " " msg t))
+	(message
+	 "%s" (truncate-string (format "[%d]: %s" num msg)
+			       (eval navi2ch-article-display-link-width)))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"

@@ -1,3 +1,14 @@
+2002-01-31  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-vars.el
+	(navi2ch-article-display-link-width): 新変数。
+	navi2ch-article-display-link-minibuffer で使用。
+
+	* navi2ch-article.el 
+	(navi2ch-article-display-link-minibuffer): 
+	引用とかを省略するように。
+	navi2ch-article-display-link-minibuffer の幅で表示する。
+
 2002-01-31  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-update):
