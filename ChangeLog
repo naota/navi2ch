@@ -1,5 +1,21 @@
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-mode):
+	手で kill-buffer したときでもスレ位置などの情報が常に保存される
+	ように、kill-buffer-hook へ navi2ch-article-save-info を追加。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/853
+	(navi2ch-article-kill-buffer): 削除。もはやバッファを消す前に
+	明示的にセーブする必要はないから。
+	(navi2ch-article-save-all-info): 同上。
+	(toplevel): `C-x k' (navi2ch-article-kill-buffer) のキーバインド
+	を廃止。
+	(navi2ch-article-expunge-buffers): 上記の関数削除に対応。
+
+	* navi2ch-articles.el (navi2ch-articles-delete):
+	上記の関数削除に対応。
+	
+2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
 	* navi2ch-util.el (navi2ch-replace-string): TO-STRING に `\1'
 	などを渡した場合にバグっていたのを修正。
 

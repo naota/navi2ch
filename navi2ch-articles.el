@@ -95,13 +95,10 @@
     (let ((buf (navi2ch-articles-get-property (point))))
       (if buf
           (let ((buffer-read-only nil))
-            (save-excursion
-              (set-buffer buf)
-              (navi2ch-article-kill-buffer))
+            (kill-buffer buf)
             (delete-region (point)
                            (save-excursion (forward-line) (point))))
-        (message "Can't select this line!")))))
-  
+        (message "Can't select this line!")))))  
 
 (defun navi2ch-articles (&rest args)
   "articles を表示する"

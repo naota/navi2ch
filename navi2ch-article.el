@@ -76,7 +76,6 @@
     ;; (define-key map "2" 'navi2ch-article-two-pane)
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
-    (define-key map "\C-xk" 'navi2ch-article-kill-buffer)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -135,9 +134,6 @@ last が最後からいくつ表示するか。
   (setq navi2ch-article-hide-mode-map (make-sparse-keymap))
   (define-key navi2ch-article-hide-mode-map "d" 'navi2ch-article-cancel-hide-message)
   (define-key navi2ch-article-hide-mode-map "a" 'undefined))
-
-;; add hook
-(add-hook 'navi2ch-save-status-hook 'navi2ch-article-save-all-info)
 
 ;; local variables
 (make-variable-buffer-local 'navi2ch-article-current-article)
@@ -481,9 +477,8 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (if (not (numberp num)) ; C-uのみの時4個にしたいわけじゃないと思われ
       (setq num navi2ch-article-max-buffers))
   (save-excursion
-    (dolist (killed-buf (nthcdr num (navi2ch-article-buffer-list)))
-      (set-buffer killed-buf)
-      (navi2ch-article-kill-buffer))))
+    (dolist (buf (nthcdr num (navi2ch-article-buffer-list)))
+      (kill-buffer buf))))
 
 (defun navi2ch-article-view-article (board article
 				     &optional force number max-line)
@@ -561,6 +556,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
+  (add-hook 'kill-buffer-hook 'navi2ch-article-save-info t t)
   (run-hooks 'navi2ch-article-mode-hook))
 
 (defun navi2ch-article-exit ()
@@ -586,12 +582,6 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (let ((board navi2ch-article-current-board))
     (navi2ch-article-exit)
     (navi2ch-board-select-board board)))
-
-(defun navi2ch-article-kill-buffer ()
-  "save-info してから kill-buffer する"
-  (interactive)
-  (navi2ch-article-save-info)
-  (kill-buffer (current-buffer)))
 
 (defun navi2ch-article-fix-range (num)
   "navi2ch-article-view-range を num が含まれる範囲に変更"
@@ -892,13 +882,6 @@ state はあぼーんされてれば aborn というシンボル。
       (dolist (x alist)
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
-
-(defun navi2ch-article-save-all-info ()
-  (dolist (x (navi2ch-article-buffer-list))
-    (save-excursion
-      (set-buffer x)
-      (navi2ch-article-save-number)
-      (navi2ch-article-save-info))))
 
 (defun navi2ch-article-write-message (&optional sage)
   (interactive)
