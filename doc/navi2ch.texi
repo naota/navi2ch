@@ -1568,14 +1568,14 @@ Meadow + Cygwin でうまく動かないことがあるんだけど。
 (setq navi2ch-enable-readcgi nil)
 (setq navi2ch-net-accept-gzip nil)
 @end lisp
-として gzip を使わないという方法もあるけど、にちゃんねるにネットワーク的
+として gzip を使わないという方法もあるけど、２ちゃんねるにネットワーク的
 負荷がかかるので素人にはお勧めできない。
 
 @item Q.
 突然とある板が更新されなくなったみたいなんだけど。
 
 @item A.
-それは多分にちゃんねる側の問題。板の移転があったのかも。
+それは多分２ちゃんねる側の問題。板の移転があったのかも。
 @file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
 最新の板一覧
 @uref{http://isweb36.infoseek.co.jp/computer/hima2908/bbsmenu.html}
