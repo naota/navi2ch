@@ -184,9 +184,7 @@ nil の場合は browse-url-browser-function を使う。
   :type 'boolean
   :group 'navi2ch-list)
 
-;; ２ちゃんねるは "http://www.ff.iij4u.or.jp/~ch2/bbsmenu.html" を使っ
-;; てるけど、まだ古いみたい。
-(defcustom navi2ch-list-bbstable-url "http://www6.ocn.ne.jp/~mirv/2chmenu.html"
+(defcustom navi2ch-list-bbstable-url nil
   "*bbstable の URL。"
   :type 'string
   :group 'navi2ch-list)

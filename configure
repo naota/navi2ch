@@ -1700,7 +1700,7 @@ fi
 
 echo "$as_me:$LINENO: checking detecting your emacs type" >&5
 echo $ECHO_N "checking detecting your emacs type... $ECHO_C" >&6
-emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))"`
+emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))" | sed -e '/^$/d'`
 echo "$as_me:$LINENO: result: $emacstype" >&5
 echo "${ECHO_T}$emacstype" >&6
 
@@ -1721,7 +1721,7 @@ test "$emacstype" != xemacs && { { echo "$as_me:$LINENO: error: packagedir only 
 echo "$as_me: error: packagedir only works with XEmacs" >&2;}
    { (exit 1); exit 1; }; }
 case "$withval" in
-yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))'` ;;
+yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))' | sed -e '/^$/d'` ;;
 no)  unset packagedir ;;
 *)   packagedir="$withval" ;;
 esac
@@ -1786,7 +1786,7 @@ echo $ECHO_N "checking where icon files should go... $ECHO_C" >&6
 if test "${cv_icondir+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-      cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))'`
+      cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))' | sed -e '/^$/d'`
     if test -z "$cv_icondir"; then
       cv_icondir='${datadir}/pixmaps/navi2ch'
     fi

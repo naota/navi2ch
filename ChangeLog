@@ -1,3 +1,12 @@
+2002-07-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* configure.in: EMACS の出力から空行を取り除くようにした。
+	sourceforge で XEmacs 使って configure すると頭に余計な \n がつく
+	のは誰のせいなんだろ。。。
+
+	* navi2ch-vars.el (navi2ch-list-bbstable-url): デフォルトを nil に。
+	nil のままなら navi2ch-update.el で更新される。
+
 2002-07-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-send-message):
