@@ -1,3 +1,8 @@
+2004-03-18  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch.el: eval-last-sexp, shell-command に advice 追加。
+	  セキュリティ対策。
+
 2004-03-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-right-align-strings): 新関数。

@@ -120,6 +120,8 @@
   "navi2ch を終了する
 SUSPEND が non-nil なら buffer を消さない"
   (interactive)
+  (ad-deactivate 'eval-last-sexp)
+  (ad-deactivate 'shell-command)
   (when (or suspend
             (not navi2ch-ask-when-exit)
             (if (functionp navi2ch-ask-when-exit)
@@ -495,6 +497,21 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
       (with-output-to-temp-buffer "*Navi2ch Ident List*"
 	(princ (mapconcat 'symbol-value ident-list "\n"))))))
 
+;; セキュリティ対策: C-x C-e 実行前に確認
+(defadvice eval-last-sexp (around navi2ch-confirm-eval activate)
+  (if (yes-or-no-p "elispを評価しようとしています。本当に実行して大丈夫ですか?")
+      ad-do-it))
+
+;; セキュリティ対策: rm 実行前に確認
+(defadvice shell-command (around navi2ch-confirm-cmd (cmd) activate)
+  ""
+  (if (string-match "rm.*-r" cmd)
+      (progn 
+	(if (yes-or-no-p
+	          (concat "危険なコマンド " cmd " を実行しようとしています。本当に実行しますか?"))
+	        ad-do-it t))
+    ad-do-it))
+
 (eval-when-compile
   (autoload 'browse-url-interactive-arg "browse-url"))
 
@@ -503,6 +520,8 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   "Navi2ch interface function for browse-url.el."
   (interactive
    (browse-url-interactive-arg "Navi2ch URL: "))
+  (ad-activate 'eval-last-sexp)
+  (ad-activate 'shell-command)
   (unless navi2ch-init
     (save-window-excursion
       (navi2ch)))
