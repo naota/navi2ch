@@ -337,6 +337,13 @@ KEY は (concat URI ARTID) ")
     (navi2ch-bm-setup 'navi2ch-bookmark)
     (navi2ch-bookmark-sync)))
 
+(defun navi2ch-bookmark-sync ()
+  (interactive)
+  (let ((buffer-read-only nil))
+    (erase-buffer)
+    (save-excursion
+      (navi2ch-bookmark-insert-subjects))))
+
 (easy-menu-define navi2ch-bookmark-mode-menu
   navi2ch-bookmark-mode-map
   "Menu used in navi2ch-bookmark"
@@ -447,14 +454,6 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 		 bookmark-id
 		 (equal navi2ch-bookmark-current-bookmark-id bookmark-id))
 	buf))))
-
-(defun navi2ch-bookmark-sync ()
-  "BOOKMARK-ID で指定する bookmark バッファがある場合は更新する。"
-  (interactive)
-  (let ((buffer-read-only nil))
-    (erase-buffer)
-    (save-excursion
-      (navi2ch-bookmark-insert-subjects))))
 
 (defun navi2ch-bookmark-remember-order ()
   "ブックマークの現在のスレの並び順を記憶する。"

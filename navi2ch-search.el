@@ -53,6 +53,7 @@
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-bm-mode-map)
     (define-key map "Q" 'navi2ch-search-return-previous-board-maybe)
+    (define-key map "s" 'navi2ch-search-sync)
     (setq navi2ch-search-mode-map map)))
 
 (defvar navi2ch-search-mode-menu-spec
@@ -171,6 +172,10 @@
 (defun navi2ch-search (&rest args)
   (navi2ch-search-mode)
   (navi2ch-bm-setup 'navi2ch-search)
+  (navi2ch-search-sync))
+
+(defun navi2ch-search-sync ()
+  (interactive)
   (let ((buffer-read-only nil))
     (erase-buffer)
     (save-excursion

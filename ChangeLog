@@ -1,3 +1,25 @@
+2002-09-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-articles.el (navi2ch-articles-sync): 新関数。
+	(navi2ch-articles): 上記関数を使うように。
+	(navi2ch-articles-mode-map): s に navi2ch-articles-sync をバインド。
+
+	* navi2ch-directory.el (navi2ch-directory-sync): 新関数。
+	(navi2ch-directory): 上記関数を使うように。
+	(navi2ch-directory-mode-map): s に navi2ch-directory-sync をバイン
+	ド。
+
+	* navi2ch-history.el (navi2ch-history-sync): 新関数。
+	(navi2ch-history): 上記関数を使うように。
+	(navi2ch-history-mode-map): s に navi2ch-history-sync をバインド。
+
+	* navi2ch-search.el (navi2ch-search-sync): 新関数。
+	(navi2ch-search): 上記関数を使うように。
+	(navi2ch-search-mode-map): s に navi2ch-search-sync をバインド。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-sync): 場所を変更。
+	docstring が挙動と合っていないので、削除。
+
 2002-09-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-open-all-category):

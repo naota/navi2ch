@@ -40,6 +40,7 @@
     ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
     (define-key map "d" 'navi2ch-articles-delete)
     (define-key map "md" 'navi2ch-articles-delete-mark-aritcle)
+    (define-key map "s" 'navi2ch-articles-sync)
     (setq navi2ch-articles-mode-map map)))
 
 (defvar navi2ch-articles-mode-menu-spec
@@ -112,6 +113,10 @@
   "articles を表示する"
   (navi2ch-articles-mode)
   (navi2ch-bm-setup 'navi2ch-articles)
+  (navi2ch-articles-sync))
+
+(defun navi2ch-articles-sync ()
+  (interactive)
   (let ((buffer-read-only nil))
     (erase-buffer)
     (save-excursion

@@ -37,6 +37,7 @@
 (unless navi2ch-directory-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-bm-mode-map)
+    (define-key map "s" 'navi2ch-directory-sync)
     (setq navi2ch-directory-mode-map map)))
 
 (defvar navi2ch-directory-mode-menu-spec
@@ -124,6 +125,10 @@
   "directory を表示する"
   (navi2ch-directory-mode)
   (navi2ch-bm-setup 'navi2ch-directory)
+  (navi2ch-directory-sync))
+
+(defun navi2ch-directory-sync
+  (interactive)
   (let ((buffer-read-only nil))
     (erase-buffer)
     (save-excursion

@@ -42,6 +42,7 @@
     (define-key map "\C-y" 'navi2ch-history-yank)
     (define-key map "d" 'navi2ch-history-delete)
     (define-key map "md" 'navi2ch-history-delete-mark-article)
+    (define-key map "s" 'navi2ch-history-sync)
     (setq navi2ch-history-mode-map map)))
 
 (defvar navi2ch-history-mode-menu-spec
@@ -132,6 +133,10 @@ key は (concat uri artid)。
   "history を表示する"
   (navi2ch-history-mode)
   (navi2ch-bm-setup 'navi2ch-history)
+  (navi2ch-history-sync))
+
+(defun navi2ch-history-sync ()
+  (interactive)
   (let ((buffer-read-only nil))
     (erase-buffer)
     (save-excursion
