@@ -1,3 +1,8 @@
+2002-10-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board.el (navi2ch-board-sync): header に "Not-Updated"
+	が含まれていたときは、更新されてないとみなすように。
+
 2002-09-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-articles.el (navi2ch-articles-sync): 新関数。
