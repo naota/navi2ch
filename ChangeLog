@@ -1,3 +1,12 @@
+2002-12-17  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-header): Date: ヘッダを使って
+	2ch 時間を覚えておくように。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-get-message-time-field):
+	単純に過去の時間を送るのではまずい場合があるので、上記の時間を使う
+	ように。
+
 2002-12-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-exit): 元のレス番号に戻らな

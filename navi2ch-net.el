@@ -34,6 +34,7 @@
 (defvar navi2ch-net-connection-name "navi2ch connection")
 (defvar navi2ch-net-user-agent "Monazilla/1.00 Navi2ch")
 (defvar navi2ch-net-setting-file-name "SETTING.TXT")
+(defvar navi2ch-net-last-date nil)
 (defvar navi2ch-net-last-url nil)
 (defvar navi2ch-net-process nil)
 (defvar navi2ch-net-last-host nil)
@@ -250,6 +251,9 @@ BODY の評価中にエラーが起こると nil を返す。"
 	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
 	       (setq list (cons (cons (match-string 1) (match-string 2))
 				list)))
+	     (let ((date (assoc-ignore-case "Date" list)))
+	       (when (and date (stringp (cdr date)))
+		 (setq navi2ch-net-last-date (cdr date))))
 	     (setq navi2ch-net-header (nreverse list))))))))
 
 (defun navi2ch-net-get-content-subr-with-temp-file (gzip-p start end)
