@@ -1,3 +1,7 @@
+2003-07-01  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Getting Develop Version): URL の最後に / を追加。
+
 2003-06-30  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode): PopUp Article モードでの "D"、"A"、

@@ -333,7 +333,7 @@ CVS についての詳しい説明は
 リリース版の問題を解決した最新版というわけではない。
 
 開発者になると CVS に commit することができるようになる。
-@uref{http://sourceforge.net/projects/navi2ch}
+@uref{http://sourceforge.net/projects/navi2ch/}
 から「プロジェクト管理者」にコンタクトを取って、ぜひ Navi2ch の開発に
 参加してほしい。
 
