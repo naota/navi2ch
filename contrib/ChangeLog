@@ -1,3 +1,9 @@
+2002-07-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* README: 新ファイル。各ファイルの簡単な説明。
+
+	* navi2ch-track-mouse.el: 新ファイル。
+
 2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* gikope.el (gikope-aa-buffer): バッファ名に変更。
@@ -22,4 +28,5 @@
 
 	* navi2ch-logo.el: ファイル追加。レス一覧の先頭にロゴを張る。
 	http://pc.2ch.net/test/read.cgi/unix/999166513/895
-
+
+$Id$

@@ -1,0 +1,21 @@
+-*- mode: outline; coding: iso-2022-7bit -*-
+Copyright (C) 2000-2002 Navi2ch Project
+
+このディレクトリには Navi2ch といっしょに使うと便利なファイルが入って
+います。詳しい使い方は、各ファイルの先頭のコメントを読んでね。
+
+* navi2ch-logo.el
+  レス一覧の先頭にその板のロゴを貼りつける。
+  Emacs 21 専用。
+
+* gikope.el
+  AA をキルリングにコピー。
+
+* navi2ch-migemo.el
+  migemo を使ってレスを検索。
+
+* navi2ch-track-mouse.el
+  Emacs 20 でも help-echo プロパティを echo area に表示。
+  ~/.emacs とかで (require 'navi2ch-track-mouse) する。
+
+$Id$
