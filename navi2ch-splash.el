@@ -3,6 +3,7 @@
 ;; Copyright (C) 2002 by Navi2ch Project
 
 ;; Author: UEYAMA Rui <rui314159@users.sourceforge.net>
+;; 110 の名無しさん http://pc.2ch.net/test/read.cgi/unix/1013457056/110
 ;;         
 ;; Keywords: network, 2ch
 
@@ -50,20 +51,19 @@
   "Basename of the logo file.")
 
 ;; これはさすがに差しかえないと……
-(defvar navi2ch-splash-logo-ascii "\
-        o$                  oo$$$$$$ooo
-     oo$$$      o$$      o$$$\"\"\"\"\"\"$$$$$o
-  $$$$$$\"     o$$$\"    o$\"\"          \"$$$
-    $$\"      o$\"\"    o$\"              $$$
-   $\"      oo$\"     $\"                $$$
- o$     oo\"\"$$     $                  $$
-o$$  oo$\"  \"$$$o  $                 o$$
-$$$$\"\"       \"$$oo$    o          o$\"
-               \"$$o   \"$$$o oooo$\"\"
-                 $$       \"\"\"\"
-	       Navi2ch
-                  \"$
-Yet Another Message Interface On Emacsen"
+(setq navi2ch-splash-logo-ascii "\
+　　■　　　　■　　　　　　　　　　　　　　　■　　　　■
+　■　　　　■　　　　■　　　　　　　■　　　　■　　　　■
+　■　　　　　　　　　　■　　　　　■　　　　　　　　　　■
+■　　　　　　　　　　　■　　　　　■　　　　　　　　　　　■
+■　　　　　　　　　　　　■■■■■　　　　　　　　　　　　■
+■　　　　　　　　　　　　■　　　■　　　　　　　　　　　　■
+　■　　　　　　　　　　　　■　■　　　　　　　　　　　　■
+　■　　　　　　　　　　　　■　■　　　　　　　　　　　　■
+　　■　　　　　　　　　　　　■　　　　　　　　　　　　■
+
+                                Navi2ch
+                     Navigator for 2ch for Emacsen"
   "Ascii picture used to splash the startup screen.")
 
 (eval-and-compile
