@@ -1,8 +1,7 @@
-*.tar.gz
 Makefile
 autom4te.cache
 config.log
 config.status
 configure.lineno
-readonly.diff
 stamp-link
+*.tar.gz
