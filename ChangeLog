@@ -6,6 +6,8 @@
 	* Makefile.am (recompile): 上記変更に伴い、バイトコンパイルを一度
 	だけに。
 
+	* bcomp.el.in (dir): 同上。
+
 2003-03-11  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-no-logging-message): 新関数。

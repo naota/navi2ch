@@ -20,9 +20,4 @@
     (setq file (concat dir elt))
     (byte-compile-file file t))
 
-  (message "recompiling...")
-  (dolist (elt bcomp-files)
-    (setq file (concat dir elt))
-    (byte-compile-file file t))
-
   (message "done"))
