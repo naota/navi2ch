@@ -1,6 +1,6 @@
 ;;; izonmoji-mode.el --- Visualize Windows and Macintosh izonmoji
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2003 by Navi2ch Project
 
 ;; Author: SAITO Takuya <tabmore@users.sourceforge.net>
 ;; Keywords: 2ch, charset

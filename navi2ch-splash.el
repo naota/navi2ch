@@ -1,6 +1,6 @@
 ;;; navi2ch-splash.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2003 by Navi2ch Project
 
 ;; Author: UEYAMA Rui <rui314159@users.sourceforge.net>
 ;; 110 の名無しさん http://pc.2ch.net/test/read.cgi/unix/1013457056/110
@@ -45,7 +45,7 @@
 (require 'navi2ch-version)
 
 (defconst navi2ch-splash-copyright-notice
-  "Copyright (C) 2000-2002  Navi2ch Project."
+  "Copyright (C) 2000-2003  Navi2ch Project."
   "A declaration of the copyright on Navi2ch.")
 
 (defconst navi2ch-splash-logo-image-name

@@ -1,6 +1,6 @@
 ;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch.
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2003 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん

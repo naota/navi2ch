@@ -1,6 +1,6 @@
 ;;; navi2ch-search.el --- Search Module for Navi2ch
 
-;; Copyright (C) 2001, 2002 by Navi2ch Project
+;; Copyright (C) 2001-2003 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network

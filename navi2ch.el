@@ -1,6 +1,6 @@
 ;;; navi2ch.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2000-2002 by Navi2ch Project
+;; Copyright (C) 2000-2003 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
