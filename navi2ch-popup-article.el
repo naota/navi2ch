@@ -108,6 +108,7 @@ stack が空なら、PopUp Article モードを抜ける。"
   (setq major-mode 'navi2ch-popup-article-mode)
   (setq mode-name "Navi2ch PopUp Article")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (make-local-variable 'truncate-partial-width-windows)
   (setq truncate-partial-width-windows nil)
   (use-local-map navi2ch-popup-article-mode-map)

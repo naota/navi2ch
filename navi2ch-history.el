@@ -157,6 +157,7 @@ key は (concat uri artid)。
   (setq major-mode 'navi2ch-history-mode)
   (setq mode-name "Navi2ch History")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-history-mode-map)
   (navi2ch-history-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-history-mode-hook))

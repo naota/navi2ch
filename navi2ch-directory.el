@@ -150,6 +150,7 @@
   (setq major-mode 'navi2ch-directory-mode)
   (setq mode-name "Navi2ch Directory")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-directory-mode-map)
   (navi2ch-directory-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-directory-mode-hook))

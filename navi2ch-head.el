@@ -65,6 +65,7 @@
   (setq major-mode 'navi2ch-head-mode)
   (setq mode-name "Navi2ch Head")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-head-mode-map)
   (run-hooks 'navi2ch-head-mode-hook))
 

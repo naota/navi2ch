@@ -166,6 +166,7 @@
   (setq major-mode 'navi2ch-search-mode)
   (setq mode-name "Navi2ch Search")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-search-mode-map)
   (navi2ch-search-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-search-mode-hook))

@@ -380,6 +380,7 @@
   (setq major-mode 'navi2ch-list-mode)
   (setq mode-name "Navi2ch List")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-list-mode-map)
   (navi2ch-list-setup-menu)
   (run-hooks 'navi2ch-list-mode-hook)

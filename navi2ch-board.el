@@ -327,6 +327,7 @@
   (setq major-mode 'navi2ch-board-mode)
   (setq mode-name "Navi2ch Board")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (use-local-map navi2ch-board-mode-map)
   (navi2ch-board-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-board-mode-hook)

@@ -943,6 +943,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (setq major-mode 'navi2ch-article-mode)
   (setq mode-name "Navi2ch Article")
   (setq buffer-read-only t)
+  (buffer-disable-undo)
   (make-local-variable 'truncate-partial-width-windows)
   (setq truncate-partial-width-windows nil)
   (use-local-map navi2ch-article-mode-map)
