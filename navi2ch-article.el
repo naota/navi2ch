@@ -483,7 +483,7 @@ START, END, NOFIRST で範囲を指定する"
 	year month day et dt time youbi date)
     ;; "あぼーん"とかIDとか旧形式の日付にも対応しているはず．
     ;; 正規表現に工夫が必要かも…
-    (if (string-match "^\\([0-9/]+\\) \\([A-Za-z0-9: +/?]+\\)$" d)
+    (if (string-match "^\\([0-9][0-9]/[0-9][0-9]/[0-9][0-9]\\) \\([A-Za-z0-9: +/?]+\\)$" d)
 	(progn
 	  (setq time (match-string 2 d))
 	  (setq date (match-string 1 d))
