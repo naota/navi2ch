@@ -249,7 +249,8 @@ stack が空なら、PopUp Article モードを抜ける。"
       (setq navi2ch-article-current-article
 	    (navi2ch-put-alist
 	     sym
-	     (union (cdr (assq sym navi2ch-article-current-article)) list)
+	     (navi2ch-union (cdr (assq sym navi2ch-article-current-article))
+			    list)
 	     navi2ch-article-current-article))
       (let ((buffer-read-only nil))
 	(navi2ch-article-save-view
