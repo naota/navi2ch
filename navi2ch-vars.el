@@ -159,7 +159,7 @@
   :type 'boolean
   :group 'navi2ch-list)
 
-(defcustom navi2ch-list-bbstable-url "http://www.2ch.net/2chmenu.html"
+(defcustom navi2ch-list-bbstable-url "http://www.2ch.net/bbsmenu.html"
   "*bbstable の URL。"
   :type 'string
   :group 'navi2ch-list)

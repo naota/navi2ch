@@ -1,3 +1,8 @@
+2002-02-18  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch-vars.el (navi2ch-list-bbstable-url): 2chmenu.html ->
+	bbsmenu.html に変更
+
 2002-02-15  NOKUBI Takatsugu  <knok@users.sourceforge.net>
 
 	* navi2ch-mona.el (find-face): apel からコードを拝借
