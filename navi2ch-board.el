@@ -40,7 +40,6 @@
     (define-key map "+" 'navi2ch-board-toggle-updated)
     (define-key map "b" 'navi2ch-board-toggle-bookmark)
     (define-key map "w" 'navi2ch-board-write-message)
-    ;; (define-key map "2" 'navi2ch-board-two-pane)
     (define-key map "\M-e" 'navi2ch-board-expire)
     (define-key map "md" 'navi2ch-board-hide-mark-article)
     (setq navi2ch-board-mode-map map)))
@@ -169,10 +168,16 @@
   
 (defun navi2ch-board-get-file-name (board &optional file-name)
   (let ((uri (navi2ch-board-get-uri board)))
-     (when (and uri (string-match "http://\\(.+\\)" uri))
-       (setq uri (match-string 1 uri))
-       (navi2ch-expand-file-name
-	(concat uri (or file-name navi2ch-board-subject-file-name))))))
+    (when uri
+      (cond ((string-match "http://\\(.+\\)" uri)
+	     (navi2ch-expand-file-name
+	      (concat (match-string 1 uri)
+		      (or file-name navi2ch-board-subject-file-name))))
+	    ((string-match "file://\\(.+\\)" uri)
+	     (expand-file-name (or file-name
+				   navi2ch-board-subject-file-name)
+			       (match-string 1 uri)))))))
+	     
 
 (defsubst navi2ch-board-get-matched-article ()
   "match した結果から article を得る"
@@ -435,37 +440,6 @@
 (defun navi2ch-board-write-message ()
   (interactive)
   (navi2ch-message-write-message navi2ch-board-current-board nil t))
-
-(defun navi2ch-board-two-pane ()
-  (interactive)
-  (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
-	 (board-buf (get-buffer navi2ch-board-buffer-name))
-	 (art-buf (navi2ch-article-current-buffer))
-	 (list-win (get-buffer-window (or list-buf "")))
-	 (art-win (get-buffer-window (or art-buf "")))
-	 buf)
-    (when board-buf
-      (delete-other-windows)
-      (switch-to-buffer board-buf)
-      (setq buf
-	    (cond ((and list-buf art-buf)
-		   (cond ((and list-win art-win) art-buf)
-			 (list-win art-buf)
-			 (art-win list-buf)
-			 (t art-buf)))
-		  (list-buf list-buf)
-		  (art-buf art-buf)))
-      (when buf
-	(if (eq buf list-buf)
-	    (split-window-horizontally navi2ch-list-window-width)
-	  (condition-case nil
-	      (enlarge-window (frame-height))
-	    (error nil))
-	  (split-window-vertically navi2ch-board-window-height)
-	  (other-window 1))
-	(switch-to-buffer buf))
-      (other-window 1))))
-  
 
 (defun navi2ch-board-save-info (&optional board)
   (or board (setq board navi2ch-board-current-board))

@@ -384,21 +384,13 @@ KEY は (concat URI ARTID) ")
     (setq state (navi2ch-bm-fetch-article max-line))
     (unless (assq 'subject article)
       (let ((newsubject
-	     (let ((file (navi2ch-article-get-file-name board article))
-		   sep)
+	     (let ((file (navi2ch-article-get-file-name board article)))
 	       (when (and file
 			  (file-exists-p file))
                  ;; dat を 全部読まず、頭の1行だけ読むのはどうすれば?
 		 ;; 俺も知らないです:-)
-		 (with-temp-buffer
-		   (navi2ch-insert-file-contents file)
-		   (goto-char (point-min))
-		   (setq sep (navi2ch-article-get-separator))
-		   (cdr (assq 'subject (navi2ch-article-parse-message
-					(buffer-substring-no-properties
-					 (point)
-					 (progn (end-of-line) (point)))
-					sep))))))))
+		 (cdr (assq 'subject
+			    (navi2ch-article-get-first-message-from-file file)))))))
 	(when newsubject 
 	  (setq article (navi2ch-put-alist 'subject newsubject article))
 	  (navi2ch-bookmark-add-subr 

@@ -600,5 +600,8 @@ TAG は正規表現。"
 		(mapconcat 'car
 			   navi2ch-replace-html-tag-regexp-alist "\\|"))))
 
+(defun navi2ch-filename-to-url (filename)
+  (concat "file://" (expand-file-name filename)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

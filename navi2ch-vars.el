@@ -896,7 +896,7 @@ X11 上で見るために作られたフリーのフォントです。
   "navi2ch のどのモードでも使える keymap。")
 (unless navi2ch-global-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
+    (define-key map "\C-c\C-f" 'navi2ch-find-file)
     ;; (define-key map "\C-c\C-g" 'navi2ch-list-goto-board)
     (define-key map "\C-c\C-t" 'navi2ch-toggle-offline)
     (define-key map "\C-c\C-u" 'navi2ch-goto-url)

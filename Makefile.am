@@ -6,7 +6,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-history.el navi2ch-search.el navi2ch-message.el \
 	navi2ch.el \
 	navi2ch-head.el navi2ch-mona.el navi2ch-e21.el \
-	navi2ch-splash.el
+	navi2ch-splash.el navi2ch-directory
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in

@@ -134,20 +134,16 @@
             (navi2ch-insert-file-contents file)
             (goto-char (point-min))
             (when (re-search-forward regexp nil t)
-              (goto-char (point-min))
               (let ((subject
                      (cdr (assq 'subject
-                                (navi2ch-article-parse-message
-                                 (buffer-substring-no-properties (point)
-                                                   (progn (forward-line 1)
-                                                          (1- (point))))
-                                 (navi2ch-article-get-separator))))))
-                (string-match "[0-9]+" file)
-                (setq alist (cons
-                             (cons board
-                                   (list (cons 'subject subject)
-                                         (cons 'artid (match-string 0 file))))
-                             alist))))))))
+                                (navi2ch-article-get-first-message)))))
+                (setq alist
+		      (cons
+		       (cons board
+			     (list (cons 'subject subject)
+				   (cons 'artid
+					 (file-name-sans-extension file))))
+		       alist))))))))
     (message "searching article...%s" (if alist "done" "not found"))
     (nreverse alist)))
 

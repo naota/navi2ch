@@ -192,9 +192,12 @@
 	 (state (cond ((string= (cdr (assq 'name board))
 				navi2ch-bm-board-name-from-file)
 					; navi2ch-article-check-cached で処理すべきか。
-		       (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
+		       (cond ((get-buffer (navi2ch-article-get-buffer-name
+					   board article))
 			      'view)
-			     ((and item (file-exists-p item))
+			     ((file-exists-p
+			       (navi2ch-article-get-file-name
+				board article))
 			      'cache)
 			     (t
 			      nil)))
@@ -263,25 +266,20 @@
          (board (navi2ch-bm-get-board-internal item))
          (buf (current-buffer)))
     (if article
-	(if (string= (cdr (assq 'name board))
-		     navi2ch-bm-board-name-from-file)
-	    (navi2ch-article-find-file item)
-	  (dolist (x (navi2ch-article-buffer-list))
-            (when x
-              (delete-windows-on x)))
-	  (when navi2ch-bm-stay-board-window
-	    (condition-case nil
-		(enlarge-window (frame-height))
-	      (error nil))
-	    (split-window-vertically navi2ch-board-window-height)
-	    (other-window 1))
-          (let (state)
-            (setq state (navi2ch-article-view-article
-                         board article nil nil max-line))
-            (save-excursion
-              (set-buffer buf)
-              (let ((buffer-read-only nil))
-                (when (or state
+	(progn
+	  (navi2ch-split-window 'article)
+	  (let (state)
+	    (setq state
+		  (if (string= (cdr (assq 'name board))
+			       navi2ch-bm-board-name-from-file)
+		      (navi2ch-article-view-article-from-file
+		       (navi2ch-article-get-file-name board article))
+		    (navi2ch-article-view-article
+		     board article nil nil max-line)))
+	    (save-excursion
+	      (set-buffer buf)
+	      (let ((buffer-read-only nil))
+		(when (or state
 			  (navi2ch-bm-fetched-article-p board article)
 			  (eq (navi2ch-bm-get-state) 'view))
 		  (navi2ch-bm-remove-fetched-article board article)

@@ -48,7 +48,6 @@
     (define-key map "/" 'navi2ch-list-toggle-open)
     (define-key map "[" 'navi2ch-list-open-all-category)
     (define-key map "]" 'navi2ch-list-close-all-category)
-    ;; (define-key map "2" 'navi2ch-list-two-pane)
     (define-key map "D" 'navi2ch-list-delete-global-bookmark)
     (define-key map "C" 'navi2ch-list-change-global-bookmark)
     (define-key map "?" 'navi2ch-list-search)
@@ -331,9 +330,7 @@
     (dolist (x (navi2ch-article-buffer-list))
       (when x
 	(delete-windows-on x)))
-    (when (and flag navi2ch-list-stay-list-window)
-      (split-window-horizontally navi2ch-list-window-width)
-      (other-window 1))
+    (navi2ch-split-window 'board)
     (navi2ch-bm-select-board board force)))
 
 (defun navi2ch-list-setup-menu ()
@@ -553,31 +550,6 @@ changed-list は '((board-id old-board new-board) ...) な alist。
       (unless (string= (car x) navi2ch-list-changed-category-name)
 	(setq alist (append (cdr (assq 'child x)) alist))))
     alist))
-
-(defun navi2ch-list-two-pane ()
-  (interactive)
-  (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
-	 (board-buf (get-buffer navi2ch-board-buffer-name))
-	 (art-buf (navi2ch-article-current-buffer))
-	 (board-win (get-buffer-window (or board-buf "")))
-	 (art-win (get-buffer-window (or art-buf "")))
-	 buf)
-    (when list-buf
-      (delete-other-windows)
-      (switch-to-buffer list-buf)
-      (setq buf
-	    (cond ((and board-buf art-buf)
-		   (cond ((and board-win art-win) board-buf)
-			 (board-win art-buf)
-			 (art-win board-buf)
-			 (t board-buf)))
-		  (board-buf board-buf)
-		  (art-buf art-buf)))
-      (when buf
-	(split-window-horizontally navi2ch-list-window-width)
-	(other-window 1)
-	(switch-to-buffer buf))
-      (other-window 1))))
 
 (defun navi2ch-list-save-info ()
   (when navi2ch-list-category-list

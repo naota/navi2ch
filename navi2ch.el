@@ -39,6 +39,7 @@
 (require 'navi2ch-bookmark)
 (require 'navi2ch-history)
 (require 'navi2ch-search)
+(require 'navi2ch-directory)
 (require 'navi2ch-message)
 (and navi2ch-on-emacs21
      (require 'navi2ch-e21))
@@ -253,6 +254,33 @@ SUSPEND が non-nil なら buffer を消さない"
 	(let ((standard-input (current-buffer)))
 	  (read))))))
 
+(defun navi2ch-split-window (display)
+  "window を分割する。
+DISPLAY が `board' のときは board を表示する用に分割する。
+DISPLAY が `article' のときは article を表示する用に分割する。"
+  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
+        (board-win (get-buffer-window navi2ch-board-buffer-name))
+        (art-win (and (navi2ch-article-current-buffer)
+                      (get-buffer-window (navi2ch-article-current-buffer)))))
+    (cond (art-win
+	   (select-window art-win)
+	   (when (eq display 'board)
+	     (navi2ch-article-exit)))
+          (board-win
+	   (select-window board-win)
+	   (when (and (eq display 'article)
+		      navi2ch-bm-stay-board-window)
+	     (condition-case nil
+		 (enlarge-window (frame-height))
+	       (error nil))
+	     (split-window-vertically navi2ch-board-window-height)
+	     (other-window 1)))
+          (list-win
+           (select-window list-win)
+	   (when navi2ch-list-stay-list-window
+	     (split-window-horizontally navi2ch-list-window-width)
+	     (other-window 1))))))
+  
 (defun navi2ch-goto-url (url &optional force)
   "URL からスレまたは板を選ぶ"
   (interactive "sURL: ")
@@ -262,31 +290,31 @@ SUSPEND が non-nil なら buffer を消さない"
                       (get-buffer-window (navi2ch-article-current-buffer))))
 	(article (navi2ch-article-url-to-article url))
 	(board (navi2ch-board-url-to-board url)))
-    (when board
-      (cond (art-win
-	     (select-window art-win)
-	     (unless article
-	       (navi2ch-article-exit)))
-	    (board-win
-	     (select-window board-win)
-	     (when article
-	       (condition-case nil
-		   (enlarge-window (frame-height))
-		 (error nil))
-	       (split-window-vertically navi2ch-board-window-height)
-	       (other-window 1)))
-	    (list-win
-	     (select-window list-win)
-	     (when navi2ch-list-stay-list-window
-	       (split-window-horizontally navi2ch-list-window-width)
-	       (other-window 1))))
-      (if article
-	  (progn
-	    (navi2ch-article-view-article board
-					  article
-					  force
-					  (cdr (assq 'number article))))
-	(navi2ch-board-select-board board force)))))
+    (cond (article
+	   (navi2ch-split-window 'article)
+	   (navi2ch-article-view-article board
+					 article
+					 force
+					 (cdr (assq 'number article))))
+	  (board
+	   (navi2ch-split-window 'board)
+	   (navi2ch-board-select-board board force)))))
+
+(defun navi2ch-find-file (file)
+  "FILE からスレまたは板を選ぶ"
+  (interactive "fFind article file or board directory: ")
+  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
+        (board-win (get-buffer-window navi2ch-board-buffer-name))
+        (art-win (and (navi2ch-article-current-buffer)
+                      (get-buffer-window (navi2ch-article-current-buffer))))
+	(article-p (file-regular-p file))
+	(board-p (file-directory-p file)))
+    (cond (article-p
+	   (navi2ch-split-window 'article)
+	   (navi2ch-article-view-article-from-file file))
+	  (board-p
+	   (navi2ch-split-window 'board)
+	   (navi2ch-directory-find-directory file)))))
 
 (defun navi2ch-2ch-url-p (url)
   "URL が 2ch 内の url かを返す。"

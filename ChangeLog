@@ -1,3 +1,57 @@
+2002-06-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-directory.el: 新ファイル。ディレクトリにあるスレを全て表
+	示するモード。
+	
+	* navi2ch.el (toplevel): navi2ch-directory を require するように。
+	(navi2ch-split-window): 新関数。
+	(navi2ch-goto-url): navi2ch-split-window を使うように。
+	(navi2ch-find-file): navi2ch-article-find-file からリネーム。ディ
+	レクトリを指定した場合は navi2ch-directory を呼ぶように。
+	navi2ch-split-window を使うように。	
+
+	* navi2ch-vars.el (navi2ch-global-map): C-cC-f を
+	navi2ch-find-file に変更。
+
+	* navi2ch-util.el (navi2ch-filename-to-url): 新関数。
+
+	* navi2ch-search.el (navi2ch-search-article-regexp): 
+	navi2ch-article-get-first-message を使うように。
+	
+	* navi2ch-list.el (navi2ch-list-select-board):
+	navi2ch-split-window を使うように。
+	(navi2ch-list-two-pane): 削除。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
+	navi2ch-article-get-first-message を使うように。
+
+	* navi2ch-board.el (navi2ch-board-get-file-name): file:// ではじまっ
+	ていたら、そのファイル名を返すように。
+	(navi2ch-board-two-pane) 削除。
+
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): ファイルから
+	取得の場合に、ファイル名
+	を item ではなく navi2ch-article-get-file-name() で得るように。
+	(navi2ch-bm-select-article): navi2ch-split-window を使うように。
+	ファイルから取得の場合に navi2ch-article-view-article-from-file を
+	使うように。
+
+	* navi2ch-article.el (navi2ch-article-get-url): 引数に no-kako を
+	取るように。
+	(navi2ch-article-get-buffer-name): url を buffer 名にするように。
+	(navi2ch-article-get-first-message): 新関数。current-buffer の
+	article の最初の message を返す。
+	(navi2ch-article-get-first-message-from-file): 新関数。FILE で指定
+	された article の最初の message を返す。
+	(navi2ch-article-view-article-from-file): 生成する board, article
+	のを普通のものと同じような感じに変更。sync した結果が返り値になる
+	ように。
+	(navi2ch-article-sync-from-file): navi2ch-article-message-list は
+	ここで作るようにする。先頭に移動するように。
+	(navi2ch-article-find-file): navi2ch-find-file にリネーム。
+	navi2ch.el に移動。
+	(navi2ch-article-two-pane): 削除
+
 2002-06-27  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-get-buffer): 新関数。

@@ -75,7 +75,6 @@
     (define-key map "a" 'navi2ch-article-add-important-message)
     (define-key map "h" 'navi2ch-article-toggle-hide)
     (define-key map "$" 'navi2ch-article-toggle-important)
-    ;; (define-key map "2" 'navi2ch-article-two-pane)
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (setq navi2ch-article-mode-map map)))
@@ -155,10 +154,11 @@ last が最後からいくつ表示するか。
 	    (navi2ch-article-expunge-buffers 0)))
 
 ;;; navi2ch-article functions
-(defun navi2ch-article-get-url (board article)
+(defun navi2ch-article-get-url (board article &optional no-kako)
   (let ((artid (cdr (assq 'artid article)))
 	(url (navi2ch-board-get-uri board)))
-    (if (cdr (assq 'kako article))
+    (if (and (not no-kako)
+	     (cdr (assq 'kako article)))
 	(navi2ch-article-get-kako-url board article)
       (concat url "dat/" artid ".dat"))))
 
@@ -188,9 +188,7 @@ LEN は RANGE で範囲を指定される list の長さ"
 
 (defsubst navi2ch-article-get-buffer-name (board article)
   (concat navi2ch-article-buffer-name-prefix
-          (cdr (assq 'id board))
-          "/"
-          (cdr (assq 'artid article))))
+	  (navi2ch-article-get-url board article 'no-kako)))
 
 (defsubst navi2ch-article-check-cached (board article)
   "BOARD と ARTICLE で指定されるスレッドがキャッシュされてるか。"
@@ -312,6 +310,21 @@ START, END, NOFIRST で範囲を指定する"
     (if (looking-at "[^\n]+<>[^\n]*<>")
         " *<> *"
       " *, *")))
+
+(defsubst navi2ch-article-get-first-message ()
+  "current-buffer の article の最初の message を返す。"
+  (goto-char (point-min))
+  (navi2ch-article-parse-message
+   (buffer-substring-no-properties (point)
+				   (progn (forward-line 1)
+					  (1- (point))))
+   (navi2ch-article-get-separator)))
+
+(defsubst navi2ch-article-get-first-message-from-file (file)
+  "FILE で指定された article の最初の message を返す。"
+  (with-temp-buffer
+    (navi2ch-insert-file-contents file)
+    (navi2ch-article-get-first-message)))
 
 (defun navi2ch-article-apply-filters (board)
   (dolist (filter navi2ch-article-filter-list)
@@ -531,14 +544,18 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 
 (defun navi2ch-article-view-article-from-file (file)
   "FILE からスレを見る。"
+  (setq file (expand-file-name file))
   (let* ((board (list (cons 'id "navi2ch")
-                      (cons 'name navi2ch-bm-board-name-from-file)))
-         (article (list (cons 'artid file)))
+		      (cons 'uri (navi2ch-filename-to-url
+				  (file-name-directory file)))
+		      (cons 'name navi2ch-bm-board-name-from-file)))
+	 (article (list (cons 'artid (file-name-sans-extension
+				      (file-name-nondirectory file)))))
          (buf-name (navi2ch-article-get-buffer-name board article)))
     (if (get-buffer buf-name)
         (progn
           (switch-to-buffer buf-name)
-          (navi2ch-article-sync))
+	  nil)
       (if (and navi2ch-article-auto-expunge
 	       (> navi2ch-article-max-buffers 0))
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
@@ -549,11 +566,10 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
       (when navi2ch-article-auto-range
         (setq navi2ch-article-view-range
               navi2ch-article-new-message-range))
-      (save-excursion
-	(setq navi2ch-article-message-list
-	      (navi2ch-article-sync-from-file file))
-	(navi2ch-article-set-mode-line))
-      (navi2ch-article-mode))))
+      (prog1
+	  (navi2ch-article-sync-from-file file)
+	(navi2ch-article-set-mode-line)
+	(navi2ch-article-mode)))))
 
 (defun navi2ch-article-setup-menu ()
   (easy-menu-define navi2ch-article-mode-menu
@@ -761,13 +777,16 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-sync-from-file (file)
   "スレを FILE から更新する。"
-  (when navi2ch-article-from-file-p
+  (when (and navi2ch-article-from-file-p
+	     (file-exists-p file))
     (let ((list (navi2ch-article-get-message-list file))
-	  (range navi2ch-article-view-range))
-      (let ((buffer-read-only nil))
-        (erase-buffer)
-        (navi2ch-article-insert-messages list range))
-      list)))
+	  (range navi2ch-article-view-range)
+	  (buffer-read-only nil))
+      (erase-buffer)
+      (navi2ch-article-insert-messages list range)
+      (prog1
+	  (setq navi2ch-article-message-list list)
+	(navi2ch-article-goto-number 1)))))
 
 (defun navi2ch-article-set-mode-line ()
   (let ((article navi2ch-article-current-article)
@@ -837,29 +856,6 @@ state はあぼーんされてれば aborn というシンボル。
   (setq navi2ch-article-view-range
         (navi2ch-article-select-view-range-subr))
   (navi2ch-article-redraw))
-
-(defun navi2ch-article-find-file (file)
-  "FILE からスレを選ぶ"
-  (interactive "fArtilce File: ")
-  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
-        (board-win (get-buffer-window navi2ch-board-buffer-name))
-        (art-win (and (navi2ch-article-current-buffer)
-                      (get-buffer-window (navi2ch-article-current-buffer)))))
-    (cond (art-win (select-window art-win))
-          (board-win
-           (select-window board-win)
-	   (when navi2ch-bm-stay-board-window
-	     (condition-case nil
-		 (enlarge-window (frame-height))
-	       (error nil))
-	     (split-window-vertically navi2ch-board-window-height)
-	     (other-window 1)))
-          (list-win
-           (select-window list-win)
-	   (when navi2ch-list-stay-list-window
-	     (split-window-horizontally navi2ch-list-window-width)
-	     (other-window 1))))
-    (navi2ch-article-view-article-from-file file)))
 
 (defun navi2ch-article-save-number ()
   (unless (or navi2ch-article-hide-mode
@@ -1225,35 +1221,6 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   "前のスレに移動する。"
   (interactive)
   (navi2ch-article-through-subr (interactive-p) -1))
-
-(defun navi2ch-article-two-pane ()
-  (interactive)
-  (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
-         (board-buf (get-buffer navi2ch-board-buffer-name))
-         (art-buf (navi2ch-article-current-buffer))
-         (list-win (get-buffer-window (or list-buf "")))
-         (board-win (get-buffer-window (or board-buf "")))
-         buf)
-    (when art-buf
-      (delete-other-windows)
-      (switch-to-buffer art-buf)
-      (setq buf
-            (cond ((and list-buf board-buf)
-                   (cond ((and list-win board-win) board-buf)
-                         (list-win board-buf)
-                         (board-win list-buf)
-                         (t board-buf)))
-                  (list-buf list-buf)
-                  (board-buf board-buf)))
-      (when buf
-        (if (eq buf list-buf)
-            (split-window-horizontally navi2ch-list-window-width)
-	  (condition-case nil
-	      (enlarge-window (frame-height))
-	    (error nil))
-          (split-window-vertically navi2ch-board-window-height))
-        (switch-to-buffer buf))
-      (other-window 1))))
 
 (defun navi2ch-article-get-message (num)
   "NUM 番目のレスを得る"
@@ -1683,7 +1650,6 @@ gunzip に通してから文字コードの推測を試みる。"
          (or (navi2ch-next-property (point) 'current-number)
              (point-max))))))
   (message msg))
-
 
 ;;; hide mode
 (navi2ch-set-minor-mode 'navi2ch-article-hide-mode
