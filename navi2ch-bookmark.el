@@ -262,6 +262,10 @@ KEY は (concat URI ARTID) ")
   (navi2ch-bookmark-copy bookmark-id)
   (navi2ch-bookmark-delete-subr))
   
+(defun navi2ch-bookmark-move-mark-article (bookmark-id)
+  (interactive (list (navi2ch-bookmark-read-id "move to: ")))
+  (navi2ch-bm-exec-subr 'navi2ch-bookmark-move bookmark-id))
+
 (defun navi2ch-bookmark-cut ()
   (interactive)
   (let ((item (save-excursion (beginning-of-line)

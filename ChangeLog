@@ -1,9 +1,11 @@
 2002-06-23  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-bookmark.el (navi2ch-bookmark-move-mark-article): 新関数。
+
 	* navi2ch-article.el (navi2ch-article-sync): 
 	必ず navi2ch-article-goto-number するように。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/111-113n
-	
+
 2002-06-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-status): 新変数。
