@@ -226,17 +226,12 @@
         (dolist (file (and (file-directory-p default-directory)
                            (directory-files default-directory
 					    nil "[0-9]+\\.dat")))
-	  (setq node 
+	  (setq node
 		(or (cdr (assoc file subject-alist))
-		    (with-temp-buffer
-		      (navi2ch-insert-file-contents file)
-		      (goto-char (point-min))
-		      (let ((subject
-			     (cdr (assq 'subject
-					(navi2ch-article-get-first-message)))))
-			(list (cons 'subject subject)
-			      (cons 'artid
-				    (file-name-sans-extension file)))))))
+		    (let ((subject (assq 'subject
+					 (navi2ch-article-get-first-message-from-file file))))
+		      (list subject
+			    (cons 'artid (file-name-sans-extension file))))))
 	  (setq alist (cons (cons board node) alist)))))
     (message "searching cache...%s" (if alist "done" "not found"))
     (setq navi2ch-search-searched-subject-list (nreverse alist))

@@ -463,7 +463,6 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			     (navi2ch-list-get-changed-category
 			      category-list)))
 		 category-list)))
-	(setq navi2ch-mode-line-identification "%12b")
 	(navi2ch-set-mode-line-identification)
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
   (run-hooks 'navi2ch-list-after-sync-hook))
@@ -666,6 +665,10 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (navi2ch-search-article-subr
    (navi2ch-list-get-current-category-list)))
 
+(defun navi2ch-list-search-current-board-cache ()
+  (interactive)
+  (navi2ch-search-cache-subr (list (get-text-property (point) 'board))))
+
 (defun navi2ch-list-search-current-category-cache ()
   (interactive)
   (navi2ch-search-cache-subr
@@ -682,11 +685,11 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-subject))
 		 ((eq ch2 ?a) (navi2ch-search-all-subject))))
 	  ((eq ch ?a)
-	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-article))
+	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-article))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-article))
 		 ((eq ch2 ?a) (navi2ch-search-all-article))))
 	  ((eq ch ?c)
-	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-cache))
+	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-cache))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-cache))
 		 ((eq ch2 ?a) (navi2ch-search-all-cache)))))))
 

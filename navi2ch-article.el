@@ -572,6 +572,8 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (setq navi2ch-article-point-stack nil)
   (make-local-hook 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'navi2ch-article-kill-buffer-hook t t)
+  (make-local-hook 'post-command-hook)
+  (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-article-mode-hook))
 
 (defun navi2ch-article-kill-buffer-hook ()
@@ -1354,8 +1356,9 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
     subject))
 
-(defun navi2ch-article-display-link-minibuffer (point)
-  "point のリンク先を minibuffer に表示"
+(defun navi2ch-article-display-link-minibuffer (&optional point)
+  "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示"
+  (setq point (or point (point)))
   (when (eq major-mode 'navi2ch-article-mode)
     (let ((num-prop (get-text-property (point) 'number))
 	  (url-prop (get-text-property (point) 'url))
@@ -1395,16 +1398,14 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   (interactive)
   (let ((point (navi2ch-next-property (point) 'link-head)))
     (if point
-	(goto-char point)))
-  (navi2ch-article-display-link-minibuffer (point)))
+	(goto-char point))))
 
 (defun navi2ch-article-previous-link ()
   "前のリンクへ"
   (interactive)
   (let ((point (navi2ch-previous-property (point) 'link-head)))
     (if point
-	(goto-char point)))
-  (navi2ch-article-display-link-minibuffer (point)))
+	(goto-char point))))
 
 (defun navi2ch-article-fetch-link (&optional force)
   (interactive)
@@ -1414,8 +1415,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	  (let ((article (navi2ch-article-url-to-article url))
 		(board (navi2ch-board-url-to-board url)))
 	    (and (navi2ch-article-fetch-article board article force)
-		 (navi2ch-bm-remember-fetched-article board article)))))
-    (navi2ch-article-display-link-minibuffer (point))))
+		 (navi2ch-bm-remember-fetched-article board article)))))))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)

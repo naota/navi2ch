@@ -253,10 +253,10 @@ BODY の評価中にエラーが起こると nil を返す。"
 	     navi2ch-net-gunzip-program t t nil
 	     navi2ch-net-gunzip-args)))
 
-(fset 'navi2ch-net-get-content-subr
-      (if (string-match "windowsce" system-configuration)
-	  'navi2ch-net-get-content-subr-with-temp-file
-	'navi2ch-net-get-content-subr-region))
+(defalias 'navi2ch-net-get-content-subr
+  (if (string-match "windowsce" system-configuration)
+      'navi2ch-net-get-content-subr-with-temp-file
+    'navi2ch-net-get-content-subr-region))
 
 (defun navi2ch-net-get-chunk (proc)
   "カレントバッファの PROC の point 以降を chunk とみなして chunk を得る。

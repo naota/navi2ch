@@ -1,7 +1,26 @@
 2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-search.el (navi2ch-search-cache-subr):
+	navi2ch-article-get-first-message-from-file を使うようにした。
+
+	* navi2ch-net.el (navi2ch-net-get-content-subr): unload-feature で
+	きるよう、fset ではなく defalias するようにした。
+
+	* navi2ch-list.el (navi2ch-list-sync):
+	navi2ch-mode-line-identification への setq を削除。
+	(navi2ch-list-search-current-board-cache): 新関数。
+	(navi2ch-list-search): list モードなのに navi2ch-bm 系の関数を使っ
+	ていたので修正。
+
 	* navi2ch-article.el (navi2ch-article-show-url): lambda の前の邪魔
 	な quote をはずした。
+	(navi2ch-article-mode): post-command-hook に
+	navi2ch-article-display-link-minibuffer を local-hook として設定。
+	(navi2ch-article-display-link-minibuffer): point を optional にし
+	て省略時は (point) を使うようにした。
+	(navi2ch-article-next-link): 不要なので最後の link 表示を削除。
+	(navi2ch-article-previous-link): 同上。
+	(navi2ch-article-fetch-link): 同上。
 
 	* navi2ch-board-misc.el (navi2ch-bm-show-url): 同上。
 
