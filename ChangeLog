@@ -7,6 +7,9 @@
 	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
 	レス番号の候補を取得するとき、名前欄の「◆」以降を無視するように。
 
+	* navi2ch-vars.el (navi2ch-article-url-regexp): 「;」を追加。
+	(navi2ch-article-number-separator-regexp): 「、」「=」「＝」を追加。
+
 2003-02-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-func-alist): 不要かつ存在

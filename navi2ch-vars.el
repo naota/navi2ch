@@ -553,7 +553,7 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-number-separator-regexp " *, *"
+(defcustom navi2ch-article-number-separator-regexp " *[,、=＝] *"
   "*同じスレ内へのリンクの数字を区切る文字列を表わす正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
@@ -565,7 +565,7 @@ ask なら明示的に移動する時以外なら質問する
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-url-regexp
-  "\\(h?ttps?\\|x-localbbs\\)\\(://[-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:]+\\)"
+  "\\(h?ttps?\\|x-localbbs\\)\\(://[-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:;]+\\)"
   "*レスのテキストのうち URL とみなす部分の正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
