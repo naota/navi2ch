@@ -1,5 +1,8 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-view-article): V なスレを見
+	た時も navi2ch-history-add してみる。
+
 	* navi2ch-net.el: navi2ch-exit-hook に navi2ch-net-cleanup を追加。
 	(navi2ch-net-process): 新変数。
 	(navi2ch-net-cleanup): 新関数。

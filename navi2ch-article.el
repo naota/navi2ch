@@ -452,7 +452,9 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
     (if (get-buffer buf-name)
         (progn
           (switch-to-buffer buf-name)
-          (navi2ch-article-sync force nil number))
+	  (prog1 (navi2ch-article-sync force nil number)
+	    (navi2ch-history-add navi2ch-article-current-board
+				 navi2ch-article-current-article)))
       (if (and navi2ch-article-auto-expunge
 	       (> navi2ch-article-max-buffers 0))
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
