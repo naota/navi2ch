@@ -44,6 +44,8 @@
 (unless navi2ch-message-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-map)
+    (define-key map "\C-a" 'navi2ch-message-beginning-of-line)
+    (define-key map "\M-m" 'navi2ch-message-back-to-indentation)
     (define-key map "\C-c\C-c" 'navi2ch-message-send-message)
     (define-key map "\C-c\C-k" 'navi2ch-message-exit)
     (define-key map "\C-c\C-y" 'navi2ch-message-cite-original)
@@ -149,15 +151,15 @@
 (defun navi2ch-message-insert-header (new sage)
   (and sage (setq sage "sage"))
   (when new
-    (insert "Subject: \n"))
-  (insert "From: "
+    (insert (navi2ch-read-only-string "Subject: ") "\n"))
+  (insert (navi2ch-read-only-string "From: ")
 	  (or (and navi2ch-message-remember-user-name
 		   (cdr (assq 'name navi2ch-message-current-article)))
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-user-name-alist))
 	      navi2ch-message-user-name "")
 	  "\n"
-	  "Mail: "
+	  (navi2ch-read-only-string "Mail: ")
 	  (or sage
 	      (and navi2ch-message-remember-user-name
 		   (cdr (assq 'mail navi2ch-message-current-article)))
@@ -165,18 +167,18 @@
 			  navi2ch-message-mail-address-alist))
 	      navi2ch-message-mail-address "")
 	  "\n"
-	  (navi2ch-propertize navi2ch-message-header-separator
-			      'read-only t
-			      'front-sticky t 'rear-nonsticky t))
+	  (navi2ch-read-only-string
+	   (navi2ch-propertize navi2ch-message-header-separator
+			       'navi2ch-message-header-separator t)))
   (setq buffer-undo-list nil)
   (set-buffer-modified-p nil))
 
-(defsubst navi2ch-message-header-end ()
+(defun navi2ch-message-header-end ()
   (save-restriction
     (widen)
-    (if (get-text-property (point-min) 'read-only)
+    (if (get-text-property (point-min) 'navi2ch-message-header-separator)
 	(point-min)
-      (next-single-property-change (point-min) 'read-only))))
+      (next-single-property-change (point-min) 'navi2ch-message-header-separator))))
 
 (defun navi2ch-message-cleanup-message ()
   (save-excursion
@@ -488,6 +490,21 @@
     (split-window-vertically)
     (other-window 1)
     (switch-to-buffer (get-buffer navi2ch-message-buffer-name))))
+
+(defun navi2ch-message-beginning-of-line (&optional n)
+  "行の先頭へ移動。
+header field へ移動しない以外は `beginning-of-line' と同じ。"
+  (interactive "p")
+  (beginning-of-line n)
+  (when (< (point) (navi2ch-message-header-end))
+    (search-forward ": " nil t)))
+    
+(defun navi2ch-message-back-to-indentation ()
+  "行の最初の空白でない箇所へ移動。
+header field へ移動しない以外は `back-to-indentation' と同じ。"
+  (interactive)
+  (navi2ch-message-beginning-of-line)
+  (skip-chars-forward " \t"))
 
 ;; sendlog機能
 (defun navi2ch-message-sendlog-subject (board article)

@@ -1,3 +1,22 @@
+2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-message.el (navi2ch-message-insert-header): Subject とか
+	を read-only にしてみる。
+	header が終わる箇所に navi2ch-message-header-separator という
+	property を付ける。
+	(navi2ch-message-header-end): navi2ch-message-header-separator を
+	使うように。
+	(navi2ch-message-beginning-of-line): 新関数。
+	(navi2ch-message-back-to-indentation): 同上。
+	(navi2ch-message-mode-map):
+	navi2ch-message-beginning-of-line,
+	navi2ch-message-back-to-indentation を追加。
+
+	* navi2ch-util.el (navi2ch-read-only-string): 新関数。
+
+	<http://pc5.2ch.net/test/read.cgi/unix/1106152504/136>
+	<http://sourceforge.net/tracker/index.php?func=detail&aid=1115437&group_id=39552&atid=435774>
+
 2005-02-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	sendlog を書くときの message の format する関数を指定できるように。

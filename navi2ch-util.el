@@ -1274,5 +1274,8 @@ STRING2 の方が大きい場合は負数を返す。
 	(setq bol (1+ (navi2ch-line-end-position))))))
   (goto-char start))
 
+(defun navi2ch-read-only-string (string)
+  (navi2ch-propertize string '(read-only t front-sticky t rear-nonsticky t)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
