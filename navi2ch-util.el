@@ -1202,7 +1202,8 @@ FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
   (interactive)
   (ding)
   (let ((key (this-command-keys)))
-    (message "`%s' is disabled in Navi2ch."
+    (message "%s (%s) is disabled in Navi2ch."
+	     (key-description key)
 	     (lookup-key (current-global-map) key))))
 
 (run-hooks 'navi2ch-util-load-hook)
