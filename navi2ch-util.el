@@ -330,8 +330,9 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 
 (defsubst navi2ch-replace-html-tag-with-buffer ()
   (goto-char (point-min))
-  (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
-    (replace-match (navi2ch-replace-html-tag-to-string (match-string 0)))))
+  (let ((case-fold-search nil))
+    (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
+      (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))))
 
 (defsubst navi2ch-replace-html-tag-with-temp-buffer (str)
   (with-temp-buffer
