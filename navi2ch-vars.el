@@ -636,7 +636,9 @@ nil $B$J$i!"=q$-$+$1$rGK4~$7$F$$$$$+Ld$$9g$o$;$k!#(B
     ("u" . "((I_$B'U(I_(B)(I3O0(B")
     ("U" . "(-$B!2(B-)(I3B@^(B"))
   "*AA $B$rF~NO$9$k$H$-$N%-!<%P%$%s%I$H(B AA $B$N(B alist$B!#(B
-message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(B"
+message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(B
+SPC$B!"(BC-l$B!"(BC-g$B!"(BC-v$B$O%j%9%HI=<($N:]$K;HMQ$5$l$k$N$G%-!<$K$O;HMQ$7$J$$$3$H!#(B
+"
   :type '(repeat (cons string string))
   :group 'navi2ch-message)
 
@@ -650,7 +652,7 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(
   :type 'boolean
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-popup-aa-width 36
+(defcustom navi2ch-message-popup-aa-width 39
   "*aa $B$N%j%9%H$rI=<($9$k:]$NI}(B"
   :type 'number
   :group 'navi2ch-message)

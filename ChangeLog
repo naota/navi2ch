@@ -1,3 +1,21 @@
+2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map): G に
+	navi2ch-article-goto-board をバインド。
+	(navi2ch-article-goto-board): 新関数。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/276 とか
+
+	* navi2ch-message.el (navi2ch-message-insert-aa-list): キーを表示
+	する際に key-description を使用するようにした。Ctrl + key とかも使
+	用できるように。そのため、キーが一文字でおさまらない可能性があるの
+	で truncate のしかたを変更。
+	(navi2ch-message-popup-aa-list): AA のリストが一画面におさまらない
+	場合にそなえてスクロールできるようにした。
+
+	* navi2ch-vars.el (navi2ch-message-aa-alist): 説明を追加。
+	(navi2ch-message-popup-aa-width): 表示する際の truncate のしかたを
+	変えたのでデフォルト値を変更。
+
 2002-07-03  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	callback を定義する為の仕組みを作ってみました。

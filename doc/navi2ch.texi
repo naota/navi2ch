@@ -1246,11 +1246,11 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @code{navi2ch-message-pop-message-buffer} 書き込みのとき書き込み画面に
 戻る
 
-@item C-x k
-@code{navi2ch-article-kill-buffer} バッファを保存して消去
-
 @item i
 @code{navi2ch-article-fetch-link} リンク先のスレを更新
+
+@item G
+@code{navi2ch-article-goto-board} 指定した板に移動
 
 @end table
 

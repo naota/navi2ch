@@ -296,28 +296,49 @@
     (dolist (elt navi2ch-message-aa-alist)
       (let* ((key (car elt))
 	     (val (cdr elt))
-	     (width (string-width val)))
+	     string width)
 	(when (and (stringp key) (stringp val))
+	  (setq string (format "%s: %s" (key-description key) val)
+		width (string-width string))
 	  (if (> width aa-width)
-	      (setq val
-		    (concat (truncate-string-to-width val (- aa-width 3))
-			    "...")))
-	  (insert (format (format "%%s: %%-%ds"
-				  navi2ch-message-popup-aa-width) key val)
+	      (setq string (concat (truncate-string-to-width string
+							     (- aa-width 3))
+				   "...")))
+	  (insert (truncate-string-to-width string aa-width nil ?\ )
 		  (if nl "\n" " "))
 	  (setq nl (not nl)))))))
 
 (defun navi2ch-message-popup-aa-list ()
   "aa のリストを表示する。"
   (interactive)
-  (save-window-excursion
-    (with-temp-buffer
-      (navi2ch-message-insert-aa-list)
-      (pop-to-buffer (current-buffer))
-      (let ((cursor-in-echo-area t)
-	    (message-log-max nil))
-	(message "Type key for AA: ")
-	(read-char)))))
+  (let ((buffer (get-buffer-create "*AA List*"))
+	(continue t)
+	c)
+    (unwind-protect
+	(save-window-excursion
+	  (with-current-buffer buffer
+	    (erase-buffer)
+	    (navi2ch-message-insert-aa-list)
+	    (goto-char (point-min))
+	    (pop-to-buffer (current-buffer))
+	    (while continue
+	      (setq c (navi2ch-read-char
+		       "Type key for AA (or SPC forward, DEL back): "))
+	      (cond
+	       ((memq c '(?\  ?\C-v))
+		(condition-case nil
+		    (scroll-up)
+		  (error nil)))
+	       ((memq c '(?\C-h ?\177))
+		(condition-case nil
+		    (scroll-down)
+		  (error nil)))
+	       ((eq c ?\C-l)
+		(recenter))
+	       (t (setq continue nil)))))
+	  c)
+      (if (bufferp buffer)
+	  (kill-buffer buffer)))))
 
 (defun navi2ch-message-insert-aa ()
   "aa を入力する。"

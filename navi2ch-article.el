@@ -77,6 +77,7 @@
     (define-key map "$" 'navi2ch-article-toggle-important)
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
+    (define-key map "G" 'navi2ch-article-goto-board)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1023,6 +1024,11 @@ state はあぼーんされてれば aborn というシンボル。
       (if navi2ch-article-goto-number-recenter
 	  (navi2ch-article-recenter (navi2ch-article-get-current-number))))
     (force-mode-line-update t)))
+
+(defun navi2ch-article-goto-board (&optional board)
+  (interactive)
+  (navi2ch-list-goto-board (or board
+			       navi2ch-article-current-board)))
 
 (defun navi2ch-article-get-point (&optional point)
   (save-window-excursion
