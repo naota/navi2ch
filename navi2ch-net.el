@@ -382,6 +382,7 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 			 (cons "Pragma" "no-cache")
 		       (and time (cons "If-Modified-Since" time)))
 		     (and navi2ch-net-accept-gzip
+			  (not (assoc "Range" other-header))
 			  '("Accept-Encoding" . "gzip"))
 		     (and navi2ch-net-user-agent
 			  (cons "User-Agent" navi2ch-net-user-agent)))

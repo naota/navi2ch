@@ -1,3 +1,8 @@
+2003-01-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-download-file): Range ヘッダがある時
+	は gzip エンコーディングを受け付けないように。
+
 2003-01-20  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-auto-range): docstring 修正。
@@ -7,7 +12,7 @@
 
 	* navi2ch-article.el (navi2ch-article-select-current-link):
 	>>1 などのスレ内リンクも C-u つきのときはブラウザで開くように。
-	
+
 2003-01-10  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-alist): <hr> を追加。
@@ -44,9 +49,9 @@
 	`navi2ch-base64-line-regexp' にマッチしない行を無視する。
 	(navi2ch-which): 新関数。
 
-	* navi2ch-article.el (navi2ch-article-mode-map): 
+	* navi2ch-article.el (navi2ch-article-mode-map):
 	"\ei" に navi2ch-article-base64-toggle-text をバインド。
-	(navi2ch-article-auto-decode-base64-section): 
+	(navi2ch-article-auto-decode-base64-section):
 	navi2ch-article-auto-insert-base64-text が nil であれば
 	デコードしたテキストを本文に挿入しない。
 	(navi2ch-article-base64-text-on): 新関数。
