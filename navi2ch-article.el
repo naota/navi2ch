@@ -990,12 +990,16 @@ state はあぼーんされてれば aborn というシンボル。
   (interactive)
   (let (default alist ret)
     (setq default
-	  (let ((from (cdr (assq 'name
-				 (navi2ch-article-get-message
-				  (navi2ch-article-get-current-number))))))
+	  (let* ((msg (navi2ch-article-get-message
+		       (navi2ch-article-get-current-number)))
+		 (from (cdr (assq 'name msg)))
+		 (data (cdr (assq 'data msg))))
 	    (or (and from
 		     (string-match "[0-9０-９]+" from)
 		     (japanese-hankaku (match-string 0 from)))
+		(and data
+		     (string-match "[0-9０-９]+" data)
+		     (japanese-hankaku (match-string 0 data)))
 		nil)))
     (setq alist (mapcar
 		 (lambda (x) (cons (cdr (assq 'id x)) x))
@@ -1007,7 +1011,6 @@ state はあぼーんされてれば aborn というシンボル。
 		       ": ")
 	       alist nil nil))
     (setq ret (if (string= ret "") default ret))
-
     (if ret
 	(let ((num (string-to-number ret)))
 	  (if (> num 0)

@@ -9,6 +9,8 @@
 	(navi2ch-article-cached-subject-minimum-size): 
 	navi2ch-insert-file-contents で挿入したサイズもチェックするように。
 	リンク先スレにレスが1つのときに無限ループに入っていたので。
+	(navi2ch-article-goto-number-or-board): レス本文からもデフォルトの
+	レス番号を探すように。
 
 2002-05-16    mami  <mami@users.sourceforge.net>
 
