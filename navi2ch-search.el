@@ -133,7 +133,7 @@
       (let ((default-directory (navi2ch-board-get-file-name board "")))
         (dolist (file (and (file-directory-p default-directory)
                            (directory-files default-directory
-					    nil "[0-9]+\\.dat")))
+					    nil "[0-9]+\\.dat$")))
           (with-temp-buffer
             (navi2ch-insert-file-contents file)
             (goto-char (point-min))
@@ -234,7 +234,7 @@
 			     (navi2ch-board-get-file-name board)))))
         (dolist (file (and (file-directory-p default-directory)
                            (directory-files default-directory
-					    nil "[0-9]+\\.dat")))
+					    nil "[0-9]+\\.dat$")))
 	  (setq node
 		(or (cdr (assoc file subject-alist))
 		    (let ((subject (assq 'subject
