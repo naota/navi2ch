@@ -1,3 +1,9 @@
+2003-09-09  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-board): parse 方法
+	を変更。またドメインが変わっても対応できるように。
+	(navi2ch-machibbs-url-to-article): 同上。
+
 2003-09-09  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-auto-modify.el (navi2ch-auto-modify-save-variables):

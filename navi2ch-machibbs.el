@@ -111,56 +111,31 @@ START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
 
 (defun navi2ch-machibbs-url-to-board (url)
   "url$Bから BOARDに変換。"
-  (cond ((string-match
-	  "http://www\\.machibbs\\.com/[^/]+/bbs/read\\.cgi.*BBS=\\([^&]+\\)"
-	  url)
-	 (list (cons 'uri (format "http://%s.machibbs.com/%s/"
-				  (match-string 1 url)
-				  (match-string 1 url)))
-	       (cons 'id  (match-string 1 url))))
-	((string-match
-	  "http://www\\.machi\\.to/[^/]+/bbs/read\\.cgi.*BBS=\\([^&]+\\)"
-	  url)
-	 (list (cons 'uri (format "http://%s.machi.to/%s/"
-				  (match-string 1 url)
-				  (match-string 1 url)))
-	       (cons 'id  (match-string 1 url))))
-	((string-match
-	  "\\(http://[^\\.]+\\.machibbs\\.com\\)/bbs/read\\.\\(pl\\|cgi\\).*BBS=\\([^&]+\\)"
-	  url)
-	 (list (cons 'uri (format "%s/%s/" (match-string 1 url)
-				  (match-string 3 url)))
-	       (cons 'id  (match-string 3 url))))
-	((string-match
-	  "\\(http://[^\\.]+\\.machi\\.to\\)/bbs/read\\.\\(pl\\|cgi\\).*BBS=\\([^&]+\\)"
-	  url)
-	 (list (cons 'uri (format "%s/%s/" (match-string 1 url)
-				  (match-string 3 url)))
-	       (cons 'id  (match-string 3 url))))
-	((string-match
-	  "\\(http://[^\\.]+\\.machibbs\\.com/\\([^/]+\\)/\\)" url)
-	 (list (cons 'uri (match-string 1 url))
-	       (cons 'id  (match-string 2 url))))
-	((string-match
-	  "\\(http://[^\\.]+\\.machi\\.to/\\([^/]+\\)/\\)" url)
-	 (list (cons 'uri (match-string 1 url))
-	       (cons 'id  (match-string 2 url))))))
+  (cond
+   ;; http://www.machi.to/bbs/read.pl?BBS=tawara&KEY=1059722839
+   ;; http://tohoku.machi.to/bbs/read.pl?BBS=touhoku&KEY=1062265542
+   ((string-match
+     "http://\\(.+\\)/bbs/read\\..*BBS=\\([^&]+\\)"
+     url)
+    (list (cons 'uri (format "http://%s/%s/"
+			     (match-string 1 url)
+			     (match-string 2 url)))
+	  (cons 'id  (match-string 2 url))))
+   ;; http://www.machi.to/tawara/
+   ;; http://tohoku.machi.to/touhoku/
+   ((string-match
+     "http://\\([^/]+\\)/\\([^/]+\\)"
+     url)
+    (list (cons 'uri (format "http://%s/%s/"
+			     (match-string 1 url)
+			     (match-string 2 url)))
+	  (cons 'id  (match-string 2 url))))))
 
 (defun navi2ch-machibbs-url-to-article (url)
   (cond ((string-match
-	  "http://www.machibbs.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
-	 (list (cons 'artid (match-string 1 url))))
-	((string-match
-	  "http://www.machi.to/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
-	 (list (cons 'artid (match-string 1 url))))
-	((string-match
-	  "http://[^\\.]+\\.machibbs\\.com/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)"
+	  "http://.+/bbs/read\\..*KEY=\\([0-9]+\\)"
 	  url)
-	 (list (cons 'artid (match-string 2 url))))
-	((string-match
-	  "http://[^\\.]+\\.machi\\.to/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)"
-	  url)
-	 (list (cons 'artid (match-string 2 url))))))
+	 (list (cons 'artid (match-string 1 url))))))
 
 (defun navi2ch-machibbs-send-message
   (from mail message subject bbs key time board article)
