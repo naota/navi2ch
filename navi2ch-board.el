@@ -1,6 +1,6 @@
 ;;; navi2ch-board.el --- subject list module for navi2ch
 
-;; Copyright (C) 2000-2003 by Navi2ch Project
+;; Copyright (C) 2000-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -553,20 +553,11 @@
 	  (message msg))
       (message "Can't select this line!"))))
 
-
-;;; from Wanderlust(wl-expire.el)
-(defsubst navi2ch-board-expire-date-p (key-datevec file access-time)
-  (let ((datevec
-	 (condition-case nil
-	     (navi2ch-make-datevec
-	      (or access-time
-		  (nth 5 (file-attributes file))))
-	   (error nil))))
-    (and
-     datevec (> (aref datevec 1) 0)
-     (string<
-      (navi2ch-make-sortable-date datevec)
-      (navi2ch-make-sortable-date key-datevec)))))
+(defsubst navi2ch-board-expire-date-p (key-time file access-time)
+  (let ((time (ignore-errors (or access-time
+				 (nth 5 (file-attributes file))))))
+    (and time key-time
+	 (navi2ch-compare-times key-time time))))
 
 (defun navi2ch-board-expire (&optional board ask)
   (interactive)
@@ -584,9 +575,8 @@
 						  (match-string 0 file)))))
 				  (directory-files dir nil "\\.dat$")))
 	    (summary (navi2ch-article-load-article-summary board))
-	    (key-datevec (navi2ch-get-offset-datevec
-			  (navi2ch-make-datevec (current-time))
-			  navi2ch-board-expire-date))
+	    (key-time (navi2ch-add-days-to-time (current-time)
+						navi2ch-board-expire-date))
 	    (remove-list nil))
 	(message "expiring %s..." (cdr (assq 'name board)))
 	(dolist (article article-list)
@@ -599,7 +589,7 @@
 		       (and navi2ch-board-expire-orphan-only
 			    (navi2ch-article-orphan-p board article))
 		       (navi2ch-board-expire-date-p
-			key-datevec file
+			key-time file
 			(navi2ch-article-summary-element-access-time
 			 (cdr (assoc artid summary)))))
 	      (push article remove-list)

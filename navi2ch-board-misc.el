@@ -1,6 +1,6 @@
 ;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode
 
-;; Copyright (C) 2001-2003 by Navi2ch Project
+;; Copyright (C) 2001-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -501,16 +501,16 @@
                         (cdr (assq 'artid navi2ch-article-current-article))))
              (get-buffer-window (navi2ch-article-current-buffer)))
         (let ((win (selected-window)))
-          (select-window
-           (get-buffer-window (navi2ch-article-current-buffer)))
-          (condition-case nil
-              (cond
-               ((eq way 'up)
-                (navi2ch-article-scroll-up))
-               ((eq way 'down)
-                (navi2ch-article-scroll-down)))
-            (error nil))
-          (select-window win))
+	  (unwind-protect
+	      (progn
+		(select-window
+		 (get-buffer-window (navi2ch-article-current-buffer)))
+		(cond
+		 ((eq way 'up)
+		  (navi2ch-article-scroll-up))
+		 ((eq way 'down)
+		  (navi2ch-article-scroll-down))))
+	    (select-window win)))
       (navi2ch-bm-select-article max-line))))
 
 (defun navi2ch-bm-select-article-or-scroll-up (&optional max-line)
@@ -939,9 +939,9 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 	  (condition-case nil
 	      (if (file-exists-p file)
 		  (delete-file file))
-	    (error nil)))
+	    (file-error nil)))
 	(navi2ch-bm-remove-fetched-article board article)
-	(while (setq elt (assoc artid summary)) ; $B%/%I$$(B?
+	(while (setq elt (assoc artid summary))
 	  (setq summary (delq elt summary))))
       (navi2ch-bm-update-article board article))
     (navi2ch-article-save-article-summary board summary)))

@@ -1,3 +1,28 @@
+2004-04-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el
+	(navi2ch-article-disable-display-link-commands): eval-expression
+	を追加。
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-article-or-scroll): こ
+	こではエラーを無視すべきではない。
+	(navi2ch-bm-remove-article-subr): file-error のみを無視。
+
+	* navi2ch-board.el (navi2ch-board-expire-date-p): current-time()
+	形式で比較。
+	(navi2ch-board-expire): 同上。
+
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): <?...>
+	や <!...> も空文字列に。
+	(navi2ch-make-sortable-date): 削除。
+	(navi2ch-make-datevec): 削除。
+	(navi2ch-get-offset-datevec): 削除。
+	(navi2ch-compare-number-list): 新関数。
+	(navi2ch-lists-to-list-of-list): 新関数。
+	(navi2ch-add-number-lists): 新関数。
+	(navi2ch-compare-times): navi2ch-compare-number-list() を使用。
+	(navi2ch-add-days-to-time): 新関数。
+
 2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): cookie 要求

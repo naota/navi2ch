@@ -2205,7 +2205,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     (put-text-property start end 'help-echo value)))
 
 (defvar navi2ch-article-disable-display-link-commands
-  '(navi2ch-article-show-url-at-point)
+  '(navi2ch-article-show-url-at-point eval-expression)
   "このコマンドの後では minibuffer にリンク先を表示しない。")
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)

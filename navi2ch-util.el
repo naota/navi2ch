@@ -48,7 +48,7 @@
   "$BCV49$9$k(B html $B$N%?%0$NO"A[%j%9%H(B($B@55,I=8=$O;H$($J$$(B)")
 
 (defvar navi2ch-replace-html-tag-regexp-alist
-  '(("</?[a-zA-Z][^<>]*>" . "")
+  '(("</?[?!a-zA-Z][^<>]*>" . "")
     ("&[a-z][a-z0-9]*;?" . navi2ch-entity-reference-to-str)
     ("&#[0-9]+;?" . navi2ch-numeric-reference-to-str))
   "$BCV49$9$k(B html $B$N%?%0$NO"A[%j%9%H(B($B@55,I=8=(B)
@@ -277,12 +277,6 @@ See also the function `defalias'."
 
 (defalias 'navi2ch-string-as-multibyte
   (navi2ch-ifxemacs #'identity #'string-as-multibyte))
-
-;;; from Wanderlust (elmo-date.el)
-(defun navi2ch-make-sortable-date (datevec)
-  "Make a sortable string from DATEVEC."
-  (timezone-make-sortable-date (aref datevec 0) (aref datevec 1)
-			       (aref datevec 2) (aref datevec 3)))
 
 (defsubst navi2ch-match-string-no-properties (num &optional string)
   (navi2ch-ifxemacs
@@ -627,47 +621,6 @@ return new alist whose car is the new pair and cdr is ALIST.
 		     "%" "%%" navi2ch-mode-line-identification t)
 		  navi2ch-mode-line-identification))))
   (force-mode-line-update t))
-
-(defun navi2ch-make-datevec (time)
-  (timezone-fix-time
-   (let ((dtime (decode-time time)))
-     (apply 'timezone-make-arpa-date
-            (mapcar (lambda (x) (nth x dtime)) '(5 4 3 2))))
-   nil nil))
-
-;;; from Wanderlust (elmo-date.el)
-(defun navi2ch-get-offset-datevec (datevec offset &optional time)
-  (let ((year  (aref datevec 0))
-        (month (aref datevec 1))
-        (day   (aref datevec 2))
-        (hour     (aref datevec 3))
-        (minute   (aref datevec 4))
-        (second   (aref datevec 5))
-        (timezone (aref datevec 6))
-        day-number p
-        day-of-month)
-    (setq p 1)
-    (setq day-number (- (timezone-day-number month day year)
-                        offset))
-    (while (<= day-number 0)
-      (setq year (1- year)
-            day-number (+ (timezone-day-number 12 31 year)
-                          day-number)))
-    (while (> day-number (setq day-of-month
-                               (timezone-last-day-of-month p year)))
-      (setq day-number (- day-number day-of-month))
-      (setq p (1+ p)))
-    (setq month p)
-    (setq day day-number)
-    (timezone-fix-time
-     (format "%d %s %d %s %s"
-             day
-             (car (rassq month timezone-months-assoc))
-             year
-             (if time
-                 (format "%d:%d:%d" hour minute second)
-               "0:00")
-             (cadr timezone)) nil nil)))
 
 (defun navi2ch-end-of-buffer (&optional arg)
   "$B%P%C%U%!$N:G=*9T$K0\F0!#(B"
@@ -1033,13 +986,44 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
     (insert-file-contents file)
     (count-lines (point-min) (point-max))))
 
+(defun navi2ch-compare-number-list (list1 list2)
+  "LIST1 $B$H(B LIST2 $B$N3FMWAG$r?tCM$H$7$FHf3S$9$k!#(B
+LIST1 $B$H(B LIST2 $B$,Ey$7$$>l9g$O(B 0 $B$r!"(BLIST1 $B$NJ}$,Bg$-$$>l9g$O@5?t$r!"(B
+LIST2 $B$NJ}$,Bg$-$$>l9g$OIi?t$rJV$9!#(B"
+  (let ((r 0)
+	n1 n2)
+    (while (and (or list1 list2)
+		(= r 0))
+      (setq n1 (car-safe list1)
+	    list1 (cdr-safe list1)
+	    n2 (car-safe list2)
+	    list2 (cdr-safe list2)
+	    r (- (or n1 0) (or n2 0))))
+    r))
+
+(defun navi2ch-lists-to-list-of-list (&rest lists)
+  "LISTS $B$N3FMWAG$r$^$H$a$?MWAG$+$i$J$k%j%9%H$rJV$9!#(B
+$BNc$($P(B '(0 1 2) '(a b) $B$rEO$9$H(B ((0 a) (1 b) (2 nil)) $B$rJV$9!#(B"
+  (let (r)
+    (while (remq nil lists)
+      (push (mapcar #'car lists) r)
+      (setq lists (mapcar #'cdr lists)))
+    (nreverse r)))
+
+(defun navi2ch-add-number-lists (&rest lists)
+  "LISTS $BCf$N3F%j%9%H$N3FMWAG$r?tCM$H$7$F2C;;$9$k!#(B"
+  (mapcar (lambda (l)
+	    (apply #'+ (mapcar (lambda (x) (or x 0)) l)))
+	  (apply #'navi2ch-lists-to-list-of-list lists)))
+
 (defun navi2ch-compare-times (t1 t2)
-  "t1 $B$,(B t2 $B$h$j?7$7$1$l$P(B t"
-  (cond
-   ((null (and t1 t2)) t)
-   ((> (nth 0 t1) (nth 0 t2)) t)
-   ((= (nth 0 t1) (nth 0 t2)) (> (nth 1 t1) (nth 1 t2)))
-   (t nil)))
+  "T1 $B$,(B T2 $B$h$j?7$7$1$l$P(B non-nil $B$rJV$9!#(B"
+  (> (navi2ch-compare-number-list t1 t2) 0))
+
+(defun navi2ch-add-days-to-time (time days)
+  "TIME $B$N(B DAYS $BF|8e(B ($BIi$N>l9g$OA0(B) $B$N(B TIME $B$rJV$9!#(B"
+  (apply #'encode-time (navi2ch-add-number-lists (decode-time time)
+						 (list 0 0 0 days))))
 
 (defun navi2ch-which (file)
   (when (stringp file)
@@ -1195,8 +1179,10 @@ FIXEDCASE$B!"(BLITERAL $B$O(B `replace-match' $B$K$=$N$^$^EO$5$l$k!#(B"
 					    rep))))
 		     fixedcase literal))))
 
+;; XEmacs $B$G$O(B `char-width' $B$r9MN8$7$F$/$l$J$$$N$G!#(B
 (defun navi2ch-truncate-string-to-width
   (str end-column &optional start-column padding)
+  "`truncate-string-to-width' $B$HF1Ey!#(B"
   (let ((col 0)
 	(start-column (or start-column 0))
 	r)
