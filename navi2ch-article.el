@@ -448,20 +448,25 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 
 (defun navi2ch-article-update-previous-message-separator ()
   "現在位置の直前のレス区切を更新する。"
-  (save-excursion
-    (let ((buffer-read-only nil)
-	  end beg)
-      (setq end (previous-single-property-change (point) 'message-separator))
-      (when end
-	(if (get-text-property (1- end) 'message-separator)
-	    (setq beg (previous-single-property-change end 'message-separator))
-	  (setq beg end)
-	  (setq end (next-single-property-change beg 'message-separator))))
-      (when (and beg end)
-	(let ((number (get-text-property beg 'message-separator)))
-	  (goto-char beg)
-	  (delete-region beg end)
-	  (navi2ch-article-insert-message-separator number))))))
+  (let ((old-pos (point-marker)))
+    (set-marker-insertion-type old-pos t)
+    (save-excursion
+      (let ((buffer-read-only nil)
+	    end beg)
+	(if (= (point) (point-max))
+	    (setq end (point))
+	  (setq end (previous-single-property-change (point) 'message-separator)))
+	(when end
+	  (if (get-text-property (1- end) 'message-separator)
+	      (setq beg (previous-single-property-change end 'message-separator))
+	    (setq beg end)
+	    (setq end (next-single-property-change beg 'message-separator))))
+	(when (and beg end)
+	  (let ((number (get-text-property beg 'message-separator)))
+	    (goto-char beg)
+	    (delete-region beg end)
+	    (navi2ch-article-insert-message-separator number)))))
+    (goto-char old-pos)))
 
 (defun navi2ch-article-insert-message-separator (number)
   "レス区切を挿入する。"
@@ -769,11 +774,13 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 			  (navi2ch-put-alist 'replace
 					     reps
 					     navi2ch-article-message-filter-cache)))))))
-	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
+	  (setq alist (navi2ch-put-alist 'point (point-marker) alist))
+	  (setcdr x alist)
 	  ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
 	  (if suppress
 	      (navi2ch-article-update-previous-message-separator)
-	    (navi2ch-article-insert-message num alist)))
+	    (navi2ch-article-insert-message num alist)
+	    (set-marker-insertion-type (cdr (assq 'point alist)) t)))
 	;; 進捗表示
 	(and (> (setq progress (+ progress 100)) 10000)
 	     (/= (/ progress len) percent)
@@ -824,15 +831,12 @@ BOARD non-nil ならば、その板の coding-system を使う。"
       (setq visible (cdr visible)))
     (when visible
       (setq end-point
-	    (cdr (assq 'point (navi2ch-article-get-message (car visible)))))
-      (set-marker-insertion-type end-point t))
+	    (cdr (assq 'point (navi2ch-article-get-message (car visible))))))
     (if (null start-point)
 	(goto-char (point-max))
       (goto-char start-point)
       (delete-region start-point (or end-point (point-max))))
-    (prog1 (navi2ch-article-insert-messages list nil)
-      (when end-point
-	(set-marker-insertion-type end-point nil)))))
+    (navi2ch-article-insert-messages list nil)))
 
 (defun navi2ch-article-apply-message-filters (alist)
   (let (score)

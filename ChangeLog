@@ -1,4 +1,17 @@
+2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el
+	(navi2ch-article-update-previous-message-separator):
+	現在位置がbuffer の最後の場合 end を point-max() とするように。
+	現在位置をそれなりに保存するように。
+	(navi2ch-article-insert-messages):
+	後でレスの先頭に文字列を挿入するときの為に、message を挿入した場合
+	は、point で示される marker の insertion-type を t にするように。
+	(navi2ch-article-reinsert-partial-messages): 上記変更の為、ここで
+	一時的に insertion-type を t にするのをやめる。
+
 2005-02-11  mami  <mami@users.sourceforge.net>
+
 
 	XEmacs の forward-comment はバッファの最後で t を返す模様。
 	http://list-archive.xemacs.org/xemacs-beta/200210/msg00522.html
