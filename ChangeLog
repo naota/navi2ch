@@ -1,3 +1,12 @@
+2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* Makefile.am, configure.in:
+	バイトコンパイルを２回やらないように。
+	http://sourceforge.net/tracker/index.php?func=detail&aid=1107635&group_id=39552&atid=435774
+
+	* config.guess, config.sub, elisp-comp, install-sh, missing,
+	* mkinstalldirs: automake 1.9.2, autoconf 2.59 に付属のものに更新
+	
 2005-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-multibbs.el (toplevel): cl を require。

@@ -31,10 +31,6 @@ snap:
 	rm -f $(srcdir)/navi2ch-version.el && \
 	$(MAKE) $(AM_MAKEFLAGS) $(srcdir)/navi2ch-version.el
 
-recompile: $(lisp_LISP)
-	rm -f $(ELCFILES) && \
-	EMACS="$(EMACS)" $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
-
 elcdist: $(ELCFILES)
 	rm -rf $(distdir) && \
 	mkdir $(distdir) && \
@@ -46,9 +42,6 @@ $(srcdir)/bcomp.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/bcomp.el.in $(srcdir)/Makef
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
 	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
-
-$(ELCFILES): $(lisp_LISP)
-	$(MAKE) $(AM_MAKEFLAGS) recompile
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) && \

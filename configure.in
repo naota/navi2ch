@@ -112,14 +112,4 @@ fi
 
 AC_SUBST(icondir)
 
-# link files
-if test `cd ${srcdir}; pwd` != `pwd`; then
-  AC_CONFIG_COMMANDS([link-lisp],
-  [
-    rm -f *.el
-    ${navi2ch_ln_s} ${ac_srcdir}/*.el .
-  ], [navi2ch_ln_s="${LN_S}"])
-  AC_CONFIG_LINKS(doc/navi2ch.info:doc/navi2ch.info)
-fi
-
 AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile])
