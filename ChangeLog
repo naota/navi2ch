@@ -1,3 +1,8 @@
+2002-02-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-list-bbstable-url): bbstable の位置変更
+	に追従。
+
 2002-02-11  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-init-file): "init.el" を "init" に変更。
