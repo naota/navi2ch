@@ -269,6 +269,7 @@ START, END, NOFIRST で範囲を指定する"
 			     (cons (point-marker)
 				   (if (re-search-forward sep nil t)
 				       (copy-marker (match-beginning 0))
+				     (goto-char max)
 				     max))))
 		     syms))
 	(navi2ch-replace-html-tag-with-buffer)
@@ -1572,13 +1573,15 @@ gunzip に通してから文字コードの推測を試みる。"
 
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
-	 (file (make-temp-name (navi2ch-temp-directory))))
-    (with-temp-file file
-      (insert str))
-    (let ((w32-start-process-show-window t)) ; for meadow
-      (call-process navi2ch-article-aadisplay-program
-                    nil nil nil file))
-    (delete-file file)))
+	 (file (expand-file-name (make-temp-name (navi2ch-temp-directory)))))
+    (unwind-protect
+	(progn
+	  (with-temp-file file
+	    (insert str))
+	  (let ((w32-start-process-show-window t)) ; for meadow
+	    (call-process navi2ch-article-aadisplay-program
+			  nil nil nil file)))
+      (ignore-errors (delete-file file)))))
 
 (defun navi2ch-article-popup-dialog (str)
   (navi2ch-ifxemacs
