@@ -302,17 +302,32 @@
 	  (navi2ch-bm-insert-subject
 	   article i
 	   (cdr (assq 'subject article))
-	   (let* ((response (cdr (assq 'response article)))
-		  (increase (- (string-to-number response)
-			       (or seen
-				   (cdr (assoc artid navi2ch-board-last-seen-alist))
-				   (string-to-number
-				    (or (cdr (assoc artid navi2ch-board-old-subject-alist))
-					"0"))))))
-	     (setq response (format "%4s" response)
-		   increase (format "%4d" increase))
+	   (let ((res (cdr (assq 'response article)))
+		 (last (and navi2ch-board-insert-subject-with-diff
+			    (or seen
+				(cdr (assoc artid navi2ch-board-last-seen-alist))
+				(catch 'break
+				  (string-to-number
+				   (or (cdr (assoc artid navi2ch-board-old-subject-alist))
+				       (throw 'break nil)))))))
+		 (read (and navi2ch-board-insert-subject-with-unread
+			    (navi2ch-article-get-last-read-number
+			     navi2ch-board-current-board
+			     article))))
 	     (concat "("
-		     (mapconcat #'eval navi2ch-board-other-field-form "")
+		     (format "%4s" res)
+		     (and navi2ch-board-insert-subject-with-diff
+			  (format "/%5s"
+				  (if last
+				      (format "+%d" (- (string-to-number res)
+						       last))
+				    "-")))
+		     (and navi2ch-board-insert-subject-with-unread
+			  (format "/%5s"
+				  (if read
+				      (format "+%d" (- (string-to-number res)
+						       read))
+				    "-")))
 		     ")"))
 	   (cond ((and navi2ch-board-check-updated-article-p
 		       (setq updated

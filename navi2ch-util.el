@@ -1083,7 +1083,7 @@ This function is a cutdown version of cl-seq's one."
   (navi2ch-defalias-maybe 'characterp 'ignore))
 
 (defun navi2ch-quote-maybe (sexp)
-  "Quote SEXP if it is not self quoting."
+  "Quote SEXP iff it is not self quoting."
   ;; `custom-quote'のパクり。
   (if (or (memq sexp '(t nil))
 	  (if (fboundp 'keywordp)

@@ -1172,18 +1172,27 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		    (setq suppressed res)))))))
       (when navi2ch-article-auto-activate-message-filter
 	(with-temp-buffer
-	  (setq navi2ch-article-current-board board
-		navi2ch-article-current-article (navi2ch-article-load-info
-						 board article)
-		navi2ch-article-message-list (navi2ch-article-get-message-list
-					      (navi2ch-article-get-file-name
-					       board article)))
+	  (setq navi2ch-article-current-board board)
+	  (setq navi2ch-article-message-list
+		(navi2ch-article-get-message-list
+		 (navi2ch-article-get-file-name
+		  navi2ch-article-current-board
+		  article)))
 	  (message "filtering current messages...")
 	  (let ((res (length navi2ch-article-message-list)))
 	    (when (and (>= res start)
 		       (or (null end)
 			   (<= res end)))
-	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article))))
+	      (setq navi2ch-article-current-article
+		    (navi2ch-article-load-info
+		     navi2ch-article-current-board
+		     article))
+	      (setq navi2ch-article-message-filter-cache
+		    (navi2ch-article-load-message-filter-cache
+		     navi2ch-article-current-board
+		     navi2ch-article-current-article))
+	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
+		    (f-hide (cdr (assq 'hide navi2ch-article-message-filter-cache))))
 		(catch 'loop
 		  (dolist (x (nthcdr (1- start) navi2ch-article-message-list))
 		    (if (eq (navi2ch-article-apply-message-filters
@@ -1198,14 +1207,46 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 				(navi2ch-put-alist
 				 'hide
 				 hide
-				 navi2ch-article-current-article)))
+				 navi2ch-article-current-article))
+			  (when navi2ch-article-use-message-filter-cache
+			    (setq f-hide (cons (car x) f-hide))
+			    (setq navi2ch-article-message-filter-cache
+				  (navi2ch-put-alist
+				   'hide
+				   f-hide
+				   navi2ch-article-message-filter-cache))))
 		      (throw 'loop nil)))
 		  (setq suppressed res)))
+	      (navi2ch-article-save-info
+	       navi2ch-article-current-board
+	       navi2ch-article-current-article)
+	      (navi2ch-article-save-message-filter-cache
+	       navi2ch-article-current-board
+	       navi2ch-article-current-article
+	       navi2ch-article-message-filter-cache)
 	      (message "Garbage collecting...")
 	      (garbage-collect)	; `navi2ch-article-parse-message' のゴミ掃除
 	      (message "Garbage collecting...done")))
 	  (message "filtering current messages...done"))))
     suppressed))
+
+(defun navi2ch-article-get-last-read-number (board article)
+  (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board article)))
+	hide num)
+    (if buffer
+	(with-current-buffer buffer
+	  (setq hide (cdr (assq 'hide navi2ch-article-current-article))
+		num (if (or navi2ch-article-hide-mode
+			    navi2ch-article-important-mode)
+			(cdr (assq 'number navi2ch-article-current-article))
+		      (navi2ch-article-get-current-number))))
+      (setq article (navi2ch-article-load-info board article))
+      (setq hide (cdr (assq 'hide article))
+	    num (cdr (assq 'number article))))
+    (when num
+      (while (memq (1+ num) hide)
+	(setq num (1+ num)))
+      num)))
 
 (defun navi2ch-article-get-readcgi-raw-url (board article &optional start)
   (let ((url (navi2ch-article-to-url board article))
@@ -2960,44 +3001,45 @@ NO-SYNC が non-nil のときは sync しない。"
 (defun navi2ch-article-get-message-filter-cache-file-name (board article)
   (concat (navi2ch-article-get-info-file-name board article) ".filter"))
 
-(defun navi2ch-article-save-message-filter-cache (&optional board article)
-  (or board (setq board navi2ch-article-current-board))
-  (or article (setq article navi2ch-article-current-article))
-  (let* ((buffer (get-buffer (navi2ch-article-get-buffer-name board article)))
-	 (cache (and buffer
-		     (with-current-buffer buffer
-		       navi2ch-article-message-filter-cache))))
-    (when cache
-      (let ((file (navi2ch-article-get-message-filter-cache-file-name board article))
-	    (alist (delq nil
-			 (mapcar
-			  (lambda (key)
-			    (let ((slot (assq key cache)))
-			      (if (eq key 'replace)
-				  (let ((reps (delq nil
-						    (mapcar
-						     (lambda (reps-slot)
-						       (let ((rep (delq nil
-									(mapcar
-									 (lambda (rep-slot)
-									   (and (cdr rep-slot)
-										(cons (car rep-slot)
-										      (cadr rep-slot))))
-									 (cdr reps-slot)))))
-							 (and rep
-							      (cons (car reps-slot) rep))))
-						     (cdr slot)))))
-				    (and reps
-					 (cons key reps)))
-				(and (cdr slot)
-				     slot))))
-			  navi2ch-article-save-message-filter-cache-keys))))
-	(if (and (null alist)
-		 (file-exists-p file))
-	    (condition-case nil
-		(delete-file file)
-	      (error nil))
-	  (navi2ch-save-info file alist))))))
+(defun navi2ch-article-save-message-filter-cache (&optional board article cache)
+  (unless (and board article cache)
+    (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board article))))
+      (when buffer
+	(with-current-buffer buffer
+	  (or board (setq board navi2ch-article-current-board))
+	  (or article (setq article navi2ch-article-current-article))
+	  (or cache (setq cache navi2ch-article-message-filter-cache))))))
+  (when cache
+    (let ((file (navi2ch-article-get-message-filter-cache-file-name board article))
+	  (alist (delq nil
+		       (mapcar
+			(lambda (key)
+			  (let ((slot (assq key cache)))
+			    (if (eq key 'replace)
+				(let ((reps (delq nil
+						  (mapcar
+						   (lambda (reps-slot)
+						     (let ((rep (delq nil
+								      (mapcar
+								       (lambda (rep-slot)
+									 (and (cdr rep-slot)
+									      (cons (car rep-slot)
+										    (cadr rep-slot))))
+								       (cdr reps-slot)))))
+						       (and rep
+							    (cons (car reps-slot) rep))))
+						   (cdr slot)))))
+				  (and reps
+				       (cons key reps)))
+			      (and (cdr slot)
+				   slot))))
+			navi2ch-article-save-message-filter-cache-keys))))
+      (if (and (null alist)
+	       (file-exists-p file))
+	  (condition-case nil
+	      (delete-file file)
+	    (error nil))
+	(navi2ch-save-info file alist)))))
 
 (defun navi2ch-article-load-message-filter-cache (&optional board article)
   (or board (setq board navi2ch-article-current-board))

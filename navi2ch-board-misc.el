@@ -455,10 +455,11 @@
 		  (updated-mark (navi2ch-bm-get-updated-mark)))
 	      (when seen
 		(setq seen
-		      (and (<= (string-to-number
-				(or (cdr (assoc artid navi2ch-board-subject-alist))
-				    "1"))
-			       (+ seen navi2ch-board-check-article-update-suppression-length))
+		      (and (catch 'break
+			     (<= (string-to-number
+				  (or (cdr (assoc artid navi2ch-board-subject-alist))
+				      (throw 'break t)))
+				 (+ seen navi2ch-board-check-article-update-suppression-length)))
 			   (navi2ch-article-check-message-suppression
 			    board
 			    article

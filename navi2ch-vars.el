@@ -469,25 +469,14 @@ nil を指定すると、新着レスへのフィルター処理をチェックしない。"
 		 (const :tag "チェックしない" nil))
   :group 'navi2ch-board)
 
-(defcustom navi2ch-board-other-field-form '(response)
-  "*レス数欄の表示内容を決める擬似パターン(S式のリスト)。
+(defcustom navi2ch-board-insert-subject-with-diff nil
+  "*non-nil なら、Board モードのレス数欄にレスの増加数を表示する。"
+  :type 'boolean
+  :group 'navi2ch-board)
 
-以下のシンボルを含めることができる。
-
-response	レスの総数を表す文字列(4桁・右詰め)
-increase	レスの増分を表す文字列(4桁・右詰め)
-
-例えば次の値を設定すると、
-
-'(increase \"/\" response)
-
-表示は以下のようになり、
-`navi2ch-bm-sort-by-other'の結果が増分順に変わる。
-
- 16 +C くだらない質問はここに書き込め！なんでもアリ4     (  12/ 636)
- 17 =C*navi2ch for emacs (part 4)                        (   0/  50)
- 18  U おい、イブの夜にUnixいじってるうんこども！        (   0/ 101)"
-  :type '(repeat sexp)
+(defcustom navi2ch-board-insert-subject-with-unread nil
+  "*non-nil なら、Board モードのレス数欄にレスの未読数を表示する。"
+  :type 'boolean
   :group 'navi2ch-board)
 
 ;;; article variables

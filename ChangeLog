@@ -1,3 +1,22 @@
+2003-06-09  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-quote-maybe): docstring の修正。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): フィルター処理を
+	チェックするかどうかの判定方法を修正。
+
+	* navi2ch-vars.el (navi2ch-board-other-field-form): 廃止。
+	(navi2ch-board-insert-subject-with-diff): 新変数。
+	(navi2ch-board-insert-subject-with-unread): 新変数。
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects):
+	navi2ch-board-other-field-form に代え、上記新変数を使うように。
+
+	* navi2ch-article.el (navi2ch-article-check-message-suppression): 
+	フィルター結果を保存するように。
+	(navi2ch-article-get-last-read-number): 新関数。
+	(navi2ch-article-save-message-filter-cache): 第3引き数を追加。
+
 2003-06-08  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-sync): ~/.navi2ch/etc.txt の変更が
