@@ -362,8 +362,8 @@
 		(navi2ch-bm-insert-state item 'update)))))
       (message "can't select this line!"))))
 
-(defun navi2ch-bm-textize-article (directory &optional buffer)
-  (interactive "Ddirectory: ")
+(defun navi2ch-bm-textize-article (&optional dir-or-file buffer)
+  (interactive)
   (let* ((navi2ch-article-view-range nil)
 	 (navi2ch-article-auto-range nil)
 	 window)
@@ -376,8 +376,18 @@
     (let* ((article navi2ch-article-current-article)
 	   (board navi2ch-article-current-board)
 	   (id (cdr (assq 'id board)))
-	   (file (format "%s_%s.txt" id (cdr (assq 'artid article))))
-	   (subject (cdr (assq 'subject article))))
+	   (subject (cdr (assq 'subject article)))
+	   (basename (format "%s_%s.txt" id (cdr (assq 'artid article))))
+	   (dir nil) file)
+      (and dir-or-file
+	   (file-directory-p dir-or-file)
+	   (setq dir dir-or-file))
+      (setq file
+	    (if (or (not dir-or-file)
+		    (and dir (interactive-p)))
+		(expand-file-name
+		 (read-file-name "Write thread to file: " dir nil nil basename))
+	      (expand-file-name basename dir)))
       (and buffer
 	   (save-excursion
 	     (set-buffer buffer)
@@ -385,7 +395,8 @@
 	     (insert (format "<a href=\"%s\">%s</a><br>\n" file subject))))
       (let ((coding-system-for-write navi2ch-coding-system))
 	(navi2ch-write-region (point-min) (point-max)
-			      (expand-file-name file directory))))
+			      file))
+      (message "Wrote %s" file))
     (select-window window)))
 
 
