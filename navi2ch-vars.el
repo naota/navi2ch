@@ -166,7 +166,7 @@ nil の場合は browse-url-browser-function を使う。
   :group 'navi2ch)
 
 (defcustom navi2ch-2ch-host-list
-  '("cocoa.2ch.net")
+  '("cocoa.2ch.net" "pc.2ch.net" "pc2.2ch.net")
   "*2ちゃんねるとみなす host のリスト。"
   :type '(repeat (string :tag "ホスト"))
   :group 'navi2ch)
