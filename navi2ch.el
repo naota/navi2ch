@@ -71,7 +71,7 @@
 
 (defun navi2ch-version ()
   (interactive)
-  (message "Navivagor for 2ch %s" navi2ch-version))
+  (message "Navigator for 2ch %s" navi2ch-version))
 
 (defun navi2ch-save-status ()
   "list, board, article の状態を保存する"

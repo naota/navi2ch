@@ -579,9 +579,10 @@ changed-list は '((board-id . board) ...) な alist。"
 
 (defun navi2ch-list-load-info ()
   (setq navi2ch-list-current-list
-	(navi2ch-load-info (navi2ch-list-get-file-name "list.info"))
-	navi2ch-list-category-list
-	(cdr (assq 'category navi2ch-list-current-list))))
+	(navi2ch-load-info (navi2ch-list-get-file-name "list.info")))
+  (if navi2ch-list-load-category-list
+      (setq navi2ch-list-category-list
+	    (cdr (assq 'category navi2ch-list-current-list)))))
 
 (defun navi2ch-list-get-current-category-list ()
   (save-excursion

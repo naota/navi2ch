@@ -180,6 +180,11 @@ non-nil なら read.cgi を使う"
   :type 'boolean
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-load-category-list t
+  "*navi2ch 起動時に前回開いていたカテゴリを開くか。"
+  :type 'boolean
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。
