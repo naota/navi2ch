@@ -1,6 +1,12 @@
 2002-02-24  UEYAMA Rui <rui314159@users.sourceforge.net>
 
 	* navi2ch-splash.el (navi2ch-splash-logo-ascii):
+	setq を defvar に修正。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/113
+
+2002-02-24  UEYAMA Rui <rui314159@users.sourceforge.net>
+
+	* navi2ch-splash.el (navi2ch-splash-logo-ascii):
 	アスキーアート版のロゴをモナーに。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/110
 

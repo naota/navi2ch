@@ -51,7 +51,7 @@
   "Basename of the logo file.")
 
 ;; これはさすがに差しかえないと……
-(setq navi2ch-splash-logo-ascii "\
+(defvar navi2ch-splash-logo-ascii "\
 　　■　　　　■　　　　　　　　　　　　　　　■　　　　■
 　■　　　　■　　　　■　　　　　　　■　　　　■　　　　■
 　■　　　　　　　　　　■　　　　　■　　　　　　　　　　■
@@ -62,8 +62,8 @@
 　■　　　　　　　　　　　　■　■　　　　　　　　　　　　■
 　　■　　　　　　　　　　　　■　　　　　　　　　　　　■
 
-                                Navi2ch
-                     Navigator for 2ch for Emacsen"
+                            Navi2ch
+                 Navigator for 2ch for Emacsen"
   "Ascii picture used to splash the startup screen.")
 
 (eval-and-compile
