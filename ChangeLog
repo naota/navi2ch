@@ -1,3 +1,9 @@
+2004-03-05  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-ignore-category-list): 板カテゴリ
+	再編にともない「運営」を「運営案内」に変更。
+	http://qb3.2ch.net/test/read.cgi/operate/1077986839/105
+
 2004-02-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in (AC_PREREQ): Autoconf 2.53 以降を要求。
