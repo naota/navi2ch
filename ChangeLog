@@ -10,6 +10,9 @@
 	(navi2ch-article-set-mode-line): レス数が 0 のときは "-" と表示す
 	るように。
 
+	* navi2ch-vars.el (navi2ch-article-number-prefix-regexp): 「≫」を
+	追加。
+
 2003-02-26  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-message-filter-list): 
