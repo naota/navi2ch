@@ -211,6 +211,7 @@ SUSPEND が non-nil なら buffer を消さない"
     (set-window-start (selected-window) start)))
 
 (defun navi2ch-save-info (file info)
+  (setq info (navi2ch-strip-properties info))
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))

@@ -528,5 +528,32 @@ base64デコードすべき内容がない場合はエラーになる。"
 	  'temporary-file-directory)
 	'(getenv "TMP")))
 
+(defmacro navi2ch-match-string-no-properties (num &optional string)
+  (if (featurep 'xemacs)
+      `(match-string ,num ,string)
+    `(match-string-no-properties ,num ,string)))
+
+(defun navi2ch-strip-properties (obj)
+  "OBJ 中の文字列を再帰的に探し、テキスト属性を外したオブジェクトを返す。
+元の OBJ は変更しない。"
+  (cond
+   ((consp obj)
+    (let* ((ret (cons (car obj) (cdr obj)))
+	   (seq ret))
+      (while (consp seq)
+	(setcar seq (navi2ch-strip-properties (car seq)))
+	(if (consp (cdr seq))
+	    (setcdr seq (cons (cadr seq) (cddr seq)))
+	  (setcdr seq (navi2ch-strip-properties (cdr seq))))
+	(setq seq (cdr seq)))
+      ret))
+   ((stringp obj)
+    (let ((str (copy-sequence obj)))
+      (set-text-properties 0 (length str) nil str)
+      str))
+   ((vectorp obj)
+    (vconcat (mapcar 'navi2ch-strip-properties obj)))
+   (t obj)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

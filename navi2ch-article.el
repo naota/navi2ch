@@ -356,7 +356,7 @@ START, END, NOFIRST で範囲を指定する"
      (list 'face 'navi2ch-article-link-face
 	   'link t
 	   'mouse-face 'highlight
-	   'number (match-string-no-properties 1))))
+	   'number (navi2ch-match-string-no-properties 1))))
   (goto-char (point-min))
   (while (re-search-forward
 	  navi2ch-article-url-regexp nil t)
@@ -366,7 +366,7 @@ START, END, NOFIRST で範囲を指定する"
      (list 'face 'navi2ch-article-url-face
 	   'link t
 	   'mouse-face 'highlight
-	   'url (concat "http://" (match-string-no-properties 1))))))
+	   'url (concat "http://" (navi2ch-match-string-no-properties 1))))))
   
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))
