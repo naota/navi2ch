@@ -1597,6 +1597,12 @@ Navi2ch を同時に複数起動すると、@file{~/.navi2ch/} の整合性が取れなく
 @kbd{l} で戻れます。
 
 @item Q.
+スレを開くと一部のレスしか表示されないよ。全部読みたいんだけど。
+
+@item A.
+@kbd{r 0} でどうよ。詳しくは @ref{Article View Range} を見てね。
+
+@item Q.
 スレを開いたときにデフォルトで全件表示させたいんだけど。
 
 @item A.
@@ -1637,12 +1643,6 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 また、変数 @code{navi2ch-article-auto-expunge} を
 @code{nil} 以外 (@code{t} とか) に設定すると
 スレを開いたときに自動的にバッファの最大数が上記の値に制限される。@xref{Customize}.
-
-@item Q.
-スレを開くと一部のレスしか表示されないよ。全部読みたいんだけど。
-
-@item A.
-@kbd{r 0} でどうよ。詳しくは @ref{Article View Range} を見てね。
 
 @c 読めない
 @item Q.
