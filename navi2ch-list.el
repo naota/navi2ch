@@ -516,7 +516,8 @@ changed-list は '((board-id . board) ...) な alist。"
 				 ": ")
 			 alist nil t)
 			alist))))
-    (setq board (or board default))
+    (setq board (or board 
+		    (assoc (cdr (assq 'id default)) alist)))
     (when board
       (when (eq (navi2ch-get-major-mode navi2ch-board-buffer-name)
 		'navi2ch-board-mode)
