@@ -1,5 +1,18 @@
 2002-11-17  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-apply-filters): 
+	navi2ch-article-filter-by-name,	navi2ch-article-filter-by-message
+	を使わないように。
+	(navi2ch-article-filter-by-name): 削除。
+	(navi2ch-article-filter-by-message): 削除。
+	(navi2ch-article-get-separator-string): 削除。
+
+	* navi2ch-vars.el (navi2ch-article-filter-by-name-alist): 削除。
+	(navi2ch-article-filter-by-message-alist): 削除。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/587
+
+2002-11-17  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-insert-messages): フィルタが
 	返す値によってレスを hide や important に入れられるように。
 

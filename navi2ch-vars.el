@@ -664,20 +664,6 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
   :type 'boolean
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-filter-by-name-alist nil
-  "*この変数は廃止の予定です。
-navi2ch-article-message-filter-by-name-alist を使用してください。"
-  :type '(repeat (cons (string :tag "名前欄")
-		       (string :tag "置換後")))
-  :group 'navi2ch-article)
-
-(defcustom navi2ch-article-filter-by-message-alist nil
-  "*この変数は廃止の予定です。
-navi2ch-article-message-filter-by-message-alist を使用してください。"
-  :type '(repeat (cons (string :tag "本文中")
-		       (string :tag "置換後")))
-  :group 'navi2ch-article)
-
 (defcustom navi2ch-article-message-filter-list
   '(navi2ch-article-message-filter-by-name
     navi2ch-article-message-filter-by-id
