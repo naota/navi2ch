@@ -586,9 +586,10 @@ internet drafts directory for a copy.")
    "&"))
 
 (defun navi2ch-net-send-message-success-p (proc)
-  (string-match "書きこみました。"
-		(decode-coding-string (navi2ch-net-get-content proc)
-				      navi2ch-coding-system)))
+  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				   navi2ch-coding-system)))
+    (or (string-match "書きこみました。" str)
+	(string-match "書きこみが終わりました。" str))))
 
 (defun navi2ch-net-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)

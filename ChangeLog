@@ -1,5 +1,9 @@
 2002-06-13  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-send-message-success-p): 
+	サーバによって、書き込み完了時のメッセージが変更になっていたので対
+	応。<!-- 2ch_X:***** --> になるんじゃなかったの?
+
 	バイトコンパイルするときの warning がうるさかったので navi2ch-mona
 	を中心にちょいいじってみた。xemacs でも動く事だけは確認したけど自
 	信ないのでテストよろしく。
