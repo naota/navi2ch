@@ -472,7 +472,7 @@ START, END, NOFIRST で範囲を指定する"
 	      (navi2ch-article-set-link-property-subr
 	       (match-beginning (1+ sep-depth)) (match-end (1+ sep-depth))
 	       'number (navi2ch-match-string-no-properties (1+ sep-depth)))
-	      (goto-char (match-end 0)))))
+	      (goto-char (max (1+ (match-beginning 0)) (match-end 0))))))
 	 (url-func
 	  (lambda ()
 	    (let ((start (match-beginning 0))
@@ -480,7 +480,8 @@ START, END, NOFIRST で範囲を指定する"
 		  (url (navi2ch-match-string-no-properties 0)))
 	      (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
 		(setq url (replace-match "http\\2" nil nil url)))
-	      (navi2ch-article-set-link-property-subr start end 'url url))))
+	      (navi2ch-article-set-link-property-subr start end 'url url)
+	      (goto-char (max (1+ start) end)))))
 	 (alist (navi2ch-regexp-alist-to-number-alist
 		 (append
 		  navi2ch-article-link-regexp-alist
@@ -501,7 +502,8 @@ START, END, NOFIRST で範囲を指定する"
 	       (when (string-match (concat "\\`" (car match) "\\'") url)
 		 (setq url (replace-match rep nil nil url))
 		 (navi2ch-article-set-link-property-subr
-		  start end 'url url))))))))
+		  start end 'url url))
+	       (goto-char (max (1+ start) end))))))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))

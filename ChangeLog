@@ -1,5 +1,8 @@
 2004-04-04  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-set-link-property): マッチし
+	た後、少なくとも 1 文字は進めるように。
+
 	* navi2ch.el (navi2ch-goto-url): デフォルト値として、カーソル下の
 	URL プロパティを使用。
 
