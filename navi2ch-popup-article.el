@@ -245,11 +245,10 @@ stack が空なら、PopUp Article モードを抜ける。"
 	     navi2ch-article-current-article))
       (let ((buffer-read-only nil))
 	(navi2ch-article-save-view
-	  (save-excursion
-	    (erase-buffer)
-	    (navi2ch-article-insert-messages
-	     navi2ch-article-message-list
-	     navi2ch-article-view-range))))
+	  (erase-buffer)
+	  (navi2ch-article-insert-messages
+	   navi2ch-article-message-list
+	   navi2ch-article-view-range)))
       (message msg))))
 
 (defun navi2ch-popup-article-hide-messages ()

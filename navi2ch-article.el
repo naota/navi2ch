@@ -1125,16 +1125,19 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	  (navi2ch-article-set-summary-element board article t)
 	  t)))))
 
-(defun navi2ch-article-check-message-suppression (board article number)
+(defun navi2ch-article-check-message-suppression (board article start
+							&optional end)
   (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board article)))
 	suppressed)
     (if buffer
 	(with-current-buffer buffer
 	  (when navi2ch-article-message-filter-mode
 	    (let ((res (length navi2ch-article-message-list)))
-	      (when (>= res number)
+	      (when (and (>= res start)
+			 (or (null end)
+			     (<= res end)))
 		(let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
-		      (i number))
+		      (i start))
 		  (while (memq i hide)
 		    (setq i (1+ i)))
 		  (when (> i res)
@@ -1149,10 +1152,12 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 					       board article)))
 	  (message "filtering current messages...")
 	  (let ((res (length navi2ch-article-message-list)))
-	    (when (>= res number)
+	    (when (and (>= res start)
+		       (or (null end)
+			   (<= res end)))
 	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article))))
 		(catch 'loop
-		  (dolist (x (nthcdr (1- number) navi2ch-article-message-list))
+		  (dolist (x (nthcdr (1- start) navi2ch-article-message-list))
 		    (if (eq (navi2ch-article-apply-message-filters
 			     (navi2ch-put-alist
 			      'number
@@ -1167,10 +1172,10 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 				 hide
 				 navi2ch-article-current-article)))
 		      (throw 'loop nil)))
-		  (setq suppressed res)))))
-	  (message "Garbage collecting...")
-	  (garbage-collect)		; `navi2ch-article-parse-message' のゴミ掃除
-	  (message "Garbage collecting...done")
+		  (setq suppressed res)))
+	      (message "Garbage collecting...")
+	      (garbage-collect)	; `navi2ch-article-parse-message' のゴミ掃除
+	      (message "Garbage collecting...done")))
 	  (message "filtering current messages...done"))))
     suppressed))
 
@@ -1800,18 +1805,19 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       nil)))
 
 (defun navi2ch-article-get-current-word-in-body ()
-  (let ((face (get-text-property (point) 'face)))
-    (cond
-     ((memq face '(navi2ch-article-url-face))
-      (buffer-substring-no-properties
-       (if (eq (get-text-property (1- (point)) 'face) face)
-	   (previous-single-property-change (point) 'face)
-	 (point))
-       (next-single-property-change (point) 'face)))
-     ((memq face '(navi2ch-article-face
-		   navi2ch-article-citation-face
-		   navi2ch-article-link-face))
-      (current-word)))))
+  (let ((case-fold-search nil)
+	(word (if (get-text-property (point) 'url)
+		  (buffer-substring-no-properties
+		   (if (get-text-property (1- (point)) 'url)
+		       (previous-single-property-change (point) 'url)
+		     (point))
+		   (next-single-property-change (point) 'url))
+		(current-word))))
+    (when (string-match
+	   (regexp-quote word)
+	   (cdr (assq 'data (cdr (assq (navi2ch-article-get-current-number)
+				       navi2ch-article-message-list)))))
+      word)))
 
 (defun navi2ch-article-get-current-subject ()
   (or (cdr (assq 'subject navi2ch-article-current-article))

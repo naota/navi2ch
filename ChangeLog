@@ -1,3 +1,26 @@
+2003-06-03  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-sift-messages): 
+	navi2ch-article-save-view() 内の不要な save-excursion() を削除。
+
+	* navi2ch-mona.el (navi2ch-mona-arrange-message): 
+	PopUp Article モードでも Article モードに準じて face を設定するように。
+
+	* navi2ch-board.el (navi2ch-board-check-article-update-suppression): 
+	廃止。
+	(navi2ch-board-last-seen-alist): 新変数。
+	(navi2ch-board-insert-subjects): 上記変数を使うように。
+	(navi2ch-board-update-seen-articles): 同上。
+	(navi2ch-board-sync): 同上。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 同上。
+	また、Board モード以外の板系モードでもフィルター処理をチェック
+	できるように。
+
+	* navi2ch-article.el (navi2ch-article-check-message-suppression): 
+	第4引き数を追加。
+	(navi2ch-article-get-current-word-in-body): face に依存しないように。
+
 2003-05-28  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-delete-message): delete する

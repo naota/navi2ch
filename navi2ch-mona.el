@@ -303,8 +303,12 @@ nil is returned.  Otherwise the associated face object is returned."
 
 (defun navi2ch-mona-arrange-message ()
   "モナーフォントを使う板ならそのための関数を呼ぶ。"
-  (let ((id (cdr (assq 'id navi2ch-article-current-board)))
-	(artid (cdr (assq 'artid navi2ch-article-current-article))))
+  (let ((id (cdr (assq 'id (if (eq major-mode 'navi2ch-popup-article-mode)
+			       navi2ch-popup-article-current-board
+			     navi2ch-article-current-board))))
+	(artid (cdr (assq 'artid (if (eq major-mode 'navi2ch-popup-article-mode)
+				     navi2ch-popup-article-current-article
+				   navi2ch-article-current-article)))))
     (when (and (or (and (or (not navi2ch-mona-enable-board-list)
 			    (member id navi2ch-mona-enable-board-list))
 			(not (member id navi2ch-mona-disable-board-list)))
