@@ -1,3 +1,11 @@
+2003-02-14  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-mark-states): 新関数。
+	(navi2ch-bm-mark-marks): 上記を使うように。
+	(navi2ch-bm-fetch-maybe-new-articles): 新関数。
+	(navi2ch-bm-mode-map): 上記をバインド。順番をちょっと変更。
+
+
 2003-02-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-union): 新関数。

@@ -1,3 +1,7 @@
+2003-02-14  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Board Misc Mode Key Bindings): "I" を追加。
+
 2003-02-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode): @key を @kbd で囲んだ。

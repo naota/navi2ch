@@ -55,6 +55,8 @@
     (define-key map "?" 'navi2ch-bm-search)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "R" 'navi2ch-bm-remove-article)
+    (define-key map "\C-o" 'navi2ch-bm-save-dat-file)
+    (define-key map "I" 'navi2ch-bm-fetch-maybe-new-articles)
 
     ;; mark command
     (define-key map "*" 'navi2ch-bm-mark)
@@ -69,7 +71,6 @@
     (define-key map "m?" 'navi2ch-bm-mark-by-query)
     (define-key map "mb" 'navi2ch-bm-add-bookmark-mark-article)
     (define-key map "mR" 'navi2ch-bm-remove-mark-article)
-    (define-key map "\C-o" 'navi2ch-bm-save-dat-file)
     (setq navi2ch-bm-mode-map map)))
 
 (defvar navi2ch-bm-mode-menu-spec
@@ -683,20 +684,30 @@ ARG が non-nil なら移動方向を逆にする。"
 					       (point))
 			       (if arg " " "*")))
 
+(defun navi2ch-bm-fetch-maybe-new-articles ()
+  "更新されている可能性のあるスレを fetch する。"
+  (interactive)
+  (navi2ch-bm-mark-states "[^=]")
+  (navi2ch-bookmark-fetch-mark-article))
+
 (defun navi2ch-bm-mark-all (&optional arg)
   (interactive "P")
   (navi2ch-bm-mark-region (point-min) (point-max) arg))
 
 (defun navi2ch-bm-mark-marks (mark &optional arg)
-  (interactive "cinput mark: \nP")
+  (interactive "cInput mark: \nP")
+  (navi2ch-bm-mark-states
+   (format ".%c" (upcase mark))
+   arg))
+
+(defun navi2ch-bm-mark-states (regexp &optional arg)
   (save-excursion
     (goto-char (point-min))
-    (let ((rep (format "%c" (upcase mark))))
-      (while (not (eobp))
-        (navi2ch-bm-goto-state-column)
-        (when (looking-at rep)
-          (navi2ch-bm-mark-subr (if arg " " "*")))
-        (forward-line)))))
+    (while (not (eobp))
+      (navi2ch-bm-goto-updated-mark-column)
+      (when (looking-at regexp)
+	(navi2ch-bm-mark-subr (if arg " " "*")))
+      (forward-line))))
 
 ;; mark by regexp query
 (defun navi2ch-bm-mark-by-query (query &optional arg)

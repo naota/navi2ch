@@ -1139,6 +1139,12 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @item R
 @code{navi2ch-bm-remove-article} スレの情報 (取得した .dat ファイルや既読情報など) を消す
 
+@item C-o
+@code{navi2ch-bm-save-dat-file} .dat ファイルを保存
+
+@item I
+@code{navi2ch-bm-fetch-maybe-new-articles} 更新されている可能性のあるスレをすべて更新
+
 @item *
 @code{navi2ch-bm-mark} スレにマークをつける
 
@@ -1178,9 +1184,6 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @item m R
 @code{navi2ch-bm-remove-mark-article} マークしたスレの情報
 (取得した .dat ファイルや既読情報など) を消す
-
-@item C-o
-@code{navi2ch-bm-save-dat-file} .dat ファイルを保存
 
 @end table
 
