@@ -557,18 +557,62 @@
 			" Bookmark"
 			navi2ch-board-bookmark-mode-map)
 
+(defun navi2ch-board-update-buffer (buffer)
+  (let (point)
+    (with-current-buffer buffer
+      (let ((buffer-read-only nil)
+	    (artid (cdr (assq 'artid (get-text-property (point) 'article))))
+	    p)
+	(erase-buffer)
+	(navi2ch-board-insert-subjects navi2ch-board-subject-list)
+	(setq p (point-min))
+	(while p
+	  (if (equal artid (cdr (assq 'artid
+				      (get-text-property p 'article))))
+	      (progn
+		(goto-char p)
+		(setq point p
+		      p nil))
+	    (setq p (next-single-property-change p 'article))))))
+    (if point
+	;; 表示してるバッファのカーソル位置をすべて更新する。
+	(save-selected-window
+	  (dolist (win (get-buffer-window-list buffer nil t))
+	    (select-window win)
+	    (goto-char point))))))
+
+(defun navi2ch-board-add-bookmark-subr (board article)
+  (let ((buffer (get-buffer navi2ch-board-buffer-name))
+	(artid (cdr (assq 'artid article)))
+	current-board list)
+    (setq board
+	  (if (and (bufferp buffer)
+		   (eq (with-current-buffer buffer major-mode)
+		       'navi2ch-board-mode)
+		   (equal (cdr (assq 'id navi2ch-board-current-board))
+			  (cdr (assq 'id board))))
+	      (progn
+		(setq current-board t)
+		navi2ch-board-current-board)
+	    (navi2ch-board-load-info board)))
+    (setq list (cdr (assq 'bookmark navi2ch-board-current-board)))
+    (when (and artid (not (member artid list)))
+      (setq board (navi2ch-put-alist 'bookmark (cons artid list) board))
+      (message "Add bookmark")
+      (if current-board
+	  (with-current-buffer buffer
+	    (setq navi2ch-board-current-board board)
+	    (if navi2ch-board-bookmark-mode
+		(navi2ch-board-update-buffer buffer)))
+	(navi2ch-board-save-info board)))))
+
 (defun navi2ch-board-add-bookmark ()
   (interactive)
   (unless navi2ch-board-bookmark-mode
-    (let ((artid (cdr (assq 'artid (get-text-property (point) 'article))))
-	  (list (cdr (assq 'bookmark navi2ch-board-current-board))))
-      (if artid
-	  (unless (member artid list)
-	    (setq list (cons artid list))
-	    (setq navi2ch-board-current-board
-		  (navi2ch-put-alist 'bookmark list
-				     navi2ch-board-current-board))
-	    (message "Add bookmark"))
+    (let ((article (get-text-property (point) 'article)))
+      (if article
+	  (navi2ch-board-add-bookmark-subr navi2ch-board-current-board
+					   article)
 	(message "can't select this line!")))))
 
 (defun navi2ch-board-delete-bookmark ()

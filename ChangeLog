@@ -1,3 +1,20 @@
+2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-add-board-bookmark): 新関数。
+	(navi2ch-article-add-important-message): C-u a で上記関数を呼ぶよ
+	うに。
+
+	* navi2ch-board.el (navi2ch-board-update-buffer): 新関数。
+	(navi2ch-board-add-bookmark-subr): 新関数。
+	(navi2ch-board-add-bookmark): 上記関数を使うように。
+
+	* navi2ch-list.el (navi2ch-list-mode-map): navi2ch-list-show-url
+	を U にバインド。
+	(navi2ch-list-show-url): 新関数。
+
+	* navi2ch-vars.el (navi2ch-list-board-id-alist): 
+	ぐへ、まただぶってるし。
+
 2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: 変数を参照する際はできるだけ "" で囲むように。

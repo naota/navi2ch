@@ -52,6 +52,7 @@
     (define-key map "C" 'navi2ch-list-change-global-bookmark)
     (define-key map "?" 'navi2ch-list-search)
     (define-key map "e" 'navi2ch-list-expire)
+    (define-key map "U" 'navi2ch-list-show-url)
     (setq navi2ch-list-mode-map map)))
 
 (defvar navi2ch-list-mode-menu-spec
@@ -722,6 +723,27 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (cond ((eq ch ?b) (navi2ch-list-expire-current-board 'ask))
 	  ((eq ch ?c) (navi2ch-list-expire-current-category 'ask))
 	  ((eq ch ?a) (navi2ch-list-expire-all 'ask)))))
+
+(defun navi2ch-list-show-url ()
+  (interactive)
+  (let* ((board (get-text-property (point) 'board))
+	 (uri (cdr (assq 'uri board)))
+	 (name (cdr (assq 'name board))))
+    (let ((char (navi2ch-read-char-with-retry
+		 (format "c)opy v)iew t)itle u)rl&title? URL: %s: " uri)
+		 nil '(?c ?v ?t ?u))))
+      (if (eq char ?v)
+	  (navi2ch-browse-url uri)
+	(let ((str (cond ((eq char ?c)
+			  uri)
+			 ((eq char ?t)
+			  name)
+			 ((eq char ?u)
+			  (format "%s\n%s" name uri)))))
+	  (if (not str)
+	      (ding)
+	    (kill-new str)
+	    (message "copy: %s" str)))))))
 
 (run-hooks 'navi2ch-list-load-hook)
 ;;; navi2ch-list.el ends here

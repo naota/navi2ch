@@ -1586,6 +1586,11 @@ gunzip に通してから文字コードの推測を試みる。"
     (setq summary (navi2ch-put-alist artid element summary))
     (navi2ch-article-save-article-summary board summary)))
 
+(defun navi2ch-article-add-board-bookmark ()
+  (interactive)
+  (navi2ch-board-add-bookmark-subr navi2ch-article-current-board
+				   navi2ch-article-current-article))
+
 (defun navi2ch-article-add-global-bookmark (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
   (navi2ch-bookmark-add
@@ -1694,16 +1699,18 @@ gunzip に通してから文字コードの推測を試みる。"
                         " Important"
                         navi2ch-article-important-mode-map)
 
-(defun navi2ch-article-add-important-message ()
-  (interactive)
-  (let* ((article navi2ch-article-current-article)
-         (list (cdr (assq 'important article)))
-         (num (navi2ch-article-get-current-number)))
-    (unless (memq num list)
-      (setq list (cons num list))
-      (setq navi2ch-article-current-article
-            (navi2ch-put-alist 'important list article))
-      (message "Add important message"))))
+(defun navi2ch-article-add-important-message (&optional prefix)
+  (interactive "P")
+  (if prefix
+      (navi2ch-article-add-important-message)
+    (let* ((article navi2ch-article-current-article)
+	   (list (cdr (assq 'important article)))
+	   (num (navi2ch-article-get-current-number)))
+      (unless (memq num list)
+	(setq list (cons num list))
+	(setq navi2ch-article-current-article
+	      (navi2ch-put-alist 'important list article))
+	(message "Add important message")))))
 
 (defun navi2ch-article-delete-important-message ()
   (interactive)

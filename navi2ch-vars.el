@@ -205,7 +205,8 @@ nil ならば手動で更新しないかぎり取りにいかない。"
 
 (defcustom navi2ch-list-board-id-alist
   '(("http://yasai.2ch.net/sports/" . "wcliveb")
-    ("http://salami.2ch.net/dome/" . "wcliveo"))
+    ("http://salami.2ch.net/dome/" . "wcliveo")
+    ("http://mentai.2ch.net/accuse/" . "accuse-rinji"))
   "*板 URL から board-id への alist。"
   :type '(repeat (cons (string :tag "URL") (string :tag "id")))
   :group 'navi2ch-list)
