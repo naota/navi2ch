@@ -496,6 +496,20 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	     (setq prompt (or retry-prompt prompt)))))
     c))
 
+(defun navi2ch-read-event (&optional prompt)
+  "PROMPT (non-nil の場合) を表示して event を読む。"
+  (let ((cursor-in-echo-area t)
+	(message-log-max nil)
+	e)
+    (if prompt
+	(message "%s" prompt))
+    (navi2ch-ifxemacs
+	(setq e (next-command-event nil prompt))
+      (setq e (read-event prompt)))
+    (if prompt
+	(message "%s%s" prompt (single-key-description e)))
+    e))
+
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
   (let* ((prompt (concat prompt "(y, n, or q) "))
 	 (c (navi2ch-read-char-with-retry

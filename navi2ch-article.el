@@ -43,6 +43,7 @@
     (define-key map "k" 'navi2ch-article-few-scroll-down)
     (define-key map " " 'navi2ch-article-scroll-up)
     (define-key map [del] 'navi2ch-article-scroll-down)
+    (define-key map [delete] 'navi2ch-article-scroll-down)
     (define-key map [backspace] 'navi2ch-article-scroll-down)
     (define-key map "\177" 'navi2ch-article-scroll-down)
     (define-key map "w" 'navi2ch-article-write-message)
@@ -1286,16 +1287,15 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (let* ((accept-value (if title t 'quit))
 	 (prompt (if title 
 		     (format "Type %s for %s "
-			     (single-key-description last-command-char)
+			     (single-key-description last-command-event)
 			     title)
 		   (format "The %s article. Type %s for quit "
 			   (if (< num 0) "first" "last")
-			   (single-key-description last-command-char))))
-	 (c (navi2ch-read-char prompt)))
-    (if (equal c last-command-char)
+			   (single-key-description last-command-event))))
+	 (e (navi2ch-read-event prompt)))
+    (if (equal e last-command-event)
 	accept-value
-      (push (navi2ch-ifxemacs (character-to-event c) c)
-	    unread-command-events)
+      (push e unread-command-events)
       nil)))
 
 (defun navi2ch-article-through-ask (no-ask num)
