@@ -1,3 +1,13 @@
+2003-02-26  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-list-get-category-list-hook): 新変数。
+	(navi2ch-article-get-message-list-hook): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-get-message-list): 上記 hook
+	を実行するように。
+
+	* navi2ch-list.el (navi2ch-list-get-category-list): 同上。
+
 2003-02-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-search): 単なるラッパーに。
@@ -22,7 +32,7 @@
 
 2003-02-26  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): 
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
 	"<数字>" は置換しないように。
 	削除系板対策。
 	http://pc.2ch.net/test/read.cgi/unix/1039935998/936
@@ -37,7 +47,7 @@
 
 2003-02-26  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-vars.el (navi2ch-article-message-filter-list): 
+	* navi2ch-vars.el (navi2ch-article-message-filter-list):
 	navi2ch-article-message-filter-by-mail、
 	navi2ch-article-message-filter-by-subject を追加。
 	(navi2ch-article-message-filter-by-name-alist): フィルタ機能の拡張。
@@ -51,7 +61,7 @@
 	(navi2ch-article-message-hide-below): 新変数。
 	(navi2ch-article-message-add-important-above): 新変数。
 
-	* navi2ch-article.el (navi2ch-article-mode-map): 
+	* navi2ch-article.el (navi2ch-article-mode-map):
 	"F" に navi2ch-article-toggle-message-filter、
 	"x" に 'undefined をバインド。
 	(navi2ch-article-save-info-keys): 'unfilter を追加。
@@ -79,7 +89,7 @@
 	* navi2ch-util.el (navi2ch-set-difference): 新関数。
 	(navi2ch-expand-newtext): 新関数。
 
-	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): 
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr):
 	フィルタのキャッシュファイルも削除するように。
 
 2003-02-24  SAITO Takuya  <tabmore@users.sourceforge.net>

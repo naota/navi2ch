@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-article)
@@ -382,6 +382,7 @@ START, END, NOFIRST で範囲を指定する"
 	  sep message-list)
       (with-temp-buffer
         (navi2ch-insert-file-contents file begin end)
+	(run-hooks 'navi2ch-article-get-message-list-hook)
         (let ((i 1))
 	  (navi2ch-article-apply-filters board)
           (message "splitting current messages...")
@@ -1953,7 +1954,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-detect-encoded-regions (&optional sort)
   "バッファから uuencode または base64 エンコードされた領域を探す。
- (list (list type fname start end)) を返す。 
+ (list (list type fname start end)) を返す。
 SORT が non-nil のときは start でソートした結果を返す。
 ただし、
  type: 'uuencode か 'base64
