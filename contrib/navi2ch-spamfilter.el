@@ -75,6 +75,8 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 		     :table (make-hash-table :test #'eq)
 		     :message-count 0))
 
+(defvar navi2ch-article-before-save-corpus-hook nil)
+
 (dolist (map (list navi2ch-article-mode-map navi2ch-popup-article-mode-map))
   (define-key map "\C-c\C-g"
     'navi2ch-article-add-message-filter-by-bayesian-good)
@@ -169,6 +171,7 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 	'hide)))
 
 (defun navi2ch-article-save-corpus ()
+  (run-hooks 'navi2ch-article-before-save-corpus-hook)
   (message "Saving corpus file...")
   (spamf-save-corpus navi2ch-article-bayesian-save-file-name
 		     navi2ch-spamf-good-corpus
