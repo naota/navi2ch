@@ -64,6 +64,7 @@
 (defvar navi2ch-board-old-subject-alist nil)
 (defvar navi2ch-board-subject-file-name "subject.txt")
 (defvar navi2ch-board-old-subject-file-name "old-subject.txt")
+(defvar navi2ch-board-enable-readcgi nil)
 
 (defvar navi2ch-board-minor-mode-list
   '(navi2ch-board-bookmark-mode
@@ -337,8 +338,11 @@
   (unless navi2ch-offline
     (let ((file (navi2ch-board-get-file-name board))
 	  (time (cdr (assq 'time board))))
-      (navi2ch-net-update-file (navi2ch-board-get-url board) file time))))
-  
+      (if navi2ch-board-enable-readcgi
+	  (navi2ch-net-update-file-with-readcgi
+	   (navi2ch-board-get-readcgi-raw-url board) file time)
+	(navi2ch-net-update-file (navi2ch-board-get-url board) file time)))))
+
 (defun navi2ch-board-sync (&optional force first)
   (interactive "P")
   (run-hooks 'navi2ch-board-before-sync-hook)

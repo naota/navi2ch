@@ -1,4 +1,13 @@
 2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi):
+	offlaw.cgi が使えなくなったのでコメントアウト。
+
+	* navi2ch-board.el (navi2ch-board-enable-readcgi): 新変数。
+	(navi2ch-board-update-file): subject.txt の取得に read.cgi を使う
+	かどうかを上記変数によって決める。
+
+2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
 	ELP しまくりで細かいチューン。俺の環境だと 1000 レスのスレを
 	navi2ch-article-auto-range nil で開くのが 10% くらい速くなった。
 
