@@ -22,7 +22,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-article)
 (require 'navi2ch-message)
 (require 'navi2ch-face)

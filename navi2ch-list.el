@@ -26,12 +26,12 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-util)
 (require 'navi2ch-board)
 (require 'navi2ch-net)
 (require 'navi2ch-face)
 (require 'navi2ch-vars)
-(require 'cl)
 
 (defvar navi2ch-list-mode-map nil)
 (unless navi2ch-list-mode-map
@@ -448,7 +448,7 @@
       (navi2ch-list-select-board board))))
 
 (defun navi2ch-list-get-normal-category-list (list)
-  (setq list (copy-list list))		; delq するから
+  (setq list (copy-sequence list))	; delq するから
   (when (assoc navi2ch-list-navi2ch-category-name list)
     (setq list (delq (assoc navi2ch-list-navi2ch-category-name list) list)))
   (when (assoc navi2ch-list-global-bookmark-category-name list)

@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-board-misc)
 
 (defvar navi2ch-articles-mode-map nil)

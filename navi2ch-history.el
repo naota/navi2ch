@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-board-misc)
 
 (defvar navi2ch-history-mode-map nil)
@@ -191,7 +191,7 @@
 	    (let ((list (member (assoc (navi2ch-history-get-property (point))
 				       navi2ch-history-alist)
 				navi2ch-history-alist)))
-	      (setcdr list (copy-list list))
+	      (setcdr list (copy-sequence list))
 	      (setcar list pair)))
 	  (let ((buffer-read-only nil))
 	    (navi2ch-history-insert-subject 0 (car pair)))

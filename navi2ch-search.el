@@ -41,7 +41,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-board-misc)
 (require 'navi2ch-board)
 

@@ -1,5 +1,13 @@
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el, navi2ch-articles.el, navi2ch-board-misc.el,
+	navi2ch-board.el, navi2ch-bookmark.el, navi2ch-history.el,
+	navi2ch-list.el, navi2ch-popup-article.el, navi2ch-search.el,
+	navi2ch-util.el, navi2ch.el: 動作時に cl パッケージを使わないように。
+	(require 'cl) -> (eval-when-compile (require 'cl))
+	copy-list -> copy-sequence
+	copy-tree -> copy-alist
+
 	* TODO: Todo からリネーム。Windows だとファイル名の case を無視す
 	るせいか、automake がうまくいってなかったため。
 

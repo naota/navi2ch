@@ -22,10 +22,10 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-article)
 (require 'navi2ch-board-misc)
 (require 'navi2ch-net)
-(require 'cl)
 
 (defvar navi2ch-board-mode-map nil)
 (unless navi2ch-board-mode-map

@@ -22,7 +22,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-net)
 (require 'browse-url)
 (require 'navi2ch-vars)

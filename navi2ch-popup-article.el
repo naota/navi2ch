@@ -99,7 +99,7 @@
     (setq navi2ch-article-message-list mlist)
     (setq navi2ch-article-message-list
 	  (mapcar (lambda (x)
-		    (cons x (copy-tree (navi2ch-article-get-message x))))
+		    (cons x (copy-alist (navi2ch-article-get-message x))))
 		  num-list))
     (setq navi2ch-article-separator sep)
     (setq navi2ch-article-point-stack nil)

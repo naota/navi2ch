@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'navi2ch-board-misc)
 
 (defvar navi2ch-bookmark-mode-map nil)
@@ -238,7 +238,7 @@
 	    (let ((list (member (assoc (navi2ch-bookmark-get-property (point))
 				       (cddr bookmark))
 				(cddr bookmark))))
-	      (setcdr list (copy-list list))
+	      (setcdr list (copy-sequence list))
 	      (setcar list pair)))
 	  (let ((buffer-read-only nil))
 	    (navi2ch-bookmark-insert-subject 0 (car pair)))

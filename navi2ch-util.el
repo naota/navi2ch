@@ -22,7 +22,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'regexp-opt)
 (require 'navi2ch-vars)
 (require 'timezone)

@@ -22,6 +22,7 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-util)
 (require 'navi2ch-net)
 (require 'navi2ch-articles)
@@ -33,7 +34,6 @@
 (require 'navi2ch-list)
 (require 'navi2ch-article)
 (require 'navi2ch-message)
-(require 'cl)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
