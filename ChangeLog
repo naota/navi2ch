@@ -1,3 +1,9 @@
+2003-06-07  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-get-kako-url): article ID が
+	9桁でも10桁でもないときにエラーとならず nil を返すように。
+	別なとこでエラーになるけど。
+
 2003-06-05  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-quote-maybe): Emacs 21 でも keywordp() を

@@ -194,13 +194,20 @@ last が最後からいくつ表示するか。
       (concat url "dat/" artid ".dat"))))
 
 (defun navi2ch-article-get-kako-url (board article)
-  (let ((artid (cdr (assq 'artid article)))
-	(url (navi2ch-board-get-uri board)))
-    (concat url "kako/"
-	    (if (= (length artid) 9)
-		(substring artid 0 3)
-	      (concat (substring artid 0 4) "/" (substring artid 0 5)))
-	    "/" artid ".dat.gz")))
+  (let* ((artid (cdr (assq 'artid article)))
+	 (url (navi2ch-board-get-uri board))
+	 (length (length artid)))
+    (cond
+     ((= length 9)
+      (concat url "kako/"
+	      (substring artid 0 3)
+	      "/" artid ".dat.gz"))
+     ((= length 10)
+      (concat url "kako/"
+	      (substring artid 0 4) "/" (substring artid 0 5)
+	      "/" artid ".dat.gz"))
+     (t
+      nil))))
 
 (defun navi2ch-article-get-file-name (board article)
   (navi2ch-board-get-file-name board
