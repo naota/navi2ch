@@ -1,3 +1,10 @@
+2002-07-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-add-bookmark-subr): せっかく
+	board をほげってるのに、navi2ch-board-current-board から bookmark
+	の元ネタを得てた。(あんまテストしてないのバレバレっすね。。。)
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/672
+
 2002-07-28  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-get-link-text): 処理中に

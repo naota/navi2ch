@@ -575,7 +575,7 @@
 		(setq current-board t)
 		navi2ch-board-current-board)
 	    (navi2ch-board-load-info board)))
-    (setq list (cdr (assq 'bookmark navi2ch-board-current-board)))
+    (setq list (cdr (assq 'bookmark board)))
     (when (and artid (not (member artid list)))
       (setq board (navi2ch-put-alist 'bookmark (cons artid list) board))
       (message "Add bookmark")
