@@ -56,7 +56,7 @@
     (define-key map "mr" 'navi2ch-bm-mark-region)
     (define-key map "ma" 'navi2ch-bm-mark-all)
     (define-key map "mA" 'navi2ch-bm-add-global-bookmark-mark-article)
-    (define-key map "mo" 'navi2ch-bm-display-mark-article)
+    (define-key map "m." 'navi2ch-bm-display-mark-article)
     (define-key map "mi" 'navi2ch-bm-fetch-mark-article)
     (define-key map "me" 'navi2ch-bm-textize-mark-article)
     (define-key map "mm" 'navi2ch-bm-mark-marks)

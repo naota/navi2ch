@@ -1,3 +1,15 @@
+2002-06-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map): 
+	navi2ch-bookmark-move-mark-article を "mo" にバインド。
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 
+	navi2ch-bm-display-mark-article を "mo" から "m." に変更。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/124
+
+	* navi2ch-board.el (navi2ch-board-mode-map): "md" を後ろに移動。
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map): "md", "mi" を後
+	ろに移動。
+
 2002-06-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-e21.el: 文字コードを ISO-2022-JP に変更。

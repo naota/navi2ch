@@ -1011,7 +1011,7 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @code{navi2ch-bm-add-global-bookmark-mark-article} マークしたスレをグ
 ローバルブックマークに登録
 
-@item m o
+@item m .
 @code{navi2ch-bm-display-mark-article} マークしたスレを表示
 
 @item m i
@@ -1030,10 +1030,6 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @item m b
 @code{navi2ch-bm-add-bookmark-mark-article} マークしたスレをローカルブッ
 クマークに登録
-
-@item m d
-@code{navi2ch-bm-delete-mark-article} マークしたスレを削除
-(というインプリメントにした方がいいんじゃないかな)
 
 @end table
 
@@ -1067,11 +1063,11 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item w
 @code{navi2ch-board-write-message} スレを立てる
 
-@item 2
-@code{navi2ch-board-two-pane} 二画面表示
-
 @item @kbd{ESC} e
 @code{navi2ch-board-expire} 古いキャッシュファイルを削除する
+
+@item m d
+@code{navi2ch-board-hide-mark-article} マークしたスレを隠す
 @end table
 
 @node Bookmark Mode Key Bindings
@@ -1080,8 +1076,11 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @table @kbd
-@item d
+@item D
 @code{navi2ch-bookmark-delete} ブックマークを削除
+
+@item d
+@code{navi2ch-bookmark-cut} ブックマークをカットし、キルリングに追加
 
 @item C-k
 @code{navi2ch-bookmark-cut} ブックマークをカットし、キルリングに追加
@@ -1094,6 +1093,13 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item O
 @code{navi2ch-bookmark-copy} 別のブックマークにコピー
+
+@item m d
+@code{navi2ch-bookmark-cut-mark-article} マークしたスレをカットし、キルリングに追加
+
+@item m o
+@code{navi2ch-bookmark-move-mark-article} マークしたスレを別のブックマークに移動
+
 @end table
 
 @node Article Mode Key Bindings

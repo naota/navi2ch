@@ -37,16 +37,17 @@
     (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key map "q" 'navi2ch-bookmark-exit)
     (define-key map "i" 'navi2ch-bookmark-fetch-article)
-    (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
     (define-key map "D" 'navi2ch-bookmark-delete)
     (define-key map "d" 'navi2ch-bookmark-cut)
-    (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
     (define-key map "\C-k" 'navi2ch-bookmark-cut)
     (define-key map "\C-y" 'navi2ch-bookmark-yank)
     (define-key map "o" 'navi2ch-bookmark-move)
     (define-key map "O" 'navi2ch-bookmark-copy)
+    (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
+    (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
+    (define-key map "mo" 'navi2ch-bookmark-move-mark-article)
     (setq navi2ch-bookmark-mode-map map)))
-    
+
 (defvar navi2ch-bookmark-mode-menu-spec
   (navi2ch-bm-make-menu-spec
    "Bookmark"

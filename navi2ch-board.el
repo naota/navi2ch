@@ -36,13 +36,13 @@
     (define-key map "r" 'navi2ch-board-select-view-range)
     (define-key map "a" 'navi2ch-board-add-bookmark)
     (define-key map "d" 'navi2ch-board-hide-article)
-    (define-key map "md" 'navi2ch-board-hide-mark-article)
     (define-key map "h" 'navi2ch-board-toggle-hide)
     (define-key map "+" 'navi2ch-board-toggle-updated)
     (define-key map "b" 'navi2ch-board-toggle-bookmark)
     (define-key map "w" 'navi2ch-board-write-message)
     ;; (define-key map "2" 'navi2ch-board-two-pane)
     (define-key map "\M-e" 'navi2ch-board-expire)
+    (define-key map "md" 'navi2ch-board-hide-mark-article)
     (setq navi2ch-board-mode-map map)))
 
 (defvar navi2ch-board-mode-menu-spec
