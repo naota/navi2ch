@@ -1348,12 +1348,19 @@ NUM が -1 のときは前のスレに移動する。"
 
 (defun navi2ch-article-cached-subject (board article)
   "キャッシュされている dat ファイルからスレタイトルを得る。"
-  (let ((file (navi2ch-article-get-file-name board article))
-	list)
-    (when (navi2ch-article-check-cached board article)
-      (setq list (navi2ch-article-get-message-list
-		  file 0 (navi2ch-article-cached-subject-minimum-size file)))
-      (cdr (assq 'subject (navi2ch-article-parse-message (cdar list)))))))
+  (let ((state (navi2ch-article-check-cached board article)))
+    (cond ((eq state 'view)
+	   (save-excursion
+	     (set-buffer (navi2ch-article-get-buffer-name board article))
+	     (or (cdr (assq 'subject navi2ch-article-current-article))
+		 navi2ch-bm-empty-subject)))
+	  ((eq state 'cache)
+	   (let* ((file (navi2ch-article-get-file-name board article))
+		  (list (navi2ch-article-get-message-list
+			 file 0 (navi2ch-article-cached-subject-minimum-size file))))
+	     (cdr (assq 'subject (navi2ch-article-parse-message (cdar list))))))
+	  (t
+	   "navi2ch: ???"))))	;; 変数にして navi2ch-vars.el に入れるべき?
 
 (defun navi2ch-article-display-link-minibuffer (point)
   "point のリンク先を minibuffer に表示"
@@ -1382,12 +1389,14 @@ NUM が -1 のときは前のスレに移動する。"
 	(if (navi2ch-2ch-url-p url-prop)
 	    (let ((board (navi2ch-board-url-to-board url-prop))
 		  (article (navi2ch-article-url-to-article url-prop)))
-	      (if (navi2ch-article-check-cached board article)
-		  (message "%s" (truncate-string-to-width
-				 (format "[%s]: %s"
-					 (cdr (assq 'name board))
-					 (navi2ch-article-cached-subject board article))
-				 (eval navi2ch-article-display-link-width)))))))))))
+	      (message "%s"
+		       (truncate-string-to-width
+			(if article
+			    (format "[%s]: %s"
+				    (cdr (assq 'name board))
+				    (navi2ch-article-cached-subject board article))
+			  (format "[%s]" (cdr (assq 'name board))))
+			(eval navi2ch-article-display-link-width))))))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"

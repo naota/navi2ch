@@ -1,3 +1,12 @@
+2002-05-19    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-cached-subject): 
+	スレのバッファがあるときは navi2ch-article-current-article からス
+	レタイトルを取得するように。
+	スレタイトル不明のときもなんか表示するように。
+	(navi2ch-article-display-link-minibuffer): リンク先が板の URL のと
+	きに板名を表示するように。
+
 2002-05-16    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-through-ask): 1 か -1 を引き
