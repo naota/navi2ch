@@ -1,3 +1,15 @@
+2003-02-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-change): 新関数。
+	移転の際に板ブックマークを更新。
+	(navi2ch-list-apply-changed-status): 上記関数を使うように。
+	(navi2ch-list-normalize-bookmark): 新関数。
+	板ブックマークを掃除する。(ゴミがいっぱい溜ってたので。。。)
+	(navi2ch-list-save-info): 上記関数を使うように。
+
+	* navi2ch-board-misc.el (navi2ch-bm-mark-region): スレが一つも無い
+	時に m a した際、エラーが起きないように。
+
 2003-01-26  mami  <mami@users.sourceforge.net>
 
 	http://pc.2ch.net/test/read.cgi/unix/1039935998/496

@@ -432,6 +432,22 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (list (cons 'add added-list)
  	  (cons 'change changed-list))))
 
+(defun navi2ch-list-change (changed-list)
+  "CHANGED-LIST $B$r$b$H$KHD%V%C%/%^!<%/$r99?7(B"
+  (let ((changed-alist (mapcar
+			(lambda (elt)
+			  (cons (navi2ch-list-bookmark-node (nth 1 elt))
+				(navi2ch-list-bookmark-node (nth 2 elt))))
+			changed-list)))
+    (setq navi2ch-list-current-list
+	  (navi2ch-put-alist 'bookmark
+			     (mapcar (lambda (node)
+				       (or (cdr (assoc node changed-alist))
+					   node))
+				     (cdr (assq 'bookmark
+						navi2ch-list-current-list)))
+			     navi2ch-list-current-list))))
+
 (defun navi2ch-list-apply-changed-status (changed-status)
   "CHANGED-STATUS $B$r$b$H$KHD$NJQ99$r$$$m$s$J=j$KH?1G$9$k!#(B"
   (message "applying board changes...")
@@ -450,6 +466,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (navi2ch-change-log-directory changed-list)
     (navi2ch-bookmark-change changed-list)
     (navi2ch-history-change changed-list)
+    (navi2ch-list-change changed-list)
     (message "applying board changes...done"))))
 
 (defun navi2ch-list-get-changed-category (category-list)
@@ -616,6 +633,15 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			    (delq (assoc id alist) alist))))))
     (mapcar #'cdr (nreverse alist))))
 
+(defun navi2ch-list-normalize-bookmark (list)
+  (let ((bookmark (cdr (assq 'bookmark list)))
+	ret)
+    (dolist (x (navi2ch-list-get-board-name-list navi2ch-list-category-list))
+      (let ((node (navi2ch-list-bookmark-node x)))
+	(when (member node bookmark)
+	  (setq ret (cons node (delq node ret))))))
+    (nreverse ret)))
+
 (defun navi2ch-list-save-info ()
   (when navi2ch-list-category-list
     (let ((list (mapcar (lambda (elt)
@@ -628,7 +654,8 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (when navi2ch-list-current-list
     (navi2ch-save-info
      (navi2ch-list-get-file-name "list.info")
-     (list (assq 'bookmark navi2ch-list-current-list)
+     (list (cons 'bookmark (navi2ch-list-normalize-bookmark
+			    navi2ch-list-current-list))
 	   (assq 'category navi2ch-list-current-list)
 	   (assq 'change navi2ch-list-current-list))
      t)))
