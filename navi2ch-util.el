@@ -231,30 +231,47 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (insert str)
     (navi2ch-replace-html-tag-with-buffer)
     (buffer-string)))
-      
+
+(defun navi2ch-read-char (&optional prompt)
+  "PROMPT (non-nil の場合) を表示して `read-char' を呼び出す。"
+  (let ((cursor-in-echo-area t)
+	(message-log-max nil)
+	c)
+    (if prompt
+	(message "%s" prompt))
+    (setq c (read-char))
+    (if prompt
+	(message "%s%c" prompt c))
+    c))
+
+(defun navi2ch-read-char-with-retry (prompt retry-prompt list)
+  "PROMPT を表示 (non-nil の場合) して `read-char' を呼び出す。
+入力された文字が LIST に含まれない場合、RETRY-PROMPT (nil の場合は 
+PROMPT) を表示して再度 `read-char' を呼ぶ。"
+  (let ((retry t) c)
+    (while retry
+      (setq c (navi2ch-read-char prompt))
+      (cond ((memq c list)
+	     (setq retry nil))
+	    ((eq c 12)
+	     (recenter))
+	    (t
+	     (ding)
+	     (setq prompt (or retry-prompt prompt)))))
+    c))
+	 
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
   (let ((prompt (concat prompt "(y, n, or q) "))
-	(again nil))
-    (catch 'exit
-      (while t
-	(message prompt)
-	(let ((c (read-char)))
-	  (cond ((memq c '(?q ?Q))
-		 (message (concat prompt "q"))
-		 (throw 'exit (or quit-symbol nil)))
-		((memq c '(?y ?Y ?\ ))
-		 (message (concat prompt "y"))
-		 (throw 'exit t))
-		((memq c '(?n ?N ?\177 ))
-		 (message (concat prompt "n"))
-		 (throw 'exit nil))
-		((eq c 12)
-		 (recenter))
-		(t
-		 (ding)
-		 (or again
-		     (setq prompt (concat "Please answer y, n, or q.  " prompt)
-			   again t)))))))))
+	(c (navi2ch-read-char-with-retry
+	     prompt
+	     (concat "Please answer y, n, or q.  " prompt)
+	     '(?q ?Q ?y ?Y ?\  ?n ?N ?\177))))
+    (cond ((memq c '(?q ?Q))
+	   (or quit-symbol nil))
+	  ((memq c '(?y ?Y ?\ ))
+	   t)
+	  ((memq c '(?n ?N ?\177))
+	   nil))))
 
 (defun navi2ch-browse-url (url)
   (cond ((and navi2ch-browse-url-image-program	; images

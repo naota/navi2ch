@@ -839,8 +839,7 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
             (setq i (1+ i)))))
       (display-buffer buf)
       (let (n)
-        (message "input: ")
-        (setq n (read-char))
+	(setq n (navi2ch-read-char "input: "))
         (when (or (< n ?0) (> n ?9))
           (error "%c is bad key" n))
         (setq n (- n ?0))
@@ -1240,8 +1239,9 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (interactive)
   (let ((url (navi2ch-article-to-url navi2ch-article-current-board
 				     navi2ch-article-current-article)))
-    (message "c)opy v)iew t)itle? URL: %s" url)
-    (let ((char (read-char)))
+    (let ((char (navi2ch-read-char-with-retry
+		 (format "c)opy v)iew t)itle? URL: %s: " url)
+		 nil '(?c ?v ?t))))
       (if (eq char ?t)
 	  (navi2ch-article-copy-title)
 	(funcall (cond ((eq char ?c)
@@ -1256,8 +1256,8 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-show-url-subr ()
   "$B%a%K%e!<$rI=<($7$F!"(Burl $B$rF@$k(B"
-  (message "a)ll c)urrent r)egion b)oard")
-  (let ((char (read-char)))
+  (let ((char (navi2ch-read-char-with-retry "a)ll c)urrent r)egion b)oard: "
+					    nil '(?a ?c ?r ?b))))
     (if (eq char ?b)
 	(navi2ch-board-to-url navi2ch-article-current-board)
       (apply 'navi2ch-article-to-url
@@ -1277,8 +1277,8 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-copy-title ()
   "$B%a%K%e!<$rI=<($7$F!"%?%$%H%k$rF@$k(B"
-  (message "b)oard a)rticle")
-  (let ((char (read-char)))
+  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
+					    nil '(?b ?a))))
     (message "copy: %s"
 	     (kill-new
 	      (cond ((eq char ?b)
@@ -1452,19 +1452,14 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
   "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B
 $B$=$N$&$A%G%U%)%k%H$N%G%3!<%@$r?dB,$9$k$h$&$K$7$?$$!#(B"
   (interactive)
-  (let ((prompt "(u)udecode or (b)ase64")
-	(cursor-in-echo-area t)
-	decoder c)
-    (unless decoder
-      (while (not decoder)
-	(message "%s: " prompt)
-	(message "%s: %c" prompt (setq c (read-char)))
-	(setq decoder (cond ((memq c '(?u ?U))
-			     'navi2ch-article-uudecode-message)
-			    ((memq c '(?b ?B))
-			     'navi2ch-article-base64-decode-message)))
-	(setq prompt "Please answer u, or b.  (u)udecode or (b)ase64")))
-    (call-interactively decoder)))
+  (let ((c (navi2ch-read-char-with-retry
+	    "(u)udecode or (b)ase64: " 
+	    "Please answer u, or b.  (u)udecode or (b)ase64: "
+	    '(?u ?U ?b ?B))))
+    (call-interactively (cond ((memq c '(?u ?U))
+			       'navi2ch-article-uudecode-message)
+			      ((memq c '(?b ?B))
+			       'navi2ch-article-base64-decode-message)))))
 
 (defun navi2ch-article-auto-decode-base64-section ()
   "$B%+%l%s%H%P%C%U%!$N(B BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$KCV$-49$($k!#(B

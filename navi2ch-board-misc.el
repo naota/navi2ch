@@ -294,8 +294,9 @@
   (let* ((board (navi2ch-bm-get-board-internal
 		 (navi2ch-bm-get-property-internal (point))))
 	 (url (navi2ch-board-to-url board)))
-    (message "c)opy v)iew t)itle? URL: %s" url)
-    (let ((char (read-char)))
+    (let ((char (navi2ch-read-char-with-retry
+		 (format "c)opy v)iew t)itle? URL: %s: " url)
+		 nil '(?c ?v ?t))))
       (if (eq char ?t) (navi2ch-bm-copy-title board)
 	(funcall (cond ((eq char ?c)
 			'(lambda (x)
@@ -309,8 +310,8 @@
 
 (defun navi2ch-bm-show-url-subr (board)
   "メニューを表示して、url を得る"
-  (message "b)oard a)rticle")
-  (let ((char (read-char)))
+  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
+					    nil '(?b ?a))))
     (cond ((eq char ?b) (navi2ch-board-to-url board))
 	  ((eq char ?a)
 	   (navi2ch-article-to-url
@@ -320,8 +321,8 @@
 
 (defun navi2ch-bm-copy-title (board)
   "メニューを表示して、タイトルを得る"
-  (message "b)oard a)rticle")
-  (let ((char (read-char)))
+  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
+					    nil '(?b ?a))))
     (message "copy: %s"
 	     (kill-new
 	      (cond ((eq char ?b) (cdr (assq 'name board)))
@@ -725,8 +726,9 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-sort (&optional arg)
   (interactive "P")
-  (message "Sort by n)umber s)tate t)itle o)ther d)ate?")
-  (let ((ch (read-char)))
+  (let ((ch (navi2ch-read-char-with-retry
+	     "Sort by n)umber s)tate t)itle o)ther d)ate? "
+	     nil '(?n ?s ?t ?o ?d))))
     (funcall
      (cond ((eq ch ?n) 'navi2ch-bm-sort-by-number)
            ((eq ch ?s) 'navi2ch-bm-sort-by-state)
@@ -750,19 +752,16 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-search ()
   (interactive)
-  (let (ch)
-    (message "Search for: s)ubject a)rticle")
-    (setq ch (read-char))
+  (let ((ch (navi2ch-read-char-with-retry "Search for: s)ubject a)rticle: "
+					   nil '(?s ?a)))
+	(ch2 (navi2ch-read-char-with-retry "Search from: b)oard a)ll: "
+					   nil '(?b ?a))))
     (cond ((eq ch ?s)
-           (message "Search from: b)oard a)ll")
-           (setq ch (read-char))
-           (cond ((eq ch ?b) (navi2ch-bm-search-current-board-subject))
-                 ((eq ch ?a) (navi2ch-search-all-subject))))
+           (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-subject))
+                 ((eq ch2 ?a) (navi2ch-search-all-subject))))
           ((eq ch ?a)
-           (message "Search from: b)oard a)ll")
-           (setq ch (read-char))
-           (cond ((eq ch ?b) (navi2ch-bm-search-current-board-article))
-                 ((eq ch ?a) (navi2ch-search-all-article)))))))
+           (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-article))
+                 ((eq ch2 ?a) (navi2ch-search-all-article)))))))
   
 ;;; save and load info
 (defun navi2ch-bm-save-info ()

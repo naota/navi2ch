@@ -1,8 +1,37 @@
 2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	read-char 使用のクリーンアップ。動作が変になったとこは指摘してね。
+
+	* navi2ch-article.el (navi2ch-article-select-view-range-subr):
+	navi2ch-read-char を使うように。
+	(navi2ch-article-show-url): navi2ch-read-char-with-retry を使うよ
+	うに。
+	(navi2ch-article-show-url-subr): 同上。
+	(navi2ch-article-copy-title): 同上。
+	(navi2ch-article-decode-message): 同上。
+
+	* navi2ch-board-misc.el (navi2ch-bm-show-url):
+	navi2ch-read-char-with-retry を使用するように。
+	(navi2ch-bm-show-url-subr): 同上。
+	(navi2ch-bm-copy-title): 同上。
+	(navi2ch-bm-sort): 同上。
+	(navi2ch-bm-search): 同上。
+
+	* navi2ch-list.el (navi2ch-list-search):
+	navi2ch-read-char-with-retry を使用するように。
+	(navi2ch-list-expire): 同上。
+
+	* navi2ch-util.el (navi2ch-read-char): 新関数。
+	プロンプト付き read-char。
+	(navi2ch-read-char-with-retry): 新関数。
+	ありがちなループをまとめてみた。
+	(navi2ch-y-or-n-p): navi2ch-read-char-with-retry を使用するように。
+
+2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-util.el (navi2ch-chop-/): 新関数。
-	(navi2ch-rename-file): 新関数。Meadow だと / で終わるファイル名を
-	使用すると固まるそうなので。。。
+	(navi2ch-rename-file): 新関数。Meadow だと `/' で終わるファイル名
+	を使用すると固まるそうなので。。。
 	* navi2ch.el (navi2ch-change-log-directory): 上記関数を使用するよ
 	うに。
 	(navi2ch-update): 同上。
