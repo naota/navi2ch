@@ -1,3 +1,9 @@
+2003-05-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-download-file): URL の最後が .gz の
+	ときは Accebt-Encoding: gzip をつけないように。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/829-834n
+
 2003-05-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-send-message-error-string): 「サーバ
