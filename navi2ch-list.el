@@ -375,21 +375,27 @@
 の alist にして返す。
 added-list は '(board-id ...) な list。
 changed-list は '((board-id old-board new-board) ...) な alist。"
-  (let ((list (navi2ch-alist-list-to-alist
+  (let (;; 現在の板一覧の id の alist
+	(list (navi2ch-alist-list-to-alist
 	       (navi2ch-list-get-board-name-list category-list)
 	       'id))
+	;; 以前の板一覧の id の alist
 	(old-list (navi2ch-alist-list-to-alist
  		   (navi2ch-list-get-board-name-list old-category-list)
 		   'id))
 	added-list changed-list)
     (dolist (new list)
       (let ((old (assoc (car new) old-list)))
+	;; 現在の板一覧の id が以前の板一覧から見つかったら
 	(if old
 	    (let ((old-uri (cdr (assq 'uri (cdr old))))
 		  (new-uri (cdr (assq 'uri (cdr new)))))
+	      ;; id が同じでも uri が違っていたら changed-list に追加する
 	      (unless (string= old-uri new-uri)
 		(push (list (car new) (cdr old) (cdr new))
 		      changed-list)))
+	  ;; 現在の板一覧の id が以前の板一覧から見つからなかったら追
+	  ;; 加された事にする
 	  (push (car new) added-list))))
     (list (cons 'add added-list)
  	  (cons 'change changed-list))))

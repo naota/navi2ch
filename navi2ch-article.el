@@ -1702,7 +1702,7 @@ gunzip に通してから文字コードの推測を試みる。"
 (defun navi2ch-article-add-important-message (&optional prefix)
   (interactive "P")
   (if prefix
-      (navi2ch-article-add-important-message)
+      (navi2ch-article-add-board-bookmark)
     (let* ((article navi2ch-article-current-article)
 	   (list (cdr (assq 'important article)))
 	   (num (navi2ch-article-get-current-number)))
