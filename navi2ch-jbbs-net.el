@@ -44,7 +44,7 @@
     (board-update	. navi2ch-jbbs-board-update)))
 
 (defvar navi2ch-jbbs-variable-alist
-  '((coding-system	. shift_jis)))
+  (list (cons 'coding-system navi2ch-coding-system)))
 
 (navi2ch-multibbs-regist 'jbbs-net
 			 navi2ch-jbbs-func-alist

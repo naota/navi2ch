@@ -87,7 +87,7 @@
     (board-get-file-name . navi2ch-localfile-board-get-file-name)))
 
 (defvar navi2ch-localfile-variable-alist
-  '((coding-system	. shift_jis)))
+  (list (cons 'coding-system navi2ch-coding-system)))
 
 (navi2ch-multibbs-regist 'localfile
 			 navi2ch-localfile-func-alist
@@ -96,7 +96,8 @@
 ;;-------------
 
 ;; internal functions like bbs.cgi
-(defconst navi2ch-localfile-coding-system 'shift_jis-unix)
+(defconst navi2ch-localfile-coding-system
+  (intern (format "%s-unix" navi2ch-coding-system)))
 
 (defvar navi2ch-localfile-encode-html-tag-alist
   '((">" . "&gt;")

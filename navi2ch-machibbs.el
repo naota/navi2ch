@@ -47,7 +47,7 @@
     (board-update	. navi2ch-machibbs-board-update)))
 
 (defvar navi2ch-machibbs-variable-alist
-  '((coding-system	. shift_jis)))
+  (list (cons 'coding-system navi2ch-coding-system)))
 
 (navi2ch-multibbs-regist 'machibbs
 			 navi2ch-machibbs-func-alist

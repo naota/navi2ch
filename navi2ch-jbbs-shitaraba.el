@@ -49,8 +49,12 @@
     (error-string   	. navi2ch-js-send-message-error-string)
     (board-update	. navi2ch-js-board-update)))
 
+(defvar navi2ch-js-coding-system
+  (or (car (memq 'eucjp-ms (coding-system-list)))
+      'euc-japan))
+
 (defvar navi2ch-js-variable-alist
-  '((coding-system	. euc-japan)))
+  (list (cons 'coding-system navi2ch-js-coding-system)))
 
 (navi2ch-multibbs-regist 'jbbs-shitaraba
 			 navi2ch-js-func-alist
@@ -157,7 +161,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
      url "POST"
      (list (cons "Content-Type" "application/x-www-form-urlencoded")
 	   (cons "Referer" referer))
-     (let ((navi2ch-coding-system 'euc-japan))
+     (let ((navi2ch-coding-system navi2ch-js-coding-system))
        (navi2ch-net-get-param-string param-alist)))))
 
 (defun navi2ch-js-send-message-success-p (proc)
@@ -165,7 +169,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 
 (defun navi2ch-js-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)
-				   'euc-japan)))
+				   navi2ch-js-coding-system)))
     (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
 	   (match-string 1 str))
 	  ((string-match "<b>\\([^<]+\\)" str)

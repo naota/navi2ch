@@ -183,7 +183,9 @@
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
   "base64コードのみが含まれる行にマッチする正規表現。")
 
-(defvar navi2ch-coding-system 'shift_jis)
+(defvar navi2ch-coding-system
+  (or (car (memq 'cp932 (coding-system-list)))
+      'shift_jis))
 
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-online-indicator  "[ON] ")
@@ -1205,6 +1207,29 @@ FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
     (message "%s (%s) is disabled in Navi2ch."
 	     (key-description key)
 	     (lookup-key (current-global-map) key))))
+
+(defun navi2ch-caller-p (function-list)
+  "呼び出し元の関数が function-list に含まれていれば non-nil を返す。"
+  (let ((n 1)
+	frame function)
+    (while (and (not function)
+		(setq frame (backtrace-frame n)))
+      (setq n (1+ n))
+      (when (car frame)
+	(setq function (car (memq (cadr frame) function-list)))))
+    function))
+
+(defun navi2ch-compare-version-string (string1 string2)
+  "STRING1 と STRING2 をバージョン番号として比較する。
+STRING1 と STRING2 が等しければ 0 を、STRING1 の方が大きい場合は正数を、
+STRING2 の方が大きい場合は負数を返す。
+一般の小数点数とは事なり、4.10 > 4.9 となる。"
+  (apply #'navi2ch-compare-number-list
+	 (mapcar (lambda (s)
+		   (mapcar #'string-to-number
+			   (when (string-match "[0-9]+\\(\\.[0-9]+\\)+" s)
+			     (split-string (match-string 0 s) "\\."))))
+		 (list string1 string2))))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

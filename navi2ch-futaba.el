@@ -38,7 +38,7 @@
     ))
 
 (defvar navi2ch-futaba-variable-alist
-  '((coding-system	. shift_jis)))
+  (list (cons 'coding-system navi2ch-coding-system)))
 
 (navi2ch-multibbs-regist 'futaba
 			 navi2ch-futaba-func-alist

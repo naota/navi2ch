@@ -396,8 +396,7 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 		    (goto-char (point-max))))
 	     (navi2ch-net-get-content-subr gzip p (point))
 	     (setq navi2ch-net-content
-		   (navi2ch-string-as-multibyte
-		    (buffer-substring-no-properties p (point))))))))))
+		   (buffer-substring-no-properties p (point)))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)
@@ -501,12 +500,14 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 	     (when (and cont func)
 	       (message "%stranslating..." (current-message))
 	       (setq cont (with-temp-buffer
+			    (navi2ch-set-buffer-multibyte nil)
 			    (insert cont)
 			    (goto-char (point-min))
 			    (funcall func)
 			    (buffer-string))))
 	     (if (and cont (not (string= cont "")))
 		 (with-temp-file file
+		   (navi2ch-set-buffer-multibyte nil)
 		   (when diff
 		     (insert-file-contents file)
 		     (goto-char (point-max)))
@@ -545,11 +546,9 @@ header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
 	(>= len (or size 0))
       t)))				; $B%[%s%H$K$3$l$G$$$$$+$J(B?
 
-(defun navi2ch-net-update-file-diff (url file &optional time func)
+(defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE $B$r:9J,$G99?7$9$k!#(B
 TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
-FUNC $B$,(B non-nil $B$J$i$P99?78e(B FUNC $B$r;H$C$F%U%!%$%k$rJQ49$9$k!#(B
-FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 $B99?7$G$-$l$P(B HEADER $B$rJV$9!#(B"
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
@@ -586,15 +585,9 @@ FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 ;;; 			(setq ret (list header nil)))
 		       (t
 			(with-temp-file file
+			  (navi2ch-set-buffer-multibyte nil)
 			  (insert-file-contents file nil nil size)
 			  (goto-char (point-max))
-			  (when (and cont func)
-			    (message "%stranslating..." (current-message))
-			    (setq cont (with-temp-buffer
-					 (insert cont)
-					 (goto-char (point-min))
-					 (funcall func)
-					 (buffer-string))))
 			  (insert cont))
 			(message "%sdone" (current-message)))))))
 	  ((string= status "200")
@@ -602,14 +595,8 @@ FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 	       (setq aborn-p t)
 	     (message "%s: getting whole file..." (current-message))
 	     (let ((cont (navi2ch-net-get-content proc)))
-	       (when (and cont func)
-		 (message "%stranslating..." (current-message))
-		 (setq cont (with-temp-buffer
-			      (insert cont)
-			      (goto-char (point-min))
-			      (funcall func)
-			      (buffer-string))))
 	       (with-temp-file file
+		 (navi2ch-set-buffer-multibyte nil)
 		 (insert cont)))
 	     (message "%sdone" (current-message))))
 	  ((string= status "304")
@@ -622,7 +609,7 @@ FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
       (navi2ch-net-save-aborn-file file)
       (navi2ch-net-add-state
        'aborn
-       (navi2ch-net-update-file url file nil func)))))
+       (navi2ch-net-update-file url file)))))
 
 (defun navi2ch-net-save-aborn-file (file)
   (when (and navi2ch-net-save-old-file-when-aborn
@@ -673,7 +660,6 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
 		 (when (and (string-match "\\(OK\\|INCR\\)" state)
 			    (string-match "\\(.+\\)/\\(.+\\)K" data))
 		   (setq cont-size (string-to-number (match-string 1 data))))
-		 (setq cont (navi2ch-string-as-unibyte cont))
 		 (cond
 		  ((string= "+OK" state)
 		   (with-temp-file file
@@ -682,7 +668,7 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
 		       (insert-file-contents file)
 		       (goto-char (point-max)))
 		     (insert (substring cont 0 cont-size))))
-		  ((string= "-INCR" state);; $B$"$\!<$s(B
+		  ((string= "-INCR" state) ;; $B$"$\!<$s(B
 		   (with-temp-file file
 		     (navi2ch-set-buffer-multibyte nil)
 		     (insert (substring cont 0 cont-size)))

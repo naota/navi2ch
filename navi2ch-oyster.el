@@ -47,7 +47,7 @@
 ;; navi2ch-net-user-agent も multibbs 化する必要あり?
 
 (defvar navi2ch-oyster-variable-alist
-  '((coding-system	. shift_jis)))
+  (list (cons 'coding-system navi2ch-coding-system)))
 
 (navi2ch-multibbs-regist 'oyster
 			 navi2ch-oyster-func-alist
@@ -198,7 +198,6 @@ DIFF が non-nil ならば差分を取得する。
 		 (when (and (string-match "\\(OK\\|INCR\\)" state)
 			    (string-match "\\(.+\\)/\\(.+\\)K" data))
 		   (setq cont-size (string-to-number (match-string 1 data))))
-		 (setq cont (navi2ch-string-as-unibyte cont))
 		 (cond
 		  ((string= "+OK" state)
 		   (with-temp-file file

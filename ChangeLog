@@ -1,5 +1,45 @@
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-coding-system): 可能であれば cp932 を使
+	用。
+	* navi2ch-futaba.el (navi2ch-futaba-variable-alist): 'shift_jis で
+	はなく navi2ch-coding-system を使用。
+
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-variable-alist): 同上。
+
+	* navi2ch-localfile.el (navi2ch-localfile-variable-alist): 同上。
+	(navi2ch-localfile-coding-system): 同上。
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-variable-alist): 同上。
+
+	* navi2ch-oyster.el (navi2ch-oyster-variable-alist): 同上。
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-coding-system): 新変数。
+	可能であれば eucjp-ms を使用。
+	(navi2ch-js-variable-alist): 'euc-japan ではなく上記変数を使用。
+	(navi2ch-js-send-message): 同上。
+	(navi2ch-js-send-message-error-string): 同上。
+
+	* navi2ch-oyster.el (navi2ch-oyster-update-file-with-offlaw):
+	navi2ch-net-get-content() の結果を unibyte のまま扱うように。
+
+	* navi2ch-net.el (navi2ch-net-get-content): 結果を unibyte のまま
+	返すように。
+	(navi2ch-net-update-file): navi2ch-net-get-content() の結果を
+	unibyte のまま扱うように。
+	(navi2ch-net-update-file-with-readcgi): 同上。
+	(navi2ch-net-update-file-diff): 同上。
+	差分更新と関数での変換は両立しないので、func 引数を削除。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): 変換元バッファ
+	を unibyte として扱い、{decode,encode}-coding-region() に応じて適宜
+	navi2ch-set-buffer-multibyte() を呼び出すように。
+
+2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-caller-p): 新関数。
+	(navi2ch-compare-version-string): 新関数。
+
 	* navi2ch-article.el (navi2ch-article-set-link-property): 置換先が
 	関数だった場合はその返却値の \ を特別扱いしない。
 

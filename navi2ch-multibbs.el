@@ -158,9 +158,11 @@ SPEC は (BBSTYPE [ARG]...)。
 			  navi2ch-coding-system)))
 	 (decode-coding-region (point-min) (point-max)
 			       ,decoding)
+	 (navi2ch-set-buffer-multibyte t)
 	 ,@body
 	 (encode-coding-region (point-min) (point-max)
-			       navi2ch-coding-system)))))
+			       navi2ch-coding-system)
+	 (navi2ch-set-buffer-multibyte nil)))))
 (put 'navi2ch-multibbs-defcallback 'lisp-indent-function 2)
 
 (defun navi2ch-multibbs-article-update (board article start)
