@@ -1632,7 +1632,10 @@ gunzip に通してから文字コードの推測を試みる。"
                                 (insert str)))
                             (let ((charset (coding-system-get
 					    (navi2ch-ifxemacs
-						(car (detect-coding-region (point-min) (point-max)))
+						(let ((result (detect-coding-region (point-min) (point-max))))
+						  (if (listp result)
+						       (car result)
+						    result))
 					      (detect-coding-region (point-min) (point-max) t))
                                             'mime-charset)))
                               (if charset

@@ -1,5 +1,12 @@
 2002-10-13  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section): 
+	XEmacs で detect-decoding-region が coding system を一つしか返さな
+	かったときに対応。
+	なんで list で返してくれないんだー。
+
+2002-10-13  mami  <mami@users.sourceforge.net>
+
 	名前欄で「あぼぼーん機能」を実装。
 
 	* navi2ch-article.el
