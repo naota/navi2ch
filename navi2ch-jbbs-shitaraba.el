@@ -69,13 +69,17 @@
   (re-search-backward "\\(\n.*\n\\)")
   (replace-match "\n"))
 
-(defun navi2ch-js-article-update (board article)
-  "BOARD ARTICLEの記事を更新する。"
+(defun navi2ch-js-article-update (board article start)
+  "BOARD ARTICLEの記事を更新する。
+START が non-nil ならばレス番号 START からの差分を取得する。
+返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
-	(url  (navi2ch-js-article-to-url board article))
-	(func 'navi2ch-js-article-callback))
-    (navi2ch-net-update-file url file time func)))
+	(url  (navi2ch-js-article-to-url board article start nil start))
+	(func (if start
+		  'navi2ch-js-article-callback-diff
+		'navi2ch-js-article-callback)))
+    (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-js-url-to-board (url)
   (let (uri id)
@@ -177,22 +181,31 @@ START, END, NOFIRST で範囲を指定する"
     (format "%s<>%s<>%s<>%s<>%s\n"
 	    name (or mail "") date contents (or subject ""))))
 
-(navi2ch-multibbs-defcallback navi2ch-js-article-callback (jbbs-shitaraba)
+(navi2ch-multibbs-defcallback navi2ch-js-article-callback
+    (jbbs-shitaraba &optional diff)
   (let ((beg (point))
 	(max-num 0)
-	subject alist num)
-    (setq subject (navi2ch-js-parse-subject))
+	subject alist num min-num)
+    (unless diff
+      (setq subject (navi2ch-js-parse-subject)))
     (while (navi2ch-js-parse)
       (setq num (string-to-number (match-string 1))
+	    min-num (or min-num num)
 	    max-num (max max-num num)
 	    alist (cons (cons (string-to-number (match-string 1))
 			      (navi2ch-js-make-article subject))
 			alist)
 	    subject nil))
     (delete-region beg (point-max))
-    (dotimes (i max-num)
-      (insert (or (cdr (assoc (1+ i) alist))
-		  "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n")))))
+    (when (and min-num max-num)
+      (let ((i min-num))
+	(while (<= i max-num)
+	  (insert (or (cdr (assoc i alist))
+		      "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n"))
+	  (setq i (1+ i)))))))
+
+(defun navi2ch-js-article-callback-diff ()
+  (navi2ch-js-article-callback t))
 
 (defun navi2ch-js-get-writecgi-url (board)
   "write.cgi の url を返す"

@@ -61,8 +61,9 @@ SUBJECT-CALLBACK-FUNC():
     subject.txt を取得するときに navi2ch-net-update-file で使われるコー
     ルバック関数
 
-ARTICLE-UPDATE-FUNC(BOARD ARTICLE):
+ARTICLE-UPDATE-FUNC(BOARD ARTICLE START):
     BOARD ARTICLE で表されるファイルを更新する。
+    START が non-nil ならばレス番号 START からの差分を取得する。
 
 ARTICLE-TO-URL-FUNC(BOARD ARTICLE
 		    &OPTIONAL START END NOFIRST):
@@ -136,17 +137,17 @@ CODING-SYSTEM-VAR:
 
 (defmacro navi2ch-multibbs-defcallback (name spec &rest body)
   "navi2ch-net-update-file に渡す callback を定義する。
-SPEC は (BBSTYPE)。
+SPEC は (BBSTYPE [ARG]...)。
 実際には、callback を定義するのに必要な BBSTYPE な板の coding-system
-による decode, encode 処理を、BODY を評価する前後に行なう NAME という
-関数が定義される。"
+による decode, encode 処理を BODY を評価する前後に行なう、NAME という
+引数 [ARG]... を持つ関数が定義される。"
   (let ((bbstype (gensym "--bbstype--"))
 	(decoding (gensym "--decoding--"))
 	docstring)
     (when (stringp (car body))
 	  (setq docstring (car body))
 	  (setq body (cdr body)))
-    `(defun ,name ()
+    `(defun ,name (,@(cdr spec))
        ,docstring
        (let* ((coding-system-for-read 'binary)
 	      (coding-system-for-write 'binary)
@@ -161,12 +162,11 @@ SPEC は (BBSTYPE)。
 			       navi2ch-coding-system)))))
 (put 'navi2ch-multibbs-defcallback 'lisp-indent-function 2)
 
-(defun navi2ch-multibbs-article-update (board article)
+(defun navi2ch-multibbs-article-update (board article start)
   (let* ((bbstype (navi2ch-multibbs-get-bbstype board))
 	 (func    (navi2ch-multibbs-get-func
 		   bbstype 'article-update 'navi2ch-2ch-article-update)))
-    (funcall func board article)))
-
+    (funcall func board article start)))
 
 (defun navi2ch-multibbs-regist (bbstype func-alist variable-alist)
   (setq navi2ch-multibbs-func-alist
@@ -283,8 +283,9 @@ START, END, NOFIRST で範囲を指定する"
   (when navi2ch-board-use-subback-html
     (navi2ch-board-make-subject-txt)))
 
-(defun navi2ch-2ch-article-update (board article)
+(defun navi2ch-2ch-article-update (board article start)
   "BOARD, ARTICLE に対応するファイルを更新する。
+START が non-nil ならばレス番号 START からの差分を取得する。
 返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
@@ -292,28 +293,21 @@ START, END, NOFIRST で範囲を指定する"
     (if (and (navi2ch-enable-readcgi-p
 	      (navi2ch-board-get-host board)))
 	(progn
-	  (setq url (navi2ch-article-get-readcgi-raw-url
-		     board article))
-	  (setq header (navi2ch-net-update-file-with-readcgi
-			url file time (file-exists-p file)))
-	  (when (navi2ch-net-get-state 'kako header)
-	    (setq url (navi2ch-article-get-kako-url
-		       board article))
-	    (setq header (navi2ch-net-update-file url file))
-	    (setq kako-p t)))
+	  (setq url (navi2ch-article-get-readcgi-raw-url board article start))
+	  (setq header (navi2ch-net-update-file-with-readcgi url file time start))
+	  (setq kako-p (or (not header)
+			   (navi2ch-net-get-state 'kako header))))
       (setq url (navi2ch-article-get-url board article))
-      (setq header
-	    (if (and (file-exists-p file)
-		     navi2ch-article-enable-diff)
-		(navi2ch-net-update-file-diff url file time)
-	      (navi2ch-net-update-file url file time)))
-      (unless header
-	(setq url (navi2ch-article-get-kako-url board article))
-	(setq header (navi2ch-net-update-file url file))
-	(setq kako-p t)))
-    (if kako-p
-	(navi2ch-net-add-state 'kako header)
-      header)))
+      (setq header (if start
+		       (navi2ch-net-update-file-diff url file time)
+		     (navi2ch-net-update-file url file time)))
+      (setq kako-p (or (not header)
+		       (navi2ch-net-get-state 'kako header))))
+    (when kako-p
+      (setq url (navi2ch-article-get-kako-url board article))
+      (setq header (navi2ch-net-add-state
+		    'kako (navi2ch-net-update-file url file))))
+    header))
 
 (defun navi2ch-2ch-url-to-board (url)
   (let (id uri)
@@ -332,24 +326,24 @@ START, END, NOFIRST で範囲を指定する"
   "URL から article に変換。"
   (let (list)
     (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match "&st=\\([0-9]+\\)" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
+	   (setq list (list (cons 'artid (match-string 1 url))))
+	   (when (string-match "&st=\\([0-9]+\\)" url)
+	     (setq list (cons (cons 'number
+				    (string-to-number (match-string 1 url)))
+			      list))))
 	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match
+	   (setq list (list (cons 'artid (match-string 1 url))))
+	   (when (string-match
 		  "http://.+/test/read\\.cgi/[^/]+/[^/]+/[ni.]?\\([0-9]+\\)[^/]*$" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
+	     (setq list (cons (cons 'number
+				    (string-to-number (match-string 1 url)))
+			      list))))
 	  ((string-match
 	    "http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
 	   (setq list (list (cons 'artid (match-string 1 url))
 			    (cons 'kako t))))
-          ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))))
+	  ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+	   (setq list (list (cons 'artid (match-string 1 url))))))
     list))
 
 (defun navi2ch-2ch-send-message
@@ -386,14 +380,14 @@ START, END, NOFIRST で範囲を指定する"
   (let ((url (navi2ch-board-get-readcgi-url board)))
     (setq url (concat url (cdr (assq 'artid article)) "/"))
     (if (numberp start)
-        (setq start (number-to-string start)))
+	(setq start (number-to-string start)))
     (if (numberp end)
-        (setq end (number-to-string end)))
+	(setq end (number-to-string end)))
     (if (equal start end)
-        (concat url start)
+	(concat url start)
       (concat url
-              start (and (or start end) "-") end
-              (and nofirst "n")))))
+	      start (and (or start end) "-") end
+	      (and nofirst "n")))))
 
 (defalias 'navi2ch-2ch-send-message-success-p
   'navi2ch-net-send-message-success-p)
@@ -404,8 +398,8 @@ START, END, NOFIRST で範囲を指定する"
   (let ((file (navi2ch-board-get-file-name board))
 	(time (cdr (assq 'time board))))
     (if navi2ch-board-enable-readcgi
-        (navi2ch-net-update-file-with-readcgi
-         (navi2ch-board-get-readcgi-raw-url board) file time)
+	(navi2ch-net-update-file-with-readcgi
+	 (navi2ch-board-get-readcgi-raw-url board) file time)
       (let ((url (navi2ch-board-get-url
 		  board (if navi2ch-board-use-subback-html
 			    navi2ch-board-subback-file-name)))

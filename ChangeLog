@@ -1,3 +1,69 @@
+2002-10-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	multibbs-module で差分取得をできるようにしてみる。
+	一応 bofore_multibbs_diff タグを付けた。
+	ちょいと ad-hoc な気もするけどまぁ OK でしょう。
+	
+	* navi2ch-oyster.el (navi2ch-oyster-article-update): 引数に start
+	を取るように。
+	(navi2ch-oyster-get-offlaw-url): インデントを直してみる。
+
+	* navi2ch-localfile.el (navi2ch-localfile-article-update): 引数
+	start を取るように。
+
+	* navi2ch-machibbs.el: 差分取得対応。
+	(navi2ch-machibbs-article-update): 引数 start を取るように。
+	start が non-nil ならば navi2ch-machibbs-article-callback-diff を
+	使う。
+	(navi2ch-machibbs-article-callback): 引数 diff を取るように。
+	diff が non-nil ならば subject は取得しない。
+	(navi2ch-machibbs-article-callback-diff): 新関数。
+	navi2ch-machibbs-article-callback を引数付きで呼ぶだけ。
+	
+	* navi2ch-jbbs-shitaraba.el: 差分取得対応。
+	(navi2ch-js-article-update): 引数 start を取るように。
+	start が non-nil ならば navi2ch-js-article-callback-diff を使う。
+	(navi2ch-js-article-callback): 引数 diff を取るように。
+	diff が non-nil ならば subject は取得しない。
+	(navi2ch-js-article-callback-diff): 新関数。
+	navi2ch-js-article-callback を引数付きで呼ぶだけ。
+
+	* navi2ch-jbbs-net.el: 差分取得対応。
+	(navi2ch-jbbs-article-update): 引数 start を 取るように。
+	start が non-nil ならば navi2ch-jbbs-article-callback を使うように。
+	(navi2ch-jbbs-parse-regexp): 新変数。スレの差分での取得用。
+	(navi2ch-jbbs-parse): 新関数。スレの差分での取得用。
+	(navi2ch-jbbs-make-article): 同上。
+	(navi2ch-jbbs-article-callback): 同上。
+
+	* navi2ch-multibbs.el: multibbs-module の差分取得対応。
+	(navi2ch-multibbs-func-alist):
+	article-update が引数 start を取るように。
+	multibbs-module はこの引数を使って差分を取得するようにする。
+	(navi2ch-multibbs-defcallback): bbstype 以降に好きな引数を渡せるよ
+	うに。
+	(navi2ch-multibbs-article-update): 引数 start を取るように。
+	(navi2ch-2ch-article-update): 同上。
+	(navi2ch-2ch-url-to-article): インデントを直してみる
+	(navi2ch-2ch-article-to-url): 同上。
+	(navi2ch-2ch-board-update): 同上。
+
+	* navi2ch-util.el (navi2ch-count-lines-file): 新関数。
+
+	* navi2ch-net.el: multibbs-module の差分取得対応。
+	(navi2ch-net-update-file): 引数 diff を取るように。
+	non-nil なら差分としてファイルを取得する。
+	取得した内容が "" でも no-updated とするように。
+	(navi2ch-net-update-file-with-readcgi): diff が指定されたときのメッ
+	セージを変更。
+
+	* navi2ch-article.el: multibbs-module の差分取得対応。
+	(navi2ch-article-fetch-article): インデントを直してみる。
+	(navi2ch-article-get-readcgi-raw-url): 引数で start を取るように。
+	新たに start から取得するという風にした。
+	(navi2ch-article-update-file): navi2ch-multibbs-article-update に
+	次に取得する最初のレス番号の start を渡すように。
+
 2002-10-04  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-mode-line): スレタイトル

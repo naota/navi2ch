@@ -78,13 +78,16 @@
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
     (replace-match "\\1dat\\2")))
 
-(defun navi2ch-machibbs-article-update (board article)
-  "BOARD ARTICLEの記事を更新する。"
+(defun navi2ch-machibbs-article-update (board article start)
+  "BOARD ARTICLEの記事を更新する。
+START が non-nil ならばレス番号 START からの差分を取得する。
+返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
-        (time (cdr (assq 'time article)))
-        (url  (navi2ch-machibbs-article-to-url board article))
-        (func 'navi2ch-machibbs-article-callback))
-    (navi2ch-net-update-file url file time func)))
+	(time (cdr (assq 'time article)))
+	(url  (navi2ch-machibbs-article-to-url board article start nil start))
+	(func (if start 'navi2ch-machibbs-article-callback-diff
+		'navi2ch-machibbs-article-callback)))
+    (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-machibbs-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
@@ -182,20 +185,30 @@ START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
 	    name (or mail "") (concat date (or date-tail ""))
 	    contents (or subject ""))))
 
-(navi2ch-multibbs-defcallback navi2ch-machibbs-article-callback (machibbs)
+(navi2ch-multibbs-defcallback navi2ch-machibbs-article-callback
+    (machibbs &optional diff)
   (let ((beg (point))
 	(max-num 0)
-	subject alist num)
-    (setq subject (navi2ch-machibbs-parse-subject))
+	subject alist num min-num)
+    (unless diff
+      (setq subject (navi2ch-machibbs-parse-subject)))
     (while (navi2ch-machibbs-parse)
       (setq num (string-to-number (match-string 1))
+	    min-num (or min-num num)
 	    max-num (max max-num num)
 	    alist (cons (cons (string-to-number (match-string 1))
 			      (navi2ch-machibbs-make-article subject))
 			alist)
 	    subject nil))
     (delete-region beg (point-max))
-    (dotimes (i max-num)
-      (insert (or (cdr (assoc (1+ i) alist))
-		  "$Bあぼーん<>あぼーん<>あぼーん<>あぼーん<>\n")))))
+    (when (and min-num max-num)
+      (let ((i min-num))
+	(while (<= i max-num)
+	  (insert (or (cdr (assoc i alist))
+		      "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n"))
+	  (setq i (1+ i)))))))
+
+(defun navi2ch-machibbs-article-callback-diff ()
+  (navi2ch-machibbs-article-callback t))
+
 ;;; navi2ch-machibbs.el ends here

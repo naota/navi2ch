@@ -64,11 +64,15 @@
   (re-search-backward "\\(\n.*\n\\)")
   (replace-match "\n"))
 
-(defun navi2ch-jbbs-article-update (board article)
+(defun navi2ch-jbbs-article-update (board article start)
+  "BOARD ARTICLEの記事を更新する。
+START が non-nil ならばレス番号 START からの差分を取得する。
+返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
-	(url  (navi2ch-jbbs-get-offlaw-url board article)))
-    (navi2ch-net-update-file url file time)))
+	(url  (navi2ch-jbbs-get-offlaw-url board article))
+	(func (and start 'navi2ch-jbbs-article-callback)))
+    (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-jbbs-get-offlaw-url (board article)
   (let ((uri (cdr (assq 'uri board))))
@@ -113,4 +117,41 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-jbbs-send-message-success-p (proc)
   (string-match "302 Found" (navi2ch-net-get-content proc)))
+
+;;-------------
+(defvar navi2ch-jbbs-parse-regexp "\
+<dt>\\([0-9]+\\) 名前：\\(<a href=\"mailto:\\([^\"]*\\)\">\\|<[^>]+>\\)\
+<b> \\(.*\\) </b><[^>]+> 投稿日： \\(.*\\)<br><dd>\\(.*\\)<br><br>\n")
+
+(defun navi2ch-jbbs-parse ()
+  (let ((case-fold-search t))
+    (re-search-forward navi2ch-jbbs-parse-regexp nil t)))
+
+(defun navi2ch-jbbs-make-article ()
+  (let ((mail (match-string 3))
+	(name (match-string 4))
+	(date (match-string 5))
+	(contents (match-string 6)))
+    ;; 差分の前のセパレータが "," で後が "<>" になるのがちょっとイヤ。
+    (format "%s<>%s<>%s<>%s<>\n"
+	    name (or mail "") date contents )))
+
+(navi2ch-multibbs-defcallback navi2ch-jbbs-article-callback (jbbs-net)
+  (let ((beg (point))
+	(max-num 0)
+	alist num min-num)
+    (while (navi2ch-jbbs-parse)
+      (setq num (string-to-number (match-string 1))
+	    min-num (or min-num num)
+	    max-num (max max-num num)
+	    alist (cons (cons (string-to-number (match-string 1))
+			      (navi2ch-jbbs-make-article))
+			alist)))
+    (delete-region beg (point-max))
+    (when (and min-num max-num)
+      (let ((i min-num))
+	(while (<= i max-num)
+	  (insert (or (cdr (assoc i alist))
+		      "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n"))
+	  (setq i (1+ i)))))))
 ;;; navi2ch-jbbs-net.el ends here

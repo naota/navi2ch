@@ -412,12 +412,14 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 			      other-header)))
 
 
-(defun navi2ch-net-update-file (url file &optional time func location)
+(defun navi2ch-net-update-file (url file &optional time func location diff)
   "FILE $B$r99?7$9$k!#(B
 TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 FUNC $B$,(B non-nil $B$J$i$P99?78e(B FUNC $B$r;H$C$F%U%!%$%k$rJQ49$9$k!#(B
 FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
-LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$k$h$&$K$9$k!#(B
+LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$k$h$&(B
+$B$K$9$k!#(B
+DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9$k!#(B
 $B99?7$G$-$l$P(B header $B$rJV$9(B"
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
@@ -440,7 +442,10 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 		 (not header))
 	     (setq header nil))		; $BG0$N$?$a(B
 	    ((string= status "200")
-	     (message "%s: getting new file..." (current-message))
+	     (message (if diff
+			  "%s: getting file diff..."
+			"%s: getting new file...")
+		      (current-message))
 	     (setq cont (navi2ch-net-get-content proc))
 	     (when (and cont func)
 	       (message "%stranslating..." (current-message))
@@ -449,11 +454,15 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 			    (goto-char (point-min))
 			    (funcall func)
 			    (buffer-string))))
-	     (if cont
+	     (if (and cont (not (string= cont "")))
 		 (with-temp-file file
+		   (when diff
+		     (insert-file-contents file)
+		     (goto-char (point-max)))
 		   (insert cont)
 		   (message "%sdone" (current-message)))
-	       (message "%sfailed" (current-message))))
+	       (setq header (navi2ch-net-add-state 'not-updated header))
+	       (message "%snot updated" (current-message))))
 	    ((and location
 		  (string= status "302")
 		  (assoc "Location" header))
@@ -549,8 +558,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
   "FILE $B$r(B URL $B$+$i(B read.cgi $B$r;H$C$F99?7$9$k!#(B
 TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
-$B99?7$G$-$l$P(B (header state) $B$J(B list $B$rJV$9!#(B
-state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
+$B99?7$G$-$l$P(B HEADER $B$rJV$9!#(B"
   (let ((dir (file-name-directory file))
 	proc header cont)
     (unless (file-exists-p dir)
@@ -562,11 +570,14 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
     (when proc
       (let ((coding-system-for-write 'binary)
 	    (coding-system-for-read 'binary))
-	(message "%s: getting file with read.cgi..." (current-message))
+	(message (if diff
+		     "%s: getting file diff with read.cgi..."
+		   "%s: getting new file with read.cgi..."
+		   (current-message)))
 	(setq header (navi2ch-net-get-header proc))
 	(setq cont (navi2ch-net-get-content proc))
-	(if (or (string= cont "")
-		(not cont))
+	(if (or (not cont)
+		(string= cont ""))
 	    (progn (message "%sfailed" (current-message))
 		   (signal 'navi2ch-update-failed nil))
 	  (message "%sdone" (current-message))

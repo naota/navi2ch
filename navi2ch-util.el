@@ -819,5 +819,11 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
 (if (fboundp 'line-end-position)
     (defalias 'navi2ch-line-end-position 'line-end-position))
 
+(defun navi2ch-count-lines-file (file)
+  "$B$=$N%U%!%$%k$N9T?t$r?t$($k(B"
+  (with-temp-buffer
+    (insert-file-contents file)
+    (count-lines (point-min) (point-max))))
+    
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

@@ -269,7 +269,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   "URI が localfile なら non-nilを返す。"
   (string-match navi2ch-localfile-regexp uri))
 
-(defun navi2ch-localfile-article-update (board article)
+(defun navi2ch-localfile-article-update (board article start)
   "BOARD ARTICLEの記事を更新する。"
   (let ((url (navi2ch-article-get-url board article))
 	(file (navi2ch-article-get-file-name board article)))

@@ -71,15 +71,16 @@
        (or (string-match "http://.*\\.2ch\\.net/" uri)
 	   (string-match "http://.*\\.bbspink\\.com/" uri))))
 
-(defun navi2ch-oyster-article-update (board article)
+(defun navi2ch-oyster-article-update (board article start)
   "BOARD, ARTICLE に対応するファイルを更新する。
-返り値は HEADER のリスト。"
+START が non-nil ならばレス番号 START からの差分を取得する。
+START からじゃないかもしれないけど・・・。
+返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	(url (navi2ch-article-get-url board article))
 	header kako-p)
-    (setq header (if (and (file-exists-p file)
-			  navi2ch-article-enable-diff)
+    (setq header (if start
 		     (navi2ch-net-update-file-diff url file time)
 		   (navi2ch-net-update-file url file time)))
     (unless header
@@ -94,7 +95,7 @@
       (setq kako-p t)
       (message "offlaw url %s" url)
       (setq header
-	    (if (file-exists-p file)
+	    (if start
 		(progn
 		  (message "article %s" article)
 		  (navi2ch-oyster-update-file-with-offlaw url file time t))
@@ -140,7 +141,7 @@
 (defun navi2ch-oyster-get-offlaw-url (board article sid file)
   "BOARD, ARTICLE, SESSION-ID, FILE  から offlaw url に変換。"
   (let ((uri (navi2ch-board-get-uri board))
- 	(artid (cdr (assq 'artid article)))
+	(artid (cdr (assq 'artid article)))
 	(size 0)
 	encoded-s)
 ;    (setq encoded-s (w3m-url-encode-string sid))
@@ -149,7 +150,7 @@
       (setq size (max 0 (nth 7 (file-attributes file)))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
     (format "%s/test/offlaw.cgi/%s/%s/?raw=.%s&sid=%s"
- 	    (match-string 1 uri) (match-string 2 uri) artid size encoded-s)))
+	    (match-string 1 uri) (match-string 2 uri) artid size encoded-s)))
 
 (defun navi2ch-oyster-update-file-with-offlaw (url file &optional time diff)
   "FILE を URL から offlaw.cgi を使って更新する。
