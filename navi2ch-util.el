@@ -48,7 +48,7 @@
 
 (defvar navi2ch-replace-html-tag-regexp-alist
   '(("<[^<>]+>" . "")
-    ("&[a-zA-Z]+;" . navi2ch-entity-reference-to-str)
+    ("&[a-z][a-z0-9]*;?" . navi2ch-entity-reference-to-str)
     ("&#[0-9]+;?" . navi2ch-numeric-reference-to-str))
   "$BCV49$9$k(B html $B$N%?%0$NO"A[%j%9%H(B($B@55,I=8=(B)
 $BCV49@h$,4X?t$@$H!"CV4985$r0z?t$H$7$F$=$N4X?t$r8F$S$@$7$?$b$N$GCV$-BX$($k!#(B
@@ -947,6 +947,14 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
   (with-temp-buffer
     (insert-file-contents file)
     (count-lines (point-min) (point-max))))
+
+(defun navi2ch-compare-times (t1 t2)
+  "t1 $B$,(B t2 $B$h$j?7$7$1$l$P(B t"
+  (cond
+   ((null (and t1 t2)) t)
+   ((> (nth 0 t1) (nth 0 t2)) t)
+   ((= (nth 0 t1) (nth 0 t2)) (> (nth 1 t1) (nth 1 t2)))
+   (t nil)))
     
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

@@ -275,8 +275,9 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 (defun navi2ch-localfile-article-update (board article start)
   "BOARD ARTICLEの記事を更新する。"
   (let ((url (navi2ch-article-get-url board article))
-	(file (navi2ch-article-get-file-name board article)))
-    (list (navi2ch-localfile-update-file url file) nil)))
+	(file (navi2ch-article-get-file-name board article))
+	(time (cdr (assq 'time article))))
+    (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-article-to-url
   (board article &optional start end nofirst)
@@ -363,40 +364,44 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   navi2ch-localfile-last-error)
 
 (defun navi2ch-localfile-board-update (board)
-  (let ((file (navi2ch-board-get-file-name board))
-	(url (navi2ch-board-get-url board)))
-    (navi2ch-localfile-update-file url file)))
+  (let ((url (navi2ch-board-get-url board))
+	(file (navi2ch-board-get-file-name board))
+	(time (cdr (assq 'time board))))
+    (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-board-get-file-name (board &optional file-name)
   (let ((uri (navi2ch-board-get-uri board))
 	(cache-dir (navi2ch-expand-file-name navi2ch-localfile-cache-name)))
     (when (and uri
-	       (string-match (concat navi2ch-localfile-regexp "/*\\(.+\\)")
-			     uri))
+	       (string-match
+		(concat navi2ch-localfile-regexp "/*\\(.:/\\)?\\(.+\\)") uri))
       (expand-file-name (or file-name
 			    navi2ch-board-subject-file-name)
-			(expand-file-name (match-string 1 uri)
-					  cache-dir)))))
+			(expand-file-name (match-string 2 uri) cache-dir)))))
 
-(defun navi2ch-localfile-update-file (url file &rest args)
+(defun navi2ch-localfile-update-file (url file &optional time &rest args)
   (let ((directory (file-name-directory file)))
     (unless (file-exists-p directory)
       (make-directory directory t)))
   (let (source-file)
     (save-match-data
-      (if (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
-			url)
-	  (setq source-file (match-string 1 url))))
-    (if (and source-file
-	     (file-readable-p source-file))
-	(let* ((coding-system-for-write 'binary)
-	       (coding-system-for-read 'binary)
-	       (time (nth 5 (file-attributes source-file)))
-	       (time-string (navi2ch-http-date-encode time)))
-	  (with-temp-file file
-	    (insert-file-contents source-file))
-	  (list (cons "Date" time-string)
-		(cons "Server" "localfile")
-		(cons "Last-Modified" time-string))))))
+      (when (string-match (concat navi2ch-localfile-regexp "\\(.+\\)") url)
+	(setq source-file (match-string 1 url))))
+    (when (and source-file (file-readable-p source-file))
+      (message "checking file...")
+      (let* ((mtime (nth 5 (file-attributes source-file)))
+	     (mtime-string (navi2ch-http-date-encode mtime))
+	     header)
+	(when time (setq time (navi2ch-http-date-decode time)))
+	(setq header (list (cons "Date" mtime-string)
+			   (cons "Server" "localfile")))
+	(if (navi2ch-compare-times mtime time)
+	    (progn
+	      (copy-file source-file file t)
+	      (setq header (cons (cons "Last-Modified" mtime-string) header))
+	      (message "%supdated" (current-message)))
+	  (setq header (navi2ch-net-add-state 'not-updated header))
+	  (message "%snot updated" (current-message)))
+	header))))
 
 ;;; navi2ch-localfile.el ends here

@@ -1,3 +1,17 @@
+2002-10-22  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-localfile.el (navi2ch-localfile-update-file): mtimeを使って
+	更新されているかを判断するように。messageの出力を追加。
+	(navi2ch-localfile-article-update): 上記変更にともなって、
+	navi2ch-localfile-update-fileに引数timeを追加。
+	(navi2ch-localfile-board-update): 同上。
+	(navi2ch-localfile-board-get-file-name): x-localbbs:///c:/tmp 形式に
+	対応。
+
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
+	文字実体参照用の正規表現を修正。
+	(navi2ch-compare-times): 新関数。
+
 2002-10-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
