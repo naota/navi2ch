@@ -314,7 +314,8 @@
       (goto-char (point-min))
       (re-search-forward (concat "^"
 				 (regexp-quote
-				  (replace-in-string str "^\\[\\+\\]" "[-]"))
+				  (navi2ch-replace-string "^\\[\\+\\]" "[-]"
+							  str t))
 				 "$")
 			 nil t)
       (beginning-of-line)

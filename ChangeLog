@@ -1,3 +1,12 @@
+2002-09-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-open-all-category):
+	replace-in-string は XEmacs でしか使えないので
+	navi2ch-replace-string を使用するように。
+
+	* navi2ch-article.el (navi2ch-article-appendweek): youbi と date
+	を local variable に。
+
 2002-09-23  miz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-article.e: YY/MM/DD形式の日付をYYYY/MM/DD(曜日)形式
