@@ -1,6 +1,8 @@
 ;;; navi2ch-e21.el --- GNU Emacs 21 module for navi2ch
 
-;; Copyright (C) 2001 by Navi2ch Project
+;; Copyright (C) 2001, 2002 by Navi2ch Project
+;; Copyright (C) 2000,2001 Katsumi Yamaoka <yamaoka@jpl.org>
+;; Copyright (C) 2000,2001 Yuuichi Teranishi <teranisi@gohome.org>
 
 ;; Author: UEYAMA Rui <rui314159@users.sourceforge.net>
 ;; Keywords: network, 2ch

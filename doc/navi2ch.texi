@@ -1731,6 +1731,8 @@ Navi2ch を作ってくれた (not 1) さん、どうもありがとう。
 
 最初に perl 版を作った hc2ivan さんに感謝です。
 
+Navi2ch は APEL、Wanderlust の一部を使用しています。作者の方々に感謝。
+
 @bye
 カーソルを以下の関数の上に置いて
 M-x eval-defun RET M-x navi2ch-doc-update-aa-list RET

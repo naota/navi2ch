@@ -1,6 +1,7 @@
 ;;; navi2ch-mona.el --- Mona Font Utils for Navi2ch
 
-;; Copyright (C) 2001 by Navi2ch Project
+;; Copyright (C) 2001, 2002 by Navi2ch Project
+;; Copyright (C) 1995,1996,1997,1998,1999 Free Software Foundation, Inc.
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; 431 の名無しさん

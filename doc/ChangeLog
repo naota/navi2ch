@@ -2,6 +2,8 @@
 
 	* navi2ch.texi (Compile): configure を使用しないコンパイル方法につ
 	いて追記。
+	(Thanks): 謝辞に APEL、Wanderlust を追加。
+
 
 2002-07-24  mami  <mami@users.sourceforge.net>
 

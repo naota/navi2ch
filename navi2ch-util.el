@@ -1,6 +1,7 @@
 ;;; navi2ch-util.el --- useful utilities for navi2ch
 
-;; Copyright (C) 2000 by Navi2ch Project
+;; Copyright (C) 2000-2002 by Navi2ch Project
+;; Copyright (C) 1993-2000 Free Software Foundation, Inc.
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch

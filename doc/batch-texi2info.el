@@ -1,9 +1,9 @@
 ;;; batch-texi2info.el --- run texi2info with emacs -batch
 
+;; Copyright (C) 2002 by Navi2ch Project
 ;; Copyright (C) 1985, 1986, 1988, 1990, 1991, 1992, 1993,
 ;;               1994, 1995, 1996, 1997, 1998, 2000, 2001
 ;;    Free Software Foundation, Inc.
-;; Copyright (C) 2002 by 2ちゃんねる
 
 ;; Author: 名無しさん＠お腹いっぱい
 ;; Keywords: network, 2ch

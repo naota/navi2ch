@@ -1,6 +1,6 @@
 ;;; navi2ch-message.el --- write message module for navi2ch
 
-;; Copyright (C) 2000 by Navi2ch Project
+;; Copyright (C) 2000-2002 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch

@@ -1,5 +1,13 @@
 2002-07-26  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* README: 謝辞に APEL、Wanderlust を追加。
+	* navi2ch-e21.el: Wanderlust の Copyright を追加。
+	* navi2ch-mona.el: APEL の Copyright を追加。
+	* navi2ch-util.el: APEL の Copyright を追加。
+	さすがにコピペしておいて何も無しだとまずいかと。。。
+
+	* 各種ファイル: Copyright をアップデート。
+
 	* NEWS: 板 ID の衝突について追記。
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-article-callback):
