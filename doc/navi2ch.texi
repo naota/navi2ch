@@ -924,13 +924,6 @@ non-nil であっても、指定した板でしかモナーフォントが使われないというこ
 (setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
 @end lisp
 
-@c @code{navi2ch-mona-enable-board-list} がデフォルト値の @code{nil} のときは、
-@c @code{navi2ch-mona-disnable-board-list} で指定しなかった板ではモナーフォントが使われる。
-@c @code{navi2ch-mona-enable-board-list} に (@code{nil} 以外の) 何かを設定したときは、
-@c @code{navi2ch-mona-enable-board-list} と @code{navi2ch-mona-disnable-board-list} の
-@c どちらでも指定しなかった板ではモナーフォントは使われない。
-@c ;; ……うーん、もうちょっと簡潔に書けないものか。
-
 なお、Navi2ch 1.5.1 かそれ以前のバージョンでモナーフォントを使用したい場合は
 次のように書く必要がある。
 
@@ -1016,7 +1009,7 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @code{next-line} 次の行に移動
 
 @item p
-@code{previout-line} 前の行に移動
+@code{previous-line} 前の行に移動
 
 @item t
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
