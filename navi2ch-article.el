@@ -368,7 +368,7 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-article-get-separator ()
   (save-excursion
     (beginning-of-line)
-    (if (looking-at "[^\n]+<>[^\n]*<>")
+    (if (search-forward "<>" (navi2ch-line-end-position) t 2)
         " *<> *"
       " *, *")))
 

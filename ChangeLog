@@ -1,3 +1,9 @@
+2003-09-05  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-get-separator):
+	search-forward を用い、正規表現ではなく固定文字列で検索するように。
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/774
+
 2003-08-31  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (lisp_LISP): navi2ch-futaba.el を追加。
