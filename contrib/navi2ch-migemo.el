@@ -28,7 +28,9 @@
 ;;; Code:
 (provide 'navi2ch-migemo)
 
-(require 'migemo)
+;; migemo がなくてもコンパイルできるように。
+(eval '(require 'migemo))
+
 (require 'navi2ch-search)
 
 (defvar navi2ch-migemo-enable t

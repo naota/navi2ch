@@ -1,3 +1,8 @@
+2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-migemo.el (toplevel): バイトコンパイル時に migemo が必要
+	無いように、(require 'migemo) を eval で囲んだ。
+
 2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (EXTRA_DIST): navi2ch-migemo.el を追加。
