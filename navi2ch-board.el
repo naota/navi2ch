@@ -177,6 +177,9 @@
 	     (expand-file-name (or file-name
 				   navi2ch-board-subject-file-name)
 			       (match-string 1 uri)))))))
+
+(defsubst navi2ch-board-from-file-p (board)
+  (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
 	     
 
 (defsubst navi2ch-board-get-matched-article ()
@@ -509,7 +512,6 @@
       (navi2ch-make-sortable-date datevec)
       (navi2ch-make-sortable-date key-datevec)))))
 
-;; まだテストしてない
 (defun navi2ch-board-expire (&optional board ask)
   (interactive)
   (and (interactive-p) (setq ask t))

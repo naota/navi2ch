@@ -87,7 +87,7 @@
 (defun navi2ch-directory-set-current-board (directory)
   (setq directory (expand-file-name directory))
   (setq navi2ch-directory-current-board
-	(list (cons 'name navi2ch-bm-board-name-from-file)
+	(list (cons 'name navi2ch-board-name-from-file)
 	      (cons 'uri (navi2ch-filename-to-url directory))
 	      (cons 'id "navi2ch"))))
 

@@ -104,8 +104,6 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-poped-point-stack nil)
 (defvar navi2ch-article-separator nil)
 (defvar navi2ch-article-hide-mode nil)
-(defvar navi2ch-article-from-file-p nil
-  "ファイルから読み込んでるか")
 (defvar navi2ch-article-window-configuretion nil)
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
@@ -143,7 +141,6 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-point-stack)
 (make-variable-buffer-local 'navi2ch-article-poped-point-stack)
 (make-variable-buffer-local 'navi2ch-article-view-range)
-(make-variable-buffer-local 'navi2ch-article-from-file-p)
 (make-variable-buffer-local 'navi2ch-article-separator)
 (make-variable-buffer-local 'navi2ch-article-through-next-function)
 (make-variable-buffer-local 'navi2ch-article-through-previous-function)
@@ -529,8 +526,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
       (setq navi2ch-article-current-board board
-            navi2ch-article-current-article article
-            navi2ch-article-from-file-p nil)
+            navi2ch-article-current-article article)
       (when navi2ch-article-auto-range
         (if (file-exists-p (navi2ch-article-get-file-name board article))
             (setq navi2ch-article-view-range
@@ -548,7 +544,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (let* ((board (list (cons 'id "navi2ch")
 		      (cons 'uri (navi2ch-filename-to-url
 				  (file-name-directory file)))
-		      (cons 'name navi2ch-bm-board-name-from-file)))
+		      (cons 'name navi2ch-board-name-from-file)))
 	 (article (list (cons 'artid (file-name-sans-extension
 				      (file-name-nondirectory file)))))
          (buf-name (navi2ch-article-get-buffer-name board article)))
@@ -561,13 +557,12 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
       (setq navi2ch-article-current-board board
-            navi2ch-article-current-article article
-            navi2ch-article-from-file-p t)
+            navi2ch-article-current-article article)
       (when navi2ch-article-auto-range
         (setq navi2ch-article-view-range
               navi2ch-article-new-message-range))
       (prog1
-	  (navi2ch-article-sync-from-file file)
+	  (navi2ch-article-sync-from-file board article)
 	(navi2ch-article-set-mode-line)
 	(navi2ch-article-mode)))))
 
@@ -636,7 +631,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   "スレを更新する。force なら強制。
 first が nil ならば、ファイルが更新されてなければ何もしない"
   (interactive "P")
-  (when (not navi2ch-article-from-file-p)
+  (when (not (navi2ch-board-from-file-p navi2ch-article-current-board))
     (run-hooks 'navi2ch-article-before-sync-hook)
     (let* ((list navi2ch-article-message-list)
            (article navi2ch-article-current-article)
@@ -775,18 +770,20 @@ state はあぼーんされてれば aborn というシンボル。
 	    (setq article (navi2ch-put-alist 'kako t article))))))
     (list article state)))
 
-(defun navi2ch-article-sync-from-file (file)
-  "スレを FILE から更新する。"
-  (when (and navi2ch-article-from-file-p
-	     (file-exists-p file))
-    (let ((list (navi2ch-article-get-message-list file))
-	  (range navi2ch-article-view-range)
-	  (buffer-read-only nil))
-      (erase-buffer)
-      (navi2ch-article-insert-messages list range)
-      (prog1
-	  (setq navi2ch-article-message-list list)
-	(navi2ch-article-goto-number 1)))))
+(defun navi2ch-article-sync-from-file ()
+  "from-file なスレを更新する。"
+  (let ((file (navi2ch-article-get-file-name navi2ch-article-current-board
+					     navi2ch-article-current-article)))
+    (when (and (navi2ch-board-from-file-p navi2ch-article-current-board)
+	       (file-exists-p file))
+      (let ((list (navi2ch-article-get-message-list file))
+	    (range navi2ch-article-view-range)
+	    (buffer-read-only nil))
+	(erase-buffer)
+	(navi2ch-article-insert-messages list range)
+	(prog1
+	    (setq navi2ch-article-message-list list)
+	  (navi2ch-article-goto-number 1))))))
 
 (defun navi2ch-article-set-mode-line ()
   (let ((article navi2ch-article-current-article)
@@ -875,7 +872,7 @@ state はあぼーんされてれば aborn というシンボル。
 (defun navi2ch-article-save-info (&optional board article first)
   (let (ignore alist)
     (when (eq major-mode 'navi2ch-article-mode)
-      (if navi2ch-article-from-file-p
+      (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
 	  (setq ignore t)
 	(when (and navi2ch-article-message-list (not first))
 	  (navi2ch-article-save-number))
@@ -896,7 +893,7 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-load-info (&optional board article)
   (let (ignore alist)
-    (if navi2ch-article-from-file-p
+    (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
 	(setq ignore t)
       (or board (setq board navi2ch-article-current-board))
       (or article (setq article navi2ch-article-current-article)))
@@ -909,7 +906,7 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-write-message (&optional sage)
   (interactive)
-  (when (not navi2ch-article-from-file-p)
+  (when (not (navi2ch-board-from-file-p navi2ch-article-current-board))
     (navi2ch-article-save-number)
     (navi2ch-message-write-message navi2ch-article-current-board
                                    navi2ch-article-current-article

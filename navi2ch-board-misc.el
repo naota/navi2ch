@@ -189,8 +189,7 @@
   (let* ((article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item))
 	 (point (point))
-	 (state (cond ((string= (cdr (assq 'name board))
-				navi2ch-bm-board-name-from-file)
+	 (state (cond ((navi2ch-board-from-file-p board)
 					; navi2ch-article-check-cached で処理すべきか。
 		       (cond ((get-buffer (navi2ch-article-get-buffer-name
 					   board article))
@@ -270,8 +269,7 @@
 	  (navi2ch-split-window 'article)
 	  (let (state)
 	    (setq state
-		  (if (string= (cdr (assq 'name board))
-			       navi2ch-bm-board-name-from-file)
+		  (if (navi2ch-board-from-file-p board)
 		      (navi2ch-article-view-article-from-file
 		       (navi2ch-article-get-file-name board article))
 		    (navi2ch-article-view-article
@@ -369,8 +367,7 @@
          (article (navi2ch-bm-get-article-internal item))
          state)
     (if (and article
-	     (not (string= (cdr (assq 'name board))
-			   navi2ch-bm-board-name-from-file)))
+	     (not (navi2ch-board-from-file-p board)))
 	(progn
 	  (setq state (navi2ch-article-fetch-article board article))
 	  (when state

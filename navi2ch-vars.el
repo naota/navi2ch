@@ -306,7 +306,7 @@ non-nil ならば expire する。"
   :type 'boolean
   :group 'navi2ch-board)
   
-(defcustom navi2ch-bm-board-name-from-file "From File"
+(defcustom navi2ch-board-name-from-file "From File"
   "*ファイルから読み込んだスレを表わす板名。"
   :type 'string
   :group 'navi2ch-board)
