@@ -1,3 +1,7 @@
+2003-08-31  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (lisp_LISP): navi2ch-futaba.el を追加。
+
 2003-08-30  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-oyster.el : スレの何方かが提供してくださったSESSION-ID取得を
