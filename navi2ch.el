@@ -59,8 +59,7 @@
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
     (when (file-exists-p navi2ch-update-file)
       (load-file navi2ch-update-file))
-    (when (file-exists-p navi2ch-init-file)
-      (load-file navi2ch-init-file))
+    (load navi2ch-init-file t)
     (if navi2ch-auto-update
 	(navi2ch-update))
     (add-hook 'kill-emacs-hook 'navi2ch-save-status)

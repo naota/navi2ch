@@ -95,7 +95,7 @@
 
 (defcustom navi2ch-init-file (concat
                               (file-name-as-directory navi2ch-directory)
-                              "init.el")
+                              "init")
   "*navi2ch の初期化ファイル。"
   :type 'file
   :group 'navi2ch)
