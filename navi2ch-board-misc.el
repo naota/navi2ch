@@ -215,7 +215,9 @@
 		      (t
 		       (navi2ch-article-check-cached board article))))
 	 ;; for contrib/izonmoji-mode.el
-	 (buffer-display-table (if (and (boundp 'izonmoji-mode) izonmoji-mode)
+	 (buffer-display-table (if (or (not (boundp 'buffer-display-table))
+				       (and (boundp 'izonmoji-mode)
+					    izonmoji-mode))
 				   nil
 				 buffer-display-table)))
     (unless subject (setq subject navi2ch-bm-empty-subject))
