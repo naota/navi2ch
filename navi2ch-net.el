@@ -46,7 +46,7 @@
     (kako . "X-Navi2ch-Kako")		; 過去ログになってる
     (not-updated . "X-Navi2ch-Not-Updated") ; 更新されていない
     (error . "X-Navi2ch-Error"))	; エラー(ファイルが取得できないとか)
-  
+
   "STATE のシンボルと 実際にヘッダに書かれる文字列の alist")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
@@ -384,6 +384,11 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 	       other-header)))
        (message "checking file...")
        (setq status (navi2ch-net-get-status proc))
+       (when (and (string= status "416")
+		  (assoc "Range" other-header))
+	 (let ((elt (assoc "Range" other-header)))
+	   (setq other-header (delq elt other-header)
+		 status nil)))
        (unless status
 	 (message "retrying...")
 	 (sit-for 3)))			; リトライする前にちょっと待つ

@@ -1,3 +1,10 @@
+2002-11-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-download-file): HTTP status code
+	"416 Requested Range Not Satisfiable" に対応してみた。
+	とりあえず動作未検証ですけど。。。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/723
+
 2002-11-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-goto-number): スレ内にレスが
@@ -38,7 +45,7 @@
 
 2002-11-01  SAITO Takuya  <tabmore@users.sourceforge.net>
 
-	* navi2ch-board.el (navi2ch-board-get-matched-article): 
+	* navi2ch-board.el (navi2ch-board-get-matched-article):
 	subject の最初と最後の空白をけずる。
 	(navi2ch-board-get-subject-list): subject 途中の空白を圧縮しない。
 
@@ -101,7 +108,7 @@
 	"Q"        `navi2ch-popup-article-exit-and-goto-number'
 	をバインド。
 	(navi2ch-popup-article-exit-and-goto-number): 新関数。
-	(navi2ch-popup-article-mode): post-command-hook に 
+	(navi2ch-popup-article-mode): post-command-hook に
 	`navi2ch-article-display-link-minibuffer' を add-hook。
 	(navi2ch-popup-article): 存在しない範囲に対する参照に対処。
 	(navi2ch-popup-article-select-current-link): 新関数。
@@ -196,7 +203,7 @@
 
 	送信履歴保存機能を実装。
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): 
+	* navi2ch-article.el (navi2ch-article-set-link-property):
 	navi2ch-article-url-regexpの変更に追従。
 
 	* navi2ch-localfile.el (navi2ch-localfile-article-to-url):
@@ -255,11 +262,11 @@
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-board-update): 新関数。
 	(navi2ch-js-func-alist): board-update を追加。順番を変更。
-	
+
 	* navi2ch-machibbs.el (navi2ch-machibbs-board-update): 新関数。
 	(navi2ch-machibbs-func-alist): board-update を追加。
 	http://pc.2ch.net/test/read.cgi/unix/1031231315/480
-	
+
 2002-10-17  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el (navi2ch-article-through-ask-n-or-p-p):
@@ -291,7 +298,7 @@
 	(navi2ch-net-update-file-diff): 同上。
 	(navi2ch-net-update-file-with-readcgi): 同上。ただし、過去ログ倉庫
 	で発見のときは kako を返す。
-	
+
 
 	* navi2ch-multibbs.el (navi2ch-2ch-article-update): kako を付ける
 	ときの条件を変える。
@@ -356,7 +363,7 @@
 
 2002-10-13  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section): 
+	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section):
 	XEmacs で detect-decoding-region が coding system を一つしか返さな
 	かったときに対応。
 	なんで list で返してくれないんだー。
@@ -409,12 +416,12 @@
 
 2002-10-10  SAITO Takuya  <tabmore@users.sourceforge.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject):
 	navi2ch-ifxemacs を使って書き替え。
 
 2002-10-10  SAITO Takuya  <tabmore@users.sourceforge.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject):
 	XEmacs では buffer-display-table を使わないように。
 
 2002-10-10  mami  <mami@users.sourceforge.net>
@@ -480,17 +487,17 @@
 	たんで修正。
 	<http://pc.2ch.net/test/read.cgi/unix/1031231315/341>
 
-	* navi2ch-localfile.el (navi2ch-localfile-encode-html-tag-alist): 
+	* navi2ch-localfile.el (navi2ch-localfile-encode-html-tag-alist):
 	"<" が "&gt;"、">" が "&lt;" になってたので修正。
 	<http://pc.2ch.net/test/read.cgi/unix/1031231315/337>
-	
-	
+
+
 2002-10-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	multibbs-module で差分取得をできるようにしてみる。
 	一応 bofore_multibbs_diff タグを付けた。
 	ちょいと ad-hoc な気もするけどまぁ OK でしょう。
-	
+
 	* navi2ch-oyster.el (navi2ch-oyster-article-update): 引数に start
 	を取るように。
 	(navi2ch-oyster-get-offlaw-url): インデントを直してみる。
@@ -506,7 +513,7 @@
 	diff が non-nil ならば subject は取得しない。
 	(navi2ch-machibbs-article-callback-diff): 新関数。
 	navi2ch-machibbs-article-callback を引数付きで呼ぶだけ。
-	
+
 	* navi2ch-jbbs-shitaraba.el: 差分取得対応。
 	(navi2ch-js-article-update): 引数 start を取るように。
 	start が non-nil ならば navi2ch-js-article-callback-diff を使う。
@@ -589,7 +596,7 @@
 
 2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	navi2ch-net(upload|download)-* が header を返すのと 
+	navi2ch-net(upload|download)-* が header を返すのと
 	'(header state) を返すのの2種類あるのが前からちょっと嫌だったので、
 	あぼーんとか過去ログの状態をヘッダに突っこむようにした。
 	一応この直前に、before_state_in_header タグを打ちますた。
@@ -600,7 +607,7 @@
 	* navi2ch-machibbs.el (navi2ch-machibbs-article-update): 同上。
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-update): 同上。
 	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-update): 同上。
-	
+
 	* navi2ch-board.el (navi2ch-board-sync):
 	navi2ch-net-(add|get)-state を使うように。
 
