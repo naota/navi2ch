@@ -1,3 +1,11 @@
+2002-12-28  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-which): 拡張子 ".exe" をつけたものも探す。
+
+	* navi2ch-message.el (navi2ch-message-header-end): 新関数。
+	(navi2ch-message-cleanup-message): ↑を使用。
+	(navi2ch-message-send-message): 同上。
+
 2002-12-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-multibbs.el (navi2ch-2ch-url-to-article): 記事 ID が10桁
