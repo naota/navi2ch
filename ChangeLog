@@ -1,3 +1,9 @@
+2002-06-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-e21.el: 文字コードを ISO-2022-JP に変更。
+	* navi2ch-mona.el: 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/128
+
 2002-06-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-move-mark-article): 新関数。

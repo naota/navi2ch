@@ -3,10 +3,10 @@
 ;; Copyright (C) 2001 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
-;; 431 ¤ÎÌ¾Ìµ¤·¤µ¤ó
-;; 874 ¤ÎÌ¾Ìµ¤·¤µ¤ó
+;; 431 $B$NL>L5$7$5$s(B
+;; 874 $B$NL>L5$7$5$s(B
 ;; UEYAMA Rui <rui314159@users.sourceforge.net>
-;; part5 ¥¹¥ì¤Î 26, 45 ¤µ¤ó
+;; part5 $B%9%l$N(B 26, 45 $B$5$s(B
 
 ;; The part of find-face is originated form apel (poe.el).
 ;; You can get the original apel from <ftp://ftp.m17n.org/pub/mule/apel>.
@@ -33,8 +33,8 @@
 
 ;;; Commentary:
 
-;; custom ¤ò»È¤Ã¤Æ M-x customize-group navi2ch-mona ¤«¤é
-;; ÀßÄê¤¹¤ë¤È¥é¥¯¥Á¥ó¡£
+;; custom $B$r;H$C$F(B M-x customize-group navi2ch-mona $B$+$i(B
+;; $B@_Dj$9$k$H%i%/%A%s!#(B
 
 ;;; Code:
 (provide 'navi2ch-mona)
@@ -49,16 +49,16 @@
 (make-face 'navi2ch-mona14-face)
 (make-face 'navi2ch-mona16-face)
 
-;; ¥«¥¹¥¿¥Þ¥¤¥ºÊÑ¿ô¤Î defcustom ¤ËÉ¬Í×¤Ê´Ø¿ô
+;; $B%+%9%?%^%$%:JQ?t$N(B defcustom $B$KI,MW$J4X?t(B
 (defun navi2ch-mona-create-fontset-from-family-name (family-name height)
-  "navi2ch ¤¬É¬Í×¤È¤¹¤ë¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ê¡¢¤½¤ÎÌ¾Á°¤òÊÖ¤¹¡£
+  "navi2ch $B$,I,MW$H$9$k%U%)%s%H%;%C%H$r:n$j!"$=$NL>A0$rJV$9!#(B
 
-FAMILY-NAME ¤Ï \"foundry-family\" ¤«¤é¤Ê¤ëÊ¸»úÎó¡£HEIGHT ¤Ï pixelsize¡£
+FAMILY-NAME $B$O(B \"foundry-family\" $B$+$i$J$kJ8;zNs!#(BHEIGHT $B$O(B pixelsize$B!#(B
 
-XEmacs ¤Ç¤ÏÌÀ¼¨Åª¤Ë¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ëÉ¬Í×¤¬¤Ê¤¤¤Î¤Ç¡¢
-¥Õ¥©¥ó¥È¥»¥Ã¥ÈÌ¾¤È¤·¤Æ°ÕÌ£¤Î¤¢¤ëÊ¸»úÎó
+XEmacs $B$G$OL@<(E*$K%U%)%s%H%;%C%H$r:n$kI,MW$,$J$$$N$G!"(B
+$B%U%)%s%H%;%C%HL>$H$7$F0UL#$N$"$kJ8;zNs(B
  \"-<FAMILY-NAME>-medium-r-*--<height>-*-*-*-p-*-*-*\"
-¤òÊÖ¤¹¤À¤±¡£"
+$B$rJV$9$@$1!#(B"
   (let ((fontset-name (format "-%s-medium-r-*--%d-*-*-*-p-*-*-*"
                               family-name height)))
     (cond (navi2ch-on-xemacs
@@ -100,30 +100,30 @@ XEmacs ¤Ç¤ÏÌÀ¼¨Åª¤Ë¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ëÉ¬Í×¤¬¤Ê¤¤¤Î¤Ç¡¢
 
 ;; Customizable variables.
 (defcustom navi2ch-mona-enable-board-list nil
-  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ÇÉ½¼¨¤¹¤ëÈÄ¤Î¥ê¥¹¥È¡£"
-  :type '(repeat (string :tag "ÈÄ"))
+  "*$B%b%J!<%U%)%s%H$GI=<($9$kHD$N%j%9%H!#(B"
+  :type '(repeat (string :tag "$BHD(B"))
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-disable-board-list nil
-  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤ï¤Ê¤¤ÈÄ¤Î¥ê¥¹¥È¡£"
-  :type '(repeat (string :tag "ÈÄ"))
+  "*$B%b%J!<%U%)%s%H$r;H$o$J$$HD$N%j%9%H!#(B"
+  :type '(repeat (string :tag "$BHD(B"))
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-pack-space-p nil
-  "*non-nil ¤Ê¤é¡¢Web ¥Ö¥é¥¦¥¶¤Î¤è¤¦¤Ë2¤Ä°Ê¾å¤Î¶õÇò¤Ï1¤Ä¤Ë¤Þ¤È¤á¤ÆÉ½¼¨¤¹¤ë¡£"
+  "*non-nil $B$J$i!"(BWeb $B%V%i%&%6$N$h$&$K(B2$B$D0J>e$N6uGr$O(B1$B$D$K$^$H$a$FI=<($9$k!#(B"
   :type 'boolean
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-font-family-name "mona-gothic"
-  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤È¤·¤Æ»È¤¦¥Õ¥©¥ó¥È¤Î family Ì¾¡£
-XLFD ¤Ç¤¤¤¦ \`foundry-family\' ¤ò»ØÄê¤¹¤ë¡£Í×¤¹¤ë¤Ë X ¤Ç¤Î
-¥Õ¥©¥ó¥ÈÌ¾¤ÎºÇ½é¤Î2¥Õ¥£¡¼¥ë¥É¤ò½ñ¤±¤Ð¤¤¤¤¤Ã¤Æ¤³¤Ã¤¿¡£
+  "*$B%b%J!<%U%)%s%H$H$7$F;H$&%U%)%s%H$N(B family $BL>!#(B
+XLFD $B$G$$$&(B \`foundry-family\' $B$r;XDj$9$k!#MW$9$k$K(B X $B$G$N(B
+$B%U%)%s%HL>$N:G=i$N(B2$B%U%#!<%k%I$r=q$1$P$$$$$C$F$3$C$?!#(B
 
-XEmacs ¤Ç¤Ï¡¢»ØÄê¤µ¤ì¤¿ family ¤ËÂÐ¤·¤Æ pixelsize: 12/14/16
-¤Î 3¤Ä¤Î¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ë¡£
+XEmacs $B$G$O!";XDj$5$l$?(B family $B$KBP$7$F(B pixelsize: 12/14/16
+$B$N(B 3$B$D$N%U%)%s%H%;%C%H$r:n$k!#(B
 
-Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
-¤¿¤È¤¨¤Ð°ú¿ô \`moga-gothic\' ¤¬¤ï¤¿¤µ¤ì¤ë¤È¡¢
+Emacs 21 $B$G$O!"$=$l$K2C$($F(B medium/bold $B$J%U%)%s%H$rJL!9$K:n$k!#(B
+$B$?$H$($P0z?t(B \`moga-gothic\' $B$,$o$?$5$l$k$H!"(B
 
  -mona-gothic-medium-r-*--12-*-*-*-*-*-fontset-mona12
  -mona-gothic-medium-r-*--14-*-*-*-*-*-fontset-mona14
@@ -132,15 +132,15 @@ Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
  -mona-gothic-bold-r-*--14-*-*-*-*-*-fontset-mona14
  -mona-gothic-bold-r-*--16-*-*-*-*-*-fontset-mona16
 
-¤È¤¤¤¦ 6 ¤Ä¤Î¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ë¤³¤È¤Ë¤Ê¤ë¡£
+$B$H$$$&(B 6 $B$D$N%U%)%s%H%;%C%H$r:n$k$3$H$K$J$k!#(B
 
-Ê¸»ú¤Î¤«¤ï¤ê¤Ë¥È¡¼¥Õ¤¬É½¼¨¤µ¤ì¤Á¤ã¤¦¤Î¤Ï¡¢¤¿¤Ö¤ó¥Õ¥©¥ó¥È¤¬
-¸«¤Ä¤«¤é¤Ê¤«¤Ã¤¿¤»¤¤¤Ê¤Î¤Ç¡¢\`xlsfonts\' ¤ò¼Â¹Ô¤·¤Æ
+$BJ8;z$N$+$o$j$K%H!<%U$,I=<($5$l$A$c$&$N$O!"$?$V$s%U%)%s%H$,(B
+$B8+$D$+$i$J$+$C$?$;$$$J$N$G!"(B\`xlsfonts\' $B$r<B9T$7$F(B
 
--<»ØÄê¤·¤¿Ê¸»úÎó>-{medium,bold}-r-*--{12,14,16}-*-*\\
+-<$B;XDj$7$?J8;zNs(B>-{medium,bold}-r-*--{12,14,16}-*-*\\
 -*-*-*-{iso8859-1,jisx0201.1976-0,jisx0208.(1983|1990)-0}
 
-¤¬¤¢¤ë¤«¤É¤¦¤«³Î¤«¤á¤Æ¤Í¡£"
+$B$,$"$k$+$I$&$+3N$+$a$F$M!#(B"
   :type '(choice (string :tag "family name")
 		 (string :tag "Mona fonts"
 			 :value "mona-gothic")
@@ -160,7 +160,7 @@ Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
   :group 'navi2ch-mona)
 
 (defconst navi2ch-mona-sample-string
-  (concat "¥µ¥ó¥×¥ë¥Æ¥­¥¹¥È¥²¥Ã¥È¥©¡ª¡ª ¤Ò¤é¤¬¤Ê¡¢¥«¥¿¥«¥Ê¡¢Roman Alphabet¡£\n"
+  (concat "$B%5%s%W%k%F%-%9%H%2%C%H%)!*!*(B $B$R$i$,$J!"%+%?%+%J!"(BRoman Alphabet$B!#(B\n"
           (decode-coding-string
            (base64-decode-string
 	    (concat
@@ -171,7 +171,7 @@ Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
 	   'shift_jis)))
 
 (defcustom navi2ch-mona-face-variable t
-  "*¥Ç¥Õ¥©¥ë¥È¤Î Mona face ¤òÁª¤Ö¡£"
+  "*$B%G%U%)%k%H$N(B Mona face $B$rA*$V!#(B"
   :type `(radio (const :tag "navi2ch-mona16-face"
                        :sample-face navi2ch-mona16-face
                        :doc ,navi2ch-mona-sample-string
@@ -187,7 +187,7 @@ Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
                        :doc ,navi2ch-mona-sample-string
                        :format "%t:\n%{%d%}\n"
                        navi2ch-mona12-face)
-                (const :tag "¥Ç¥Õ¥©¥ë¥È¤Î¥Õ¥©¥ó¥È¤ÈÆ±¤¸¥µ¥¤¥º¤Î face ¤ò¼«Æ°ÁªÂò¤¹¤ë"
+                (const :tag "$B%G%U%)%k%H$N%U%)%s%H$HF1$8%5%$%:$N(B face $B$r<+F0A*Br$9$k(B"
                        t))
   :set (function (lambda (symbol value)
                    (set-default symbol value)
@@ -232,8 +232,8 @@ nil is returned.  Otherwise the associated face object is returned."
       (navi2ch-set-face-parent 'navi2ch-mona-face parent))))
 
 (defun navi2ch-mona-put-face ()
-  "face ¤¬ÆÃ¤Ë»ØÄê¤µ¤ì¤Æ¤¤¤Ê¤¤ÉôÊ¬¤ò mona-face ¤Ë¤¹¤ë¡£
-`navi2ch-article-face' ¤ÎÉôÊ¬¤â mona-face ¤Ë¤¹¤ë¡£"
+  "face $B$,FC$K;XDj$5$l$F$$$J$$ItJ,$r(B mona-face $B$K$9$k!#(B
+`navi2ch-article-face' $B$NItJ,$b(B mona-face $B$K$9$k!#(B"
   (save-excursion
     (goto-char (point-min))
     (let (p face)
@@ -248,7 +248,7 @@ nil is returned.  Otherwise the associated face object is returned."
 	(goto-char p)))))
 
 (defun navi2ch-mona-pack-space ()
-  "Ï¢Â³¤¹¤ë2¤Ä°Ê¾å¤Î¶õÇò¤ò1¤Ä¤Ë¤Þ¤È¤á¤ë¡£"
+  "$BO"B3$9$k(B2$B$D0J>e$N6uGr$r(B1$B$D$K$^$H$a$k!#(B"
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward "^ +" nil t)
@@ -258,7 +258,7 @@ nil is returned.  Otherwise the associated face object is returned."
       (replace-match " "))))
 
 (defun navi2ch-mona-arrange-message ()
-  "¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦ÈÄ¤Ê¤é¤½¤Î¤¿¤á¤Î´Ø¿ô¤ò¸Æ¤Ö¡£"
+  "$B%b%J!<%U%)%s%H$r;H$&HD$J$i$=$N$?$a$N4X?t$r8F$V!#(B"
   (let ((id (cdr (assq 'id navi2ch-article-current-board))))
     (when (or (member id navi2ch-mona-enable-board-list)
 	      (and (not (member id navi2ch-mona-disable-board-list))
@@ -268,7 +268,7 @@ nil is returned.  Otherwise the associated face object is returned."
       (navi2ch-mona-pack-space))))
 
 (defun navi2ch-mona-setup ()
-  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦¤¿¤á¤Î¥Õ¥Ã¥¯¤òÄÉ²Ã¤¹¤ë¡£"
+  "*$B%b%J!<%U%)%s%H$r;H$&$?$a$N%U%C%/$rDI2C$9$k!#(B"
   (add-hook 'navi2ch-article-arrange-message-hook
 	    'navi2ch-mona-arrange-message))
 

@@ -24,7 +24,7 @@
 (provide 'navi2ch-e21)
 (require 'navi2ch)
 
-;;; °Ê²¼¡¢Wanderlust (wl-e21.el) ¤«¤é¤Û¤È¤ó¤É¥³¥Ô¥Ú¡£¤³¤ìºÇ¶¯¡£
+;;; $B0J2<!"(BWanderlust (wl-e21.el) $B$+$i$[$H$s$I%3%T%Z!#$3$l:G6/!#(B
 (add-hook 'navi2ch-hook 'navi2ch-offline-init-icons)
 
 (eval-when-compile
