@@ -1,3 +1,12 @@
+2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	WC 終わったので今更ですが。。。
+
+	* navi2ch-vars.el (navi2ch-list-board-id-alist): 新変数。
+
+	* navi2ch-list.el (navi2ch-list-board-id-from-url): 新関数。
+	(navi2ch-list-make-board-txt): 上記関数を使うように。
+
 2002-07-02  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): 引数の

@@ -461,6 +461,14 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
   (run-hooks 'navi2ch-list-after-sync-hook))
 
+(defun navi2ch-list-board-id-from-url (url)
+  "URL $B$+$i(B board-id $B$rF@$k!#(B"
+  (let ((board-id (cdr (assoc url navi2ch-list-board-id-alist))))
+    (or board-id
+	(save-match-data
+	  (if (string-match "\\`http://.+/\\([^/]+\\)/\\'" url)
+	      (match-string 1 url))))))
+
 (defun navi2ch-list-make-board-txt ()
   "bbstable.html $B$+$i(B (navi2ch $BMQ$N(B) board.txt $B$r:n$k(B
 `navi2ch-net-update-file' $B$N%O%s%I%i!#(B"
@@ -480,10 +488,12 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  (if (string-match "a" tag)
 	      (when (and (not ignore)
 			 (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
+			 (navi2ch-list-board-id-from-url (match-string 1 attr))
 			 (navi2ch-list-valid-board (match-string 1 attr)))
 		(insert cont "\n"
 			(match-string 1 attr) "\n"
-			(match-string 2 attr) "\n"))
+			(navi2ch-list-board-id-from-url (match-string 1 attr))
+			"\n"))
 	    (setq ignore
 		  (member (decode-coding-string
 			   cont navi2ch-coding-system)

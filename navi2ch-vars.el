@@ -201,6 +201,13 @@ nil ならば手動で更新しないかぎり取りにいかない。"
   :type 'regexp
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-board-id-alist
+  '(("http://yasai.2ch.net/sports/" . "wcliveb")
+    ("http://salami.2ch.net/dome/" . "wcliveo"))
+  "*板 URL から board-id への alist。"
+  :type '(repeat (cons (string :tag "URL") (string :tag "id")))
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。nil なら全部ダウンロードする。"
