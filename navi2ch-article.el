@@ -481,21 +481,27 @@ START, END, NOFIRST で範囲を指定する"
 	      (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
 		(setq url (replace-match "http\\2" nil nil url)))
 	      (navi2ch-article-set-link-property-subr start end 'url url))))
-	 (alist (append navi2ch-article-link-regexp-alist
-			`((,(concat navi2ch-article-number-prefix-regexp
-				    navi2ch-article-number-number-regexp)
-			   . ,number-func)
-			  (,navi2ch-article-url-regexp . ,url-func))))
-	 match)
+	 (alist (navi2ch-regexp-alist-to-number-alist
+		 (append
+		  navi2ch-article-link-regexp-alist
+		  (list (cons (concat navi2ch-article-number-prefix-regexp
+				      navi2ch-article-number-number-regexp)
+			      number-func)
+			(cons navi2ch-article-url-regexp
+			      url-func)))))
+	 match rep)
     (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
-      (if (functionp (cdr match))
-	  (funcall (cdr match))
-	(let ((start (match-beginning 0))
-	      (end (match-end 0))
-	      (url (navi2ch-match-string-no-properties 0)))
-	  (when (string-match (car match) url)
-	    (setq url (replace-match (cdr match) nil nil url))
-	    (navi2ch-article-set-link-property-subr start end 'url url)))))))
+      (setq rep (cdr match))
+      (cond ((functionp rep)
+	     (funcall rep pref-depth sep-depth))
+	    ((stringp rep)
+	     (let ((start (match-beginning 0))
+		   (end (match-end 0))
+		   (url (navi2ch-match-string-no-properties 0)))
+	       (when (string-match (concat "\\`" (car match) "\\'") url)
+		 (setq url (replace-match rep nil nil url))
+		 (navi2ch-article-set-link-property-subr
+		  start end 'url url))))))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))

@@ -664,11 +664,16 @@ ask なら明示的に移動する時以外なら質問する
 ;;    "http://home.jp.freebsd.org/cgi-bin/showmail/FreeBSD-users-jp/\\1"))
 ;; とかすれば、URL じゃない物にもリンクを貼れる。
 (defcustom navi2ch-article-link-regexp-alist
-  '(("<\\(UR[IL]:\\)?\\([^>]+\\)>" . "\\2"))
+  '(("<\\(UR[IL]:\\)?\\([^:>]+\\)>" . nil)
+    ("<\\(UR[IL]:\\)?\\([a-z][-+.0-9a-z]*:[^>]*\\)>" . "\\2"))
   "*各要素の car を正規表現とし、マッチしたテキストに cdr へのリンクを張る。
+cdr が nil の場合はリンクを貼らない。
+リストの先頭を優先し、同じ文字列には一度だけマッチする。
 navi2ch-article-url-regexp より優先される。"
   :type '(repeat (cons (regexp :tag "マッチする正規表現")
-		       (string :tag "置換する文字列")))
+		       (choice (const :tag "リンクを貼らない"
+				      :value nil)
+			       (string :tag "置換する文字列"))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-filter-list nil

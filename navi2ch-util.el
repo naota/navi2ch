@@ -1120,19 +1120,25 @@ This function is a cutdown version of cl-seq's one."
 (defun navi2ch-right-aligned-string= (s1 s2)
   (apply #'string= (navi2ch-right-align-strings s1 s2)))
 
+(defsubst navi2ch-regexp-alist-to-number-alist (regexp-alist)
+  (if (numberp (caar regexp-alist))
+      regexp-alist
+    (let ((n 1))
+      (mapcar (lambda (elt)
+		(let ((r (concat "\\(" (car elt) "\\)")))
+		  (prog1
+		      (list n r elt)
+		    (setq n (+ n (regexp-opt-depth r))))))
+	      regexp-alist))))
+
 (defsubst navi2ch-match-regexp-alist-subr (match-function regexp-alist)
-  "REGEXP-ALIST 各要素の car を正規表現とし、MATCH-FUNCTION を呼び出す。
+  "REGEXP-ALIST の各要素の car を正規表現とし、MATCH-FUNCTION を呼び出す。
 マッチした要素を返す。
 REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
-back reference は有効に動作しない。"
-  (let* ((number-alist
-	  (let ((n 1))
-	    (mapcar (lambda (elt)
-		      (let ((r (concat "\\(" (car elt) "\\)")))
-			(prog1
-			    (list n r elt)
-			  (setq n (+ n (regexp-opt-depth r))))))
-		    regexp-alist)))
+back reference は有効に動作しない。
+`navi2ch-regexp-alist-to-number-alist' を使用して REGEXP-ALIST を
+あらかじめ内部形式に変換しておくことも可能。"
+  (let* ((number-alist (navi2ch-regexp-alist-to-number-alist regexp-alist))
 	 (number-list (mapcar #'car number-alist))
 	 (combined-regexp (mapconcat #'cadr number-alist "\\|")))
     (when (funcall match-function combined-regexp)
@@ -1145,8 +1151,7 @@ back reference は有効に動作しない。"
   (regexp-alist &optional bound noerror count)
   "REGEXP-ALIST の各要素の car を正規表現とし、`re-search-forward' を呼び出す。
 `match-data' をマッチした正規表現の物にし、マッチした要素を返す。
-REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
-back reference は有効に動作しない。
+REGEXP-ALIST については `navi2ch-match-regexp-alist-subr' を参照。
 BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
   (let* ((p (point))
 	 (matched-elt (navi2ch-match-regexp-alist-subr
@@ -1159,10 +1164,9 @@ BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
     matched-elt))
 
 (defun navi2ch-string-match-regexp-alist (regexp-alist string &optional start)
-  "REGEXP-ALIST の key を正規表現とし、`string-match' を呼び出す。
+  "REGEXP-ALIST の各要素の car を正規表現とし、`string-match' を呼び出す。
 `match-data' をマッチした正規表現の物にし、マッチした要素を返す。
-REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
-back reference は有効に動作しない。
+REGEXP-ALIST については `navi2ch-match-regexp-alist-subr' を参照。
 START は `string-match' にそのまま渡される。"
   (let ((matched-elt (navi2ch-match-regexp-alist-subr
 		      (lambda (regexp)
@@ -1176,12 +1180,12 @@ START は `string-match' にそのまま渡される。"
   "REGEXP-ALIST の各要素の car を正規表現とし、cdr で置き換える。
 cdr が文字列の場合はそれ自身と、関数の場合はマッチした正規表現を引数
 として呼び出した結果と置き換える。
-REGEXP-ALIST 中の正規表現は連結されるため、正規表現中の \\数字等の
-back reference は有効に動作しない。
+REGEXP-ALIST については `navi2ch-match-regexp-alist-subr' を参照。
 FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
-  (let (elt rep)
+  (let ((number-alist (navi2ch-regexp-alist-to-number-alist regexp-alist))
+	elt rep)
     (while (setq elt
-		 (navi2ch-re-search-forward-regexp-alist regexp-alist nil t))
+		 (navi2ch-re-search-forward-regexp-alist number-alist nil t))
       (setq rep (cdr elt))
       (replace-match (cond ((stringp rep) rep)
 			   ((functionp rep) (funcall rep (car elt)))

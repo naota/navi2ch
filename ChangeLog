@@ -1,3 +1,20 @@
+2004-04-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-goto-url): デフォルト値として、カーソル下の
+	URL プロパティを使用。
+
+	* navi2ch-article.el (navi2ch-article-set-link-property):
+	regexp-alist をあらかじめ内部形式に変換しておく。
+	置換先が nil の場合は何もしない。
+
+	* navi2ch-util.el (navi2ch-regexp-alist-to-number-alist): 新関数。
+	(navi2ch-match-regexp-alist-subr): 上記関数を使用。
+	(navi2ch-replace-regexp-alist): regexp-alist をあらかじめ内部形式
+	に変換しておく。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): <> の間に
+	「:」を含まない文字列は URL を見なさない。
+
 2004-04-03  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): 複数の正
