@@ -31,8 +31,7 @@
 (unless navi2ch-message-aa-map
   (let ((map (make-sparse-keymap "Type ? for further options")))
     ;; define-key で t にマップできないので。。。
-    (setcdr map (cons '(t . navi2ch-message-self-insert-aa)
-		      (cdr map)))
+    (navi2ch-set-keymap-default-binding map 'navi2ch-message-self-insert-aa)
     (define-key map "?" 'navi2ch-message-insert-aa)
     (setq navi2ch-message-aa-map map)))
 
@@ -307,9 +306,9 @@
 (defun navi2ch-message-self-insert-aa ()
   "最後入力したキーにしたがって AA を入力する。"
   (interactive)
-  (let ((event last-command-event) aa)
-    (if (and (char-valid-p event)
-	     (setq aa (cdr (assoc (string last-command-event)
+  (let ((char last-command-char) aa)
+    (if (and (navi2ch-char-valid-p char)
+	     (setq aa (cdr (assoc (string last-command-char)
 				  (append navi2ch-message-aa-alist
 					  navi2ch-message-aa-default-alist)))))
 	(insert aa)

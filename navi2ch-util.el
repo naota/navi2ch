@@ -29,12 +29,13 @@
 
 (require 'navi2ch-vars)
 
-(unless (and (fboundp 'base64-encode-region)
-	     (fboundp 'base64-decode-region))
-  (cond ((locate-library "mel")
-	 (require 'mel))
-	((locate-library "base64")
-	 (require 'base64))))
+(eval-and-compile
+  (unless (and (fboundp 'base64-encode-region)
+	       (fboundp 'base64-decode-region))
+    (cond ((locate-library "mel")
+	   (require 'mel))
+	  ((locate-library "base64")
+	   (require 'base64)))))
 
 (defvar navi2ch-mode-line-identification nil)
 (make-variable-buffer-local 'navi2ch-mode-line-identification)
@@ -663,6 +664,21 @@ properties to add to the result"
   (prog1
       (setq string (copy-sequence string))
     (add-text-properties 0 (length string) properties string)))
+
+(defun navi2ch-set-keymap-default-binding (map command)
+  "キーマップのデフォルトバインドを設定する。"
+  (funcall (if (fboundp 'set-keymap-default-binding)
+	       'set-keymap-default-binding
+	     (lambda (map command)
+	       (setcdr map (cons (cons t command) (cdr map)))
+	       command))
+	   map command))
+
+(defun navi2ch-char-valid-p (obj)
+  "オブジェクトがキャラクタかどうか調べる。"
+  (funcall (if (featurep 'xemacs)
+	       'characterp
+	     'char-valid-p) obj))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
