@@ -1,5 +1,8 @@
 2003-01-10  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-replace-html-tag-alist): <hr> を追加。
+	tomato 対策。
+
 	* navi2ch-article.el (navi2ch-article-goto-number-or-board): 飛び
 	先がレス番号かどうかの判定を厳しく。
 	21oversea 板に飛べなかったので。
