@@ -462,15 +462,21 @@ state はあぼーんされてれば aborn というシンボル。"
 		((string= status "206")
 		 (message "%s: getting file diff..." (current-message))
 		 (setq cont (navi2ch-net-get-content proc))
-		 (if (and (> size 0)
-			  (not (= (aref cont 0) ?\n)))
-		     (setq aborn-flag t) ; \n で始まってない場合はあぼーん
-		   (with-temp-file file
-		     (insert-file-contents file nil nil size)
-		     (goto-char (point-max))
-		     (insert cont))
-		   (message "%sdone" (current-message))
-		   (setq ret (list header nil))))
+		 (cond ((and (> size 0)
+			     (not (= (aref cont 0) ?\n)))
+			(setq aborn-flag t)) ; \n で始まってない場合はあぼーん
+		       ((string= cont "\n")
+			(message "%snot updated" (current-message))
+			(setq header (cons '("Not-Updated" . "yes")
+					   header))
+			(setq ret (list header nil)))
+		       (t
+			(with-temp-file file
+			  (insert-file-contents file nil nil size)
+			  (goto-char (point-max))
+			  (insert cont))
+			(message "%sdone" (current-message))
+			(setq ret (list header nil)))))
 		((string= status "200")
 		 (if (not (navi2ch-net-check-aborn size header))
 		     (setq aborn-flag t)

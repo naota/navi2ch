@@ -1,3 +1,8 @@
+2002-06-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-net.el (navi2ch-net-update-file-diff): 更新した内容が
+	"\n" だけだった場合は not-updated とするように。
+
 2002-06-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode): article モードのバッ
