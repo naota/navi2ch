@@ -163,6 +163,7 @@ Bookmark モード
 * Bookmark Mode Key Bindings::  Bookmark モードでのキーバインド
 * Article Mode Key Bindings::   Article モードでのキーバインド
 * Message Mode Key Bindings::   Message モードでのキーバインド
+z* Message Mode AA List::        Message モードでのアスキーアート一覧
 * Message Mode AA List::        Message モードでのアスキーアート一覧
 
 @end detailmenu
@@ -806,6 +807,7 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 * Article Mode Key Bindings::   Article モードでのキーバインド
 * Message Mode Key Bindings::   Message モードでのキーバインド
 z* Message Mode AA List::        Message モードでのアスキーアート一覧
+* Message Mode AA List::        Message モードでのアスキーアート一覧
 @end menu
 
 @node Global Key Bindings
