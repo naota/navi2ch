@@ -52,7 +52,6 @@
 (make-face 'navi2ch-mona14-face)
 (make-face 'navi2ch-mona16-face)
 
-(defvar navi2ch-mona-create-fontset nil)
 (eval-when-compile
   (navi2ch-defalias-maybe 'query-fontset 'ignore)
   (navi2ch-defalias-maybe 'new-fontset 'ignore))
@@ -69,8 +68,7 @@ XEmacs では明示的にフォントセットを作る必要がないので、
 を返すだけ。"
   (let ((fontset-name (format "-%s-medium-r-*--%d-*-*-*-p-*-*-*"
                               family-name height)))
-    (if (or navi2ch-on-xemacs
-	    (not navi2ch-mona-create-fontset))
+    (navi2ch-ifxemacs
 	fontset-name
       (let* ((fields (x-decompose-font-name fontset-name))
 	     (foundry (aref fields 0))

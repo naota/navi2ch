@@ -1,3 +1,8 @@
+2002-07-18  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-mona.el (navi2ch-mona-create-fontset): 削除。
+	(navi2ch-mona-create-fontset-from-family-name): 元に戻した。
+
 2002-07-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-to-url): 引数の
