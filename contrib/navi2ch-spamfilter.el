@@ -1,5 +1,6 @@
 ;;; navi2ch-spamfilter.el --- Navi2ch interface for spamfilter.el
 
+;; Copyright (C) 2003, 2004 by Navi2ch Project
 ;; Copyright (C) 2003 http://pc.2ch.net/test/read.cgi/unix/1065246418/38
 
 ;; Author: http://pc.2ch.net/test/read.cgi/unix/1065246418/38
