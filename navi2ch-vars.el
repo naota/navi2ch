@@ -795,6 +795,16 @@ window の幅いっぱいにしたいなら
   :type 'sexp
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-message-separator-insert-hide-number-p t
+  "*hide 情報をレスとレスの区切りに表示するか。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-separator-insert-trailing-newline-p t
+  "*レスの区切りの後にもう一個改行を表示するか。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 (defcustom navi2ch-article-auto-expunge nil
   "*non-nil なら、バッファとして保持するスレの数を
 `navi2ch-article-max-buffers' 以下に保つ。この制限値を超えたときには、

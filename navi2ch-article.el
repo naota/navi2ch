@@ -453,7 +453,10 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	  end beg)
       (setq end (previous-single-property-change (point) 'message-separator))
       (when end
-	(setq beg (previous-single-property-change end 'message-separator)))
+	(if (get-text-property (1- end) 'message-separator)
+	    (setq beg (previous-single-property-change end 'message-separator))
+	  (setq beg end)
+	  (setq end (next-single-property-change beg 'message-separator))))
       (when (and beg end)
 	(let ((number (get-text-property beg 'message-separator)))
 	  (goto-char beg)
@@ -464,8 +467,11 @@ BOARD non-nil ならば、その板の coding-system を使う。"
   "レス区切を挿入する。"
   (let ((p (point)))
     (funcall navi2ch-article-insert-message-separator-function)
-    (when (navi2ch-article-insert-hide-number-following number)
+    (when (and navi2ch-article-message-separator-insert-hide-number-p
+	       (navi2ch-article-insert-hide-number-following number))
       (funcall navi2ch-article-insert-message-separator-function))
+    (when navi2ch-article-message-separator-insert-trailing-newline-p
+      (insert "\n"))
     (put-text-property p (point) 'message-separator number)))
 
 (defun navi2ch-article-insert-hide-number-following (number)
@@ -611,8 +617,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
         (if navi2ch-article-auto-decode-p
             (navi2ch-article-auto-decode-encoded-section))
 	(navi2ch-article-arrange-message))))
-  (navi2ch-article-insert-message-separator num)
-  (insert "\n"))
+  (navi2ch-article-insert-message-separator num))
 
 (defun navi2ch-article-insert-messages (list range)
   "LIST を整形して挿入する。"

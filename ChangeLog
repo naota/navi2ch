@@ -1,3 +1,20 @@
+2005-02-08  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el
+	(navi2ch-article-update-previous-message-separator):
+	previous-single-property-change でいきなりセパレータの最初にいっちゃ
+	う場合があったので対処。
+	(navi2ch-article-insert-message-separator):
+	navi2ch-article-message-separator-insert-hide-number-p,
+	navi2ch-article-message-separator-insert-trailing-newline-p
+	を見るように。
+	(navi2ch-article-insert-message): 最後の改行入れるのを
+	navi2ch-article-insert-message-separator() に移す。
+
+	* navi2ch-vars.el
+	(navi2ch-article-message-separator-insert-hide-number-p): 新変数。
+	(navi2ch-article-message-separator-insert-trailing-newline-p): 同上。
+
 2005-02-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	http://pc5.2ch.net/test/read.cgi/unix/1106152504/68 の要望をかなえ
