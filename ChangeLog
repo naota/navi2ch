@@ -1,6 +1,11 @@
 2002-10-10  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
+	navi2ch-ifxemacs を使って書き替え。
+
+2002-10-10  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
 	XEmacs では buffer-display-table を使わないように。
 
 2002-10-10  mami  <mami@users.sourceforge.net>

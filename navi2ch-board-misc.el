@@ -213,24 +213,36 @@
 		      ((navi2ch-bm-fetched-article-p board article)
 		       'update)
 		      (t
-		       (navi2ch-article-check-cached board article))))
-	 ;; for contrib/izonmoji-mode.el
-	 (buffer-display-table (if (or (not (boundp 'buffer-display-table))
-				       (and (boundp 'izonmoji-mode)
-					    izonmoji-mode))
-				   nil
-				 buffer-display-table)))
+		       (navi2ch-article-check-cached board article)))))
     (unless subject (setq subject navi2ch-bm-empty-subject))
-    (insert (format (concat "%" (number-to-string navi2ch-bm-number-width) "d %s%s %s%s%s\n")
-                    number
-		    (cdr (assq updated navi2ch-bm-updated-mark-alist))
-		    (cadr (assq state navi2ch-bm-state-alist))
-                    subject
-                    (make-string (max (- navi2ch-bm-subject-width
-                                         (string-width subject))
-                                      1)
-                                 ? )
-                    other))
+    ;; for contrib/izonmoji-mode.el
+    (navi2ch-ifxemacs
+	(insert (format (concat "%" (number-to-string navi2ch-bm-number-width)
+				"d %s%s %s%s%s\n")
+			number
+			(cdr (assq updated navi2ch-bm-updated-mark-alist))
+			(cadr (assq state navi2ch-bm-state-alist))
+			subject
+			(make-string (max (- navi2ch-bm-subject-width
+					     (string-width subject))
+					  1)
+				     ? )
+			other))
+      (let ((buffer-display-table (if (and (boundp 'izonmoji-mode)
+					   izonmoji-mode)
+				      nil
+				    buffer-display-table)))
+	(insert (format (concat "%" (number-to-string navi2ch-bm-number-width)
+				"d %s%s %s%s%s\n")
+			number
+			(cdr (assq updated navi2ch-bm-updated-mark-alist))
+			(cadr (assq state navi2ch-bm-state-alist))
+			subject
+			(make-string (max (- navi2ch-bm-subject-width
+					     (string-width subject))
+					  1)
+				     ? )
+			other))))
     (navi2ch-bm-set-property point (1- (point)) item state updated)))
 
 (defun navi2ch-bm-exit ()
