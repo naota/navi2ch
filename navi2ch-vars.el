@@ -573,6 +573,16 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B aa $B$rF~NO$G$-$k!#(
   :type '(repeat (cons string string))
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-cleanup-trailing-whitespace nil
+  "*$B=q$-9~$`A0$K9TKv$N6uGr$r<h$j=|$/$+(B"
+  :type 'boolean
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-cleanup-trailing-newline nil
+  "*$B=q$-9~$`A0$KKvHx$N6u9T$r<h$j=|$/$+(B"
+  :type 'boolean
+  :group 'navi2ch-message)
+
 ;; net variables
 (defcustom navi2ch-net-http-proxy
   (if (string= (getenv "HTTP_PROXY") "")

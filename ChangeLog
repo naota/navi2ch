@@ -1,3 +1,18 @@
+2002-01-28  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-select-board):
+	navi2ch-board-current-board には load した board を入れておく。
+	(navi2ch-board-sync): 上記に伴いここでは load しない。
+	navi2ch-board-update-file がエラーになっても処理を続ける。
+	Bug#509248
+
+	* navi2ch-message.el (navi2ch-message-cleanup-message): 新関数。
+	(navi2ch-message-send-message): 上記関数を使うように。
+
+	* navi2ch-vars.el (navi2ch-message-cleanup-trailing-whitespace):
+	新変数。
+	(navi2ch-message-cleanup-trailing-newline): 新変数。
+
 2002-01-27  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el

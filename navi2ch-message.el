@@ -52,6 +52,7 @@
 (defvar navi2ch-message-current-board nil)
 (defvar navi2ch-message-new-message-p nil)
 (defvar navi2ch-message-window-configuration nil)
+(defvar navi2ch-message-header-separator "----------------\n")
 
 (defun navi2ch-message-write-message (board article &optional new sage)
   (if (and (get-buffer navi2ch-message-buffer-name)
@@ -110,13 +111,26 @@
 	      (or sage
 	      (cdr (assq 'mail navi2ch-message-current-article))
 	      navi2ch-message-mail-address "") "\n"
-	      "----------------\n"))
+	      navi2ch-message-header-separator))
+
+(defun navi2ch-message-cleanup-message ()
+  (save-excursion
+    (when navi2ch-message-cleanup-trailing-whitespace
+      (goto-char (point-min))
+      (when (re-search-forward navi2ch-message-header-separator nil t)
+	(while (re-search-forward "[ \t]+$" nil t)
+	  (replace-match ""))))
+    (when navi2ch-message-cleanup-trailing-newline
+      (goto-char (point-min))
+      (if (re-search-forward "[ \t\n]+\\'" nil t)
+	  (replace-match "")))))
 
 (defun navi2ch-message-send-message ()
   (interactive)
   (when (or (not navi2ch-message-ask-before-send)
             (y-or-n-p "send message?"))
     (run-hooks 'navi2ch-message-before-send-hook)
+    (navi2ch-message-cleanup-message)
     (save-excursion
       (let (subject from mail message)
         (goto-char (point-min))

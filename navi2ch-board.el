@@ -288,8 +288,8 @@
       (if (and (eq navi2ch-board-current-board board)
 	       (eq old-mode major-mode))
 	  (navi2ch-board-sync force)
-	(setq navi2ch-board-current-board board)
 	(run-hooks 'navi2ch-board-select-board-hook)
+	(setq navi2ch-board-current-board (navi2ch-board-load-info board))
 	(navi2ch-board-sync force 'first)))))
 
 (defun navi2ch-board-setup-menu ()
@@ -365,11 +365,13 @@
 		      board
 		      navi2ch-board-old-subject-file-name))
 	   time header)
-      (when first
-	(setq board (navi2ch-board-load-info board)))
       (unless navi2ch-offline
 	(navi2ch-board-save-old-subject-file board)
-	(setq header (navi2ch-board-update-file board))
+	(setq header (condition-case nil
+			 (navi2ch-board-update-file board)
+		       ((error quit)
+			(message "%sabort!" (current-message))
+			nil)))
 	(setq time (or (cdr (assoc "Last-Modified" header))
 		       (cdr (assoc "Date" header))))
 	(when time
