@@ -1,4 +1,5 @@
-EXTRA_DIST = navi2ch-logo.el gikope.el navi2ch-migemo.el
+EXTRA_DIST = gikope.el izonmoji-mode.el navi2ch-logo.el \
+	navi2ch-migemo.el navi2ch-track-mouse.el
 
 all:
 
