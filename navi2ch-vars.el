@@ -350,8 +350,8 @@ ask なら明示的に移動する時以外なら質問する
   "*parse するフィールドのリスト。
 遅くてもいいんなら '(data mail name) とかするといいかも"
   :type '(set (const :tag "記事" data)
-	       (const :tag "メール" mail)
-	       (const :tag "名前" name))
+	      (const :tag "メール" mail)
+	      (const :tag "名前" name))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-goto-number-recenter t
@@ -706,12 +706,18 @@ non-nil なら付加する。"
   :type 'boolean
   :group 'navi2ch)
 
-(defcustom navi2ch-icon-directory (if (fboundp 'locate-data-directory)
-                                      (locate-data-directory "navi2ch")
-                                    (let ((icons (expand-file-name "navi2ch/icons/"
-                                                                   data-directory)))
-                                      (if (file-directory-p icons)
-                                          icons)))
+(defcustom navi2ch-icon-directory
+  (cond ((fboundp 'locate-data-directory)
+	 (locate-data-directory "navi2ch"))
+	((let ((icons (expand-file-name "navi2ch/icons/"
+					data-directory)))
+	   (if (file-directory-p icons)
+	       icons)))
+	((let ((icons (expand-file-name "icons/"
+					(file-name-directory
+					 (locate-library "navi2ch")))))
+	   (if (file-directory-p icons)
+	       icons))))
   "* アイコンファイルが置かれたディレクトリ。nil ならアイコンを使わない。"
   :type '(choice (directory :tag "directory") (const :tag "nil" nil))
   :group 'navi2ch)

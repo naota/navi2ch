@@ -1,3 +1,9 @@
+2002-02-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-icon-directory): navi2ch.el があるディ
+	レクトリの下の icons も見るようにした。(working direcotyr に直接
+	load-path を通してる場合にもアイコンを使えるように。)
+
 2002-02-02  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-e21.el: 新規ファイル。GNU Emacs21 に依存したコードを
