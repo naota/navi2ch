@@ -654,8 +654,16 @@ ask なら明示的に移動する時以外なら質問する
 		 (const :tag "Auto" auto))
   :group 'navi2ch-article)
 
+;; <http://www.ietf.org/rfc/rfc2396.txt>
+;;       URI-reference = [ absoluteURI | relativeURI ] [ "#" fragment ]
+;;       uric          = reserved | unreserved | escaped
+;;       reserved      = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
+;;                       "$" | ","
+;;       unreserved    = alphanum | mark
+;;       mark          = "-" | "_" | "." | "!" | "~" | "*" | "'" |
+;;                       "(" | ")"
 (defcustom navi2ch-article-url-regexp
-  "\\(h?t?tps?\\|x-localbbs\\|ftp\\)\\(://[-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:;]+\\)"
+  "\\(h?t?tps?\\|x-localbbs\\|ftp\\)\\(://[-a-zA-Z0-9_.!~*'();/?:@&=+$,#]+\\)"
   "*レスのテキストのうち URL とみなす部分の正規表現。"
   :type 'regexp
   :group 'navi2ch-article)

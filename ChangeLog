@@ -5,6 +5,7 @@
 
 	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): docstring、
 	custom の設定を修正。
+	(navi2ch-article-url-regexp): RFC 2396 に準拠。
 
 2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
 
