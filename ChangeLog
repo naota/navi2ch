@@ -1,5 +1,11 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-wait-time): 1 秒だと更新されな
+	いことが多いので長くしてみた。
+
+	* navi2ch-message.el (navi2ch-message-send-message): wait を長くし
+	たら長くて不安になったのでメッセージを追加。
+
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map):
 	navich-bm-remove-article を `R' にバインド。
 	(navi2ch-bm-remove-article-subr): 新関数。

@@ -174,7 +174,9 @@
 	  (let ((spid (cdr result)))
 	    (if spid (navi2ch-board-save-spid board spid))
 	    (when (car result)
+	      (message "waiting new message...")
 	      (sleep-for navi2ch-message-wait-time)
+	      (message (current-message) "done")
 	      (save-excursion
 		(if navi2ch-message-new-message-p
 		    (progn
