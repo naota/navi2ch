@@ -429,18 +429,20 @@ START, END, NOFIRST で範囲を指定する"
 (defsubst navi2ch-article-set-link-property ()
   ">>1 とか http:// に property を付ける"
   (goto-char (point-min))
-  (while (re-search-forward (concat navi2ch-article-number-prefix-regexp
-				    navi2ch-article-number-number-regexp)
-			    nil t)
-    (navi2ch-article-set-link-property-subr
-     (match-beginning 0) (match-end 0)
-     'number (navi2ch-match-string-no-properties 1))
-    (while (looking-at (concat navi2ch-article-number-separator-regexp
-			       navi2ch-article-number-number-regexp))
+  (let ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
+	(sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp)))
+    (while (re-search-forward (concat navi2ch-article-number-prefix-regexp
+				      navi2ch-article-number-number-regexp)
+			      nil t)
       (navi2ch-article-set-link-property-subr
-       (match-beginning 1) (match-end 1)
-       'number (navi2ch-match-string-no-properties 1))
-      (goto-char (match-end 0))))
+       (match-beginning 0) (match-end 0)
+       'number (navi2ch-match-string-no-properties (1+ pref-depth)))
+      (while (looking-at (concat navi2ch-article-number-separator-regexp
+				 navi2ch-article-number-number-regexp))
+	(navi2ch-article-set-link-property-subr
+	 (match-beginning (1+ sep-depth)) (match-end (1+ sep-depth))
+	 'number (navi2ch-match-string-no-properties (1+ sep-depth)))
+	(goto-char (match-end 0)))))
   (goto-char (point-min))
   (while (re-search-forward navi2ch-article-url-regexp nil t)
     (let ((start (match-beginning 0))
@@ -655,55 +657,56 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-article-reinsert-partial-messages (start &optional end)
   "START 番目から、最後または END 番目までのレスを挿入しなおす。"
-  (let* ((nums (mapcar 'car navi2ch-article-message-list))
+  (let* ((nums (mapcar #'car navi2ch-article-message-list))
 	 (len (length nums))
-	 (last (apply 'max nums))
-	 list visible start-marker start-ins-type end-marker end-ins-type)
+	 (last (car (last nums)))
+	 list visible start-point end-point)
     (when (minusp start)
       (setq start (+ start last 1)))
-    (when end
+    (if (null end)
+	(setq end last)
       (when (minusp end)
 	(setq end (+ end last 1)))
       (when (> start end)
 	(setq start (prog1 end
 		      (setq end start)))))
-    (dolist (num (nreverse nums))
-      (when (and (>= num start)
-		 (if end (<= num end) t)
-		 (or navi2ch-article-hide-mode
-		     navi2ch-article-important-mode
-		     (navi2ch-article-inside-range-p num
-						     navi2ch-article-view-range
-						     len)))
-	(let ((msg (navi2ch-article-get-message num)))
-	  (when msg
-	    (setq list (cons (cons num msg) list))))))
+    (catch 'loop
+      (dolist (num (nreverse nums))
+	(cond
+	 ((< num start)
+	  (throw 'loop nil))
+	 ((and (<= num end)
+	       (or navi2ch-article-hide-mode
+		   navi2ch-article-important-mode
+		   (navi2ch-article-inside-range-p num
+						   navi2ch-article-view-range
+						   len)))
+	  (let ((slot (assq num navi2ch-article-message-list)))
+	    (when slot
+	      (setq list (cons slot list))))))))
     (if (null list)
 	(message "Out of view range")
       (setq visible (navi2ch-article-get-visible-numbers))
       (while (and visible
 		  (< (car visible) start))
 	(setq visible (cdr visible)))
-      (setq start-marker
-	    (if visible
-		(cdr (assq 'point (navi2ch-article-get-message (car visible))))
-	      (point-max-marker))
-	    start-ins-type (marker-insertion-type start-marker))
-      (set-marker-insertion-type start-marker nil)
+      (when visible
+	(setq start-point
+	      (cdr (assq 'point (navi2ch-article-get-message (car visible))))))
       (while (and visible
 		  (<= (car visible) end))
 	(setq visible (cdr visible)))
-      (setq end-marker
-	    (if visible
-		(cdr (assq 'point (navi2ch-article-get-message (car visible))))
-	      (point-max-marker))
-	    end-ins-type (marker-insertion-type end-marker))
-      (set-marker-insertion-type end-marker t)
-      (goto-char start-marker)
-      (delete-region start-marker end-marker)
+      (when visible
+	(setq end-point
+	      (cdr (assq 'point (navi2ch-article-get-message (car visible)))))
+	(set-marker-insertion-type end-point t))
+      (if (null start-point)
+	  (goto-char (point-max))
+	(goto-char start-point)
+	(delete-region start-point (or end-point (point-max))))
       (prog1 (navi2ch-article-insert-messages list nil)
-	(set-marker-insertion-type start-marker start-ins-type)
-	(set-marker-insertion-type end-marker end-ins-type)))))
+	(when end-point
+	  (set-marker-insertion-type end-point nil))))))
 
 (defun navi2ch-article-apply-message-filters (alist)
   (let (score)
@@ -904,10 +907,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
           (setq navi2ch-article-view-range
 		navi2ch-article-new-message-range)))
       (when navi2ch-article-auto-activate-message-filter
-	(setq navi2ch-article-message-filter-mode t)
-	(when navi2ch-article-use-message-filter-cache
-	  (setq navi2ch-article-message-filter-cache
-		(navi2ch-article-load-message-filter-cache))))
+	(setq navi2ch-article-message-filter-mode t
+	      navi2ch-article-message-filter-cache
+	      (navi2ch-article-load-message-filter-cache)))
       (setq list (navi2ch-article-sync force 'first))
       (navi2ch-article-mode))
     (when (and number
@@ -941,10 +943,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
         (setq navi2ch-article-view-range
               navi2ch-article-new-message-range))
       (when navi2ch-article-auto-activate-message-filter
-	(setq navi2ch-article-message-filter-mode t)
-	(when navi2ch-article-use-message-filter-cache
-	  (setq navi2ch-article-message-filter-cache
-		(navi2ch-article-load-message-filter-cache))))
+	(setq navi2ch-article-message-filter-mode t
+	      navi2ch-article-message-filter-cache
+	      (navi2ch-article-load-message-filter-cache)))
       (prog1
 	  (navi2ch-article-sync-from-file)
 	(navi2ch-article-set-mode-line)
@@ -1705,16 +1706,17 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-get-visible-numbers ()
   "表示中のレスの番号のリストを得る。"
-  (let ((navi2ch-article-goto-number-recenter nil)
-	(navi2ch-article-through-previous-function
-	 (lambda () (throw 'loop nil)))
-	list num)
+  (let* ((navi2ch-article-goto-number-recenter nil)
+	 (loop (make-symbol "loop"))
+	 (navi2ch-article-through-previous-function
+	  `(lambda () (throw ',loop nil)))
+	 list num)
     (save-excursion
       (goto-char (point-max))
       (setq num (navi2ch-article-get-current-number))
       (when num
 	(navi2ch-article-goto-number num)
-	(catch 'loop
+	(catch loop
 	  (while num
 	    (setq list (cons num list))
 	    (navi2ch-article-previous-message)
@@ -2806,8 +2808,13 @@ PREFIX が与えられた場合は、
 キャッシュをクリアし、フィルタ機能を on にしてスレを表示しなおす。"
   (interactive "P")
   (if (null prefix)
-      (setq navi2ch-article-message-filter-mode
-	    (not navi2ch-article-message-filter-mode))
+      (progn
+	(setq navi2ch-article-message-filter-mode
+	      (not navi2ch-article-message-filter-mode))
+	(when (and navi2ch-article-message-filter-mode
+		   (null navi2ch-article-message-filter-cache))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-article-load-message-filter-cache))))
     (when navi2ch-article-message-filter-cache
       ;; フィルタ前のレスの状態をキャッシュから復元
       (dolist (reps-slot (cdr (assq 'replace navi2ch-article-message-filter-cache)))

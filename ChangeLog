@@ -1,3 +1,21 @@
+2003-04-19  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): 
+	navi2ch-article-number-prefix-regexp と
+	navi2ch-article-number-separator-regexp で `\(...\)' を使えるように。
+	(navi2ch-article-reinsert-partial-messages): 第2引き数を渡さないと
+	エラーになるのを修正。
+	(navi2ch-article-view-article): フィルタを on にするときは、
+	navi2ch-article-use-message-filter-cache が nil でも
+	navi2ch-article-message-filter-cache に値をロードするように。
+	(navi2ch-article-view-article-from-file): 同上。
+	(navi2ch-article-get-visible-numbers): 
+	navi2ch-article-through-previous-function が throw するシンボルが、
+	navi2ch-article-get-visible-numbers 内でのみ catch されるように。
+	(navi2ch-article-toggle-message-filter): 初めてフィルタを on に
+	する場合は、navi2ch-article-use-message-filter-cache が nil でも
+	navi2ch-article-message-filter-cache に値をロードするように。
+
 2003-04-09  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-message-filter-list): docstring
