@@ -530,7 +530,7 @@ browser is started up in a new process with possible additional arguments
 don't offer a form of remote control."
   (interactive (browse-url-interactive-arg "URL: "))
   (if (not navi2ch-browse-url-image-program)
-    (error "No browser defined (`navi2ch-browse-url-image-program')"))
+      (error "No browser defined (`navi2ch-browse-url-image-program')"))
   (apply 'start-process (concat navi2ch-browse-url-image-program url) nil
          navi2ch-browse-url-image-program
          (append navi2ch-browse-url-image-args (list url))))
@@ -565,16 +565,16 @@ return new alist whose car is the new pair and cdr is ALIST.
     (when point
       (1- point))))
 
-;(defun navi2ch-change-text-property (point prop value)
-;  (unless (get-text-property point prop)
-;    (error "POINT (%d) does not have property %s" point prop))
-;  (let ((start (if (or (= (point-min) point)
-;		       (not (eq (get-text-property (1- point) prop)
-;				(get-text-property point prop))))
-;		   point
-;		 (or (previous-single-property-change point prop) point)))
-;	(end (or (next-single-property-change point prop) point)))
-;    (put-text-property start end prop value)))
+;; (defun navi2ch-change-text-property (point prop value)
+;;   (unless (get-text-property point prop)
+;;     (error "POINT (%d) does not have property %s" point prop))
+;;   (let ((start (if (or (= (point-min) point)
+;; 		       (not (eq (get-text-property (1- point) prop)
+;; 				(get-text-property point prop))))
+;; 		   point
+;; 		 (or (previous-single-property-change point prop) point)))
+;; 	(end (or (next-single-property-change point prop) point)))
+;;     (put-text-property start end prop value)))
 
 (defun navi2ch-set-minor-mode (mode name map)
   (make-variable-buffer-local mode)
@@ -1207,7 +1207,7 @@ FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
 	(setq col (+ col (char-width c)))))
     (when padding
       (while (and (>= col start-column)
-		 (< col end-column))
+		  (< col end-column))
 	(push padding r)
 	(setq col (+ col (char-width padding)))))
     (concat (nreverse r))))

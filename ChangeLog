@@ -1,3 +1,9 @@
+2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch): navi2ch-auto-update が nil の時、lock が行
+	われなかったのを修正。
+	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/667>
+
 2004-04-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-truncate-string-to-width): 新関数。

@@ -84,13 +84,14 @@
       (load-file navi2ch-update-file))
     (load navi2ch-init-file t)
     (navi2ch-lock)
-    (let ((done nil))
-      (unwind-protect
-	  (when navi2ch-auto-update
-	    (navi2ch-update)
-	    (setq done t))
-	(unless done
-	  (navi2ch-unlock))))
+    (when navi2ch-auto-update
+      (let ((done nil))
+	(unwind-protect
+	    (progn
+	      (navi2ch-update)
+	      (setq done t))
+	  (unless done
+	    (navi2ch-unlock)))))
     (add-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook)
     (run-hooks 'navi2ch-load-status-hook)
     (run-hooks 'navi2ch-hook)
