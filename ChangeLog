@@ -1,3 +1,15 @@
+2004-07-16  mami  <mami@users.sourceforge.net>
+
+	board 系モードで、スレのない最下行での U の挙動を修正。
+
+	* navi2ch-board-misc.el (navi2ch-bm-show-url-subr): a と l で
+	article が存在しない行のときは nil を返すように。
+	(navi2ch-bm-show-url): 上記で nil が返ってきたときはメッセージを出
+	して終了するように。
+
+	* navi2ch-article.el (navi2ch-article-copy-title): a と A で
+	article が存在しない行のときはメッセージを出して終了するように。
+
 2004-07-13  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p): 

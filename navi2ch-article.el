@@ -2047,17 +2047,21 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	 (title (cond ((eq char ?b)
 		       (cdr (assq 'name board)))
 		      ((eq char ?a)
-		       (cdr (assq 'subject article)))
+		       (when article
+			 (cdr (assq 'subject article))))
 		      ((eq char ?B)
 		       (concat (cdr (assq 'name board))
 			       "\n"
 			       (navi2ch-board-to-url board)))
 		      ((eq char ?A)
-		       (concat (cdr (assq 'subject article))
-			       "\n"
-			       (navi2ch-article-to-url board article))))))
-    (kill-new title)
-    (message "copy: %s" title)))
+		       (when article
+			 (concat (cdr (assq 'subject article))
+				 "\n"
+				 (navi2ch-article-to-url board article)))))))
+    (if (not title)
+	(message "Can't select this line!")
+      (kill-new title)
+      (message "copy: %s" title))))
 
 (defun navi2ch-article-redisplay-current-message ()
   "今いるレスを画面の中心(上？)に"

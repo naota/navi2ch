@@ -370,16 +370,17 @@
       (let ((char (navi2ch-read-char-with-retry
 		   (format "c)opy v)iew t)itle? URL: %s: " url)
 		   nil '(?c ?v ?t))))
-	(if (eq char ?t) (navi2ch-bm-copy-title board)
-	  (funcall (cond ((eq char ?c)
-			  (lambda (x)
-			    (kill-new x)
-			    (message "copy: %s" x)))
-			 ((eq char ?v)
-			  (lambda (x)
-			    (navi2ch-browse-url-internal x)
-			    (message "view: %s" x))))
-		   (navi2ch-bm-show-url-subr board)))))))
+	(if (eq char ?t)
+	    (navi2ch-bm-copy-title board)
+	  (setq url (navi2ch-bm-show-url-subr board))
+	  (cond ((not url)
+		 (message "Can't select this line!"))
+		((eq char ?c)
+		 (kill-new url)
+		 (message "copy: %s" url))
+		((eq char ?v)
+		 (navi2ch-browse-url-internal url)
+		 (message "view: %s" url))))))))
 
 (defun navi2ch-bm-show-url-subr (board)
   "メニューを表示して、url を得る"
@@ -390,9 +391,11 @@
 	(article (navi2ch-bm-get-article-internal
 		  (navi2ch-bm-get-property-internal (point)))))
     (cond ((eq char ?b) (navi2ch-board-to-url board))
-	  ((eq char ?a) (navi2ch-article-to-url board article))
+	  ((eq char ?a) (when article
+			  (navi2ch-article-to-url board article)))
 	  ((eq char ?l) (let ((l (format "l%d" navi2ch-article-show-url-number)))
-			  (navi2ch-article-to-url board article l l))))))
+			  (when article
+			    (navi2ch-article-to-url board article l l)))))))
 
 (defun navi2ch-bm-copy-title (board)
   "メニューを表示して、タイトルを得る"
