@@ -394,10 +394,11 @@ START, END, NOFIRST で範囲を指定する"
 					  (1- (point))))
    (navi2ch-article-get-separator)))
 
-(defsubst navi2ch-article-get-first-message-from-file (file)
-  "FILE で指定された article の最初の message を返す。"
+(defsubst navi2ch-article-get-first-message-from-file (file &optional board)
+  "FILE で指定された article の最初の message を返す。
+BOARD non-nil ならば、その板の coding-system を使う。"
   (with-temp-buffer
-    (navi2ch-insert-file-contents file)
+    (navi2ch-board-insert-file-contents board file)
     (navi2ch-article-get-first-message)))
 
 (defun navi2ch-article-get-message-list (file &optional begin end)
@@ -407,7 +408,7 @@ START, END, NOFIRST で範囲を指定する"
     (let ((board navi2ch-article-current-board)
 	  sep message-list)
       (with-temp-buffer
-        (navi2ch-insert-file-contents file begin end)
+        (navi2ch-board-insert-file-contents board file begin end)
 	(run-hooks 'navi2ch-article-get-message-list-hook)
         (let ((i 1))
 	  (navi2ch-apply-filters board navi2ch-article-filter-list)
@@ -2118,7 +2119,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       (setq msg (navi2ch-article-parse-message msg)))
     (cdr (assq 'data msg))))
 
-(defun navi2ch-article-cached-subject-minimum-size (file)
+(defun navi2ch-article-cached-subject-minimum-size (board article)
   "スレタイトルを得るのに十分なファイルサイズを求める。"
   (with-temp-buffer
     (let ((beg 0) (end 0) (n 1))
@@ -2126,7 +2127,10 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		  (> n 0))
 	(setq beg end)
 	(setq end (+ end 1024))
-	(setq n (car (cdr (navi2ch-insert-file-contents file beg end))))
+	(setq n (car (cdr (navi2ch-board-insert-file-contents
+			   board
+			   (navi2ch-article-get-file-name board article)
+			   beg end))))
 	(forward-line))
       end)))
 
@@ -2147,7 +2151,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		 (msg-list (navi2ch-article-get-message-list
 			    file
 			    0
-			    (navi2ch-article-cached-subject-minimum-size file))))
+			    (navi2ch-article-cached-subject-minimum-size board article))))
 	    (setq subject
 		  (cdr (assq 'subject
 			     (navi2ch-article-parse-message (cdar msg-list))))))))

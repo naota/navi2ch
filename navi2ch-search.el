@@ -143,7 +143,7 @@
   (navi2ch-search-for-each-article
    (lambda (board file)
      (with-temp-buffer
-       (navi2ch-insert-file-contents file)
+       (navi2ch-board-insert-file-contents board file)
        (goto-char (point-min))
        (when (re-search-forward regexp nil t)
 	 (let ((subject
@@ -160,7 +160,7 @@
    (lambda (board file)
      (let ((subject (assq 'subject
 			  (navi2ch-article-get-first-message-from-file
-			   file))))
+			   file board))))
        (list board subject
 	     (cons 'artid (file-name-sans-extension file)))))
    board-list))
@@ -172,7 +172,7 @@
        (if (navi2ch-article-orphan-p board article)
 	   (let ((subject (assq 'subject
 				(navi2ch-article-get-first-message-from-file
-				 file))))
+				 file board))))
 	     (nconc (list board subject)
 		    article)))))
    board-list))

@@ -1,3 +1,49 @@
+2005-01-22  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	復活記念という事で。
+	とりあえずの BE 対応。というか、文字コード指定対応。
+	navi2ch-board-coding-system-alist に板ID と coding-system を登録す
+	ることで板に対する文字コードを指定できる。
+
+	保存するときに文字コードを変換するんだと、差分更新に対応するのが面
+	倒なので、開くときに指定できるようにする。
+	ただ、現状 navi2ch-multibbs-defcallback されている BBS を
+	navi2ch-board-coding-system-alist に登録すると文字化けしちゃうはず。
+	
+	* navi2ch-search.el (navi2ch-search-article-regexp):
+	navi2ch-board-insert-file-contents を使うように。
+	(navi2ch-search-cache):
+	navi2ch-article-get-first-message-from-file に board を渡すように。
+	(navi2ch-search-orphan): 同上。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
+	navi2ch-article-get-first-message-from-file に board を渡すように。
+
+	* navi2ch-article.el
+	(navi2ch-article-get-first-message-from-file):
+	引数に board を貰えるように。
+	(navi2ch-article-get-message-list):
+	navi2ch-board-insert-file-contents を使うように。
+
+	(navi2ch-article-cached-subject-minimum-size):
+	board と article を引数に貰うように。
+	navi2ch-board-insert-file-contents を使うように。
+	(navi2ch-article-cached-subject): 上記関数の変更に対応。
+
+	* navi2ch-board.el (navi2ch-board-get-coding-system): 新関数。
+	(navi2ch-board-insert-file-contents): 新関数。
+	(navi2ch-board-get-subject-list):
+	navi2ch-board-insert-file-contents を使うように。
+	(navi2ch-board-save-old-subject-file):
+	navi2ch-board-get-coding-system,
+	navi2ch-board-insert-file-contents を使うように。
+
+	* navi2ch-util.el (navi2ch-insert-file-contents):
+	coding-system を指定できるように。
+	指定されていない場合は今まで通り、navi2ch-coding-system を使う。
+
+	* navi2ch-vars.el (navi2ch-board-coding-system-alist): 新変数。
+
 2004-12-13  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-expire):

@@ -336,9 +336,10 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 				    fixedcase literal string)))
       string)))
 
-(defun navi2ch-insert-file-contents (file &optional begin end)
-  (let ((coding-system-for-read navi2ch-coding-system)
-        (coding-system-for-write navi2ch-coding-system))
+(defun navi2ch-insert-file-contents (file &optional begin end coding-system)
+  (setq coding-system (or coding-system navi2ch-coding-system))
+  (let ((coding-system-for-read coding-system)
+	(coding-system-for-write coding-system))
     (insert-file-contents file nil begin end)))
 
 (defun navi2ch-expand-file-name (file)

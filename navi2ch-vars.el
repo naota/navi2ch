@@ -518,6 +518,22 @@ nil を指定すると、新着レスへのフィルター処理をチェックしない。"
   :type 'boolean
   :group 'navi2ch-board)
 
+(defcustom navi2ch-board-coding-system-alist
+  '(("be" . euc-jp))
+  "*板に対して強制的に coding-system を指定する為の alist。
+各要素は、(BOARD-ID . CODING-SYSTEM)。
+BOARD-ID は板ID。
+CODING-SYSTEM は BOARD-ID で指定される板に指定する coding-system。"
+  :type `(repeat
+	  (cons
+	   (string :tag "板ID")
+	   (choice :tag "文字コード"
+		   ,@(mapcar (lambda (x)
+			       (list 'const x))
+			     (coding-system-list)))))
+  :group 'navi2ch-board)
+
+
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)

@@ -242,7 +242,7 @@
   "FILE からスレの list を作る。"
   (when (file-exists-p file)
     (with-temp-buffer
-      (navi2ch-insert-file-contents file)
+      (navi2ch-board-insert-file-contents navi2ch-board-current-board file nil nil)
       (run-hooks 'navi2ch-board-get-subject-list-hook)
       (navi2ch-apply-filters navi2ch-board-current-board navi2ch-board-filter-list)
       (navi2ch-replace-html-tag-with-buffer)
@@ -401,9 +401,9 @@
       (setq from (prog1 to
 		   (setq to from))))
     (when (file-exists-p from)
-      (let ((coding-system-for-write navi2ch-coding-system))
+      (let ((coding-system-for-write (navi2ch-board-get-coding-system board)))
 	(with-temp-file to
-	  (navi2ch-insert-file-contents from))))))
+	  (navi2ch-board-insert-file-contents board from))))))
 
 (defun navi2ch-board-update-seen-articles ()
   (let ((summary (navi2ch-article-load-article-summary
@@ -695,6 +695,20 @@
 (defun navi2ch-board-toggle-bookmark ()
   (interactive)
   (navi2ch-board-toggle-minor-mode 'navi2ch-board-bookmark-mode))
+
+(defun navi2ch-board-get-coding-system (board)
+  "`navi2ch-board-coding-system-alist' に BOARD に対応する coding-system があ
+ればそれを返す。
+ない場合は `navi2ch-coding-system' を返す。"
+  (or (cdr (assoc (cdr (assq 'id board)) navi2ch-board-coding-system-alist))
+      navi2ch-coding-system))
+
+(defun navi2ch-board-insert-file-contents (board file &optional begin end)
+  "`navi2ch-board-get-coding-system' で特定される coding-system で
+`navi2ch-insert-file-contents' する。"
+  (navi2ch-insert-file-contents
+   file begin end
+   (navi2ch-board-get-coding-system board)))
 
 ;;; hide mode
 (navi2ch-set-minor-mode 'navi2ch-board-hide-mode

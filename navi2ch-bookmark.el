@@ -414,7 +414,7 @@ KEY は (concat URI ARTID)")
                  ;; dat を 全部読まず、頭の1行だけ読むのはどうすれば?
 		 ;; 俺も知らないです:-)
 		 (cdr (assq 'subject
-			    (navi2ch-article-get-first-message-from-file file)))))))
+			    (navi2ch-article-get-first-message-from-file file board)))))))
 	(when newsubject
 	  (setq article (navi2ch-put-alist 'subject newsubject article))
 	  (navi2ch-bookmark-add-subr
