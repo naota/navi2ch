@@ -5,6 +5,7 @@
 
 	* navi2ch-article.el (navi2ch-article-str-to-num): >>2-1 みたいな
 	逆順になってるのにも対応。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/898
 
 2002-02-05  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
