@@ -983,6 +983,16 @@ GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 
 これですべての板でモナーフォントが使われる。
 
+もし、これでも表示されない場合は
+
+@lisp
+(setq navi2ch-mona-face-variable 'navi2ch-mona16-face)
+@end lisp
+
+を追記すると表示されるかもしれない。
+@footnote{ちなみに、@code{navi2ch-mona16-face} の 16 の部分は 12, 14
+を指定する事もできる。}
+
 特定の板でのみモナーフォントを使いたいときは、上記に加えて
 以下の例のように @code{navi2ch-mona-enable-board-list} に
 板の ID のリストを入れておく。

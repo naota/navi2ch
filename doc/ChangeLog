@@ -1,3 +1,8 @@
+2005-01-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch.texi (How to Use Mona Font): navi2ch-mona-enable しても
+	使えない場合の設定を追記。
+
 2005-01-14  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Board Questions): 整理。
