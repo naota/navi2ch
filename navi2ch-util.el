@@ -618,7 +618,10 @@ return new alist whose car is the new pair and cdr is ALIST.
 	    (default-value 'mode-line-buffer-identification)))
     (setq mode-line-buffer-identification
           (list offline
-                navi2ch-mode-line-identification)))
+		(if (stringp navi2ch-mode-line-identification)
+		    (navi2ch-replace-string
+		     "%" "%%" navi2ch-mode-line-identification t)
+		  navi2ch-mode-line-identification))))
   (force-mode-line-update t))
 
 (defun navi2ch-make-datevec (time)

@@ -1,3 +1,8 @@
+2004-01-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-set-mode-line-identification):
+	navi2ch-mode-line-identification 中の % をエスケープするように。
+
 2003-12-28  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-mona.el (navi2ch-mona-arrange-message):
