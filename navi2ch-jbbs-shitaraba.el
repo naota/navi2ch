@@ -25,7 +25,8 @@
 
 ;;; Commentary:
 
-;;
+;; ＪＢＢＳ＠したらばの仕様は下記参照。
+;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452916/126-140n
 
 ;;; Code:
 (provide 'navi2ch-jbbs-shitaraba)
@@ -76,9 +77,10 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
-	(url  (navi2ch-js-article-to-url board article start nil start))
+	(url  (navi2ch-js-article-to-rawmode-url board article start nil start))
 	(func (if start
-		  'navi2ch-js-article-callback-diff
+		  (lexical-let ((start start))
+		    (lambda () (navi2ch-js-article-callback start)))
 		'navi2ch-js-article-callback)))
     (navi2ch-net-update-file url file time func nil start)))
 
@@ -136,7 +138,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 
 (defun navi2ch-js-send-message
   (from mail message subject bbs key time board article)
-  (let ((url         (navi2ch-js-get-writecgi-url board))
+  (let ((url         (navi2ch-js-get-cgi-url "write" board))
 	(referer     (navi2ch-board-get-uri board))
 	(param-alist (list
 		      (cons "submit" (if subject
@@ -169,84 +171,85 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	  ((string-match "<b>\\([^<]+\\)" str)
 	   (match-string 1 str)))))
 
-(defun navi2ch-js-article-to-url (board article &optional start end nofirst)
-  "BOARD, ARTICLE から url に変換。
+(defun navi2ch-js-article-to-url-subr
+  (string board article &optional start end nofirst)
+  "BOARD, ARTICLE から  STRING.cgi の url に変換。
 START, END, NOFIRST で範囲を指定する"
-  (let ((uri   (cdr (assq 'uri board)))
-	(artid (cdr (assq 'artid article))))
-    (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
-    (concat
-     (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
-	     (match-string 1 uri) (match-string 2 uri) artid)
-     (if (and (stringp start)
-	      (string-match "l\\([0-9]+\\)" start))
-	 (format "&LAST=%s" (match-string 1 start))
-       (concat
-	(and start (format "&START=%d" start))
-	(and end (format "&END=%d" end))))
-     (and nofirst
-	  (not (eq start 1))
-	  "&NOFIRST=TRUE"))))
+  (let ((url (concat (navi2ch-js-get-cgi-url string board)
+		     (cdr (assq 'artid article))
+		     "/")))
+    (if (numberp start)
+	(setq start (number-to-string start)))
+    (if (numberp end)
+	(setq end (number-to-string end)))
+    (if (equal start end)
+	(concat url start)
+      (concat url
+	      start (and (or start end) "-") end
+	      (and nofirst "n")))))
+
+(defun navi2ch-js-article-to-url (board article &optional start end nofirst)
+  "BOARD, ARTICLE から read.cgi の url に変換。
+START, END, NOFIRST で範囲を指定する"
+  (navi2ch-js-article-to-url-subr "read"
+				  board article start end nofirst))
+
+(defun navi2ch-js-article-to-rawmode-url (board article &optional start end nofirst)
+  "BOARD, ARTICLE から rawmode.cgi の url に変換。
+START, END, NOFIRST で範囲を指定する"
+  (navi2ch-js-article-to-url-subr "rawmode"
+				  board article start end nofirst))
 
 ;;------------------
 
-(defvar navi2ch-js-parse-regexp "\
-<dt>\\([0-9]+\\) 名前：\\(<a href=\"mailto:\\([^\"]*\\)\">\\|<[^>]+>\\)\
-<b> \\(.*\\) </b><[^>]+> 投稿日： \\(.*\\)<br><dd>\\(.*\\)<br><br>\n")
-(defvar navi2ch-js-parse-subject-regexp "<title>\\([^\\n]*\\)</title>")
-
-(defun navi2ch-js-parse-subject ()
-  (let ((case-fold-search t))
-    (re-search-forward navi2ch-js-parse-subject-regexp nil t)
-    (match-string 1)))
+(defvar navi2ch-js-parse-regexp
+  ;; レス番        名前      メール  投稿日時    本文  スレタイトル  ID/リモホ
+  "\\([0-9]+\\)<>\\(.*\\)<>\\(.*\\)<>\\(.*\\)<>\\(.*\\)<>\\(.*\\)<>\\(.*\\)\n")
 
 (defun navi2ch-js-parse ()
   (let ((case-fold-search t))
     (re-search-forward navi2ch-js-parse-regexp nil t)))
 
-(defun navi2ch-js-make-article (&optional subject)
-  (let ((mail (match-string 3))
-	(name (match-string 4))
-	(date (match-string 5))
-	(contents (match-string 6)))
-    (format "%s<>%s<>%s<>%s<>%s\n"
-	    name (or mail "") date contents (or subject ""))))
-
 (navi2ch-multibbs-defcallback navi2ch-js-article-callback
-    (jbbs-shitaraba &optional diff)
-  (let ((beg (point))
-	(max-num 0)
-	subject alist num min-num)
-    (unless diff
-      (setq subject (navi2ch-js-parse-subject)))
+    (jbbs-shitaraba &optional start)
+  (let ((i (or start 1))
+	(beg (point))
+	num name mail date contents subject id)
     (while (navi2ch-js-parse)
-      (setq num (string-to-number (match-string 1))
-	    min-num (or min-num num)
-	    max-num (max max-num num)
-	    alist (cons (cons (string-to-number (match-string 1))
-			      (navi2ch-js-make-article subject))
-			alist)
-	    subject nil))
-    (delete-region beg (point-max))
-    (when (and min-num max-num)
-      (let ((i min-num))
-	(while (<= i max-num)
-	  (insert (or (cdr (assoc i alist))
-		      "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n"))
-	  (setq i (1+ i)))))))
-
-(defun navi2ch-js-article-callback-diff ()
-  (navi2ch-js-article-callback t))
+      (setq num		(match-string 1)
+	    name	(match-string 2)
+	    mail	(match-string 3)
+	    date	(match-string 4)
+	    contents	(match-string 5)
+	    subject	(match-string 6)
+	    id		(match-string 7))
+      (delete-region beg (match-end 0))
+      (while (< i (string-to-number num))
+	(insert "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n")
+	(setq i (1+ i)))
+      (insert (format "%s<>%s<>%s%s<>%s<>%s\n"
+		      name
+		      (or mail "")
+		      date
+		      (if (= 0 (length id)) "" (concat " ID:" id))
+		      contents
+		      (or subject "")))
+      (setq i (1+ i))
+      (setq beg (point)))))
 
 (defconst navi2ch-js-url-regexp
-  ;; prefix、カテゴリ、BBS番号
+  ;;    prefix   カテゴリ     BBS番号
   "\\`\\(.+\\)/\\([^/]+\\)/\\([^/]+\\)/\\'")
 
-(defun navi2ch-js-get-writecgi-url (board)
-  "write.cgi の url を返す"
+(defun navi2ch-js-get-cgi-url (string board)
+  "STRING.cgi の url を返す"
   (let ((uri (navi2ch-board-get-uri board)))
     (and (string-match navi2ch-js-url-regexp uri)
-	 (format "%s/bbs/write.cgi" (match-string 1 uri)))))
+	 (format "%s/bbs/%s.cgi/%s/%s/"
+		 (match-string 1 uri)
+		 string
+		 (match-string 2 uri)
+		 (match-string 3 uri)))))
 
 (defun navi2ch-js-get-dir (board)
   "write.cgi に渡す DIR パラメータを返す。"

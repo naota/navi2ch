@@ -1,3 +1,31 @@
+2004-03-28  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el
+	透明あぼーんの検出を改良。
+	新形式 URL に対応。rawmode.cgi に対応。ID を表示するように。
+	http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452916/126-140n
+
+	(navi2ch-js-get-writecgi-url): 廃止。
+	(navi2ch-js-get-cgi-url): 新関数。
+	(navi2ch-js-send-message): 上記を使い、引き数を渡すように。
+	http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452916/129-133n
+
+	(navi2ch-js-article-to-url-subr): 新関数。新形式 URL に対応。
+	(navi2ch-js-article-to-url): 上記を使うように。
+	(navi2ch-js-article-to-rawmode-url): 新関数。
+
+	(navi2ch-js-parse-regexp): rawmode.cgi の出力に対応。
+	(navi2ch-js-article-callback): 2番目の引き数を取得開始レス番に変更
+	し、透明あぼーんの検出を改良。
+	rawmode.cgi の出力に対応。ID を表示するように。
+	(navi2ch-js-article-callback-diff): 上記変更にともない廃止。
+	(navi2ch-js-article-update): navi2ch-js-article-to-rawmode-url を
+	使うように。差分取得のとき navi2ch-js-article-callback に start を
+	つけて呼ぶように。
+	(navi2ch-js-parse-subject-regexp): 廃止。
+	(navi2ch-js-parse-subject): 同上。
+	(navi2ch-js-make-article): 同上。
+
 2004-03-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-list-moved-board-alist): 新変数。
