@@ -291,6 +291,11 @@ nil なら expire しない。"
   :type 'integer
   :group 'navi2ch-board)
 
+(defcustom navi2ch-bm-number-width 3
+  "*各スレのスレ番号欄の幅。"
+  :type 'integer
+  :group 'navi2ch-board)
+
 (defcustom navi2ch-bm-mark-and-move t
   "*マークしたあとのポインタの動作。
 nil なら移動しない

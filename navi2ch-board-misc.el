@@ -210,7 +210,7 @@
 		      (t
 		       (navi2ch-article-check-cached board article)))))
     (unless subject (setq subject navi2ch-bm-empty-subject))
-    (insert (format "%3d %s%s %s%s%s\n"
+    (insert (format (concat "%" (number-to-string navi2ch-bm-number-width) "d %s%s %s%s%s\n")
                     number
 		    (cdr (assq updated navi2ch-bm-updated-mark-alist))
 		    (cadr (assq state navi2ch-bm-state-alist))
@@ -240,7 +240,9 @@
 
 (defun navi2ch-bm-goto-state-column ()
   (beginning-of-line)
-  (forward-char 5))
+  (looking-at "\\( *[0-9]+\\)")
+  (goto-char (match-end 1))
+  (forward-char 2))
 
 (defun navi2ch-bm-insert-state (item state &optional updated)
   ;; (setq article (navi2ch-put-alist 'cache 'view article))

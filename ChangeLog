@@ -1,3 +1,14 @@
+2002-08-02  mami  <mami@users.sourceforge.net>
+
+	board 系バッファでレス番号が3桁を超えたときの動作がおかしかった。
+
+	* navi2ch-vars.el (navi2ch-bm-number-width): 新変数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 上記変数を使
+	うように。
+	(navi2ch-bm-goto-state-column): レス番号の桁数にかかわらず正しく動
+	作するように。
+
 2002-08-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-send-request): 条件をちょい厳密に。
