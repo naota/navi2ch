@@ -217,12 +217,18 @@
       (dolist (x navi2ch-list-board-name-list)
 	(when (string= (cdr (assq 'uri x)) uri)
 	  (setq board x)))
-      (unless board
-	(setq board (list (cons 'uri uri)
-			  (cons 'id id)
-			  (cons 'type 'board)
-			  (cons 'name "No Name"))))
-      board)))
+      (or board
+	  (let* ((alist (navi2ch-alist-list-to-alist
+			 navi2ch-list-board-name-list
+			 'id 'name))
+		 (host (navi2ch-url-to-host uri))
+		 (name (concat (or (cdr (assoc id alist))
+				   "No Name")
+			       "(" host ")")))
+	    (list (cons 'uri uri)
+		  (cons 'id id)
+		  (cons 'type 'board)
+		  (cons 'name name)))))))
 
 (defun navi2ch-board-to-url (board)
   "BOARD から url に変換"
