@@ -76,6 +76,9 @@
 (defvar navi2ch-localfile-func-alist
   '((bbs-p		. navi2ch-localfile-p)
     (article-update 	. navi2ch-localfile-article-update)
+    (article-to-url	. navi2ch-localfile-article-to-url)
+    (url-to-board	. navi2ch-localfile-url-to-board)
+    (url-to-article	. navi2ch-localfile-url-to-article)
     (send-message   	. navi2ch-localfile-send-message)
     (send-success-p 	. navi2ch-localfile-send-message-success-p)
     (error-string   	. navi2ch-localfile-error-string)
@@ -274,6 +277,41 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   (let ((url (navi2ch-article-get-url board article))
 	(file (navi2ch-article-get-file-name board article)))
     (list (navi2ch-localfile-update-file url file) nil)))
+
+(defun navi2ch-localfile-article-to-url
+  (board article &optional start end nofirst)
+  (let* ((uri (cdr (assq 'uri board)))
+	 (artid (cdr (assq 'artid article)))
+	 (url (concat uri "/dat/" artid ".dat/")))
+    (when (numberp start)
+      (setq start (number-to-string start)))
+    (when (numberp end)
+      (setq end (number-to-string end)))
+    (if (equal start end)
+	(concat url start)
+      (concat url
+	      start (and (or start end) "-") end
+	      (and nofirst "n")))))
+
+(defun navi2ch-localfile-url-to-board (url)
+  (let (list)
+    (when (string-match
+	   "\\`\\(x-localbbs://.*/\\([^/]+\\)\\)/dat/[0-9]+\\.dat" url)
+      (setq list (list (cons 'uri (match-string 1 url))
+		       (cons 'id (match-string 2 url)))))
+    list))
+
+(defun navi2ch-localfile-url-to-article (url)
+  (let (list)
+    (when (string-match
+	   "\\`x-localbbs://.*/\\([0-9]+\\)\\.dat/?\\([0-9]+\\)?" url)
+      (setq list (cons (cons 'artid (match-string 1 url))
+		       list))
+      (when (match-string 2 url)
+	(setq list (cons (cons 'number
+			       (string-to-number (match-string 2 url)))
+			 list))))
+    list))
 
 (defvar navi2ch-localfile-last-error nil)
 

@@ -785,8 +785,12 @@ base64デコードすべき内容がない場合はエラーになる。"
       (insert str))))
 
 (defun navi2ch-url-to-host (url)
-  (when (and url (string-match "http://\\([^/]+\\)" url))
-    (match-string 1 url)))
+  (when url
+    (cond
+     ((string-match "http://\\([^/]+\\)" url)
+      (match-string 1 url))
+     ((string-match "x-localbbs://" url)
+      "localhost"))))
 
 (defun navi2ch-read-string (prompt &optional initial-input history)
   (let ((minibuffer-allow-text-properties nil))

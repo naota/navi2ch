@@ -291,14 +291,16 @@
 
 (defun navi2ch-bm-insert-state (item state &optional updated)
   ;; (setq article (navi2ch-put-alist 'cache 'view article))
-  (navi2ch-bm-goto-state-column)
-  (backward-char 1)
-  (delete-char 2)
-  (insert (cdr (assq updated navi2ch-bm-updated-mark-alist)))
-  (insert (cadr (assq state navi2ch-bm-state-alist)))
-  (navi2ch-bm-set-property (save-excursion (beginning-of-line) (point))
-			   (save-excursion (end-of-line) (point))
-			   item state updated))
+  (let ((buffer-read-only nil))
+    (save-excursion
+      (navi2ch-bm-goto-state-column)
+      (backward-char 1)
+      (delete-char 2)
+      (insert (cdr (assq updated navi2ch-bm-updated-mark-alist)))
+      (insert (cadr (assq state navi2ch-bm-state-alist)))
+      (navi2ch-bm-set-property (navi2ch-line-beginning-position)
+			       (navi2ch-line-end-position)
+			       item state updated))))
 
 (defun navi2ch-bm-get-state (&optional point)
   "$B$=$N0LCV$N(B state $B$rD4$Y$k(B"
@@ -338,14 +340,13 @@
 			 board article nil nil max-line)))
 		(save-excursion
 		  (set-buffer buf)
-		  (let ((buffer-read-only nil))
-		    (when (or state
-			      (navi2ch-bm-fetched-article-p board article)
-			      (eq (navi2ch-bm-get-state) 'view))
-		      (navi2ch-bm-remove-fetched-article board article)
-		      (if (eq major-mode 'navi2ch-board-mode)
-			  (navi2ch-bm-insert-state item 'view 'seen)
-			(navi2ch-bm-insert-state item 'view)))))))
+		  (when (or state
+			    (navi2ch-bm-fetched-article-p board article)
+			    (eq (navi2ch-bm-get-state) 'view))
+		    (navi2ch-bm-remove-fetched-article board article)
+		    (if (eq major-mode 'navi2ch-board-mode)
+			(navi2ch-bm-insert-state item 'view 'seen)
+		      (navi2ch-bm-insert-state item 'view))))))
 	  (message "Can't select this line!"))
       ((error quit)
        (set-window-configuration window-configuration)
@@ -433,10 +434,8 @@
 	  (setq state (navi2ch-article-fetch-article board article force))
 	  (when state
 	    (navi2ch-bm-remember-fetched-article board article)
-	    (let ((buffer-read-only nil))
-	      (save-excursion
-		(navi2ch-bm-insert-state item 'update
-					 (navi2ch-bm-get-updated-mark))))))
+	    (navi2ch-bm-insert-state item 'update
+				     (navi2ch-bm-get-updated-mark))))
       (message "Can't select this line!"))
     state))
 
@@ -855,9 +854,7 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 	 (board (navi2ch-bm-get-board-internal item)))
     (when (and board article)
       (navi2ch-bm-remove-article-subr board article)
-      (save-excursion
-	(let ((buffer-read-only nil))
-	  (navi2ch-bm-insert-state item nil nil))))))
+      (navi2ch-bm-insert-state item nil nil))))
 
 (defun navi2ch-bm-remove-mark-article ()
   (interactive)
