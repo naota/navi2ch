@@ -51,6 +51,7 @@
 
 (defvar navi2ch-replace-html-tag-regexp-alist
   '((" *<br> " . "\n")
+    (" *<br>" . "\n")
     ("<[^<>]+>" . "")
     ("&#[0-9]+;" . "〓"))
   "置換する html のタグの連想リスト(正規表現)
