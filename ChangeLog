@@ -1,3 +1,16 @@
+2002-10-21  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-change-help-echo-property):
+	新関数。navi2ch-change-text-property をいじった。
+	(navi2ch-article-select-current-link):
+	navi2ch-change-text-property の代わりに上記関数を使うように。
+	(navi2ch-article-get-link-text): 同上。
+	(navi2ch-article-fetch-link): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/536
+
+	* navi2ch-util.el (navi2ch-change-text-property): 使わなくなったの
+	でコメントアウト。
+
 2002-10-20  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): startとend

@@ -1009,8 +1009,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		 (progn
 		   (and (get-text-property (point) 'help-echo)
 			(let ((buffer-read-only nil))
-			  (navi2ch-change-text-property (point)
-							'help-echo
+			  (navi2ch-article-change-help-echo-property (point)
 							(function navi2ch-article-help-echo))))
 		   (navi2ch-goto-url prop))
                (navi2ch-browse-url-internal prop))))
@@ -1040,7 +1039,6 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
                          (y-or-n-p (format "File `%s' exists; overwrite? "
                                            filename)))
                      (write-region (point-min) (point-max) filename))))))))))
-
 
 (defun navi2ch-article-mouse-select (e)
   (interactive "e")
@@ -1546,8 +1544,23 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		(stringp help-echo-prop))
       (setq help-echo-prop (navi2ch-article-get-link-text-subr point))
       (let ((buffer-read-only nil))
-	(navi2ch-change-text-property point 'help-echo help-echo-prop)))
+	(navi2ch-article-change-help-echo-property point help-echo-prop)))
     help-echo-prop))
+
+(defun navi2ch-article-change-help-echo-property (point value)
+  (unless (get-text-property point 'help-echo)
+    (error "POINT (%d) does not have property help-echo" point))
+  (let ((start (if (or (= (point-min) point)
+		       (not (eq (get-text-property (1- point) 'help-echo)
+				(get-text-property point 'help-echo))))
+		   point
+		 (or (previous-single-property-change point 'help-echo)
+		     point)))
+	(end (or (min (next-single-property-change point 'help-echo)
+		      (or (navi2ch-next-property point 'link-head)
+			  (point-max)))
+		 point)))
+    (put-text-property start end 'help-echo value)))
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
@@ -1592,9 +1605,9 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	   (when article
 	     (and (get-text-property (point) 'help-echo)
 		  (let ((buffer-read-only nil))
-		    (navi2ch-change-text-property (point)
-						  'help-echo
-						  (function navi2ch-article-help-echo))))
+		    (navi2ch-article-change-help-echo-property (point)
+							       'help-echo
+							       (function navi2ch-article-help-echo))))
 	     (and (navi2ch-article-fetch-article board article force)
 		  (navi2ch-bm-remember-fetched-article board article)))))))
 
