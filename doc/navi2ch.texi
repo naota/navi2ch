@@ -2,6 +2,7 @@
 @comment %**start of header
 @setfilename navi2ch.info
 @settitle Navi2ch, Navigator for 2ch for Emacsen
+@set REVISION $Revision$
 @ifhtml
 @documentlanguage ja
 @documentencoding EUC-JP
@@ -29,6 +30,8 @@
 @c Emacs 20 だとフォーマットできないみたい。。。
 
 @ifinfo
+@value{REVISION}
+
 Copyright (C) 2002 by ２ちゃんねる
 
 Permission is granted to make and distribute verbatim copies of this
@@ -58,7 +61,8 @@ translation approved by the Free Software Foundation.
 @titlepage
 @title Navi2ch
 @subtitle Navigator for 2ch for Emacsen
-@author 名無しさん
+@subtitle @value{REVISION}
+@author Navi2ch Project
 
 @page
 @vskip 0pt plus 1filll
@@ -90,7 +94,6 @@ Navi2ch は、Emacs、XEmacs、Mule、Meadow などのEmacsen で動作する、２ちゃ
 んねるナビゲータである。
 
 @menu
-* About This Document::         このドキュメントについて
 * Install::                     イントール
 * Usage::                       使い方
 * Customize::                   カスタマイズ
@@ -105,6 +108,10 @@ Navi2ch は、Emacs、XEmacs、Mule、Meadow などのEmacsen で動作する、２ちゃ
 
 * Getting::                     入手方法
 * Compile::                     コンパイル方法
+
+入手方法
+
+* Getting Develop Version::     開発版の入手
 
 使い方
 
@@ -155,19 +162,6 @@ Bookmark モード
 
 @end ifnottex
 
-@node About This Document
-@unnumbered このドキュメントについて
-
-このドキュメントは、Emacs 用の２ちゃんねるナビゲータ navi2ch の使い方
-を説明した物である。
-
-最新版は
-@uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
-で配布しているので、こちらも参照のこと。
-
-現在のところ、このドキュメントは navi2ch とは独立して編集されているた
-め、navi2ch の最新版と同期していない可能性がある。
-
 @node Install
 @chapter インストール
 
@@ -179,19 +173,58 @@ Bookmark モード
 @node Getting
 @section 入手方法
 
-作者の (not 1) さんのページ
-@uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
+Navi2ch Project Home Page
+@uref{http://navi2ch.sourceforge.net/}
 から最新の tar 玉を入手する。
 
-リリース情報は２ちゃんねる UNIX 板、navi2ch スレでアナウンスされるので
-チェックしよう。
+Navi2ch Project Summary Page
+@uref{http://sourceforge.net/projects/navi2ch/}
+も要チェック。
 
-SourceForge でのプロジェクトがスタート。以下のウェブサイトも要チェック。
+以前のリリースは作者の (not 1) さんのページ
+@uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
+から入手することができる。
 
-@itemize @bullet
-@item @uref{http://sourceforge.net/projects/navi2ch/}
-@item @uref{http://navi2ch.sourceforge.net/}
-@end itemize
+(全部 sourceforge に移した方がいいかな。)
+
+２ちゃんねる UNIX 板、navi2ch スレも参照のこと。
+
+@menu
+* Getting Develop Version::     開発版の入手
+@end menu
+
+@node Getting Develop Version
+@subsection 開発版の入手
+
+navi2ch の開発版は CVS を使って入手することができる。
+@code{CVS password:} と聞いてきたら何も入力せず @kbd{@key{RET}} を押すこと。
+
+@example
+@group
+% cvs -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch login
+% cvs -z3 -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch co navi2ch
+@r{(それぞれ一行で入力)}
+@end group
+@end example
+
+checkout した後は @file{navi2ch} ディレクトリで
+
+@example
+@group
+% cvs update -Pd
+@end group
+@end example
+
+とすると最新版に同期することができる。
+
+CVS についての詳しい説明は
+@uref{http://www.cvshome.org/}
+などを参照。
+
+開発者になると CVS に commit することができるようになる。
+@uref{http://sourceforge.net/projects/navi2ch}
+から「プロジェクト管理者」にコンタクトを取って、ぜひ navi2ch の開発に
+参加してほしい。
 
 @node Compile
 @section コンパイル方法

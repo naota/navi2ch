@@ -1,3 +1,9 @@
+2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (About This Document): 削除。
+	(Getting): 入手方法を SourceForge に変更。
+	(Getting Develop Version): 新規ノード。
+
 2002-01-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* batch-texi2info.el: 念のため、(set-language-environment) する。
