@@ -1,6 +1,13 @@
 2002-01-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el 
+	(navi2ch-article-next-link): 普通に string-to-number でいい事に気
+	付いた。
+	(navi2ch-article-previous-link): 同上。
+
+2002-01-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el 
 	(navi2ch-article-get-message-string): 新関数
 	(navi2ch-article-next-link): 上の関数を使って、そのリンクのレスを
 	表示するように。

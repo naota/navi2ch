@@ -1290,9 +1290,7 @@ article buffer から抜けるなら 'quit を返す。"
       (goto-char point)
       (let ((num (get-text-property (point) 'number)))
 	(when num
-	  (setq num (navi2ch-article-str-to-num num))
-	  (when (listp num)
-	    (setq num (car num)))
+	  (setq num (string-to-number num))
 	  (message "%s" (navi2ch-replace-string
 			 "\n" ""
 			 (navi2ch-article-get-message-string num) t)))))))
@@ -1304,9 +1302,7 @@ article buffer から抜けるなら 'quit を返す。"
     (when point (goto-char point)
 	  (let ((num (get-text-property (point) 'number)))
 	    (when num
-	      (setq num (navi2ch-article-str-to-num num))
-	      (when (listp num)
-		(setq num (car num)))
+	      (setq num (string-to-number num))
 	      (message "%s" (navi2ch-replace-string
 			     "\n" ""
 			     (navi2ch-article-get-message-string num) t)))))))
