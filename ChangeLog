@@ -1,3 +1,9 @@
+2003-03-05  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-board-expire-bookmark-p): docstring 修
+	正。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/84
+
 2003-03-01  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	XEmacsでもモードラインにオン/オフライン状態を表す画像を表示。

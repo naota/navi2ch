@@ -382,7 +382,7 @@ non-nil ならば記憶する。"
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-expire-bookmark-p nil
-  "*expire するときに bookarmk されているスレも expire するかどうか。
+  "*expire するときに bookmark されているスレも expire するかどうか。
 non-nil ならば expire する。"
   :type 'boolean
   :group 'navi2ch-board)
