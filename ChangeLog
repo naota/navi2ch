@@ -7,6 +7,9 @@
 	(navi2ch-article-view-article-from-file): 同上。(意味無いかも)
 	(navi2ch-article-mode): toplevel の変更に伴い make-local-variable
 	の多くを削除。
+	(navi2ch-article-cleanup-message): 最近、改行が "<br>" だったり
+	"<br> " だったり "<br>  " だったりするので、そのレスの "<br> *" の
+	うち最も短いのを改行にするようにした。
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
 	navi2ch-article-mode と同様。

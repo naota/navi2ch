@@ -248,14 +248,18 @@ START, END, NOFIRST で範囲を指定する"
 	      (and nofirst "n")))))
 
 (defsubst navi2ch-article-cleanup-message ()
-  (let ((re "<br>"))
+  (let (re str)
     (when navi2ch-article-cleanup-white-space-after-old-br
       (goto-char (point-min))
-      (if (not (re-search-forward "<br>[^ ]" nil t))
-	  (setq re "<br> ")))
+      (while (re-search-forward "<br> *" nil t)
+	(setq str (match-string 0))
+	(if (or (not re)
+		(< (length str) (length re)))
+	    (setq re str))))
     (when navi2ch-article-cleanup-trailing-whitespace
-      (setq re (concat " *" re)))
-    (unless (string= re "<br>")
+      (setq re (concat " *" (or re "<br>"))))
+    (unless (or (not re)
+		(string= re "<br>"))
       (goto-char (point-min))
       (while (re-search-forward re nil t)
 	(replace-match "<br>")))))	; "\n" でもいいかも。
