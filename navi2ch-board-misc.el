@@ -523,7 +523,8 @@ ARG が non-nil なら移動方向を逆にする。"
       (when (looking-at "\\*")
 	(condition-case nil
 	    (progn
-	      (apply func args)
+	      (save-excursion
+		(apply func args))
 	      (navi2ch-bm-unmark))
 	  (navi2ch-update-failed nil))
 	(sit-for 0))
