@@ -2,6 +2,7 @@
 
 	* navi2ch.texi (Board Misc Mode Key Bindings): "R" の説明を補足。
 	"m R" を追加。
+	(FAQ): Message モードの "C-c C-i" について記述。
 
 2002-08-28  mami  <mami@users.sourceforge.net>
 
