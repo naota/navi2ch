@@ -313,12 +313,13 @@ nil is returned.  Otherwise the associated face object is returned."
 		 nil)
 		((member (cons id artid) navi2ch-mona-enable-article-list)
 		 t)
-		(navi2ch-mona-enable-article-list nil)
 		((member id navi2ch-mona-disable-board-list)
 		 nil)
 		((member id navi2ch-mona-enable-board-list)
 		 t)
-		(navi2ch-mona-enable-board-list nil)
+		((or navi2ch-mona-enable-article-list
+		     navi2ch-mona-enable-board-list)
+		 nil)
 		(t t))
       (navi2ch-mona-put-face))
     (when navi2ch-mona-pack-space-p
