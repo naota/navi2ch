@@ -1,3 +1,8 @@
+2003-10-29  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Getting): ダウンロードページを直接記載。
+	(Compile): 手順に tar 玉の展開を追記。
+
 2003-09-29  mami  <mami@users.sourceforge.net>
 
 	* releng.txt: 更新。
