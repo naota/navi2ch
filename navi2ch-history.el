@@ -45,8 +45,6 @@
 
 (defvar navi2ch-history-alist nil "history を表す連想リスト")
 (defvar navi2ch-history-buffer-name "*navi2ch history*")
-(defvar navi2ch-history-file (navi2ch-expand-file-name
-                               "history.txt"))
 
 (defvar navi2ch-history-board
   '((name . "履歴")

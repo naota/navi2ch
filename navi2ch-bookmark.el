@@ -48,8 +48,6 @@
    nil))
 
 (defvar navi2ch-bookmark-list nil "bookmark を表すリスト")
-(defvar navi2ch-bookmark-file (navi2ch-expand-file-name
-			       "bookmark2.txt"))
 
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-board

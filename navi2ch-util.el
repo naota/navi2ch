@@ -21,9 +21,8 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
-
 (eval-when-compile (require 'cl))
-(require 'regexp-opt)
+
 (require 'navi2ch-vars)
 (require 'timezone)
 
@@ -136,14 +135,6 @@
               b (cdr b))))
     list))
 
-(defun navi2ch-insert-file-contents (file &optional begin end)
-  (let ((coding-system-for-read navi2ch-net-coding-system)
-        (coding-system-for-write navi2ch-net-coding-system))
-    (insert-file-contents file nil begin end)))
-
-(defun navi2ch-expand-file-name (file)
-  (expand-file-name file navi2ch-directory))
-  
 (defun navi2ch-uudecode-region (start end)
   (interactive "r")
   (let (dir)
@@ -212,121 +203,6 @@
       (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))
     (buffer-string)))
       
-      
-(defun navi2ch-url-to-board (url)
-  (let (uri id board kako)
-    (cond ((string-match
-            "http://\\(.+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)))
-	  ((string-match
-            "http://\\(.+\\)/test/read\\.cgi/\\([^/]+\\)/" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)))
-          ((string-match
-            "http://\\(.+\\)/\\([^/]+\\)/\\(kako/[0-9]+/\\)" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)
-                 kako (match-string 3 url)))
-          ((string-match "http://\\(.+\\)/\\([^/]+\\)" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id))))
-    (when id
-      (let (name)
-        (dolist (x (navi2ch-list-get-board-name-list
-                    navi2ch-list-category-list))
-          (when (string= (cdr (assq 'uri x)) uri)
-            (setq board x)))
-        (unless board
-          (setq board (list (cons 'uri uri)
-                            (cons 'id id)
-                            (cons 'name "No Name"))))
-        (cons (cons 'kako kako)
-              board)))))
-
-
-(defun navi2ch-url-to-article (url)
-  (let (list)
-    (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match "&st=\\([0-9]+\\)" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
-	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match "http://.+/test/read\\.cgi/.+/[ni.]?\\([0-9]+\\)[^/]*$" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
-          ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))))
-    list))
-
-(defun navi2ch-article-to-url (board article &optional start end nofirst)
-  "BOARD, ARTICLE から url に変換。
-START, END, NOFIRST で範囲を指定する"
-  (let ((url (navi2ch-board-get-readcgi-url board)))
-    (setq url (concat
-	       url
-	       (cdr (assq 'artid article)) "/"
-	       (and (or start end nofirst) "?")
-	       (and start (format "&st=%d" start))
-	       (and end (format "&to=%d" end))
-	       (and nofirst "&nofirst=true")))))
-
-(defun navi2ch-board-to-url (board)
-  "BOARD から url に変換"
-  (navi2ch-board-get-uri board))
-							   
-(defun navi2ch-2ch-url-p (url)
-  (let (list)
-    (setq list
-          (mapcar
-           (lambda (x)
-             (let ((str (cdr (assq 'uri x))))
-               (and str
-                    (string-match "http://\\([^/]+\\)" str)
-                    (match-string 1 str))))
-           (navi2ch-list-get-board-name-list
-            navi2ch-list-category-list)))
-    (when (string-match "http://\\([^/]+\\)" url)
-      (setq url (match-string 1 url))
-      (member url list))))
-                      
-  
-(defun navi2ch-goto-url (url &optional force)
-  "URL からスレまたは板を選ぶ"
-  (interactive "sURL: ")
-  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
-        (board-win (get-buffer-window navi2ch-board-buffer-name))
-        (art-win (and (navi2ch-article-current-buffer)
-                      (get-buffer-window (navi2ch-article-current-buffer))))
-	(article (navi2ch-url-to-article url))
-	(board (navi2ch-url-to-board url)))
-    (when board
-      (cond (art-win
-	     (select-window art-win)
-	     (unless article
-	       (navi2ch-article-exit)))
-	    (board-win
-	     (select-window board-win)
-	     (when article
-	       (split-window-vertically navi2ch-board-window-height)
-	       (other-window 1)))
-	    (list-win
-	     (select-window list-win)
-	     (when navi2ch-list-stay-list-window
-	       (split-window-horizontally navi2ch-list-window-width)
-	       (other-window 1))))
-      (if article
-	  (progn
-	    (navi2ch-article-view-article board
-					  article
-					  force
-					  (cdr (assq 'number article))))
-	(navi2ch-board-select-board board force)))))
-
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
   (let ((prompt (concat prompt "(y, n, or q) "))
 	(again nil))
@@ -429,12 +305,12 @@ return new alist whose car is the new pair and cdr is ALIST.
 (defun navi2ch-write-region (begin end filename)
   (write-region begin end filename nil 'no-msg))
 
-(defun navi2ch-enable-readcgi-p (board)
-  "read.cgi を使う板かどうかを返す。"
+(defun navi2ch-enable-readcgi-p (host)
+  "HOST が read.cgi を使うホストかどうかを返す。"
   (if navi2ch-enable-readcgi
-      (not (member (navi2ch-board-get-host board)
+      (not (member host
 		   navi2ch-disable-readcgi-host-list))
-    (member (navi2ch-board-get-host board)
+    (member host
 	    navi2ch-enable-readcgi-host-list)))
 
 ;; from apel
@@ -516,23 +392,6 @@ return new alist whose car is the new pair and cdr is ALIST.
       (aref (, datevec) 1)
       (aref (, datevec) 2)
       (aref (, datevec) 3))))
-
-(defun navi2ch-clear-seen ()
-  (interactive)
-  (dolist (board (navi2ch-list-get-board-name-list
-		  navi2ch-list-category-list))
-    (let ((navi2ch-board-current-board board))
-      (unless (assq 'type navi2ch-board-current-board)
-	(navi2ch-board-load-info)
-	(setq navi2ch-board-current-board
-	      (delete (assq 'seen navi2ch-board-current-board)
-		      navi2ch-board-current-board))
-	(setq navi2ch-board-current-board
-	      (delete (assq nil navi2ch-board-current-board)
-		      navi2ch-board-current-board))
-	(setq navi2ch-board-current-board
-	      (navi2ch-put-alist 'seen nil navi2ch-board-current-board))
-	(navi2ch-board-save-info)))))
 
 (defun navi2ch-end-of-buffer ()
   (interactive)

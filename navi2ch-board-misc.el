@@ -89,7 +89,6 @@
   "スレを得る関数。引数は ITEM")
 (defvar navi2ch-bm-exit-function nil)
 (defvar navi2ch-bm-fetched-article-list nil)
-(defvar navi2ch-bm-fetched-info-file (navi2ch-expand-file-name "fetched.txt"))
 
 (defvar navi2ch-bm-state-alist
   '((view "V" navi2ch-bm-view-face navi2ch-bm-updated-view-face navi2ch-bm-seen-view-face)
@@ -351,7 +350,7 @@
 	     (set-buffer buffer)
 	     (goto-char (point-max))
 	     (insert (format "<a href=\"%s\">%s</a><br>\n" file subject))))
-      (let ((coding-system-for-write navi2ch-net-coding-system))
+      (let ((coding-system-for-write navi2ch-coding-system))
 	(navi2ch-write-region (point-min) (point-max)
 			      (expand-file-name file directory))))
     (select-window window)))

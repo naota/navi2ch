@@ -25,10 +25,6 @@
 (eval-when-compile (require 'cl))
 (require 'navi2ch-util)
 (require 'navi2ch-net)
-(require 'navi2ch-articles)
-(require 'navi2ch-search)
-(require 'navi2ch-bookmark)
-(require 'navi2ch-history)
 (require 'navi2ch-board)
 (require 'navi2ch-board-misc)
 (require 'navi2ch-list)
@@ -41,6 +37,8 @@
   :group 'hypermedia)
 
 (defvar navi2ch-ask-when-exit t)
+
+(defvar navi2ch-coding-system 'shift_jis)
 
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-offline-on "[ON] ")
@@ -174,19 +172,75 @@ SUSPEND が non-nil なら buffer を消さない"
       (make-directory dir t)))
   (when (or (file-regular-p file)
 	    (not (file-exists-p file)))
-    (let ((coding-system-for-write navi2ch-net-coding-system))
+    (let ((coding-system-for-write navi2ch-coding-system))
       (with-temp-file file
 	(let ((standard-output (current-buffer)))
 	  (prin1 info))))))
 
 (defun navi2ch-load-info (file)
   (when (file-regular-p file)
-    (let ((coding-system-for-read navi2ch-net-coding-system))
+    (let ((coding-system-for-read navi2ch-coding-system))
       (with-temp-buffer
 	(insert-file-contents file)
 	(let ((standard-input (current-buffer)))
 	  (read))))))
 
+(defun navi2ch-goto-url (url &optional force)
+  "URL からスレまたは板を選ぶ"
+  (interactive "sURL: ")
+  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
+        (board-win (get-buffer-window navi2ch-board-buffer-name))
+        (art-win (and (navi2ch-article-current-buffer)
+                      (get-buffer-window (navi2ch-article-current-buffer))))
+	(article (navi2ch-article-url-to-article url))
+	(board (navi2ch-board-url-to-board url)))
+    (when board
+      (cond (art-win
+	     (select-window art-win)
+	     (unless article
+	       (navi2ch-article-exit)))
+	    (board-win
+	     (select-window board-win)
+	     (when article
+	       (split-window-vertically navi2ch-board-window-height)
+	       (other-window 1)))
+	    (list-win
+	     (select-window list-win)
+	     (when navi2ch-list-stay-list-window
+	       (split-window-horizontally navi2ch-list-window-width)
+	       (other-window 1))))
+      (if article
+	  (progn
+	    (navi2ch-article-view-article board
+					  article
+					  force
+					  (cdr (assq 'number article))))
+	(navi2ch-board-select-board board force)))))
+
+(defun navi2ch-2ch-url-p (url)
+  "URL が 2ch 内の url かを返す。"
+  (let (list)
+    (setq list
+          (mapcar
+           (lambda (x)
+             (let ((str (cdr (assq 'uri x))))
+               (and str
+                    (string-match "http://\\([^/]+\\)" str)
+                    (match-string 1 str))))
+           (navi2ch-list-get-board-name-list
+            navi2ch-list-category-list)))
+    (when (string-match "http://\\([^/]+\\)" url)
+      (setq url (match-string 1 url))
+      (member url list))))
+                      
+(defun navi2ch-insert-file-contents (file &optional begin end)
+  (let ((coding-system-for-read navi2ch-coding-system)
+        (coding-system-for-write navi2ch-coding-system))
+    (insert-file-contents file nil begin end)))
+
+(defun navi2ch-expand-file-name (file)
+  (expand-file-name file navi2ch-directory))
+  
 (provide 'navi2ch)
 
 ;;; navi2ch.el ends here

@@ -194,6 +194,36 @@ LEN は RANGE で範囲を指定される list の長さ"
 (defmacro navi2ch-article-summary-element-set-access-time (element time)
   `(setq ,element (plist-put ,element :access-time ,time)))
 
+(defun navi2ch-article-url-to-article (url)
+  "URL から article に変換。"
+  (let (list)
+    (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
+           (setq list (list (cons 'artid (match-string 1 url))))
+           (when (string-match "&st=\\([0-9]+\\)" url)
+             (setq list (cons (cons 'number
+                                    (string-to-number (match-string 1 url)))
+                              list))))
+	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
+           (setq list (list (cons 'artid (match-string 1 url))))
+           (when (string-match "http://.+/test/read\\.cgi/.+/[ni.]?\\([0-9]+\\)[^/]*$" url)
+             (setq list (cons (cons 'number
+                                    (string-to-number (match-string 1 url)))
+                              list))))
+          ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+           (setq list (list (cons 'artid (match-string 1 url))))))
+    list))
+
+(defun navi2ch-article-to-url (board article &optional start end nofirst)
+  "BOARD, ARTICLE から url に変換。
+START, END, NOFIRST で範囲を指定する"
+  (let ((url (navi2ch-board-get-readcgi-url board)))
+    (setq url (concat url (cdr (assq 'artid article)) "/"))
+    (if (eq start end)
+	(concat url start)
+      (concat url
+	      start (and (or start end) "-") end
+	      (and nofirst "n")))))
+
 (defsubst navi2ch-article-parse-message (str &optional sep)
   (or sep (setq sep navi2ch-article-separator))
   (unless (string= str "")
@@ -599,7 +629,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	    (time (cdr (assq 'time article)))
 	    full-size url)
         (setq state
-	      (if (and (navi2ch-enable-readcgi-p board) (file-exists-p file))
+	      (if (and (navi2ch-enable-readcgi-p
+			(navi2ch-board-get-host board)) (file-exists-p file))
 		  (progn
 		    (setq url (navi2ch-article-get-readcgi-raw-url board article))
 		    (navi2ch-net-update-file-with-readcgi url file time
@@ -800,8 +831,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
       (when prop
 	(let ((2ch-url-p (navi2ch-2ch-url-p prop)))
 	  (if (and 2ch-url-p
-		   (or (navi2ch-url-to-board prop)
-		       (navi2ch-url-to-article prop))
+		   (or (navi2ch-board-url-to-board prop)
+		       (navi2ch-article-url-to-article prop))
 		   (not browse-p))
 	      (navi2ch-goto-url prop)
 	    (navi2ch-browse-url prop)))))))
@@ -1084,7 +1115,8 @@ article buffer から抜けるなら 'quit を返す。"
 					 (navi2ch-article-get-current-number))
 				       (save-excursion
 					 (goto-char (region-end))
-					 (navi2ch-article-get-current-number)))))))))
+					 (navi2ch-article-get-current-number)
+					 t))))))))
 
 (defun navi2ch-article-copy-title ()
   "メニューを表示して、タイトルを得る"

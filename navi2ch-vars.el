@@ -80,7 +80,8 @@
   :type '(repeat :tag "引数" string)
   :group 'navi2ch)
 
-(defcustom navi2ch-init-file "~/.navi2ch/init.el"
+(defcustom navi2ch-init-file (expand-file-name "init.el"
+					       navi2ch-directory)
   "*navi2ch の初期化ファイル"
   :type 'file
   :group 'navi2ch)
@@ -247,6 +248,25 @@ nil ならば制限しない"
 `non-nil' なら表示したままにする"
   :type 'boolean
   :group 'navi2ch-board)
+
+(defcustom navi2ch-bm-fetched-info-file (expand-file-name "fetched.txt"
+							  navi2ch-directory)
+  "*すでに読んだスレを保存するファイル"
+  :type 'string
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-bookmark-file (expand-file-name "bookmark2.txt"
+						   navi2ch-directory)
+  "*グローバルブックマークを保存するファイル"
+  :type 'string
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-history-file (expand-file-name "history.txt"
+						  navi2ch-directory)
+  "*ヒストリを保存するファイル"
+  :type 'string
+  :group 'navi2ch-board)
+
 
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program

@@ -30,6 +30,12 @@
 (require 'navi2ch-util)
 (require 'navi2ch-board)
 (require 'navi2ch-net)
+
+(require 'navi2ch-search)
+(require 'navi2ch-history)
+(require 'navi2ch-bookmark)
+(require 'navi2ch-articles)
+
 (require 'navi2ch-face)
 (require 'navi2ch-vars)
 
@@ -85,11 +91,12 @@
 (defvar navi2ch-list-category-list nil)
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
+
 (defvar navi2ch-list-navi2ch-category-alist
   (list navi2ch-articles-board
-	navi2ch-search-board
-;;	   navi2ch-bookmark-board
-	navi2ch-history-board))
+	  navi2ch-search-board
+	  navi2ch-bookmark-board
+	  navi2ch-history-board))
 
 (defsubst navi2ch-list-get-file-name (&optional name)
   (navi2ch-expand-file-name
@@ -421,7 +428,7 @@
 			      (setq start t))
 			    (setq ignore
 				  (member (decode-coding-string
-					   cont navi2ch-net-coding-system)
+					   cont navi2ch-coding-system)
 					  navi2ch-list-ignore-category-list))
 			    (when (not ignore)
 			      (concat cont "\n\n\n")))))))

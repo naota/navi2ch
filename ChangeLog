@@ -1,4 +1,63 @@
 2002-01-12  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+	navi2ch-util, navi2ch-net から list, board, article 依存のコードを
+	はずしてみた。また、それに伴なしいくつかの変数、関数名も変更。
+	navi2ch-url-to-article => navi2ch-article-url-to-article
+	navi2ch-url-to-board => navi2ch-board-url-to-board
+	navi2ch-net-coding-system => navi2ch-coding-system
+
+	* navi2ch.el
+	(toplevel): navi2ch-list で require するようになった feature を
+	require しないように。
+	(navi2ch-coding-system): navi2ch-net から移動。名前変更。
+	(navi2ch-save-info): navi2ch-coding以下略。
+	(navi2ch-load-info): 同上。
+	(navi2ch-goto-url): navi2ch-util から移動。
+	(navi2ch-2ch-url-p): 同上。
+	(navi2ch-insert-file-contents): 同上。
+	(navi2ch-expand-file-name): 同上。
+
+	* navi2ch-vars.el (navi2ch-init-file): expand-file-name を使うように
+	(navi2ch-bm-fetched-info-file): navi2ch-board-misc から移動。
+	(navi2ch-bookmark-file): navi2ch-bookmark から移動
+	(navi2ch-history-file): navi2ch-history から移動
+
+	* navi2ch-util.el (navi2ch-enable-readcgi-p): board ではなく host
+	を貰うように。
+
+	* navi2ch-net.el
+	(toplevel): navi2ch-net を require してみる。
+	(navi2ch-net-update-file-with-readcgi): navi2ch-coding... 以下略。
+	(navi2ch-net-url-hexify-string): 同上
+	(navi2ch-net-send-message-success-p): 同上
+	(navi2ch-net-send-message-error-string): 同上
+
+	* navi2ch-list.el 
+	(toplevel): navi2ch-search, navi2ch-history, navi2ch-bookmark,
+	navi2ch-article を require するように。
+	(navi2ch-list-make-board-txt): navi2ch-coding-system の名前変更に
+	合わせる。
+
+	* navi2ch-board.el
+	(toplevel): navi2ch を require するように。
+	(navi2ch-board-url-to-board): navi2ch-util から移動。名前変更。
+	(navi2ch-board-to-url): 同上。
+	(navi2ch-board-save-old-subject-file): navi2ch-coding-system の名
+	前変更に合わせる。
+	(navi2ch-board-update-seen-articles): なんかいらない変数使ってたの
+	で捨て。
+
+	* navi2ch-board-misc.el
+	(navi2ch-bm-textize-article): navi2ch-coding-system の名前変更に合
+	わせる。
+
+	* navi2ch-article.el
+	(navi2ch-article-url-to-article): navi2ch-util から移動。名前変更。
+	(navi2ch-article-to-url): 同上。出力フォーマットを修正。
+	(navi2ch-article-update-file): navi2ch-board-get-host の変更に合わ
+	せる。上の変更に合わせる。
+	(navi2ch-article-select-current-link): 同上。
+	(navi2ch-article-show-url-subr): 範囲指定したときに最初のレスを表
+	示しないように。
 
 	* navi2ch-board.el
 	(navi2ch-board-get-bbscgi-url): 新関数。defsubst にする必要って全

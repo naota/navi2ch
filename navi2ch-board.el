@@ -27,6 +27,10 @@
 (require 'navi2ch-board-misc)
 (require 'navi2ch-net)
 
+(eval-when-compile
+  (provide 'navi2ch-board)
+  (require 'navi2ch))
+
 (defvar navi2ch-board-mode-map nil)
 (unless navi2ch-board-mode-map
   (let ((map (copy-keymap navi2ch-bm-mode-map)))
@@ -174,6 +178,42 @@ kako ならばそれに対応した uri にする"
 	  (cons 'response num)
 	  (cons 'artid id))))
 
+(defun navi2ch-board-url-to-board (url)
+  "URL から board を得る"
+  (let (uri id board kako)
+    (cond ((string-match
+            "http://\\(.+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
+           (setq id (match-string 2 url)
+                 uri (format "http://%s/%s/" (match-string 1 url) id)))
+	  ((string-match
+            "http://\\(.+\\)/test/read\\.cgi/\\([^/]+\\)/" url)
+           (setq id (match-string 2 url)
+                 uri (format "http://%s/%s/" (match-string 1 url) id)))
+          ((string-match
+            "http://\\(.+\\)/\\([^/]+\\)/\\(kako/[0-9]+/\\)" url)
+           (setq id (match-string 2 url)
+                 uri (format "http://%s/%s/" (match-string 1 url) id)
+                 kako (match-string 3 url)))
+          ((string-match "http://\\(.+\\)/\\([^/]+\\)" url)
+           (setq id (match-string 2 url)
+                 uri (format "http://%s/%s/" (match-string 1 url) id))))
+    (when id
+      (let (name)
+        (dolist (x (navi2ch-list-get-board-name-list
+                    navi2ch-list-category-list))
+          (when (string= (cdr (assq 'uri x)) uri)
+            (setq board x)))
+        (unless board
+          (setq board (list (cons 'uri uri)
+                            (cons 'id id)
+                            (cons 'name "No Name"))))
+        (cons (cons 'kako kako)
+              board)))))
+
+(defun navi2ch-board-to-url (board)
+  "BOARD から url に変換"
+  (navi2ch-board-get-uri board))
+							   
 (defun navi2ch-board-get-subject-list (file)
   "file からスレの list を作る。"
   (when (file-exists-p file)
@@ -274,7 +314,7 @@ kako ならばそれに対応した uri にする"
 (defun navi2ch-board-save-old-subject-file (board)
   (let ((file (navi2ch-board-get-file-name board)))
     (when (file-exists-p file)
-      (let ((coding-system-for-write navi2ch-net-coding-system))
+      (let ((coding-system-for-write navi2ch-coding-system))
 	(with-temp-file (navi2ch-board-get-file-name
 			 board
 			 navi2ch-board-old-subject-file-name)
@@ -289,8 +329,7 @@ kako ならばそれに対応した uri にする"
 	(when (navi2ch-board-updated-article-p
 	       (list (cons 'artid artid))
 	       (navi2ch-article-summary-element-seen element))
-	  (navi2ch-article-summary-element-set-seen element nil)
-	  (setq changed t))
+	  (navi2ch-article-summary-element-set-seen element nil))
 	(navi2ch-put-alist artid element summary)))
     (navi2ch-article-save-article-summary
      navi2ch-board-current-board summary)))
@@ -398,7 +437,6 @@ kako ならばそれに対応した uri にする"
 	   (assq 'time board)
 	   (assq 'logo board)
 	   (assq 'seen board)))))
-   
 
 (defun navi2ch-board-load-info (&optional board)
   (or board (setq board navi2ch-board-current-board))

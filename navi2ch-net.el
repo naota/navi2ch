@@ -26,9 +26,11 @@
 (require 'timezone)
 (require 'navi2ch-util)
 (require 'navi2ch-vars)
+(eval-when-compile
+  (provide 'navi2ch-net)
+  (require 'navi2ch))
 
 (defvar navi2ch-net-connection-name "navi2ch connection")
-(defvar navi2ch-net-coding-system 'shift_jis)
 (defvar navi2ch-net-user-agent "Navi2ch")
 (defvar navi2ch-net-setting-file-name "SETTING.TXT")
 (defvar navi2ch-net-last-url nil)
@@ -101,11 +103,10 @@
 
 (defun navi2ch-net-http-proxy-basic-credentials (user pass)
   "USER と PASS から Proxy 認証の証明書(？)部分を返す。"
-  (setq test
   (when (and user pass)
     (concat "Basic "
 	    (base64-encode-string
-	     (concat user ":" pass))))))
+	     (concat user ":" pass)))))
 
 (defun navi2ch-net-make-request-header (header-alist)
   "'((NAME . VALUE)...) な HEADER-ALIST からリクエストヘッダを作る。"
@@ -376,7 +377,7 @@ DIFF が non-nil ならば差分を取得する。
 		(insert (substring cont 0 cont-size))
 		(list header 'aborn)))
 	     ((string= "-ERR" state)
-	      (message "error! %s" (decode-coding-string data navi2ch-net-coding-system))
+	      (message "error! %s" (decode-coding-string data navi2ch-coding-system))
 	      nil))))))))
 
 ;; from Emacs/W3
@@ -401,7 +402,7 @@ internet drafts directory for a copy.")
 	      (upcase (format "%%0%x" char))
 	    (upcase (format "%%%x" char)))
 	(char-to-string char))))
-   (encode-coding-string str navi2ch-net-coding-system) ""))
+   (encode-coding-string str navi2ch-coding-system) ""))
 
 (defun navi2ch-net-get-param-string (param-alist)
   (mapconcat
@@ -414,10 +415,10 @@ internet drafts directory for a copy.")
 (defun navi2ch-net-send-message-success-p (proc)
   (string-match "書きこみました。"
 		(decode-coding-string (navi2ch-net-get-content proc)
-				      navi2ch-net-coding-system)))
+				      navi2ch-coding-system)))
 (defun navi2ch-net-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)
-				   navi2ch-net-coding-system)))
+				   navi2ch-coding-system)))
     (when (string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
       (match-string 1 str))))
 		   
