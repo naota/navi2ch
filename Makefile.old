@@ -1,0 +1,20 @@
+EMACS = meadow95.exe
+#EMACS = emacs
+#EMACS = xemacs
+
+NAME = navi2ch-`date +%y%m%d%H%M`
+
+all: elc
+
+elc: 
+	$(EMACS) --batch -q -no-site-file -l "./bcomp.el"
+
+tgz: tar
+
+tar: 
+	cvs export -D now -d $(NAME) navi2ch; 			\
+	tar --numeric-owner -zcvf $(NAME).tar.gz $(NAME);	\
+	rm -rf $(NAME)
+
+clean:
+	rm -f *~ *.elc *.tgz *.tar.gz
