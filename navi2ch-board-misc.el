@@ -450,6 +450,7 @@
     (navi2ch-bm-get-property-internal (point)))))
 
 (defun navi2ch-bm-renumber ()
+  (interactive)
   (save-excursion
     (goto-char (point-min))
     (let ((buffer-read-only nil)

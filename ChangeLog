@@ -12,6 +12,9 @@
 	message を調整。
 	major-mode が navi2ch-article-mode のときだけ処理するように。
 
+	* navi2ch-board-misc.el (navi2ch-bm-renumber):
+	(interactive) を追加。
+
 2002-05-11    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-next-link): 移動しなかったと
