@@ -1692,8 +1692,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		      (navi2ch-board-save-info navi2ch-board-current-board))
 		    (navi2ch-article-exit)
 		    (navi2ch-bm-select-board board))
-		(error "don't move")))))
-      (error "don't move"))))
+		(error "No such board"))))))))
 
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM 番目のレスに移動"
