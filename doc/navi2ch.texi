@@ -1588,6 +1588,9 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @item f
 @samp{( ´_ゝ`)フーン}
 
+@item e
+@samp{(⊃д`)}
+
 @item F
 @samp{(´ー｀)}
 
@@ -1638,6 +1641,9 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 
 @item S
 @samp{(´・ω・`)ショボーン}
+
+@item t
+@samp{y=ー( ゜д゜)・∵.　ターン}
 
 @item u
 @samp{(゜д゜)ウマー}
@@ -1725,6 +1731,17 @@ Navi2ch を同時に複数起動すると、@file{~/.navi2ch/} の整合性が取れなく
 複数起動しようとしていないことを確認した後、「もう一度試しますか?」の
 問いに @code{n} (この問いはバージョンによっては削除されています)、
 「危険を承知で続けますか?」の問いに @code{yes} と答えてください。
+
+@item Q.
+@code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
+って出て起動できないんだけど…。
+
+@item A.
+とりあえずこうしとけば？
+@lisp
+(setq navi2ch-open-network-stream-function
+      #'navi2ch-open-network-stream-with-retry)
+@end lisp
 
 @end table
 
@@ -1912,16 +1929,6 @@ Boards File}.
 @uref{http://azlucky.s25.xrea.com/}
 の【 他のボード一覧配布先 】にあるものとか) を
 @code{navi2ch-list-bbstable-url} に設定するといいかも。
-
-@item Q.
-@code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
-って出て起動できないんだけど…。
-
-@item A.
-とりあえずこうしとけば？
-@lisp
-(setq navi2ch-auto-update nil)
-@end lisp
 
 @end table
 

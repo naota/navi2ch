@@ -1,3 +1,10 @@
+2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Message Mode AA List): 最新版に同期。
+	(General Qestions): operation already in progress エラーの対処方法
+	を変更してセクションを移動。
+	(Board Questions): 同上。
+
 2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Getting Develop Version): CVS ホストを
