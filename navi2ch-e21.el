@@ -24,7 +24,7 @@
 
 ;;; Code:
 (provide 'navi2ch-e21)
-(defvar navi2ch-e21-ident
+(defconst navi2ch-e21-ident
   "$Id$")
 (require 'navi2ch)
 

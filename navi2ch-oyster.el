@@ -28,7 +28,7 @@
 
 (provide 'navi2ch-oyster)
 
-(defvar navi2ch-oyster-ident
+(defconst navi2ch-oyster-ident
   "$Id$")
 
 (require 'navi2ch-util)

@@ -1,5 +1,14 @@
 2004-05-02  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* NEWS: 更新。
+
+	* *.el: (defvar *-ident ...) -> (defconst *-ident ...)
+
+	* 各種ファイル: Copyright 更新。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): バグ持ちの
+	regexp-opt-depth() の場合は nil に。
+
 	* navi2ch-net.el (navi2ch-net-update-file-diff-size): 新変数。
 	(navi2ch-net-update-file-diff): 1 バイトかつ \n 固定ではなく、上記
 	変数のサイズに従い元のファイルにオーバーラップさせて取得。

@@ -29,7 +29,7 @@
 
 ;;; Code:
 (provide 'navi2ch-multibbs)
-(defvar navi2ch-multibbs-ident
+(defconst navi2ch-multibbs-ident
   "$Id$")
 
 (require 'navi2ch-http-date)

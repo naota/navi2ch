@@ -28,7 +28,7 @@
 
 ;;; Code:
 (provide 'navi2ch-pizaunix)
-(defvar navi2ch-pizaunix-ident
+(defconst navi2ch-pizaunix-ident
   "$Id$")
 
 (require 'navi2ch-util)

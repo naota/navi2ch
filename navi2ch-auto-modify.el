@@ -22,7 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-auto-modify)
-(defvar navi2ch-auto-modify-ident
+(defconst navi2ch-auto-modify-ident
   "$Id$")
 
 (eval-when-compile (require 'cl))

@@ -30,7 +30,7 @@
 
 ;; Preamble
 (provide 'navi2ch-head)
-(defvar navi2ch-head-ident
+(defconst navi2ch-head-ident
   "$Id$")
 
 (require 'navi2ch)

@@ -1,6 +1,6 @@
 ;;; navi2ch-localfile.el --- View localfile for Navi2ch.
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2004 by Navi2ch Project
 
 ;; Author: Nanashi San <nanashi@users.sourceforge.net>
 ;; Part6 スレの 427 の名無しさん
@@ -42,7 +42,7 @@
 ;;; Code:
 (provide 'navi2ch-localfile)
 
-(defvar navi2ch-localfile-ident
+(defconst navi2ch-localfile-ident
   "$Id$")
 
 (eval-when-compile (require 'cl))

@@ -22,7 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-xmas)
-(defvar navi2ch-xmas-ident
+(defconst navi2ch-xmas-ident
   "$Id$")
 (require 'navi2ch)
 

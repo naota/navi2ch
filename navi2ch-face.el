@@ -26,7 +26,7 @@
 
 ;;; Code:
 (provide 'navi2ch-face)
-(defvar navi2ch-face-ident
+(defconst navi2ch-face-ident
   "$Id$")
 
 (defgroup navi2ch-face nil

@@ -39,7 +39,7 @@
 ;; を non-nil に設定し、フィルタの結果に応じてコーパスに再登録する。
 
 ;;; Code:
-(defvar navi2ch-spamfilter-ident
+(defconst navi2ch-spamfilter-ident
   "$Id$")
 
 (eval-when-compile (require 'cl))

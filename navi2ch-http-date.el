@@ -84,7 +84,7 @@
 ;;; Code:
 
 (provide 'navi2ch-http-date)
-(defvar navi2ch-http-date-ident
+(defconst navi2ch-http-date-ident
   "$Id$")
 
 (require 'regexp-opt)

@@ -22,7 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch)
-(defvar navi2ch-ident
+(defconst navi2ch-ident
   "$Id$")
 
 (eval-when-compile (require 'cl))

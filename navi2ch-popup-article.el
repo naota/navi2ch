@@ -22,7 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-popup-article)
-(defvar navi2ch-popup-article-ident
+(defconst navi2ch-popup-article-ident
   "$Id$")
 
 (require 'navi2ch)

@@ -1,6 +1,6 @@
 ;;; navi2ch-jbbs-shitaraba.el --- View jbbs-shitaraba module for Navi2ch.
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2004 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -30,7 +30,7 @@
 
 ;;; Code:
 (provide 'navi2ch-jbbs-shitaraba)
-(defvar navi2ch-jbbs-shitaraba-ident
+(defconst navi2ch-jbbs-shitaraba-ident
   "$Id$")
 
 (eval-when-compile (require 'cl))
