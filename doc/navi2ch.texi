@@ -1417,6 +1417,14 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item C-o
 @code{navi2ch-article-save-dat-file} .dat ファイルを保存
 
+@item F
+@code{navi2ch-article-toggle-message-filter} レスに対するフィルタ処理の
+有効・無効を切り替える
+
+@item x
+@code{navi2ch-article-toggle-message-filter} カーソルのあるレスに対する
+レス置換の有効・無効を切り替える
+
 @end table
 
 @node Message Mode Key Bindings
