@@ -121,8 +121,12 @@
   (string= "" (navi2ch-net-get-content proc)))
 
 (defun navi2ch-js-send-message-error-string (proc)
-  (decode-coding-string (navi2ch-net-get-content proc)
-			'euc-japan))
+  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				   'euc-japan)))
+    (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
+	   (match-string 1 str))
+	  ((string-match "<b>\\([^<]+\\)" str)
+	   (match-string 1 str)))))
 
 (defun navi2ch-js-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。

@@ -1,3 +1,17 @@
+2002-07-24  mami  <mami@users.sourceforge.net>
+
+	書き込み失敗時のメッセージが化けてた。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message):
+	'send-error-string を 'error-string に変更。
+	ほんとは 'send-error-string の方が正しいのかな?
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-error-string):
+	ちゃんと応答を解釈するように。
+	「ＥＲＲＯＲ：」が使われるかは不明。
+	(navi2ch-js-func-alist): navi2ch-js-send-message-error-string を追
+	加。
+
 2002-07-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message):

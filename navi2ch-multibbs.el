@@ -230,7 +230,7 @@ START, END, NOFIRST で範囲を指定する"
 			bbstype 'send-success-p
 			'navi2ch-2ch-send-message-success-p))
 	 (error-string (navi2ch-multibbs-get-func
-			bbstype 'send-error-string
+			bbstype 'error-string
 			'navi2ch-2ch-send-message-error-string))
 	 (bbs          (let ((uri (navi2ch-board-get-uri board)))
 			 (string-match "\\([^/]+\\)/$" uri)
