@@ -1,3 +1,14 @@
+2002-10-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	スレ一覧で状態(UCV)のソート順を変えられるようにした。
+	* navi2ch-vars.el (navi2ch-bm-sort-by-state-order): 新変数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-state):
+	navi2ch-bm-sort-by-state-order を使うように。
+
+	* navi2ch-oyster.el (navi2ch-oyster-article-update): 状態の取得を
+	他と合わせる。でもエラーを全部 kako にしてるのはかなりまずい。
+
 2002-10-09  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (toplevel): byte-compile時のwarning

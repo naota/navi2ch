@@ -83,11 +83,13 @@ START からじゃないかもしれないけど・・・。
     (setq header (if start
 		     (navi2ch-net-update-file-diff url file time)
 		   (navi2ch-net-update-file url file time)))
-    (unless header
+    (unless (or (not header)
+		(navi2ch-net-get-state 'kako))
       (setq url (navi2ch-article-get-kako-url board article))
       (setq kako-p t)
       (setq header (navi2ch-net-update-file url file)))
-    (unless header
+    (unless (or (not header)
+		(navi2ch-net-get-state 'kako))
       (and (not navi2ch-oyster-session-id)
 	   (navi2ch-oyster-login))
       (setq url (navi2ch-oyster-get-offlaw-url

@@ -694,9 +694,13 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-sort-by-state (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
-   (not rev)
-   'navi2ch-bm-goto-state-column
-   'forward-char))
+   rev
+   (lambda ()
+     (navi2ch-bm-goto-state-column)
+     (cdr (assoc (buffer-substring (point)
+				   (1+ (point)))
+		 navi2ch-bm-sort-by-state-order)))
+   nil))
 
 (defun navi2ch-bm-sort-by-subject (&optional rev)
   (interactive "P")

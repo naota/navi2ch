@@ -366,6 +366,18 @@ non-nil ならば expire する。"
 		 (const :tag "フェイスを使用しない" nil))
   :group 'navi2ch-board)
 
+(defcustom navi2ch-bm-sort-by-state-order
+  '(("U" . 0)
+    ("V" . 1)
+    ("C" . 2)
+    (" " . 3))
+  "*状態でソートするときの順序を決めるリスト。"
+  :type '(list (cons (const :tag "状態 U" "U") (number :tag "順番"))
+	       (cons (const :tag "状態 V" "V") (number :tag "順番"))
+	       (cons (const :tag "状態 C" "C") (number :tag "順番"))
+	       (cons (const :tag "状態 	" " ") (number :tag "順番")))
+  :group 'navi2ch-board)
+
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)
