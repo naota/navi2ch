@@ -35,6 +35,7 @@
 (defvar navi2ch-net-process nil)
 (defvar navi2ch-net-last-host nil)
 (defvar navi2ch-net-last-port nil)
+(defvar navi2ch-net-status nil)
 (defvar navi2ch-net-header nil)
 (defvar navi2ch-net-content nil)
 
@@ -50,10 +51,6 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
       (if err
 	  (message "Error: %s" (error-message-string err))
 	(message "Error"))
-      nil)
-     (quit
-      (ding)
-      (message "Quit")
       nil)))
 
 (defun navi2ch-net-cleanup ()
@@ -61,7 +58,8 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
       (let ((buf (process-buffer navi2ch-net-process)))
 	(delete-process navi2ch-net-process)
 	(kill-buffer buf)))
-  (setq navi2ch-net-header nil
+  (setq navi2ch-net-status nil
+	navi2ch-net-header nil
 	navi2ch-net-content nil
 	navi2ch-net-process nil))
 
@@ -134,7 +132,8 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
                            (length content) content)
                  "")))
       (message "%sconnected" (current-message))
-      (setq navi2ch-net-header nil
+      (setq navi2ch-net-status nil
+	    navi2ch-net-header nil
 	    navi2ch-net-content nil
 	    navi2ch-net-process proc))))
       
@@ -176,35 +175,37 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
 (defun navi2ch-net-get-status (proc)
   "PROC の接続のステータス部を返す"
   (navi2ch-net-ignore-errors
-   (save-excursion
-     (set-buffer (process-buffer proc))
-     (while (and (eq (process-status proc) 'open)
-		 (goto-char (point-min))
-		 (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
-       (accept-process-output proc))
-     (goto-char (point-min))
-     (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
-	 (match-string 1)))))
-
-(defun navi2ch-net-get-header (proc)
-  "PROC の接続のヘッダ部を返す"
-  (navi2ch-net-ignore-errors
-   (or navi2ch-net-header
+   (or navi2ch-net-status
        (save-excursion
 	 (set-buffer (process-buffer proc))
 	 (while (and (eq (process-status proc) 'open)
 		     (goto-char (point-min))
-		     (not (re-search-forward "\r\n\r?\n" nil t)))
+		     (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
 	   (accept-process-output proc))
 	 (goto-char (point-min))
-	 (re-search-forward "\r\n\r?\n")
-	 (let ((end (match-end 0))
-	       list)
+	 (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
+	     (setq navi2ch-net-status (match-string 1)))))))
+
+(defun navi2ch-net-get-header (proc)
+  "PROC の接続のヘッダ部を返す"
+  (when (navi2ch-net-get-status)
+    (navi2ch-net-ignore-errors
+     (or navi2ch-net-header
+	 (save-excursion
+	   (set-buffer (process-buffer proc))
+	   (while (and (eq (process-status proc) 'open)
+		       (goto-char (point-min))
+		       (not (re-search-forward "\r\n\r?\n" nil t)))
+	     (accept-process-output proc))
 	   (goto-char (point-min))
-	   (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
-	     (setq list (cons (cons (match-string 1) (match-string 2)) 
-			      list)))
-	   (setq navi2ch-net-header (nreverse list)))))))
+	   (re-search-forward "\r\n\r?\n")
+	   (let ((end (match-end 0))
+		 list)
+	     (goto-char (point-min))
+	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
+	       (setq list (cons (cons (match-string 1) (match-string 2)) 
+				list)))
+	     (setq navi2ch-net-header (nreverse list))))))))
 
 (defun navi2ch-net-get-content-subr-with-temp-file (gzip-p start end)
   (if gzip-p
@@ -273,40 +274,41 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
-  (navi2ch-net-ignore-errors
-   (or navi2ch-net-content
-       (let* ((header (navi2ch-net-get-header proc))
-	      (gzip (and navi2ch-net-accept-gzip
-			 (string-match "gzip"
-				       (or (cdr (assoc "Content-Encoding"
-						       header))
-					   ""))))
-	      p)
-	 (save-excursion
-	   (set-buffer (process-buffer proc))
-	   (goto-char (point-min))
-	   (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
-	   (setq p (point))
-	   (cond ((equal (cdr (assoc "Transfer-Encoding" header))
-			 "chunked")
-		  (while (> (navi2ch-net-get-chunk proc) 0)
-		    nil))
-		 ((assoc "Content-Length" header)
-		  (let ((size (string-to-number (cdr (assoc "Content-Length"
-							    header)))))
-		    (while (and (eq (process-status proc) 'open)
-				(goto-char (+ p size))
-				(not (= (point) (+ p size))))
-		      (accept-process-output))
-		    (goto-char (+ p size))))
-		 ((not navi2ch-net-enable-http11)
-		  (while (eq (process-status proc) 'open)
-		    (accept-process-output proc))
-		  (goto-char (point-max))))
-	   (navi2ch-net-get-content-subr gzip p (point))
-	   (setq navi2ch-net-content
-		 (navi2ch-string-as-multibyte
-		  (buffer-substring-no-properties p (point)))))))))
+  (when (and (navi2ch-net-get-status) (navi2ch-net-get-header))
+    (navi2ch-net-ignore-errors
+     (or navi2ch-net-content
+	 (let* ((header (navi2ch-net-get-header proc))
+		(gzip (and navi2ch-net-accept-gzip
+			   (string-match "gzip"
+					 (or (cdr (assoc "Content-Encoding"
+							 header))
+					     ""))))
+		p)
+	   (save-excursion
+	     (set-buffer (process-buffer proc))
+	     (goto-char (point-min))
+	     (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
+	     (setq p (point))
+	     (cond ((equal (cdr (assoc "Transfer-Encoding" header))
+			   "chunked")
+		    (while (> (navi2ch-net-get-chunk proc) 0)
+		      nil))
+		   ((assoc "Content-Length" header)
+		    (let ((size (string-to-number (cdr (assoc "Content-Length"
+							      header)))))
+		      (while (and (eq (process-status proc) 'open)
+				  (goto-char (+ p size))
+				  (not (= (point) (+ p size))))
+			(accept-process-output))
+		      (goto-char (+ p size))))
+		   ((not navi2ch-net-enable-http11)
+		    (while (eq (process-status proc) 'open)
+		      (accept-process-output proc))
+		    (goto-char (point-max))))
+	     (navi2ch-net-get-content-subr gzip p (point))
+	     (setq navi2ch-net-content
+		   (navi2ch-string-as-multibyte
+		    (buffer-substring-no-properties p (point))))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)

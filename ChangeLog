@@ -1,3 +1,15 @@
+2002-06-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-status): 新変数。
+	(navi2ch-net-ignore-errors): quit をそのまま上に通してみる。
+	(navi2ch-net-cleanup): navi2ch-net-status も初期化するように。
+	(navi2ch-net-send-request): 同上。
+	(navi2ch-net-get-status): navi2ch-net-status を使用するように。
+	(navi2ch-net-get-header): navi2ch-net-get-status が成功した時のみ
+	実行するように。
+	(navi2ch-net-get-content): navi2ch-net-get-status、
+	navi2ch-net-get-header が成功した時のみ実行するように。
+
 2002-06-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-toggle-offline): navi2ch-util.el から移動。
