@@ -309,7 +309,9 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 ;;       (sit-for 1))))
 
 (defsubst navi2ch-replace-html-tag-to-string (str)
-  (or (cdr (assoc str navi2ch-replace-html-tag-alist))
+  (or (cdr (if case-fold-search
+	       (assoc-ignore-case str navi2ch-replace-html-tag-alist)
+	     (assoc str navi2ch-replace-html-tag-alist)))
       (save-match-data
 	(let ((alist navi2ch-replace-html-tag-regexp-alist)
 	      elt value)
@@ -319,18 +321,20 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 	    (when (string-match (car elt) str)
 	      (setq value (cdr elt)
 		    alist nil)))
-	  value))))
+	  value))
+      ""))
 
 (defsubst navi2ch-replace-html-tag (str)
   (unless (string= str "")
-    (navi2ch-replace-string navi2ch-replace-html-tag-regexp
-			    'navi2ch-replace-html-tag-to-string
-			    str t))
+    (let ((case-fold-search t))
+      (navi2ch-replace-string navi2ch-replace-html-tag-regexp
+			      'navi2ch-replace-html-tag-to-string
+			      str t)))
   str)
 
 (defsubst navi2ch-replace-html-tag-with-buffer ()
   (goto-char (point-min))
-  (let ((case-fold-search nil))
+  (let ((case-fold-search t))
     (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
       (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))))
 
