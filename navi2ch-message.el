@@ -44,8 +44,6 @@
 (unless navi2ch-message-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-map)
-    (define-key map "\C-a" 'navi2ch-message-beginning-of-line)
-    (define-key map "\M-m" 'navi2ch-message-back-to-indentation)
     (define-key map "\C-c\C-c" 'navi2ch-message-send-message)
     (define-key map "\C-c\C-k" 'navi2ch-message-exit)
     (define-key map "\C-c\C-y" 'navi2ch-message-cite-original)
@@ -372,6 +370,13 @@
 	(fill-region-as-paragraph beg end arg)
 	t))))
 
+(defun navi2ch-message-substitute-key-definitions ()
+  (dolist (old-new-def
+	   '((beginning-of-line . navi2ch-message-beginning-of-line)
+	     (back-to-indentation . navi2ch-message-back-to-indentation)))
+    (substitute-key-definition (car old-new-def) (cdr old-new-def)
+			       navi2ch-message-mode-map (current-global-map))))
+
 (defun navi2ch-message-mode ()
   "\\{navi2ch-message-mode-map}"
   (interactive)
@@ -388,6 +393,7 @@
        "^[A-Z][^: \n\t]+:")		; ヘッダ
   (use-local-map navi2ch-message-mode-map)
   (navi2ch-message-setup-menu)
+  (navi2ch-message-substitute-key-definitions)
   (run-hooks 'navi2ch-message-mode-hook)
   (force-mode-line-update))
 

@@ -1,5 +1,12 @@
 2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-message.el (navi2ch-message-mode-map):
+	C-a, M-m を navi2ch-message-substitute-key-definitions() に移す。
+	(navi2ch-message-substitute-key-definitions): 新関数。
+	(navi2ch-message-mode): 上記関数を呼ぶように。
+
+2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* navi2ch-article.el
 	(navi2ch-article-update-previous-message-separator):
 	現在位置がbuffer の最後の場合 end を point-max() とするように。
