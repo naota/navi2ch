@@ -99,7 +99,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 	navi2ch-net-header nil
 	navi2ch-net-content nil))
 
-(defun navi2ch-open-network-stream (name buffer host service)
+(defun navi2ch-open-network-stream-with-retry (name buffer host service)
   (let ((retry t) proc)
     (while retry
       (condition-case err
@@ -114,6 +114,10 @@ BODY の評価中にエラーが起こると nil を返す。"
 		 (sleep-for 1))
 	     (signal (car err) (cdr err)))))))
     proc))
+
+(defun navi2ch-open-network-stream-via-command (name buffer host service)
+  (apply #'start-process name buffer
+	 (funcall navi2ch-open-network-stream-command host service)))
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
@@ -139,7 +143,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 		   (equal host navi2ch-net-last-host)
 		   (equal port navi2ch-net-last-port)
 		   (processp proc)
-		   (eq (process-status proc) 'open))
+		   (memq (process-status proc) '(open run)))
 	      (progn
 		(message "reusing connection...")
 		(process-send-string proc "") ; ping
@@ -150,10 +154,10 @@ BODY の評価中にエラーが起こると nil を返す。"
 	(error (setq proc nil)))
       (when (or (not proc)
 		(not (processp proc))
-		(not (eq (process-status proc) 'open)))
+		(not (memq (process-status proc) '(open run))))
 	(message "now connecting...")
-	(setq proc (navi2ch-open-network-stream navi2ch-net-connection-name
-						buf host port)))
+	(setq proc (funcall navi2ch-open-network-stream-function
+			    navi2ch-net-connection-name buf host port)))
       (save-excursion
 	(set-buffer buf)
 	(navi2ch-set-buffer-multibyte nil)
@@ -235,7 +239,7 @@ BODY の評価中にエラーが起こると nil を返す。"
    (or navi2ch-net-status
        (save-excursion
 	 (set-buffer (process-buffer proc))
-	 (while (and (eq (process-status proc) 'open)
+	 (while (and (memq (process-status proc) '(open run))
 		     (goto-char (point-min))
 		     (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
 	   (accept-process-output proc))
@@ -257,7 +261,7 @@ BODY の評価中にエラーが起こると nil を返す。"
      (or navi2ch-net-header
 	 (save-excursion
 	   (set-buffer (process-buffer proc))
-	   (while (and (eq (process-status proc) 'open)
+	   (while (and (memq (process-status proc) '(open run))
 		       (goto-char (point-min))
 		       (not (re-search-forward "\r\n\r?\n" nil t)))
 	     (accept-process-output proc))
@@ -316,7 +320,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
     (let ((p (point))
 	  size end)
       (while (and (not (looking-at "\\([0-9a-fA-F]+\\)[^\r\n]*\r\n"))
-		  (eq (process-status proc) 'open))
+		  (memq (process-status proc) '(open run)))
 	(accept-process-output proc)
 	(goto-char p))
       (when (not (match-string 1))
@@ -328,7 +332,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
       (delete-region p (point))		; chunk size 行を消す
       (if (= size 0)
 	  (throw 'ret 0))
-      (while (and (eq (process-status proc) 'open)
+      (while (and (memq (process-status proc) '(open run))
 		  (goto-char end)
 		  (not (= (point) end)))
 	(accept-process-output proc))
@@ -368,7 +372,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		   ((assoc "Content-Length" header)
 		    (let ((size (string-to-number (cdr (assoc "Content-Length"
 							      header)))))
-		      (while (and (eq (process-status proc) 'open)
+		      (while (and (memq (process-status proc) '(open run))
 				  (goto-char (+ p size))
 				  (not (= (point) (+ p size))))
 			(accept-process-output proc))
@@ -379,7 +383,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 			(and (stringp (cdr (assoc "Connection" header)))
 			     (string= (cdr (assoc "Connection" header))
 				      "close")))
-		    (while (eq (process-status proc) 'open)
+		    (while (memq (process-status proc) '(open run))
 		      (accept-process-output proc))
 		    (goto-char (point-max))))
 	     (navi2ch-net-get-content-subr gzip p (point))

@@ -1,5 +1,23 @@
 2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
 
+	ネットワーク接続に外部コマンドや自前関数を使えるようにしてみた。
+
+	* navi2ch-net.el (navi2ch-open-network-stream-with-retry):
+	navi2ch-open-network-stream から名称変更。
+	(navi2ch-open-network-stream-via-command): 新関数。
+	(navi2ch-net-send-request): process-status が run の時も実行。
+	(navi2ch-net-send-request): process-status が run の時も除外。
+	navi2ch-open-network-stream-function を使用。
+	(navi2ch-net-get-status): process-status が run の時もループ。
+	(navi2ch-net-get-header): 同上。
+	(navi2ch-net-get-chunk): 同上。
+	(navi2ch-net-get-content): 同上。
+
+	* navi2ch-vars.el (navi2ch-open-network-stream-function): 新変数。
+	(navi2ch-open-network-stream-command): 新変数。
+
+2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-net.el (navi2ch-open-network-stream): 新関数。
 	EINPROGRESS、EALREADY の場合は再試行する。
 	(navi2ch-net-send-request): 上記関数を使用。

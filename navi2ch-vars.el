@@ -1563,6 +1563,39 @@ ask なら保存する前に質問する
   :type 'boolean
   :group 'navi2ch-net)
 
+(defcustom navi2ch-open-network-stream-function
+  #'open-network-stream
+  "*open-network-stream と同等な処理をする関数。
+`open-network-stream' (デフォルト)、
+`navi2ch-open-network-stream-with-retry' (operation already in progress 回避)
+`navi2ch-open-network-stream-via-command' (外部コマンドを使用)
+などを指定する。"
+  :type '(choice (const :tag "Emacs から直接接続"
+			open-network-stream)
+		 (const :tag "operation already in progress とかエラーが出る場合"
+			navi2ch-open-network-stream-with-retry)
+		 (const :tag "コマンド経由で接続"
+			navi2ch-open-network-stream-via-command)
+		 (function :tag "関数を指定"))
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-open-network-stream-command nil
+  "*ホストのサービスに接続するコマンドのリストを返す関数。
+`navi2ch-open-network-stream-function' が
+`navi2ch-open-network-stream-via-command' の場合に使用される。
+ssh 経由で netcat を使いたい場合は以下のようにする。
+\(lambda (host service)
+  (list \"ssh\" \"somehost\"
+        \"nc\" (format \"%s\" host) (format \"%s\" service)))"
+  :type '(choice (const :tag "Netcat を使用"
+			(lambda (host service)
+			  (list "nc" (format "%s" host)
+				(format "%s" service))))
+		 (const :tag "無効" nil)
+		 (function :tag "関数を指定"))
+  :group 'navi2ch-net)
+
+
 ;;; update variables
 (defcustom navi2ch-update-file (concat
                                 (file-name-as-directory navi2ch-directory)
