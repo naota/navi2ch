@@ -1,10 +1,18 @@
 AC_INIT(navi2ch.el)
 AM_INIT_AUTOMAKE(navi2ch, 1.4)
 
+# Emacs set environment variable EMACS as t
+test "x$EMACS" = xt && EMACS=
+
+emacsen="emacs xemacs"
+
 AC_CANONICAL_HOST
 
 case $host_os in
-*cygwin*) with_bash=yes ;;
+*cygwin*)
+  with_bash=yes
+  emacsen="$emacsen MeadowNT.exe Meadow95.exe"
+  ;;
 esac
 
 AC_ARG_WITH(bash,
@@ -14,8 +22,6 @@ yes) SHELL=bash ;;
 no)  ;;
 *)   SHELL="$withval" ;;
 esac])
-
-emacsen="emacs xemacs"
 
 AC_ARG_WITH(xemacs,
 [  --with-xemacs           Use XEmacs to build],

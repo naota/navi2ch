@@ -1,5 +1,18 @@
 2002-01-11  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-version.el.in: 新ファイル。navi2ch-version を設定するファ
+	イル。navi2ch.el で使うようにするのはちょっと待ってみる。
+
+	* Makefile.am (EXTRA_DIST): navi2ch-version.el.in を追加。
+	(lisp_LISP): navi2ch-version.el を追加。
+	(BUILT_SOURCES): 新変数。
+	navi2ch-version.el を自動的に作るようにした。
+	(snap): 新ターゲット。make snap でスナップショットを作成。
+
+	* configure.in: Cygwin では emacs の候補として Meadow*.exe も加える。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/259
+	Emacs の下だと環境変数 EMACS が t になるので、空にする。
+	
 	* navi2ch-article.el (navi2ch-article-view-article):
 	navi2ch-article-expunge-buffers の位置を変更。
 	(navi2ch-article-view-article-from-file): expunge するようにしてみ
