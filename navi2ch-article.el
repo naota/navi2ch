@@ -52,6 +52,7 @@
     (define-key map "l" 'navi2ch-article-pop-point)
     (define-key map "L" 'navi2ch-article-pop-poped-point)
     (define-key map "m" 'navi2ch-article-push-point)
+    (define-key map "R" 'navi2ch-article-rotate-point)
     (define-key map "U" 'navi2ch-article-show-url)
     (define-key map "." 'navi2ch-article-redisplay-current-message)
     (define-key map "p" 'navi2ch-article-previous-message)
@@ -1086,6 +1087,19 @@ state はあぼーんされてれば aborn というシンボル。
           (push (navi2ch-article-get-point (point)) navi2ch-article-point-stack)
 	  (navi2ch-article-goto-number (car point))
 	  (forward-char (cdr point)))
+      (message "stack is empty"))))
+
+(defun navi2ch-article-rotate-point ()
+  "stack へ push した位置を巡回する。"
+  (interactive)
+  (let ((cur (navi2ch-article-get-point nil))		; 現在地
+	(top (pop navi2ch-article-point-stack)))	; トップ
+    (if top
+        (progn
+	  (setq navi2ch-article-point-stack
+		(append navi2ch-article-point-stack (list cur))) ; 最後尾へ保存
+          (navi2ch-article-goto-number (car top))	; トップの
+          (forward-char (cdr top)))			; 以前いた文字へ
       (message "stack is empty"))))
 
 (defun navi2ch-article-goto-last-message ()

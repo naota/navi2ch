@@ -1,5 +1,11 @@
 2002-03-18    mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-rotate-point): 新関数。
+	stack へ push した位置を巡回する。
+	(navi2ch-article-mode-map): "R" に
+	navi2ch-article-rotate-point をバインド。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/94
+
 	* navi2ch-article.el (navi2ch-article-show-url):
 	ミニバッファに URL を表示するように変更 (修正?) 。
 	* navi2ch-board-misc.el (navi2ch-bm-show-url): 同上。
