@@ -1,3 +1,11 @@
+2002-05-11    mami  <mami@users.sourceforge.net>
+
+	スレにレスがないとき (全レスを d したときとか) に g がエラーとなら
+	ないように。
+	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
+	from が nil かどうかチェック。
+	(navi2ch-article-goto-number): num が nil かどうかチェック。
+
 2002-05-07    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-yank): yank 後のカーソル位

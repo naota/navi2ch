@@ -993,7 +993,8 @@ state はあぼーんされてれば aborn というシンボル。
 	  (let ((from (cdr (assq 'name
 				 (navi2ch-article-get-message
 				  (navi2ch-article-get-current-number))))))
-	    (or (and (string-match "[0-9０-９]+" from)
+	    (or from
+		(and (string-match "[0-9０-９]+" from)
 		     (japanese-hankaku (match-string 0 from)))
 		nil)))
     (setq alist (mapcar
@@ -1029,7 +1030,7 @@ state はあぼーんされてれば aborn というシンボル。
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM 番目のレスに移動"
   (interactive "ninput number: ")
-  (when (> num 0)
+  (when (and num (> num 0))
     (when (or (interactive-p) save)
       (navi2ch-article-push-point))
     (catch 'break
