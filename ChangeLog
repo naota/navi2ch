@@ -1,3 +1,10 @@
+2002-09-21  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-mode-line): モードライン
+	の ( ) の中を (スレの実際のレス数/スレ一覧から取得したレス数) に変
+	更。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/548
+
 2002-09-20  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-toggle-open): bookmark のときはす

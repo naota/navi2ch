@@ -760,10 +760,10 @@ state はあぼーんされてれば aborn というシンボル。
                      article)
             navi2ch-article-current-article article))
     (setq navi2ch-mode-line-identification
-          (format "%s (%s/%d) [%s]"
+          (format "%s (%d/%s) [%s]"
                   (cdr (assq 'subject article))
-                  (or "" (cdr (assq 'response article)))
                   (length navi2ch-article-message-list)
+                  (or (cdr (assq 'response article)) "-")
                   (cdr (assq 'name navi2ch-article-current-board)))))
   (navi2ch-set-mode-line-identification))
 
