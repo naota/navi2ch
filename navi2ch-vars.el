@@ -33,6 +33,8 @@
 (defgroup navi2ch nil
   "*Navigator for 2ch."
   :prefix "navi2ch-"
+  :link '(url-link :tag "Navi2ch Project$B%[!<%`%Z!<%8(B" "http://navi2ch.sourceforge.net/")
+  :link '(custom-manual :tag "$B%^%K%e%"%k(B (Info)" "(navi2ch)top")
   :group 'hypermedia
   :group '2ch)
 
@@ -64,41 +66,44 @@
 
 ;;; navi2ch variables
 (defcustom navi2ch-ask-when-exit t
-  "*$B=*N;;~$KK\Ev$K=*$o$k$+J9$/$+$I$&$+!#(B
-`non-nil' $B$J$iJ9$/(B"
+  "*non-nil $B$J$i!"(Bnavi2ch $B=*N;$N3NG'%a%C%;!<%8$rI=<($9$k!#(B"
   :type 'boolean
   :group 'navi2ch)
 
 (defcustom navi2ch-directory "~/.navi2ch"
-  "*navi2ch $B$N%-%c%C%7%e$J$I$rCV$/%G%#%l%/%H%j(B"
+  "*$B%-%c%C%7%e%U%!%$%k$J$I$rJ]B8$9$k%G%#%l%/%H%j!#(B
+
+$B$3$N%G%#%l%/%H%j$O!"%-%c%C%7%e$NNL$K$h$C$F(B 100MB $B0J>e$KKD$i$`(B
+$B$3$H$b$"$k!#%-%c%C%7%e$N@)8B$K$D$$$F$O(B `navi2ch-board-expire-date'
+$B$r;2>H!#(B"
   :type 'directory
   :group 'navi2ch)
 
 (defcustom navi2ch-uudecode-program "uudecode"
-  "*uudecode $B$N%W%m%0%i%`L>(B"
+  "*uudecode $B$9$k$N$K;H$&%W%m%0%i%`!#(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-uudecode-args nil
-  "*uudecode $B$r<B9T$9$k$H$-$N0z?t(B"
+  "*uudecode $B$r<B9T$9$k$H$-$N0z?t!#(B"
   :type '(repeat :tag "$B0z?t(B" string)
   :group 'navi2ch)
 
-(defcustom navi2ch-init-file (expand-file-name "init.el"
-					       navi2ch-directory)
-  "*navi2ch $B$N=i4|2=%U%!%$%k(B"
+(defcustom navi2ch-init-file (concat
+                              (file-name-as-directory navi2ch-directory)
+                              "init.el")
+  "*navi2ch $B$N=i4|2=%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch)
 
 (defcustom navi2ch-enable-readcgi t
-  "*read.cgi $B$N(B raw mode $B$r;H$C$F%U%!%$%k$r<h$C$F$/$k$+$I$&$+!#(B
-non-nil $B$J$i(B read.cgi $B$r;H$&(B"
+  "*non-nil $B$J$i!"%U%!%$%k<hF@$K(B read.cgi $B$N(B raw mode $B$rMxMQ$9$k!#(B"
   :type 'boolean
   :group 'navi2ch)
 
 (defcustom navi2ch-enable-readcgi-host-list nil
   "*read.cgi $B$N(B raw mode $B$r;H$C$F%U%!%$%k$r<h$C$F$/$k%[%9%H$N%j%9%H!#(B
-`navi2ch-enable-readcgi' $B$,(B nil $B$N;~$KM-8z(B"
+`navi2ch-enable-readcgi' $B$,(B nil $B$N;~$KM-8z!#(B"
   :type '(repeat (string :tag "$B%[%9%H(B"))
   :group 'navi2ch)
 
@@ -109,107 +114,104 @@ non-nil $B$J$i(B read.cgi $B$r;H$&(B"
   :group 'navi2ch)
 
 (defcustom navi2ch-browse-url-image-program nil
-  "*`navi2ch-browse-url-image'$B$G;H$o$l$k%W%m%0%i%`L>(B"
+  "*`navi2ch-browse-url-image' $B$K;H$&%W%m%0%i%`!#(B"
   :type '(choice string (const :tag "None" nil))
   :group 'navi2ch)
 
 (defcustom navi2ch-browse-url-image-args nil
-  "*`navi2ch-browse-url-image-program'$B$N0z?t!#(B"
+  "*`navi2ch-browse-url-image-program' $B$KM?$($k0z?t!#(B"
   :type '(repeat (string :tag "Argument"))
   :group 'navi2ch)
 
 (defcustom navi2ch-browse-url-image-extentions '("jpg" "jpeg" "gif" "png")
-  "*`navi2ch-browse-url-image'$B$r;H$&3HD%;R(B"
+  "*`navi2ch-browse-url-image' $B$GI=<($9$k2hA|$N3HD%;R!#(B"
   :type '(repeat (string :tag "$B3HD%;R(B"))
   :group 'navi2ch)
 
 (defcustom navi2ch-base64-fill-column 64
-  "*base64$B$G%(%s%3!<%I$5$l$?J8;zNs$r2?J8;z$G(Bfill$B$9$k$+!#(B"
+  "*base64 $B$G%(%s%3!<%I$5$l$?J8;zNs$r(B fill $B$9$kJ8;z?t!#(B"
   :type 'integer
   :group 'navi2ch)
 
 (defcustom navi2ch-2ch-host-list
   '("cocoa.2ch.net")
-  "*2ch $B$H$_$J$9(B host $B$N%j%9%H!#(B"
+  "*2$B$A$c$s$M$k$H$_$J$9(B host $B$N%j%9%H!#(B"
   :type '(repeat (string :tag "$B%[%9%H(B"))
   :group 'navi2ch)
 
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
-  "*list window $B$NI}(B"
+  "*$BHD0lMw%&%#%s%I%&$N2#I}!#(B"
   :type 'integer
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-etc-file-name "etc.txt"
-  "*$B$=$NB>%+%F%4%j$KF~$l$kHD$r=q$$$F$*$/%U%!%$%k(B!"
+  "*$B!V$=$NB>!W%+%F%4%j$KF~$l$kHD$r=q$$$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-stay-list-window nil
-  "*$BHD$rA*$s$@$H$-$K(B list window $B$rI=<($7$?$^$^$K$9$k$+!#(B
-`non-nil' $B$J$iI=<($7$?$^$^$K$9$k!#(B"
+  "* non-nil $B$J$i!"HD$rA*$s$@$"$HHD0lMw%P%C%U%!$rI=<($7$?$^$^$K$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-bbstable-url "http://www.2ch.net/newbbsmenu.html"
-  "*bbstable $B$N(B url"
+  "*bbstable $B$N(B URL$B!#(B"
   :type 'string
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-init-open-category nil
-  "*$B:G=i$+$iA4$F$N%+%F%4%j$r3+$/$+$I$&$+!#(B
-`non-nil' $B$GA4$F3+$/!#(B"
+  "*non-nil $B$J$i!"HD0lMw$N%+%F%4%j$r%G%U%)%k%H$G$9$Y$F3+$$$FI=<($9$k!#(B"
   :type 'boolean
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-indent-width 2
-  "*$BHDL>$N%$%s%G%s%HI}(B"
+  "*$BHD0lMw%P%C%U%!$G$NHDL>$N%$%s%G%s%HI}!#(B"
   :type 'integer
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-etc-category-name "$B$=$NB>(B"
-  "*$B$=$NB>%+%F%4%j$NL>A0(B"
+  "*$B!V$=$NB>!W%+%F%4%j$NL>A0!#(B"
   :type 'string
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-global-bookmark-category-name "$B%V%C%/%^!<%/(B"
-  "*$B%V%C%/%^!<%/%+%F%4%j$NL>A0(B"
+  "*$B!V%V%C%/%^!<%/!W%+%F%4%j$NL>A0!#(B"
   :type 'string
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-sync-update-on-boot t
-  "*navi2ch $B5/F0;~$KHD0lMw$r<h$j$K9T$/$+!#(B
-`nil' $B$K$9$k$H(B s $B$7$J$$$+$.$j<h$j$K9T$+$J$$!#(B"
+  "*non-nil $B$J$i!"(Bnavi2ch $B5/F0;~$K>o$KHD0lMw$r<h$j$K$$$/!#(B
+nil $B$J$i$P<jF0$G99?7$7$J$$$+$.$j<h$j$K$$$+$J$$!#(B"
   :type 'boolean
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-load-category-list t
-  "*navi2ch $B5/F0;~$KA02s3+$$$F$$$?%+%F%4%j$r3+$/$+!#(B"
+  "*non-nil $B$J$i!"A02s$N=*N;;~$K3+$$$F$$$?%+%F%4%j$r5/F0;~$K:F$S3+$/!#(B"
   :type 'boolean
   :group 'navi2ch-list)
 
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
-  "*$B%@%&%s%m!<%I$9$k(B subject.txt $B$N9T?t!#(B
-nil $B$J$iA4It%@%&%s%m!<%I$9$k(B"
+  "*$B%@%&%s%m!<%I$9$k(B subject.txt $B$N9T?t!#(Bnil $B$J$iA4It%@%&%s%m!<%I$9$k!#(B"
   :type '(choice (integer :tag "$B9T?t$r;XDj(B")
 		 (const :tag "$BA4$F(B" nil))
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-expire-date 30
-  "*$B:G8e$KJQ99$5$l$F$+$i$3$NF|?t0J>e$?$C$?%U%!%$%k$O(B expire $B$9$k(B
-nil $B$J$i(B expire $B$7$J$$(B"
+  "*$B:G8e$KJQ99$5$l$F$+$i$3$NF|?t0J>e$?$C$?%U%!%$%k$O(B expire ($B:o=|(B)$B$5$l$k!#(B
+nil $B$J$i(B expire $B$7$J$$!#(B"
   :type '(choice (integer :tag "$BF|?t$r;XDj(B")
 		 (const :tag "expire $B$7$J$$(B" nil))
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-window-height 10
-  "*board window $B$N9b$5(B"
+  "*$B%9%l$N0lMw$rI=<($9$k(B board window $B$N9b$5!#(B"
   :type 'integer
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-check-updated-article-p t
-  "*$B?7$7$$%l%9$,$"$C$?$+%A%'%C%/$9$k$+$I$&$+(B"
+  "*non-nil $B$J$i!"?7$7$$%l%9$,$"$C$?$+%A%'%C%/$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-board)
 
@@ -217,27 +219,27 @@ nil $B$J$i(B expire $B$7$J$$(B"
   (if (eq window-system 'w32)
       "fiber"
     "xv")
-  "*$B%m%4$r8+$k$N$K;H$&%W%m%0%i%`(B"
+  "*$B%m%4$r8+$k$N$K;H$&%W%m%0%i%`!#(B"
   :type 'file
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-view-logo-args nil
-  "*$B%m%4$r8+$k$N$K;H$&%W%m%0%i%`$N0z?t(B"
+  "*$B%m%4$r8+$k$N$K;H$&%W%m%0%i%`$N0z?t!#(B"
   :type '(repeat (string :tag "$B0z?t(B"))
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-delete-old-logo t
-  "*$B?7$7$$%m%4$r%@%&%s%m!<%I$7$?$H$-$K8E$$%m%4$r>C$9$+$I$&$+(B"
+  "*non-nil $B$J$i!"?7$7$$%m%4$r%@%&%s%m!<%I$7$?$H$-$K8E$$%m%4$r>C$9!#(B"
   :type 'boolean
   :group 'navi2ch-board)
 
 (defcustom navi2ch-bm-subject-width 50
-  "*$B3F%9%l$NBjL>$NI}(B"
+  "*$B3F%9%l$NBjL>$NI}!#(B"
   :type 'integer
   :group 'navi2ch-board)
 
 (defcustom navi2ch-bm-mark-and-move t
-  "*$B%^!<%/$7$?8e$K0\F0$9$k$+$I$&$+(B
+  "*$B%^!<%/$7$?$"$H$N%]%$%s%?$NF0:n!#(B
 nil $B$J$i0\F0$7$J$$(B
 non-nil $B$J$i2<$K0\F0$9$k(B
 'follow $B$J$i0JA00\F0$7$?J}8~$K0\F0$9$k(B"
@@ -247,39 +249,40 @@ non-nil $B$J$i2<$K0\F0$9$k(B
   :group 'navi2ch-board)
 
 (defcustom navi2ch-bm-empty-subject "navi2ch: no subject"
-  "*subject $B$,L5$$$H$-$KBe$jI=<($9$k(B subject"
+  "*subject $B$,L5$$$H$-$KBe$jI=<($9$k(B subject$B!#(B"
   :type 'string
   :group 'navi2ch-board)
 
 (defcustom navi2ch-history-max-line 100
-  "*$B%R%9%H%j$N:GBg$N9T?t(B
-nil $B$J$i$P@)8B$7$J$$(B"
+  "*$B%R%9%H%j$N9T?t$N@)8B8B!#(Bnil $B$J$i$P@)8B$7$J$$!#(B"
   :type '(choice (integer :tag "$B:GBg$N9T?t$r;XDj(B")
 		 (const :tag "$B@)8B$7$J$$(B" nil))
   :group 'navi2ch-board)
 
 (defcustom navi2ch-bm-stay-board-window t
-  "*$B%9%l$rA*$s$@$H$-$K(B board window $B$rI=<($7$?$^$^$K$9$k$+!#(B
-`non-nil' $B$J$iI=<($7$?$^$^$K$9$k(B"
+  "*non-nil $B$J$i!"%9%l$rA*$s$@$H$-$K%9%l0lMw$rI=<($7$?$^$^$K$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetched-info-file (expand-file-name "fetched.txt"
-							  navi2ch-directory)
-  "*$B$9$G$KFI$s$@%9%l$rJ]B8$9$k%U%!%$%k(B"
-  :type 'string
+(defcustom navi2ch-bm-fetched-info-file (concat
+                                         (file-name-as-directory navi2ch-directory)
+                                         "fetched.txt")
+  "*$B4{FI%9%l$N%j%9%H$rJ]B8$7$F$*$/%U%!%$%k!#(B"
+  :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bookmark-file (expand-file-name "bookmark2.txt"
-						   navi2ch-directory)
-  "*$B%0%m!<%P%k%V%C%/%^!<%/$rJ]B8$9$k%U%!%$%k(B"
-  :type 'string
+(defcustom navi2ch-bookmark-file (concat
+                                  (file-name-as-directory navi2ch-directory)
+                                  "bookmark2.txt")
+  "*$B%0%m!<%P%k%V%C%/%^!<%/$rJ]B8$7$F$*$/%U%!%$%k!#(B"
+  :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-history-file (expand-file-name "history.txt"
-						  navi2ch-directory)
-  "*$B%R%9%H%j$rJ]B8$9$k%U%!%$%k(B"
-  :type 'string
+(defcustom navi2ch-history-file (concat
+                                 (file-name-as-directory navi2ch-directory)
+                                 "history.txt")
+  "*$B%R%9%H%j$rJ]B8$7$F$*$/%U%!%$%k!#(B"
+  :type 'file
   :group 'navi2ch-board)
 
 ;;; article variables
@@ -287,7 +290,7 @@ nil $B$J$i$P@)8B$7$J$$(B"
   (if (eq window-system 'w32)
       "notepad"
     "aadisplay")
-  "*aa $B$r8+$k$N$K;H$&%W%m%0%i%`L>(B"
+  "*AA $B$rI=<($9$k$?$a$K;H$&%W%m%0%i%`!#(B"
   :type 'string
   :group 'navi2ch-article)
 
@@ -295,42 +298,42 @@ nil $B$J$i$P@)8B$7$J$$(B"
   (if (eq window-system 'w32)
       'shift_jis-dos
     'euc-jp-unix)
-  "*navi2ch-article-aadisplay-program $BMQ$N0l;~%U%!%$%k$N(B coding-system"
-  :type 'symbol
+  "*AA $B$rI=<($9$k%W%m%0%i%`$K$o$?$90l;~%U%!%$%k$N(B `coding-system'"
+  :type 'coding-system
   :group 'navi2ch-article)
-  
+
 (defcustom navi2ch-article-view-aa-function
   (if (eq window-system 'w32)
       'navi2ch-article-popup-dialog
     'navi2ch-article-call-aadisplay)
-  "*aa $B$r8+$k$N$K;H$&4X?tL>(B"
+  "*AA $B$rI=<($9$k$?$a$K;H$&4X?t!#(B"
   :type 'function
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-enable-diff t
-  "*$B:9J,$r<h$C$F$/$k$+$I$&$+!#(Bnil $B$J$i>o$K:9J,$r<h$C$F$3$J$$(B"
+  "*non-nil $B$J$i%U%!%$%k$N:9J,<hF@$,M-8z$K$J$k!#(B
+nil $B$K$9$k$H>o$K%U%!%$%kA4BN$rE>Aw$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-max-line nil
-  "*$B%@%&%s%m!<%I$9$k5-;v$N9T?t!#(B
-nil $B$J$i:9J,A4$F$r%@%&%s%m!<%I$9$k!#(B"
+  "*$B%@%&%s%m!<%I$9$k5-;v$N9T?t!#(Bnil $B$J$i;D$j$r$9$Y$F%@%&%s%m!<%I$9$k!#(B"
   :type '(choice (integer :tag "$B7o?t$r;XDj(B")
 		 (const :tag "$BA4$F(B" nil))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-enable-fill nil
-  "*fill-region $B$9$k$+$I$&$+(B"
+  "*non-nil $B$J$i!"%9%l$N%a%C%;!<%8$r(B fill-region $B$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-enable-fill-list nil
-  "*fill-region $B$9$k(B $BHD$N%j%9%H(B"
+  "*fill-region $B$9$kHD$N%j%9%H!#(B"
   :type '(repeat string)
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-disable-fill-list nil
-  "*fill-region $B$7$J$$HD$N%j%9%H(B"
+  "*fill-region $B$7$J$$HD$N%j%9%H!#(B"
   :type '(repeat string)
   :group 'navi2ch-article)
 
@@ -347,31 +350,34 @@ ask $B$J$iL@<(E*$K0\F0$9$k;~0J30$J$i<ALd$9$k(B
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-parse-field-list '(data name mail)
-  "*parse $B$9$k%U%#!<%k%I$N%j%9%H!#(B
+  "*$B%a%C%;!<%8$N%U%#!<%k%I$N$&$A!"%Q!<%:BP>]$K$9$k$b$N$N%j%9%H!#(B
 $BCY$/$F$b$$$$$s$J$i(B '(data mail name) $B$H$+$9$k$H$$$$$+$b(B"
   :type '(set (const :tag "$B5-;v(B" data)
-	      (const :tag "$B%a!<%k(B" mail)
-	      (const :tag "$BL>A0(B" name))
+              (const :tag "$B%a!<%k(B" mail)
+              (const :tag "$BL>A0(B" name))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-goto-number-recenter t
-  "*goto-number $B$7$?$H$-$K(B recenter $B$9$k$+$I$&$+(B"
+  "*non-nil $B$J$i!"(Bgoto-number $B$7$?$"$H(B recenter $B$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-new-message-range '(100 . 1)
-  "*$B?7$7$$(B $B%9%l%C%I$r<h$C$F$-$?$H$-$NI=<($9$kHO0O(B"
+  "*$B%9%l$N%G%U%)%k%H$NI=<(HO0O!#=i$a$FFI$`%9%l$KE,MQ$9$k!#(B
+
+$B$?$H$($P(B '(100 5) $B$r;XDj$9$k$H!"(Bnavi2ch $B$O%9%l$N@hF,$+$i(B100$B8D!"(B
+$BKvHx$+$i(B5$B8D$N%a%C%;!<%8$@$1$r%P%C%U%!$KA^F~$7!"$=$N$"$$$@$N(B
+$B%a%C%;!<%8$K$D$$$F$O=hM}$rHt$P$9!#(B"
   :type '(cons integer integer)
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-exist-message-range '(1 . 100)
-  "*$B$9$G$K$"$k%9%l%C%I$r<h$C$F$-$?$H$-$NI=<($9$kHO0O(B"
+  "*$B%9%l$N%G%U%)%k%H$NI=<(HO0O!#4{FI%9%l$KE,MQ$9$k!#(B"
   :type '(cons integer integer)
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-auto-range t
-  "*$B$^$?I=<($7$F$J$$%9%l%C%I$r<h$C$F$-$?$H$-$K>!<j$KHO0O$r69$a$k$+!#(B
-non-nil $B$G69$a$k(B"
+  "*non-nil $B$J$i!"$^$?I=<($7$F$J$$%9%l%C%I$NI=<(HO0O$r>!<j$K69$a$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
@@ -380,36 +386,36 @@ non-nil $B$G69$a$k(B"
     (50 . 50)
     (1 . 100)
     (100 . 100))
-  "*$BI=<($9$k%9%l%C%I$NHO0O$rA*Br$9$k$H$-$K;H$&%j%9%H(B"
+  "*$B%9%l$NI=<(HO0O$rJQ$($k$H$-A*Br8uJd$H$7$F;H$&%j%9%H!#(B"
   :type '(repeat (cons integer integer))
   :group 'navi2ch-article)
-  
+
 (defcustom navi2ch-article-header-format-function
   'navi2ch-article-default-header-format-function
-  "*NUMBER NAME MAIL DATE $B$r0z?t$K<h$j!"%l%9$N%X%C%@$rJV$94X?t(B"
+  "*NUMBER NAME MAIL DATE $B$r0z?t$K<h$j!"%l%9$N%X%C%@$rJV$94X?t!#(B"
   :type 'function
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-citation-regexp
   "^[>$B!d(B]\\($\\|[^$>$B!d(B0-9$B#0(B-$B#9(B].*\\)"
-  "*$B0zMQItJ,$N@55,I=8=(B"
+  "*$B%l%9$N0zMQItJ,$N@55,I=8=!#(B"
   :type 'regexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-number-regexp
   "[>$B!d(B][>$B!d(B]?\\(\\([0-9$B#0(B-$B#9(B]+,\\)*[0-9$B#0(B-$B#9(B]+\\(-[0-9$B#0(B-$B#9(B]+\\)?\\)"
-  "*$BF1$8%9%lFb$X$N%j%s%/$rI=$o$9@55,I=8=(B"
+  "*$BF1$8%9%lFb$X$N%j%s%/$rI=$o$9@55,I=8=!#(B"
   :type 'regexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-url-regexp
   "h?ttps?://\\([-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:]+\\)"
-  "*url $B$rI=$o$9@55,I=8=(B"
+  "*$B%l%9$N%F%-%9%H$N$&$A(B URL $B$H$_$J$9ItJ,$N@55,I=8=!#(B"
   :type 'regexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-filter-list nil
-  "*$B%9%l%C%I$N5-;v$r$$$8$k%U%#%k%?!<$N(B list$B!#(B
+  "*$B%9%l%C%I$N5-;v$r$$$8$k%U%#%k%?!<$N%j%9%H!#(B
 $B$=$l$>$l$N%U%#%k%?!<$O(B elisp $B$N4X?t$J$i$P(B $B$=$N(B symbol$B!"(B
 $B30It%W%m%0%i%`$r8F$V$J$i(B
 '(\"perl\" \"2ch.pl\")
@@ -425,19 +431,19 @@ non-nil $B$G69$a$k(B"
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-redraw-when-goto-number t
-  "*`navi2ch-article-goto-number' $B$G!"HO0O30$J$i$P!"(Bredraw $B$7$J$*$9$+$I$&$+!#(B
-non-nil $B$J$i(B redraw $B$7$J$*$9!#(B"
+  "*non-nil $B$J$i!"(B`navi2ch-article-goto-number' $B$7$?$H$3$m$,HO0O30$N$H$-(B
+$B<+F0$G(B redraw $B$7$J$*$9!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-fix-range-diff 10
-  "*`navi2ch-article-fix-range' $B$7$?$H$-$KLa$kNL(B"
+  "*`navi2ch-article-fix-range' $B$7$?$H$-$KLa$k%l%9$N?t!#(B"
   :type 'integer
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-fix-range-when-sync t
-  "*`navi2ch-article-sync' $B$GHO0O30$J$i$P(B `navi2ch-article-view-range' $B$rJQ99$9$k$+!#(B
-non-nil $B$J$iHO0OFb$KJQ99$9$k(B"
+  "*non-nil $B$J$i!"(B`navi2ch-article-sync' $B$GHO0O30$N$H$-(B
+$B<+F0E*$K(B `navi2ch-article-view-range' $B$rJQ99$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
@@ -447,46 +453,46 @@ non-nil $B$J$iHO0OFb$KJQ99$9$k(B"
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-separator-width '(/ (window-width) 2)
-  "*$B%l%9$H%l%9$N6h@Z$jJ8;z$NI}!#(B
-$BI}$r(B 80 $BJ8;zJ,$K$7$?$$$J$i(B
+  "*$B%l%9$H%l%9$r6h@Z$k%F%-%9%H$N2#I}!#(B
+$BI}$r(B 80 $BJ8;z$K$7$?$$$J$i(B
 \(setq navi2ch-article-message-separator-width 80)
-window $B$NI}$HF1$8$K$7$?$$$J$i(B
+window $B$NI}$$$C$Q$$$K$7$?$$$J$i(B
 \(setq navi2ch-article-message-separator-width '(window-width))
 $BEy;XDj$9$k!#(B"
   :type 'sexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-auto-expunge nil
-  "*$B%9%l$r3+$$$?;~$K<+F0E*$K8E$$%P%C%U%!$r>C$9$+!#(B
-`non-nil' $B$J$i(B navi2ch-article-max-buffers $B0J>e$K$J$i$J$$$h$&$K$9$k!#(B"
+  "*non-nil $B$J$i!"%P%C%U%!$H$7$FJ];}$9$k%9%l$N?t$r(B
+`navi2ch-article-max-buffers' $B0J2<$KJ]$D!#$3$N@)8BCM$rD6$($?$H$-$K$O!"(B
+$B$$$A$P$s8E$$%P%C%U%!$r<+F0E*$K>C$9!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-max-buffers 20
-  "*$B%P%C%U%!$H$7$FJ];}$9$k%9%l$N:GBg?t!#(B
-0 $B$J$i$PL5@)8B!#(B"
+  "*$B%P%C%U%!$H$7$FJ];}$9$k%9%l$N:GBg?t!#(B0 $B$J$i$PL5@)8B!#(B"
   :type 'integer
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-cleanup-white-space-after-old-br t
-  "*`non-nil' $B$N>l9g!"(B<br> $B$N8e$K$"$k6uGr$r<h$j=|$/!#(B
-$B$?$@$7!"$9$Y$F$N(B <br> $B$ND>8e$K6uGr$,$"$k>l9g$N$_!#(B"
+  "*non-nil $B$J$i!"8E$$7A<0$N(B <br> $B$KBP1~$7$F9TF,$+$i6uGr$r<h$j=|$/!#(B
+$B$?$@$7!"$9$Y$F$N(B <br> $B$ND>8e$K6uGr$,$"$k>l9g$K8B$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-cleanup-trailing-whitespace t
-  "*`non-nil' $B$N>l9g!"3F9T$NKvHx$N6uGr$r<h$j=|$/!#(B"
+  "*non-nil $B$J$i!"%9%l$N3F9T$+$iKvHx$N6uGr$r<h$j=|$/!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-cleanup-trailing-newline t
-  "*`non-nil' $B$N>l9g!"3F%l%9$NKvHx$N6u9T$r<h$j=|$/!#(B"
+  "*non-nil $B$J$i!"%9%l$N3F%l%9$+$iKvHx$N6u9T$r<h$j=|$/!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-display-link-width '(1- (window-width))
-  "*`navi2ch-article-display-link-minibuffer' $B$G(B minibuffer $B$KI=<($9$k(B
-$BJ8;zNs$NI}!#4X?t$H$+$r;XDj$9$k;v$b$G$-$k!#(B"
+  "*$B%9%l$N%j%s%/@h$J$I$r(B minibuffer $B$KI=<($9$k$H$-$NJ8;zNs$N:GBgD9!#(B
+$B$3$l$h$jD9$$%F%-%9%H$O@Z$j5M$a$i$l$k!#4X?t$H$+$r;XDj$9$k;v$b$G$-$k!#(B"
   :type '(choice (integer :tag "$B?tCM$G;XDj(B")
 		 (sexp :tag "$B4X?t$H$+(B"))
   :group 'navi2ch-article)
@@ -496,65 +502,66 @@ window $B$NI}$HF1$8$K$7$?$$$J$i(B
   (cond ((featurep 'xemacs) "$BL>L5$7$5$s!w#X#E#m#a#c#s(B")
 	((featurep 'meadow) "$BL>L5$7$5$s!w#M#e#a#d#o#w(B")
 	(t "$BL>L5$7$5$s!w#E#m#a#c#s(B"))
-  "*$BL>A0(B"
+  "*$B%G%U%)%k%H$NL>A0!#(B"
   :type 'string
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-user-name-alist
-  '(("network" . "anonymous")
-    ("tv" . "$BL>L5$7$5$s(B"))
-  "*$BHD$4$H$N%G%U%)%k%H$NL>A0$N(B alist"
-  :type '(repeat (cons string string))
+(defcustom navi2ch-message-user-name-alist nil
+  "*$BHD$4$H$N%G%U%)%k%H$NL>A0$N(B alist$B!#(B
+
+$B$?$H$($P<!$N$h$&$K@_Dj$7$F$*$/$H!"%M%C%H%o!<%/HD$G$O(B \"anonymous\"$B!"(B
+$B%F%l%SHVAHHD$G$O(B \"$BL>L5$7$5$s(B\" $B$,%G%U%)%k%H$NL>A0$K$J$k!#(B
+  '((\"network\" . \"anonymous\")
+    (\"tv\" . \"$BL>L5$7$5$s(B\"))"
+  :type '(repeat (cons (string :tag "$BHD(B  ") (string :tag "$BL>A0(B")))
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-mail-address nil
-  "*$B%G%U%)%k%H$N%a!<%k%"%I%l%9(B"
+  "*$B%G%U%)%k%H$N%a!<%k%"%I%l%9!#(B"
   :type 'string
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-ask-before-send t
-  "*$BAw?.$9$kA0$K3NG'$9$k$+!#(B
-`non-nil' $B$J$i3NG'$9$k(B"
+  "*non-nil $B$J$i!"=q$-9~$_Aw?.$N3NG'%a%C%;!<%8$rI=<($9$k!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-ask-before-kill t
-  "*$B=q$-$3$_$r%-%c%s%;%k$9$kA0$K3NG'$9$k$+(B
-`non-nil' $B$J$i3NG'$9$k(B"
+  "*non-nil $B$J$i!"=q$-$3$_%-%c%s%;%k$N3NG'%a%C%;!<%8$rI=<($9$k!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-always-pop-message nil
-  "*$B=q$-$+$1$N(B message $B$r>o$KI|85$9$k$+$I$&$+(B
-`non-nil' $B$J$iI|85$9$k(B"
+  "*non-nil $B$J$i!"?75,%a%C%;!<%8$r:n$k%3%^%s%I$O=q$-$+$1$N%l%9$r>o$KI|85$9$k!#(B
+nil $B$J$i!"=q$-$+$1$rGK4~$7$F$$$$$+Ld$$9g$o$;$k!#(B
+$B=q$-$+$1$N%a%C%;!<%8$N%P%C%U%!$,;D$C$F$$$k>l9g$K$@$1M-8z!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-wait-time 1
-  "*$BAw$C$?8e(B sync $B$9$kA0$KBT$D;~4V(B($BIC(B)"
+  "*$B%l%9$rAw$C$?$"$H%9%l$r%j%m!<%I$9$k$^$G$NBT$A;~4V(B($BIC(B)$B!#(B"
   :type 'integer
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-remember-user-name t
-  "*$BAw$C$?8e(B `navi2ch-message-user-name' $B$rAw$C$?%a!<%k%"%I%l%9$KJQ99$9$k$+!#(B
-`non-nil' $B$J$iJQ99$9$k(B"
+  "*non-nil$B$J$i!"Aw$C$?%l%9$N%a!<%k%"%I%l%9Mw$r3P$($F$*$/!#(B
+$BF1$8%9%l$G<!$K%l%9$9$k$H$-$O!"$=$l$,%G%U%)%k%H$N%a!<%k%"%I%l%9$K$J$k!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-cite-prefix "> "
-  "*$B0zMQ$9$k$H$-$N@\F,<-(B"
+  "*$B0zMQ$9$k$H$-$N@\F,<-!#(B"
   :type 'string
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-trip nil
-  "*trip $BMQ$NJ8;zNs!#(B
-$B=q$-$3$_;~$K(B From $B$N8e$m$KIU2C$5$l$k!#(B"
+  "*trip $BMQ$NJ8;zNs!#=q$-$3$_;~$K(B From $B$N8e$m$KIU2C$5$l$k!#(B"
   :type '(choice (string :tag "trip $B$r;XDj(B")
 		 (const :tag "trip $B$r;XDj$7$J$$(B" nil))
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-aa-prefix-key "\C-c\C-a"
-  "*aa $B$rF~NO$9$k0Y$N(B prefix-key$B!#(B"
+  "*AA $B$rF~NO$9$k0Y$N(B prefix-key$B!#(B"
   :type 'string
   :group 'navi2ch-message)
 
@@ -578,18 +585,18 @@ window $B$NI}$HF1$8$K$7$?$$$J$i(B
     ("s" . "$B&2!J(I_$B'U(I_(Blll$B!K(I6^0](B")
     ("u" . "((I_$B'U(I_(B)(I3O0(B")
     ("U" . "(-$B!2(B-)(I3B@^(B"))
-  "*aa $B$rF~NO$9$k$H$-$N(B key$B$H(B aa $B$N(B alist$B!#(B
-message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B aa $B$rF~NO$G$-$k!#(B"
+  "*AA $B$rF~NO$9$k$H$-$N%-!<%P%$%s%I$H(B AA $B$N(B alist$B!#(B
+message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(B"
   :type '(repeat (cons string string))
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-cleanup-trailing-whitespace nil
-  "*$B=q$-9~$`A0$K9TKv$N6uGr$r<h$j=|$/$+(B"
+  "*non-nil $B$J$i!"Aw?.$9$k%l%9$+$i9TKv$N6uGr$r<h$j=|$/!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-cleanup-trailing-newline nil
-  "*$B=q$-9~$`A0$KKvHx$N6u9T$r<h$j=|$/$+(B"
+  "*non-nil $B$J$i!"Aw?.$9$k%l%9$+$iKvHx$N6u9T$r<h$j=|$/!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
@@ -598,50 +605,48 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B aa $B$rF~NO$G$-$k!#(
   (if (string= (getenv "HTTP_PROXY") "")
       nil
     (getenv "HTTP_PROXY"))
-  "*Proxy Server $B$N(B url"
-  :type '(choice (string :tag "proxy $B$r;XDj(B")
-		 (const :tag "proxy $B$r;H$o$J$$(B" nil))
+  "*HTTP $B%W%m%-%7$N(B URL$B!#(B"
+  :type '(choice (string :tag "$B%W%m%-%7$r;XDj(B")
+		 (const :tag "$B%W%m%-%7$r;H$o$J$$(B" nil))
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-http-proxy-userid nil
-  "Proxy $BG'>Z$K;H$&%f!<%6L>!#(B"
+  "$B%W%m%-%7G'>Z$K;H$&%f!<%6L>!#(B"
   :type '(choice (string :tag "$B%f!<%6L>$r;XDj(B")
 		 (const :tag "$B%f!<%6L>$r;H$o$J$$(B" nil))
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-http-proxy-password nil
-  "Proxy $BG'>Z$K;H$&%Q%9%o!<%I!#(B"
+  "$B%W%m%-%7G'>Z$K;H$&%Q%9%o!<%I!#(B"
   :type '(choice (string :tag "$B%Q%9%o!<%I$r;XDj(B")
 		 (const :tag "$B%Q%9%o!<%I$r;H$o$J$$(B" nil))
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-send-message-use-http-proxy t
-  "*$B%l%9$r=q$/:]$K$b(B Proxy $B$r;HMQ$9$k$+!#(B
-`non-nil' $B$G$"$C$F$b(B navi2ch-net-http-proxy $B$,(B `nil' $B$N>l9g$K$O(B Proxy 
-$B$O;HMQ$7$J$$!#(B"
+  "*non-nil $B$J$i!"%l%9$rAw$k>l9g$J$I$G$b%W%m%-%7$r7PM3$9$k!#(B
+$B$3$N%*%W%7%g%s$rM-8z$K$9$k$K$O!"(B`navi2ch-net-http-proxy' $B$r(B non-nil
+$B$K@_Dj$9$k$3$H!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-force-update nil
-  "*$B99?7$,$"$C$?$+$r3NG'$;$:$K99?7$9$k$+!#(B
-`non-nil' $B$J$i$P3NG'$7$J$$(B"
+  "*non-nil $B$J$i!"%U%!%$%k$r<hF@$9$k$^$($K99?7$NM-L5$r3NG'$7$J$/$J$k!#(B
+nil $B$J$i!"99?7$5$l$F$$$J$$%U%!%$%k$NITI,MW$JE>Aw$O$7$J$$!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-check-margin 100
-  "*$B$"$\!<$s$,$"$C$?$+3NG'$9$k0Y$N%P%$%H?t(B"
+  "*$B$"$\!<$s$,$"$C$?$+3NG'$9$k0Y$N%P%$%H?t!#(B"
   :type 'integer
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-turn-back-step 1000
-  "*$B$"$\!<$s$,$"$C$?$H$-$KESCf$+$iFI$_D>$90Y$N%P%$%H?t!#(B
-$BF|K\8lJQ$@$J(B($B4@(B)$B!#(B"
+  "*$B$"$\!<$s$,$"$C$?$H$-$KESCf$+$iFI$_D>$90Y$N%P%$%H?t!#F|K\8lJQ$@$J(B($B4@(B)$B!#(B"
   :type 'integer
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-turn-back-when-aborn t
-  "*$B$"$\!<$s$,$"$C$?$H$-ESCf$+$iFI$_D>$9$+!#(B
-`non-nil'$B$J$iFI$_D>$9(B"
+  "*non-nil $B$J$i!"$"$\!<$s$,$"$C$?$H$-%9%l$rESCf$+$iFI$_D>$9!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
@@ -656,53 +661,60 @@ ask $B$J$iJ]B8$9$kA0$K<ALd$9$k(B
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-inherit-process-coding-system nil
-  "*`inherit-process-coding-system' $B$N(B navi2ch $B$G$NB+G{CM(B"
+  "*`inherit-process-coding-system' $B$N(B navi2ch $B$G$NB+G{CM!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-accept-gzip t
-  "*Accept-Encoding: gzip $B$rIU2C$9$k$+$I$&$+!#(B
-non-nil $B$J$iIU2C$9$k!#(B"
+  "*non-nil $B$J$i!"%U%!%$%k<u?.$K(B GZIP $B%(%s%3!<%G%#%s%0$r;H$&!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-gunzip-program "gzip"
-  "*gunzip $B$N%W%m%0%i%`L>!#(B"
+  "*gunzip $B$K;H$&%W%m%0%i%`!#(B"
   :type 'file
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-gunzip-args '("-d" "-c" "-q")
-  "*gunzip $B$r8F=P$9$H$-$N0z?t!#(B"
+  "*gunzip $B$r8F$S=P$9$H$-$N0z?t!#(B"
   :type '(repeat :tag "$B0z?t(B" string)
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-enable-http11 nil
-  "*HTTP/1.1 $B$r;HMQ$9$k$+$I$&$+!#(B"
+  "*non-nil $B$J$i!"(BHTTP/1.1 $B$r;HMQ$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 
 ;;; update variables
-(defcustom navi2ch-update-file (expand-file-name "navi2ch-update.el"
-						 navi2ch-directory)
-  "*Navi2ch $B$r<+F099?7$9$k%U%!%$%k(B"
+(defcustom navi2ch-update-file (concat
+                                (file-name-as-directory navi2ch-directory)
+                                "navi2ch-update.el")
+  "*Navi2ch $B$N<+F099?7$KMxMQ$9$k%U%!%$%k$N%m!<%+%k%U%!%$%kL>!#(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-update-base-url
   "http://navi2ch.sourceforge.net/autoupdate/"
-  "*`navi2ch-update-file' $B$,$"$k>l=j$N(B BASE URL"
+  "*$B<+F099?7$9$k%U%!%$%k$,$"$k>l=j$N(B BASE URL$B!#(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-update-url (concat navi2ch-update-base-url
-				      (file-name-nondirectory 
+				      (file-name-nondirectory
 				       navi2ch-update-file))
-  "*`navi2ch-update-file' $B$N(B URL"
+  "*$B<+F099?7$KMxMQ$9$k%U%!%$%k$N(B URL$B!#(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-auto-update t
-  "*$B5/F0;~$K(B`navi2ch-update-file'$B$r99?7$9$k$+!#(B"
+  "*non-nil $B$J$i!"5/F0;~$K(B `navi2ch-update-file' $B$r99?7$7$F<B9T$9$k!#(B
+$B%U%!%$%k$,<B9T$5$l$k$N$O!"(B
+ - `navi2ch-update-file' $B$,99?7$5$l$F$$$F!"(B
+ - $B$=$3$GI=<($5$l$k3NG'$9$k%a%C%;!<%8$K(B yes $B$HEz$($?$H$-(B
+$B$N$_!#(B
+
+$B%d%P$$%3!<%I$,F~$C$F$$$k$H$^$:$$$N$G!"<B9T$9$kA0$K$^$:(B navi2ch $B$N(B
+$B%9%l$J$I$r3NG'$7$?$[$&$,$$$$!#(B"
   :type 'boolean
   :group 'navi2ch)
 

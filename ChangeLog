@@ -1,3 +1,17 @@
+2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
+	* navi2ch-vars.el: defcustom の説明文字列に赤入れ。
+	elisp-ja (Info) の「説明文字列に関するヒント」の従った。
+	 - 説明文字列の最初の行は完全な文で、それだけで概要を表していること
+	 - フラグを表す変数は『Non-nil means...』のような単語で始めること
+	 - 最初の行は大文字で始め、ピリオド (マル) で終えること。
+	にはだいたい従うようになったと思う。
+
+	用語統一は、気づいたところはやってみたけどまだイマイチ。
+	というか正しい用語がわからない。たとえば、「レス」と「メッセージ」、
+	「list window」と「板一覧」、「board window」と「スレ一覧」、
+	「スレ」と「スレッド」、「Navi2ch」と「navi2ch」などなど…。
+
 2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (SUBDIRS): contrib を追加。
