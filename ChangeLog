@@ -1,3 +1,8 @@
+2004-08-26  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist):
+	amazon.co.jp への URL の最後に / を含めるように。
+
 2004-08-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-parse-message): JBBS@したら
