@@ -1,7 +1,7 @@
 -*-outline-*-
 主な変更点。詳細は ChangeLog を参照してください。
 
-* navi2ch 1.5.2 ->
+* navi2ch 1.5.2 -> 1.6.0
 板の ID が衝突しても大丈夫になった。
 configure に --with-packagedir オプションを追加。(XEmacs のみ)
 ２ちゃんねる以外のBBSをサポート: ＪＢＢＳ、ＪＢＢＳ＠したらば、まちＢＢＳ
