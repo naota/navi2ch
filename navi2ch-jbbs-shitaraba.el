@@ -85,15 +85,15 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 (defun navi2ch-js-url-to-board (url)
   (let (prefix category id)
     (when (or
-	   ;; http://jbbs.shitaraba.com/computer/351/
-	   (string-match
-	    "http://\\(.+\\)/\\([^/]+\\)/\\([0-9]+\\)/" url)
 	   ;; http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452814&START=1&END=5
 	   (string-match
 	    "http://\\(.+\\)/\\([^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
 	   ;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
 	   (string-match
-	    "http://\\(.+\\)/bbs/[^/]\\.cgi/\\([^/]+\\)/\\([0-9]+\\)" url))
+	    "http://\\(.+\\)/bbs/[^/]+\\.cgi/\\([^/]+\\)/\\([0-9]+\\)" url)
+	   ;; http://jbbs.shitaraba.com/computer/351/
+	   (string-match
+	    "http://\\(.+\\)/\\([^/]+\\)/\\([0-9]+\\)/" url))
       (setq prefix (match-string 1 url)
 	    category (match-string 2 url)
 	    id (match-string 3 url)))
@@ -117,11 +117,11 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	    kako t))
      ;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
      ((string-match
-       "http://.+/bbs/read\\.cgi/[^/]+/[^/]+/\\([^/]+\\)" url)
+       "http://.+/bbs/[^/]+\\.cgi/[^/]+/[^/]+/\\([^/]+\\)" url)
       (setq artid (match-string 1 url))
       (when (string-match
 	     (format
-	      "http://.+/bbs/[^/]\\.cgi/[^/]+/[^/]+/%s/[ni.]?\\([0-9]+\\)[^/]*$"
+	      "http://.+/bbs/[^/]+\\.cgi/[^/]+/[^/]+/%s/[ni.]?\\([0-9]+\\)[^/]*$"
 	      artid)
 	     url)
 	(setq number (string-to-number (match-string 1 url))))))

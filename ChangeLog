@@ -1,3 +1,9 @@
+2003-11-26  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board): 正規表現を
+	修正。
+	(navi2ch-js-url-to-article): 同上。
+
 2003-11-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board): parse 時に
