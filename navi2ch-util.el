@@ -81,6 +81,10 @@
 
 (defvar navi2ch-coding-system 'shift_jis)
 
+(defvar navi2ch-offline nil "オフラインモードかどうか")
+(defvar navi2ch-offline-on "[ON] ")
+(defvar navi2ch-offline-off "[--] ")
+
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
       (let (start (len (length new)))
@@ -487,6 +491,14 @@ base64デコードすべき内容がない場合はエラーになる。"
 	  (insert (format "\n%s\n" navi2ch-base64-end-delimiter))
 	  (setq str (buffer-string))))
       (insert str))))
+
+(defun navi2ch-toggle-offline ()
+  (interactive)
+  (setq navi2ch-offline (not navi2ch-offline))
+  (message (if navi2ch-offline
+               "offline"
+             "online"))
+  (navi2ch-set-mode-line-identification))
 
 (provide 'navi2ch-util)
 ;;; navi2ch-util.el ends here

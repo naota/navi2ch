@@ -38,10 +38,6 @@
 
 (defvar navi2ch-ask-when-exit t)
 
-(defvar navi2ch-offline nil "オフラインモードかどうか")
-(defvar navi2ch-offline-on "[ON] ")
-(defvar navi2ch-offline-off "[--] ")
-
 (defvar navi2ch-init nil)
 
 (defun navi2ch (&optional arg)
@@ -98,14 +94,6 @@ SUSPEND が non-nil なら buffer を消さない"
   "navi2ch を一時的に終了する"
   (interactive)
   (navi2ch-exit 'suspend))
-
-(defun navi2ch-toggle-offline ()
-  (interactive)
-  (setq navi2ch-offline (not navi2ch-offline))
-  (message (if navi2ch-offline
-               "offline"
-             "online"))
-  (navi2ch-set-mode-line-identification))
 
 (defun navi2ch-three-pain ()
   (interactive)

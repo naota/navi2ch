@@ -1,3 +1,17 @@
+2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
+	これで navi2ch.el 中の他に依存しない関数は navi2ch-util.el への移
+	動が完了したかな。
+
+	* navi2ch.el (navi2ch-offline): navi2ch-util.el へ移動。
+	(navi2ch-offline-on): 同上。
+	(navi2ch-offline-off): 同上。
+	(navi2ch-toggle-offline): 同上。
+
+	* navi2ch-util.el (navi2ch-offline): navi2ch.el から移動。
+	(navi2ch-offline-on): 同上。
+	(navi2ch-offline-off): 同上。
+	(navi2ch-toggle-offline): 同上。
+
 2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	今度は navi2ch-board-misc 関連の整理。おかしくなっていたら御免なさ
 	い。
