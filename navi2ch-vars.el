@@ -588,6 +588,12 @@ window の幅いっぱいにしたいなら
 		 (const :tag "フェイスを使用しない" nil))
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-get-url-text t
+  "* non-nil なら `navi2ch-article-get-link-text' で URL のリンク先を得る。
+nil の場合は同じスレの内容のみを得る。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")

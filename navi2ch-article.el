@@ -1385,7 +1385,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	       (format "%s" (truncate-string-to-width
 			     (format "[%d]: %s" num msg)
 			     (eval navi2ch-article-display-link-width)))))))
-	 (url-prop
+	 ((and navi2ch-article-get-url-text
+	       url-prop)
 	  (if (navi2ch-2ch-url-p url-prop)
 	      (let ((board (navi2ch-board-url-to-board url-prop))
 		    (article (navi2ch-article-url-to-article url-prop)))
@@ -1404,7 +1405,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
   (let ((text (navi2ch-article-get-link-text point)))
-    (if text
+    (if (stringp text)
 	(message "%s" text))))
 
 (defun navi2ch-article-help-echo (window-or-extent &optional object position)

@@ -1,3 +1,16 @@
+2002-07-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-multibbs.el (navi2ch-2ch-url-to-board): 昨日の変更は間違っ
+	てたので修正。
+
+	* navi2ch-vars.el (navi2ch-article-get-url-text): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-get-link-text): url-prop の
+	処理は navi2ch-article-get-url-text が non-nil の場合だけに。
+	(navi2ch-article-display-link-minibuffer): text が string かどうか
+	調べるように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/455
+
 2002-07-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-2ch-url-p): board か article にならない場合
