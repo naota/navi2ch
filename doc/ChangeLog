@@ -1,8 +1,12 @@
-2002-12-16  Nanashi San  <nanashi@users.sourceforge.net>
+2002-12-17  mami  <mami@users.sourceforge.net>
 
-	* navi2ch.texi (FAQ): たまには先手を打って、時計が合ってない場合の
-	対処方法を記述。
-	ディレクトリロックについて記述。
+	* navi2ch.texi (Start Navi2ch): M-x に @key{RET} を追加。
+	(FAQ): customize-group について追加。
+	デフォルトの名前について更新。
+	read.cgi 関連の設定方法追加。
+	スレのバッファ数制限について簡潔化。
+	M-x に @key{RET} を追加。
+	順番変更、ざっと分類。
 
 2002-11-25  mami  <mami@users.sourceforge.net>
 

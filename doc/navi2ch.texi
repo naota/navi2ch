@@ -333,7 +333,7 @@ CVS についての詳しい説明は
 
 と書く。
 
-@kbd{M-x navi2ch} で起動。
+@kbd{M-x navi2ch @key{RET}} で起動。
 
 Windows では 環境変数 @env{TZ} を @code{JST-9} としておいた方がいいらしい。
 
@@ -1459,6 +1459,7 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @node FAQ
 @appendix よくある質問とその答え
 @table @asis
+@c 全般
 @item Q.
 Navi2ch って何？
 
@@ -1476,7 +1477,7 @@ Emacs の起動と同時に Navi2ch を起動したいんだけど。
 オフラインで起動したいんだけど。
 
 @item A.
-@kbd{C-u M-x navi2ch} でどうぞ。
+@kbd{C-u M-x navi2ch @key{RET}} でどうぞ。
 
 @item Q.
 @code{Cannot open load file} が出て起動できないんだけど。
@@ -1489,7 +1490,87 @@ Emacs の起動と同時に Navi2ch を起動したいんだけど。
 
 @item A.
 とりあえず @file{navi2ch-vars.el} っていうファイルを見てみてね。
+それか @kbd{M-x customize-group @key{RET} navi2ch @key{RET}} するか。@xref{Customize}.
 
+@item Q.
+何々しようとしたらほにゃららってエラーが出るんだけど。
+
+@item A.
+まず、一度 Emacs を終了し、再度立ち上げ直してから Navi2ch を起動してみ
+てちょ。それでもエラーが出るようなら、
+
+@kbd{M-x set-variable @key{RET} debug-on-error @key{RET} t @key{RET}}
+
+して、エラーが起きた時の @code{*Backtrace*} バッファの内容を２ちゃんね
+るの Navi2ch スレで報告してね。その際、使ってる Emacs の種類やバージョ
+ン、Navi2ch のバージョン (CVS 版を使ってる時は ChangeLog の一番最後に
+あるリビジョン) も教えてくれると対応が早いかも。
+
+@item Q.
+「ディレクトリのロックに失敗しました。」って言われるんだけどこれ何?
+
+@item A.
+Navi2ch を同時に複数起動すると、@file{~/.navi2ch/} の整合性が取れなく
+なっちゃうので、ロックファイルを作成しています。ロックファイルの作成に
+失敗すると、他に Navi2ch を起動している可能性があるのでこのメッセージ
+が表示されます。
+
+ただ、Navi2ch の起動中に Emacs を強制終了したりするとロックファイルが
+残ってしまい、この警告が表示される場合があります。その際は Navi2ch を
+複数起動しようとしていないことを確認した後、「もう一度試しますか?」の
+問いに @code{n} (この問いはバージョンによっては削除されています)、
+「危険を承知で続けますか?」の問いに @code{yes} と答えてください。
+
+@c 読む
+@item Q.
+@code{>>1} みたいなリンクで飛んでったあとに元のレスに戻りたいんだけど。
+
+@item A.
+@kbd{l} で戻れます。
+
+@item Q.
+スレを開いたときにデフォルトで全件表示させたいんだけど。
+
+@item A.
+変数 @code{navi2ch-article-auto-range} の値を @code{nil} に設定します。
+@xref{Customize}.
+
+@item Q.
+複数のスレを巡回したいんだけど。
+
+@item A.
+@kbd{*} とか @kbd{m a} とか @kbd{m r} でスレにマークをつけて、@kbd{m i}
+でおっけー。@xref{Mark}.
+
+@item Q.
+URL を指定してスレを開きたいんだけど。
+
+@item A.
+@kbd{C-c C-u} でどうぞ。
+
+@item Q.
+article を開くときに一画面で開いて欲しいんだけど。
+
+@item A.
+以下の設定をして下さい。
+@lisp
+(setq navi2ch-bm-stay-board-window nil)
+@end lisp
+
+@item Q.
+Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
+るんだけど。
+
+@item A.
+たぶんスレのバッファがどんどん増えているのが原因。
+@kbd{M-x navi2ch-article-expunge-buffers @key{RET}} とすると、
+スレのバッファの数が変数 @code{navi2ch-article-max-buffers} 
+の値を越えていたときにバッファが削除される。
+また、変数 @code{navi2ch-article-auto-expunge} を
+@code{nil} 以外 (@code{t} とか) に設定すると
+スレを開いたときに自動的にバッファの最大数が上記の値に制限される。@xref{Customize}.
+
+@c 読めない
 @item Q.
 鯖がご機嫌斜めみたいで @code{now connect...} のまま止まってんだけど、
 どうにかならない?
@@ -1505,45 +1586,41 @@ Emacs の起動と同時に Navi2ch を起動したいんだけど。
 @kbd{C-u S} で強制読み込みしてみてね。
 
 @item Q.
-@code{>>1} みたいなリンクで飛んでったあとに元のレスに戻りたいんだけど。
+スレ開き中 C-g してニッチもサッチもいかなくなったらどうするの?
 
 @item A.
-@kbd{l} で戻れます。
+@kbd{C-u s} で強制的に更新する。
 
 @item Q.
-スレを開いたときにデフォルトで全件表示させたいんだけど。
+ある板で @code{checking file...moved} と出て、スレ一覧が更新されない。
 
 @item A.
-変数 @code{navi2ch-article-auto-range} の値を @code{nil} に設定します。
-@xref{Customize}.
+以下3つのどれかでどうすか?
+@lisp
+(setq navi2ch-board-enable-readcgi nil
+      navi2ch-board-use-subback-html nil)
+@end lisp
+@lisp
+(setq navi2ch-board-enable-readcgi nil
+      navi2ch-board-use-subback-html t)
+@end lisp
+@lisp
+(setq navi2ch-board-enable-readcgi t)
+@end lisp
 
 @item Q.
-スレ立てたいんだけど。
+ある板でスレを読むと @code{checking file...moved} と出て、スレが更新されない。
 
 @item A.
-Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
-そのときはブラウザで立ててください。スマソ。
+以下2つのどっちかでどうすか?
+@lisp
+(setq navi2ch-enable-readcgi nil)
+@end lisp
+@lisp
+(setq navi2ch-enable-readcgi t)
+@end lisp
 
-@item Q.
-複数のスレを巡回したいんだけど。
-
-@item A.
-@kbd{*} とか @kbd{m a} とか @kbd{m r} でスレにマークをつけて、@kbd{m i}
-でおっけー。@xref{Mark}.
-
-@item Q.
-書き込むときの名前をずーっと「名無しさん＠Ｅｍａｃｓ」にしたいんだけど。
-
-@item A.
-変数 @code{navi2ch-message-remember-user-name} の値を @code{nil} に設
-定します。@xref{Customize}.
-
-@item Q.
-URL を指定してスレを開きたいんだけど。
-
-@item A.
-@kbd{C-c C-u} でどうぞ。
-
+@c 板関連
 @item Q.
 ○○板がサーバ移転で見られなくなったみたい。どうしたらいい?
 
@@ -1575,10 +1652,87 @@ Boards File}.
 板メニューを指定できます。@xref{Customize}.
 
 @item Q.
+突然とある板が更新されなくなったみたいなんだけど。
+
+@item A.
+それは多分２ちゃんねる側の問題。板の移転があったのかも。
+@file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
+最新の板一覧 (◆AzLuckyc さんの
+@uref{http://azlucky.hp.infoseek.co.jp/2chboard/bbsmenu.html}
+とか、
+@uref{http://azlucky.hp.infoseek.co.jp/}
+の【 他のボード一覧配布先 】にあるものとか) を
+@code{navi2ch-list-bbstable-url} に設定するといいかも。
+
+@item Q.
+@code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
+って出て起動できないんだけど…。
+
+@item A.
+とりあえずこうしとけば？
+@lisp
+(setq navi2ch-auto-update nil)
+@end lisp
+
+@c 書き込む
+@item Q.
+せっかく長文のレスを書いたのに、書き込みに失敗して書いたレスのバッファが
+消えちゃった。
+さっき書いたレスをなんとかして戻せない?
+
+@item A.
+@kbd{w} で Message モードに入って @kbd{C-c C-i} でおっけー。
+
+@item Q.
+レスを書き込むときの名前を設定したい。
+
+@item A.
+変数 @code{navi2ch-message-remember-user-name} に名前の文字列を設定する。
+@xref{Customize}.
+板ごとに違う名前を使いたいときはこんな感じで。
+@lisp
+(setq navi2ch-message-user-name-alist
+      '(("network" . "anonymous")
+        ("tv" . "名無しさん")))
+@end lisp
+
+板のデフォルトの「名無しさん」を使いたいときは @code{nil} か空文字列 @code{""} を設定する。
+これだと板によって書き込めなかったり名前が fusianasan になったりするので注意。
+
+@item Q.
+前にレスを書いたときの名前を覚えていてほしくないんだけど。
+
+@item A.
+変数 @code{navi2ch-message-remember-user-name} の値を @code{nil} に設
+定します。@xref{Customize}.
+
+@item Q.
+スレ立てたいんだけど。
+
+@item A.
+Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
+そのときはブラウザで立ててください。スマソ。
+
+@item Q.
+「ＥＲＲＯＲ：もうちょっと落ち着いて書きこみしてください。」って怒られ
+ちゃう。
+
+@item A.
+時計を合わせましょう。
+
+@c 未分類、環境依存、細かい話、など
+@item Q.
 使ってると @file{~/.navi2ch/} がどんどん大きくなるんだけど。
 
 @item A.
 @kbd{e} で一定期間より古いファイルを削除できるよ。
+
+@item Q.
+あぼーんをいちいち聞かんでくれや
+
+@item A.
+変数 @code{navi2ch-net-save-old-file-when-aborn} の値を @code{nil} に
+します。@xref{Customize}.
 
 @item Q.
 プロクシ通したいんだけど。
@@ -1597,24 +1751,14 @@ Boards File}.
 定します。@xref{Customize}.
 
 @item Q.
-あぼーんをいちいち聞かんでくれや
+proxy を使って書きこんでると、時間帯によって送信に失敗することが
+あるみたいだけど?
 
 @item A.
-変数 @code{navi2ch-net-save-old-file-when-aborn} の値を @code{nil} に
-します。@xref{Customize}.
-
-@item Q.
-Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
-るんだけど。
-
-@item A.
-@kbd{M-x navi2ch-article-expunge-buffers} とすると、
-変数 @code{navi2ch-article-max-buffers} を越えるスレのバッファを削除し
-ます。スレのバッファをすべて削除したい時は
-@kbd{C-u 0 navi2ch-article-expunge-buffers} としてください。
-スレを開いたときに自動的に最大数を制限したい場合は、
-変数 @code{navi2ch-article-auto-expunge} を @code{nil} 以外に設定しま
-す。@xref{Customize}.
+２ちゃんねる側の規制で、80番ポートが listen されていたりすると
+不正 proxy とみなされることがあるので、web サーバを落とすなり
+パケットフィルタリングで２ちゃんねるからの接続のみを落とすなり
+すると動くかも。
 
 @item Q.
 Meadow + Cygwin でうまく動かないことがあるんだけど。
@@ -1630,54 +1774,12 @@ Meadow + Cygwin でうまく動かないことがあるんだけど。
 負荷がかかるので素人にはお勧めできない。
 
 @item Q.
-突然とある板が更新されなくなったみたいなんだけど。
-
-@item A.
-それは多分２ちゃんねる側の問題。板の移転があったのかも。
-@file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
-最新の板一覧 (◆AzLuckyc さんの
-@uref{http://azlucky.hp.infoseek.co.jp/2chboard/bbsmenu.html}
-とか、
-@uref{http://azlucky.hp.infoseek.co.jp/}
-の【 他のボード一覧配布先 】にあるものとか) を
-@code{navi2ch-list-bbstable-url} に設定するといいかも。
-
-@item Q.
-article を開くときに一画面で開いて欲しいんだけど。
-
-@item A.
-以下の設定をして下さい。
-@lisp
-(setq navi2ch-bm-stay-board-window nil)
-@end lisp
-
-@item Q.
-proxy を使って書きこんでると、時間帯によって送信に失敗することが
-あるみたいだけど?
-
-@item A.
-２ちゃんねる側の規制で、80番ポートが listen されていたりすると
-不正 proxy とみなされることがあるので、web サーバを落とすなり
-パケットフィルタリングで２ちゃんねるからの接続のみを落とすなり
-すると動くかも。
-
-@item Q.
 「変わった板」って何?
 
 @item A.
 前回 Navi2ch を実行してから変更があった板のことです。新たに追加された
 り、サーバが移転になった板がこのカテゴリに含まれます。変な板のことでは
 ありません。
-
-@item Q.
-@code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
-って出て起動できないんだけど…。
-
-@item A.
-とりあえずこうしとけば？
-@lisp
-(setq navi2ch-auto-update nil)
-@end lisp
 
 @item Q.
 URL を w3m.el で開きたいんだけど。
@@ -1695,12 +1797,6 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 (setq navi2ch-board-hide-updated-article t)
 @end lisp
 すれば出てこなくなる。
-
-@item Q.
-スレ開き中 C-g してニッチもサッチもいかなくなったらどうするの?
-
-@item A.
-@kbd{C-u s} で強制的に更新する。
 
 @item Q.
 スレバッファで TAB 押してリンクに飛ぶとすっげー重いんだけど。
@@ -1732,50 +1828,6 @@ sort 後に @kbd{X} で現在の並び順を記憶する。
 (require 'navi2ch-head)
 @end lisp
 しといて @kbd{H} でどうよ。
-
-@item Q.
-せっかく長文のレスを書いたのに、書き込みに失敗して書いたレスのバッファが
-消えちゃった。
-さっき書いたレスをなんとかして戻せない?
-
-@item A.
-@kbd{w} で Message モードに入って @kbd{C-c C-i} でおっけー。
-
-@item Q.
-「ＥＲＲＯＲ：もうちょっと落ち着いて書きこみしてください。」って怒られ
-ちゃう。
-
-@item A.
-時計を合わせましょう。
-
-@item Q.
-「ディレクトリのロックに失敗しました。」って言われるんだけどこれ何?
-
-@item A.
-Navi2ch を同時に複数起動すると、@file{~/.navi2ch/} の整合性が取れなく
-なっちゃうので、ロックファイルを作成しています。ロックファイルの作成に
-失敗すると、他に Navi2ch を起動している可能性があるのでこのメッセージ
-が表示されます。
-
-ただ、Navi2ch の起動中に Emacs を強制終了したりするとロックファイルが
-残ってしまい、この警告が表示される場合があります。その際は Navi2ch を
-複数起動しようとしていないことを確認した後、「もう一度試しますか?」の
-問いに @code{n} (この問いはバージョンによっては削除されています)、
-「危険を承知で続けますか?」の問いに @code{yes} と答えてください。
-
-@item Q.
-何々しようとしたらほにゃららってエラーが出るんだけど。
-
-@item A.
-まず、一度 Emacs を終了し、再度立ち上げ直してから Navi2ch を起動してみ
-てちょ。それでもエラーが出るようなら、
-
-@kbd{M-x set-variable @key{RET} debug-on-error @key{RET} t @key{RET}}
-
-して、エラーが起きた時の @code{*Backtrace*} バッファの内容を２ちゃんね
-るの Navi2ch スレで報告してね。その際、使ってる Emacs の種類やバージョ
-ン、Navi2ch のバージョン (CVS 版を使ってる時は ChangeLog の一番最後に
-あるリビジョン) も教えてくれると対応が早いかも。
 
 @ignore
 @item Q.
