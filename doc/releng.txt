@@ -1,0 +1,36 @@
+-*- mode: outline; coding: iso-2022-7bit -*-
+$Id$
+
+リリースエンジニアリングについて
+
+* 使っている道具
+  GNU Automake 1.5
+  GNU Autoconf 2.53
+
+* リリース日時を宣言する
+  適当に決める。リリースの一日前くらいから commit 禁止にする。
+  (TBD: freeze しないでリリース用にブランチを切るのもいいかも。)
+  前回のリリースからの ChangeLog をながめつつ、NEWS を更新する。
+
+* β版のリリース
+  configure.in の AM_INIT_AUTOMAKE を x.y.z-BETA に変えて
+  % aclocal && autoconf && automake && make Makefiles && make dist
+  する。tar 玉を http://navi2ch.sf.net/beta/ に置いて 2ch のスレで案内。
+
+* リリース版作成
+  configure.in の AM_INIT_AUTOMAKE を x.y.z に変えて ChangeLog を記載、
+  % aclocal && autoconf && automake && make Makefiles && make dist
+  する。うまくいったら
+  % cvs commit
+  % cvs tag navi2ch-x_y_z
+  でリリース元の準備をする。commit 忘れ等の確認のため、別ディレクトリで
+  cvs export して
+  % ./configure && make dist elcdist
+  で tar 玉を作る。またまたよそのディレクトリに展開して配布物を確認、
+  よさげなら SourceForge の File Release に置く。
+  (置き方は以下の URL からヘルプを見ながら。
+  https://sourceforge.net/project/admin/editpackages.php?group_id=39552 )
+
+* リリースのアナウンス
+  2ch のスレ、http://navi2ch.sf.net/、
+  https://sourceforge.net/news/?group_id=39552 あたりでアナウンスをする。
