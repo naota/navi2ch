@@ -46,7 +46,7 @@
     (define-key map "j" 'navi2ch-article-few-scroll-up)
     (define-key map "k" 'navi2ch-article-few-scroll-down)
     (define-key map " " 'navi2ch-article-scroll-up)
-    (define-key map "\d" 'navi2ch-article-scroll-down)
+    (navi2ch-define-delete-keys map 'navi2ch-article-scroll-down)
     (define-key map "w" 'navi2ch-article-write-message)
     (define-key map "W" 'navi2ch-article-write-sage-message)
     (define-key map "\r" 'navi2ch-article-select-current-link)

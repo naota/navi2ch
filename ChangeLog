@@ -1,5 +1,22 @@
 2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-global-view-map): delete 系のキーをキー
+	ボードマクロとして登録するのをやめる。
+
+	* navi2ch-util.el (navi2ch-delete-keys): 新変数。
+	(navi2ch-define-delete-keys): 新関数。
+	(navi2ch-read-char): 入力されたキーを表示できるか検査。
+
+	* navi2ch-article.el (navi2ch-article-mode-map): 上記関数を使用。
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 同上。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 同上。
+
+	* navi2ch-list.el (navi2ch-list-mode-map): 同上。
+
+2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-mode-map):
 	`navi2ch-article-show-url-at-point' をバインド。
 	(navi2ch-article-get-number-list): 新関数。

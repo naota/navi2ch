@@ -42,7 +42,7 @@
     (define-key map "." 'navi2ch-bm-display-article)
     (define-key map "i" 'navi2ch-bm-fetch-article)
     (define-key map "e" 'navi2ch-bm-textize-article)
-    (define-key map "\d" 'navi2ch-bm-select-article-or-scroll-down)
+    (navi2ch-define-delete-keys map 'navi2ch-bm-select-article-or-scroll-down)
     (define-key map "n" 'navi2ch-bm-next-line)
     (define-key map "p" 'navi2ch-bm-previous-line)
     (define-key map "U" 'navi2ch-bm-show-url)

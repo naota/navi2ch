@@ -257,6 +257,16 @@ See also the function `defalias'."
 (defun navi2ch-define-mouse-key (map num command)
   (define-key map (navi2ch-mouse-key num) command))
 
+(defvar navi2ch-delete-keys
+  (list "\d" [del] [delete] [backspace]
+	(navi2ch-ifxemacs
+	    [(shift space)]
+	  [(shift ? )])))
+
+(defun navi2ch-define-delete-keys (map command)
+  (dolist (key navi2ch-delete-keys)
+    (define-key map key command)))
+
 ;; from apel
 (defalias 'navi2ch-set-buffer-multibyte
   (navi2ch-ifxemacs #'identity #'set-buffer-multibyte))
@@ -436,7 +446,8 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (if prompt
 	(navi2ch-no-logging-message "%s" prompt))
     (setq c (read-char))
-    (if prompt
+    (if (and prompt
+	     (navi2ch-char-valid-p c))
 	(navi2ch-no-logging-message "%s%c" prompt c))
     c))
 

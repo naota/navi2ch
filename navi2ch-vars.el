@@ -1815,9 +1815,6 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
     (define-key map "t" 'navi2ch-toggle-offline)
     (define-key map "V" 'navi2ch-version)
     (define-key map "\C-x\C-s" 'navi2ch-save-status)
-    (define-key map [del] "\d")
-    (define-key map [delete] "\d")
-    (define-key map [backspace] "\d")
     (setq navi2ch-global-view-map map)))
 
 (run-hooks 'navi2ch-vars-load-hook)

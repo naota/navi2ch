@@ -42,7 +42,7 @@
     (define-key map "z" 'navi2ch-suspend)
     (define-key map "s" 'navi2ch-list-sync)
     (define-key map " " 'navi2ch-list-select-current-board)
-    (define-key map "\d" 'scroll-down)
+    (navi2ch-define-delete-keys map 'scroll-down)
     (define-key map "a" 'navi2ch-list-add-bookmark)
     (define-key map "b" 'navi2ch-list-toggle-bookmark)
     (navi2ch-define-mouse-key map 2 'navi2ch-list-mouse-select)
