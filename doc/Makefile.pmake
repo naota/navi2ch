@@ -6,7 +6,7 @@ TEX = ptex
 TEXINDEX = jtexindex
 MAKEINFO = jmakeinfo
 MAKEINFOOPTIONS = --no-split -p 0
-MAKEINFOHTMLOPTIONS = --html ${MAKEINFOOPTIONS} --number-sections --no-headers
+MAKEINFOHTMLOPTIONS = --html --ifinfo ${MAKEINFOOPTIONS} --number-sections --no-headers
 CLEAN_FILES =*.tar.gz navi2ch.info navi2ch.html navi2ch.pdf navi2ch.dvi	\
 	navi2ch.aux navi2ch.log navi2ch.toc				\
 	navi2ch.cp navi2ch.fn navi2ch.ky navi2ch.pg navi2ch.tp navi2ch.vr \
