@@ -1,3 +1,9 @@
+2002-01-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-write-message): 
+	(navi2ch-article-save-number) を追加。
+	レス書き込み前に見ていたレス番号を保存するように。
+
 2002-01-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-enable-http11): navi2ch-vars へ移動。

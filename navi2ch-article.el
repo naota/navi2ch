@@ -891,6 +891,7 @@ state はあぼーんされてれば aborn というシンボル。
 (defun navi2ch-article-write-message (&optional sage)
   (interactive)
   (when (not navi2ch-article-from-file-p)
+    (navi2ch-article-save-number)
     (navi2ch-message-write-message navi2ch-article-current-board
                                    navi2ch-article-current-article
 				   nil sage)))
