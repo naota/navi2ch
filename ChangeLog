@@ -1,5 +1,13 @@
 2002-01-30  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el
+	(navi2ch-article-display-link-minibuffer): 新関数 & 改良。
+	「>>1-4」「>>1,3,5」などでも最初のレスを表示。
+	(navi2ch-article-next-link): 上の関数を使うように。
+	(navi2ch-article-previous-link): 上の関数を使うように。
+
+2002-01-30  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-next-link): ミニバッファに表示
 	するレス番号を得るのに navi2ch-article-str-to-num を使うように。
 	「＞＞９５９」でうまく表示されなかったので。

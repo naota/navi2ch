@@ -1282,30 +1282,37 @@ article buffer から抜けるなら 'quit を返す。"
       (setq msg (navi2ch-article-parse-message msg)))
     (cdr (assq 'data msg))))
 
+(defun navi2ch-article-display-link-minibuffer (point)
+  "point のリンク先を minibuffer に表示"
+  (let ((prop (get-text-property (point) 'number))
+	num-list num)
+    (when prop
+      (setq num-list (navi2ch-article-str-to-num (japanese-hankaku prop)))
+      (cond ((numberp num-list)
+	     (setq num num-list))
+	    (t
+	     (setq num (car num-list))))
+      (message "[%d]: %s"
+	       num
+	       (navi2ch-replace-string
+		"\n" ""
+		(navi2ch-article-get-message-string num) t)))))
+
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
   (interactive)
   (let ((point (navi2ch-next-property (point) 'link)))
     (when point
       (goto-char point)
-      (let ((num (get-text-property (point) 'number)))
-	(when num
-	  (setq num (navi2ch-article-str-to-num (japanese-hankaku num)))
-	  (message "%s" (navi2ch-replace-string
-			 "\n" ""
-			 (navi2ch-article-get-message-string num) t)))))))
-			
+      (navi2ch-article-display-link-minibuffer point))))
+
 (defun navi2ch-article-previous-link ()
   "前のリンクへ"
   (interactive)
   (let ((point (navi2ch-previous-property (point) 'link)))
-    (when point (goto-char point)
-	  (let ((num (get-text-property (point) 'number)))
-	    (when num
-	      (setq num (string-to-number num))
-	      (message "%s" (navi2ch-replace-string
-			     "\n" ""
-			     (navi2ch-article-get-message-string num) t)))))))
+    (when point
+      (goto-char point)
+      (navi2ch-article-display-link-minibuffer point))))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)
