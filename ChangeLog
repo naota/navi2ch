@@ -3,6 +3,7 @@
 	* navi2ch-util.el (navi2ch-replace-html-tag-with-buffer):
 	replace-match の引数 LITERAL を non-nilに。
 	http://pc.2ch.net/test/read.cgi/unix/1031231315/768
+	(navi2ch-replace-html-tag): 同上。
 
 2002-11-15  SAITO Takuya  <tabmore@users.sourceforge.net>
 

@@ -418,7 +418,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
   (let ((case-fold-search t))
     (navi2ch-replace-string navi2ch-replace-html-tag-regexp
 			    'navi2ch-replace-html-tag-to-string
-			    str t)))
+			    str t nil t)))
 
 (defsubst navi2ch-replace-html-tag-with-buffer ()
   (goto-char (point-min))
