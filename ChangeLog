@@ -1,5 +1,16 @@
 2002-06-27  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-bookmark.el (navi2ch-bookmark-get-buffer): 新関数。
+	(navi2ch-bookmark-sync): 新関数。
+	(navi2ch-bookmark): 上記関数を使うように。
+	(navi2ch-bookmark-mode-map): s に navi2ch-bookmark-sync をバインド。
+
+	* navi2ch-article.el (navi2ch-article-save-info): カレントバッファ
+	がアーティクルモードでなくても動作するように。
+	(navi2ch-article-load-info): 同上。
+	これでアーティクルバッファが無い場合にボードモードから i した情報
+	が保存されるはず。
+
 	* navi2ch-vars.el (navi2ch-list-valid-host-regexp): 新変数。
 
 	* navi2ch-list.el (navi2ch-list-valid-board): 新関数。

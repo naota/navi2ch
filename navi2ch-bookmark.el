@@ -46,6 +46,7 @@
     (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
     (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
     (define-key map "mo" 'navi2ch-bookmark-move-mark-article)
+    (define-key map "s" 'navi2ch-bookmark-sync)
     (setq navi2ch-bookmark-mode-map map)))
 
 (defvar navi2ch-bookmark-mode-menu-spec
@@ -55,7 +56,7 @@
 
 (defvar navi2ch-bookmark-list nil
   "bookmark を表すリスト
-((BOOKMARK-ID BOOKMARK-NAME
+\((BOOKMARK-ID BOOKMARK-NAME
   (KEY
    (board BOARD)
    (article ARTICLE))...)
@@ -325,10 +326,7 @@ KEY は (concat URI ARTID) ")
     (navi2ch-bookmark-mode)
     (setq navi2ch-bookmark-current-bookmark-id bookmark-id)
     (navi2ch-bm-setup 'navi2ch-bookmark)
-    (let ((buffer-read-only nil))
-      (erase-buffer)
-      (save-excursion
-	(navi2ch-bookmark-insert-subjects)))))
+    (navi2ch-bookmark-sync)))
 
 (defun navi2ch-bookmark-setup-menu ()
   (easy-menu-define navi2ch-bookmark-mode-menu
@@ -435,6 +433,26 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 		    (cddr bookmark))))
 	 navi2ch-bookmark-list))
   (navi2ch-bookmark-save-info))
+
+(defun navi2ch-bookmark-get-buffer (bookmark-id)
+  "BOOKMARK-ID で指定する bookmark バッファを返す。"
+  (save-current-buffer
+    (let ((buf (get-buffer navi2ch-board-buffer-name)))
+      (when (and buf
+		 (progn		      ; 囲む必要なさそうだけど念のため
+		   (set-buffer buf)
+		   (eq major-mode 'navi2ch-bookmark-mode))
+		 bookmark-id
+		 (equal navi2ch-bookmark-current-bookmark-id bookmark-id))
+	buf))))
+
+(defun navi2ch-bookmark-sync ()
+  "BOOKMARK-ID で指定する bookmark バッファがある場合は更新する。"
+  (interactive)
+  (let ((buffer-read-only nil))
+    (erase-buffer)
+    (save-excursion
+      (navi2ch-bookmark-insert-subjects))))
 
 (run-hooks 'navi2ch-bookmark-load-hook)	
 ;;; navi2ch-bookmark.el ends here
