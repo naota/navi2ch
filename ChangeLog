@@ -1,3 +1,7 @@
+2003-09-06  mizmiz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch.el : (require 'navi2ch-futaba)追加
+
 2003-09-05  mami  <mami@users.sourceforge.net>
 
 	*.machibbs.com から *.machi.to への (一時的な?) 移転に対応。
