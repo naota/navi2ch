@@ -452,10 +452,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
       (setq redo nil)
       (unless (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name)
 	(setq error-message "ディレクトリのロックに失敗しました。")
-	(cond ((y-or-n-p (format "%sもう一度試しますか? "
-				 error-message))
-	       (setq redo t))
-	      ((yes-or-no-p (format "%s危険を承知で続けますか? "
+	(cond ((yes-or-no-p (format "%s危険を承知で続けますか? "
 				    error-message))
 	       nil)
 	      (t

@@ -236,12 +236,15 @@ START, END, NOFIRST で範囲を指定する"
 			 (string-match "\\([^/]+\\)/$" uri)
 			 (match-string 1 uri)))
 	 (key          (cdr (assq 'artid article)))
-	 (time         (mapconcat 'int-to-string
-				  (let ((time (current-time)))
-				    (navi2ch-bigint-add
-				     (navi2ch-bigint-multiply
-				      (nth 0 time) (expt 2 16)) (nth 1 time)))
-				  ""))
+	 (time         (format-time-string "%s"
+					   (let* ((now (current-time))
+						  (lag 300) ; ずらす秒数
+						  (h (nth 0 now))
+						  (l (- (nth 1 now) lag)))
+					     (when (< l 0)
+					       (setq l (+ l 65536)
+						     h (- h 0)))
+					     (cons h l))))
 	 (navi2ch-net-http-proxy (and navi2ch-net-send-message-use-http-proxy
 				      navi2ch-net-http-proxy))
 	 (tries 2)	; 送信試行の最大回数

@@ -307,48 +307,6 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 				    fixedcase literal string)))
       string)))
 
-(defun navi2ch-bigint-int-to-list (i)
-  (if (listp i)
-      i
-    (mapcar (lambda (x)
-              (- x 48))
-            (string-to-list (int-to-string i)))))
-
-(defun navi2ch-bigint-multiply (a b)
-  (setq a (reverse (navi2ch-bigint-int-to-list a))
-        b (reverse (navi2ch-bigint-int-to-list b)))
-  (let (list c)
-    (dolist (y b)
-      (let ((z 0))
-        (setq list (cons
-                    (append c (mapcar
-                               (lambda (x)
-                                 (let (w)
-                                   (setq w (+ (* x y) z))
-                                   (setq z (/ w 10))
-                                   (mod w 10))) a)
-                            (if (> z 0) (list z)))
-                    list)))
-      (setq c (cons 0 c)))
-    (let (list2)
-      (dolist (x list)
-        (setq list2 (navi2ch-bigint-add list2 (reverse x))))
-      list2)))
-
-(defun navi2ch-bigint-add (a b)
-  (setq a (reverse (navi2ch-bigint-int-to-list a))
-        b (reverse (navi2ch-bigint-int-to-list b)))
-  (let ((x 0) list)
-    (while (or a b)
-      (let (y)
-        (setq y (+ (or (car a) 0) (or (car b) 0) x))
-        (setq x (/ y 10))
-        (setq list (cons (mod y 10) list))
-        (setq a (cdr a)
-              b (cdr b))))
-    (if (> x 0) (setq list (cons x list)))
-    list))
-
 (defun navi2ch-insert-file-contents (file &optional begin end)
   (let ((coding-system-for-read navi2ch-coding-system)
         (coding-system-for-write navi2ch-coding-system))
@@ -970,6 +928,6 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
    ((> (nth 0 t1) (nth 0 t2)) t)
    ((= (nth 0 t1) (nth 0 t2)) (> (nth 1 t1) (nth 1 t2)))
    (t nil)))
-    
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
