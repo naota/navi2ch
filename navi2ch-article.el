@@ -1596,7 +1596,9 @@ gunzip に通してから文字コードの推測を試みる。"
                                 (erase-buffer)
                                 (insert str)))
                             (let ((charset (coding-system-get
-                                            (detect-coding-region (point-min) (point-max) t)
+					    (navi2ch-ifxemacs
+						(car (detect-coding-region (point-min) (point-max)))
+					      (detect-coding-region (point-min) (point-max) t))
                                             'mime-charset)))
                               (if charset
                                   (cons str (decode-coding-string (buffer-string) charset))
@@ -1615,6 +1617,8 @@ gunzip に通してから文字コードの推測を試みる。"
 					'mouse-face navi2ch-article-mouse-face
 					'file-name fname
 					'content noconv))
+	    (add-text-properties (+ 2 begin) (+ 3 begin)
+				 (list 'link-head t))
             (setq part-begin (point))
             (insert (format " (%.1fKB)\n" (/ (length noconv) 1024.0)))
             (if text (insert text))

@@ -1,3 +1,9 @@
+2002-10-10  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section):
+	XEmacs では detect-coding-region の引数・返り値が違うのに対処。
+	ファイル名に link-head プロパティをつけるように。
+
 2002-10-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	スレ一覧で状態(UCV)のソート順を変えられるようにした。
