@@ -91,13 +91,13 @@
     (save-excursion
       (find-file filename)
       (when (eq (point-max) (point-min))
-	(insert-string "'H'を押す。\n")
-	(insert-string "  ↓\n")
-	(insert-string "板ローカルルールを見る。\n")
-	(insert-string "  ↓\n")
-	(insert-string "板ローカルルールはない!\n")
-	(insert-string "  ↓\n")
-	(insert-string "(ﾟдﾟ)ﾏｼﾞｳﾏｰ\n"))
+	(insert "'H'を押す。\n"
+		"  ↓\n"
+		"板ローカルルールを見る。\n"
+		"  ↓\n"
+		"板ローカルルールはない!\n"
+		"  ↓\n"
+		"(ﾟдﾟ)ﾏｼﾞｳﾏｰ\n"))
       (set-buffer-modified-p nil)
       (navi2ch-head-mode))))
 
