@@ -254,35 +254,45 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
-  (let ((proc (navi2ch-net-download-file url time
-					 (list "200" "304"
-					       (and location "302")))))
-    (if proc
-        (let ((coding-system-for-write 'binary)
-	      (coding-system-for-read 'binary)
-	      (status (navi2ch-net-get-status proc))
-	      (header (navi2ch-net-get-header proc))
-	      cont)
-	  (cond ((string= status "200")
+  (let ((coding-system-for-write 'binary)
+	(coding-system-for-read 'binary)
+	(redo t)
+	proc status header cont)
+    (while redo
+      (setq redo nil
+	    proc (navi2ch-net-download-file url time
+					    (list "200" "304"
+						  (and location "302")))
+	    status (and proc
+			(navi2ch-net-get-status proc))
+	    header (and proc
+			(navi2ch-net-get-header proc)))
+      (unwind-protect
+	  (cond ((or (not proc)
+		     (not status)
+		     (not header))
+		 (setq header nil))	; $BG0$N$?$a(B
+		((string= status "200")
 		 (message "%s getting new file..." (current-message))
 		 (setq cont (navi2ch-net-get-content proc))
-		 (with-temp-file file 
-		   (insert (funcall (if func (progn (message "translating...")
-						    func)
-				      'eval)
-				    cont)))
-		 (message "%sdone" (current-message))
-		 (delete-process proc)
-		 header)
+		 (with-temp-file file
+		   (if (not func)
+		       (insert cont)
+		     (message "translating...")
+		     (insert (funcall func cont))))
+		 (message "%sdone" (current-message)))
 		((and (string= status "302")
 		      (assoc "Location" header))
-		 (delete-process proc)
-		 (navi2ch-net-update-file (cdr (assoc "Location" header))
-					  file time func location))
+		 (setq url (cdr (assoc "Location" header))
+		       redo t)
+		 (message "%s redirecting..." (current-message)))
 		((string= status "304")
-		 (delete-process proc)
-		 header)))
-      nil)))
+		 nil)			; $B2?$b$7$J$$(B
+		(t
+		 (setq header nil)))	; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
+	(if (processp proc)
+	    (delete-process proc))))
+    header))
 
 (defun navi2ch-net-file-start (file)
   (max (- (nth 7 (file-attributes file))
@@ -290,18 +300,22 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
        0))
 
 (defun navi2ch-net-get-length-from-header (header)
-  "header $B$+$i(B contents $BA4BN$ND9$5$rF@$k(B"
-  (let ((range (cdr (assoc "Content-Range" header))))
-    (if (and range
-	     (string-match "/\\(.+\\)" range))
-	(string-to-number (match-string 1 range))
-      (string-to-number
-       (cdr (assoc "Content-Length" header))))))
+  "header $B$+$i(B contents $BA4BN$ND9$5$rF@$k!#(B
+header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
+  (let ((range (cdr (assoc "Content-Range" header)))
+	(length (cdr (assoc "Content-Length" header))))
+    (cond ((and range
+		(string-match "/\\(.+\\)" range))
+	   (string-to-number (match-string 1 range)))
+	  (length
+	   (string-to-number length)))))
   
 (defun navi2ch-net-check-aborn (size header)
   "$B$"$\!<$s$5$l$F$J$1$l$P(B t"
-  (>= (navi2ch-net-get-length-from-header header)
-      (or size 0)))
+  (let ((len (navi2ch-net-get-length-from-header header)))
+    (if len
+	(>= len (or size 0))
+      t)))				; $B%[%s%H$K$3$l$G$$$$$+$J(B?
   
 (defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE $B$r:9J,$G99?7$9$k!#(B
@@ -320,33 +334,36 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 	      (status (navi2ch-net-get-status proc))
 	      (header (navi2ch-net-get-header proc))
 	      cont ret aborn-flag)
-	  (cond ((string= status "206")
-		 (if (not (navi2ch-net-check-aborn size header))
-		     (setq aborn-flag t)
-		   (message "%s getting file diff..." (current-message))
-		   (with-temp-file file
-		     (insert-file-contents file nil nil size)
-		     (goto-char (point-max))
-		     (insert (navi2ch-net-get-content proc)))
-		   (message "%sdone" (current-message))
-		   (delete-process proc)
-		   (setq ret (list header nil))))
-		((string= status "200")
-		 (if (not (navi2ch-net-check-aborn size header))
-		     (setq aborn-flag t)
-		   (message "%s getting whole file..." (current-message))
-		   (with-temp-file file
-		     (insert (navi2ch-net-get-content proc)))
-		   (message "%sdone" (current-message))
-		   (delete-process proc)
-		   (setq ret (list header nil))))
-		((string= status "304")
-		 (delete-process proc)
-		 (setq ret (list header nil))))
+	  (setq aborn-flag (not (navi2ch-net-check-aborn size header)))
+	  (unwind-protect
+	      (cond (aborn-flag
+		     nil)		; $B$H$j$"$($:2?$b$7$J$$(B
+		    ((string= status "206")
+		     (message "%s getting file diff..." (current-message))
+		     (setq cont (navi2ch-net-get-content proc))
+		     (if (and (> size 0)
+			      (not (= (aref cont 0) ?\n)))
+			 (setq aborn-flag t) ; \n $B$G;O$^$C$F$J$$>l9g$O$"$\!<$s(B
+		       (with-temp-file file
+			 (insert-file-contents file nil nil size)
+			 (goto-char (point-max))
+			 (insert cont))
+		       (message "%sdone" (current-message))
+		       (setq ret (list header nil))))
+		    ((string= status "200")
+		     (if (not (navi2ch-net-check-aborn size header))
+			 (setq aborn-flag t)
+		       (message "%s getting whole file..." (current-message))
+		       (with-temp-file file
+			 (insert (navi2ch-net-get-content proc)))
+		       (message "%sdone" (current-message))
+		       (setq ret (list header nil))))
+		    ((string= status "304")
+		     (setq ret (list header nil))))
+	    (if (processp proc)
+		(delete-process proc)))
 	  (if (not aborn-flag)
 	      ret
-	    (if (processp proc)
-		(delete-process proc))
 	    (message "$B$"$\!<$s(B!!!")
 	    (when (and navi2ch-net-save-old-file-when-aborn
 		       (or (not (eq navi2ch-net-save-old-file-when-aborn

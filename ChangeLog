@@ -1,5 +1,14 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-update-file): Emacs Lisp では
+	tail-recursion を展開してくれないため、Location 時はループすること
+	にした。エラーチェックもちょっと厳密にしてみる。
+	(navi2ch-net-get-length-from-header): header に Content-Range も
+	Content-Length も含まれていない場合は nil を返すようにした。
+	(navi2ch-net-check-aborn): header の長さを取得できない場合は t を
+	返すようにした。
+	(navi2ch-net-update-file-diff): 差分取得時のあぼーん検出を強化。
+
 	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
 	いでみる。navi2ch-board-misc.elc への依存関係追加。
 	
