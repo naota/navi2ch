@@ -1828,6 +1828,7 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @lisp
 (setq navi2ch-board-enable-readcgi t)
 @end lisp
+それか板移転があったのかも。@xref{Board Questions}.
 
 @item Q.
 ある板でスレを読むと @code{checking file...moved} と出て、スレが更新されない。
@@ -1840,6 +1841,7 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @lisp
 (setq navi2ch-enable-readcgi t)
 @end lisp
+それか板移転があったのかも。@xref{Board Questions}.
 
 @end table
 
@@ -1883,6 +1885,8 @@ Boards File}.
 
 @item A.
 それは多分２ちゃんねる側の問題。板の移転があったのかも。
+移転情報は運用情報板 (@uref{http://qb3.2ch.net/operate/}) の
+「新設板・板移動情報」スレでチェック。
 @file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
 最新の板一覧 (◆YaAzLuckyc さんの
 @uref{http://azlucky.s25.xrea.com/2chboard/bbsmenu.html}
