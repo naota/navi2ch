@@ -213,10 +213,10 @@
   "スレの face"
   :group 'navi2ch-face)
 
-(defface navi2ch-article-base64-face
+(defface navi2ch-article-auto-decode-face
   '((((class color) (background light)) (:background "gray90"))
     (((class color) (background dark)) (:foreground "gray10")))
-  "スレの BASE64 セクションの face"
+  "スレのエンコードされたセクションの face"
   :group 'navi2ch-face)
 
 (defface navi2ch-splash-screen-face

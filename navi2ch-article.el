@@ -73,10 +73,8 @@
     (define-key map  "i" 'navi2ch-article-fetch-link)
     (define-key map ">" 'navi2ch-article-goto-last-message)
     (define-key map "<" 'navi2ch-article-goto-first-message)
-    (define-key map "\eu" 'navi2ch-article-uudecode-message)
-    ;; (define-key map "\eb" 'navi2ch-article-base64-decode-message)
     (define-key map "\ed" 'navi2ch-article-decode-message)
-    (define-key map "\ei" 'navi2ch-article-base64-toggle-text)
+    (define-key map "\ei" 'navi2ch-article-auto-decode-toggle-text)
     (define-key map "v" 'navi2ch-article-view-aa)
     (define-key map "f" 'navi2ch-article-forward-buffer)
     (define-key map "b" 'navi2ch-article-backward-buffer)
@@ -480,8 +478,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 			   'navi2ch-article-face)
 	(navi2ch-article-put-cite-face)
 	(navi2ch-article-set-link-property)
-        (if navi2ch-article-auto-decode-base64-p
-            (navi2ch-article-auto-decode-base64-section))
+        (if navi2ch-article-auto-decode-p
+            (navi2ch-article-auto-decode-encoded-section))
 	(navi2ch-article-arrange-message))))
   (funcall navi2ch-article-insert-message-separator-function)
   (insert "\n"))
@@ -1759,108 +1757,201 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 	     (and (navi2ch-article-fetch-article board article force)
 		  (navi2ch-bm-remember-fetched-article board article)))))))
 
-(defun navi2ch-article-uudecode-message ()
-  (interactive)
-  (with-temp-buffer
-    (insert (cdr
-             (assq 'data
-                   (save-excursion
-                     (set-buffer (navi2ch-article-current-buffer))
-                     (navi2ch-article-get-message
-                      (navi2ch-article-get-current-number))))))
-    (goto-char (point-max))
-    (beginning-of-line)
-    (when (looking-at "end\\([ \t]*\\)")
-      (delete-region (match-beginning 1) (match-end 1))
-      (end-of-line)
-      (insert "\n"))
-    (navi2ch-uudecode-region (point-min) (point-max))))
+(defun navi2ch-article-detect-encoded-regions (&optional sort)
+  "$B%P%C%U%!$+$i(B uuencode $B$^$?$O(B base64 $B%(%s%3!<%I$5$l$?NN0h$rC5$9!#(B
+ (list (list type fname start end)) $B$rJV$9!#(B 
+SORT $B$,(B non-nil $B$N$H$-$O(B start $B$G%=!<%H$7$?7k2L$rJV$9!#(B
+$B$?$@$7!"(B
+ type: 'uuencode $B$+(B 'base64
+fname: $B%G%3!<%I$9$k$H$-$N%G%U%)%k%H$N%U%!%$%kL>(B
+start: $B%(%s%3!<%I$5$l$?NN0h$N@hF,(B($B%G%j%_%?$r4^$`(B)$B$N%]%$%s%H(B
+  end: $B%(%s%3!<%I$5$l$?NN0h$NKvHx(B($B%G%j%_%?$N<!$N9T$N9TF,(B)$B$N%]%$%s%H(B
+$B$G$"$k!#(B
+end $B$,(B nil $B$N>l9gKvHx$N%G%j%_%?$,L5$/@hF,$N%G%j%_%?$N$_$"$k$3$H$r0UL#$9$k!#(B"
+;; start $B$,(B nil $B$N>l9g@hF,$N%G%j%_%?$,L5$/KvHx$N%G%j%_%?$N$_$"$k$3$H$r0UL#$7!"(B
+;; $B",(B $B$9$k$H!"8mH=Dj$,B?$=$&$J$N$G$d$a!#(B
+  (let ((dels (list (cons 'base64
+			  (cons navi2ch-base64-begin-delimiter-regexp
+				navi2ch-base64-end-delimiter-regexp))
+		    (cons 'base64
+			  (cons navi2ch-base64-susv3-begin-delimiter-regexp
+				navi2ch-base64-susv3-end-delimiter-regexp))
+		    (cons 'uudecode
+			  (cons navi2ch-uuencode-begin-delimiter-regexp
+				navi2ch-uuencode-end-delimiter-regexp))))
+	regions type fname start end)
+    (save-excursion
+      (dolist (d dels)
+	(goto-char (point-min))
+	(while (re-search-forward (cadr d) nil t)
+	  (setq type (car d)
+		start (match-beginning 0)
+		fname (navi2ch-match-string-no-properties 2)
+		end (and (re-search-forward (cddr d) nil t)
+			 (navi2ch-line-beginning-position 2))
+		regions (cons (list type fname start end) regions)))))
+    (when sort
+      (setq regions (sort regions (lambda (r1 r2) (< (nth 2 r1) (nth 2 r2)))))
+      ;; end $B$,(B nil $B$O!":G8e$N$_5v$9!#(B
+      (let ((r regions))
+	(while (> (length r) 1)
+	  (when (null (nth 3 (car r)))
+	    (setq regions (delete (car r) regions)))
+	  (setq r (cdr r)))))
+    regions))
 
-(defun navi2ch-article-base64-decode-message (prefix &optional filename)
-  "$B8=:_$N%l%9$r(Bbase64$B%G%3!<%I$7!"(BFILENAME$B$K=q$-=P$9(B
-PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$k(B"
-  (interactive "P")
-  (save-excursion
-    (let* ((num (navi2ch-article-get-current-number))
-	   (num2 (or (and prefix
-			  (car (navi2ch-article-get-point (mark))))
-		     num))
-	   (begin (or (cdr (assq 'point (navi2ch-article-get-message
-					 (min num num2))))
-		      (point-min)))
-	   (end (or (cdr (assq 'point (navi2ch-article-get-message
-				       (1+ (max num num2)))))
-		    (point-max))))
-      (navi2ch-base64-write-region begin end filename))))
-
-(defun navi2ch-article-decode-message ()
+(defun navi2ch-article-decode-message (prefix)
   "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B
-$B$=$N$&$A%G%U%)%k%H$N%G%3!<%@$r?dB,$9$k$h$&$K$7$?$$!#(B"
-  (interactive)
-  (let ((c (navi2ch-read-char-with-retry
-	    "(u)udecode or (b)ase64: "
-	    "Please answer u, or b.  (u)udecode or (b)ase64: "
-	    '(?u ?U ?b ?B))))
-    (call-interactively (cond ((memq c '(?u ?U))
-			       'navi2ch-article-uudecode-message)
-			      ((memq c '(?b ?B))
-			       'navi2ch-article-base64-decode-message)))))
+PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$k!#(B
 
-(defun navi2ch-article-auto-decode-base64-section ()
-  "$B%+%l%s%H%P%C%U%!$N(B BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$X$N%"%s%+!<$K$9$k!#(B
+$BJ#?t%l%9$KJ,3d$5$l$?%(%s%3!<%I%;%/%7%g%s$r%G%3!<%I$7$?$$>l9g$O!"(B
+$B%(%s%3!<%I%;%/%7%g%s$N@hF,$N%l%9$G!"(BPREFIX$B$r;XDj$;$:$K<B9T$9$k$3$H!#(B
+$B8=:_$N%l%9Fb$K;O$a$N%G%j%_%?$N$_$,$"$k>l9g!"BP1~$9$kKvHx$N%G%j%_%?$,(B
+$B8=$l$k%l%9$^$G%G%3!<%I$9$kNN0h$r3HD%$9$k!#(B
 
-BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
-$B$K%^%C%A$9$k9T$H(B `navi2ch-base64-end-delimiter-regexp' $B$K%^%C%A$9$k9T$N(B
-$B$^$G$N%F%-%9%H!#%;%/%7%g%sFb$N9T$O$9$Y$F(B `navi2ch-base64-line-regexp' $B$K(B
-$B%^%C%A$7$J$1$l$P$J$i$J$$!#(B"
-  (goto-char (point-min))
-  (catch 'loop
-    (while (re-search-forward navi2ch-base64-begin-delimiter-regexp nil t)
-      (let* ((begin (match-beginning 0))
-             (filename (navi2ch-match-string-no-properties 2))
-             (end (and (re-search-forward navi2ch-base64-end-delimiter-regexp nil t)
-                       (match-end 0)))
-             encoded decoded)
-        (unless end (throw 'loop nil))
-        (setq encoded (buffer-substring-no-properties
-                       (progn (goto-char begin)
+$B%G%j%_%?$H$_$J$9$N$O!"(B
+`navi2ch-base64-begin-delimiter-regexp'
+`navi2ch-base64-end-delimiter-regexp'
+
+`navi2ch-base64-susv3-begin-delimiter-regexp'
+`navi2ch-base64-susv3-end-delimiter-regexp'
+
+`navi2ch-uuencode-begin-delimiter-regexp'
+`navi2ch-uuencode-end-delimiter-regexp'
+
+$B$N(B3$BAH$N$$$:$l$+$K%^%C%A$9$k9T$H$9$k!#(B"
+  (interactive "P")
+  (let* ((num (navi2ch-article-get-current-number))
+	 (num2 (or (and prefix
+			(car (navi2ch-article-get-point (mark))))
+		   num))
+	 (abuf (current-buffer))
+	 (nmax (caar (last navi2ch-article-message-list)))
+	 end regions)
+    (when (> num num2)
+      (setq num (prog1 num2
+		  (setq num2 num))))
+    (with-temp-buffer
+      (while (<= num num2)
+	(insert (or (with-current-buffer abuf
+		      (navi2ch-article-get-message-string num))
+		    "")
+		"\n")
+	(setq num (1+ num)))
+      (setq end (point))
+      (setq regions (navi2ch-article-detect-encoded-regions 'sort))
+      ;; $BJ#?t%l%9$KJ,3d$5$l$?$b$N$rC5$9!#(B
+      (when (and (not prefix) regions)
+	(while (and (null (nth 3 (car (last regions))))
+		    (< (nth 2 (car (last regions))) end)
+		    (<= num nmax))
+	  (insert (or (with-current-buffer abuf
+			(navi2ch-article-get-message-string num))
+		      "")
+		  "\n")
+	  (setq num (1+ num))
+	  (setq regions (navi2ch-article-detect-encoded-regions 'sort)))
+	(while (and regions
+		    (>= (nth 2 (car (last regions))) end))
+	  (setq regions (delete (car (last regions)) regions))))
+      (unless regions
+	(let ((c (navi2ch-read-char-with-retry
+		  "(u)udecode or (b)ase64: "
+		  "Please answer u, or b.  (u)udecode or (b)ase64: "
+		  '(?u ?U ?b ?B))))
+	  (cond
+	   ((memq c '(?u ?U))
+	    (setq regions (list (list 'uudecode nil nil nil))))
+	   ((memq c '(?b ?B))
+	    (setq regions (list (list 'base64 nil nil nil)))))))
+      (dolist (r regions)
+	(condition-case err
+	    (cond
+	     ((eq (car r) 'uudecode)
+	      (navi2ch-uudecode-write-region (or (nth 2 r) (point-min))
+					     (or (nth 3 r) end)))
+	     ((eq (car r) 'base64)
+	      (navi2ch-base64-write-region (or (nth 2 r) (point-min))
+					   (or (nth 3 r) end))))
+	  (error (ding)
+		 (message "%s" (error-message-string err))
+		 (sit-for 1)))))))
+
+(defun navi2ch-article-auto-decode-encoded-section ()
+  "$B%(%s%3!<%I$5$l$?%;%/%7%g%s$r%G%3!<%I$7$?$b$N$X$N%"%s%+!<$K$9$k!#(B"
+  (let ((regions (delq nil
+		       (mapcar (lambda (r)
+				 (when (and (nth 2 r) (nth 3 r))
+				   (list (nth 0 r)
+					 (nth 1 r)
+					 (copy-marker (nth 2 r))
+					 ;; line-end
+					 (copy-marker (1- (nth 3 r))))))
+			       (navi2ch-article-detect-encoded-regions))))
+	type filename begin end encoded decoded)
+    (dolist (r regions)
+      (setq type (nth 0 r)
+	    filename (nth 1 r)
+	    begin (nth 2 r)
+	    end (nth 3 r)
+	    encoded (cond
+		     ((eq type 'uudecode)
+		      (buffer-substring-no-properties
+		       begin
+		       (progn (goto-char end)
+			      (navi2ch-line-beginning-position 2))))
+		     ((eq type 'base64)
+		      (buffer-substring-no-properties
+		       (progn (goto-char begin)
 			      (navi2ch-line-beginning-position 2))
-                       (progn (goto-char end)
-			      (navi2ch-line-end-position 0))))
-        (with-temp-buffer
-          (insert encoded)
-          (goto-char (point-min))
-          (while (looking-at navi2ch-base64-line-regexp)
-            (forward-line))
-          (when (eobp)
-            (base64-decode-region (point-min) (point-max))
-	    (setq decoded (buffer-string))))
-	(when decoded
-          (let ((fname (unless (or (null filename) (equal filename ""))
-			 filename))
-		part-begin)
-            (delete-region begin end)
-            (goto-char begin)
-            (insert (navi2ch-propertize "> " 'face 'navi2ch-article-base64-face)
-                    (navi2ch-propertize (format "%s" (or fname "$BL>L5$7%U%!%$%k$5$s(B"))
-					'face '(navi2ch-article-url-face navi2ch-article-base64-face)
-					'link t
-					'mouse-face navi2ch-article-mouse-face
-					'file-name fname
-					'content decoded))
-	    (put-text-property begin (1+ begin) 'base64-text 'off)
-	    (put-text-property (+ 2 begin) (+ 3 begin) 'link-head t)
-	    (setq part-begin (point))
-	    (insert (format " (%.1fKB)\n" (/ (length decoded) 1024.0)))
-	    (put-text-property part-begin (point)
-			       'face 'navi2ch-article-base64-face)
-	    (add-text-properties begin (point) (list 'base64 t
-						     'hard t))
-	    (when navi2ch-article-auto-insert-base64-text
-	      (forward-line -1)
-	      (navi2ch-article-base64-text-on))))))))
+		       (progn (goto-char end)
+			      (navi2ch-line-end-position 0)))))
+	    decoded nil)
+      (with-temp-buffer
+	(insert encoded)
+	(condition-case nil
+	    (progn
+	      (cond
+	       ((eq type 'uudecode)
+		(goto-char (point-min))
+		(while (search-forward "$B!)(B" nil t) ;for 2ch
+		  (replace-match "&#" nil t))
+		(navi2ch-uudecode-region (point-min) (point-max)))
+	       ((eq type 'base64)
+		(base64-decode-region (point-min) (point-max))))
+	      (setq decoded (buffer-string)))
+	  (error nil)))
+      (when decoded
+	(let ((fname (unless (or (null filename) (equal filename ""))
+		       filename))
+	      part-begin)
+	  (delete-region begin end)
+	  (goto-char begin)
+	  (insert (navi2ch-propertize
+		   "> " 'face 'navi2ch-article-auto-decode-face)
+		  (navi2ch-propertize
+		   (format "%s" (or fname "$BL>L5$7%U%!%$%k$5$s(B"))
+		   'face '(navi2ch-article-url-face
+			   navi2ch-article-auto-decode-face)
+		   'link t
+		   'mouse-face navi2ch-article-mouse-face
+		   'file-name fname
+		   'content decoded))
+	  (put-text-property begin (1+ begin) 'auto-decode-text 'off)
+	  (put-text-property (+ 2 begin) (+ 3 begin) 'link-head t)
+	  (setq part-begin (point))
+	  (insert (format " (%.1fKB)\n" (/ (length decoded) 1024.0)))
+	  (put-text-property part-begin (point)
+			     'face 'navi2ch-article-auto-decode-face)
+	  (add-text-properties begin (point) (list 'auto-decode t
+						   'hard t))
+	  (when navi2ch-article-auto-decode-insert-text
+	    (forward-line -1)
+	    (navi2ch-article-auto-decode-text-on))))
+      (set-marker begin nil)
+      (set-marker end nil))))
 
-(defun navi2ch-article-base64-text-on (&optional coding-system compression)
+(defun navi2ch-article-auto-decode-text-on (&optional coding-system compress)
   (save-excursion
     (beginning-of-line)
     (let* ((point (next-single-property-change
@@ -1868,7 +1959,7 @@ BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
 	   (content (get-text-property point 'content))
 	   (filename (get-text-property point 'file-name))
 	   ret)
-      (when (and (eq (get-text-property (point) 'base64-text) 'off)
+      (when (and (eq (get-text-property (point) 'auto-decode-text) 'off)
 		 content)
 	(with-temp-buffer
 	  (let ((buffer-file-coding-system 'binary)
@@ -1878,10 +1969,10 @@ BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
 	    (insert content)
 	    ;; extract
 	    (cond
-	     ((or (eq compression 'gzip)
-		  (and (null compression)
+	     ((or (eq compress 'gzip)
+		  (and (null compress)
 		       filename
-		       (string-match "\\.gz$" filename)))
+		       (string-match "\\.t?gz$" filename)))
 	      (setq exit-status
 		    (apply 'call-process-region (point-min) (point-max)
 			   navi2ch-net-gunzip-program t t nil
@@ -1889,8 +1980,8 @@ BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
 	      (unless (= exit-status 0)
 		(erase-buffer)
 		(insert content)))
-	     ((or (eq compression 'bzip2)
-		  (and (null compression)
+	     ((or (eq compress 'bzip2)
+		  (and (null compress)
 		       filename
 		       (string-match "\\.bz2$" filename)
 		       (navi2ch-which navi2ch-bzip2-program)))
@@ -1920,45 +2011,51 @@ BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
 	(when content
 	  (setq ret t)
 	  (let ((buffer-read-only nil))
-	    (put-text-property (point) (1+ (point)) 'base64-text 'on)
+	    (put-text-property (point) (1+ (point)) 'auto-decode-text 'on)
 	    (forward-line)
 	    (setq point (point))
 	    (insert content)
 	    (add-text-properties point (point)
-				 (list 'base64 t
+				 (list 'auto-decode t
 				       'hard t
-				       'face 'navi2ch-article-base64-face))
+				       'face 'navi2ch-article-auto-decode-face))
 	    (set-buffer-modified-p nil))))
       ret)))
 
-(defun navi2ch-article-base64-text-off ()
-  (when (get-text-property (point) 'base64)
+(defun navi2ch-article-auto-decode-text-off ()
+  (when (get-text-property (point) 'auto-decode)
     (let ((buffer-read-only nil)
-	  (start (or (and (get-text-property (point) 'base64-text) (point))
-		     (navi2ch-previous-property (point) 'base64-text))))
-      (when (eq (get-text-property start 'base64-text) 'on)
-	(put-text-property start (1+ start) 'base64-text 'off)
-	(delete-region (save-excursion
-			 (goto-char start)
-			 (navi2ch-line-beginning-position 2))
-		       (next-single-property-change start 'base64
-						    nil (point-max)))
-	(unless (get-text-property (point) 'base64)
+	  (start (or (and (get-text-property (point) 'auto-decode-text)
+			  (point))
+		     (navi2ch-previous-property (point) 'auto-decode-text)))
+	  bs be)
+      (when (eq (get-text-property start 'auto-decode-text) 'on)
+	(put-text-property start (1+ start) 'auto-decode-text 'off)
+	(save-excursion
+	  (goto-char start)
+	  (forward-line)
+	  (setq bs (point)
+		be (min (next-single-property-change bs 'auto-decode
+						     nil (point-max))
+			(next-single-property-change bs 'auto-decode-text
+						     nil (point-max)))))
+	(delete-region bs be)
+	(when (>= (point) bs)
 	  (forward-line -1))
 	(set-buffer-modified-p nil)))))
 
-(defun navi2ch-article-base64-toggle-text (&optional ask)
-  "BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$rI=<($9$k$+$I$&$+$r@Z$j49$($k!#(B
+(defun navi2ch-article-auto-decode-toggle-text (&optional ask)
+  "$B%(%s%3!<%I$5$l$?%;%/%7%g%s$r%G%3!<%I$7$?$b$N$NI=<($r@Z$j49$($k!#(B
 ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k!#(B"
   (interactive "P")
-  (if (not (get-text-property (point) 'base64))
-      (error "Base64 is not here")
-    (if (eq (or (get-text-property (point) 'base64-text)
-		(get-text-property (navi2ch-previous-property (point)
-							      'base64-text)
-				   'base64-text))
+  (if (not (get-text-property (point) 'auto-decode))
+      (error "Decoded text is not here")
+    (if (eq (or (get-text-property (point) 'auto-decode-text)
+		(get-text-property (navi2ch-previous-property
+				    (point) 'auto-decode-text)
+				   'auto-decode-text))
 	    'on)
-	(navi2ch-article-base64-text-off)
+	(navi2ch-article-auto-decode-text-off)
       (let* ((cs (and ask (read-coding-system "Coding-system (guess): ")))
 	     (ch (and ask (navi2ch-read-char
 			   "Compression type (guess): g)zip b)zip2 n)one: ")))
@@ -1966,12 +2063,12 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 			((eq ch ?b) 'bzip2)
 			((eq ch ?n) t)))
 	     ret)
-	(message "Inserting base64 content...")
-	(setq ret (navi2ch-article-base64-text-on cs cmp))
+	(message "Inserting decoded content...")
+	(setq ret (navi2ch-article-auto-decode-text-on cs cmp))
 	(cond ((eq ret 'binary)
 	       (message "Content may be a binary"))
 	      (ret
-	       (message "Inserting base64 content...done"))
+	       (message "Inserting decoded content...done"))
 	      (t
 	       (message "Not inserted")))))))
 

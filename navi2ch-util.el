@@ -147,6 +147,17 @@
     ("permil"   . 8240) ("lsaquo"   . 8249) ("rsaquo"   . 8250)
     ("euro"     . 8364)))
 
+(defconst navi2ch-uuencode-begin-delimiter-regexp
+  "^begin \\([0-7]+\\) \\([^ \n]+\\)$"
+  "uuencode されたコードの前のデリミタにマッチする正規表現。")
+(defconst navi2ch-uuencode-end-delimiter-regexp
+  "^end\\([ \t]*\\)$"
+  "uuencode されたコードの後のデリミタにマッチする正規表現。")
+
+(defconst navi2ch-uuencode-line-regexp
+  "^[!-`]+$"
+  "uuencode されたコードのみが含まれる行にマッチする正規表現。")
+
 (defconst navi2ch-base64-begin-delimiter "----BEGIN BASE64----"
   "base64コードの前に挿入するデリミタ。")
 (defconst navi2ch-base64-end-delimiter "----END BASE64----"
@@ -320,28 +331,6 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 		       (format "%%%X" (string-to-char x)))
 		     file t)
 		    navi2ch-directory))
-
-(defun navi2ch-uudecode-region (start end)
-  (interactive "r")
-  (let (dir)
-    (save-window-excursion
-      (delete-other-windows)
-      (setq dir (read-file-name "directory name: ")))
-    (unless (file-directory-p dir)
-      (error "%s is not directory" dir))
-
-    (let ((default-directory dir)
-          (coding-system-for-read 'binary)
-          (coding-system-for-write 'binary)
-          rc)
-      (setq rc (apply
-                'call-process-region
-                start end
-                navi2ch-uudecode-program
-                nil nil nil
-                navi2ch-uudecode-args))
-      (when (not (= rc 0))
-        (error "uudecode error")))))
 
 ;; (defun navi2ch-read-number (prompt)
 ;;   "数字を minibuffer から読み込む"
@@ -666,11 +655,114 @@ return new alist whose car is the new pair and cdr is ALIST.
   (goto-char (point-max))
   (forward-line -1))
 
+(defun navi2ch-uudecode-region (start end &optional filename)
+  "STARTとENDの間のリージョンをuudecodeする。
+FILENAMEが指定されると、FILENAMEにも書き出す。"
+  (interactive "r")
+  (let* ((coding-system-for-read 'binary)
+	 (coding-system-for-write 'binary)
+	 (mode "600")
+	 (file (expand-file-name
+		(or filename
+		    (make-temp-name (navi2ch-temp-directory)))))
+	 (default-directory (file-name-directory file))
+	 (buf (current-buffer))
+	 rc)
+    (unwind-protect
+	(progn
+	  (with-temp-buffer
+	    (insert-buffer-substring buf start end)
+	    (goto-char (point-min))
+	    (when (re-search-forward navi2ch-uuencode-begin-delimiter-regexp
+				     nil t)
+	      (setq mode (navi2ch-match-string-no-properties 1))
+	      (forward-line)
+	      (delete-region (point-min) (point)))
+	    (insert (format "begin %s %s\n"
+			    mode (file-name-nondirectory file)))
+	    (goto-char (point-max))
+	    (when (re-search-backward navi2ch-uuencode-end-delimiter-regexp
+				      nil t)
+	      (delete-region (match-beginning 0) (point-max)))
+	    (insert "end\n")
+	    (setq rc (apply 'call-process-region
+			    (point-min) (point-max)
+			    navi2ch-uudecode-program
+			    nil nil nil
+			    navi2ch-uudecode-args)))
+	  (when (and (= rc 0)
+		     (file-exists-p file))
+	    (delete-region start end)
+	    (insert-file-contents-literally file)
+	    (when filename
+	      (message "Wrote %s" filename))))
+      (ignore-errors (unless filename (delete-file file))))
+    (when (not (= rc 0))
+      (error "uudecode error"))))
+
+(defun navi2ch-uudecode-write-region (start end &optional filename)
+  "STARTとENDの間のリージョンをuudecodeし、FILENAMEに書き出す。
+
+リージョン内に`navi2ch-uuencode-begin-delimiter-regexp'にマッチする行がある
+場合はそれ以前を無視し、`navi2ch-uuencode-end-delimiter-regexp'にマッチする行
+がある場合は最後のそれ以降を無視する。
+さらに、uuencode のフォーマットに従っていない行も無視する。"
+  (interactive "r")
+  (let ((buf (current-buffer))
+	(default-filename nil))
+    (save-excursion
+      (goto-char start)
+      (when (re-search-forward navi2ch-uuencode-begin-delimiter-regexp end t)
+	(setq start (match-beginning 0)
+	      default-filename (match-string 2)))
+      (goto-char end)
+      (when (re-search-backward navi2ch-uuencode-end-delimiter-regexp start t)
+	;; exclude "end"
+	(setq end (match-beginning 0))))
+    (unless filename
+      (setq filename (expand-file-name
+		      (read-file-name
+		       (if default-filename
+			   (format "Uudecode to file (default `%s'): "
+				   default-filename)
+			 "Uudecode to file: ")
+		       nil default-filename))))
+    (when (file-directory-p filename)
+      (if default-filename
+	  (setq filename (expand-file-name default-filename filename))
+	(error "%s is a directory" filename)))
+    (when (or (not (file-exists-p filename))
+	      (y-or-n-p (format "File `%s' exists; overwrite? "
+				filename)))
+      (with-temp-buffer
+	(insert-buffer-substring buf start end)
+	(goto-char (point-min))
+	(while (search-forward "？" nil t) ;for 2ch
+	  (replace-match "&#" nil t))
+	(goto-char (point-min))
+	(forward-line)
+	(while (not (eobp))
+	  (let* ((char (char-after))
+		 (len (- (navi2ch-line-beginning-position 2) (point))))
+	    (when (char-equal char ?`)
+	      (setq char ? ))
+	    (if (and (looking-at navi2ch-uuencode-line-regexp)
+		     (< len 63)
+		     (= len (- (* (/ char 3) 4) 38)))
+		(forward-line)
+	      (delete-region (point) (navi2ch-line-beginning-position 2)))))
+	(insert "end\n")
+	(navi2ch-uudecode-region (point-min) (point-max) filename)))))
+
 (defun navi2ch-base64-write-region (start end &optional filename)
   "STARTとENDの間のリージョンをbase64デコードし、FILENAMEに書き出す。
 
-リージョン内に`navi2ch-base64-begin-delimiter'がある場合はそれ以前を無
-視し、`navi2ch-base64-end-delimiter'がある場合は最後のそれ以降を無視する。
+リージョン内に`navi2ch-base64-begin-delimiter-regexp' か
+`navi2ch-base64-susv3-begin-delimiter-regexp' にマッチする行がある場合は
+それ以前を無視し、
+`navi2ch-base64-end-delimiter-regexp' か
+`navi2ch-base64-susv3-end-delimiter-regexp' にマッチする行
+がある場合は最後のそれ以降を無視する。
 さらに、`navi2ch-base64-line-regexp'にマッチしない行も無視する。
 
 base64デコードすべき内容がない場合はエラーになる。"
@@ -701,36 +793,40 @@ base64デコードすべき内容がない場合はエラーになる。"
 	  (goto-char (match-beginning 0)))
       (if (re-search-backward navi2ch-base64-line-regexp start t)
 	  (setq end (match-end 0)))
-      (with-temp-buffer
-	(let ((buffer-file-coding-system 'binary)
-	      (coding-system-for-write 'binary)
-	      ;; auto-compress-modeをdisableにする
-	      (inhibit-file-name-operation 'write-region)
-	      (inhibit-file-name-handlers (cons 'jka-compr-handler
-						inhibit-file-name-handlers)))
-	  (insert-buffer-substring buf start end)
-	  (goto-char (point-min))
-	  (while (not (eobp))
-	    (if (looking-at navi2ch-base64-line-regexp)
-		(forward-line)
-	      (delete-region (point) (navi2ch-line-beginning-position 2))))
-	  (base64-decode-region (point-min) (point-max))
-	  (if (not filename)
-	      (setq filename (read-file-name
-			      (if default-filename
-				  (format "Decode to file (default `%s'): "
-					  default-filename)
-				"Decode to file: ")
-			      nil default-filename)))
-	  (when (file-directory-p filename)
-	    (setq filename (expand-file-name default-filename filename)))
-	  (when (or (not (file-exists-p filename))
-		    (y-or-n-p (format "File `%s' exists; overwrite? "
-				      filename)))
+      (unless filename
+	(setq filename (expand-file-name
+			(read-file-name
+			 (if default-filename
+			     (format "Base64-decode to file (default `%s'): "
+				     default-filename)
+			   "Base64-decode to file: ")
+			 nil default-filename))))
+      (when (file-directory-p filename)
+	(if default-filename
+	    (setq filename (expand-file-name default-filename filename))
+	  (error "%s is a directory" filename)))
+      (when (or (not (file-exists-p filename))
+		(y-or-n-p (format "File `%s' exists; overwrite? "
+				  filename)))
+	(with-temp-buffer
+	  (let ((buffer-file-coding-system 'binary)
+		(coding-system-for-write 'binary)
+		;; auto-compress-modeをdisableにする
+		(inhibit-file-name-operation 'write-region)
+		(inhibit-file-name-handlers (cons 'jka-compr-handler
+						  inhibit-file-name-handlers)))
+	    (insert-buffer-substring buf start end)
+	    (goto-char (point-min))
+	    (while (not (eobp))
+	      (if (looking-at navi2ch-base64-line-regexp)
+		  (forward-line)
+		(delete-region (point) (navi2ch-line-beginning-position 2))))
+	    (base64-decode-region (point-min) (point-max))
 	    (write-region (point-min) (point-max) filename)
 	    (if (and susv3 mode)
 		(condition-case nil
-		    (set-file-modes filename mode)
+		    ;; 511 = (string-to-number "0777" 8)
+		    (set-file-modes filename (logand mode 511))
 		  (error nil)))))))))
 
 (defun navi2ch-base64-insert-file (filename)

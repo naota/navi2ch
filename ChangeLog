@@ -1,3 +1,47 @@
+2003-02-22  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map):
+	"\eu" のバインドをはずす。
+	navi2ch-article-base64-decode-message の改名に追随。
+	(navi2ch-article-insert-message):
+	navi2ch-article-auto-decode-encoded-section の改名に追随。
+	(navi2ch-article-uudecode-message): navi2ch-article-decode-message
+	に統合。
+	(navi2ch-article-base64-decode-message): 同上。
+	(navi2ch-article-decode-message): uudecode か base64 かを判定。
+	1レスに複数のエンコード、複数レスに分割されたエンコードに対応。
+	(navi2ch-article-detect-encoded-regions): 新関数
+	(navi2ch-article-auto-decode-encoded-section):
+	navi2ch-article-auto-decode-base64-section から改名。uuencode 対応。
+	(navi2ch-article-auto-decode-text-on): navi2ch-article-base64-text-on
+	から改名。
+	(navi2ch-article-auto-decode-text-off):
+	navi2ch-article-base64-text-off から改名。
+	(navi2ch-article-auto-decode-toggle-text):
+	navi2ch-article-base64-toggle-text から改名。
+
+	* navi2ch-face.el (navi2ch-article-auto-decode-face):
+	navi2ch-article-base64-face から改名。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	"\eu" のバインドをはずす。
+	navi2ch-article-base64-decode-message の改名に追随。
+	"\ei" に navi2ch-article-auto-decode-toggle-text をバインド。
+
+	* navi2ch-util.el (navi2ch-uuencode-begin-delimiter-regexp): 新変数。
+	(navi2ch-uuencode-end-delimiter-regexp): 同上。
+	(navi2ch-uuencode-line-regexp): 同上。
+	(navi2ch-uudecode-region): 一部機能を navi2ch-uudecode-write-region
+	に分割。デコードのみをするように。
+	(navi2ch-uudecode-write-region): 新関数。
+	(navi2ch-base64-write-region): デコードする前に read-file-name する。
+	setuid/setgid ビットを落とす。
+
+	* navi2ch-vars.el (navi2ch-article-auto-decode-p):
+	navi2ch-article-auto-decode-base64-p から改名。
+	(navi2ch-article-auto-decode-insert-text):
+	navi2ch-article-auto-insert-base64-text から改名。
+
 2003-02-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-insert-aa-list): キーが多重

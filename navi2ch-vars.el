@@ -373,7 +373,7 @@ non-nil ならば expire する。"
   :group 'navi2ch-board)
 
 (defcustom navi2ch-board-name-from-file "From File"
-  "*ファイルから読み込んだスレを表わす板名。"
+  "*ファイルから読み込んだスレを表す板名。"
   :type 'string
   :group 'navi2ch-board)
 
@@ -549,18 +549,18 @@ ask なら明示的に移動する時以外なら質問する
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-number-prefix-regexp "[>＞<＜][>＞<＜]* *"
-  "*同じスレ内へのリンクを表わす正規表現。"
+  "*同じスレ内へのリンクを表す正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-number-separator-regexp " *[,、=＝] *"
-  "*同じスレ内へのリンクの数字を区切る文字列を表わす正規表現。"
+  "*同じスレ内へのリンクの数字を区切る文字列を表す正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-number-number-regexp
   "\\([0-9０-９]+\\(-[0-9０-９]+\\)?\\)"
-  "*同じスレ内へのリンクの数字を表わす正規表現。"
+  "*同じスレ内へのリンクの数字を表す正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
 
@@ -655,14 +655,14 @@ window の幅いっぱいにしたいなら
                  (sexp :tag "関数とか"))
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-auto-decode-base64-p nil
-  "*non-nil なら、スレの BASE64 でエンコードされたテキストを自動展開する。"
+(defcustom navi2ch-article-auto-decode-p nil
+  "*non-nil なら、スレのエンコードされたテキストを自動展開する。"
   :type 'boolean
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-auto-insert-base64-text nil
-  "*non-nil なら、BASE64をデコードしたテキストをバッファに挿入する。
-`navi2ch-article-auto-decode-base64-p' が non-nil のときのみ効果がある。"
+(defcustom navi2ch-article-auto-decode-insert-text nil
+  "*non-nil なら、自動展開したテキストをバッファに挿入する。
+`navi2ch-article-auto-decode-p' が non-nil のときのみ効果がある。"
   :type 'boolean
   :group 'navi2ch-article)
 
