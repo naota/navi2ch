@@ -240,11 +240,30 @@
 	  (select-window win)
 	(navi2ch-list)))))
 
+;;; goto-*-column
 (defun navi2ch-bm-goto-state-column ()
   (beginning-of-line)
   (looking-at "\\( *[0-9]+\\)")
   (goto-char (match-end 1))
   (forward-char 2))
+
+(defun navi2ch-bm-goto-mark-column ()
+  (navi2ch-bm-goto-state-column)
+  (forward-char 1))
+
+(defun navi2ch-bm-goto-other-column ()
+  (let ((sbj (cdr
+              (assq 'subject
+		    (navi2ch-bm-get-article-internal
+                     (navi2ch-bm-get-property-internal (point)))))))
+    (navi2ch-bm-goto-mark-column)
+    (forward-char 1)
+    (unless sbj (setq sbj navi2ch-bm-empty-subject))
+    (when (and (not (string= sbj ""))
+               (search-forward sbj nil t))
+      (goto-char (match-end 0)))
+    (skip-chars-forward " ")))
+
 
 (defun navi2ch-bm-insert-state (item state &optional updated)
   ;; (setq article (navi2ch-put-alist 'cache 'view article))
@@ -473,10 +492,17 @@
     (let ((buffer-read-only nil)
           (i 1))
       (while (not (eobp))
-        (let ((props (text-properties-at (point))))
-          (delete-char 3)
-          (insert (format "%3d" i))
-	  (set-text-properties (- (point) 3) (point) props)
+        (let ((props (text-properties-at (point)))
+	      (num-string (format
+			   (concat "%" (number-to-string navi2ch-bm-number-width) "d")
+			   i)))
+          (delete-region (point)
+			 (save-excursion
+			   (navi2ch-bm-goto-state-column)
+			   (- (point) 2)))
+          (insert num-string)
+	  (set-text-properties (- (point) (length num-string))
+			       (point) props)
           (forward-line 1)
           (setq i (1+ i)))))))
 
@@ -531,10 +557,6 @@
   (setq navi2ch-bm-move-downward nil))
 
 ;;; mark
-(defun navi2ch-bm-goto-mark-column ()
-  (navi2ch-bm-goto-state-column)
-  (forward-char 1))
-
 (defun navi2ch-bm-mark-subr (mark &optional arg interactive)
   "mark する。
 INTERACTIVE が non-nil なら mark したあと移動する。
@@ -687,19 +709,6 @@ ARG が non-nil なら移動方向を逆にする。"
    (not rev)
    'navi2ch-bm-goto-state-column
    'forward-char))
-
-(defun navi2ch-bm-goto-other-column ()
-  (let ((sbj (cdr
-              (assq 'subject
-		    (navi2ch-bm-get-article-internal
-                     (navi2ch-bm-get-property-internal (point)))))))
-    (navi2ch-bm-goto-mark-column)
-    (forward-char 1)
-    (unless sbj (setq sbj navi2ch-bm-empty-subject))
-    (when (and (not (string= sbj ""))
-               (search-forward sbj nil t))
-      (goto-char (match-end 0)))
-    (skip-chars-forward " ")))
 
 (defun navi2ch-bm-sort-by-subject (rev)
   (interactive "P")
