@@ -240,7 +240,7 @@
 		 (or again
 		     (setq prompt (concat "Please answer y, n, or q.  " prompt)
 			   again t)))))))))
-  
+
 (defun navi2ch-browse-url (url)
   (cond ((and navi2ch-browse-url-image-program	; images
 	      (file-name-extension url)
@@ -249,8 +249,10 @@
 	 (navi2ch-browse-url-image url))
 	(t (browse-url				; others
 	    url
-	    (cond ((boundp 'browse-url-new-window-p) browse-url-new-window-p)
-		  ((boundp 'browse-url-new-window-flag) browse-url-new-window-flag))))))
+	    (symbol-value (cond ((boundp 'browse-url-new-window-p)
+				 'browse-url-new-window-p)
+				((boundp 'browse-url-new-window-flag)
+				 'browse-url-new-window-flag)))))))
 
 (defun navi2ch-browse-url-image (url &optional new-window)
   ;; new-window ignored
