@@ -1,0 +1,170 @@
+インストール::
+ %./configure; make
+ #make install
+ お終い・・・だけじゃあれなんで一応重要な configure のオプションを。
+
+ --with-emacs           Emacs の種類を指定
+ --with-xemacs          XEmacs の種類を指定
+ --with-lispdir         navi2ch をインストールするディレクトリを指定。
+
+ 例えば Meadow だったら(俺の場合)
+
+ ./configure --with-emacs=meadow95.exe
+             --with-lispdir=/app/meadow/site-lisp/navi2ch
+
+ ってなる。
+ 
+使い方::
+ .emacs に (require 'navi2ch) と書く。
+ XEmacs で mona font を使いたい場合は以下のように .emacs に書く
+
+  (require 'navi2ch-mona)
+  (add-hook 'navi2ch-article-arrange-message-hook
+            'navi2ch-mona-arrange-message)
+
+  (setq navi2ch-mona-enable-board-list '("mona"))
+
+  M-x navi2ch で起動。
+
+
+キーバインド(467 さんサンクス！)::
+article mode:
+
+"q" navi2ch-article-exit スレを閉じる
+"Q" navi2ch-article-goto-current-board そのスレのある板を表示
+" " navi2ch-article-scroll-up 一画面上へスクロール
+"s" navi2ch-article-sync スレを再読み込み
+"S" navi2ch-article-sync-disable-diff スレを差分なしで読み込み(今は動かないかも)
+"r" navi2ch-article-redraw-range レスの表示数を変更
+[del] navi2ch-article-scroll-down 一画面下へスクロール
+[backspace] navi2ch-article-scroll-down 一画面下へスクロール
+"\177" navi2ch-article-scroll-down 一画面下へスクロール
+"w" navi2ch-article-write-message レスを書き込む
+"t" navi2ch-toggle-offline オフライン・オンラインの切り替え
+"\r" navi2ch-article-select-current-link リンクを表示
+[mouse-2] navi2ch-article-mouse-select リンクをマウスで選択
+"g" navi2ch-article-goto-number 指定した番号のレスにジャンプ
+"l" navi2ch-article-pop-point 記憶されたカーソル位置にジャンプ
+"L" navi2ch-article-pop-poped-point 記憶したカーソル位置に逆方向にジャンプ
+"m" navi2ch-article-push-point 現在のカーソル位置を記憶
+"U" navi2ch-article-show-url スレ・特定のレス・板の URL をコピー、あるいはブラウザで表示
+"." navi2ch-article-redisplay-current-message カーソルのあるレスをバッファの一番上に移動
+"p" navi2ch-article-previous-message ひとつ前のレスに移動
+"n" navi2ch-article-next-message 次のレスに移動
+"P" navi2ch-article-through-previous ひとつ上のスレに移動
+"N" navi2ch-article-through-next ひとつ下のスレに移動
+[(shift tab)] navi2ch-article-previous-link ひとつ前のリンクに移動
+"\e\C-i" navi2ch-article-previous-link ひとつ前のリンクに移動
+"\C-\i" navi2ch-article-next-link 次のリンクに移動
+">" navi2ch-article-goto-last-message 最後のレスに移動
+"<" navi2ch-article-goto-first-message 最初のレスに移動
+"\eu" navi2ch-article-uudecode-message uuencode された記事を uudecode する
+"v" navi2ch-article-view-aa アスキーアートを表示（要 aadisplay）
+"f" navi2ch-article-forward-buffer 次のバッファに移動
+"b" navi2ch-article-backward-buffer 前のバッファに移動
+"d" navi2ch-article-hide-message カーソルのあるレスを隠す・（"h" のあと）隠したレスを戻す・（"$" のあと）レスをブックマークから削除
+"a" navi2ch-article-add-important-message カーソルのあるレスをブックマークに登録
+"h" navi2ch-article-toggle-hide 隠したレスの表示とスレの表示の切り替え
+"$" navi2ch-article-toggle-important スレのブックマークを表示
+"1" navi2ch-one-pain 一画面表示
+"2" navi2ch-article-two-pain 二画面表示
+"3" navi2ch-three-pain 三画面表示
+"A" navi2ch-article-add-global-bookmark スレをブックマークに登録
+"\C-c\C-f" navi2ch-article-find-file スレのログファイルを指定
+"\C-c\C-m" navi2ch-message-pop-message-buffer 書き込みのとき書き込み画面に戻る
+"\C-x\C-k" 'navi2ch-article-kill-buffer 書き込みをキャンセル
+
+
+board mode:
+
+"s" navi2ch-board-sync 板を再読み込み
+"r" navi2ch-board-select-view-range スレの表示数を変更
+"a" navi2ch-board-add-bookmark 板のブックマークにスレを登録
+"d" navi2ch-board-hide-article スレを隠す
+"h" navi2ch-board-toggle-hide 隠したスレを表示
+"b" navi2ch-board-toggle-bookmark ブックマークを表示
+"U" navi2ch-board-show-url 板またはスレの URL をコピー、または板をブラウザで表示
+"w" navi2ch-board-write-message レスを書き込む
+"2" navi2ch-board-two-pain 二画面表示
+"A" navi2ch-board-add-global-bookmark ブックマークに登録
+"\C-c\C-f" 'navi2ch-article-find-file スレのログファイルを指定
+"\r" navi2ch-bm-select-article スレを表示
+[mouse-2] navi2ch-bm-mouse-select スレを表示
+" " navi2ch-bm-select-article-or-scroll-up 一画面上へスクロール
+"o" navi2ch-bm-display-article スレを表示（カーソルはスレに移動しない）
+"i" 'navi2ch-bm-fetch-article スレを更新
+[del] navi2ch-bm-select-article-or-scroll-down スレを表示(すでに表示しているスレならばスレ画面を上にスクロール)
+[backspace] navi2ch-bm-select-article-or-scroll-down スレを表示(すでに表示しているスレならばスレ画面を下にスクロール)
+"n" next-line 次の行に移動
+"p" previous-line 前の行に移動
+"g" navi2ch-bm-goto-board 指定した板にジャンプ
+"q" navi2ch-bm-exit 板を閉じる
+"S" navi2ch-bm-sort スレをソート
+">" end-of-buffer 最後のスレに移動
+"<" beginning-of-buffer 最初のスレに移動
+"t" navi2ch-toggle-offline オフライン・オンラインの切り替え
+"1" navi2ch-one-pain 一画面表示
+"3" navi2ch-three-pain 三画面表示
+"?" navi2ch-bm-search 検索
+"\C-c\C-f" navi2ch-article-find-file スレのログファイルを指定
+"\C-c\C-m" 'navi2ch-message-pop-message-buffer
+"*" navi2ch-bm-mark スレにマークをつける
+"u" navi2ch-bm-unmark スレのマークを解除
+"mr" navi2ch-bm-mark-region 選択領域のスレにマークをつける
+"ma" navi2ch-bm-mark-all すべてのスレにマークをつける
+"mo" navi2ch-bm-display-mark-article マークしたスレを表示
+"mi" navi2ch-bm-fetch-mark-article マークしたスレを更新
+"mm" navi2ch-bm-mark-marks ある状態(VCU)になっているファイルをマーク
+
+
+bookmark mode:
+
+"d" navi2ch-bookmark-delete ブックマークから削除
+
+
+list mode:
+
+"\r" navi2ch-list-select-current-board 板を表示
+"q" navi2ch-exit Navi2ch を終了
+"z" navi2ch-suspend Navi2ch を中断
+"s" navi2ch-list-sync 板リストを再読み込み
+" " navi2ch-list-select-current-board 板を表示
+[del] scroll-down 上にスクロール
+[backspace] scroll-down 上にスクロール
+"n" next-line 次の行に移動
+"p" previous-line 前の行に移動
+"a" navi2ch-list-add-bookmark 板をブックマークに登録
+"b" navi2ch-list-toggle-bookmark ブックマークと板リストの表示を切り替え
+"t" navi2ch-toggle-offline オフライン・オンラインの切り替え
+[mouse-2] navi2ch-list-mouse-select 板を表示
+"g" navi2ch-list-goto-board 指定した板にジャンプ
+"/" navi2ch-list-toggle-open 板リストの開閉
+"[" navi2ch-list-open-all-category すべての板リストを開く
+"]" navi2ch-list-close-all-category すべての板リストを閉じる
+">" end-of-buffer 最終行に移動
+"<" beginning-of-buffer 先頭に移動
+"1" navi2ch-one-pain 一画面表示
+"2" navi2ch-list-two-pain 二画面表示
+"3" navi2ch-three-pain 三画面表示
+"\C-c\C-f" navi2ch-article-find-file スレのログファイルを指定
+"?" navi2ch-list-search 検索
+
+
+message mode:
+
+"\C-c\C-c" navi2ch-message-send-message 書き込みを送信
+"\C-c\C-k" navi2ch-message-exit 書き込みをキャンセル
+"\C-c\C-y" navi2ch-message-cite-original カーソルのあるレスを引用
+"\C-c\y" navi2ch-message-cite-original-from-number 番号で指定したレスを引用
+"\et" navi2ch-toggle-offline オフライン・オンラインの切り替え
+
+
+注意::
+ 環境変数 TZ を JST-9 とかにしといた方がいいです。
+ Emacs 20 以降じゃないと動かないです(多分)。
+ XEmacs は持ってないんで知りません(でも動くらしいです)。
+ elisp だけの実装なんで Meadow なんかでも動きます。
+
+謝辞::
+ 最初に perl 版を作った hc2ivan さんに感謝です。
+

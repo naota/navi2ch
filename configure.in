@@ -1,0 +1,10 @@
+AC_INIT(navi2ch.el)
+AM_INIT_AUTOMAKE(navi2ch, 1.4)
+
+AM_PATH_LISPDIR
+
+AC_ARG_WITH(xemacs,           --with-xemacs             Use XEmacs to build, [ if test "${withval}" = "yes"; then EMACS=xemacs; else EMACS=${withval}; fi ]; AC_MSG_RESULT(EMACS=$EMACS))
+AC_ARG_WITH(emacs,            --with-emacs              Use Emacs to build, [ if test "${withval}" = "yes"; then EMACS=emacs; else EMACS=${withval}; fi; EMACS=$EMACS ]; AC_MSG_RESULT(EMACS=$EMACS))
+AC_ARG_WITH(lispdir,          --with-lispdir            Where to install lisp files, lispdir=${withval}; AC_MSG_RESULT(lispdir=$lispdir))
+
+AC_OUTPUT(Makefile)
