@@ -1,3 +1,18 @@
+2002-02-08  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-board):
+	navi2ch-bm-select-board-hook を run-hooks する。
+
+	* navi2ch-vars.el (navi2ch-bm-select-board-hook): 新変数。
+
+	* contrib/navi2ch-logo.el (navi2ch-logo-init): 
+	navi2ch-board-select-board-hook にかわり上記のフックを利用。
+	このフックは板を読み直したとき常に呼ばれるので、ブックマークなどに
+	移動したときにロゴをきちんと消せるようになった。
+	(navi2ch-logo-cleanup): ロゴを正しく消すように。
+	(navi2ch-logo-previous-image): 新変数。前回挿入したロゴの image。
+	(navi2ch-logo-create-logo-image): ロゴを1ドットの黒線で囲むように。
+
 2002-02-07    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (toplevel): 

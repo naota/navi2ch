@@ -780,6 +780,7 @@ ask なら保存する前に質問する
 (defvar navi2ch-message-setup-message-hook nil)
 (defvar navi2ch-message-setup-sage-message-hook nil)
 (defvar navi2ch-bm-mode-hook nil)
+(defvar navi2ch-bm-select-board-hook nil)
 (defvar navi2ch-bm-exit-hook nil)
 (defvar navi2ch-popup-article-mode-hook nil)
 (defvar navi2ch-popup-article-exit-hook nil)

@@ -59,6 +59,7 @@
 (defvar navi2ch-logo-image-alist nil
   "\`(板のid  その板のロゴのimage)\' からなる alist。
 いちど create-image した画像はここに追加して再利用する。")
+(defvar navi2ch-logo-previous-image nil)
 
 (defun navi2ch-logo-init ()
   "navi2ch-logo を初期化して使えるようにする。"
@@ -67,7 +68,7 @@
           (file-name-as-directory
            (make-temp-file navi2ch-logo-temp-directory-prefix t)))
     (add-hook 'navi2ch-exit-hook 'navi2ch-logo-cleanup)
-    (add-hook 'navi2ch-board-select-board-hook 'navi2ch-logo-remove-image)
+    (add-hook 'navi2ch-bm-select-board-hook 'navi2ch-logo-update)
     (add-hook 'navi2ch-board-after-sync-hook 'navi2ch-logo-update)))
 
 (defun navi2ch-logo-cleanup ()
@@ -85,16 +86,22 @@
   "`navi2ch-board-mode' で動作し、ロゴを読み込んでバッファ上部に貼り付ける。
 `navi2ch-board-select-board-hook' から呼ばれる。"
   (if (eq major-mode 'navi2ch-board-mode)
-      (catch 'quit
-        (let* ((id (cdr (assq 'id navi2ch-board-current-board)))
-               (image (cdr (assoc id navi2ch-logo-image-alist))))
-          (unless image
-            (setq image (navi2ch-logo-create-logo-image))
-            (unless image (throw 'quit nil))
+      (let* ((id (cdr (assq 'id navi2ch-board-current-board)))
+             (image (cdr (assoc id navi2ch-logo-image-alist))))
+        (if (eq image t)
+            (navi2ch-logo-remove-image (point-min))
+          (when (and (not image) (not navi2ch-offline))
+            (condition-case err
+                (catch 'quit
+                  (setq image (navi2ch-logo-create-logo-image)))
+              (t nil))
             (setq navi2ch-logo-image-alist
-                  (put-alist id image navi2ch-logo-image-alist)))
-          (navi2ch-logo-remove-image)
-          (navi2ch-logo-put-image (point-min) image)))))
+                  (put-alist id (or image t) navi2ch-logo-image-alist)))
+          (when (and image (not (eq image navi2ch-logo-previous-image)))
+            (navi2ch-logo-remove-image (point-min))
+            (navi2ch-logo-put-image (point-min) image)
+            (setq navi2ch-logo-previous-image image))))
+    (navi2ch-logo-remove-image (point-min))))
 
 (defun navi2ch-logo-put-image (point image)
   "POINT 位置に IMAGE を貼り付ける。
@@ -163,7 +170,10 @@ Emacs は XPM 以外ももちろんサポートしてるから、本来は全部 XPM に
                                 "#-1" "--output" temp-file))
         (throw 'quit nil))
       (setq logo-file temp-file))
-    (when (/= 0 (call-process "convert" nil nil nil logo-file xpm-file))
+    (when (/= 0 (call-process "convert" nil nil nil
+                              "-border" "1x1"
+                              "-bordercolor" "black"
+                              logo-file xpm-file))
       (throw 'quit nil))
     (if temp-file (delete-file temp-file))
     (create-image xpm-file 'xpm)))

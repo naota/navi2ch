@@ -168,6 +168,7 @@
   (let ((type (cdr (assq 'type board))))
     (funcall (cdr (assq type navi2ch-bm-board-type-alist))
 	     board force))
+  (run-hooks 'navi2ch-bm-select-board-hook)
   (navi2ch-set-mode-line-identification))
 
 (defsubst navi2ch-bm-set-property (begin end item state &optional updated)
