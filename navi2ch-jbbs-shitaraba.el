@@ -92,9 +92,17 @@
     (if id (list (cons 'uri uri) (cons 'id id)))))
 
 (defun navi2ch-js-url-to-article (url)
-  (if (string-match
-       "http://jbbs.shitaraba.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
-      (list (cons 'artid (match-string 1 url)))))
+  "URL から article に変換。"
+  (let (list)
+    (if (string-match
+	 "http://jbbs.shitaraba.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+	(progn
+	  (setq list (list (cons 'artid (match-string 1 url))))
+	  (when (string-match "&START=\\([0-9]+\\)" url)
+	    (setq list (cons (cons 'number
+				   (string-to-number (match-string 1 url)))
+			     list)))))
+    list))
 
 (defun navi2ch-js-send-message
   (from mail message subject bbs key time board article)
