@@ -6,7 +6,7 @@
 ;; 431 の名無しさん
 ;; 874 の名無しさん
 ;; UEYAMA Rui <rui314159@users.sourceforge.net>
-;; part5 スレの 26 さん
+;; part5 スレの 26, 45 さん
 
 ;; The part of find-face is originated form apel (poe.el).
 ;; You can get the original apel from <ftp://ftp.m17n.org/pub/mule/apel>.
@@ -193,7 +193,7 @@ gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
 
 ;; defun find-face for GNU Emacs
 ;; the code is originated from apel.
-(if (and (not (featurep 'poe)) (not navi2ch-on-xemacs))
+(unless (fboundp 'find-face)
     (defun find-face (face-or-name)
       "Retrieve the face of the given name.
 If FACE-OR-NAME is a face object, it is simply returned.

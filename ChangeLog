@@ -1,3 +1,7 @@
+2002-02-20  NOKUBI Takatsugu  <knok@users.sourceforge.net>
+
+	* navi2ch-mona.el (find-face): find-face 判別方法を変更
+
 2002-02-18  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-vars.el (navi2ch-list-bbstable-url): 2chmenu.html ->
