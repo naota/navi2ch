@@ -4,6 +4,9 @@
 	新スクリプトで subback.html のスレ番号とスレタイトルの区切りが
 	「: 」から「：」に変更されたのに対応。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/228
+	* navi2ch-util.el (navi2ch-bigint-add): 
+	桁あふれに対応。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/226-227n
 
 2002-03-07  NOKUBI Takatsugu  <knok@users.sourceforge.net>
 

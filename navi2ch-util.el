@@ -150,6 +150,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
         (setq list (cons (mod y 10) list))
         (setq a (cdr a)
               b (cdr b))))
+    (if (> x 0) (setq list (cons x list)))
     list))
 
 (defun navi2ch-insert-file-contents (file &optional begin end)
