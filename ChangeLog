@@ -1,3 +1,8 @@
+2003-05-21  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-send-message-error-string): 「サーバ
+	の負荷が高いので書きこめません。」をうまく parse できてなかった。
+
 2003-05-15  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): article-summary に
