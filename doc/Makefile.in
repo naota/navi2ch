@@ -69,6 +69,7 @@ PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+icondir = @icondir@
 install_sh = @install_sh@
 lispdir = @lispdir@
 

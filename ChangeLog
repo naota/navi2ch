@@ -1,3 +1,7 @@
+2002-02-03  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* icons/Makefile.am (icondir): @icons@ に変更。
+
 2002-02-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-icon-directory): navi2ch.el があるディ

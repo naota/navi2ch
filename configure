@@ -628,6 +628,7 @@ Optional Packages:
   --with-xemacs           Use XEmacs to build
   --with-emacs            Use Emacs to build
   --with-lispdir          Override the default lisp directory
+  --with-icondir=DIR      Override default icons directory
 
 EOF
 fi
@@ -809,7 +810,7 @@ if test -z "$CONFIG_SITE"; then
 fi
 for ac_site_file in $CONFIG_SITE; do
   if test -r "$ac_site_file"; then
-    { echo "$as_me:812: loading site script $ac_site_file" >&5
+    { echo "$as_me:813: loading site script $ac_site_file" >&5
 echo "$as_me: loading site script $ac_site_file" >&6;}
     cat "$ac_site_file" >&5
     . "$ac_site_file"
@@ -820,7 +821,7 @@ if test -r "$cache_file"; then
   # Some versions of bash will fail to source /dev/null (special
   # files actually), so we avoid doing that.
   if test -f "$cache_file"; then
-    { echo "$as_me:823: loading cache $cache_file" >&5
+    { echo "$as_me:824: loading cache $cache_file" >&5
 echo "$as_me: loading cache $cache_file" >&6;}
     case $cache_file in
       [\\/]* | ?:[\\/]* ) . $cache_file;;
@@ -828,7 +829,7 @@ echo "$as_me: loading cache $cache_file" >&6;}
     esac
   fi
 else
-  { echo "$as_me:831: creating cache $cache_file" >&5
+  { echo "$as_me:832: creating cache $cache_file" >&5
 echo "$as_me: creating cache $cache_file" >&6;}
   >$cache_file
 fi
@@ -844,21 +845,21 @@ for ac_var in `(set) 2>&1 |
   eval ac_new_val="\$ac_env_${ac_var}_value"
   case $ac_old_set,$ac_new_set in
     set,)
-      { echo "$as_me:847: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
+      { echo "$as_me:848: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
 echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
       ac_cache_corrupted=: ;;
     ,set)
-      { echo "$as_me:851: error: \`$ac_var' was not set in the previous run" >&5
+      { echo "$as_me:852: error: \`$ac_var' was not set in the previous run" >&5
 echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
       ac_cache_corrupted=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-        { echo "$as_me:857: error: \`$ac_var' has changed since the previous run:" >&5
+        { echo "$as_me:858: error: \`$ac_var' has changed since the previous run:" >&5
 echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
-        { echo "$as_me:859:   former value:  $ac_old_val" >&5
+        { echo "$as_me:860:   former value:  $ac_old_val" >&5
 echo "$as_me:   former value:  $ac_old_val" >&2;}
-        { echo "$as_me:861:   current value: $ac_new_val" >&5
+        { echo "$as_me:862:   current value: $ac_new_val" >&5
 echo "$as_me:   current value: $ac_new_val" >&2;}
         ac_cache_corrupted=:
       fi;;
@@ -877,9 +878,9 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
   fi
 done
 if $ac_cache_corrupted; then
-  { echo "$as_me:880: error: changes in the environment can compromise the build" >&5
+  { echo "$as_me:881: error: changes in the environment can compromise the build" >&5
 echo "$as_me: error: changes in the environment can compromise the build" >&2;}
-  { { echo "$as_me:882: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
+  { { echo "$as_me:883: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
 echo "$as_me: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -899,10 +900,10 @@ esac
 echo "#! $SHELL" >conftest.sh
 echo  "exit 0"   >>conftest.sh
 chmod +x conftest.sh
-if { (echo "$as_me:902: PATH=\".;.\"; conftest.sh") >&5
+if { (echo "$as_me:903: PATH=\".;.\"; conftest.sh") >&5
   (PATH=".;."; conftest.sh) 2>&5
   ac_status=$?
-  echo "$as_me:905: \$? = $ac_status" >&5
+  echo "$as_me:906: \$? = $ac_status" >&5
   (exit $ac_status); }; then
   ac_path_separator=';'
 else
@@ -928,7 +929,7 @@ for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:931: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
+  { { echo "$as_me:932: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
 echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -948,7 +949,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "$as_me:951: checking for a BSD compatible install" >&5
+echo "$as_me:952: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -997,7 +998,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "$as_me:1000: result: $INSTALL" >&5
+echo "$as_me:1001: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1008,7 +1009,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-echo "$as_me:1011: checking whether build environment is sane" >&5
+echo "$as_me:1012: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
@@ -1032,7 +1033,7 @@ if (
       # if, for instance, CONFIG_SHELL is bash and it inherits a
       # broken ls alias from the environment.  This has actually
       # happened.  Such a system could not be considered "sane".
-      { { echo "$as_me:1035: error: ls -t appears to fail.  Make sure there is not a broken
+      { { echo "$as_me:1036: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&5
 echo "$as_me: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&2;}
@@ -1045,13 +1046,13 @@ then
    # Ok.
    :
 else
-   { { echo "$as_me:1048: error: newly created file is older than distributed files!
+   { { echo "$as_me:1049: error: newly created file is older than distributed files!
 Check your system clock" >&5
 echo "$as_me: error: newly created file is older than distributed files!
 Check your system clock" >&2;}
    { (exit 1); exit 1; }; }
 fi
-echo "$as_me:1054: result: yes" >&5
+echo "$as_me:1055: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 test "$program_prefix" != NONE &&
   program_transform_name="s,^,$program_prefix,;$program_transform_name"
@@ -1076,7 +1077,7 @@ if eval "$MISSING --run true"; then
 else
   am_missing_run=
   am_backtick='`'
-  { echo "$as_me:1079: WARNING: ${am_backtick}missing' script is too old or missing" >&5
+  { echo "$as_me:1080: WARNING: ${am_backtick}missing' script is too old or missing" >&5
 echo "$as_me: WARNING: ${am_backtick}missing' script is too old or missing" >&2;}
 fi
 
@@ -1084,7 +1085,7 @@ for ac_prog in mawk gawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1087: checking for $ac_word" >&5
+echo "$as_me:1088: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1099,7 +1100,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   $as_executable_p "$ac_dir/$ac_word" || continue
 ac_cv_prog_AWK="$ac_prog"
-echo "$as_me:1102: found $ac_dir/$ac_word" >&5
+echo "$as_me:1103: found $ac_dir/$ac_word" >&5
 break
 done
 
@@ -1107,17 +1108,17 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "$as_me:1110: result: $AWK" >&5
+  echo "$as_me:1111: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "$as_me:1113: result: no" >&5
+  echo "$as_me:1114: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
   test -n "$AWK" && break
 done
 
-echo "$as_me:1120: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "$as_me:1121: checking whether ${MAKE-make} sets \${MAKE}" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \${MAKE}... $ECHO_C" >&6
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
@@ -1137,11 +1138,11 @@ fi
 rm -f conftest.make
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  echo "$as_me:1140: result: yes" >&5
+  echo "$as_me:1141: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   SET_MAKE=
 else
-  echo "$as_me:1144: result: no" >&5
+  echo "$as_me:1145: result: no" >&5
 echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
@@ -1177,7 +1178,7 @@ rmdir .deps 2>/dev/null
 # test to see if srcdir already configured
 if test "`CDPATH=:; cd $srcdir && pwd`" != "`pwd`" &&
    test -f $srcdir/config.status; then
-  { { echo "$as_me:1180: error: source directory already configured; run \"make distclean\" there first" >&5
+  { { echo "$as_me:1181: error: source directory already configured; run \"make distclean\" there first" >&5
 echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1226,7 +1227,7 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 
-echo "$as_me:1229: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "$as_me:1230: checking whether to enable maintainer-specific portions of Makefiles" >&5
 echo $ECHO_N "checking whether to enable maintainer-specific portions of Makefiles... $ECHO_C" >&6
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
@@ -1235,7 +1236,7 @@ if test "${enable_maintainer_mode+set}" = set; then
 else
   USE_MAINTAINER_MODE=no
 fi;
-  echo "$as_me:1238: result: $USE_MAINTAINER_MODE" >&5
+  echo "$as_me:1239: result: $USE_MAINTAINER_MODE" >&5
 echo "${ECHO_T}$USE_MAINTAINER_MODE" >&6
 
 if test $USE_MAINTAINER_MODE = yes; then
@@ -1254,11 +1255,11 @@ emacsen="emacs xemacs"
 
 # Make sure we can run config.sub.
 $ac_config_sub sun4 >/dev/null 2>&1 ||
-  { { echo "$as_me:1257: error: cannot run $ac_config_sub" >&5
+  { { echo "$as_me:1258: error: cannot run $ac_config_sub" >&5
 echo "$as_me: error: cannot run $ac_config_sub" >&2;}
    { (exit 1); exit 1; }; }
 
-echo "$as_me:1261: checking build system type" >&5
+echo "$as_me:1262: checking build system type" >&5
 echo $ECHO_N "checking build system type... $ECHO_C" >&6
 if test "${ac_cv_build+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1267,23 +1268,23 @@ else
 test -z "$ac_cv_build_alias" &&
   ac_cv_build_alias=`$ac_config_guess`
 test -z "$ac_cv_build_alias" &&
-  { { echo "$as_me:1270: error: cannot guess build type; you must specify one" >&5
+  { { echo "$as_me:1271: error: cannot guess build type; you must specify one" >&5
 echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
    { (exit 1); exit 1; }; }
 ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
-  { { echo "$as_me:1274: error: $ac_config_sub $ac_cv_build_alias failed." >&5
+  { { echo "$as_me:1275: error: $ac_config_sub $ac_cv_build_alias failed." >&5
 echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed." >&2;}
    { (exit 1); exit 1; }; }
 
 fi
-echo "$as_me:1279: result: $ac_cv_build" >&5
+echo "$as_me:1280: result: $ac_cv_build" >&5
 echo "${ECHO_T}$ac_cv_build" >&6
 build=$ac_cv_build
 build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
 build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 
-echo "$as_me:1286: checking host system type" >&5
+echo "$as_me:1287: checking host system type" >&5
 echo $ECHO_N "checking host system type... $ECHO_C" >&6
 if test "${ac_cv_host+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1292,12 +1293,12 @@ else
 test -z "$ac_cv_host_alias" &&
   ac_cv_host_alias=$ac_cv_build_alias
 ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
-  { { echo "$as_me:1295: error: $ac_config_sub $ac_cv_host_alias failed" >&5
+  { { echo "$as_me:1296: error: $ac_config_sub $ac_cv_host_alias failed" >&5
 echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
    { (exit 1); exit 1; }; }
 
 fi
-echo "$as_me:1300: result: $ac_cv_host" >&5
+echo "$as_me:1301: result: $ac_cv_host" >&5
 echo "${ECHO_T}$ac_cv_host" >&6
 host=$ac_cv_host
 host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
@@ -1342,7 +1343,7 @@ esac
 fi;
 
 if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
-  { { echo "$as_me:1345: error: specify one of --with-xemacs or --with-emacs" >&5
+  { { echo "$as_me:1346: error: specify one of --with-xemacs or --with-emacs" >&5
 echo "$as_me: error: specify one of --with-xemacs or --with-emacs" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1351,7 +1352,7 @@ for ac_prog in ${emacsen}
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1354: checking for $ac_word" >&5
+echo "$as_me:1355: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_EMACS+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1366,7 +1367,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   $as_executable_p "$ac_dir/$ac_word" || continue
 ac_cv_prog_EMACS="$ac_prog"
-echo "$as_me:1369: found $ac_dir/$ac_word" >&5
+echo "$as_me:1370: found $ac_dir/$ac_word" >&5
 break
 done
 
@@ -1374,10 +1375,10 @@ fi
 fi
 EMACS=$ac_cv_prog_EMACS
 if test -n "$EMACS"; then
-  echo "$as_me:1377: result: $EMACS" >&5
+  echo "$as_me:1378: result: $EMACS" >&5
 echo "${ECHO_T}$EMACS" >&6
 else
-  echo "$as_me:1380: result: no" >&5
+  echo "$as_me:1381: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1386,7 +1387,7 @@ done
 test -n "$EMACS" || EMACS="no"
 
 if test $EMACS = "no"; then
-  { { echo "$as_me:1389: error: cannot find emacs" >&5
+  { { echo "$as_me:1390: error: cannot find emacs" >&5
 echo "$as_me: error: cannot find emacs" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1395,14 +1396,14 @@ fi
 if test "${with_lispdir+set}" = set; then
   withval="$with_lispdir"
    lispdir="$withval"
-    echo "$as_me:1398: checking where .elc files should go" >&5
+    echo "$as_me:1399: checking where .elc files should go" >&5
 echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6
-    echo "$as_me:1400: result: $lispdir" >&5
+    echo "$as_me:1401: result: $lispdir" >&5
 echo "${ECHO_T}$lispdir" >&6
 else
 
   if test x${lispdir+set} != xset; then
-    echo "$as_me:1405: checking where .elc files should go" >&5
+    echo "$as_me:1406: checking where .elc files should go" >&5
 echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6
 if test "${am_cv_lispdir+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1414,10 +1415,39 @@ else
       am_cv_lispdir="$am_cv_lispdir/navi2ch"
 
 fi
-echo "$as_me:1417: result: $am_cv_lispdir" >&5
+echo "$as_me:1418: result: $am_cv_lispdir" >&5
 echo "${ECHO_T}$am_cv_lispdir" >&6
     lispdir="$am_cv_lispdir"
   fi
+
+fi;
+
+# Check whether --with-icondir or --without-icondir was given.
+if test "${with_icondir+set}" = set; then
+  withval="$with_icondir"
+   icondir="$withval"
+echo "$as_me:1429: checking where icon files should go" >&5
+echo $ECHO_N "checking where icon files should go... $ECHO_C" >&6
+echo "$as_me:1431: result: $icondir" >&5
+echo "${ECHO_T}$icondir" >&6
+else
+
+if test -z "${icondir}"; then
+  echo "$as_me:1436: checking where icon files should go" >&5
+echo $ECHO_N "checking where icon files should go... $ECHO_C" >&6
+if test "${cv_icondir+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+      cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))'`
+    if test -z "$cv_icondir"; then
+      cv_icondir='${datadir}/pixmaps/navi2ch'
+    fi
+
+fi
+echo "$as_me:1447: result: $cv_icondir" >&5
+echo "${ECHO_T}$cv_icondir" >&6
+  icondir="$cv_icondir"
+fi
 
 fi;
 
@@ -1531,7 +1561,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:1534: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:1564: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -1699,7 +1729,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:1702: error: ambiguous option: $1
+    { { echo "$as_me:1732: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1718,7 +1748,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:1721: error: unrecognized option: $1
+  -*) { { echo "$as_me:1751: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1756,7 +1786,7 @@ do
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "doc/Makefile" ) CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
   "icons/Makefile" ) CONFIG_FILES="$CONFIG_FILES icons/Makefile" ;;
-  *) { { echo "$as_me:1759: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:1789: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -1870,6 +1900,7 @@ s,@host_vendor@,$host_vendor,;t t
 s,@host_os@,$host_os,;t t
 s,@EMACS@,$EMACS,;t t
 s,@lispdir@,$lispdir,;t t
+s,@icondir@,$icondir,;t t
 CEOF
 
 EOF
@@ -1984,7 +2015,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1987: creating $ac_file" >&5
+    { echo "$as_me:2018: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -2002,7 +2033,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:2005: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:2036: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -2015,7 +2046,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:2018: error: cannot find input file: $f" >&5
+           { { echo "$as_me:2049: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;

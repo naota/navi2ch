@@ -51,4 +51,23 @@ fi
 
 AM_PATH_LISPDIR
 
+AC_ARG_WITH(icondir,
+[  --with-icondir=DIR      Override default icons directory],
+[ icondir="$withval"
+AC_MSG_CHECKING([where icon files should go])
+AC_MSG_RESULT([$icondir])],
+[
+if test -z "${icondir}"; then
+  AC_CACHE_CHECK([where icon files should go], [cv_icondir], [dnl
+    cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))'`
+    if test -z "$cv_icondir"; then
+      cv_icondir='${datadir}/pixmaps/navi2ch'
+    fi
+  ])
+  icondir="$cv_icondir"
+fi
+])
+
+AC_SUBST(icondir)
+
 AC_OUTPUT([Makefile doc/Makefile icons/Makefile])

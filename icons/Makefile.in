@@ -72,7 +72,7 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 lispdir = @lispdir@
 
-icondir = ${datadir}/pixmaps/navi2ch
+icondir = @icondir@
 icon_DATA = plugged.xpm unplugged.xpm
 
 EXTRA_DIST = $(icon_DATA)
