@@ -1,3 +1,9 @@
+2004-10-18  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-update): メッセージ調整。
+	(navi2ch-toggle-offline): 同上。
+	(navi2ch-lock): 同上。
+
 2004-10-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch*.el: checkdoc と目視でメッセージ調整、docstring 調整、コ

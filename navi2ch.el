@@ -461,7 +461,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 			   (buffer-string)))))
 	       (yes-or-no-p
 		(concat "navi2ch-update.el が更新されました"
-			(unless verified "(未検証)")
+			(unless verified " (未検証)")
 			"。保存して実行しますか? ")))
       (navi2ch-rename-file new navi2ch-update-file t)
       (load navi2ch-update-file))
@@ -473,8 +473,8 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   (navi2ch-net-cleanup)
   (setq navi2ch-offline (not navi2ch-offline))
   (message (if navi2ch-offline
-               "offline"
-             "online"))
+               "Now offline"
+             "Now online"))
   (navi2ch-set-mode-line-identification))
 
 (defun navi2ch-unload ()
@@ -493,7 +493,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   "`navi2ch-directory' をロックする。"
   (if (and navi2ch-use-lock
 	   (not (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name))
-	   (not (yes-or-no-p "ディレクトリのロックに失敗しました。危険を承知で続けますか?")))
+	   (not (yes-or-no-p "ディレクトリのロックに失敗しました。危険を承知で続けますか? ")))
       (error "Lock failed")))
 
 (defun navi2ch-unlock ()
