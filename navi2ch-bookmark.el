@@ -378,7 +378,8 @@ KEY は (concat URI ARTID) ")
       (let ((newsubject
 	     (let ((file (navi2ch-article-get-file-name board article))
 		   sep)
-	       (when (file-exists-p file)
+	       (when (and file
+			  (file-exists-p file))
                  ;; dat を 全部読まず、頭の1行だけ読むのはどうすれば?
 		 ;; 俺も知らないです:-)
 		 (with-temp-buffer

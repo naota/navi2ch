@@ -189,9 +189,19 @@
   (let* ((article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item))
 	 (point (point))
-	 (state (if (navi2ch-bm-fetched-article-p board article)
-		    'update
-		  (navi2ch-article-check-cached board article))))
+	 (state (cond ((string= (cdr (assq 'name board))
+				navi2ch-bm-board-name-from-file)
+					; navi2ch-article-check-cached で処理すべきか。
+		       (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
+			      'view)
+			     ((and item (file-exists-p item))
+			      'cache)
+			     (t
+			      nil)))
+		      ((navi2ch-bm-fetched-article-p board article)
+		       'update)
+		      (t
+		       (navi2ch-article-check-cached board article)))))
     (unless subject (setq subject navi2ch-bm-empty-subject))
     (insert (format "%3d %s%s %s%s%s\n"
                     number
@@ -253,8 +263,10 @@
          (board (navi2ch-bm-get-board-internal item))
          (buf (current-buffer)))
     (if article
-        (progn
-          (dolist (x (navi2ch-article-buffer-list))
+	(if (string= (cdr (assq 'name board))
+		     navi2ch-bm-board-name-from-file)
+	    (navi2ch-article-find-file item)
+	  (dolist (x (navi2ch-article-buffer-list))
             (when x
               (delete-windows-on x)))
 	  (when navi2ch-bm-stay-board-window
@@ -276,7 +288,7 @@
 		  (if (eq major-mode 'navi2ch-board-mode)
 		      (navi2ch-bm-insert-state item 'view 'seen)
 		    (navi2ch-bm-insert-state item 'view)))))))
-      (message "can't select this line!"))))
+      (message "Can't select this line!"))))
 
 (defun navi2ch-bm-show-url ()
   "板のurl を表示して、その url を見るか kill ring にコピーする"
@@ -350,15 +362,16 @@
       (unless (cdr list)
 	(setq navi2ch-bm-fetched-article-list
 	      (delq list navi2ch-bm-fetched-article-list))))))
-  
-      
+
 (defun navi2ch-bm-fetch-article (&optional max-line)
   (interactive "P")
   (let* ((item (navi2ch-bm-get-property-internal (point)))
          (board (navi2ch-bm-get-board-internal item))
          (article (navi2ch-bm-get-article-internal item))
          state)
-    (if article
+    (if (and article
+	     (not (string= (cdr (assq 'name board))
+			   navi2ch-bm-board-name-from-file)))
 	(progn
 	  (setq state (navi2ch-article-fetch-article board article))
 	  (when state
@@ -366,7 +379,7 @@
 	    (let ((buffer-read-only nil))
 	      (save-excursion
 		(navi2ch-bm-insert-state item 'update)))))
-      (message "can't select this line!"))))
+      (message "Can't select this line!"))))
 
 (defun navi2ch-bm-textize-article (&optional dir-or-file buffer)
   (interactive)

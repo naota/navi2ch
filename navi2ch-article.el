@@ -528,7 +528,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
 (defun navi2ch-article-view-article-from-file (file)
   "FILE からスレを見る。"
   (let* ((board (list (cons 'id "navi2ch")
-                      (cons 'name "From File")))
+                      (cons 'name navi2ch-bm-board-name-from-file)))
          (article (list (cons 'artid file)))
          (buf-name (navi2ch-article-get-buffer-name board article)))
     (if (get-buffer buf-name)

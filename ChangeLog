@@ -12,6 +12,21 @@
 	(navi2ch-article-goto-number-or-board): レス本文からもデフォルトの
 	レス番号を探すように。
 
+	navi2ch-article-find-file で読みこんだスレも bookmark に入れられる
+	ように。
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article): 
+	navi2ch-article-get-file-name が nil を返したときもエラーにならな
+	いように。
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
+	ファイルから読んだスレも V, C のマークがつくように。
+	(navi2ch-bm-select-article):
+	ファイルから読んだスレはファイルから読むように。
+	(navi2ch-bm-fetch-article): 
+	ファイルから読んだスレは fetch しないように。
+	* navi2ch-vars.el (navi2ch-bm-board-name-from-file): 新変数。
+	* navi2ch-article.el (navi2ch-article-view-article-from-file): 
+	navi2ch-bm-board-name-from-file を使うように。
+
 2002-05-16    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-through-ask): 1 か -1 を引き

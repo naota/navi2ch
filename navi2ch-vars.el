@@ -300,6 +300,11 @@ non-nil ならば expire する。"
   :type 'boolean
   :group 'navi2ch-board)
   
+(defcustom navi2ch-bm-board-name-from-file "From File"
+  "*ファイルから読み込んだスレを表わす板名。"
+  :type 'string
+  :group 'navi2ch-board)
+
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)
