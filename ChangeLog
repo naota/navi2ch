@@ -2,6 +2,7 @@
 
 	* navi2ch.el: eval-last-sexp, shell-command に advice 追加。
 	  セキュリティ対策。
+	* 上記 commit を取消し。
 
 2004-03-12  Nanashi San  <nanashi@users.sourceforge.net>
 
