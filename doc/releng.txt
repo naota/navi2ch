@@ -8,6 +8,11 @@ $Id$
   GNU Autoconf 2.53
   GNU Emacs 20.7
 
+* 作業用ディレクトリ
+  configure.in の変更を伴うので、作業用ディレクトリでは
+  % ./configure --enable-maintainer-mode
+  としておくこと。
+
 * リリース日時を宣言する
   適当に決める。リリースの一日前くらいから commit 禁止にする。
   (TBD: freeze しないでリリース用にブランチを切るのもいいかも。)
@@ -15,7 +20,7 @@ $Id$
 
 * β版のリリース
   configure.in の AM_INIT_AUTOMAKE を x.y.z-BETA に変えて
-  % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
+  % aclocal && autoconf && automake && make Makefiles && make dist elcdist
   する。tar 玉を http://navi2ch.sf.net/beta/ に置いて 2ch のスレで案内。
   (.elc の tar 玉には作成したホスト名・ユーザ名が埋め込まれるので注意。
   気になるなら compile farm で作業するとよい。
@@ -26,7 +31,7 @@ $Id$
 
 * リリース版作成
   configure.in の AM_INIT_AUTOMAKE を x.y.z に変えて ChangeLog を記載、
-  % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
+  % aclocal && autoconf && automake && make Makefiles && make dist elcdist
   する。(これで configure や navi2ch-version.el などが更新される。)
   うまくいったら
   % cvs commit -m 'bump version to x.y.z'
@@ -45,7 +50,7 @@ $Id$
 
 * バージョンを開発版に変更
   configure.in の AM_INIT_AUTOMAKE を x.y.z-DEV に変えて ChangeLog を記載、
-  % aclocal && autoconf && automake && ./configure && make navi2ch-version.el
-  して
+  % aclocal && autoconf && automake && make Makefiles && make
+  して (最後の make を忘れると BUILT_SOURCES が更新されない)
   % cvs commit -m 'bump version to x.y.z-DEV'
   で commit する。
