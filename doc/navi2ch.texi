@@ -800,8 +800,34 @@ GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 (setq navi2ch-mona-enable t)
 @end lisp
 
-以前のバージョン (Navi2ch 1.5.1 を含む) を使用している場合は、次のよう
-に書く必要がある。
+これですべての板でモナーフォントが使われる。
+
+特定の板でモナーフォントを使いたくないときは、
+さらに以下の例のように @code{navi2ch-mona-disable-board-list} に
+板の ID のリストを入れておく。
+
+@lisp
+(setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
+@end lisp
+
+逆に特定の板でのみモナーフォントを使いたいときは、
+@code{(setq navi2ch-mona-enable t)} に加えて
+以下の例のように @code{navi2ch-mona-enable-board-list} に
+板の ID のリストを入れておく。
+
+@lisp
+(setq navi2ch-mona-enable-board-list '("mona" "aastory" "kao"))
+@end lisp
+
+@c @code{navi2ch-mona-enable-board-list} がデフォルト値の @code{nil} のときは、
+@c @code{navi2ch-mona-disnable-board-list} で指定しなかった板ではモナーフォントが使われる。
+@c @code{navi2ch-mona-enable-board-list} に (@code{nil} 以外の) 何かを設定したときは、
+@c @code{navi2ch-mona-enable-board-list} と @code{navi2ch-mona-disnable-board-list} の
+@c どちらでも指定しなかった板ではモナーフォントは使われない。
+@c ;; ……うーん、もうちょっと簡潔に書けないものか。
+
+なお、Navi2ch 1.5.1 かそれ以前のバージョンでモナーフォントを使用したい場合は
+次のように書く必要がある。
 
 @lisp
 (when (eq window-system 'x)

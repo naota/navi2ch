@@ -129,12 +129,15 @@ XEmacs では明示的にフォントセットを作る必要がないので、
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-enable-board-list nil
-  "*モナーフォントで表示する板のリスト。"
+  "*モナーフォントで表示する板のリスト。
+nil のときは `navi2ch-mona-disable-board-list' で指定した板以外の
+すべての板でモナーフォントを使用する。"
   :type '(repeat (string :tag "板"))
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-disable-board-list nil
-  "*モナーフォントを使わない板のリスト。"
+  "*モナーフォントを使わない板のリスト。
+`navi2ch-mona-enable-board-list' よりも優先される。"
   :type '(repeat (string :tag "板"))
   :group 'navi2ch-mona)
 
@@ -285,9 +288,9 @@ nil is returned.  Otherwise the associated face object is returned."
 (defun navi2ch-mona-arrange-message ()
   "モナーフォントを使う板ならそのための関数を呼ぶ。"
   (let ((id (cdr (assq 'id navi2ch-article-current-board))))
-    (when (or (member id navi2ch-mona-enable-board-list)
-	      (and (not (member id navi2ch-mona-disable-board-list))
-		   navi2ch-mona-enable))
+    (when (and (or (not navi2ch-mona-enable-board-list)
+		   (member id navi2ch-mona-enable-board-list))
+	       (not (member id navi2ch-mona-disable-board-list)))
       (navi2ch-mona-put-face))
     (when navi2ch-mona-pack-space-p
       (navi2ch-mona-pack-space))))

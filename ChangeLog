@@ -1,5 +1,15 @@
 2002-07-19  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-mona.el (navi2ch-mona-arrange-message):
+	特定の板のみでモナーフォントを使うための設定がうまく動いてなかった
+	ので、修正。
+	navi2ch-mona-enable-board-list が nil のときはモナーフォントを使わ
+	ないのをデフォルトに。
+	(navi2ch-mona-enable-board-list): 上記に追随して docstring に追記。
+	(navi2ch-mona-disable-board-list): 同上。
+
+	* NEWS: 上記について (ちょっと手抜きな) 追加。
+
 	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-to-url): nofirst を指
 	定しても start が 1 の ときは &NOFIRST=TRUE をつけないように。
 

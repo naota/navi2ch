@@ -58,7 +58,7 @@ BBS-P-FUNC(URI):
     URI がその BBS のものならば non-nil を返す。
 
 SUBJECT-CALLBACK-FUNC():
-    subject.txt を取得するときにnavi2ch-net-update-file で使われるコー
+    subject.txt を取得するときに navi2ch-net-update-file で使われるコー
     ルバック関数
 
 ARTICLE-UPDATE-FUNC(BOARD ARTICLE):
