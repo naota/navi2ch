@@ -435,8 +435,13 @@ state はあぼーんされてれば aborn というシンボル。"
 	      (let ((err-msg (decode-coding-string
 			      data navi2ch-coding-system)))
 		(message "error! %s" err-msg)
-		(when (string-match "過去ログ倉庫で発見" err-msg)
-		  'kako))))))))))
+		(cond ((string-match "過去ログ倉庫で発見" err-msg)
+		       'kako)
+		      ((and (string-match "html化待ち" err-msg)
+			    (string-match "/read\\.cgi/" url))
+		       (setq url (replace-match "/offlaw.cgi/" t nil url))
+		       (navi2ch-net-update-file-with-readcgi
+			url file time diff))))))))))))
 
 ;; from Emacs/W3
 (defconst navi2ch-net-url-unreserved-chars

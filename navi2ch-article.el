@@ -581,8 +581,10 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
            state)
       (when first
         (setq article (navi2ch-article-load-info)))
-      (if (and (cdr (assq 'kako article))
-	       (not (y-or-n-p "re-sync kako article?")))
+      (if (or navi2ch-offline
+	      (and (cdr (assq 'kako article))
+		   (file-exists-p file)
+		   (not (y-or-n-p "re-sync kako article?"))))
 	  (setq navi2ch-article-current-article article)
 	(let ((ret (navi2ch-article-update-file board article force)))
 	  (setq article (nth 0 ret)

@@ -1,3 +1,15 @@
+2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-sync): オフラインの時やファ
+	イルが存在しない場合は「re-sync kako article?」と聞いて来なくした。
+
+	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi):
+	offlaw.cgi を使えるようにしてみた。offlaw.cgi はログが temp にある
+	時以外は HTTP status 500 を返すので、read.cgi が「html化待ち」を返
+	した時のみ呼び出し、記事に kako のようなマークも付けない。
+	既に取得済みのログについては not updated になるので、２ちゃんねる
+	への負荷は高くならないと思うが大丈夫だろうか。
+
 2002-01-15  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
