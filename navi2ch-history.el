@@ -189,7 +189,7 @@ key は (concat uri artid)。
 	    (navi2ch-bm-renumber))
 	(message "Can't select this line!")))))
 
-(defun navi2ch-history-delete-mark-articlle ()
+(defun navi2ch-history-delete-mark-article ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-history-delete))
 
