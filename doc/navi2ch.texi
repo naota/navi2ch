@@ -1276,13 +1276,17 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item @key{ESC} t
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
+
+@item C-c C-a ?
+@code{navi2ch-message-insert-aa} アスキーアートのリストを表示して入力
 @end table
 
 @node Message Mode AA List
 @appendixsec Message モードでのアスキーアート一覧
 
 Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
-ねる特有のアスキーアートを入力することができる。
+ねる特有のアスキーアートを入力することができる。@kbd{C-c C-a ?} を押す
+と、アスキーアートのリストを表示することができる。
 
 (ホントは半角カナ (って何ですか?) が使われてるんだけど、色々不都合があ
 るのでここでは全角ね。)
