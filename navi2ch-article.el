@@ -911,7 +911,12 @@ state はあぼーんされてれば aborn というシンボル。
                       (or (navi2ch-board-url-to-board prop)
                           (navi2ch-article-url-to-article prop))
                       (not browse-p))
-                 (navi2ch-goto-url prop)
+		 (progn
+		   (let ((buffer-read-only nil))
+		     (navi2ch-change-text-property (point)
+						   'help-echo
+						   (function navi2ch-article-help-echo)))
+		   (navi2ch-goto-url prop))
                (navi2ch-browse-url-internal prop))))
           ((setq prop (get-text-property (point) 'content))
            (let ((default-filename (file-name-nondirectory
@@ -1453,12 +1458,17 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-fetch-link (&optional force)
   (interactive)
   (let ((url (get-text-property (point) 'url)))
-    (when url
-      (if (navi2ch-2ch-url-p url)
-	  (let ((article (navi2ch-article-url-to-article url))
-		(board (navi2ch-board-url-to-board url)))
-	    (and (navi2ch-article-fetch-article board article force)
-		 (navi2ch-bm-remember-fetched-article board article)))))))
+    (and url
+	 (navi2ch-2ch-url-p url)
+	 (let ((article (navi2ch-article-url-to-article url))
+	       (board (navi2ch-board-url-to-board url)))
+	   (when article
+	     (let ((buffer-read-only nil))
+	       (navi2ch-change-text-property (point)
+					     'help-echo
+					     (function navi2ch-article-help-echo)))
+	     (and (navi2ch-article-fetch-article board article force)
+		  (navi2ch-bm-remember-fetched-article board article)))))))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)

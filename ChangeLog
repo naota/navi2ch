@@ -1,3 +1,12 @@
+2002-08-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-select-current-link):
+	外部ブラウザを使わずにリンクに飛ぶときに help-echo プロパティのキャッ
+	シュをクリアするように。
+	(navi2ch-article-fetch-link): fetch 前に help-echo プロパティのキャッ
+	シュをクリアするように。
+	リンク先が板のときは fetch しないように。
+
 2002-08-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	link を追いかけた結果をキャッシュするようにした。
