@@ -12,6 +12,7 @@
 @afourpaper
 @end iftex
 @finalout
+@footnotestyle end
 @comment %**end of header
 
 @dircategory 2ch
