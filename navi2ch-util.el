@@ -315,11 +315,13 @@ return new alist whose car is the new pair and cdr is ALIST.
   "今の buffer で PROGRAM を呼んで変更する"
   (apply 'call-process-region (point-min) (point-max) program t t nil args))
 
-(defun navi2ch-alist-list-to-alist (list key1 key2)
+(defun navi2ch-alist-list-to-alist (list key1 &optional key2)
   (mapcar
    (lambda (x)
      (cons (cdr (assq key1 x))
-	   (cdr (assq key2 x))))
+	   (if key2
+	       (cdr (assq key2 x))
+	     x)))
    list))
 
 (defun navi2ch-write-region (begin end filename)

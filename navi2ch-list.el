@@ -77,6 +77,11 @@
 
 (defvar navi2ch-list-navi2ch-category-alist nil)
 
+(defvar navi2ch-list-state-alist
+  '((add "A" navi2ch-list-add-board-name-face)
+    (change "C" navi2ch-list-change-board-name-face)
+    (nil " " navi2ch-list-board-name-face)))
+
 ;; add hook
 (add-hook 'navi2ch-save-status-hook 'navi2ch-list-save-info)
 
@@ -189,13 +194,20 @@
 
 (defun navi2ch-list-insert-board-names-subr (list)
   (let ((prev (point))
-	(indent (make-string navi2ch-list-indent-width ?\ )))
-    (dolist (elt list)
-      (insert indent (cdr (assq 'name elt)) "\n")
-      (set-text-properties prev (1- (point))
-			   (list 'mouse-face 'highlight
-				 'face 'navi2ch-list-board-name-face))
-      (put-text-property prev (point) 'board elt)
+	(indent (make-string (1- navi2ch-list-indent-width) ?\ ))
+	(change (cdr (assq 'change navi2ch-list-current-list))))
+    (dolist (board list)
+      (let ((state (cdr (assq (cdr (assoc (cdr (assq 'id board))
+					  change))
+			      navi2ch-list-state-alist))))
+	(insert (car state)
+		indent
+		(cdr (assq 'name board)) "\n")
+	(set-text-properties
+	 prev (1- (point))
+	 (list 'mouse-face 'highlight
+	       'face (cadr state))))
+      (put-text-property prev (point) 'board board)
       (setq prev (point)))))
 
 (defun navi2ch-list-insert-board-names (list)
@@ -350,6 +362,45 @@
     (save-excursion
       (navi2ch-list-sync nil t))))
 
+(defun navi2ch-list-get-changed-status (category-list old-category-list)
+  "現在の板の一覧 CATEGORY-LIST と以前の板の一覧 OLD-CATEGORY-LIST を
+比べて、追加、変更のあった板を 
+'((add . added-list)
+  (change . changed-list))
+の alist にして返す。
+added-list は '(board-id ...) な list。
+changed-list は '((board-id . board) ...) な alist。"
+  (let ((list (navi2ch-alist-list-to-alist
+	       (navi2ch-list-get-board-name-list category-list)
+	       'id))
+	(old-list (navi2ch-alist-list-to-alist
+ 		   (navi2ch-list-get-board-name-list old-category-list)
+		   'id))
+	added-list changed-list)
+    (dolist (new list)
+      (let ((old (assoc (car new) old-list)))
+	(if old
+	    (unless (string= (cdr (assq 'uri (cdr new)))
+			     (cdr (assq 'uri (cdr old))))
+	      (push new changed-list))
+	  (push (car new) added-list))))
+    (list (cons 'add added-list)
+ 	  (cons 'change changed-list))))
+
+(defun navi2ch-list-apply-changed-status (changed-status)
+  (when changed-status
+    (setq navi2ch-list-current-list
+	  (navi2ch-put-alist
+	   'change
+	   (append
+	    (mapcar (lambda (id)
+		      (cons id 'add))
+		    (cdr (assq 'add changed-status)))
+	    (mapcar (lambda (pair)
+		      (cons (car pair) 'change))
+		    (cdr (assq 'change changed-status))))
+	   navi2ch-list-current-list))))
+
 (defun navi2ch-list-sync (&optional force first)
   (interactive "P")
   (save-excursion
@@ -357,9 +408,12 @@
 	  (navi2ch-net-force-update (or navi2ch-net-force-update
 					force))
 	  (file (navi2ch-list-get-file-name))
-	  updated)
-      (when first
-	(navi2ch-list-load-info))
+	  updated old-list)
+      (if first
+	  (progn
+	    (navi2ch-list-load-info)
+	    (setq old-list (navi2ch-list-get-category-list file)))
+	(setq old-list navi2ch-list-category-list))
       (unless (or navi2ch-offline
 		  (and first
 		       (not navi2ch-list-sync-update-on-boot)
@@ -378,6 +432,13 @@
 			   (navi2ch-list-get-global-bookmark-category)
 			   (navi2ch-list-get-etc-category)))
 	       (navi2ch-list-get-category-list file)))
+	
+	(when updated
+	  (navi2ch-list-apply-changed-status
+	   (navi2ch-list-get-changed-status
+	    (navi2ch-list-get-normal-category-list navi2ch-list-category-list)
+	    (navi2ch-list-get-normal-category-list old-list))))
+	
 	(setq navi2ch-mode-line-identification "%12b")
 	(navi2ch-set-mode-line-identification)
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
@@ -500,7 +561,8 @@
     (navi2ch-save-info
      (navi2ch-list-get-file-name "list.info")
      (list (assq 'bookmark navi2ch-list-current-list)
-	   (assq 'category navi2ch-list-current-list)))))
+	   (assq 'category navi2ch-list-current-list)
+	   (assq 'change navi2ch-list-current-list)))))
 
 (defun navi2ch-list-load-info ()
   (setq navi2ch-list-current-list
@@ -516,7 +578,7 @@
 	(cdr (assq 'child (cdr
 			   (assoc category
 				  navi2ch-list-category-list))))))))
-  
+
 ;;; bookmark mode
 (defvar navi2ch-list-bookmark-mode nil)
 (defvar navi2ch-list-bookmark-mode-map nil)

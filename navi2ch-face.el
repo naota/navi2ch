@@ -44,6 +44,18 @@
   "板名の face"
   :group 'navi2ch-face)
 
+(defface navi2ch-list-add-board-name-face
+  '((((class color) (background light)) (:foreground "FireBrick" :bold t))
+    (((class color) (background dark)) (:foreground "cyan" :bold t)))
+  "追加された板名の face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-list-change-board-name-face
+  '((((class color) (background light)) (:foreground "DarkOliveGreen" :bold t))
+    (((class color) (background dark)) (:foreground "GreenYellow" :bold t)))
+  "変更された板名の face"
+  :group 'navi2ch-face)
+
 (defface navi2ch-bm-unread-face
   '((((class color) (background light)) (:foreground "DarkOliveGreen"))
     (((class color) (background dark)) (:foreground "GreenYellow")))
