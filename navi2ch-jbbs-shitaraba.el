@@ -60,14 +60,23 @@
 			 navi2ch-js-func-alist
 			 navi2ch-js-variable-alist)
 
+(defvar navi2ch-js-host-list '("jbbs.shitaraba.com"
+			       "jbbs.shitaraba.net"
+			       "jbbs.livedoor.com"
+			       "jbbs.livedoor.jp"))
+
 ;;-------------
 
 (defun navi2ch-js-p (uri)
-  "URI がJBBS＠したらばなら non-nilを返す。"
-  (or (string-match "http://jbbs.shitaraba.com/" uri)
-      (string-match "http://jbbs.shitaraba.net/" uri)
-      (string-match "http://jbbs.livedoor.com/" uri)
-      (string-match "http://jbbs.livedoor.jp/" uri)))
+  "URI がJBBS＠したらばなら non-nil を返す。"
+  (let ((list navi2ch-js-host-list)
+	host result)
+    (while (and list (not result))
+      (setq host (car list))
+      (setq list (cdr list))
+      (setq result (string-match (format "^http://%s" (regexp-quote host))
+				 uri)))
+    result))
 
 (navi2ch-multibbs-defcallback navi2ch-js-subject-callback (jbbs-shitaraba)
   "subject.txt を取得するとき navi2ch-net-update-file

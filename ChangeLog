@@ -1,5 +1,8 @@
 2004-10-06  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-host-list): 新変数。
+	(navi2ch-js-p): 上記変数を使うように。
+
 	* navi2ch-history.el (navi2ch-history-cut-mark-article): 新関数。
 	(navi2ch-history-mode-map): 上記関数をバインド。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/550
