@@ -1,3 +1,8 @@
+2004-08-15  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-js-livedoor-move.el (navi2ch-js-livedoor-move): 新ファイ
+	ル。
+
 2004-06-05  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-logo.el (navi2ch-logo-update): APEL の put-alist を使わ
