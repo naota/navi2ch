@@ -424,7 +424,8 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
   (goto-char (point-min))
   (let ((case-fold-search t))
     (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
-      (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))))
+      (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))
+		     nil t))))
 
 (defsubst navi2ch-replace-html-tag-with-temp-buffer (str)
   (with-temp-buffer
