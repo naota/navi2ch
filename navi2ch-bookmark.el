@@ -275,7 +275,7 @@ KEY は (concat URI ARTID) ")
 	  (navi2ch-bookmark-delete-subr))
       (message "Can't select this line!"))))
 
-(defun 'navi2ch-bookmark-cut-mark-article ()
+(defun navi2ch-bookmark-cut-mark-article ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bookmark-cut))
 
