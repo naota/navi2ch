@@ -528,14 +528,6 @@ base64デコードすべき内容がない場合はエラーになる。"
 	  (setq str (buffer-string))))
       (insert str))))
 
-(defun navi2ch-toggle-offline ()
-  (interactive)
-  (setq navi2ch-offline (not navi2ch-offline))
-  (message (if navi2ch-offline
-               "offline"
-             "online"))
-  (navi2ch-set-mode-line-identification))
-
 (defun navi2ch-url-to-host (url)
   (when (and url (string-match "http://\\([^/]+\\)" url))
     (match-string 1 url)))

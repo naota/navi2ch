@@ -347,5 +347,14 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (if (file-exists-p new)
 	(delete-file new))))
 
+(defun navi2ch-toggle-offline ()
+  (interactive)
+  (navi2ch-net-cleanup)
+  (setq navi2ch-offline (not navi2ch-offline))
+  (message (if navi2ch-offline
+               "offline"
+             "online"))
+  (navi2ch-set-mode-line-identification))
+
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

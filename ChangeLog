@@ -1,3 +1,10 @@
+2002-06-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-toggle-offline): navi2ch-util.el から移動。
+	navi2ch-net-cleanup を呼ぶようにした。
+	* navi2ch-util.el (navi2ch-toggle-offline): navi2ch.el へ移動。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/95
+
 2002-06-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date): 
