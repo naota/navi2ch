@@ -1,3 +1,10 @@
+2002-12-19  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch.texi (Updated Flag): 新スレフラグを追加。
+	(Article Mode): レスの検索を追加。
+	(Message Mode): 「送信控え」追加。
+	(Article Mode Key Bindings): "?" を追加。
+
 2002-12-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Start Navi2ch): M-x に @key{RET} を追加。

@@ -130,6 +130,10 @@ Bookmark モード
 * Operating Bookmark::          ブックマークを操作する
 * Browsing Bookmark::           ブックマークを閲覧する
 
+Message モード
+
+* Saving Send Log::             送信控えをとる
+
 カスタマイズ
 
 * Emacs Customization Interface::  Emacs のカスタマイズインターフェイス
@@ -465,9 +469,12 @@ File}.
 更新フラグの意味は以下のとおり。
 
 @table @code
+@item %
+新しい、以前その板を開いたときにはなかったスレ。
+
 @item +
 以前その板を開いてから更新されたスレ。@kbd{+} を押すと、更新されたスレ
-のみの一覧を表示できる。
+と新しいスレのみの一覧を表示できる。
 
 @item =
 以前その板を開いてから更新されていないスレ。その他の更新フラグのスレを
@@ -706,6 +713,12 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 レスを書きたい時は @kbd{w} (age で書く時) または @kbd{W} (sage で書く
 時) を押す。
 
+@kbd{?} を押すと、レスを検索することができる。
+名前 (name)、メール (mail)、日付 (date)、ID (id)、本文 (body) から
+検索条件を選び、検索したい文字列を入力する。
+パーズ済みのメッセージのみを検索対象とするので、あらかじめ
+検索したい範囲のメッセージを表示しておくこと。
+
 @node Message Mode
 @section Message モード
 
@@ -744,6 +757,30 @@ List}) したりして、思う存分煽り文句を書いたら、@kbd{C-c C-c} で書き込
 書き込み中に他のスレを見るなどで別な (Navi2ch の)
 バッファに移動したときは、@kbd{C-c C-o}
 で元の「上のバッファが書き込むスレ、下のバッファでレスを書く」の状態に戻せる。
+
+@menu
+* Saving Send Log::             送信控えをとる
+@end menu
+
+@node Saving Send Log
+@subsection 送信控えをとる
+
+自分の書いたレスを保存しておくことができる。
+ただし、デフォルトでは控えをとらない。
+
+控えをとるには、カスタマイズインターフェイス
+(@ref{Emacs Customization Interface}) を利用して
+@code{navi2ch-message-save-sendlog} を non-nil にするか、
+初期化ファイル (@ref{Init File}) に以下のように書いておく。
+
+@lisp
+(setq navi2ch-message-save-sendlog t)
+(add-to-list 'navi2ch-list-navi2ch-category-alist
+              navi2ch-message-sendlog-board)
+@end lisp
+
+このようにすると、「Navi2ch」カテゴリに「送信控え」板が追加される。
+@xref{List Mode}.
 
 @node Customize
 @chapter カスタマイズ
@@ -1339,6 +1376,9 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item e
 @code{navi2ch-article-textize-article} スレをテキストで保存
+
+@item ?
+@code{navi2ch-article-search} レスを検索
 
 @end table
 
