@@ -55,10 +55,16 @@
   (interactive "P")
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
+    (if arg (setq navi2ch-offline (not navi2ch-offline)))
+    (if (and navi2ch-update-url
+	     (not (string= navi2ch-update-url ""))
+	     (not navi2ch-offline))
+	(navi2ch-net-update-file navi2ch-update-url navi2ch-update-file))
+    (when (file-exists-p navi2ch-update-file)
+      (load-file navi2ch-update-file))
     (when (file-exists-p navi2ch-init-file)
       (load-file navi2ch-init-file))
     (add-hook 'kill-emacs-hook 'navi2ch-save-status)
-    (if arg (setq navi2ch-offline (not navi2ch-offline)))
     (run-hooks 'navi2ch-load-status-hook)
     (setq navi2ch-init t)
     (run-hooks 'navi2ch-hook))

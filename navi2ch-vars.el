@@ -274,7 +274,6 @@ nil ならば制限しない"
   :type 'string
   :group 'navi2ch-board)
 
-
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)
@@ -639,6 +638,26 @@ non-nil なら付加する。"
   "*gunzip を呼出すときの引数。"
   :type '(repeat :tag "引数" string)
   :group 'navi2ch-net)
+
+;;; update variables
+(defcustom navi2ch-update-file (expand-file-name "navi2ch-update.el"
+						 navi2ch-directory)
+  "*Navi2ch を自動更新するファイル"
+  :type 'string
+  :group 'navi2ch)
+
+(defcustom navi2ch-update-base-url
+  "http://navi2ch.sourceforge.net/autoupdate/"
+  "*`navi2ch-update-file' がある場所の BASE URL"
+  :type 'string
+  :group 'navi2ch)
+
+(defcustom navi2ch-update-url (concat navi2ch-update-base-url
+				      (file-name-nondirectory 
+				       navi2ch-update-file))
+  "*`navi2ch-update-file' の URL"
+  :type 'string
+  :group 'navi2ch)
 
 ;;; hooks
 (defvar navi2ch-hook nil)
