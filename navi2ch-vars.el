@@ -495,6 +495,14 @@ ask なら明示的に移動する時以外なら質問する
 			navi2ch-article-through-ask-last-command-p))
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-parse-field-list '(data name mail)
+  "*メッセージのフィールドのうち、パーズ対象にするもののリスト。
+遅くてもいいんなら '(data mail name) とかするといいかも"
+  :type '(set (const :tag "記事" data)
+              (const :tag "メール" mail)
+              (const :tag "名前" name))
+  :group 'navi2ch-article)
+
 (defcustom navi2ch-article-goto-number-recenter t
   "*non-nil なら、goto-number したあと recenter する。"
   :type 'boolean
@@ -689,8 +697,10 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
 
 (defcustom navi2ch-article-message-filter-list
   '(navi2ch-article-message-filter-by-name
+    navi2ch-article-message-filter-by-mail
     navi2ch-article-message-filter-by-id
-    navi2ch-article-message-filter-by-message)
+    navi2ch-article-message-filter-by-message
+    navi2ch-article-message-filter-by-subject)
   "*レスをフィルタするための関数のリスト。
 リストの member となる関数としては、
 レスの alist を引き数に取り、
@@ -700,7 +710,8 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
 (ちょっと冗長な) 関数の例。
 
 (defun my-navi2ch-article-message-filter-hoge (alist)
-  (let ((name (cdr (assq 'name alist)))
+  (let ((number (cdr (assq 'number alist)))
+	(name (cdr (assq 'name alist)))
 	(mail (cdr (assq 'mail alist)))
 	(date (cdr (assq 'date alist)))
 	(message (cdr (assq 'data alist))))
@@ -711,42 +722,441 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-name-alist nil
-  "*レスをフィルタする名前と、置き換える文字列の alist。
-置き換える文字列の代わりに hide や important を指定できる。
+  "*レスをフィルタする名前と、フィルタ処理の alist。
+
+名前には文字列か、
+(文字列 シンボル)のリスト(拡張形式)を指定する。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法でレスを検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致(空白と改行の存在を無視し、
+		     英数記号の全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+フィルタ処理には、文字列・シンボル・数字のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+名前を拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'等を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数字を指定すると、レスの得点にその点数を加え、フィルタ処理を続行する。
+
 例えば下記の値を設定すると、
-名前欄に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
-名前欄に「ホゲ」が含まれているとレスが隠される。
+名前に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
+名前に「ホゲ」が含まれているとレスが隠される。
 
 '((\"ふが\" . \"あぼぼーん\")
-  (\"ホゲ\" . hide))"
-  :type '(repeat (cons (string :tag "名前欄")
-		       (string :tag "置換後")))
+  ((\"ホゲ\" S) . hide))"
+  :type '(repeat (cons (choice (string :tag "名前")
+			       (choice :tag "(拡張形式)"
+				       (list :tag "部分一致"
+					     (string :tag "名前")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value S)
+						     (const :tag "しない"
+							    :value s)))
+				       (list :tag "完全一致"
+					     (string :tag "名前")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value E)
+						     (const :tag "しない"
+							    :value e)))
+				       (list :tag "あいまい一致"
+					     (string :tag "名前")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value F)
+						     (const :tag "しない"
+							    :value f)))
+				       (list :tag "正規表現"
+					     (regexp :tag "名前")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value R)
+						     (const :tag "しない"
+							    :value r)))))
+		       (choice (string :tag "置き換える"
+				       :value "あぼぼーん")
+			       (const :tag "隠す"
+				      :value hide)
+			       (const :tag "ブックマークに登録する"
+				      :value important)
+			       (number :tag "点数を加える"
+				       :value 0))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-message-alist nil
-  "*レスをフィルタするためのレス本文中の文字列と、置き換える文字列の alist。
-置き換える文字列の代わりに hide や important を指定できる。
+  "*レスをフィルタするためのレス本文の内容と、フィルタ処理の alist。
+
+レス本文の内容には文字列か、
+(文字列 シンボル)のリスト(拡張形式)を指定する。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法でレスを検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致(空白と改行の存在を無視し、
+		     英数記号の全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+フィルタ処理には、文字列・シンボル・数字のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+レス本文の内容を拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'等を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数字を指定すると、レスの得点にその点数を加え、フィルタ処理を続行する。
+
 例えば下記の値を設定すると、
-レス本文中に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
-レス本文中に「ホゲ」が含まれているとレスが隠される。
+レス本文に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
+レス本文に「ホゲ」が含まれているとレスが隠される。
 
 '((\"ふが\" . \"あぼぼーん\")
-  (\"ホゲ\" . hide))"
-  :type '(repeat (cons (string :tag "本文中")
-		       (string :tag "置換後")))
+  ((\"ホゲ\" S) . hide))"
+  :type '(repeat (cons (choice (string :tag "本文")
+			       (choice :tag "(拡張形式)"
+				       (list :tag "部分一致"
+					     (string :tag "本文")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value S)
+						     (const :tag "しない"
+							    :value s)))
+				       (list :tag "完全一致"
+					     (string :tag "本文")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value E)
+						     (const :tag "しない"
+							    :value e)))
+				       (list :tag "あいまい一致"
+					     (string :tag "本文")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value F)
+						     (const :tag "しない"
+							    :value f)))
+				       (list :tag "正規表現"
+					     (regexp :tag "本文")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value R)
+						     (const :tag "しない"
+							    :value r)))))
+		       (choice (string :tag "置き換える"
+				       :value "あぼぼーん")
+			       (const :tag "隠す"
+				      :value hide)
+			       (const :tag "ブックマークに登録する"
+				      :value important)
+			       (number :tag "点数を加える"
+				       :value 0))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-id-alist nil
-  "*レスをフィルタするための ID 中の文字列と、置き換える文字列の alist。
-置き換える文字列の代わりに hide や important を指定できる。
+  "*レスをフィルタする ID と、フィルタ処理の alist。
+
+ID には文字列か、
+(文字列 シンボル)のリスト(拡張形式)を指定する。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法でレスを検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致(空白と改行の存在を無視し、
+		     英数記号の全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+フィルタ処理には、文字列・シンボル・数字のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+ID を拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'等を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数字を指定すると、レスの得点にその点数を加え、フィルタ処理を続行する。
+
 例えば下記の値を設定すると、
 ID が「FUga1234」だとレスが「あぼぼーん」に置き換わり、
 ID が「hoGE0987」だとレスが隠される。
 
-'((\"FUga1234\" . \"あぼぼーん\")
-  (\"hoGE0987\" . hide))"
-  :type '(repeat (cons (string :tag "ID")
-		       (string :tag "置換後")))
+'(((\"FUga1234\" E) . \"あぼぼーん\")
+  ((\"hoGE0987\" E) . hide))"
+  :type '(repeat (cons (choice (string :tag "ID")
+			       (choice :tag "(拡張形式)"
+				       (list :tag "部分一致"
+					     (string :tag "ID")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value S)
+						     (const :tag "しない"
+							    :value s)))
+				       (list :tag "完全一致"
+					     (string :tag "ID")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value E)
+						     (const :tag "しない"
+							    :value e)))
+				       (list :tag "あいまい一致"
+					     (string :tag "ID")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value F)
+						     (const :tag "しない"
+							    :value f)))
+				       (list :tag "正規表現"
+					     (regexp :tag "ID")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value R)
+						     (const :tag "しない"
+							    :value r)))))
+		       (choice (string :tag "置き換える"
+				       :value "あぼぼーん")
+			       (const :tag "隠す"
+				      :value hide)
+			       (const :tag "ブックマークに登録する"
+				      :value important)
+			       (number :tag "点数を加える"
+				       :value 0))))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-by-mail-alist nil
+  "*レスをフィルタするためのメール欄の内容と、フィルタ処理の alist。
+
+メール欄の内容には文字列か、
+(文字列 シンボル)のリスト(拡張形式)を指定する。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法でレスを検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致(空白と改行の存在を無視し、
+		     英数記号の全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+フィルタ処理には、文字列・シンボル・数字のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+メール欄の内容を拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'等を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数字を指定すると、レスの得点にその点数を加え、フィルタ処理を続行する。
+
+例えば下記の値を設定すると、
+メール欄に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
+メール欄に「ホゲ」が含まれているとレスが隠される。
+
+'((\"ふが\" . \"あぼぼーん\")
+  ((\"ホゲ\" S) . hide))"
+  :type '(repeat (cons (choice (string :tag "メール欄")
+			       (choice :tag "(拡張形式)"
+				       (list :tag "部分一致"
+					     (string :tag "メール欄")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value S)
+						     (const :tag "しない"
+							    :value s)))
+				       (list :tag "完全一致"
+					     (string :tag "メール欄")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value E)
+						     (const :tag "しない"
+							    :value e)))
+				       (list :tag "あいまい一致"
+					     (string :tag "メール欄")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value F)
+						     (const :tag "しない"
+							    :value f)))
+				       (list :tag "正規表現"
+					     (regexp :tag "メール欄")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value R)
+						     (const :tag "しない"
+							    :value r)))))
+		       (choice (string :tag "置き換える"
+				       :value "あぼぼーん")
+			       (const :tag "隠す"
+				      :value hide)
+			       (const :tag "ブックマークに登録する"
+				      :value important)
+			       (number :tag "点数を加える"
+				       :value 0))))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-by-subject-alist nil
+  "*レスをフィルタするためのスレのタイトルと、フィルタ処理の alist。
+
+スレのタイトルには文字列か、
+(文字列 シンボル)のリスト(拡張形式)を指定する。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法でレスを検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致(空白と改行の存在を無視し、
+		     英数記号の全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+フィルタ処理には、文字列・シンボル・数字のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+スレのタイトルを拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'等を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数字を指定すると、レスの得点にその点数を加え、フィルタ処理を続行する。
+
+例えば下記の値を設定すると、
+スレのタイトルに「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
+スレのタイトルに「ホゲ」が含まれているとレスが隠される。
+
+'((\"ふが\" . \"あぼぼーん\")
+  ((\"ホゲ\" S) . hide))"
+  :type '(repeat (cons (choice (string :tag "スレのタイトル")
+			       (choice :tag "(拡張形式)"
+				       (list :tag "部分一致"
+					     (string :tag "スレのタイトル")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value S)
+						     (const :tag "しない"
+							    :value s)))
+				       (list :tag "完全一致"
+					     (string :tag "スレのタイトル")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value E)
+						     (const :tag "しない"
+							    :value e)))
+				       (list :tag "あいまい一致"
+					     (string :tag "スレのタイトル")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value F)
+						     (const :tag "しない"
+							    :value f)))
+				       (list :tag "正規表現"
+					     (regexp :tag "スレのタイトル")
+					     (choice :tag "大文字と小文字の区別"
+						     (const :tag "する"
+							    :value R)
+						     (const :tag "しない"
+							    :value r)))))
+		       (choice (string :tag "置き換える"
+				       :value "あぼぼーん")
+			       (const :tag "隠す"
+				      :value hide)
+			       (const :tag "ブックマークに登録する"
+				      :value important)
+			       (number :tag "点数を加える"
+				       :value 0))))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-auto-activate-message-filter t
+  "*non-nil なら、フィルタ機能をデフォルトで on にする。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-use-message-filter-cache t
+  "*non-nil なら、フィルタ処理でキャッシュを利用する。
+キャッシュは、フィルタのアンドゥ情報の保持も兼ねる。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-replace-below nil
+  "*フィルタによってレスを置き換えるための得点のしきい値と、
+置き換える文字列。
+得点がこの値より小さいとレスが置き換わる。
+
+例えば下記の値を設定すると、
+レスの得点が-1000より小さいとレスが「あぼぼーん」に置き換わる。
+
+'(-1000 . \"あぼぼーん\")"
+  :type '(choice (const :tag "off"
+			:value nil)
+		 (cons (number :tag "しきい値")
+		       (string :tag "置換後"
+			       :value"あぼぼーん")))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-hide-below nil
+  "*フィルタによってレスを隠すための得点のしきい値。
+得点がこの値より小さいとレスが隠される。"
+  :type '(choice (const :tag "off"
+			:value nil)
+		 (number :tag "しきい値"))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-add-important-above nil
+  "*フィルタによってレスをブックマークに登録するための得点のしきい値。
+得点がこの値より大きいとレスがブックマークに登録される。"
+  :type '(choice (const :tag "off"
+			:value nil)
+		 (number :tag "しきい値"))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-save-info-wrapper-func nil

@@ -1045,5 +1045,21 @@ This function is a cutdown version of cl-seq's one."
 	       (setq list1 (cons x list1))))
 	   list1)))
 
+(defun navi2ch-set-difference (list1 list2)
+  "Combine LIST1 and LIST2.
+This function is a cutdown version of cl-seq's one."
+  (if (or (null list1) (null list2)) list1
+    (let ((res nil))
+      (dolist (x list1)
+	(unless (member x list2)
+	  (setq res (cons x res))))
+      res)))
+
+(defun navi2ch-expand-newtext (newtext original)
+  (substring (replace-match newtext (not case-fold-search) nil original)
+	     (match-beginning 0)
+	     (and (< (match-end 0) (length original))
+		  (- (match-end 0) (length original)))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

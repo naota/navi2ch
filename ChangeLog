@@ -1,3 +1,50 @@
+2003-02-26  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-list): 
+	navi2ch-article-message-filter-by-mail、
+	navi2ch-article-message-filter-by-subject を追加。
+	(navi2ch-article-message-filter-by-name-alist): フィルタ機能の拡張。
+	(navi2ch-article-message-filter-by-message-alist): 同上。
+	(navi2ch-article-message-filter-by-id-alist): 同上。
+	(navi2ch-article-message-filter-by-mail-alist): 新変数。
+	(navi2ch-article-message-filter-by-subject-alist): 新変数。
+	(navi2ch-article-auto-activate-message-filter): 新変数。
+	(navi2ch-article-use-message-filter-cache): 新変数。
+	(navi2ch-article-message-replace-below): 新変数。
+	(navi2ch-article-message-hide-below): 新変数。
+	(navi2ch-article-message-add-important-above): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-mode-map): 
+	"F" に navi2ch-article-toggle-message-filter、
+	"x" に 'undefined をバインド。
+	(navi2ch-article-save-info-keys): 'unfilter を追加。
+	(navi2ch-article-message-filter-mode): 新変数。
+	(navi2ch-article-message-filter-mode-map): 新変数。
+	"x" に navi2ch-article-toggle-replace-message をバインド。
+	(navi2ch-article-message-filter-cache): 新変数。
+	(navi2ch-article-save-message-filter-cache-keys): 新変数。
+	(navi2ch-article-insert-messages): フィルタ機能の拡張。
+	(navi2ch-article-apply-message-filters): 同上。
+	(navi2ch-article-message-filter-subr): 同上。
+	(navi2ch-article-message-filter-by-mail): 新変数。
+	(navi2ch-article-message-filter-by-subject): 新変数。
+	(navi2ch-article-save-info): フィルタのキャッシュも保存するように。
+	(navi2ch-article-delete-message): optional な引き数を追加。
+	hide/important を解除した後、再フィルタ処理するか決められるように。
+	(navi2ch-article-cancel-hide-message): 同上。
+	(navi2ch-article-delete-important-message): 同上。
+	(navi2ch-article-get-message-filter-cache-file-name): 新関数。
+	(navi2ch-article-save-message-filter-cache): 新関数。
+	(navi2ch-article-load-message-filter-cache): 新関数。
+	(navi2ch-article-toggle-replace-message): 新関数。
+	(navi2ch-article-toggle-message-filter): 新関数。
+
+	* navi2ch-util.el (navi2ch-set-difference): 新関数。
+	(navi2ch-expand-newtext): 新関数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): 
+	フィルタのキャッシュファイルも削除するように。
+
 2003-02-24  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-parse-field-list): 廃止。
