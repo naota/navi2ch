@@ -1,3 +1,11 @@
+2003-06-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map): XEmacs じゃないと
+	きは navi2ch-article-toggle-sticky のキー表記をベクトルで書くよう
+	に。
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/126
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/141
+
 2003-06-09  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-quote-maybe): docstring の修正。

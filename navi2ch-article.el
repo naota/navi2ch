@@ -91,7 +91,9 @@
     (define-key map "F" 'navi2ch-article-toggle-message-filter)
     (define-key map "x" 'undefined)
     (define-key map "!" 'navi2ch-article-add-message-filter-rule)
-    (define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
+    (navi2ch-ifxemacs
+	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
+      (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
