@@ -1530,6 +1530,10 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item C-c C-r
 @code{navi2ch-article-remove-article} スレの情報 (取得した .dat ファイルや既読情報など) を消す
 
+@item u
+@code{navi2ch-article-show-url-at-point} カーソルの下の URL を表示し、
+キルリングにコピーする。
+
 @end table
 
 @node Message Mode Key Bindings

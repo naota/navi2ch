@@ -92,6 +92,7 @@
     (navi2ch-ifxemacs
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
+    (define-key map "u" 'navi2ch-article-show-url-at-point)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1507,51 +1508,60 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	 (mapcar 'string-to-number (split-string str ",")))
 	(t (string-to-number str))))
 
+(defun navi2ch-article-get-number-list (number-property &optional limit)
+  (if (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" number-property)
+      (let (nums)
+	(dolist (msg navi2ch-article-message-list (nreverse nums))
+	  (when (listp (cdr msg))
+	    (let ((date (cdr (assq 'date (cdr msg))))
+		  (name (cdr (assq 'name (cdr msg)))))
+	      (when (or (and date
+			     (string-match " ID:\\([^ ][^ ][^ ][^ ]+\\)"
+					   ;; ID:??? はスルー
+					   date)
+			     (string-match (regexp-quote
+					    (match-string 1 date))
+					   number-property))
+			 (and name
+			      (string-match "◆\\([^ ]+\\)" name)
+			      (string-match (regexp-quote
+					     (match-string 1 name))
+					    number-property)))
+		(if (and (numberp limit)
+			 (>= (car msg) limit)
+			 nums)
+		    (return (car nums))
+		  (push (car msg) nums)))))))
+    (navi2ch-article-str-to-num (japanese-hankaku number-property))))
+
 (defun navi2ch-article-select-current-link (&optional browse-p)
   (interactive "P")
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'number))
 	   (navi2ch-article-select-current-link-number
-	    (or (and (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" prop)
-		     (let (nums)
-		       (dolist (msg navi2ch-article-message-list (nreverse nums))
-			 (when (and (listp (cdr msg))
-				    (or (and (string-match
-					      ;; ID:??? はスルー
-					      " ID:\\([^ ][^ ][^ ][^ ]+\\)"
-					      (or (cdr (assq 'date (cdr msg)))
-						  ""))
-					     (string-match
-					      (regexp-quote
-					       (match-string
-						1 (cdr (assq 'date (cdr msg)))))
-					      prop))
-					(and (string-match
-					      "◆\\([^ ]+\\)"
-					      (or (cdr (assq 'name (cdr msg)))
-						  ""))
-					     (string-match
-					      (regexp-quote
-					       (match-string
-						1 (cdr (assq 'name (cdr msg)))))
-					      prop))))
-			   (setq nums (cons (car msg) nums))))))
-		(navi2ch-article-str-to-num (japanese-hankaku prop)))
+	    (navi2ch-article-get-number-list prop)
 	    browse-p))
           ((setq prop (get-text-property (point) 'url))
            (navi2ch-article-select-current-link-url prop browse-p nil))
           ((setq prop (get-text-property (point) 'content))
 	   (navi2ch-article-save-content)))))
 
+(defun navi2ch-article-number-list-to-url (number-list)
+  (navi2ch-article-to-url navi2ch-article-current-board
+			  navi2ch-article-current-article
+			  (if (numberp number-list)
+			      number-list
+			    (apply #'min number-list))
+			  (if (numberp number-list)
+			      number-list
+			    (apply #'max number-list))
+			  t))
+
 (defun navi2ch-article-select-current-link-number (prop browse-p)
   ;; prop は「数の list」か「数」。
   (cond (browse-p
 	 (navi2ch-browse-url-internal
-	  (navi2ch-article-to-url navi2ch-article-current-board
-				  navi2ch-article-current-article
-				  (if (numberp prop) prop (apply 'min prop))
-				  (if (numberp prop) prop (apply 'max prop))
-				  t)))
+	  (navi2ch-article-number-list-to-url prop)))
 	((eq navi2ch-article-select-current-link-number-style 'popup)
 	 (navi2ch-popup-article (if (listp prop) prop (list prop))))
 	((eq navi2ch-article-select-current-link-number-style 'jump)
@@ -2133,37 +2143,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	      num-list num)
 	  (cond
 	   (num-prop
-	    (setq num-list
-		  (or (and (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" num-prop)
-			   (let ((limit (navi2ch-article-get-current-number))
-				 last)
-			     (catch 'loop
-			       (dolist (msg (reverse navi2ch-article-message-list) last)
-				 (when (and (listp (cdr msg))
-					    (or (and (string-match
-						      ;; ID:??? はスルー
-						      " ID:\\([^ ][^ ][^ ][^ ]+\\)"
-						      (or (cdr (assq 'date (cdr msg)))
-							  ""))
-						     (string-match
-						      (regexp-quote
-						       (match-string
-							1 (cdr (assq 'date (cdr msg)))))
-						      num-prop))
-						(and (string-match
-						      "◆\\([^ ]+\\)"
-						      (or (cdr (assq 'name (cdr msg)))
-							  ""))
-						     (string-match
-						      (regexp-quote
-						       (match-string
-							1 (cdr (assq 'name (cdr msg)))))
-						      num-prop))))
-				   (if (< (car msg) limit)
-				       (throw 'loop (car msg))
-				     (setq last (car msg))))))))
-		      (navi2ch-article-str-to-num
-		       (japanese-hankaku num-prop))))
+	    (setq num-list (navi2ch-article-get-number-list
+			    num-prop (navi2ch-article-get-current-number)))
 	    (cond ((numberp num-list)
 		   (setq num num-list))
 		  (t
@@ -2223,11 +2204,17 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		    point)))
     (put-text-property start end 'help-echo value)))
 
+(defvar navi2ch-article-disable-display-link-commands
+  '(navi2ch-article-show-url-at-point)
+  "このコマンドの後では minibuffer にリンク先を表示しない。")
+
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
-  (save-match-data
-    (save-excursion
-      (unless isearch-mode
+  (unless (or isearch-mode
+	      (memq this-command
+		    navi2ch-article-disable-display-link-commands))
+    (save-match-data
+      (save-excursion
 	(let ((text (navi2ch-article-get-link-text point)))
 	  (if (stringp text)
 	      (message "%s" text)))))))
@@ -3333,6 +3320,31 @@ PREFIX が与えられた場合は、
 		   (throw 'break t)))))
 	 nil)
 	(t t)))
+
+(defun navi2ch-article-url-at-point (point)
+  "POINT の下のリンクを指す URL を得る。
+\(defadvice browse-url-url-at-point
+  (around my-browse-url-url-at-point-navi2ch activate compile)
+  (let ((url (navi2ch-article-url-at-point (point))))
+    (if url
+	(setq ad-return-value url)
+      ad-do-it)))
+のようにすると、リンクに対して browse-url をインタラクティブに
+実行できる。"
+  (let ((number-property (get-text-property point 'number))
+	(url-property (get-text-property point 'url)))
+    (cond (number-property
+	   (navi2ch-article-number-list-to-url
+	    (navi2ch-article-get-number-list number-property)))
+	  (url-property))))
+
+(defun navi2ch-article-show-url-at-point (point)
+  "POINT の下のリンクを指す URL を表示し、kill-ring にコピーする。"
+  (interactive "d")
+  (let ((url (navi2ch-article-url-at-point point)))
+    (when url
+      (kill-new url)
+      (message "%s" url))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

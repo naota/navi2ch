@@ -1,3 +1,7 @@
+2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode Key Bindings): "u" を追加。
+
 2004-03-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Board Questions): navi2ch-list-moved-board-alist

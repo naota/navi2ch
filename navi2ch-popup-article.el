@@ -62,6 +62,7 @@
     (define-key map "d" 'navi2ch-popup-article-exclude-message)
     (define-key map "D" 'navi2ch-popup-article-hide-messages)
     (define-key map "A" 'navi2ch-popup-article-add-important-messages)
+    (define-key map "u" 'navi2ch-popup-article-show-url-at-point)
     (setq navi2ch-popup-article-mode-map map)))
 
 (defvar navi2ch-popup-article-current-board nil)
@@ -264,6 +265,13 @@ stack が空なら、PopUp Article モードを抜ける。"
       (navi2ch-popup-article-sift-messages 'important
 					   "Add important messages")
     (message "Don't add important messages")))
+
+(defun navi2ch-popup-article-show-url-at-point (point)
+  "POINT の下のリンクを指す URL を表示し、kill-ring にコピーする。"
+  (interactive "d")
+  (let ((navi2ch-article-current-board navi2ch-popup-article-current-board)
+	(navi2ch-article-current-article navi2ch-popup-article-current-article))
+    (navi2ch-article-show-url-at-point point)))
 
 (run-hooks 'navi2ch-popup-article-load-hook)
 ;;; navi2ch-popup-article.el ends here

@@ -1,3 +1,22 @@
+2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map):
+	`navi2ch-article-show-url-at-point' をバインド。
+	(navi2ch-article-get-number-list): 新関数。
+	(navi2ch-article-select-current-link): 上記関数を使用。
+	(navi2ch-article-get-link-text-subr): 同上。
+	(navi2ch-article-number-list-to-url): 新関数。
+	(navi2ch-article-select-current-link-number): 上記関数を使用。
+	(navi2ch-article-disable-display-link-commands): 新変数。
+	(navi2ch-article-display-link-minibuffer): 上記変数に含まれるコマ
+	ンドの後はミニバッファを更新しないように。
+	(navi2ch-article-url-at-point): 新関数。
+	(navi2ch-article-show-url-at-point): 新関数。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	`navi2ch-popup-article-show-url-at-point' をバインド。
+	(navi2ch-popup-article-show-url): 新関数。
+
 2004-04-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-set-keymap-default-binding): GNU Emacs
