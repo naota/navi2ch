@@ -1,3 +1,9 @@
+2003-06-08  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-save-aborn-file): 新関数。
+	navi2ch-net-update-file-diff から分離。
+	(navi2ch-net-update-file-diff): 上記関数を使うように。
+
 2003-06-07  mami  <mami@users.sourceforge.net>
 
 	新機能 sticky article buffer

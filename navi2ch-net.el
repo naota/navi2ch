@@ -585,14 +585,17 @@ FUNC は current-buffer を操作する関数である事。
     (if (not aborn-p)
 	header
       (message "あぼーん!!!")
-      (when (and navi2ch-net-save-old-file-when-aborn
-		 (or (not (eq navi2ch-net-save-old-file-when-aborn
-			      'ask))
-		     (y-or-n-p "あぼーん!!! backup old file? ")))
-	(copy-file file (read-file-name "file name: ")))
+      (navi2ch-net-save-aborn-file file)
       (navi2ch-net-add-state
        'aborn
        (navi2ch-net-update-file url file nil func)))))
+
+(defun navi2ch-net-save-aborn-file (file)
+  (when (and navi2ch-net-save-old-file-when-aborn
+	     (or (not (eq navi2ch-net-save-old-file-when-aborn
+			  'ask))
+		 (y-or-n-p "あぼーん!!! backup old file? ")))
+    (copy-file file (read-file-name "file name: "))))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
   "FILE を URL から read.cgi を使って更新する。
