@@ -1369,18 +1369,18 @@ article buffer から抜けるなら 'quit を返す。"
           (setq msg (navi2ch-replace-string
                      "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
           (setq msg (navi2ch-replace-string "\n+" " " msg t))
-          (message
-           "%s" (truncate-string-to-width
-                 (format "[%d]: %s" num msg)
-                 (eval navi2ch-article-display-link-width))))))
+          (message (truncate-string-to-width
+		    (format "[%d]: %s" num msg)
+		    (eval navi2ch-article-display-link-width))))))
      (url-prop
       (if (navi2ch-2ch-url-p url-prop)
 	  (let ((board (navi2ch-board-url-to-board url-prop))
 		(article (navi2ch-article-url-to-article url-prop)))
 	    (if (navi2ch-article-check-cached board article)
-		(message "[%s]: %s"
-			 (cdr (assq 'name board))
-			 (navi2ch-article-cached-subject board article)))))))))
+		(message (truncate-string-to-width
+			  (format "[%s]: %s"
+				  (cdr (assq 'name board))
+				  (navi2ch-article-cached-subject board article)))))))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
