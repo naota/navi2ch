@@ -241,15 +241,18 @@
 	(navi2ch-list)))))
 
 ;;; goto-*-column
-(defun navi2ch-bm-goto-state-column ()
+(defun navi2ch-bm-goto-updated-mark-column ()
   (beginning-of-line)
-  (looking-at "\\( *[0-9]+\\)")
-  (goto-char (match-end 1))
-  (forward-char 2))
+  (looking-at "\\( *[0-9]+ \\)")
+  (goto-char (match-end 1)))
+
+(defun navi2ch-bm-goto-state-column ()
+  (navi2ch-bm-goto-updated-mark-column)
+  (forward-char 1))
 
 (defun navi2ch-bm-goto-mark-column ()
-  (navi2ch-bm-goto-state-column)
-  (forward-char 1))
+  (navi2ch-bm-goto-updated-mark-column)
+  (forward-char 2))
 
 (defun navi2ch-bm-goto-other-column ()
   (let ((sbj (cdr
@@ -684,9 +687,11 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-sort-by-state (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
-   (not rev)
-   'navi2ch-bm-goto-state-column
-   'forward-char))
+   rev
+   (lambda ()
+     (navi2ch-bm-goto-updated-mark-column)
+     nil)
+   'navi2ch-bm-goto-mark-column))
 
 (defun navi2ch-bm-sort-by-subject (&optional rev)
   (interactive "P")
