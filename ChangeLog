@@ -1,3 +1,10 @@
+2003-06-04  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): レスの増分を
+	表示するように。
+	また、navi2ch-board-last-seen-alist の値を設定する処理を削除。
+	(navi2ch-board-sync): 上記削除処理の追加。
+
 2003-06-03  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-sift-messages): 

@@ -302,14 +302,20 @@
 	  (navi2ch-bm-insert-subject
 	   article i
 	   (cdr (assq 'subject article))
-	   (format "(%4s)" (cdr (assq 'response article)))
+	   (format
+	    "(%4s/%5s)"
+	    (cdr (assq 'response article))
+	    (format
+	     "+%d"
+	     (- (string-to-number (cdr (assq 'response article)))
+		(or seen
+		    (cdr (assoc artid navi2ch-board-last-seen-alist))
+		    (string-to-number
+		     (or (cdr (assoc artid navi2ch-board-old-subject-alist))
+			 "0"))))))
 	   (cond ((and navi2ch-board-check-updated-article-p
 		       (setq updated
 			     (navi2ch-board-updated-article-p article seen)))
-		  (when (eq updated 'new)
-		    (setq navi2ch-board-last-seen-alist
-			  (navi2ch-put-alist
-			   artid 0 navi2ch-board-last-seen-alist)))
 		  updated)
 		 (seen 'seen)))
 	  (setq i (1+ i)))))))
@@ -420,7 +426,12 @@
 	(setq navi2ch-board-old-subject-alist
 	      (navi2ch-alist-list-to-alist
 	       navi2ch-board-old-subject-list 'artid 'response))
-	(setq navi2ch-board-last-seen-alist nil)
+	(setq navi2ch-board-last-seen-alist
+	      (mapcar
+	       (lambda (x) (cons x 0))	; 新スレの seen は 0 扱い
+	       (navi2ch-set-difference
+		(mapcar 'car navi2ch-board-subject-alist)
+		(mapcar 'car navi2ch-board-old-subject-alist))))
 	(when time
 	  (navi2ch-board-update-seen-articles))
 	(navi2ch-board-insert-subjects navi2ch-board-subject-list)
