@@ -1192,7 +1192,7 @@ NUM が -1 のときは前のスレに移動する。"
 		 (if (eq num 1)
 		     (navi2ch-bm-next-line)
 		   (navi2ch-bm-previous-line))
-		 (recenter)
+		 (recenter t)
 		 (navi2ch-bm-select-article))
 		(t
 		 (message "Don't through article"))))
