@@ -1,10 +1,11 @@
 info_TEXINFOS = navi2ch.texi
 EXTRA_DIST = Makefile.pmake batch-texi2info.el
-CLEANFILES = navi2ch.info navi2ch.pdf navi2ch.html
+CLEANFILES = navi2ch.pdf navi2ch.html
 
 .texi.info:
-	rm -f ${@}* && \
-	  ${EMACS} -q -batch -l $(srcdir)/batch-texi2info.el -f batch-texi2info $<
+	rm -f $(srcdir)/${@}* && \
+	$(EMACS) -q -batch -l $(srcdir)/batch-texi2info.el -f batch-texi2info $<
+	touch $@
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \

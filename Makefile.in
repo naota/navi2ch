@@ -63,6 +63,7 @@ DEPDIR = @DEPDIR@
 EMACS = @EMACS@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LN_S = @LN_S@
 MAINT = @MAINT@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -456,10 +457,10 @@ elcdist: $(ELCFILES)
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz && \
 	rm -rf $(distdir)
 
-bcomp.el: @MAINTAINER_MODE_TRUE@ bcomp.el.in Makefile.am
+bcomp.el: $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
-	sed -e "s/@\(lisp_LISP\)@/$$list/" < bcomp.el.in > $@
+	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
 
 $(ELCFILES): $(lisp_LISP)
 	$(MAKE) $(AM_MAKEFLAGS) recompile
@@ -471,6 +472,13 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 
 update:
 	cvs update -P -d
+
+$(lisp_LISP): stamp-link
+stamp-link: $(srcdir)/Makefile.am
+	for file in $(lisp_LISP); do \
+		test -r $$file || $(LN_S) $(srcdir)/$$file .; \
+	done && \
+	touch $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1752,6 +1752,16 @@ fi
 fi;
 
 
+echo "$as_me:$LINENO: checking whether ln -s works" >&5
+echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
+echo "${ECHO_T}no, using $LN_S" >&6
+fi
 
 ac_config_files="$ac_config_files Makefile contrib/Makefile doc/Makefile icons/Makefile"
 cat >confcache <<\_ACEOF
@@ -2371,6 +2381,7 @@ s,@EMACS@,$EMACS,;t t
 s,@packagedir@,$packagedir,;t t
 s,@lispdir@,$lispdir,;t t
 s,@icondir@,$icondir,;t t
+s,@LN_S@,$LN_S,;t t
 CEOF
 
 _ACEOF

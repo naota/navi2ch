@@ -99,5 +99,5 @@ fi
 ])
 
 AC_SUBST(icondir)
-
+AC_PROG_LN_S
 AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile])

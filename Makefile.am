@@ -38,10 +38,10 @@ elcdist: $(ELCFILES)
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz && \
 	rm -rf $(distdir)
 
-bcomp.el: @MAINTAINER_MODE_TRUE@ bcomp.el.in Makefile.am
+bcomp.el: $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
-	sed -e "s/@\(lisp_LISP\)@/$$list/" < bcomp.el.in > $@
+	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
 
 $(ELCFILES): $(lisp_LISP)
 	$(MAKE) $(AM_MAKEFLAGS) recompile
@@ -53,3 +53,10 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 
 update:
 	cvs update -P -d
+
+$(lisp_LISP): stamp-link
+stamp-link: $(srcdir)/Makefile.am
+	for file in $(lisp_LISP); do \
+		test -r $$file || $(LN_S) $(srcdir)/$$file .; \
+	done && \
+	touch $@

@@ -1,7 +1,12 @@
+2002-07-10  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (CLEANFILES): navi2ch.info を削除。
+	(.texi.info): 別ディレクトリでも作成できるように。
+
 2002-07-07  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Compile): XEmacs 21.4.8 だと ~/.xemacs 直下はパッ
-	ケージディレクトリとみなさないようなので、configure の例を 
+	ケージディレクトリとみなさないようなので、configure の例を
 	~/.xemacs/mule-packages に変更。
 
 2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
