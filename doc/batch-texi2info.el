@@ -40,8 +40,6 @@ For example, invoke
   \"emacs -batch -funcall batch-texi2nfo $docs/ ~/*.texinfo\"."
   (if (not noninteractive)
       (error "batch-tex2info may only be used -batch"))
-  (if (< emacs-major-version 21)
-      (error "Please use Emacs 21 or later"))
   (let ((version-control t)
         (auto-save-default nil)
         (find-file-run-dired nil)
