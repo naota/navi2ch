@@ -1,3 +1,11 @@
+2003-11-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-search.el (navi2ch-search-for-each-directory-recursive):
+	新関数。
+	(navi2ch-search-directory-to-board): 新関数。
+	(navi2ch-search-all-board-list): 上記関数を使い、cache が存在する
+	すべてのディレクトリを板と見なすように。
+
 2003-11-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	JBBS@したらばの変更に対応。

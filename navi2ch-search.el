@@ -226,11 +226,40 @@
 					 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
+(defun navi2ch-search-for-each-directory-recursive (function directory)
+  (let ((default-directory directory))
+    (dolist (file (directory-files "."))
+      (if (and (file-directory-p file)
+	       (not (member file '("." ".."))))
+	  (navi2ch-search-for-each-directory-recursive
+	   function (expand-file-name file)))))
+  (funcall function directory))
+
+(defun navi2ch-search-directory-to-board (directory directory-to-board-alist)
+  (let ((dir (file-name-as-directory (expand-file-name directory))))
+    (or (cdr (assoc dir directory-to-board-alist))
+	(navi2ch-board-url-to-board
+	 (concat "http://"
+		 (file-relative-name dir navi2ch-directory))))))
+
 (defun navi2ch-search-all-board-list ()
-  ;; TODO: 板が移転した後も過去ログは旧サーバなので洩れがある。
-  (navi2ch-list-get-board-name-list
-   (navi2ch-list-get-normal-category-list
-    navi2ch-list-category-list)))
+  (let ((directory-to-board-alist
+	 (mapcar (lambda (board)
+		   (cons (navi2ch-board-get-file-name board "")
+			 board))
+		 (navi2ch-list-get-board-name-list
+		  (navi2ch-list-get-normal-category-list
+		   navi2ch-list-category-list))))
+	l)
+    (navi2ch-search-for-each-directory-recursive
+     (lambda (directory)
+       (if (file-exists-p (expand-file-name navi2ch-article-summary-file-name
+					    directory))
+	   (push (navi2ch-search-directory-to-board directory
+						    directory-to-board-alist)
+		 l)))
+     navi2ch-directory)
+    l))
 
 (defun navi2ch-search-all-subject ()
   (interactive)
