@@ -74,6 +74,13 @@
 (defconst navi2ch-base64-end-delimiter-regexp
   (format "^%s.*$" (regexp-quote navi2ch-base64-end-delimiter))
   "base64コードの後のデリミタにマッチする正規表現。")
+(defconst navi2ch-base64-susv3-begin-delimiter-regexp
+  "^begin-base64 \\([0-7]+\\) \\([^ \n]+\\)$"
+  "SUSv3のuuencodeで作成されるbase64コードの前のデリミタにマッチする正規表現")
+(defconst navi2ch-base64-susv3-end-delimiter-regexp
+  "^====$"
+  "SUSv3のuuencodeで作成されるbase64コードの後のデリミタにマッチする正規表現")
+
 (defconst navi2ch-base64-line-regexp
   (concat
    "^\\([+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z]\\)*"
@@ -476,17 +483,27 @@ base64デコードすべき内容がない場合はエラーになる。"
   (interactive "r")
   (save-excursion
     (let ((buf (current-buffer))
-	  (default-filename nil))
+	  (default-filename nil)
+	  (mode nil)
+	  (susv3 nil))
       ;; insertした後に削るのは無駄なのであらかじめ絞り込んでおく
       (goto-char start)
-      (when (re-search-forward navi2ch-base64-begin-delimiter-regexp end t)
+      (cond
+       ((re-search-forward navi2ch-base64-begin-delimiter-regexp end t)
 	(setq default-filename (match-string 2))
 	(goto-char (match-end 0)))
+       ((re-search-forward navi2ch-base64-susv3-begin-delimiter-regexp end t)
+	(setq default-filename (match-string 2)
+	      mode (string-to-number (match-string 1) 8)
+	      susv3 t)
+	(goto-char (match-end 0))))
       (if (re-search-forward navi2ch-base64-line-regexp end t)
 	  (setq start (match-beginning 0))
 	(error "No base64 data"))
       (goto-char end)
-      (if (re-search-backward navi2ch-base64-end-delimiter-regexp start t)
+      (if (or (and susv3 (re-search-backward
+			  navi2ch-base64-susv3-end-delimiter-regexp start t))
+	      (re-search-backward navi2ch-base64-end-delimiter-regexp start t))
 	  (goto-char (match-beginning 0)))
       (if (re-search-backward navi2ch-base64-line-regexp start t)
 	  (setq end (match-end 0)))
@@ -519,10 +536,14 @@ base64デコードすべき内容がない場合はエラーになる。"
 			      nil default-filename)))
 	  (when (file-directory-p filename)
 	    (setq filename (expand-file-name default-filename filename)))
-	  (if (or (not (file-exists-p filename))
-		  (y-or-n-p (format "File `%s' exists; overwrite? "
-				    filename)))
-	      (write-region (point-min) (point-max) filename)))))))
+	  (when (or (not (file-exists-p filename))
+		    (y-or-n-p (format "File `%s' exists; overwrite? "
+				      filename)))
+	    (write-region (point-min) (point-max) filename)
+	    (if (and susv3 mode)
+		(condition-case nil
+		    (set-file-modes filename mode)
+		  (error nil)))))))))
 
 (defun navi2ch-base64-insert-file (filename)
   "FILENAMEをbase64エンコードし、現在のポイントに挿入する。"
