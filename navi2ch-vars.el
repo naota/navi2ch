@@ -516,7 +516,7 @@ ask なら明示的に移動する時以外なら質問する
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-auto-range t
-  "*non-nil なら、また表示してないスレッドの表示範囲を勝手に狭める。"
+  "*non-nil なら、まだ表示してないスレッドの表示範囲を勝手に狭める。"
   :type 'boolean
   :group 'navi2ch-article)
 

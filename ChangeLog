@@ -1,3 +1,8 @@
+2003-01-20  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-auto-range): docstring 修正。
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/475
+
 2003-01-16  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-select-current-link):
