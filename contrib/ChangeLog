@@ -1,3 +1,9 @@
+2004-12-30  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (izonmoji-mode-on):
+	buffer-display-table を上書きしないように。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/876
+
 2004-10-10  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-js-livedoor-move.el (navi2ch-js-livedoor-move):

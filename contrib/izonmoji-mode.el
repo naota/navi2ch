@@ -329,10 +329,10 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 					       izonmoji-mac-chars-list)))
 		       (length ctable)))
 	       face glyph)
-	  (setq izonmoji-backuped-display-table (copy-sequence ctable))
-	  (if (> len 0)
-	      (setq table (vconcat ctable (make-vector len nil)))
-	    (setq table ctable))
+	  (setq izonmoji-backuped-display-table ctable
+		table (copy-sequence ctable))
+	  (when (> len 0)
+	    (setq table (vconcat table (make-vector len nil))))
 	  (while priority
 	    (cond
 	     ((eq (car priority) 'win)
@@ -358,9 +358,10 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 	  (set-specifier current-display-table table (current-buffer))))
        (t				;GNU Emacs
 	(let (face-bits)
-	  (setq izonmoji-backuped-display-table
-		(copy-sequence buffer-display-table)
-		table (or buffer-display-table (make-display-table)))
+	  (setq izonmoji-backuped-display-table buffer-display-table
+		table (or (copy-sequence (or buffer-display-table
+					     standard-display-table))
+			  (make-display-table)))
 	  (while priority
 	    (cond
 	     ((eq (car priority) 'win)
