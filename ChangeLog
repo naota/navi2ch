@@ -1,5 +1,12 @@
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el: base64 関係をちょい修正。変数に docstring 追加。
+	(navi2ch-base64-begin-delimiter-with-name-regexp): 削除
+	(navi2ch-base64-write-region): 上記変更に対応
+
+	* .cvsignore: 新ファイル。cvs update が configure の作成したファイ
+	ルについて文句を言うのを黙らせる。
+
 	* doc: 新規ディレクトリ。
 
 2002-01-07  mami  <mami@users.sourceforge.net>

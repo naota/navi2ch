@@ -26,6 +26,7 @@
 (require 'regexp-opt)
 (require 'navi2ch-vars)
 (require 'timezone)
+(require 'base64)
 
 (defvar navi2ch-mode-line-identification nil)
 (make-variable-buffer-local 'navi2ch-mode-line-identification)
@@ -34,7 +35,7 @@
   '(("&gt;" . ">")
     ("&lt;" . "<")
     ("&quot;" . "\"")
-	("&nbsp;" . " ")
+    ("&nbsp;" . " ")
     ("＠｀" . ","))
   "置換する html のタグの連想リスト(正規表現は使えない)")
 
@@ -45,20 +46,23 @@
   "置換する html のタグの正規表現
 `navi2ch-replace-html-tag-alist' から生成される")
 
-(defconst navi2ch-base64-begin-delimiter "----BEGIN BASE64----")
-(defconst navi2ch-base64-end-delimiter "----END BASE64----")
+(defconst navi2ch-base64-begin-delimiter "----BEGIN BASE64----"
+  "base64コードの前に挿入するデリミタ。")
+(defconst navi2ch-base64-end-delimiter "----END BASE64----"
+  "base64コードの後に挿入するデリミタ。")
 
 (defconst navi2ch-base64-begin-delimiter-regexp
-  (format "^%s *$" (regexp-quote navi2ch-base64-begin-delimiter)))
+  (format "^%s\\((\\([^\)]+\\))\\)?.*$"
+          (regexp-quote navi2ch-base64-begin-delimiter))
+  "base64コードの前のデリミタにマッチする正規表現。")
 (defconst navi2ch-base64-end-delimiter-regexp
-  (format "^%s *$" (regexp-quote navi2ch-base64-end-delimiter)))
+  (format "^%s.*$" (regexp-quote navi2ch-base64-end-delimiter))
+  "base64コードの後のデリミタにマッチする正規表現。")
 (defconst navi2ch-base64-line-regexp
   (concat
    "^\\([+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z]\\)*"
-   "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$"))
-(defconst navi2ch-base64-begin-delimiter-with-name-regexp
-  (format "^%s(\\([^\)]+\\)) *$"
-	  (regexp-quote navi2ch-base64-begin-delimiter)))
+   "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
+  "base64コードのみが含まれる行にマッチする正規表現。")
 
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
@@ -541,12 +545,9 @@ base64デコードすべき内容がない場合はエラーになる。"
 	  (default-filename nil))
       ;; insertした後に削るのは無駄なのであらかじめ絞り込んでおく
       (goto-char start)
-      (if (re-search-forward navi2ch-base64-begin-delimiter-with-name-regexp
-			     end t)
-	  (progn (setq default-filename (match-string 1))
-		 (goto-char (match-end 0))))
-      (if (re-search-forward navi2ch-base64-begin-delimiter-regexp end t)
-	  (goto-char (match-end 0)))
+      (when (re-search-forward navi2ch-base64-begin-delimiter-regexp end t)
+	(setq default-filename (match-string 2))
+	(goto-char (match-end 0)))
       (if (re-search-forward navi2ch-base64-line-regexp end t)
 	  (setq start (match-beginning 0))
 	(error "No base64 data"))
