@@ -93,6 +93,7 @@ EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 
 BUILT_SOURCES = navi2ch-version.el bcomp.el
 SUBDIRS = contrib doc icons
+CLEANFILES = stamp-link
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -368,6 +369,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*

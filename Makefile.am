@@ -14,6 +14,7 @@ EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in
 BUILT_SOURCES = navi2ch-version.el bcomp.el
 SUBDIRS = contrib doc icons
+CLEANFILES = stamp-link
 
 navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \

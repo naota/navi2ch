@@ -5,6 +5,7 @@
 	* Makefile.am (bcomp.el): 別ディレクトリでも作成できるように。
 	(lisp_LISP): 新ターゲット
 	(stamp-link): 別ディレクトリの場合はシンボリックリンクを張る。
+	(CLEANFILES): stamp-link を削除。
 
 	* navi2ch.el (navi2ch-use-lock, navi2ch-lock-directory):
 	navi2ch-vars.el に移動。
