@@ -1,3 +1,21 @@
+2002-01-17  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (EXTRA_DIST): bcomp.el.in を追加。
+	(BUILT_SOURCES): bcomp.el を追加。
+	(navi2ch-version.el): ; -> &&
+	(snap): 同上。
+	(recompile): bcomp と同様に、.elc ファイルを消す→2 回バイトコンパ
+	イルする、に変えた。
+	(elcdist): $(ELCFILES) じゃなくて recompile に依存するようにした。
+	(bcomp.el): 新ターゲット。bcomp.el.in から bcomp.el を作成。
+
+	* bcomp.el.in: bcomp.el からリネーム。
+	(bcomp-files): Makefile.am で埋めるように。
+	(toplevel): 確実にコンパイルできるよう、.elc ファイルを消す→バイ
+	トコンパイルしてロードする→もう一度バイトコンパイルしてロードする、
+	という感じにしてみた。これなら defsubst のクロスリファレンスがあっ
+	ても平気だと思う。
+
 2002-01-16  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): 
