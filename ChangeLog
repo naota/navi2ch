@@ -1,3 +1,11 @@
+2003-10-05  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-subr): 新関数。
+	旧 navi2ch-auto-modify を関数に変更。
+	Emacs 20 では dolist は標準ではなく cl マクロであるため、起動時に
+	cl パッケージが読み込まれていないとエラーになっていた。
+	(navi2ch-auto-modify): 上記関数の wrapper に変更。
+
 2003-10-03  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-ifemacsce): 新マクロ。
@@ -5,7 +13,7 @@
 	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/147
 	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/193
 	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/195
-	
+
 	* navi2ch-net.el (navi2ch-net-get-content-subr): 上記マクロを使う
 	ように。
 
@@ -13,7 +21,7 @@
 	グに対処。
 	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/248
 	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/265
-	
+
 2003-09-29  mami  <mami@users.sourceforge.net>
 
 	* configure.in: 1.7.1-DEV にアップデート。

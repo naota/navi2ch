@@ -35,6 +35,23 @@
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-auto-modify-save)
 
+(defun navi2ch-auto-modify-subr (body)
+  (prog2 (setq navi2ch-auto-modify-variable-list nil)
+      (eval (cons 'progn body))
+    (let (added)
+      (dolist (sexp body)
+	(when (memq (car-safe sexp) '(setq setq-default))
+	  (setq sexp (cdr sexp))
+	  (while sexp
+	    (unless (or (memq (car sexp) navi2ch-auto-modify-variable-list)
+			(memq (car sexp) added))
+	      (setq added (cons (car sexp) added)))
+	    (setq sexp (cddr sexp)))))
+      (when added
+	(setq navi2ch-auto-modify-variable-list
+	      (append navi2ch-auto-modify-variable-list
+		      (nreverse added)))))))
+
 (defmacro navi2ch-auto-modify (&rest body)
   "`navi2ch-auto-modify-file'で指定されたファイルに記述すると、
 その中に含まれる変数の設定を自動的に変更して保存する。
@@ -49,23 +66,7 @@ Navi2ch 終了時に自動的に変更・保存される。
 	...)
   (setq navi2ch-article-message-filter-by-message-alist
 	...))"
-  (let ((sexp (make-symbol "sexp"))
-	(added (make-symbol "added")))
-    `(prog2 (setq navi2ch-auto-modify-variable-list nil)
-	 (progn ,@body)
-       (let (,added)
-	 (dolist (,sexp ',body)
-	   (when (memq (car-safe ,sexp) '(setq setq-default))
-	     (setq ,sexp (cdr ,sexp))
-	     (while ,sexp
-	       (unless (or (memq (car ,sexp) navi2ch-auto-modify-variable-list)
-			   (memq (car ,sexp) ,added))
-		 (setq ,added (cons (car ,sexp) ,added)))
-	       (setq ,sexp (cddr ,sexp)))))
-	 (when ,added
-	   (setq navi2ch-auto-modify-variable-list
-		 (append navi2ch-auto-modify-variable-list
-			 (nreverse ,added))))))))
+  `(navi2ch-auto-modify-subr ',body))
 
 (put 'navi2ch-auto-modify 'lisp-indent-function 0)
 
