@@ -298,7 +298,9 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
-  (let* ((size (nth 7 (file-attributes file)))
+  ;; ファイルサイズと等しい値を range にするとファイルを全部送ってくる
+  ;; ので 1- する。
+  (let* ((size (max 0 (1- (nth 7 (file-attributes file)))))
          (proc (navi2ch-net-download-file-range url (format "%d-" size) time)))
     (if proc
         (progn
@@ -308,8 +310,10 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
             (if (navi2ch-net-check-aborn (nth 7 (file-attributes file))
 					 (navi2ch-net-get-header proc))
                 (progn
-                  (with-temp-file file 
-                    (insert-file-contents file nil nil size)
+                  (with-temp-file file
+		    (if (string= (navi2ch-net-get-status proc) "206")
+			(insert-file-contents file nil nil size)
+		      (message "%s getting whole file..." (current-message)))
                     (goto-char (point-max))
                     (insert (navi2ch-net-get-content proc)))
                   (message "%sdone" (current-message))

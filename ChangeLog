@@ -1,5 +1,13 @@
 2002-01-11  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-update-file-diff): range にファイル
+	サイズと等しい値を指定するとファイルの内容を全部送ってくるようになっ
+	てたので 1- する。
+	以前のファイルを挿入するのは HTTP status が 206 の時だけに。
+
+	* navi2ch-list.el (navi2ch-list-expire-current-board): list モード
+	で板の expire ができなかったのを修正。
+
 	* ChangeLog: 末尾に $ I d $ を追加。cvs stat しなくても ChangeLog
 	のリビジョンがわかるように。
 

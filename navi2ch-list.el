@@ -604,10 +604,10 @@
 		 ((eq ch ?a) (navi2ch-search-all-article)))))))
 
 ;;; expire
-(defun navi2ch-list-expire-current-board ()
+(defun navi2ch-list-expire-current-board (&optional ask)
   (interactive)
   (navi2ch-board-expire
-   (get-text-property (point) 'board) 'ask))
+   (get-text-property (point) 'board) ask))
 
 (defun navi2ch-list-expire-current-category (&optional ask)
   (interactive)
