@@ -185,9 +185,8 @@
       (navi2ch-bookmark-insert-subject i (car x))
       (setq i (1+ i)))))
 
-(defun navi2ch-bookmark-delete ()
+(defun navi2ch-bookmark-delete-subr ()
   "その行を bookmark から削除する"
-  (interactive)
   (save-excursion
     (beginning-of-line)
     (let ((item (navi2ch-bookmark-get-property (point)))
@@ -203,6 +202,12 @@
 	    (navi2ch-bm-renumber))
 	(message "Can't select this line!")))))
 
+(defun navi2ch-bookmark-delete ()
+  "その行を bookmark から削除する"
+  (interactive)
+  (if (y-or-n-p "Delete this line?")
+      (navi2ch-bookmark-delete-subr)))
+
 (defun navi2ch-bookmark-copy (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "copy to: ")))
   (save-excursion
@@ -215,7 +220,7 @@
 (defun navi2ch-bookmark-move (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
   (navi2ch-bookmark-copy bookmark-id)
-  (navi2ch-bookmark-delete))
+  (navi2ch-bookmark-delete-subr))
   
 (defun navi2ch-bookmark-cut ()
   (interactive)
@@ -228,7 +233,7 @@
 	  (progn
 	    (push (assoc item (cddr bookmark))
 		  navi2ch-bookmark-cut-stack)
-	    (navi2ch-bookmark-delete))
+	    (navi2ch-bookmark-delete-subr))
 	(message "Can't select this line!")))))
 
 (defun navi2ch-bookmark-yank ()

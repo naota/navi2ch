@@ -1,3 +1,14 @@
+2002-01-27  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-bookmark.el
+	(navi2ch-bookmark-delete-subr):
+	新関数。中身は旧 navi2ch-bookmark-delete ほぼそのまま。
+	(navi2ch-bookmark-delete):
+	y-or-n-p 後に navi2ch-bookmark-delete-subr を呼ぶ、に変更。
+	(navi2ch-bookmark-move): 
+	navi2ch-bookmark-delete ではなく -subr を使うように。
+	(navi2ch-bookmark-cut): 同上。
+
 2002-01-27  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-bookmark-node): type を bookmark
