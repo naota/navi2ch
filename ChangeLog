@@ -1,5 +1,14 @@
 2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
+	* navi2ch-popup-article.el (navi2ch-popup-article-current-board):
+	新変数。
+	(navi2ch-popup-article-current-article): 新変数。
+	(navi2ch-popup-article-exit-and-goto-number): ↑を使用。
+	(navi2ch-popup-article-exit): 元の Articleモードが消えていても
+	exit したら戻るように。
+
+2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-save-content): 新関数。
 	(navi2ch-article-select-current-link): ↑を使う。
 	(navi2ch-article-get-link-text-subr): navi2ch-popup-article-mode
@@ -102,8 +111,8 @@
 
 2002-10-20  SAITO Takuya  <tabmore@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): startとend
-	間違いました。
+	* navi2ch-article.el (navi2ch-article-set-link-property):
+	2002-10-19の変更で link-head を付ける region を間違えていたのを修正。
 
 2002-10-19  SAITO Takuya  <tabmore@users.sourceforge.net>
 

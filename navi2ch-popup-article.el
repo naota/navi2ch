@@ -61,12 +61,21 @@
     (define-key map "v" 'navi2ch-article-view-aa)
     (setq navi2ch-popup-article-mode-map map)))
 
+(defvar navi2ch-popup-article-current-board nil)
+(defvar navi2ch-popup-article-current-article nil)
+
 (defun navi2ch-popup-article-exit ()
   "PopUp Article モードを抜ける。"
   (interactive)
   (run-hooks 'navi2ch-popup-article-exit-hook)
   (bury-buffer)
-  (set-window-configuration navi2ch-popup-article-window-configuration))
+  (set-window-configuration navi2ch-popup-article-window-configuration)
+  (delete-windows-on (get-buffer navi2ch-popup-article-buffer-name))
+  (unless (eq navi2ch-article-current-article
+	      navi2ch-popup-article-current-article)
+    (navi2ch-article-view-article
+     navi2ch-popup-article-current-board
+     navi2ch-popup-article-current-article)))
 
 (defun navi2ch-popup-article-exit-and-goto-number (&optional num)
   "Article モードに戻ってから今の位置のレスの番号に移動。
@@ -106,6 +115,10 @@ stack が空なら、PopUp Article モードを抜ける。"
 	(buf (get-buffer-create navi2ch-popup-article-buffer-name)))
     (setq navi2ch-popup-article-window-configuration
 	  (current-window-configuration))
+    (setq navi2ch-popup-article-current-board
+	  navi2ch-article-current-board
+	  navi2ch-popup-article-current-article
+	  navi2ch-article-current-article)
     (pop-to-buffer buf)
     (navi2ch-popup-article-mode)
     (setq navi2ch-article-message-list mlist)
