@@ -132,6 +132,7 @@ Board モード
 * Updated Flag::                更新フラグ
 * State Flag::                  状態フラグ
 * Mark::                        マーク
+* Hide Thread::                 スレを隠す
 * Search Thread::               スレの検索
 
 Bookmark モード
@@ -404,8 +405,8 @@ File}.
 * Updated Flag::                更新フラグ
 * State Flag::                  状態フラグ
 * Mark::                        マーク
-* Search Thread::               スレの検索
 * Hide Thread::                 スレを隠す
+* Search Thread::               スレの検索
 @end menu
 
 @node Updated Flag
@@ -1301,11 +1302,8 @@ Emacs の起動と同時に navi2ch を起動したいんだけど。
 スレを開いたときにデフォルトで全件表示させたいんだけど。
 
 @item A.
-@file{~/navi2ch/init.el} に以下を追加します。
-
-@lisp
-(setq navi2ch-article-auto-range nil)
-@end lisp
+変数 @code{navi2ch-article-auto-range} の値を @code{nil} に設定します。
+@xref{Customize}.
 
 @item Q.
 スレ立てたいんだけど。
@@ -1324,11 +1322,8 @@ i} でおっけー。@xref{Mark}.
 書き込むときの名前をずーっと「名無しさん＠Ｅｍａｃｓ」にしたいんだけど。
 
 @item A.
-@file{~/.navi2ch/init.el} に以下を追加します。
-
-@lisp
-(setq navi2ch-message-remember-user-name nil)
-@end lisp
+変数 @code{navi2ch-message-remember-user-name} の値を @code{nil} に設
+定します。@xref{Customize}.
 
 @item Q.
 URL を指定してスレを開きたいんだけど。
@@ -1362,14 +1357,9 @@ Boards File}.
 違う板リスト (@code{bbstable}) を見るようにしたいんだけど。
 
 @item A.
-@file{~/.navi2ch/init.el} に以下を追加します。
-
-@lisp
-(setq navi2ch-list-bbstable-url
-      "http://www.2ch.net/newbbsmenu.html")
-@end lisp
-
-上の例では本家の板メニューを読むようにしています。
+変数 @code{navi2ch-list-bbstable-url} の値を板リストの URL に設定しま
+す。例えば、@code{"http://www.2ch.net/newbbsmenu.html"} とすると本家の
+板メニューを指定できます。@xref{Customize}.
 
 @item Q.
 使ってると @file{~/.navi2ch/} がどんどん大きくなるんだけど。
@@ -1381,34 +1371,32 @@ Boards File}.
 プロクシ通したいんだけど。
 
 @item A.
-@file{~/.navi2ch/init.el} に以下を追加します。
+変数 @code{navi2ch-net-http-proxy} の値を @code{"127.0.0.1:8080"} のよ
+うにします。
 
-@lisp
-(setq navi2ch-net-http-proxy "127.0.0.1:8080")
-@end lisp
-
-認証が必要なプロクシを使う時には、さらに以下の記述も追加。
-
-@lisp
-(setq navi2ch-net-http-proxy-userid "fusianasann")
-(setq navi2ch-net-http-proxy-password "mokorikomo")
-@end lisp
-
+認証が必要なプロクシを使う時には、さらに
+@code{navi2ch-net-http-proxy-userid}、
+@code{navi2ch-net-http-proxy-password} も追加。
 
 環境変数 @env{HTTP_PROXY} を設定することでもプロクシを利用できます。大文
 字である点に注意。この変数には、URL のような書式を設定します。例えば前述
 と同じ設定を行なうのであれば、@code{http://127.0.0.1:8080/} という値を設
-定します。
+定します。@xref{Customize}.
 
 @item Q.
 あぼーんをいちいち聞かんでくれや
 
 @item A.
-@file{~/.navi2ch/init.el} に以下を追加します。
+変数 @code{navi2ch-net-save-old-file-when-aborn} の値を @code{nil} に
+します。@xref{Customize}.
 
-@lisp
-(setq navi2ch-net-save-old-file-when-aborn nil)
-@end lisp
+@item Q.
+navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
+るんだけど。
+
+@item A.
+変数 @code{navi2ch-article-max-buffers} でバッファとして保持するスレの
+最大数を制限できます。@xref{Customize}.
 
 @ignore
 @item Q.

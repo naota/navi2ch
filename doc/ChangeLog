@@ -1,75 +1,84 @@
+2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): $BJQ?t$N@_DjJ}K!$G$O(B ~/navi2ch/init.el $B$K8@5Z(B
+	$B$;$:!"(BCustomize $B%N!<%I$X$N%/%m%9%j%U%!%l%s%9$rF~$l$k$h$&$K$7$?!#(B
+	navi2ch-article-max-buffers $B$K$D$$$FDI2C!#(B
+
+	* ChangeLog: $B$h$/8+$?$i$3$N%U%!%$%k(B EUC $B$8$c$s$h!"$F$3$H$G(B JIS $B$K(B
+	$BJQ99!#(B
+
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* batch-texi2info.el (batch-texi2info): Emacs 21 ¤Î¥Á¥§¥Ã¥¯¤ò¤ä¤á¤ë¡£
+	* batch-texi2info.el (batch-texi2info): Emacs 21 $B$N%A%'%C%/$r$d$a$k!#(B
 
-	* navi2ch.texi: Emacs 20 ¤Ç¤â¥Õ¥©¡¼¥Þ¥Ã¥È¤Ç¤­¤ë¤è¤¦¡¢
+	* navi2ch.texi: Emacs 20 $B$G$b%U%)!<%^%C%H$G$-$k$h$&!"(B
 	@ifnottex -> @ifinfo
-	(About This Document): ºï½ü¡£
-	(Getting): Æþ¼êÊýË¡¤ò SourceForge ¤ËÊÑ¹¹¡£
-	(Getting Develop Version): ¿·µ¬¥Î¡¼¥É¡£
-	(Adding Bookmark): navi2ch 1.4 ¤Ç½¤Àµ¤µ¤ì¤¿¤Î¤Ç patch ¤òºï½ü¡£
+	(About This Document): $B:o=|!#(B
+	(Getting): $BF~<jJ}K!$r(B SourceForge $B$KJQ99!#(B
+	(Getting Develop Version): $B?75,%N!<%I!#(B
+	(Adding Bookmark): navi2ch 1.4 $B$G=$@5$5$l$?$N$G(B patch $B$r:o=|!#(B
 
 2002-01-05  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* batch-texi2info.el: Ç°¤Î¤¿¤á¡¢(set-language-environment) ¤¹¤ë¡£
-	(batch-texi2info): Emacs 21 °Ê¾å¤òÍ×µá¤¹¤ë¤è¤¦¤Ë¤·¤¿¡£
-	Info ¥Õ¥¡¥¤¥ë¤ò½ñ¤­½Ð¤¹ºÝ¤Î coding system ¤ò JIS ¤Ë¡£
+	* batch-texi2info.el: $BG0$N$?$a!"(B(set-language-environment) $B$9$k!#(B
+	(batch-texi2info): Emacs 21 $B0J>e$rMW5a$9$k$h$&$K$7$?!#(B
+	Info $B%U%!%$%k$r=q$-=P$9:]$N(B coding system $B$r(B JIS $B$K!#(B
 
-	* navi2ch.texi: @document¤Û¤Ë¤ã¤é¤é ¤Ï HTML ¤Î»þ¤À¤±Í­¸ú¤Ë¤¹¤ë¡£
-	(List Mode): Naci2ch ¥«¥Æ¥´¥ê¤ÎÈÄ¤Ë¤Ä¤¤¤ÆÄÉµ­¡£
-	(Search Thread): ¿·µ¬¥Î¡¼¥É¡£¥¹¥ì¤Î¸¡º÷¤Ë¤Ä¤¤¤ÆÄÉµ­¡£
-	(Other Boards File): etc.txt ¤Ë¤Ä¤¤¤Æ¼ã´³ÄÉµ­¡£
-	¤½¤í¤½¤í¥»¥¯¥·¥ç¥ó¹½À®¸«Ä¾¤¹¤Ù¤­¤«?
+	* navi2ch.texi: @document$B$[$K$c$i$i(B $B$O(B HTML $B$N;~$@$1M-8z$K$9$k!#(B
+	(List Mode): Naci2ch $B%+%F%4%j$NHD$K$D$$$FDI5-!#(B
+	(Search Thread): $B?75,%N!<%I!#%9%l$N8!:w$K$D$$$FDI5-!#(B
+	(Other Boards File): etc.txt $B$K$D$$$F<c43DI5-!#(B
+	$B$=$m$=$m%;%/%7%g%s9=@.8+D>$9$Y$-$+(B?
 
-	* batch-texi2info.el (batch-texi2info): ¿·¥Õ¥¡¥¤¥ë (¿·´Ø¿ô)
-	¤Ê¤ó¤Ç texi2info ¤Ë¤Ï batch ¥â¡¼¥ÉÍÑ´Ø¿ô¤¬¤Ê¤¤¤Î¤è¡¢¤Ã¤Æ¤³¤È¤Ç
-	texinfmt.el ¤Î batch-texinfo-format ¤«¤é¥³¥Ô¥Ú¡£
+	* batch-texi2info.el (batch-texi2info): $B?7%U%!%$%k(B ($B?74X?t(B)
+	$B$J$s$G(B texi2info $B$K$O(B batch $B%b!<%IMQ4X?t$,$J$$$N$h!"$C$F$3$H$G(B
+	texinfmt.el $B$N(B batch-texinfo-format $B$+$i%3%T%Z!#(B
 
-	* Makefile: ¤ä¤Ã¤Ñ makeinfo ¤Î fill ¤ÏÊÑ¤Ê¤Î¤Ç texinfo -> info ¤Ë
-	¤Ï¾åµ­¤Î´Ø¿ô¤ò»È¤Ã¤Æ emacs ¤Ç½èÍý¤¹¤ë¤³¤È¤Ë¤·¤¿¡£
-	TeX ¤Î¥Æ¥ó¥Ý¥é¥ê¥Õ¥¡¥¤¥ë¤ò¤Á¤ã¤ó¤È¥ê¥¹¥È¥¢¥Ã¥×¡£
+	* Makefile: $B$d$C$Q(B makeinfo $B$N(B fill $B$OJQ$J$N$G(B texinfo -> info $B$K(B
+	$B$O>e5-$N4X?t$r;H$C$F(B emacs $B$G=hM}$9$k$3$H$K$7$?!#(B
+	TeX $B$N%F%s%]%i%j%U%!%$%k$r$A$c$s$H%j%9%H%"%C%W!#(B
 
 2002-01-04  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.texi: SourceForge ¤Ë¤Ä¤¤¤ÆÄÉµ­¡£
+	* navi2ch.texi: SourceForge $B$K$D$$$FDI5-!#(B
 
-	* Makefile: .dvi ¤òºîÀ®¸å¤Ë .log ¤ò¾Ã¤µ¤Ê¤¤¤è¤¦¤Ë¤·¤¿¡£
+	* Makefile: .dvi $B$r:n@.8e$K(B .log $B$r>C$5$J$$$h$&$K$7$?!#(B
 
-	* navi2ch.texi: ¡Ö¤³¤Î¥É¥­¥å¥á¥ó¥È¤Ë¤Ä¤¤¤Æ¡×¾Ï¤òÄÉ²Ã¡£
-	¡ÖBookmark ¥â¡¼¥É¡×¥»¥¯¥·¥ç¥ó¤òÄÉ²Ã¡£
-	¥­¡¼¥Ð¥¤¥ó¥É¤Î node Ì¾¤ò¡Ö¡Á Key Bindings¡×¤ËÅý°ì¡£
-	2¥¹¥È¥í¡¼¥¯¥­¡¼¤Ï´Ö¤Ë¥¹¥Ú¡¼¥¹¤òÆþ¤ì¤¿¡£\C-? ¤Ï C-? ¤ËÊÑ¹¹¡£
-	¥¯¥í¥¹¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¤Á¤ç¤Ã¤È¸«Ä¾¤·¡£
+	* navi2ch.texi: $B!V$3$N%I%-%e%a%s%H$K$D$$$F!W>O$rDI2C!#(B
+	$B!V(BBookmark $B%b!<%I!W%;%/%7%g%s$rDI2C!#(B
+	$B%-!<%P%$%s%I$N(B node $BL>$r!V!A(B Key Bindings$B!W$KE}0l!#(B
+	2$B%9%H%m!<%/%-!<$O4V$K%9%Z!<%9$rF~$l$?!#(B\C-? $B$O(B C-? $B$KJQ99!#(B
+	$B%/%m%9%j%U%!%l%s%9$r$A$g$C$H8+D>$7!#(B
 
-	* Makefile: tar ¶Ì¤Ë ChangeLog ¤òÆþ¤ì¤ë¤è¤¦¤Ë¤·¤¿¡£
+	* Makefile: tar $B6L$K(B ChangeLog $B$rF~$l$k$h$&$K$7$?!#(B
 
-	* ChangeLog: ¿·¥Õ¥¡¥¤¥ë¡£
+	* ChangeLog: $B?7%U%!%$%k!#(B
 
-	* navi2ch.texi: 56¤µ¤ó¤Î½ñ¤¤¤Æ¤¯¤ì¤¿¥Þ¡¼¥¯¤ÈFAQ¤ò¥Þ¡¼¥¸¡£
+	* navi2ch.texi: 56$B$5$s$N=q$$$F$/$l$?%^!<%/$H(BFAQ$B$r%^!<%8!#(B
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/56
 
-	HTML¤Þ¤ï¤ê¤ò¼ã´³¼êÄ¾¤·¡£
+	HTML$B$^$o$j$r<c43<jD>$7!#(B
 
 2002-01-03  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* .cvsignore: navi2ch.html ¤âÌµ»ë¤¹¤ë¤³¤È¤Ë¡£
+	* .cvsignore: navi2ch.html $B$bL5;k$9$k$3$H$K!#(B
 
-	* navi2ch.texi: ¼ã´³¥¯¥ê¡¼¥ó¥Ê¥Ã¥×
-	makeinfo¤ò»ÈÍÑ¤¹¤ë¤³¤È¤Ë¤·¤¿¤Î¤Ç¡¢@node¤Ç¤Î¥¯¥í¥¹¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼è
-	¤ê½ü¤¤¤¿¡£
-	2ch¤ÎÉ½µ­¤ò¡Ö£²¤Á¤ã¤ó¤Í¤ë¡×¤ËÅý°ì¡£
-	HTML¤âºî¤ë¤³¤È¤Ë¤·¤¿¤Î¤Ç¤Á¤ç¤Ã¤ÈÊÑ¹¹¡£(¤Ê¤ó¤«makeinfo --html¤Ã¤ÆÃî
-	¤¬¤¤¤ë¤è¤¦¤Êµ¤¤¬¤¹¤ë¡£)
+	* navi2ch.texi: $B<c43%/%j!<%s%J%C%W(B
+	makeinfo$B$r;HMQ$9$k$3$H$K$7$?$N$G!"(B@node$B$G$N%/%m%9%j%U%!%l%s%9$r<h(B
+	$B$j=|$$$?!#(B
+	2ch$B$NI=5-$r!V#2$A$c$s$M$k!W$KE}0l!#(B
+	HTML$B$b:n$k$3$H$K$7$?$N$G$A$g$C$HJQ99!#(B($B$J$s$+(Bmakeinfo --html$B$C$FCn(B
+	$B$,$$$k$h$&$J5$$,$9$k!#(B)
 
-	* Makefile: HTML¤âºîÀ®¤¹¤ë¤è¤¦¤Ë¤·¤¿¡£(mami¤µ¤ó¤Î¥ê¥¯¥¨¥¹¥È)
-	info¤òºîÀ®¤¹¤ë¤Î¤Ëmakeinfo¤ò»ÈÍÑ¤¹¤ë¤³¤È¤Ë¤·¤¿¡£
+	* Makefile: HTML$B$b:n@.$9$k$h$&$K$7$?!#(B(mami$B$5$s$N%j%/%(%9%H(B)
+	info$B$r:n@.$9$k$N$K(Bmakeinfo$B$r;HMQ$9$k$3$H$K$7$?!#(B
 
 2002-01-02  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.texi: Board ¥â¡¼¥É¤ÎÀâÌÀ¤ò¼ã´³½¼¼Â
+	* navi2ch.texi: Board $B%b!<%I$N@bL@$r<c43=<<B(B
 
-	* Makefile: tar¶Ì¤Îºî¤êÊý¤ò¼ã´³ÊÑ¤¨¤¿¡£
-	clean¤Ç*.gz¤â¾Ã¤¹¤è¤¦¤Ë¤·¤¿¡£
+	* Makefile: tar$B6L$N:n$jJ}$r<c43JQ$($?!#(B
+	clean$B$G(B*.gz$B$b>C$9$h$&$K$7$?!#(B
 
-	* Makefile: tar¶Ì¤òºî¤ë¤È¤­¡¢¥Ç¥£¥ì¥¯¥È¥ê¤â´Þ¤à¤è¤¦¤Ë¤·¤¿¡£
-	dvi¤òºî¤Ã¤¿¸å¤Ë¥Ç¥£¥ì¥¯¥È¥ê¤ò¤­¤ì¤¤¤Ë¤¹¤ë¡£
+	* Makefile: tar$B6L$r:n$k$H$-!"%G%#%l%/%H%j$b4^$`$h$&$K$7$?!#(B
+	dvi$B$r:n$C$?8e$K%G%#%l%/%H%j$r$-$l$$$K$9$k!#(B
