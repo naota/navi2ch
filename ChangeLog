@@ -1,3 +1,9 @@
+2003-12-08  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-str-to-num): 数値の最小値・
+	最大値を制限するように。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/409-418n
+
 2003-12-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property-subr):
