@@ -1,3 +1,9 @@
+2002-07-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-multibbs.el (navi2ch-2ch-url-to-board): 板のマッチをルー
+	ズにもどした。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/552
+
 2002-07-20  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-temp-directory): expand-file-name され

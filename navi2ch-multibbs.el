@@ -311,12 +311,12 @@ state はあぼーんされてれば aborn というシンボル。
 (defun navi2ch-2ch-url-to-board (url)
   (let (id uri)
     (if (or (string-match
-	     "\\`http://\\([^/]+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
+	     "http://\\(.+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
 	    (string-match
-	     "\\`http://\\([^/]+\\)/test/read\\.cgi/\\([^/]+\\)/?" url)
+	     "http://\\(.+\\)/test/read\\.cgi/\\([^/]+\\)/" url)
 	    (string-match
-	     "\\`http://\\([^/]+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
-	    (string-match "\\`http://\\([^/]+\\)/\\([^/]+\\)/?" url))
+	     "http://\\(.+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
+	    (string-match "http://\\(.+\\)/\\([^/]+\\)" url))
 	(setq id (match-string 2 url)
 	      uri (format "http://%s/%s/" (match-string 1 url) id)))
     (if id (list (cons 'uri uri) (cons 'id id)))))
