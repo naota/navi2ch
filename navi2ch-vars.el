@@ -682,7 +682,7 @@ ask なら明示的に移動する時以外なら質問する
   (if (= (regexp-opt-depth "\\(\\(\\)\\)") 1)
       nil ;; バグ持ち regexp-opt-depth()
     '(("<\\(UR[IL]:\\)?\\([^:>]+\\)>" . nil)
-      ("\\<h?t?tp:\\(//www.amazon.co.jp/exec/obidos/ASIN/[0-9]+\\)" .
+      ("\\<h?t?tp:\\(//www.amazon.co.jp/exec/obidos/ASIN/[0-9A-Z]+\\)" .
        "http:\\1")
       ("\\<h?t?tp://\\(ime\\.nu/\\)+\\([-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+\\)" .
        "http://\\2")

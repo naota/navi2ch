@@ -479,8 +479,9 @@ START, END, NOFIRST で範囲を指定する"
 	      (goto-char (max (1+ (match-beginning 0)) (match-end 0))))))
 	 (url-func
 	  (lambda (url)
-	    (when (string-match "\\`\\(h?t?tp\\)\\(s?:\\)" url)
-	      (replace-match "http\\2" nil nil url))))
+	    (if (string-match "\\`\\(h?t?tp\\)\\(s?:\\)" url)
+		(replace-match "http\\2" nil nil url)
+	      url)))
 	 (alist (navi2ch-regexp-alist-to-number-alist
 		 (append
 		  navi2ch-article-link-regexp-alist
@@ -2244,7 +2245,9 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     (put-text-property start end 'help-echo value)))
 
 (defvar navi2ch-article-disable-display-link-commands
-  '(navi2ch-show-url-at-point eval-expression)
+  '(navi2ch-show-url-at-point
+    navi2ch-article-select-current-link
+    eval-expression)
   "このコマンドの後では minibuffer にリンク先を表示しない。")
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)

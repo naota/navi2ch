@@ -394,6 +394,10 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		    (while (memq (process-status proc) '(open run))
 		      (accept-process-output proc))
 		    (goto-char (point-max))))
+	     (when (and (stringp (cdr (assoc "Connection" header)))
+			(string= (cdr (assoc "Connection" header))
+				 "close"))
+	       (delete-process proc))
 	     (navi2ch-net-get-content-subr gzip p (point))
 	     (setq navi2ch-net-content
 		   (buffer-substring-no-properties p (point)))))))))
@@ -591,8 +595,9 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 	     (message "%s: getting file diff..." (current-message))
 	     (let ((cont (navi2ch-net-get-content proc)))
 	       (cond ((and (> size 0) last
-			   (not (string= (substring cont 0 (length last))
-					 last)))
+			   (or (> (length last) (length cont))
+			       (not (string= (substring cont 0 (length last))
+					     last))))
 		      (setq aborn-p t))	; 前回と一致しない場合はあぼーん
 		     ((string= cont last)
 		      (message "%snot updated" (current-message))

@@ -1,5 +1,25 @@
 2004-08-06  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-set-link-property): h?t?tps?
+	以外の場合、リンクが貼られないのを修正。
+	(navi2ch-article-disable-display-link-commands):
+	navi2ch-article-select-current-link を追加。
+
+	* navi2ch-multibbs.el
+	(navi2ch-multibbs-send-message-retry-confirm-function): typo 修正。
+	(navi2ch-multibbs-send-message-retry-confirm): 新関数。
+	(navi2ch-multibbs-send-message): 上記関数を使用。
+
+	* navi2ch-net.el (navi2ch-net-get-content): Connection ヘッダが
+	"close" かを検査。
+	(navi2ch-net-update-file-diff): last から substring を取るのは
+	cont の方が短い場合のみに。
+
+	* navi2ch-util.el (navi2ch-add-days-to-time): 夏時間でも動くように。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): ASIN は
+	[0-9A-Z]。
+
 	* navi2ch-vars.el (navi2ch-article-url-regexp): "(" ")" を URL の
 	一部と見なさないように。
 	(navi2ch-article-link-regexp-alist): 同上。

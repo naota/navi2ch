@@ -236,7 +236,19 @@ START, END, NOFIRST で範囲を指定する"
 	      h (- h 0)))
       (cons h l))))
 
-(defvar navi2ch-multibbs-send-message-retry-comfirm-function #'yes-or-no-p)
+(defvar navi2ch-multibbs-send-message-retry-confirm-function #'yes-or-no-p)
+
+(defun navi2ch-multibbs-send-message-retry-confirm (board)
+  (let ((func (or (navi2ch-fboundp
+		   navi2ch-multibbs-send-message-retry-confirm-function)
+		  #'yes-or-no-p))
+	spid)
+    (unwind-protect
+	(let ((result (funcall func "Retry? ")))
+	  (when result
+	    (setq spid (navi2ch-board-load-spid board)))
+	  result)
+      (navi2ch-board-save-spid board spid))))
 
 (defun navi2ch-multibbs-send-message
   (from mail message subject board article)
@@ -284,10 +296,7 @@ START, END, NOFIRST で範囲を指定する"
 		     (replace-match "\n"))
 		   (delete-other-windows)
 		   (switch-to-buffer (current-buffer))
-		   (unless (funcall (or navi2ch-multibbs-send-message-retry-comfirm-function
-					#'yes-or-no-p)
-				    "Retry? ")
-		     (navi2ch-board-save-spid board nil)
+		   (unless (navi2ch-multibbs-send-message-retry-confirm board)
 		     (return nil))))
 	       (sit-for navi2ch-message-retry-wait-time)
 	       (setq message-str "re-send message..."))

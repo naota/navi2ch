@@ -1021,8 +1021,9 @@ LIST2 の方が大きい場合は負数を返す。"
 
 (defun navi2ch-add-days-to-time (time days)
   "TIME の DAYS 日後 (負の場合は前) の TIME を返す。"
-  (apply #'encode-time (navi2ch-add-number-lists (decode-time time)
-						 (list 0 0 0 days))))
+  (let ((decoded (decode-time time)))
+    (setf (nth 3 decoded) (+ (nth 3 decoded) days))
+    (apply #'encode-time decoded)))
 
 (defun navi2ch-which (file)
   (when (stringp file)
