@@ -189,9 +189,8 @@ Navi2ch Project Summary Page
 @uref{http://sourceforge.net/projects/navi2ch/}
 も要チェック。
 
-以前のリリースは作者の (not 1) さんのページ
+以前のリリースは作者の (not 1) さんのページから入手することができる。
 @uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
-から入手することができる。
 
 (全部 sourceforge に移した方がいいかな。)
 
@@ -209,8 +208,10 @@ navi2ch の開発版は CVS を使って入手することができる。
 
 @example
 @group
-% cvs -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch login
-% cvs -z3 -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch co navi2ch
+% cvs -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch
+        login
+% cvs -z3 -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch
+        co navi2ch
 @r{(それぞれ一行で入力)}
 @end group
 @end example
@@ -1021,7 +1022,7 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 
 @item m m
 @code{navi2ch-bm-mark-marks} ある状態 (VCU) になっているスレをマーク
-@end @table
+@end table
 
 @node Board Mode Key Bindings
 @appendixsec Board モードでのキーバインド
