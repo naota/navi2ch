@@ -61,6 +61,10 @@
   "*オイスターの ID。")
 (defvar navi2ch-oyster-password "odebuchan"
   "*オイスターのパスワード。")
+(defvar navi2ch-oyster-server "2chv.tora3.net"
+  "*オイスターのID取得サーバ。")
+(defvar navi2ch-oyster-cgi "/futen.cgi"
+  "*オイスターのID取得CGI。")
 
 (defvar navi2ch-oyster-session-id nil
   "オイスターサーバから取得したセッションID")
@@ -269,12 +273,12 @@ DIFF が non-nil ならば差分を取得する。
     (save-excursion
       (set-buffer buf)
       (erase-buffer))
-    (setq proc (open-ssl-stream "ssl" buf "tiger2.he.net" 443))
+    (setq proc (open-ssl-stream "ssl" buf navi2ch-oyster-server 443))
     (let ((contents (concat "ID=" navi2ch-oyster-id
 			    "&PW=" navi2ch-oyster-password)))
       (process-send-string proc
 			   (concat
-			    "POST /~tora3n2c/futen.cgi HTTP/1.0\n"
+			    (concat "POST " navi2ch-oyster-cgi " HTTP/1.0\n")
 			    "User-Agent: DOLIB/1.00\n"
 			    "X-2ch-UA: "
 			    (format "Navigator for 2ch %s" navi2ch-version) "\n"
