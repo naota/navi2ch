@@ -320,7 +320,7 @@
        (signal (car err) (cdr err))))))
 
 (defun navi2ch-bm-show-url ()
-  "板のurl を表示して、その url を見るか kill ring にコピーする"
+  "板の url を表示して、その url を見るか kill ring にコピーする"
   (interactive)
   (let* ((board (navi2ch-bm-get-board-internal
 		 (navi2ch-bm-get-property-internal (point))))

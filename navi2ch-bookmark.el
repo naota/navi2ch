@@ -254,18 +254,24 @@ KEY は (concat URI ARTID) ")
 
 (defun navi2ch-bookmark-copy (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "copy to: ")))
-  (save-excursion
-    (beginning-of-line)
-    (let ((item (navi2ch-bookmark-get-property (point))))
-      (navi2ch-bookmark-add-subr bookmark-id
-				 (navi2ch-bookmark-get-board item)
-				 (navi2ch-bookmark-get-article item))
-      (navi2ch-bookmark-save-info))))
+  (if (equal bookmark-id
+	     navi2ch-bookmark-current-bookmark-id)
+      (message "Same bookmark.")
+    (save-excursion
+      (beginning-of-line)
+      (let ((item (navi2ch-bookmark-get-property (point))))
+	(navi2ch-bookmark-add-subr bookmark-id
+				   (navi2ch-bookmark-get-board item)
+				   (navi2ch-bookmark-get-article item))
+	(navi2ch-bookmark-save-info)))))
 
 (defun navi2ch-bookmark-move (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
-  (navi2ch-bookmark-copy bookmark-id)
-  (navi2ch-bookmark-delete-subr))
+  (if (equal bookmark-id
+	     navi2ch-bookmark-current-bookmark-id)
+      (message "Same bookmark.")
+    (navi2ch-bookmark-copy bookmark-id)
+    (navi2ch-bookmark-delete-subr)))
 
 (defun navi2ch-bookmark-move-mark-article (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
