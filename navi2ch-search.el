@@ -123,9 +123,7 @@
 		     (and (file-directory-p default-directory)
 			  (sort (directory-files default-directory
 						 nil "[0-9]+\\.dat$")
-				(lambda (x y)
-				  (let ((r (navi2ch-compare-strings x y)))
-				    (and (numberp r) (< r 0))))))))))
+				#'navi2ch-right-aligned-string<))))))
    board-list))
 
 (defun navi2ch-search-board-subject-regexp (board-list regexp)
