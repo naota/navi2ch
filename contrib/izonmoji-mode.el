@@ -100,11 +100,17 @@
 
 (defvar izonmoji-win-face 'izonmoji-win-face
   "*Windowsの機種依存文字の表示に使うフェイス名。
-'default にするとフェイスをつけません。")
+'default にするとフェイスをつけません。
+
+XEmacs-21.1 では、機種依存文字にフェイスを付けると XEmacs が落ちるようなので
+この変数の値に関わらずフェイスを付けません。")
 
 (defvar izonmoji-mac-face 'izonmoji-mac-face
   "*Macの機種依存文字の表示に使うフェイス名。
-'default にするとフェイスをつけません。")
+'default にするとフェイスをつけません。
+
+XEmacs-21.1 では、機種依存文字にフェイスを付けると XEmacs が落ちるようなので
+この変数の値に関わらずフェイスを付けません。")
 
 (defface izonmoji-win-face
   '((((class color) (type tty)) (:foreground "cyan"))
@@ -297,8 +303,11 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 		    face (or mac-face izonmoji-mac-face 'default))))
 	    (setq priority (cdr priority))
 	    (while (and from to)
-	      (if (eq face 'default)
-		  ;; face が 'default のときは、その場所での face になるように
+	      (if (or (eq face 'default)
+		      ;; XEmacs 21.1 で face を付けると落るので。
+		      (and (= emacs-major-version 21)
+			   (= emacs-minor-version 1)))
+		  ;; face を指定しない。
 		  (aset table (car from) (car to))
 		(setq glyph (make-glyph (car to)))
 		(set-glyph-face glyph face)

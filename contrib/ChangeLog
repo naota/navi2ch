@@ -1,3 +1,11 @@
+2002-11-17  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (izonmoji-mode-on): XEmacs-21.1 では、フェイスを
+	付けないように。 http://pc.2ch.net/test/read.cgi/unix/1031231315/772
+	(izonmoji-win-face): XEmacs-21.1 ではフェイスを付けないことを
+	docstring に追加。
+	(izonmoji-mac-face): 同上。
+
 2002-11-11  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* izonmoji-mode.el (izonmoji-mode-on): XEmacs でも
