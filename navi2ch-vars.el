@@ -357,7 +357,7 @@ non-nil で狭める"
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-citation-regexp
-  "^[>＞][^>＞0-9０-９].*"
+  "^[>＞]\\($\\|[^$>＞0-9０-９].*\\)"
   "*引用部分の正規表現"
   :type 'regexp
   :group 'navi2ch-article)

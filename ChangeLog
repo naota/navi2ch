@@ -31,6 +31,8 @@
 	(navi2ch-message-aa-alist): いくつか追加。
 	(navi2ch-message-user-name-alist): 新変数
 	(navi2ch-message-always-pop-message): 新変数
+	(navi2ch-article-citation-regexp): 行が ">" だけのとき次の行も含めて
+	引用と認識されてたので修正。
 	
 	* navi2ch-util.el
 	(navi2ch-browse-url): URL に extension がないときは
