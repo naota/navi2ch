@@ -314,7 +314,9 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 		   (not (file-regular-p file))
 		   (file-newer-than-file-p backup-file file))
 	       (yes-or-no-p
-		"問題発生。バックアップファイルから読み込みますか? "))
+		(format
+		 "%s の読み込みで問題発生。バックアップファイルから読み込みますか? "
+		 file)))
       (setq file backup-file)))
   (when (file-regular-p file)
     (let ((coding-system-for-read navi2ch-coding-system))

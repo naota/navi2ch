@@ -1,3 +1,8 @@
+2003-10-31  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-load-info): 問題発生時のプロンプトにファイル
+	名を表示するように。
+
 2003-10-18  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-select-article): 呼び出し先で
