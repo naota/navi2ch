@@ -702,9 +702,9 @@ non-nil なら付加する。"
     (define-key map "\C-c\C-t" 'navi2ch-toggle-offline)
     (define-key map "\C-c\C-u" 'navi2ch-goto-url)
     (define-key map "\C-c\C-v" 'navi2ch-version)
-    (define-key map "\C-c1" 'navi2ch-one-pane)
+    ;; (define-key map "\C-c1" 'navi2ch-one-pane)
     ;; (define-key map "\C-c2" 'navi2ch-two-pane)
-    (define-key map "\C-c3" 'navi2ch-three-pane)
+    ;; (define-key map "\C-c3" 'navi2ch-three-pane)
     (setq navi2ch-global-map map)))
 
 (defvar navi2ch-global-view-map nil

@@ -829,12 +829,6 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 
 @item C-c C-v
 @code{navi2ch-version} navi2ch のバージョンをミニバッファに表示
-
-@item C-c 1
-@code{navi2ch-one-pane} 1ペイン表示に切り替え
-
-@item C-c 3
-@code{navi2ch-tree-pane} 3ペイン表示に切り替え
 @end table
 
 Message モード以外では以下のキーバインドも使える。ただし、モードで上書
