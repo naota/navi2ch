@@ -857,14 +857,14 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-article-default-header-format-function (number name mail date)
   "デフォルトのヘッダをフォーマットする関数
   ヘッダのface を付けるのもここで。"
-  (let ((start 0))
-    (while (string-match "[0-9]+" name start)
-      (navi2ch-article-set-link-property-subr (match-beginning 0)
-					      (match-end 0)
-					      'number
-					      (match-string 0 name)
-					      name)
-      (setq start (match-end 0))))
+  (when (string-match (concat "\\`" navi2ch-article-number-number-regexp
+			      "\\'")
+		      name)
+    (navi2ch-article-set-link-property-subr (match-beginning 0)
+					    (match-end 0)
+					    'number
+					    (match-string 0 name)
+					    name))
   (let ((from-header "From: ")
         (from (format "[%d] %s <%s>\n" number name mail))
         (date-header "Date: ")
