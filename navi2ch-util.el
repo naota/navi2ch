@@ -1153,13 +1153,12 @@ back reference は有効に動作しない。
 `match-data' をマッチした正規表現の物にし、マッチした要素を返す。
 REGEXP-ALIST については `navi2ch-match-regexp-alist-subr' を参照。
 BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
-  (let* ((p (point))
-	 (matched-elt (navi2ch-match-regexp-alist-subr
-		       (lambda (regexp)
-			 (re-search-forward regexp bound noerror count))
-		       regexp-alist)))
+  (let ((matched-elt (navi2ch-match-regexp-alist-subr
+		      (lambda (regexp)
+			(re-search-forward regexp bound noerror count))
+		      regexp-alist)))
     (when matched-elt
-      (goto-char p)
+      (goto-char (match-beginning 0))
       (re-search-forward (car matched-elt) bound noerror count))
     matched-elt))
 
@@ -1173,22 +1172,21 @@ START は `string-match' にそのまま渡される。"
 			(string-match regexp string start))
 		      regexp-alist)))
     (when matched-elt
-      (string-match (car matched-elt) string start))
+      (string-match (car matched-elt) string (match-beginning 0)))
     matched-elt))
 
 (defun navi2ch-replace-regexp-alist (regexp-alist &optional fixedcase literal)
   "REGEXP-ALIST の各要素の car を正規表現とし、cdr で置き換える。
-cdr が文字列の場合はそれ自身と、関数の場合はマッチした正規表現を引数
+cdr が文字列の場合はそれ自身と、関数の場合はマッチした文字列を引数
 として呼び出した結果と置き換える。
 REGEXP-ALIST については `navi2ch-match-regexp-alist-subr' を参照。
 FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
-  (let ((number-alist (navi2ch-regexp-alist-to-number-alist regexp-alist))
+  (let ((alist (navi2ch-regexp-alist-to-number-alist regexp-alist))
 	elt rep)
-    (while (setq elt
-		 (navi2ch-re-search-forward-regexp-alist number-alist nil t))
+    (while (setq elt (navi2ch-re-search-forward-regexp-alist alist nil t))
       (setq rep (cdr elt))
       (replace-match (cond ((stringp rep) rep)
-			   ((functionp rep) (funcall rep (car elt)))
+			   ((functionp rep) (funcall rep (match-string 0)))
 			   (t (signal 'wrong-type-argument
 				      (list 'stringp-or-functionp
 					    rep))))
