@@ -205,7 +205,7 @@
 		(cdr (assq 'name board)) "\n")
 	(set-text-properties
 	 prev (1- (point))
-	 (list 'mouse-face 'highlight
+	 (list 'mouse-face navi2ch-list-mouse-face
 	       'face (cadr state))))
       (put-text-property prev (point) 'board board)
       (setq prev (point)))))
@@ -221,7 +221,7 @@
 	  (insert "[" (if open "-" "+") "]"
 		  (car pair) "\n")
 	  (set-text-properties prev (1- (point))
-			       (list 'mouse-face 'highlight
+			       (list 'mouse-face navi2ch-list-mouse-face
 				     'face 'navi2ch-list-category-face))
 	  (put-text-property prev (point) 'category (car pair))
 	  (when open

@@ -361,7 +361,7 @@ START, END, NOFIRST で範囲を指定する"
 			 (list 'face 'navi2ch-article-link-face
 			       'help-echo (function navi2ch-article-help-echo)
 			       'link t
-			       'mouse-face 'highlight
+			       'mouse-face navi2ch-article-mouse-face
 			       'number (navi2ch-match-string-no-properties 1)))
     (add-text-properties (match-beginning 0)
 			 (+ 1 (match-beginning 0))
@@ -374,7 +374,7 @@ START, END, NOFIRST で範囲を指定する"
 			 (list 'face 'navi2ch-article-url-face
 			       'help-echo (function navi2ch-article-help-echo)
 			       'link t
-			       'mouse-face 'highlight
+			       'mouse-face navi2ch-article-mouse-face
 			       'url (concat "http://" (navi2ch-match-string-no-properties 1))))
     (add-text-properties (match-beginning 0)
 			 (+ 1 (match-beginning 0))
@@ -1546,7 +1546,7 @@ gunzip に通してから文字コードの推測を試みる。"
                     (navi2ch-propertize (format "%s" (or fname "名無しファイルさん"))
 					'face '(navi2ch-article-url-face navi2ch-article-base64-face)
 					'link t
-					'mouse-face 'highlight
+					'mouse-face navi2ch-article-mouse-face
 					'file-name fname
 					'content noconv))
             (setq part-begin (point))

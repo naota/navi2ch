@@ -180,7 +180,7 @@
   (navi2ch-bm-set-property-internal begin end item)
   (setq updated (or updated (get-text-property (1+ begin) 'updated)))
   (put-text-property begin end 'updated updated)
-  (put-text-property begin end 'mouse-face 'highlight)
+  (put-text-property begin end 'mouse-face navi2ch-bm-mouse-face)
   (put-text-property begin end 'face (nth (cond ((eq updated 'updated) 3)
 						((eq updated 'seen) 4)
 						((eq updated nil) 2))

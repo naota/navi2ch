@@ -211,6 +211,12 @@ nil ならば手動で更新しないかぎり取りにいかない。"
   :type '(repeat (cons (string :tag "URL") (string :tag "id")))
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-mouse-face 'highlight
+  "リストモードで板をポイントした時に使用するフェイス。"
+  :type '(choice (face :tag "フェイスを指定")
+		 (const :tag "フェイスを使用しない" nil))
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。nil なら全部ダウンロードする。"
@@ -319,6 +325,12 @@ non-nil ならば expire する。"
 (defcustom navi2ch-board-name-from-file "From File"
   "*ファイルから読み込んだスレを表わす板名。"
   :type 'string
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-bm-mouse-face 'highlight
+  "*板でスレをポイントした時に使用するフェイス。"
+  :type '(choice (face :tag "フェイスを指定")
+		 (const :tag "フェイスを使用しない" nil))
   :group 'navi2ch-board)
 
 ;;; article variables
@@ -543,6 +555,12 @@ window の幅いっぱいにしたいなら
 (defcustom navi2ch-article-show-url-number 50
   "*url を表示・コピーする際、最後のレスをいくつ表示するか。 "
   :type 'number
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-mouse-face 'highlight
+  "*スレでリンクをポイントした時に使用するフェイス。"
+  :type '(choice (face :tag "フェイスを指定")
+		 (const :tag "フェイスを使用しない" nil))
   :group 'navi2ch-article)
 
 ;;; message variables
