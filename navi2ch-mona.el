@@ -41,6 +41,7 @@
 (defvar navi2ch-mona-ident
   "$Id$")
 (eval-when-compile (require 'cl))
+(require 'base64)
 (require 'navi2ch-util)
 
 (eval-when-compile

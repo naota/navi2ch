@@ -1,3 +1,23 @@
+2002-07-19  Nanashi San  <nanashi@users.sourceforge.net>
+
+	base64-ほげほげ を使う際は (require 'base64) するようにした。
+	o GNU Emacs 20、21、XEmacs 21.4 では base64 が provide されてる。
+	o flim を使うパッケージは (mel-find-function ...) をしており、
+	  base64 feature には依存しない作りになっている。
+	o XEmacs では、base64.el は browse-url.el と共に mail-lib の一部と
+	  して配布されており、(require 'browse-url) をしている以上、
+	  (require 'base64) しても問題無いはず。
+
+	* navi2ch-article.el: base64 を require。
+
+	* navi2ch-mona.el: 同上。
+
+	* navi2ch-net.el: 同上。
+
+	* navi2ch-util.el: 同上。
+
+	* README: flim に関する記述を削除。
+
 2002-07-18  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (recompile): $(EMACS) に空白が入っても大丈夫なよう、

@@ -28,16 +28,9 @@
 (eval-when-compile (require 'cl))
 (require 'timezone)
 (require 'browse-url)
+(require 'base64)
 
 (require 'navi2ch-vars)
-
-(eval-and-compile
-  (unless (and (fboundp 'base64-encode-region)
-	       (fboundp 'base64-decode-region))
-    (cond ((locate-library "mel")
-	   (require 'mel))
-	  ((locate-library "base64")
-	   (require 'base64)))))
 
 (defvar navi2ch-mode-line-identification nil)
 (make-variable-buffer-local 'navi2ch-mode-line-identification)

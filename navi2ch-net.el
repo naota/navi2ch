@@ -27,6 +27,7 @@
 
 (eval-when-compile (require 'cl))
 (require 'timezone)
+(require 'base64)
 
 (require 'navi2ch)
 

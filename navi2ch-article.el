@@ -26,6 +26,7 @@
   "$Id$")
 
 (eval-when-compile (require 'cl))
+(require 'base64)
 
 (require 'navi2ch)
 
