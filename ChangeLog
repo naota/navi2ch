@@ -1,5 +1,7 @@
 2002-07-26  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* NEWS: 板 ID の衝突について追記。
+
 	* navi2ch-machibbs.el (navi2ch-machibbs-article-callback):
 	透明あぼーんで番号がずれていたのに対応。
 
