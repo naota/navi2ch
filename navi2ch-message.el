@@ -176,7 +176,7 @@
 	    (when (car result)
 	      (message "waiting new message...")
 	      (sleep-for navi2ch-message-wait-time)
-	      (message (current-message) "done")
+	      (message "%s%s" (current-message) "done")
 	      (save-excursion
 		(if navi2ch-message-new-message-p
 		    (progn
