@@ -1,5 +1,7 @@
 2002-02-03  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* configure.in: icondir を自動的に設定するようにした。
+
 	* icons/Makefile.am (icondir): @icons@ に変更。
 
 2002-02-02  Nanashi San  <nanashi@users.sourceforge.net>
