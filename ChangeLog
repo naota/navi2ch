@@ -1,3 +1,7 @@
+2003-06-26  mami  <mami@users.sourceforge.net>
+
+	* NEWS: 1.6.1 からの変更点を追加。
+
 2003-06-24  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-logo): SETTING.TXT が見つか
