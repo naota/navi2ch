@@ -1,3 +1,15 @@
+2003-10-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-hide-message-hook)
+	(navi2ch-article-cancel-hide-message-hook)
+	(navi2ch-article-add-important-message-hook)
+	(navi2ch-article-delete-important-message-hook): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-hide-message)
+	(navi2ch-article-cancel-hide-message)
+	(navi2ch-article-add-important-message)
+	(navi2ch-article-delete-important-message): 上記 hook を使うように。
+
 2003-10-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-mark-subr):

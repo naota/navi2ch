@@ -2815,6 +2815,7 @@ NO-SYNC が non-nil のときは sync しない。"
 
 (defun navi2ch-article-hide-message ()
   (interactive)
+  (run-hooks 'navi2ch-article-hide-message-hook)
   (navi2ch-article-delete-message
    'hide
    (lambda (num list)
@@ -2825,6 +2826,7 @@ NO-SYNC が non-nil のときは sync しない。"
 
 (defun navi2ch-article-cancel-hide-message (&optional prefix)
   (interactive "P")
+  (run-hooks 'navi2ch-article-cancel-hide-message-hook)
   (navi2ch-article-delete-message 'hide 'delq
                                   "Cancel hide message"
 				  prefix))
@@ -2854,6 +2856,7 @@ NO-SYNC が non-nil のときは sync しない。"
 
 (defun navi2ch-article-add-important-message (&optional prefix)
   (interactive "P")
+  (run-hooks 'navi2ch-article-add-important-message-hook)
   (if prefix
       (navi2ch-article-add-board-bookmark)
     (let* ((article navi2ch-article-current-article)
@@ -2867,6 +2870,7 @@ NO-SYNC が non-nil のときは sync しない。"
 
 (defun navi2ch-article-delete-important-message (&optional prefix)
   (interactive "P")
+  (run-hooks 'navi2ch-article-delete-important-message-hook)
   (navi2ch-article-delete-message 'important 'delq
                                   "Delete important message"
 				  prefix))
