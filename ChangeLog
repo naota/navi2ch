@@ -1,5 +1,10 @@
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* TODO: Todo からリネーム。Windows だとファイル名の case を無視す
+	るせいか、automake がうまくいってなかったため。
+
+	* Makefile.am: 上記リネームに対応。
+
 	* navi2ch-util.el: base64 関係をちょい修正。変数に docstring 追加。
 	(navi2ch-base64-begin-delimiter-with-name-regexp): 削除
 	(navi2ch-base64-write-region): 上記変更に対応
