@@ -44,6 +44,7 @@
     (define-key map "U" 'navi2ch-bm-show-url)
     (define-key map "l" 'navi2ch-bm-view-logo)
     (define-key map "A" 'navi2ch-bm-add-global-bookmark)
+    (define-key map "g" 'navi2ch-bm-goto-board)
     (define-key map "q" 'navi2ch-bm-exit)
     (define-key map "S" 'navi2ch-bm-sort)
     (define-key map "?" 'navi2ch-bm-search)

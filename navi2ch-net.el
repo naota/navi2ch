@@ -29,7 +29,7 @@
 (require 'navi2ch)
 
 (defvar navi2ch-net-connection-name "navi2ch connection")
-(defvar navi2ch-net-user-agent "Navi2ch")
+(defvar navi2ch-net-user-agent "Monazilla/1.00 Navi2ch")
 (defvar navi2ch-net-setting-file-name "SETTING.TXT")
 (defvar navi2ch-net-last-url nil)
 (defvar navi2ch-net-process nil)
