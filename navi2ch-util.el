@@ -345,7 +345,8 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 				   file t)
 				  navi2ch-directory)))
     (if (string-match (format "^%s"
-			      (regexp-quote (expand-file-name navi2ch-directory)))
+			      (regexp-quote (file-name-as-directory
+					     (expand-file-name navi2ch-directory))))
 		      result)
 	result
       (error "Wrong file name"))))
