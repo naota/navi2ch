@@ -1,5 +1,11 @@
 2002-07-31  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* acinclude.m4 (AC_EMACS_LISP): 与えられた elisp-code を一つの関数
+	に閉じ込め、その関数を呼び出すように。
+	Emacs 20 は -l でロードした場合には標準出力に何も出力しないみたい
+	なので。。。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/708
+
 	* elisp-comp: -L で load-path を追加できるようにしてみた。
 	-eval は使わず、中間ファイルに書き出してそれを -l するように。
 

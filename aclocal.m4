@@ -20,10 +20,12 @@ AC_DEFUN([AC_EMACS_LISP],[dnl
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
 cat >$ac_temp <<\_ACEOF
+(defun ac-temp-func ()
 $2
 (princ "\n") ; make sure the output has trailing newline.
+)
 _ACEOF
-$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
 $1=`cat $ac_output`
 rm -f $ac_temp $ac_output; }])
 

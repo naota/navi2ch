@@ -1704,13 +1704,15 @@ echo $ECHO_N "checking detecting your emacs type... $ECHO_C" >&6
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
 cat >$ac_temp <<\_ACEOF
+(defun ac-temp-func ()
 (princ (cond ((featurep 'xemacs) 'xemacs)
              ((>= emacs-major-version 21) 'emacs21)
              ((= emacs-major-version 20) 'emacs20)
              (t 'UNKNOWN)))
 (princ "\n") ; make sure the output has trailing newline.
+)
 _ACEOF
-$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
 emacstype=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
 echo "$as_me:$LINENO: result: $emacstype" >&5
@@ -1737,10 +1739,12 @@ yes) { ac_temp=./conftemp.$$
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
 cat >$ac_temp <<\_ACEOF
+(defun ac-temp-func ()
 (princ (expand-file-name "../site-packages" data-directory))
 (princ "\n") ; make sure the output has trailing newline.
+)
 _ACEOF
-$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
 packagedir=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
 ;;
@@ -1780,6 +1784,7 @@ else
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
 cat >$ac_temp <<\_ACEOF
+(defun ac-temp-func ()
 (defvar result nil)
 (while load-path
   (if (string-match "\\`\\(.+/site-lisp\\)/?\\'" (car load-path))
@@ -1788,8 +1793,9 @@ cat >$ac_temp <<\_ACEOF
     (setq load-path (cdr load-path))))
 (princ (or result (expand-file-name "../site-lisp" data-directory)))
 (princ "\n") ; make sure the output has trailing newline.
+)
 _ACEOF
-$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
 am_cv_lispdir=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
       if test -z "$am_cv_lispdir"; then
@@ -1827,10 +1833,12 @@ else
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
 cat >$ac_temp <<\_ACEOF
+(defun ac-temp-func ()
 (princ (expand-file-name "navi2ch/icons" data-directory))
 (princ "\n") ; make sure the output has trailing newline.
+)
 _ACEOF
-$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
 cv_icondir=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
     if test -z "$cv_icondir"; then
