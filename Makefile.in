@@ -81,7 +81,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-history.el navi2ch-search.el navi2ch-message.el \
 	navi2ch.el \
 	navi2ch-head.el navi2ch-mona.el navi2ch-e21.el \
-	navi2ch-splash.el
+	navi2ch-splash.el navi2ch-directory.el
 
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
@@ -98,11 +98,12 @@ LISP = $(lisp_LISP)
 
 ELCFILES = navi2ch-article.elc navi2ch-articles.elc \
 	navi2ch-board-misc.elc navi2ch-board.elc navi2ch-bookmark.elc \
-	navi2ch-e21.elc navi2ch-face.elc navi2ch-head.elc \
-	navi2ch-history.elc navi2ch-list.elc navi2ch-message.elc \
-	navi2ch-mona.elc navi2ch-net.elc navi2ch-popup-article.elc \
-	navi2ch-search.elc navi2ch-splash.elc navi2ch-util.elc \
-	navi2ch-vars.elc navi2ch-version.elc navi2ch.elc
+	navi2ch-directory.elc navi2ch-e21.elc navi2ch-face.elc \
+	navi2ch-head.elc navi2ch-history.elc navi2ch-list.elc \
+	navi2ch-message.elc navi2ch-mona.elc navi2ch-net.elc \
+	navi2ch-popup-article.elc navi2ch-search.elc navi2ch-splash.elc \
+	navi2ch-util.elc navi2ch-vars.elc navi2ch-version.elc \
+	navi2ch.elc
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
