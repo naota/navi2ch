@@ -1423,7 +1423,7 @@ fi
 
 # Define the identity of the package.
 PACKAGE=navi2ch
-VERSION=1.7
+VERSION=1.7-DEV
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE "$PACKAGE"
