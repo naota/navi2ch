@@ -1354,17 +1354,17 @@ article buffer から抜けるなら 'quit を返す。"
   "次のリンクへ"
   (interactive)
   (let ((point (navi2ch-next-property (point) 'link-head)))
-    (when point
-      (goto-char point)
-      (navi2ch-article-display-link-minibuffer point))))
+    (if point
+	(goto-char point)))
+  (navi2ch-article-display-link-minibuffer (point)))
 
 (defun navi2ch-article-previous-link ()
   "前のリンクへ"
   (interactive)
   (let ((point (navi2ch-previous-property (point) 'link-head)))
-    (when point
-      (goto-char point)
-      (navi2ch-article-display-link-minibuffer point))))
+    (if point
+	(goto-char point)))
+  (navi2ch-article-display-link-minibuffer (point)))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)

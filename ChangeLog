@@ -1,5 +1,9 @@
 2002-05-11    mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-next-link): 移動しなかったと
+	きもリンク先を表示するように。
+	(navi2ch-article-previous-link): 同上。
+
 	スレにレスがないとき (全レスを d したときとか) に g がエラーとなら
 	ないように。
 	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
