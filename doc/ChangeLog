@@ -1,3 +1,9 @@
+2003-06-30  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode): PopUp Article モードでの "D"、"A"、
+	"d"、"C-u d" について記述。
+	(Article Message Filter): 新ノード。
+
 2003-06-07  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): @appendixsec でセクション分け。

@@ -133,6 +133,7 @@ Bookmark モード
 Article モード
 
 * Article View Range::          スレの表示範囲
+* Article Message Filter::      レスのフィルタ処理
 
 Message モード
 
@@ -741,8 +742,15 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 パーズ済みのメッセージのみを検索対象とするので、あらかじめ
 検索したい範囲のメッセージを表示しておくこと。
 
+検索結果の表示バッファでは、@kbd{D} を押すと表示されているレスをまとめ
+て隠すことができ、@kbd{A} を押すと同様にまとめてブックマークすることが
+できる。また、これらの操作の対象にしたくないレスがあるときは、@kbd{d} 
+でカーソル位置のレスを除外することができる。間違って除外してしまったと
+きは、@kbd{C-u d} でレスが復活する。
+
 @menu
 * Article View Range::          スレの表示範囲
+* Article Message Filter::      レスのフィルタ処理
 @end menu
 
 @node Article View Range
@@ -758,6 +766,60 @@ Navi2ch では、スレ中のすべてのレスを一度に処理するのは負荷が高いため、
 @code{navi2ch-article-exist-message-range} を変更する。@xref{Customize}.
 
 現在表示中のスレの表示領域を変えたい場合は @kbd{r} を押す。
+
+@node Article Message Filter
+@subsection レスのフィルタ処理
+
+Navi2ch には、名前や本文中の語句など、レスに含まれる特定の文字列を条件
+としてフィルタする機能が用意されている。
+
+スレ閲覧中に @kbd{!} を押すと、
+
+@enumerate
+@item
+名前 (name)、メール欄 (mail)、日付 (date)、ID (id)、本文 (body)、スレ
+のタイトル (subject) のうち、どの項目でフィルタするか。
+
+@item
+レスを検査する方法を、拡張形式によってくわしく指定する (Use
+extensional match) か。
+
+拡張形式で指定する場合、部分一致 (substring)、あいまい一致 
+(fuzzy-substring)、完全一致 (exact-string)、正規表現 (regexp) のうち、
+どの方法を使うか。その際、大文字と小文字の違いは無視する (Ignore case) 
+か。
+
+@item
+どんな文字列をフィルタ対象にするか。
+
+@item
+条件が一致したレスに対し、置き換える (replace)、隠す (hide)、ブックマー
+クする (important)、点数を加える (score) のうち、どの処理をおこなうか。
+置き換える場合は、どう置き換えるか。点数を加える場合は、何点加えるか。
+
+@item
+設定したフィルタを閲覧中のスレに今すぐ反映させるか。
+@end enumerate
+
+が順番に質問され、これに答えていくと、対応する変数の設定値が自動的に更
+新される。
+
+複数の項目、例えばスレのタイトルとレス本文の両方を条件としてフィルタし
+たい場合は、まずスレタイと本文によってレスに点数を付け、つぎに合計点数
+によってレスがうまくフィルタされるように、
+@code{navi2ch-article-message-replace-below}、
+@code{navi2ch-article-message-hide-below}、
+@code{navi2ch-article-message-add-important-above} を設定するとよい。
+@xref{Customize}.
+
+スレ閲覧中に @kbd{F} を押すと、フィルタの有効・無効を切り替えることが
+できる。また、デフォルトではフィルタ処理の結果はキャッシュされ、一度検
+査されたレスは再度検査されないようになっているが、フィルタ処理の条件を
+変更したときなどあらためてレスを検査したい場合には、@kbd{C-u F} を押す
+とキャッシュが更新される。
+
+カーソル位置のレスがフィルタにより置き換えられていた場合、@kbd{x} を押
+すとそのレスの置き換えの有効・無効を切り替えることができる。
 
 @node Message Mode
 @section Message モード

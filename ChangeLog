@@ -1,3 +1,8 @@
+2003-06-30  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-list): docstring 内の
+	関数の記述例で、括弧の数がおかしかったのを修正。
+
 2003-06-28  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* NEWS: navi2ch-article-decode-message の変更について記述。

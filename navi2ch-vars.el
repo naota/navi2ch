@@ -779,7 +779,7 @@ nil の場合は同じスレの内容のみを得る。"
 	(message (cdr (assq 'data alist))))
     (if (equal name \"ほげ\")
 	\"あぼぼーん\"
-      nil))"
+      nil)))"
   :type '(repeat function)
   :group 'navi2ch-article)
 
