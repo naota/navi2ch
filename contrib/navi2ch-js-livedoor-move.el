@@ -1,4 +1,4 @@
-;;; navi2ch-js-livedoor-move.el --- Supports moving JBBS@shitaraba to livedoor.
+;;; navi2ch-js-livedoor-move.el --- Supports moving JBBS-shitaraba.
 
 ;; Copyright (C) 2004 by Navi2ch Project
 
@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; jbbs.shitaraba.com から jbbs.livedoor.com への移転のサポート。
+;; jbbs.livedoor.com から jbbs.livedoor.jp への移転のサポート。
 
 ;;; Code:
 
@@ -33,17 +33,22 @@
 
 (defun navi2ch-js-livedoor-move ()
   (interactive)
-  (let* ((etc-category (navi2ch-list-get-etc-category))
+  (let* ((old-host "jbbs.livedoor.com")
+	 (new-host "jbbs.livedoor.jp")
+	 (etc-category (navi2ch-list-get-etc-category))
 	 changed-list)
 
     ;; ログ移動
     (dolist (board (cdr (assq 'child etc-category)))
       (let ((uri (cdr (assq 'uri board))))
-	(when (string-match "^http://jbbs\.shitaraba\.com/" uri)
+	(when (string-match (format "^http://%s/"
+				    (regexp-quote old-host))
+			    uri)
 	  (let ((new-board (copy-tree board)))
 	    (setcdr (assq 'uri new-board)
-		    (navi2ch-replace-string "^http://jbbs\.shitaraba\.com/"
-					    "http://jbbs.livedoor.com/"
+		    (navi2ch-replace-string (format "^http://%s/"
+						    (regexp-quote old-host))
+					    (format "http://%s/" new-host)
 					    uri))
 	    (push (list (cdr (assq 'id board))
 			board

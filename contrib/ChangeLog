@@ -1,3 +1,9 @@
+2004-10-10  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-js-livedoor-move.el (navi2ch-js-livedoor-move):
+	jbbs.livedoor.com から jbbs.livedoor.jp への移転用に変更。
+	ホスト名を関数の最初に移動。
+
 2004-08-15  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-js-livedoor-move.el: (provide ...) を先頭に。
