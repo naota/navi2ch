@@ -1,6 +1,6 @@
 ;;; navi2ch-popup-article.el --- popup article module for navi2ch
 
-;; Copyright (C) 2001-2003 by Navi2ch Project
+;; Copyright (C) 2001-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -62,7 +62,7 @@
     (define-key map "d" 'navi2ch-popup-article-exclude-message)
     (define-key map "D" 'navi2ch-popup-article-hide-messages)
     (define-key map "A" 'navi2ch-popup-article-add-important-messages)
-    (define-key map "u" 'navi2ch-popup-article-show-url-at-point)
+    (define-key map "u" 'navi2ch-show-url-at-point)
     (setq navi2ch-popup-article-mode-map map)))
 
 (defvar navi2ch-popup-article-current-board nil)
@@ -266,12 +266,11 @@ stack が空なら、PopUp Article モードを抜ける。"
 					   "Add important messages")
     (message "Don't add important messages")))
 
-(defun navi2ch-popup-article-show-url-at-point (point)
-  "POINT の下のリンクを指す URL を表示し、kill-ring にコピーする。"
-  (interactive "d")
+(defun navi2ch-popup-article-url-at-point (point)
+  "POINT の下のリンクを指す URL を得る。"
   (let ((navi2ch-article-current-board navi2ch-popup-article-current-board)
 	(navi2ch-article-current-article navi2ch-popup-article-current-article))
-    (navi2ch-article-show-url-at-point point)))
+    (navi2ch-article-url-at-point point)))
 
 (run-hooks 'navi2ch-popup-article-load-hook)
 ;;; navi2ch-popup-article.el ends here

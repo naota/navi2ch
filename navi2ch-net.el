@@ -116,8 +116,16 @@ BODY の評価中にエラーが起こると nil を返す。"
     proc))
 
 (defun navi2ch-open-network-stream-via-command (name buffer host service)
-  (apply #'start-process name buffer
-	 (funcall navi2ch-open-network-stream-command host service)))
+  (let ((command (cond ((stringp navi2ch-open-network-stream-command)
+			(format navi2ch-open-network-stream-command
+				host service))
+		       ((functionp navi2ch-open-network-stream-command)
+			(funcall navi2ch-open-network-stream-command
+				 host service)))))
+    (apply #'start-process name buffer
+	   (if (stringp command)
+	       (list shell-file-name shell-command-switch command)
+	     command))))
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)

@@ -890,5 +890,9 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 	      (kill-new str)
 	      (message "copy: %s" str))))))))
 
+(defun navi2ch-list-url-at-point (point)
+  (let ((board (get-text-property point 'board)))
+    (cdr (assq 'uri board))))
+
 (run-hooks 'navi2ch-list-load-hook)
 ;;; navi2ch-list.el ends here

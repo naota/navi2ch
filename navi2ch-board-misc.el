@@ -966,5 +966,13 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
     (when (and board article)
       (navi2ch-article-save-dat-file board article))))
 
+(defun navi2ch-bm-url-at-point (point)
+  "POINT $B$N2<$N%j%s%/$r;X$9(B URL $B$rF@$k!#(B"
+  (let ((board (navi2ch-bm-get-board-internal
+		(navi2ch-bm-get-property-internal point)))
+	(article (navi2ch-bm-get-article-internal
+		  (navi2ch-bm-get-property-internal point))))
+    (navi2ch-article-to-url board article)))
+
 (run-hooks 'navi2ch-board-misc-load-hook)
 ;;; navi2ch-board-misc.el ends here

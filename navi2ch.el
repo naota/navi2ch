@@ -1,6 +1,6 @@
 ;;; navi2ch.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2000-2003 by Navi2ch Project
+;; Copyright (C) 2000-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -515,6 +515,35 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
       (navi2ch-goto-url url)
     (message "falling back...")
     (apply 'navi2ch-browse-url-internal url args)))
+
+(defun navi2ch-url-at-point (point)
+  "POINT の下のリンクを指す URL を得る。
+\(defadvice browse-url-url-at-point
+  (around my-browse-url-url-at-point-navi2ch activate compile)
+  (let ((url (navi2ch-url-at-point (point))))
+    (if url
+	(setq ad-return-value url)
+      ad-do-it)))
+のようにすると、リンクに対して browse-url をインタラクティブに
+実行できる。"
+  (let ((alist `((navi2ch-list-mode . navi2ch-list-url-at-point)
+		 (navi2ch-article-mode . navi2ch-article-url-at-point)
+		 (navi2ch-popup-article-mode
+		  . navi2ch-popup-article-url-at-point)
+		 ,@(mapcar (lambda (mode)
+			     (cons (intern (format "navi2ch-%s-mode"
+						   (car mode)))
+				   #'navi2ch-bm-url-at-point))
+			   navi2ch-bm-board-type-alist))))
+    (funcall (or (cdr (assq major-mode alist)) #'ignore) point)))
+
+(defun navi2ch-show-url-at-point (point)
+  "POINT の下のリンクを指す URL を表示し、kill-ring にコピーする。"
+  (interactive "d")
+  (let ((url (navi2ch-article-url-at-point point)))
+    (when url
+      (kill-new url)
+      (message "%s" url))))
 
 (eval-when-compile
   (mapatoms (lambda (symbol)

@@ -1,5 +1,34 @@
 2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-disabled-key): 新関数。
+
+	* navi2ch-vars.el (navi2ch-global-map): "C-xC-e" に ignore ではな
+	く、上記関数をバインド。
+
+	* navi2ch.el (navi2ch-url-at-point): 新関数。
+	(navi2ch-show-url-at-point): 新関数。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): "u"
+	を navi2ch-show-url-at-point に変更。
+	(navi2ch-popup-article-url-at-point): 新関数。
+	(navi2ch-popup-article-show-url-at-point): 削除。
+
+	* navi2ch-list.el (navi2ch-list-url-at-point): 新関数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-url-at-point): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-cleanup-message): 削る行頭の
+	空白は一つだけに。
+	(navi2ch-article-mode-map): u を navi2ch-show-url-at-point に変更。
+	(navi2ch-article-url-at-point): docfix
+	(navi2ch-article-show-url-at-point): 削除。
+
+	* navi2ch-net.el (navi2ch-open-network-stream-via-command):
+	navi2ch-open-network-stream-command の自由度を上げた。
+
+	* navi2ch-vars.el (navi2ch-open-network-stream-command): 上記変更
+	について docstring および custom type を変更。
+
 	* navi2ch-article.el (navi2ch-article-set-link-property): cdr が関
 	数だった場合はその返却値を利用するように。
 

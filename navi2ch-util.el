@@ -1198,5 +1198,12 @@ FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。"
 	(setq col (+ col (char-width padding)))))
     (concat (nreverse r))))
 
+(defun navi2ch-disabled-key ()
+  (interactive)
+  (ding)
+  (let ((key (this-command-keys)))
+    (message "`%s' is disabled in Navi2ch."
+	     (lookup-key (current-global-map) key))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

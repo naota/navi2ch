@@ -1575,7 +1575,8 @@ ask なら保存する前に質問する
 などを指定する。"
   :type '(choice (const :tag "Emacs から直接接続"
 			open-network-stream)
-		 (const :tag "operation already in progress とかエラーが出る場合"
+		 (const :tag
+			"operation already in progress 等のエラーが出る場合"
 			navi2ch-open-network-stream-with-retry)
 		 (const :tag "コマンド経由で接続"
 			navi2ch-open-network-stream-via-command)
@@ -1583,21 +1584,30 @@ ask なら保存する前に質問する
   :group 'navi2ch-net)
 
 (defcustom navi2ch-open-network-stream-command nil
-  "*ホストのサービスに接続するコマンドのリストを返す関数。
+  "*ホストのサービスに接続するコマンド。
 `navi2ch-open-network-stream-function' が
 `navi2ch-open-network-stream-via-command' の場合に使用される。
-ssh 経由で netcat を使いたい場合は以下のようにする。
+値が文字列の場合、その文字列と host service を `format' に渡し、その返
+却値をシェル経由で実行する。
+値が関数の場合、host service を引数として呼び出す。
+指定した関数の返却値が文字列の場合はシェル経由で、リストの場合は直接実
+行する。
+
+たとえば、ssh 経由で netcat を使いたい場合は以下のいずれかのようにする。
+\"ssh somehost nc %s %s\"
+\(lambda (host service)
+  (format \"ssh somehost nc %s %s\" host service))
 \(lambda (host service)
   (list \"ssh\" \"somehost\"
         \"nc\" (format \"%s\" host) (format \"%s\" service)))"
-  :type '(choice (const :tag "Netcat を使用"
+  :type '(choice (const :tag "無効" nil)
+		 (const :tag "Netcat を使用"
 			(lambda (host service)
 			  (list "nc" (format "%s" host)
 				(format "%s" service))))
-		 (const :tag "無効" nil)
+		 (string :tag "文字列を指定")
 		 (function :tag "関数を指定"))
   :group 'navi2ch-net)
-
 
 ;;; update variables
 (defcustom navi2ch-update-file (concat
@@ -1819,7 +1829,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
   "navi2ch のどのモードでも使える keymap。")
 (unless navi2ch-global-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-x\C-e" 'ignore)	; Navi2ch 内では無効に
+    (define-key map "\C-x\C-e" 'navi2ch-disabled-key) ; Navi2ch 内では無効に
     (define-key map "\C-c\C-f" 'navi2ch-find-file)
     ;; (define-key map "\C-c\C-g" 'navi2ch-list-goto-board)
     (define-key map "\C-c\C-t" 'navi2ch-toggle-offline)

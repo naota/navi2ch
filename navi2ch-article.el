@@ -92,7 +92,7 @@
     (navi2ch-ifxemacs
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
-    (define-key map "u" 'navi2ch-article-show-url-at-point)
+    (define-key map "u" 'navi2ch-show-url-at-point)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -315,18 +315,15 @@ START, END, NOFIRST で範囲を指定する"
   (navi2ch-multibbs-article-to-url board article start end nofirst))
 
 (defsubst navi2ch-article-cleanup-message ()
-  (let (re str)
+  (let (re)
     (when navi2ch-article-cleanup-trailing-newline ; レス末尾の空白を取り除く
       (goto-char (point-min))
       (when (re-search-forward "\\(<br> *\\)+<>" nil t)
 	(replace-match "<>")))
     (when navi2ch-article-cleanup-white-space-after-old-br
       (goto-char (point-min))
-      (while (re-search-forward "<br> *" nil t)
-	(setq str (match-string 0))
-	(if (or (not re)
-		(< (length str) (length re)))
-	    (setq re str))))
+      (unless (re-search-forward "<br>[^ ]" nil t)
+	(setq re "<br> ")))
     (when navi2ch-article-cleanup-trailing-whitespace
       (setq re (concat " *" (or re "<br>"))))
     (unless (or (not re)
@@ -3318,29 +3315,13 @@ PREFIX が与えられた場合は、
 	(t t)))
 
 (defun navi2ch-article-url-at-point (point)
-  "POINT の下のリンクを指す URL を得る。
-\(defadvice browse-url-url-at-point
-  (around my-browse-url-url-at-point-navi2ch activate compile)
-  (let ((url (navi2ch-article-url-at-point (point))))
-    (if url
-	(setq ad-return-value url)
-      ad-do-it)))
-のようにすると、リンクに対して browse-url をインタラクティブに
-実行できる。"
+  "POINT の下のリンクを指す URL を得る。"
   (let ((number-property (get-text-property point 'number))
 	(url-property (get-text-property point 'url)))
     (cond (number-property
 	   (navi2ch-article-number-list-to-url
 	    (navi2ch-article-get-number-list number-property)))
 	  (url-property))))
-
-(defun navi2ch-article-show-url-at-point (point)
-  "POINT の下のリンクを指す URL を表示し、kill-ring にコピーする。"
-  (interactive "d")
-  (let ((url (navi2ch-article-url-at-point point)))
-    (when url
-      (kill-new url)
-      (message "%s" url))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here
