@@ -419,8 +419,8 @@ START, END, NOFIRST で範囲を指定する"
   "スレのバッファの数を NUM に制限する。
 NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (interactive "P")
-  (if (not (numberp num) ; C-uのみの時4個にしたいわけじゃないと思われ
-	   (setq num navi2ch-article-max-buffers)))
+  (if (not (numberp num)) ; C-uのみの時4個にしたいわけじゃないと思われ
+      (setq num navi2ch-article-max-buffers))
   (save-excursion
     (dolist (killed-buf (nthcdr num (navi2ch-article-buffer-list)))
       (set-buffer killed-buf)
