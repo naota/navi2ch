@@ -1,3 +1,11 @@
+2004-04-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-set-keymap-default-binding): GNU Emacs
+	でのデフォルト動作指定を (define-key map [t] command) に。
+
+	* navi2ch-article.el (navi2ch-article-message-filter-by-message):
+	append 末尾の nil は不要。
+
 2004-04-09  Nanashi San  <nanashi@users.sourceforge.net>
 
 	マクロの使用を未評価の引数が必要な場合のみに制限。

@@ -32,7 +32,6 @@
 (defvar navi2ch-message-aa-map nil)
 (unless navi2ch-message-aa-map
   (let ((map (make-sparse-keymap "Type ? for further options")))
-    ;; define-key で t にマップできないので。。。
     (navi2ch-set-keymap-default-binding map 'navi2ch-message-self-insert-aa)
     (define-key map "?" 'navi2ch-message-insert-aa)
     (setq navi2ch-message-aa-map map)))

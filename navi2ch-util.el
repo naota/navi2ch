@@ -956,11 +956,9 @@ properties to add to the result"
 
 (defun navi2ch-set-keymap-default-binding (map command)
   "キーマップのデフォルトバインドを設定する。"
-  (funcall (if (fboundp 'set-keymap-default-binding)
-	       'set-keymap-default-binding
-	     (lambda (map command)
-	       (setcdr map (cons (cons t command) (cdr map)))
-	       command))
+  (funcall (or (navi2ch-fboundp 'set-keymap-default-binding)
+	       (lambda (map command)
+		 (define-key map [t] command)))
 	   map command))
 
 (defun navi2ch-char-valid-p (obj)

@@ -793,8 +793,7 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-article-message-filter-by-message (alist)
   (let ((l (append navi2ch-article-default-message-filter-by-message-alist
-		   navi2ch-article-message-filter-by-message-alist
-		   nil))) ; ←appendの最後の引数はコピーされないので必要
+		   navi2ch-article-message-filter-by-message-alist)))
     (when l
       (prog1
 	  (navi2ch-article-message-filter-subr
