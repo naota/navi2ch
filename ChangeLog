@@ -1,3 +1,11 @@
+2003-08-30  mizmiz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-oyster.el : スレの何方かが提供してくださったSESSION-ID取得を
+	りトライするためのパッチを適用
+
+	* navi2ch-futaba.el : 新規ファイル 
+	ふたばちゃんねる(http://www.2chan.net)の"文字の"掲示板に対応
+
 2003-08-04  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-chunk): すでに PROC が閉じられて
