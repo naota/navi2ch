@@ -72,6 +72,7 @@
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
     ;; (define-key map "\eb" 'navi2ch-article-base64-decode-message)
     (define-key map "\ed" 'navi2ch-article-decode-message)
+    (define-key map "\ei" 'navi2ch-article-base64-toggle-text)
     (define-key map "v" 'navi2ch-article-view-aa)
     (define-key map "f" 'navi2ch-article-forward-buffer)
     (define-key map "b" 'navi2ch-article-backward-buffer)
@@ -1682,19 +1683,12 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
 			       'navi2ch-article-base64-decode-message)))))
 
 (defun navi2ch-article-auto-decode-base64-section ()
-  "$B%+%l%s%H%P%C%U%!$N(B BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$KCV$-49$($k!#(B
+  "$B%+%l%s%H%P%C%U%!$N(B BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$X$N%"%s%+!<$K$9$k!#(B
 
 BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
 $B$K%^%C%A$9$k9T$H(B `navi2ch-base64-end-delimiter-regexp' $B$K%^%C%A$9$k9T$N(B
 $B$^$G$N%F%-%9%H!#%;%/%7%g%sFb$N9T$O$9$Y$F(B `navi2ch-base64-line-regexp' $B$K(B
-$B%^%C%A$7$J$1$l$P$J$i$J$$!#(B
-
-$B%G%3!<%I$7$?%F%-%9%H$O!"$=$NJ8;z%3!<%I$r(B Emacs $B$,?dB,$G$-$?>l9g$K8B$j(B
-$BK\J8$KA^F~$9$k!#?dB,$G$-$J$+$C$?$H$-$O%P%$%J%j%U%!%$%k$H8+$J$7$F%"%s%+!<(B
-$B$@$1$rA^F~$9$k!#(B
-
-BASE64 $B%;%/%7%g%s$N%X%C%@$G;XDj$5$l$?%U%!%$%kL>$,(B *.gz $B$J$i$P!"$$$C$?$s(B
-gunzip $B$KDL$7$F$+$iJ8;z%3!<%I$N?dB,$r;n$_$k!#(B"
+$B%^%C%A$7$J$1$l$P$J$i$J$$!#(B"
   (goto-char (point-min))
   (catch 'loop
     (while (re-search-forward navi2ch-base64-begin-delimiter-regexp nil t)
@@ -1716,35 +1710,11 @@ gunzip $B$KDL$7$F$+$iJ8;z%3!<%I$N?dB,$r;n$_$k!#(B"
             (forward-line))
           (when (eobp)
             (base64-decode-region (point-min) (point-max))
-            (setq decoded (let ((buffer-file-coding-system 'binary)
-                                (coding-system-for-read 'binary)
-                                (coding-system-for-write 'binary)
-                                (str (buffer-string))
-                                exit-status)
-                            (when (and filename (string-match "\\.gz$" filename))
-                              (setq exit-status
-                                    (apply 'call-process-region (point-min) (point-max)
-                                           navi2ch-net-gunzip-program t t nil
-                                           navi2ch-net-gunzip-args))
-                              (unless (= exit-status 0)
-                                (erase-buffer)
-                                (insert str)))
-                            (let ((charset (coding-system-get
-					    (navi2ch-ifxemacs
-						(let ((result (detect-coding-region (point-min) (point-max))))
-						  (if (listp result)
-						      (car result)
-						    result))
-					      (detect-coding-region (point-min) (point-max) t))
-                                            'mime-charset)))
-                              (if charset
-                                  (cons str (decode-coding-string (buffer-string) charset))
-                                (cons str nil)))))))
-        (when decoded
-          (let ((noconv (car decoded))
-                (text (cdr decoded))
-                (fname (unless (or (null filename) (equal filename "")) filename))
-                part-begin)
+	    (setq decoded (buffer-string))))
+	(when decoded
+          (let ((fname (unless (or (null filename) (equal filename ""))
+			 filename))
+		part-begin)
             (delete-region begin end)
             (goto-char begin)
             (insert (navi2ch-propertize "> " 'face 'navi2ch-article-base64-face)
@@ -1753,29 +1723,151 @@ gunzip $B$KDL$7$F$+$iJ8;z%3!<%I$N?dB,$r;n$_$k!#(B"
 					'link t
 					'mouse-face navi2ch-article-mouse-face
 					'file-name fname
-					'content noconv))
-	    (add-text-properties (+ 2 begin) (+ 3 begin)
-				 (list 'link-head t))
-            (setq part-begin (point))
-            (insert (format " (%.1fKB)\n" (/ (length noconv) 1024.0)))
-            (if text (insert text))
-            (add-text-properties part-begin (point)
-                                 '(hard t face navi2ch-article-base64-face))))))))
+					'content decoded))
+	    (put-text-property begin (1+ begin) 'base64-text 'off)
+	    (put-text-property (+ 2 begin) (+ 3 begin) 'link-head t)
+	    (setq part-begin (point))
+	    (insert (format " (%.1fKB)\n" (/ (length decoded) 1024.0)))
+	    (put-text-property part-begin (point)
+			       'face 'navi2ch-article-base64-face)
+	    (add-text-properties begin (point) (list 'base64 t
+						     'hard t))
+	    (when navi2ch-article-auto-insert-base64-text
+	      (forward-line -1)
+	      (navi2ch-article-base64-text-on))))))))
+
+(defun navi2ch-article-base64-text-on (&optional coding-system compression)
+  (save-excursion
+    (beginning-of-line)
+    (let* ((point (next-single-property-change
+		   (point) 'link-head nil (navi2ch-line-end-position)))
+	   (content (get-text-property point 'content))
+	   (filename (get-text-property point 'file-name))
+	   ret)
+      (when (and (eq (get-text-property (point) 'base64-text) 'off)
+		 content)
+	(with-temp-buffer
+	  (let ((buffer-file-coding-system 'binary)
+		(coding-system-for-read 'binary)
+		(coding-system-for-write 'binary)
+		exit-status)
+	    (insert content)
+	    ;; extract
+	    (cond
+	     ((or (eq compression 'gzip)
+		  (and (null compression)
+		       filename
+		       (string-match "\\.gz$" filename)))
+	      (setq exit-status
+		    (apply 'call-process-region (point-min) (point-max)
+			   navi2ch-net-gunzip-program t t nil
+			   navi2ch-net-gunzip-args))
+	      (unless (= exit-status 0)
+		(erase-buffer)
+		(insert content)))
+	     ((or (eq compression 'bzip2)
+		  (and (null compression)
+		       filename
+		       (string-match "\\.bz2$" filename)
+		       (navi2ch-which navi2ch-bzip2-program)))
+	      (setq exit-status
+		    (apply 'call-process-region (point-min) (point-max)
+			   navi2ch-bzip2-program t t nil
+			   navi2ch-bzip2-args))
+	      (unless (= exit-status 0)
+		(erase-buffer)
+		(insert content))))
+	    ;; decode
+	    (unless coding-system
+	      (let ((detect (detect-coding-region (point-min) (point-max)))
+		    name)
+		(setq coding-system (or (car-safe detect) detect)
+		      name (navi2ch-ifxemacs
+			       (coding-system-name
+				(coding-system-base coding-system))
+			     (coding-system-base coding-system)))
+		(when (memq name '(raw-text binary)) ;$BE,Ev(B
+		  (setq ret 'binary
+			coding-system nil
+			content nil))))
+	    (when coding-system
+	      (decode-coding-region (point-min) (point-max) coding-system)
+	      (setq content (buffer-string)))))
+	(when content
+	  (setq ret t)
+	  (let ((buffer-read-only nil))
+	    (put-text-property (point) (1+ (point)) 'base64-text 'on)
+	    (forward-line)
+	    (setq point (point))
+	    (insert content)
+	    (add-text-properties point (point)
+				 (list 'base64 t
+				       'hard t
+				       'face 'navi2ch-article-base64-face))
+	    (set-buffer-modified-p nil))))
+      ret)))
+
+(defun navi2ch-article-base64-text-off ()
+  (when (get-text-property (point) 'base64)
+    (let ((buffer-read-only nil)
+	  (start (or (and (get-text-property (point) 'base64-text) (point))
+		     (navi2ch-previous-property (point) 'base64-text))))
+      (when (eq (get-text-property start 'base64-text) 'on)
+	(put-text-property start (1+ start) 'base64-text 'off)
+	(delete-region (save-excursion
+			 (goto-char start)
+			 (navi2ch-line-beginning-position 2))
+		       (next-single-property-change start 'base64
+						    nil (point-max)))
+	(unless (get-text-property (point) 'base64)
+	  (forward-line -1))
+	(set-buffer-modified-p nil)))))
+
+(defun navi2ch-article-base64-toggle-text (&optional ask)
+  "BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$rI=<($9$k$+$I$&$+$r@Z$j49$($k!#(B
+ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k!#(B"
+  (interactive "P")
+  (if (not (get-text-property (point) 'base64))
+      (error "Base64 is not here")
+    (if (eq (or (get-text-property (point) 'base64-text)
+		(get-text-property (navi2ch-previous-property (point)
+							      'base64-text)
+				   'base64-text))
+	    'on)
+	(navi2ch-article-base64-text-off)
+      (let* ((cs (and ask (read-coding-system "Coding-system (guess): ")))
+	     (ch (and ask (navi2ch-read-char
+			   "Compression type (guess): g)zip b)zip2 n)one: ")))
+	     (cmp (cond ((eq ch ?g) 'gzip)
+			((eq ch ?b) 'bzip2)
+			((eq ch ?n) t)))
+	     ret)
+	(message "Inserting base64 content...")
+	(setq ret (navi2ch-article-base64-text-on cs cmp))
+	(cond ((eq ret 'binary)
+	       (message "Content may be a binary"))
+	      (ret
+	       (message "Inserting base64 content...done"))
+	      (t
+	       (message "Not inserted")))))))
 
 (defun navi2ch-article-save-content ()
   (interactive)
   (let ((prop (get-text-property (point) 'content))
-	(default-filename (file-name-nondirectory
-			   (get-text-property (point) 'file-name)))
+	(default-filename (get-text-property (point) 'file-name))
 	filename)
+    (when default-filename
+      (setq default-filename (file-name-nondirectory default-filename)))
     (setq filename (read-file-name
 		    (if default-filename
 			(format "Save file (default `%s'): "
 				default-filename)
 		      "Save file: ")
 		    nil default-filename))
-    (when (and default-filename (file-directory-p filename))
-      (setq filename (expand-file-name default-filename filename)))
+    (when (file-directory-p filename)
+      (if default-filename
+	  (setq filename (expand-file-name default-filename filename))
+	(error "%s is a directory" filename)))
     (if (not (file-writable-p filename))
 	(error "File not writable: %s" filename)
       (with-temp-buffer

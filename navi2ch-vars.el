@@ -95,6 +95,16 @@
   :type '(repeat :tag "引数" string)
   :group 'navi2ch)
 
+(defcustom navi2ch-bzip2-program "bzip2"
+  "*bzip2 に使うプログラム。"
+  :type 'string
+  :group 'navi2ch)
+
+(defcustom navi2ch-bzip2-args '("-d" "-c" "-q")
+  "*bzip2 を呼び出すときの引数。"
+  :type '(repeat :tag "引数" string)
+  :group 'navi2ch)
+
 (defcustom navi2ch-init-file (concat
                               (file-name-as-directory navi2ch-directory)
                               "init")
@@ -640,6 +650,12 @@ window の幅いっぱいにしたいなら
 
 (defcustom navi2ch-article-auto-decode-base64-p nil
   "*non-nil なら、スレの BASE64 でエンコードされたテキストを自動展開する。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-auto-insert-base64-text nil
+  "*non-nil なら、BASE64をデコードしたテキストをバッファに挿入する。
+`navi2ch-article-auto-decode-base64-p' が non-nil のときのみ効果がある。"
   :type 'boolean
   :group 'navi2ch-article)
 

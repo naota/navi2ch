@@ -664,10 +664,8 @@ return new alist whose car is the new pair and cdr is ALIST.
   "START$B$H(BEND$B$N4V$N%j!<%8%g%s$r(Bbase64$B%G%3!<%I$7!"(BFILENAME$B$K=q$-=P$9!#(B
 
 $B%j!<%8%g%sFb$K(B`navi2ch-base64-begin-delimiter'$B$,$"$k>l9g$O$=$l0JA0$rL5(B
-$B;k$7!"(B`navi2ch-base64-end-delimiter'$B$,$"$k>l9g$O$=$l0J9_$N(B
-`navi2ch-base64-begin-delimiter'$B$^$G!"$b$7$/$O%j!<%8%g%s$N:G8e$^$G$rL5(B
-$B;k$9$k!#$5$i$K!":G=i$K(B`navi2ch-base64-line-regexp'$B$K%^%C%A$9$kD>A0$^$G(B
-$B$H!":G8e$K(B`navi2ch-base64-line-regexp'$B$K%^%C%A$9$kD>8e$^$G$bL5;k$9$k!#(B
+$B;k$7!"(B`navi2ch-base64-end-delimiter'$B$,$"$k>l9g$O:G8e$N$=$l0J9_$rL5;k$9$k!#(B
+$B$5$i$K!"(B`navi2ch-base64-line-regexp'$B$K%^%C%A$7$J$$9T$bL5;k$9$k!#(B
 
 base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
   (interactive "r")
@@ -703,18 +701,13 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
 	      ;; auto-compress-mode$B$r(Bdisable$B$K$9$k(B
 	      (inhibit-file-name-operation 'write-region)
 	      (inhibit-file-name-handlers (cons 'jka-compr-handler
-						inhibit-file-name-handlers))
-	      cur-point)
+						inhibit-file-name-handlers)))
 	  (insert-buffer-substring buf start end)
 	  (goto-char (point-min))
-	  (while (re-search-forward navi2ch-base64-end-delimiter-regexp
-				    nil t)
-	    (setq cur-point (match-beginning 0))
-	    (if (re-search-forward navi2ch-base64-begin-delimiter-regexp
-				   nil t)
-		(delete-region cur-point (match-end 0))
-	      (delete-region cur-point (point-max)))
-	    (goto-char cur-point))
+	  (while (not (eobp))
+	    (if (looking-at navi2ch-base64-line-regexp)
+		(forward-line)
+	      (delete-region (point) (navi2ch-line-beginning-position 2))))
 	  (base64-decode-region (point-min) (point-max))
 	  (if (not filename)
 	      (setq filename (read-file-name
@@ -928,6 +921,15 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
    ((> (nth 0 t1) (nth 0 t2)) t)
    ((= (nth 0 t1) (nth 0 t2)) (> (nth 1 t1) (nth 1 t2)))
    (t nil)))
+
+(defun navi2ch-which (file)
+  (when (stringp file)
+    (catch 'loop
+      (dolist (path exec-path)
+	(setq path (expand-file-name file path))
+	(when (and (file-exists-p path)
+		   (file-executable-p path))
+	  (throw 'loop path))))))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

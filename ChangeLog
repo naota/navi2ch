@@ -1,3 +1,26 @@
+2002-12-23  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-bzip2-program): 新変数。
+	(navi2ch-bzip2-args): 同上。
+	(navi2ch-article-auto-insert-base64-text): 同上。
+
+	* navi2ch-util.el (navi2ch-base64-write-region):
+	`navi2ch-base64-line-regexp' にマッチしない行を無視する。
+	(navi2ch-which): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-mode-map): 
+	"\ei" に navi2ch-article-base64-toggle-text をバインド。
+	(navi2ch-article-auto-decode-base64-section): 
+	navi2ch-article-auto-insert-base64-text が nil であれば
+	デコードしたテキストを本文に挿入しない。
+	(navi2ch-article-base64-text-on): 新関数。
+	(navi2ch-article-base64-text-off): 同上。
+	(navi2ch-article-base64-toggle-text): 同上。
+	(navi2ch-article-save-content): 'file-name プロパティが nil のときに
+	エラーになっていたのを修正。
+	デフォルトのファイル名が無く、保存先にディレクトリを指定したときに
+	エラーになるように。
+
 2002-12-20  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-view-article): バッファが無
