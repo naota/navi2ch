@@ -88,15 +88,23 @@
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
 (defvar navi2ch-modeline-offline navi2ch-offline-indicator)
 
-(defsubst navi2ch-replace-string (rep new str &optional all)
+(defsubst navi2ch-replace-string (regexp to-string string &optional all)
+  "STRING に含まれる REGEXP を TO-STRING で置換する。
+TO-STRING の `\\1' などは `replace-regexp' と同じように展開される。
+
+ALL が non-nil ならば、マッチしたテキストをすべて置換する。nil なら
+最初の1つだけを置換する。
+
+REGEXP が見つからない場合、STRING をそのまま返す。"
   (if all
-      (let (start (len (length new)))
-	(while (setq start (string-match rep str start))
-	  (setq str (replace-match new nil nil str))
-	  (setq start (+ start len))))
-    (when (string-match rep str)
-      (setq str (replace-match new nil nil str))))
-  str)
+      (let (start len)
+        (while (setq start (string-match regexp string start))
+          (setq len (length string)
+                string (replace-match to-string nil nil string)
+                start (+ (match-end 0) (- (length string) len)))))
+    (when (string-match regexp string)
+      (setq string (replace-match to-string nil nil string))))
+  string)
 
 (defmacro navi2ch-define-mouse-key (map num command)
   (if (featurep 'xemacs)
