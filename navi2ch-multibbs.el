@@ -79,7 +79,8 @@ SEND-MESSAGE-FUNC(FROM MAIL MESSAGE
     MESSAGE を送信する。
 
 SEND-MESSAGE-SUCCESS-P-FUNC(PROC):
-    PROC の送信セッションが成功していれば non-nil を返す。
+    PROC の送信セッションが成功していれば non-nil を、
+    失敗したら nil を、再試行可能な失敗なら 'retry を返す。
 
 ERROR-STRING-FUNC(PROC):
     PROC の送信セッションが失敗したときのエラーメッセージを返す。
@@ -220,7 +221,6 @@ START, END, NOFIRST で範囲を指定する"
 	       board 'article-to-url 'navi2ch-2ch-article-to-url)))
     (funcall func board article start end nofirst)))
 
-
 (defun navi2ch-multibbs-send-message
   (from mail message subject board article)
   (let* ((bbstype      (navi2ch-multibbs-get-bbstype board))
@@ -244,18 +244,28 @@ START, END, NOFIRST で範囲を指定する"
 				  ""))
 	 (navi2ch-net-http-proxy (and navi2ch-net-send-message-use-http-proxy
 				      navi2ch-net-http-proxy))
-	 (proc      (funcall send from mail message subject bbs key time
-			     board article)))
-    (message "send message...")
-    (if (funcall success-p proc)
-	(progn
-	  (message "send message...succeed")
-	  t)
-      (let ((err (funcall error-string proc)))
-	(if (stringp err)
-	    (message "send message...failed: %s" err)
-	  (message "send message...failed")))
-      nil)))
+	 (tries 2)	; 送信試行の最大回数
+	 (message-str "send message...")
+	 (result 'retry))
+    (while (eq result 'retry)
+      (let ((proc (funcall send from mail message subject bbs key time
+			   board article)))
+	(message message-str)
+	(setq result (funcall success-p proc))
+	(if (and result
+		 (not (eq result 'retry)))
+	    (message (concat message-str "succeed"))
+	  (let ((err (funcall error-string proc)))
+	    (if (stringp err)
+		(message (concat message-str "failed: %s") err)
+	      (message (concat message-str "failed"))))
+	  (if (eq result 'retry)
+	      (if (= tries 1)
+		  (setq result nil)
+		(1- tries)
+		(sit-for navi2ch-message-retry-wait-time)
+		(setq message-str "re-send message..."))))))
+      result))
 
 (defun navi2ch-multibbs-board-update (board)
   (let ((func (navi2ch-multibbs-get-func-from-board

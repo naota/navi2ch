@@ -659,6 +659,11 @@ nil なら、書きかけを破棄していいか問い合わせる。
   :type 'integer
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-retry-wait-time 2
+  "*レス送信を再試行するときの待ち時間(秒)。"
+  :type 'integer
+  :group 'navi2ch-message)
+
 (defcustom navi2ch-message-remember-user-name t
   "*non-nilなら、送ったレスの名前覧を覚えておく。
 同じスレで次にレスするときは、それがデフォルトの名前になる。"

@@ -1,13 +1,21 @@
 2002-08-28  mami  <mami@users.sourceforge.net>
 
+	レス送信時に SPID クッキー確認画面が出たら、自動で再試行するように。
+	(まだ <!-- 2ch_X:cookie --> は見てないです。)
+	* navi2ch-net.el (navi2ch-net-send-message-success-p): クッキー確
+	認のときは 'retry を返すように。
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): success-p
+	が 'retry を返したときはもう一度だけ送信を試すように。
+	(navi2ch-multibbs-func-alist): 返り値の 'retry と nil について追記。
+	* navi2ch-vars.el (navi2ch-message-retry-wait-time): 新変数。
+
 	* navi2ch-article.el (navi2ch-article-textize-article): 新関数。
 	navi2ch-bm-textize-article から分離。
 	(navi2ch-article-mode-map): navi2ch-article-textize-article を "e"
 	にバインド。
-	http://pc.2ch.net/test/read.cgi/unix/1023884490/843
-
 	* navi2ch-board-misc.el (navi2ch-bm-textize-article):
 	上記 navi2ch-article-textize-article を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/843
 
 	* navi2ch-head.el (navi2ch-head-get-head-txt): 
 	navi2ch-offline が t のときはファイルを取ってこないように。
