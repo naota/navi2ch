@@ -299,10 +299,8 @@ Navi2ch の開発に興味があるなら、CVS を使って開発版を入手することができる。
 
 @example
 @group
-% cvs -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch
-        login
-% cvs -z3 -d:pserver:anonymous@@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch
-        co navi2ch
+% cvs -d:pserver:anonymous@@cvs.sourceforge.net:/cvsroot/navi2ch login
+% cvs -z3 -d:pserver:anonymous@@cvs.sourceforge.net:/cvsroot/navi2ch co navi2ch
 @r{(それぞれ一行で入力)}
 @end group
 @end example

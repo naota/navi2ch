@@ -1,3 +1,9 @@
+2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Getting Develop Version): CVS ホストを
+	cvs.sourceforge.net に。
+	<http://sourceforge.net/cvs/?group_id=39552>
+
 2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode Key Bindings): "u" を追加。
