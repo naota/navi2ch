@@ -286,6 +286,7 @@ START, END, NOFIRST で範囲を指定する"
       " *, *")))
 
 (defun navi2ch-article-get-separator-string ()
+  "この関数は廃止の予定です。"
   (let ((sep-regexp (navi2ch-article-get-separator)))
     (if (string-match "<>" sep-regexp)
 	"<>"
@@ -321,6 +322,7 @@ START, END, NOFIRST で範囲を指定する"
       (funcall filter))))
 
 (defun navi2ch-article-filter-by-name (sep)
+  "この関数は廃止の予定です。"
   (dolist (pair navi2ch-article-filter-by-name-alist)
     (goto-char (point-min))
     (let ((regexp (concat
@@ -345,6 +347,7 @@ START, END, NOFIRST で範囲を指定する"
 		 (cdr pair) sep))))))	; message
 
 (defun navi2ch-article-filter-by-message (sep)
+  "この関数は廃止の予定です。"
   (dolist (pair navi2ch-article-filter-by-message-alist)
     (goto-char (point-min))
     (let ((regexp (concat
@@ -511,11 +514,63 @@ START, END, NOFIRST で範囲を指定する"
 			       (not (memq num hide))))))
           (when (stringp alist)
             (setq alist (navi2ch-article-parse-message alist)))
+	  (let ((filtered (navi2ch-article-apply-message-filters alist)))
+	    (when filtered
+	      (cond ((stringp filtered)
+		     (navi2ch-put-alist 'name filtered alist)
+		     (navi2ch-put-alist 'data filtered alist)
+		     (navi2ch-put-alist 'mail
+					(if (string-match "sage"
+							  (cdr (assq 'mail alist)))
+					    "sage"
+					  "")
+					alist))
+		    ;((eq filtered 'delete)
+		    ; (...))
+		    ;((eq filtered 'important)
+		    ; (...))
+		    )))
 	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
           ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
           (navi2ch-article-insert-message num alist))))
     (garbage-collect) ; navi2ch-parse-message は大量にゴミを残す
     (message "inserting current messages...done")))
+
+(defun navi2ch-article-apply-message-filters (alist)
+  (catch 'loop
+    (dolist (filter navi2ch-article-message-filter-list)
+      (let ((result (funcall filter alist)))
+	(when result
+	  (throw 'loop result))))))
+
+(defun navi2ch-article-message-filter-by-name (alist)
+  (when navi2ch-article-message-filter-by-name-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-name-alist
+     (cdr (assq 'name alist)))))
+
+(defun navi2ch-article-message-filter-by-message (alist)
+  (when navi2ch-article-message-filter-by-message-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-message-alist
+     (cdr (assq 'data alist)))))
+
+(defun navi2ch-article-message-filter-by-id (alist)
+  (let ((case-fold-search nil))
+    (when (and navi2ch-article-message-filter-by-id-alist
+	       (string-match " ID:\\([^ ]+\\)"
+			     (cdr (assq 'date alist))))
+      (navi2ch-article-message-filter-subr
+       navi2ch-article-message-filter-by-id-alist
+       (match-string 1 (cdr (assq 'date alist)))))))
+
+(defun navi2ch-article-message-filter-subr (rules string)
+  (let ((case-fold-search nil))
+    (catch 'loop
+      (dolist (rule rules)
+	(when (string-match (regexp-quote (car rule))
+			    string)
+	  (throw 'loop (cdr rule)))))))
 
 (defun navi2ch-article-default-header-format-function (number name mail date)
   "デフォルトのヘッダをフォーマットする関数

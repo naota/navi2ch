@@ -655,6 +655,42 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-filter-by-name-alist nil
+  "*この変数は廃止の予定です。
+navi2ch-article-message-filter-by-name-alist を使用してください。"
+  :type '(repeat (cons (string :tag "名前欄")
+		       (string :tag "置換後")))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-filter-by-message-alist nil
+  "*この変数は廃止の予定です。
+navi2ch-article-message-filter-by-message-alist を使用してください。"
+  :type '(repeat (cons (string :tag "本文中")
+		       (string :tag "置換後")))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-list
+  '(navi2ch-article-message-filter-by-name
+    navi2ch-article-message-filter-by-id
+    navi2ch-article-message-filter-by-message)
+  "*レスをフィルタするための関数のリスト。
+リストの member となる関数としては、
+レスの alist を引き数に取りフィルタ後の文字列を返すものを指定する。
+
+下記は名前欄が「ほげ」のときに「あぼぼーん」に置換するための
+(ちょっと冗長な) 関数の例。
+
+(defun my-navi2ch-article-message-filter-hoge (alist)
+  (let ((name (cdr (assq 'name alist)))
+	(mail (cdr (assq 'mail alist)))
+	(date (cdr (assq 'date alist)))
+	(message (cdr (assq 'data alist))))
+    (if (equal name \"ほげ\")
+	\"あぼぼーん\"
+      nil))"
+  :type '(repeat function)
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-by-name-alist nil
   "*レスをフィルタする名前と、置き換える文字列の alist。
 例えば下記の値を設定すると、
 名前欄に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
@@ -666,18 +702,27 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
 		       (string :tag "置換後")))
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-filter-by-message-alist nil
+(defcustom navi2ch-article-message-filter-by-message-alist nil
   "*レスをフィルタするためのレス本文中の文字列と、置き換える文字列の alist。
 例えば下記の値を設定すると、
 レス本文中に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
 レス本文中に「ホゲ」が含まれているとレスが「アボボーン」に置き換わる。
 
 '((\"ふが\" . \"あぼぼーん\")
-  (\"ホゲ\" . \"アボボーン\"))
-
-Tips: レス中の複数行を指定したい場合は、
-.dat ファイルから <br> も含めてコピペするとよい。"
+  (\"ホゲ\" . \"アボボーン\"))"
   :type '(repeat (cons (string :tag "本文中")
+		       (string :tag "置換後")))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-by-id-alist nil
+  "*レスをフィルタするための ID 中の文字列と、置き換える文字列の alist。
+例えば下記の値を設定すると、
+ID が「FUga1234」だとレスが「あぼぼーん」に置き換わり、
+ID が「hoGE0987」だとレスが「アボボーン」に置き換わる。
+
+'((\"FUga1234\" . \"あぼぼーん\")
+  (\"hoGE0987\" . \"アボボーン\"))"
+  :type '(repeat (cons (string :tag "ID")
 		       (string :tag "置換後")))
   :group 'navi2ch-article)
 

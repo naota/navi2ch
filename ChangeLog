@@ -1,3 +1,28 @@
+2002-10-25  mami  <mami@users.sourceforge.net>
+
+	「あぼぼーん機能」書き直し。
+
+	* navi2ch-article.el
+	(navi2ch-article-apply-message-filters): 新関数。
+	(navi2ch-article-message-filter-by-name): 同上。
+	(navi2ch-article-message-filter-by-message): 同上。
+	(navi2ch-article-message-filter-by-id): 同上。
+	(navi2ch-article-message-filter-subr): 同上。
+	(navi2ch-article-insert-messages):
+	上記 navi2ch-article-apply-message-filters を使用してレスをフィル
+	タするように。
+	(navi2ch-article-filter-by-name): docstring 追加。
+	(navi2ch-article-filter-by-message): 同上。
+	(navi2ch-article-get-separator-string): 同上。
+
+	* navi2ch-vars.el
+	(navi2ch-article-message-filter-list): 新変数。
+	(navi2ch-article-message-filter-by-name-alist): 同上。
+	(navi2ch-article-message-filter-by-message-alist): 同上。
+	(navi2ch-article-message-filter-by-id-alist): 同上。
+	(navi2ch-article-filter-by-name-alist): docstring 追加。
+	(navi2ch-article-filter-by-message-alist): 同上。
+
 2002-10-24  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-regist-board): Navi2chカテゴリに
