@@ -1110,6 +1110,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
 (defvar navi2ch-board-before-sync-hook nil)
 (defvar navi2ch-board-after-sync-hook nil)
 (defvar navi2ch-board-select-board-hook nil)
+(defvar navi2ch-board-get-subject-list-hook nil)
 (defvar navi2ch-article-mode-hook nil)
 (defvar navi2ch-article-exit-hook nil)
 (defvar navi2ch-article-before-sync-hook nil)
