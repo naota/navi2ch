@@ -19,7 +19,7 @@ EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 BUILT_SOURCES = $(srcdir)/navi2ch-version.el $(srcdir)/bcomp.el
 SUBDIRS = contrib doc icons
 
-$(srcdir)/navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
+$(srcdir)/navi2ch-version.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \
 	sed -e 's/@\(VERSION\)@/$(VERSION)/' \
 		$(srcdir)/navi2ch-version.el.in > $@.tmp && \
@@ -42,7 +42,7 @@ elcdist: $(ELCFILES)
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz && \
 	rm -rf $(distdir)
 
-$(srcdir)/bcomp.el: $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
+$(srcdir)/bcomp.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
 	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@

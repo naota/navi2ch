@@ -1,6 +1,6 @@
 ;;; navi2ch-face.el --- face definitions for navi2ch
 
-;; Copyright (C) 2001-2003 by Navi2ch Project
+;; Copyright (C) 2001-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -188,6 +188,12 @@
   '((((class color) (background light)) (:foreground "Navy"))
     (((class color) (background dark)) (:foreground "yellow")))
   "ヘッダの内容の方の face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-article-header-fusianasan-face
+  '((((class color) (background light)) (:underline t :foreground "Navy"))
+    (((class color) (background dark)) (:underline t :foreground "yellow")))
+  "ふしあなさんを表示する際の face"
   :group 'navi2ch-face)
 
 (defface navi2ch-article-link-face

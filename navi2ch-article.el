@@ -362,9 +362,18 @@ START, END, NOFIRST で範囲を指定する"
 				     (goto-char max)
 				     max))))
 		     syms))
+	(let ((start (car (cdr (assq 'name alist))))
+	      (end (cdr (cdr (assq 'name alist)))))
+	  (when (and start end)
+	    (goto-char start)
+	    (while (re-search-forward "</b>[^<]+<b>" end t)
+	      ;; fusianasan
+	      (replace-match (navi2ch-propertize (match-string 0)
+						 'navi2ch-fusianasan-flag t)
+			     t t))))
 	(navi2ch-replace-html-tag-with-buffer)
 	(dolist (x alist)
-	  (setcdr x (buffer-substring-no-properties (cadr x) (cddr x))))
+	  (setcdr x (buffer-substring (cadr x) (cddr x))))
 	alist))))
 
 (defun navi2ch-article-get-separator ()
@@ -890,26 +899,30 @@ START, END, NOFIRST で範囲を指定する"
 					    'number
 					    (match-string 0 name)
 					    name))
-  (let ((from-header "From: ")
-        (from (concat (format "[%d] " number)
-		      name
-		      (format " <%s>\n" mail)))
-        (date-header "Date: ")
-        str p)
-    ;;曜日表示する？
-    (if navi2ch-article-dispweek
-	(setq date (navi2ch-article-appendweek date)))
-    (setq str (concat from-header from date-header date "\n\n"))
-    (setq p (length from-header))
-    (add-text-properties 0 p
-			 '(face navi2ch-article-header-face) str)
-    (add-text-properties p (1- (setq p (+ p (length from))))
-			 '(face navi2ch-article-header-contents-face) str)
-    (add-text-properties p (setq p (+ p (length date-header)))
-			 '(face navi2ch-article-header-face) str)
-    (add-text-properties p (setq p (+ p (length date)))
-			 '(face navi2ch-article-header-contents-face) str)
-    str))
+  (let ((from-header (navi2ch-propertize "From: "
+					 'face 'navi2ch-article-header-face))
+        (from (navi2ch-propertize (concat (format "[%d] " number)
+					  name
+					  (format " <%s>\n" mail))
+				  'face 'navi2ch-article-header-contents-face))
+        (date-header (navi2ch-propertize "Date: "
+					 'face 'navi2ch-article-header-face))
+	(date (navi2ch-propertize (if navi2ch-article-dispweek
+				      ;;曜日表示する？
+				      (navi2ch-article-appendweek date)
+				    date)
+				  'face
+				  'navi2ch-article-header-contents-face))
+	(start 0) next)
+    (while start
+      (setq next
+	    (next-single-property-change start 'navi2ch-fusianasan-flag from))
+      (when (get-text-property start 'navi2ch-fusianasan-flag from)
+	(add-text-properties start (or next (length from))
+			     '(face navi2ch-article-header-fusianasan-face)
+			     from))
+      (setq start next))
+    (concat from-header from date-header date "\n\n")))
 
 (defun navi2ch-article-appendweek (d)
   "YY/MM/DD形式の日付に曜日を足す。"

@@ -1,5 +1,17 @@
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-face.el (navi2ch-article-header-fusianasan-face):
+	新 face。
+
+	* navi2ch-article.el (navi2ch-article-parse-message): ふしあなさん
+	らしき部分に印を付けておく。
+	(navi2ch-article-default-header-format-function): 印の付いた部分に
+	navi2ch-article-header-fusianasan-face を付ける。
+
+	* Makefile.am ($(srcdir)/navi2ch-version.el): maintainer mode が有
+	効な時のみ更新。
+	($(srcdir)/bcomp.el): 同上。
+
 	* navi2ch.el (navi2ch-update): pgp 等が利用できる場合は検証する。
 
 	* navi2ch-util.el (navi2ch-verify-signature-file): 新関数。
