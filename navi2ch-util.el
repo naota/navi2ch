@@ -91,7 +91,9 @@
 
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-online-indicator  "[ON] ")
+(put 'navi2ch-online-indicator 'risky-local-variable t)
 (defvar navi2ch-offline-indicator "[--] ")
+(put 'navi2ch-offline-indicator 'risky-local-variable t)
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
 (defvar navi2ch-modeline-offline navi2ch-offline-indicator)
 
