@@ -1,5 +1,7 @@
 2004-08-15  mami  <mami@users.sourceforge.net>
 
+	* Makefile.am (EXTRA_DIST): navi2ch-js-livedoor-move.el を追加。
+
 	* navi2ch-js-livedoor-move.el (navi2ch-js-livedoor-move): 新ファイ
 	ル。
 
