@@ -82,6 +82,7 @@
 
 (defvar navi2ch-board-buffer-name "*navi2ch board*")
 
+;; set by navi2ch-bm-setup
 (defvar navi2ch-bm-get-property-function nil
   "その位置の text-property を得る関数。引数は POINT")
 (defvar navi2ch-bm-set-property-function nil
@@ -93,6 +94,7 @@
 (defvar navi2ch-bm-exit-function nil)
 
 ;; stub functions
+;; set by navi2ch-bm-setup
 (defun navi2ch-bm-get-property-internal (point))
 (defun navi2ch-bm-set-property-internal (begin end item))
 (defun navi2ch-bm-get-board-internal (item))

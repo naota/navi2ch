@@ -1,3 +1,8 @@
+2003-05-28  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-delete-message): delete する
+	レスがないときにエラーにならないように。
+
 2003-05-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): URL の最後が .gz の
