@@ -993,8 +993,8 @@ state はあぼーんされてれば aborn というシンボル。
 	  (let ((from (cdr (assq 'name
 				 (navi2ch-article-get-message
 				  (navi2ch-article-get-current-number))))))
-	    (or from
-		(and (string-match "[0-9０-９]+" from)
+	    (or (and from
+		     (string-match "[0-9０-９]+" from)
 		     (japanese-hankaku (match-string 0 from)))
 		nil)))
     (setq alist (mapcar
