@@ -338,12 +338,17 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (insert-file-contents file nil begin end)))
 
 (defun navi2ch-expand-file-name (file)
-  (expand-file-name (navi2ch-replace-string
-		     navi2ch-file-name-reserved-char-regexp
-		     (lambda (x)
-		       (format "%%%X" (string-to-char x)))
-		     file t)
-		    navi2ch-directory))
+  (let ((result (expand-file-name (navi2ch-replace-string
+				   navi2ch-file-name-reserved-char-regexp
+				   (lambda (x)
+				     (format "%%%X" (string-to-char x)))
+				   file t)
+				  navi2ch-directory)))
+    (if (string-match (format "^%s"
+			      (regexp-quote (expand-file-name navi2ch-directory)))
+		      result)
+	result
+      (error "Wrong file name"))))
 
 ;; (defun navi2ch-read-number (prompt)
 ;;   "数字を minibuffer から読み込む"

@@ -1,5 +1,9 @@
 2004-10-09  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-expand-file-name): expand した結果が
+	navi2ch-directory の外のときはエラーに。
+	/../ などを含む URL 対策。
+
 	* navi2ch.el (navi2ch-2ch-url-p): ホスト名がないときは nil に。
 	http:///〜 などの URL 対策。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/555
