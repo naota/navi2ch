@@ -81,6 +81,8 @@
         (quit))
       (when (buffer-live-p splash-buffer)
         (kill-buffer splash-buffer))))
+  (when navi2ch-mona-enable
+    (require 'navi2ch-mona))
   (navi2ch-list)
   (run-hooks 'navi2ch-after-startup-hook))
 

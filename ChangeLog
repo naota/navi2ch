@@ -1,3 +1,32 @@
+2002-06-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	バイトコンパイルするときの warning がうるさかったので navi2ch-mona
+	を中心にちょいいじってみた。xemacs でも動く事だけは確認したけど自
+	信ないのでテストよろしく。
+
+	* navi2ch.el (navi2ch): navi2ch-mona-enable に応じて navi2ch-mona を
+	require するようにした。これで ~/.navi2ch/init.el で
+	navi2ch-mona-enable を設定できるようになる。
+
+	* navi2ch-vars.el: ここでは navi2ch-mona をロードしないことにした。
+	navi2ch.el での変更に伴い、モナーフォント関係の変数を常に定義する
+	ようにした。(Emacs 20でも大丈夫っぽいけど。。。)
+
+	* navi2ch-mona.el: なんかインデントが変なとこが多かったので、
+	mark-whole-buffer -> indent-region した。
+	(toplevel): 中で base64-hoge を使ってるので navi2ch-util を
+	require するようにした。
+	Emacs 20 から require した際は navi2ch-mona-set-mona-face、
+	navi2ch-mona-setup を呼び出さないようにした。
+	(navi2ch-find-face-gnu): find-faceから変更。
+	navi2ch-以外の名前空間を汚さないように。
+	(navi2ch-find-face): 新マクロ。emacs/xemacsに応じてfind-faceを呼ぶ。
+	(navi2ch-mona-char-height): 新マクロ。
+	(navi2ch-set-face-parent): 新マクロ。
+	(navi2ch-mona-set-mona-face): 上記マクロを使うように。
+	(navi2ch-mona-sample-string): mel-b の base64-decode-string って間
+	に \n が入るとエラーを吐くみたいなので各行を concat で連結。
+
 2002-06-12    mami  <mami@users.sourceforge.net>
 
 	* 「nanashi さんおかえりヽ(´▽｀)ノ」リリース。

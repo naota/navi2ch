@@ -786,6 +786,13 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @file{~/.navi2ch/init.el} に以下のように書いておく。@xref{Init File}.
 
 @lisp
+(setq navi2ch-mona-enable t)
+@end lisp
+
+以前のバージョン (Navi2ch 1.5.1 を含む) を使用している場合は、次のよう
+に書く必要がある。
+
+@lisp
 (when (eq window-system 'x)
   (require 'navi2ch-mona)
   (add-hook 'navi2ch-article-arrange-message-hook
@@ -819,9 +826,6 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @table @kbd
 @item C-c C-f
 @code{navi2ch-article-find-file} スレのログファイルを指定
-
-@item C-c C-g
-@code{navi2ch-list-goto-board} 指定した板を表示
 
 @item C-c C-t
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
@@ -1018,6 +1022,19 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 
 @item m m
 @code{navi2ch-bm-mark-marks} ある状態 (VCU) になっているスレをマーク
+
+@item m ?
+@code{navi2ch-bm-mark-by-query} 正規表現にマッチするスレを問い合わせつ
+つマーク (という動作だと思う)
+
+@item m b
+@code{navi2ch-bm-add-bookmark-mark-article} マークしたスレをローカルブッ
+クマークに登録
+
+@item m d
+@code{navi2ch-bm-delete-mark-article} マークしたスレを削除
+(というインプリメントにした方がいいんじゃないかな)
+
 @end table
 
 @node Board Mode Key Bindings
@@ -1215,7 +1232,11 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 戻る
 
 @item C-x k
-@code{'navi2ch-article-kill-buffer} バッファを保存して消去
+@code{navi2ch-article-kill-buffer} バッファを保存して消去
+
+@item i
+@code{navi2ch-article-fetch-link} リンク先のスレを更新
+
 @end table
 
 @node Message Mode Key Bindings

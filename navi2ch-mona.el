@@ -39,7 +39,10 @@
 ;;; Code:
 (provide 'navi2ch-mona)
 (eval-when-compile (require 'cl))
-(require 'navi2ch-vars)
+(require 'navi2ch-util)
+
+(eval-when-compile
+  (autoload 'x-decompose-font-name "fontset"))
 
 (make-face 'navi2ch-mona-face)
 (make-face 'navi2ch-mona12-face)
@@ -160,10 +163,11 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
   (concat "サンプルテキストゲットォ！！ ひらがな、カタカナ、Roman Alphabet。\n"
           (decode-coding-string
            (base64-decode-string
-            "gVCBUIFQgVCBUIHJgVCBUIFQgVCBUIFQgVCBUIFAgUAogUyBTAqBQIFAgUCBQCCB
-yIHIgUCBQIFAgWqBQIFAgUCBQIFAgUAogUyB3CiBTAqBQIFAgbyBad+ERN+BvIHc
-gU2CwoHfgd+B3yiBTIHcOzs7gd+B34HfCoFAgUCBQIFAgUCBQCCBUIFQgUAgKIFM
-gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
+	    (concat
+	     "gVCBUIFQgVCBUIHJgVCBUIFQgVCBUIFQgVCBUIFAgUAogUyBTAqBQIFAgUCBQCCB"
+	     "yIHIgUCBQIFAgWqBQIFAgUCBQIFAgUAogUyB3CiBTAqBQIFAgbyBad+ERN+BvIHc"
+	     "gU2CwoHfgd+B3yiBTIHcOzs7gd+B34HfCoFAgUCBQIFAgUCBQCCBUIFQgUAgKIFM"
+	     "gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg=="))
 	   'shift_jis)))
 
 (defcustom navi2ch-mona-face-variable t
@@ -193,80 +197,88 @@ gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
 
 ;; defun find-face for GNU Emacs
 ;; the code is originated from apel.
-(unless (fboundp 'find-face)
-    (defun find-face (face-or-name)
-      "Retrieve the face of the given name.
+(defun navi2ch-find-face-subr (face-or-name)
+  "Retrieve the face of the given name.
 If FACE-OR-NAME is a face object, it is simply returned.
 Otherwise, FACE-OR-NAME should be a symbol.  If there is no such face,
 nil is returned.  Otherwise the associated face object is returned."
-      (car (memq face-or-name (face-list)))))
+  (car (memq face-or-name (face-list))))
+
+(defmacro navi2ch-find-face (face-or-name)
+  (if (fboundp 'find-face)
+      `(find-face ,face-or-name)
+    `(navi2ch-find-face-subr ,face-or-name)))
+
+(defmacro navi2ch-mona-char-height ()
+  (if (featurep 'xemacs)
+      '(font-height (face-font 'default))
+    '(frame-char-height)))
+
+(defmacro navi2ch-set-face-parent (face parent)
+  (if (featurep 'xemacs)
+      `(set-face-parent ,face ,parent)
+    `(set-face-attribute ,face nil :inherit ,parent)))
 
 ;; functions
 (defun navi2ch-mona-set-mona-face ()
-(let ((parent navi2ch-mona-face-variable))
-  (when (eq t parent)
-    (let* ((height (cond (navi2ch-on-xemacs
-                          (font-height (face-font 'default)))
-                         (navi2ch-on-emacs21
-                          (frame-char-height))))
-           (face-name (if height
-                          (format "navi2ch-mona%d-face" height)
-                        "navi2ch-mona16-face")))
-      (setq parent (intern face-name))))
-  (when (find-face parent)
-    (cond (navi2ch-on-xemacs
-           (set-face-parent 'navi2ch-mona-face parent))
-          (navi2ch-on-emacs21
-           (set-face-attribute 'navi2ch-mona-face nil
-                               :inherit parent))))))
+  (let ((parent navi2ch-mona-face-variable))
+    (when (eq t parent)
+      (let* ((height (navi2ch-mona-char-height))
+	     (face-name (if height
+			    (format "navi2ch-mona%d-face" height)
+			  "navi2ch-mona16-face")))
+	(setq parent (intern face-name))))
+    (when (navi2ch-find-face parent)
+      (navi2ch-set-face-parent 'navi2ch-mona-face parent))))
 
 (defun navi2ch-mona-put-face ()
-"face が特に指定されていない部分を mona-face にする。
+  "face が特に指定されていない部分を mona-face にする。
 `navi2ch-article-face' の部分も mona-face にする。"
-(save-excursion
-  (goto-char (point-min))
-  (let (p face)
-    (while (not (eobp))
-      (setq p (next-single-property-change (point)
-                                           'face nil (point-max)))
-      (setq face (get-text-property (point) 'face))
-      (if (or (null face)
-              (eq face 'navi2ch-article-face))
-          (put-text-property (point) (1- p)
-                             'face 'navi2ch-mona-face))
-      (goto-char p)))))
+  (save-excursion
+    (goto-char (point-min))
+    (let (p face)
+      (while (not (eobp))
+	(setq p (next-single-property-change (point)
+					     'face nil (point-max)))
+	(setq face (get-text-property (point) 'face))
+	(if (or (null face)
+		(eq face 'navi2ch-article-face))
+	    (put-text-property (point) (1- p)
+			       'face 'navi2ch-mona-face))
+	(goto-char p)))))
 
 (defun navi2ch-mona-pack-space ()
-"連続する2つ以上の空白を1つにまとめる。"
-(save-excursion
-  (goto-char (point-min))
-  (while (re-search-forward "^ +" nil t)
-    (replace-match ""))
-  (goto-char (point-min))
-  (while (re-search-forward"  +" nil t)
-    (replace-match " "))))
+  "連続する2つ以上の空白を1つにまとめる。"
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "^ +" nil t)
+      (replace-match ""))
+    (goto-char (point-min))
+    (while (re-search-forward"  +" nil t)
+      (replace-match " "))))
 
 (defun navi2ch-mona-arrange-message ()
-"モナーフォントを使う板ならそのための関数を呼ぶ。"
-(let ((id (cdr (assq 'id navi2ch-article-current-board))))
-  (when (or (member id navi2ch-mona-enable-board-list)
-            (and (not (member id navi2ch-mona-disable-board-list))
-                 navi2ch-mona-enable))
-    (navi2ch-mona-put-face))
-  (when navi2ch-mona-pack-space-p
-    (navi2ch-mona-pack-space))))
+  "モナーフォントを使う板ならそのための関数を呼ぶ。"
+  (let ((id (cdr (assq 'id navi2ch-article-current-board))))
+    (when (or (member id navi2ch-mona-enable-board-list)
+	      (and (not (member id navi2ch-mona-disable-board-list))
+		   navi2ch-mona-enable))
+      (navi2ch-mona-put-face))
+    (when navi2ch-mona-pack-space-p
+      (navi2ch-mona-pack-space))))
 
 (defun navi2ch-mona-setup ()
-"*モナーフォントを使うためのフックを追加する。"
-(add-hook 'navi2ch-article-arrange-message-hook
-          'navi2ch-mona-arrange-message))
+  "*モナーフォントを使うためのフックを追加する。"
+  (add-hook 'navi2ch-article-arrange-message-hook
+	    'navi2ch-mona-arrange-message))
 
 (defun navi2ch-mona-undo-setup ()
-(remove-hook 'navi2ch-article-arrange-message-hook
-             'navi2ch-mona-arrange-message))
+  (remove-hook 'navi2ch-article-arrange-message-hook
+	       'navi2ch-mona-arrange-message))
 
-(navi2ch-mona-set-mona-face)
-(navi2ch-mona-setup)
+(when (or navi2ch-on-emacs21 navi2ch-on-xemacs)
+  (navi2ch-mona-set-mona-face)
+  (navi2ch-mona-setup))
 
 (run-hooks 'navi2ch-mona-load-hook)
 ;;; navi2ch-mona.el ends here
