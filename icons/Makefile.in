@@ -59,6 +59,7 @@ host_alias = @host_alias@
 host_triplet = @host@
 AMTAR = @AMTAR@
 AWK = @AWK@
+CVS = @CVS@
 DEPDIR = @DEPDIR@
 EMACS = @EMACS@
 EXEEXT = @EXEEXT@

@@ -1573,7 +1573,7 @@ proxy を使って書きこんでると、時間帯によって送信に失敗することが
 @item A.
 ２ちゃんねる側の規制で、80番ポートが listen されていたりすると
 不正 proxy とみなされることがあるので、web サーバを落とすなり
-パケットフィルタリングでにちゃんねるからの接続のみを落とすなり
+パケットフィルタリングで２ちゃんねるからの接続のみを落とすなり
 すると動くかも。
 
 @item Q.
@@ -1625,6 +1625,20 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 (setq navi2ch-article-get-url-text nil)
 @end lisp
 すれば軽くなるかも。(navi2ch-article.el:1.126 以降)
+
+@item Q.
+何々しようとしたらほにゃららってエラーが出るんだけど。
+
+@item A.
+まず、一度 Emacs を終了し、再度立ち上げ直してから Navi2ch を起動してみ
+てちょ。それでもエラーが出るようなら、
+
+@kbd{M-x set-variable @key{RET} debug-on-error @key{RET} t @key{RET}}
+
+して、エラーが起きた時の @code{*Backtrace*} バッファの内容を２ちゃんね
+るの Navi2ch スレで報告してね。その際、使ってる Emacs の種類やバージョ
+ン、Navi2ch のバージョン (CVS 版を使ってる時は ChangeLog の一番最後に
+あるリビジョン) も教えてくれると対応が早いかも。
 
 @ignore
 @item Q.

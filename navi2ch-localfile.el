@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2002 by Navi2ch Project
 
-;; Author:
+;; Author: Nanashi San <nanashi@users.sourceforge.net>
 ;; Part6 スレの 427 の名無しさん
 ;; <http://pc.2ch.net/test/read.cgi/unix/1023884490/427>
 
@@ -25,7 +25,13 @@
 
 ;;; Commentary:
 
-;; etc.txt に
+;; まず、BBS を用意したいディレクトリを作る。
+;;  % mkdir /tmp/localfile
+;; 次に、ディレクトリのパーミッションを適切に設定する。
+;;  % chgrp navi2ch /tmp/localfile
+;;  % chmod g+w /tmp/localfile
+;;  % chmod g+s /tmp/localfile (OS によっては必要)
+;; 最後に、読み書きしたい奴らの etc.txt に
 ;; ====
 ;; ローカルファイルテスト
 ;; x-localbbs:///tmp/localfile
@@ -50,6 +56,19 @@
   :type 'string
   :group 'navi2ch-localfile)
 
+(defcustom navi2ch-localfile-default-file-modes ?\775
+  "*ローカル BBS にファイルを書き込む際に使用する `default-file-modes'。
+意味があるのは8進数なので生で操作する時は注意。"
+  :type '(choice (const :tag "特定グループの奴らのみが書きこめる" ?\775)
+		 (const :tag "自分のみが書きこめる" ?\755)
+		 (const :tag "特定グループの奴らのみが読み書きできる" ?\770)
+		 (const :tag "自分のみが読み書きできる" ?\700)))
+
+(defcustom navi2ch-localfile-default-user-name "名無しさん"
+  "*ローカル BBS に書き込む際の名無しの名前。"
+  :type 'string
+  :group 'navi2ch-localfile)
+
 (defvar navi2ch-localfile-regexp "\\`x-localbbs://")
 (defvar navi2ch-localfile-use-lock t)
 (defvar navi2ch-localfile-lock-name "lockdir_localfile")
@@ -59,7 +78,7 @@
     (article-update 	. navi2ch-localfile-article-update)
     (send-message   	. navi2ch-localfile-send-message)
     (send-success-p 	. navi2ch-localfile-send-message-success-p)
-    (error-string   	. navi2ch-localfile-navi2ch-net-get-content)
+    (error-string   	. navi2ch-localfile-error-string)
     (board-update	. navi2ch-localfile-board-update)
     (board-get-file-name . navi2ch-localfile-board-get-file-name)))
 
@@ -101,9 +120,20 @@
 		 (error "lock failed"))))))))
 
 (defun navi2ch-localfile-unlock (dir)
-  "`dir' のロックを解除する。"
+  "DIR のロックを解除する。"
   (when navi2ch-localfile-use-lock
     (navi2ch-unlock-directory dir navi2ch-localfile-lock-name)))
+
+(defmacro navi2ch-localfile-with-lock (directory &rest body)
+  "DIRECTORY をロックし、BODY を実行する。
+BODY の実行後は DIRECTORY のロックを解除する。"
+  `(unwind-protect
+       (progn
+	 (navi2ch-localfile-lock directory)
+	 ,@body)
+     (navi2ch-localfile-unlock directory)))
+
+(put 'navi2ch-localfile-with-lock 'lisp-indent-function 1)
 
 (defun navi2ch-localfile-encode-string (string)
   (let* ((alist navi2ch-localfile-encode-html-tag-alist)
@@ -173,10 +203,17 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	(if (file-exists-p temp-file)
 	    (delete-file temp-file))))))
 
+;; ↓とりあえずスタブ。将来的には SETTING.TXT を読むようにしたい。
+(defun navi2ch-localfile-default-user-name (directory)
+  "DIRECTORY でのデフォルトの名無しさんを返す。"
+  navi2ch-localfile-default-user-name)
+
 (defun navi2ch-localfile-create-thread (directory from mail message subject)
   "DIRECTORY 以下にスレを作る。"
-  (navi2ch-localfile-lock directory)
-  (unwind-protect
+  (if (string= from "")
+      (setq from (navi2ch-localfile-default-user-name directory)))
+  (navi2ch-with-default-file-modes navi2ch-localfile-default-file-modes
+    (navi2ch-localfile-with-lock directory
       (let ((coding-system-for-read navi2ch-localfile-coding-system)
 	    (coding-system-for-write navi2ch-localfile-coding-system)
 	    (redo t)
@@ -198,14 +235,15 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	  (insert (navi2ch-localfile-encode-message
 		   from mail now message subject)))
 	(navi2ch-localfile-update-subject-file directory article-id
-					       (string-match "sage" mail)))
-    (navi2ch-localfile-unlock directory)))
+					       (string-match "sage" mail))))))
 
 (defun navi2ch-localfile-append-message (directory article-id
 						   from mail message)
   "DIRECTORY の ARTICLE-ID スレにレスを付ける。"
-  (navi2ch-localfile-lock directory)
-  (unwind-protect
+  (if (string= from "")
+      (setq from (navi2ch-localfile-default-user-name directory)))
+  (navi2ch-with-default-file-modes navi2ch-localfile-default-file-modes
+    (navi2ch-localfile-with-lock directory
       (let* ((coding-system-for-read navi2ch-localfile-coding-system)
 	     (coding-system-for-write navi2ch-localfile-coding-system)
 	     (dat-directory (expand-file-name "dat" directory))
@@ -225,8 +263,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	  (if (file-exists-p temp-file)
 	      (delete-file temp-file)))
 	(navi2ch-localfile-update-subject-file directory article-id
-					       (string-match "sage" mail)))
-    (navi2ch-localfile-unlock directory)))
+					       (string-match "sage" mail))))))
 
 ;; interface functions for multibbs
 (defun navi2ch-localfile-p (uri)
@@ -239,32 +276,39 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	(file (navi2ch-article-get-file-name board article)))
     (list (navi2ch-localfile-update-file url file) nil)))
 
+(defvar navi2ch-localfile-last-error nil)
+
 (defun navi2ch-localfile-send-message
   (from mail message subject bbs key time board article)
-
-  (when (= (length message) 0)
-    (error "本文が書かれていません。"))
-  (when (and subject
-	     (= (length subject) 0))
-    (error "Subject が書かれていません。"))
-
-  (save-match-data
-    (let* ((url (navi2ch-board-get-url board))
-	   directory)
-      (if (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
-			url)
-	  (setq directory (file-name-directory (match-string 1 url)))
-	(error "何か変です。"))
-      (if subject
-	  ;; スレ立て
-	  (navi2ch-localfile-create-thread directory from mail message subject)
-	;; レス書き
-	(navi2ch-localfile-append-message directory key
-					  from mail message)))))
+  (setq navi2ch-localfile-last-error
+	(catch 'error
+	  (when (= (length message) 0)
+	    (throw 'error "本文が書かれていません。"))
+	  (when (and subject
+		     (= (length subject) 0))
+	    (throw 'error "Subject が書かれていません。"))
+	  (save-match-data
+	    (let* ((url (navi2ch-board-get-url board))
+		   directory)
+	      (if (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
+				url)
+		  (setq directory (file-name-directory (match-string 1 url)))
+		(throw 'error "何か変です。"))
+	      (if subject
+		  ;; スレ立て
+		  (navi2ch-localfile-create-thread directory
+						   from mail message subject)
+		;; レス書き
+		(navi2ch-localfile-append-message directory key
+						  from mail message))))
+	  nil)))
 
 (defun navi2ch-localfile-send-message-success-p (proc)
-;  (string-match "302 Found" (navi2ch-net-get-content proc)))
-  t)
+					;  (string-match "302 Found" (navi2ch-net-get-content proc)))
+  (null navi2ch-localfile-last-error))
+
+(defun navi2ch-localfile-error-string (proc)
+  navi2ch-localfile-last-error)
 
 (defun navi2ch-localfile-board-update (board)
   (let ((file (navi2ch-board-get-file-name board))

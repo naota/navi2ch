@@ -1,5 +1,48 @@
 2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
 
+	別ディレクトリで configure した時の挙動を変更。
+
+	make 中にシンボリックリンクを張ると、ポータブルに依存関係を解決で
+	きないみたいなので、シンボリックリンクは configure 時に張るように
+	した。
+
+	GNU make 以外の make を使っている場合は、cvs update の後で、
+	% ./config.status --recheck && ./config.status
+	してね。
+
+	* configure.in: CVS をチェックするように。デフォルトで cvs -z3。
+	ソースディレクトリ以外で configure している場合は *.el と
+	doc/navi2ch.info をシンボリックリンクするように。
+
+	* Makefile.am (BUILT_SOURCES): $(srcdir) に。
+	(CLEANFILES): 削除。
+	($(srcdir)/navi2ch-version.el): navi2ch-version.el から変更。
+	($(srcdir)/bcomp.el): bcomp.el から変更。
+	(Makefiles): 新ターゲット。
+	(stamp-link): 削除。
+	(update): CVS マクロを使うように。Makefiles ターゲットを使うように。
+
+2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-localfile.el: Author に俺を追加。
+	BBS の作り方をもうちょい詳しくしてみる。
+	(navi2ch-localfile-default-file-modes): 新変数。
+	(navi2ch-localfile-default-user-name): 新変数。
+	(navi2ch-localfile-func-alist): error-string を得るように。
+	(navi2ch-localfile-with-lock): 新マクロ。
+	(navi2ch-localfile-default-user-name): 新関数。
+	(navi2ch-localfile-create-thread): 名無しを設定するように。
+	default-file-modes を設定するように。
+	(navi2ch-localfile-append-message): 同上。
+	(navi2ch-localfile-last-error): 新変数。
+	(navi2ch-localfile-send-message): エラーをシグナルせず、後から取る
+	ために設定するように。
+	(navi2ch-localfile-send-message-success-p): エラーが起きたかどうか
+	を報告するように。
+	(navi2ch-localfile-error-string): エラー文字列を得るように。
+
+	* navi2ch-util.el (navi2ch-with-default-file-modes): 新マクロ。
+
 	navi2ch-localfile がなんとなく動くようになりますた。
 	まだ navi2ch.el からはロードしてません。
 

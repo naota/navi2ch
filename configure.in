@@ -44,6 +44,9 @@ if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
   AC_MSG_ERROR(specify one of --with-xemacs or --with-emacs)
 fi
 
+AC_CHECK_PROG(CVS, cvs, cvs -z3, :)
+AC_PROG_LN_S
+
 AC_CHECK_PROGS(EMACS, ${emacsen}, no)
 if test "$EMACS" = "no"; then
   AC_MSG_ERROR(cannot find emacs)
@@ -99,5 +102,15 @@ fi
 ])
 
 AC_SUBST(icondir)
-AC_PROG_LN_S
+
+# link files
+if test `cd ${srcdir}; pwd` != `pwd`; then
+  AC_CONFIG_COMMANDS([link-lisp],
+  [
+    rm -f *.el
+    ${navi2ch_ln_s} ${ac_srcdir}/*.el .
+  ], [navi2ch_ln_s="${LN_S}"])
+  AC_CONFIG_LINKS(doc/navi2ch.info:doc/navi2ch.info)
+fi
+
 AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile])

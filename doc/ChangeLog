@@ -1,5 +1,11 @@
 2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch.texi (FAQ): エラー報告のしかたについて追加。
+
+	* Makefile.am (.texi.info): デフォルトルールと同様、srcdir に
+	cd するように。
+	(.texi.html): MAKEINFO マクロを使用するように。
+
 	* navi2ch.texi (Getting Develop Version): make update について追加。
 
 2002-07-14  Nanashi San  <nanashi@users.sourceforge.net>

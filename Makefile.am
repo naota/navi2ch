@@ -13,20 +13,20 @@ lisp_LISP = navi2ch-version.el \
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in
-BUILT_SOURCES = navi2ch-version.el bcomp.el
+BUILT_SOURCES = $(srcdir)/navi2ch-version.el $(srcdir)/bcomp.el
 SUBDIRS = contrib doc icons
-CLEANFILES = stamp-link
 
-navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
+$(srcdir)/navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \
 	sed -e 's/@\(VERSION\)@/$(VERSION)/' \
 		$(srcdir)/navi2ch-version.el.in > $@.tmp && \
 	mv $@.tmp $@
 
 snap:
-	rm -f navi2ch-version.el && \
+	rm -f $(srcdir)/navi2ch-version.el && \
 	$(MAKE) $(AM_MAKEFLAGS) VERSION=@VERSION@-`date +%y%m%d` dist elcdist && \
-	rm -f navi2ch-version.el
+	rm -f $(srcdir)/navi2ch-version.el && \
+	$(MAKE) $(AM_MAKEFLAGS) $(srcdir)/navi2ch-version.el
 
 recompile: $(lisp_LISP)
 	rm -f $(ELCFILES) && \
@@ -40,7 +40,7 @@ elcdist: $(ELCFILES)
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz && \
 	rm -rf $(distdir)
 
-bcomp.el: $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
+$(srcdir)/bcomp.el: $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
 	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
@@ -53,14 +53,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	CONFIG_HEADERS= CONFIG_LINKS= \
 	CONFIG_FILES=$@ $(SHELL) ./config.status
 
-update:
-	( cd $(srcdir); cvs update -P -d ) && \
-	$(MAKE) $(AM_MAKEFLAGS) $(top_builddir)/config.status && \
+Makefiles: $(top_builddir)/config.status
 	$(SHELL) $(top_builddir)/config.status
 
-$(lisp_LISP): stamp-link
-stamp-link: $(srcdir)/Makefile.am
-	for file in $(lisp_LISP); do \
-		test -r $$file || $(LN_S) $(srcdir)/$$file .; \
-	done && \
-	touch $@
+update:
+	( cd $(srcdir); $(CVS) update -P -d ) && \
+	$(MAKE) $(AM_MAKEFLAGS) Makefiles

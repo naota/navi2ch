@@ -3,9 +3,10 @@ EXTRA_DIST = Makefile.pmake batch-texi2info.el
 CLEANFILES = navi2ch.pdf navi2ch.html
 
 .texi.info:
-	rm -f $(srcdir)/${@}* && \
-	$(EMACS) -q -batch -l $(srcdir)/batch-texi2info.el -f batch-texi2info $<
-	touch $@
+	cd $(srcdir) && \
+	rm -f ${@}* && \
+	$(EMACS) -q -batch -l $(srcdir)/batch-texi2info.el \
+		-f batch-texi2info $<
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
@@ -22,4 +23,5 @@ pdf: navi2ch.pdf
 # create HTML file
 html: navi2ch.html
 .texi.html:
-	makeinfo --html --no-split -o $@ $<
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) \
+		--html --no-split -o $@ $<

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2002  Navi2ch Project
 
 ;; Author: Nanashi San <nanashi@users.sourceforge.net>
-;; Keywords:
+;; Keywords: 2ch, network
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

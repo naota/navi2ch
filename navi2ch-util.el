@@ -162,6 +162,18 @@ See also the function `defalias'."
       `(match-string ,num ,string)
     `(match-string-no-properties ,num ,string)))
 
+(defmacro navi2ch-with-default-file-modes (mode &rest body)
+  "default-file-modes を MODE にして BODY を実行する。"
+  (let ((temp (make-symbol "--file-modes-temp--")))
+    `(let ((,temp (default-file-modes)))
+       (unwind-protect
+	   (progn
+	     (set-default-file-modes ,mode)
+	     ,@body)
+	 (set-default-file-modes ,temp)))))
+
+(put 'navi2ch-with-default-file-modes 'lisp-indent-function 1)
+
 
 ;;;; other misc stuff
 (defsubst navi2ch-replace-string (regexp rep string
