@@ -787,8 +787,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
           (board-win
            (select-window board-win)
 	   (when navi2ch-bm-stay-board-window
-	     (if (< (window-height) (frame-height))
-		 (enlarge-window (frame-height)))
+	     (condition-case nil
+		 (enlarge-window (frame-height))
+	       (error nil))
 	     (split-window-vertically navi2ch-board-window-height)
 	     (other-window 1)))
           (list-win
@@ -1126,8 +1127,9 @@ article buffer から抜けるなら 'quit を返す。"
       (when buf
         (if (eq buf list-buf)
             (split-window-horizontally navi2ch-list-window-width)
-	  (if (< (window-height) (frame-height))
-	      (enlarge-window (frame-height)))
+	  (condition-case nil
+	      (enlarge-window (frame-height))
+	    (error nil))
           (split-window-vertically navi2ch-board-window-height))
         (switch-to-buffer buf))
       (other-window 1))))

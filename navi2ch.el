@@ -176,8 +176,9 @@ SUSPEND が non-nil なら buffer を消さない"
 	    (board-win
 	     (select-window board-win)
 	     (when article
-	       (if (< (window-height) (frame-height))
-		   (enlarge-window (frame-height)))
+	       (condition-case nil
+		   (enlarge-window (frame-height))
+		 (error nil))
 	       (split-window-vertically navi2ch-board-window-height)
 	       (other-window 1)))
 	    (list-win

@@ -262,8 +262,9 @@
             (when x
               (delete-windows-on x)))
 	  (when navi2ch-bm-stay-board-window
-	    (if (< (window-height) (frame-height))
-		(enlarge-window (frame-height)))
+	    (condition-case nil
+		(enlarge-window (frame-height))
+	      (error nil))
 	    (split-window-vertically navi2ch-board-window-height)
 	    (other-window 1))
           (let (state)

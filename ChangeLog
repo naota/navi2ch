@@ -1,6 +1,14 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-find-file):
+	enlarge-window を condition-case で囲む。
+	(navi2ch-article-two-pain): 同上。
+	* navi2ch-board-misc.el (navi2ch-bm-select-article): 同上。
+	* navi2ch-board.el (navi2ch-board-two-pain): 同上。
+	* navi2ch.el (navi2ch-goto-url): 同上。
+	XEmacs って。。。ぱーと２
+
+	* navi2ch-article.el (navi2ch-article-find-file):
 	enlarge-window の前に window-height と frame-height とを比較する。
 	(navi2ch-article-two-pain): 同上。
 	* navi2ch-board-misc.el (navi2ch-bm-select-article): 同上。
