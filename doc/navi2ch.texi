@@ -805,7 +805,7 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 * Bookmark Mode Key Bindings::  Bookmark モードでのキーバインド
 * Article Mode Key Bindings::   Article モードでのキーバインド
 * Message Mode Key Bindings::   Message モードでのキーバインド
-* Message Mode AA List::        Message モードでのアスキーアート一覧
+z* Message Mode AA List::        Message モードでのアスキーアート一覧
 @end menu
 
 @node Global Key Bindings
@@ -1470,6 +1470,48 @@ navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 スレを開いたときに自動的に最大数を制限したい場合は、
 変数 @code{navi2ch-article-auto-expunge} を @code{nil} 以外に設定しま
 す。@xref{Customize}.
+
+@item Q.
+Meadow + Cygwin でうまく動かないことがあるんだけど。
+
+@item A.
+古い gzip では問題があるので、gzip を更新すると直るかも。
+もしくは
+@lisp
+(setq navi2ch-enable-readcgi nil)
+(setq navi2ch-net-accept-gzip nil)
+@end lisp
+として gzip を使わないという方法もあるけど、にちゃんねるにネットワーク的
+負荷がかかるので素人にはお勧めできない。
+
+@item Q.
+突然とある板が更新されなくなったみたいなんだけど。
+
+@item A.
+それは多分にちゃんねる側の問題。板の移転があったのかも。
+@file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
+最新の板一覧
+@uref{http://isweb36.infoseek.co.jp/computer/hima2908/bbsmenu.html}
+を @code{navi2ch-list-bbstable-url} に設定するといいかも。
+
+@item Q.
+article を開くときに一画面で開いて欲しいんだけど。
+
+@item A.
+以下の設定をして下さい。
+@lisp
+(setq navi2ch-bm-stay-board-window nil)
+@end lisp
+
+@item Q.
+proxy を使って書きこんでると、時間帯によって送信に失敗することが
+あるみたいだけど?
+
+@item A.
+にちゃんねる側の規制で、80番ポートが listen されていたりすると
+不正 proxy とみなされることがあるので、web サーバを落とすなり
+パケットフィルタリングでにちゃんねるからの接続のみを落とすなり
+すると動くかも。
 
 @ignore
 @item Q.
