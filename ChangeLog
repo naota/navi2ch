@@ -1,5 +1,15 @@
 2004-12-12  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el
+	(navi2ch-article-make-mode-line-identification): 新関数として分離。
+	(navi2ch-article-set-mode-line): 上記関数を使うように。
+
+	* navi2ch-message.el
+	(navi2ch-message-make-mode-line-identification): 新関数として分離。
+	(navi2ch-message-write-message): 上記関数を使うように。
+
+2004-12-12  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-net.el (navi2ch-net-send-message-error-string): 文字列が
 	取得できなかったときは HTTP status を返すように。
 

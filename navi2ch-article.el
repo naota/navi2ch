@@ -1387,15 +1387,18 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
                      article)
             navi2ch-article-current-article article))
     (setq navi2ch-mode-line-identification
-          (format "%s (%s/%s) [%s]"
-                  (or (cdr (assq 'subject article))
-		      navi2ch-bm-empty-subject)
-                  (let ((l (length navi2ch-article-message-list)))
-		    (if (= l 0) "-"
-		      (number-to-string l)))
-                  (or (cdr (assq 'response article)) "-")
-                  (cdr (assq 'name navi2ch-article-current-board)))))
+          (navi2ch-article-make-mode-line-identification article)))
   (navi2ch-set-mode-line-identification))
+
+(defun navi2ch-article-make-mode-line-identification (article)
+  (format "%s (%s/%s) [%s]"
+	  (or (cdr (assq 'subject article))
+	      navi2ch-bm-empty-subject)
+	  (let ((l (length navi2ch-article-message-list)))
+	    (if (= l 0) "-"
+	      (number-to-string l)))
+	  (or (cdr (assq 'response article)) "-")
+	  (cdr (assq 'name navi2ch-article-current-board))))
 
 (defun navi2ch-article-sync-disable-diff (&optional force)
   (interactive "P")
