@@ -1,3 +1,8 @@
+2002-10-20  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): startとend
+	間違いました。
+
 2002-10-19  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	送信履歴保存機能を実装。

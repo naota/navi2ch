@@ -446,7 +446,7 @@ START, END, NOFIRST で範囲を指定する"
 				 'mouse-face navi2ch-article-mouse-face
 				 'url url))
       (add-text-properties start
-			   (1+ end)
+			   (1+ start)
 			   (list 'link-head t)))))
 
 (defsubst navi2ch-article-put-cite-face ()
