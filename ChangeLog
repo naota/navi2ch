@@ -1,3 +1,15 @@
+2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	久々の commit。mami さんすんません。
+	* navi2ch-article.el (navi2ch-article-through-subr): 
+	navi2ch-article-through-nextから名前を変更。
+	中で呼んでた(interactive-p)を外で呼んで引数として渡す事に。
+	navi2ch-article-enable-through に 'ask を入れても P 押すと常に聞か
+	れちゃってたので。
+	(navi2ch-article-through-next): navi2ch-article-through-subr を呼
+	ぶようにした。
+	(navi2ch-article-through-previous): 同上。
+
 2002-05-19    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-cached-subject): 

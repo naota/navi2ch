@@ -1171,9 +1171,10 @@ article buffer から抜けるなら 'quit を返す。"
     (or no-ask
 	navi2ch-article-enable-through)))
 
-(defun navi2ch-article-through-next (&optional num)
-  "次のスレに移動する。
-NUM が -1 のときは前のスレに移動する。"
+(defun navi2ch-article-through-subr (interactive-flag num)
+  "前後のスレに移動する。
+NUM が 1 のときは次、-1 のときは前のスレに移動。
+呼び出す際はINTERACTIVE-FLAGに(interactive-p)を入れる。"
   (interactive)
   (or num (setq num 1))
   (if (and (not (eq num 1))
@@ -1185,7 +1186,7 @@ NUM が -1 のときは前のスレに移動する。"
 		 (and (eq mode 'navi2ch-board-mode)
 		      (navi2ch-board-equal navi2ch-article-current-board
 					   navi2ch-board-current-board))))
-	(let ((ret (navi2ch-article-through-ask (interactive-p) num)))
+	(let ((ret (navi2ch-article-through-ask interactive-flag num)))
 	  (cond ((eq ret 'quit)
 		 (navi2ch-article-exit))
 		(ret
@@ -1201,10 +1202,15 @@ NUM が -1 のときは前のスレに移動する。"
 		 (message "Don't through article"))))
       (message "Don't through article"))))
 
+(defun navi2ch-article-through-next ()
+  "次のスレに移動する。"
+  (interactive)
+  (navi2ch-article-through-subr (interactive-p) 1))
+ 
 (defun navi2ch-article-through-previous ()
   "前のスレに移動する。"
   (interactive)
-  (navi2ch-article-through-next -1))
+  (navi2ch-article-through-subr (interactive-p) -1))
 
 (defun navi2ch-article-two-pane ()
   (interactive)
