@@ -1522,6 +1522,24 @@ proxy を使って書きこんでると、時間帯によって送信に失敗することが
 り、サーバが移転になった板がこのカテゴリに含まれます。変な板のことでは
 ありません。
 
+@item Q.
+@code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
+って出て起動できないんだけど…。
+
+@item A.
+とりあえずこうしとけば？
+@lisp
+(setq navi2ch-auto-update nil)
+@end lisp
+
+@item Q.
+URL を w3m.el で開きたいんだけど。
+
+@item A.
+@lisp
+(setq browse-url-browser-function 'w3m-browse-url)
+@end lisp
+
 @ignore
 @item Q.
 ふーん、Navi2ch って便利なんだね。ところで２ちゃんねるって何？
