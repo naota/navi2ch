@@ -22,6 +22,11 @@
 	きの挙動を修正。
 	http://pc.2ch.net/test/read.cgi/unix/999166513/889
 
+	* navi2ch-article.el
+	(navi2ch-article-view-article-from-file):
+	navi2ch-article-message-list に入れるよう修正
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/73-74
+
 2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el: かっこがずれていたのを直した
