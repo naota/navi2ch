@@ -422,6 +422,12 @@ window の幅と同じにしたいなら
   :type 'sexp
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-max-buffers 0
+  "*バッファとして保持するスレの最大数。
+0 ならば無制限。"
+  :type 'integer
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (if (featurep 'xemacs)
