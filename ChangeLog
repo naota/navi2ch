@@ -1,3 +1,11 @@
+2004-07-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el
+	(navi2ch-article-get-article-length): 新関数。
+	(navi2ch-article-str-to-num): 上記関数を使ってレス数を得るように。
+	popup から popup するときレス数が少なくなってしまうバグの修正。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/155
+
 2004-07-16  mami  <mami@users.sourceforge.net>
 
 	board 系モードで、スレのない最下行での U の挙動を修正。

@@ -1518,7 +1518,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		(n2 (string-to-number (match-string 2 str)))
 		(min (max (min n1 n2) 1))
 		(i (min (max n1 n2)
-			(1+ (length navi2ch-article-message-list))))
+			(1+ (navi2ch-article-get-article-length))))
 		list)
 	   (while (>= i min)
 	     (push i list)
@@ -1527,6 +1527,20 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	((string-match "\\([0-9]+,\\)+[0-9]+" str)
 	 (mapcar 'string-to-number (split-string str ",")))
 	(t (string-to-number str))))
+
+(defun navi2ch-article-get-article-length ()
+  (let* ((board (or navi2ch-article-current-board
+		    navi2ch-popup-article-current-board))
+	 (article (or navi2ch-article-current-article
+		      navi2ch-popup-article-current-article))
+	 (buffer-name (navi2ch-article-get-buffer-name board article)))
+    (save-excursion
+      (set-buffer
+       (or (get-buffer buffer-name)
+	   (progn
+	     (navi2ch-article-view-article board article nil nil nil t)
+	     buffer-name)))
+      (length navi2ch-article-message-list))))
 
 (defun navi2ch-article-get-number-list (number-property &optional limit)
   (if (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" number-property)
