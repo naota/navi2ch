@@ -1,5 +1,11 @@
 2003-02-06  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-mona.el (navi2ch-mona-enable-article-list): 新変数。
+	(navi2ch-mona-disable-article-list): 新変数。
+	(navi2ch-mona-arrange-message): 上記変数を使用するように。
+	条件考えてたらわけわかんなくなったのでとりあえず commit するけど、
+	たぶん順番を変える必要あり。
+
 	* navi2ch-article.el (navi2ch-article-save-dat-file): 新関数。
 	.dat ファイルを指定のファイルにコピー。
 	(navi2ch-article-mode-map): "\C-o" に
