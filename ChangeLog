@@ -1,5 +1,10 @@
 2002-10-21  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-fetch-link): ↓で引き数を変
+	え忘れたのを修正。
+
+2002-10-21  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-change-help-echo-property):
 	新関数。navi2ch-change-text-property をいじった。
 	(navi2ch-article-select-current-link):

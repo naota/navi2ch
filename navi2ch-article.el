@@ -1010,7 +1010,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		   (and (get-text-property (point) 'help-echo)
 			(let ((buffer-read-only nil))
 			  (navi2ch-article-change-help-echo-property (point)
-							(function navi2ch-article-help-echo))))
+								     (function navi2ch-article-help-echo))))
 		   (navi2ch-goto-url prop))
                (navi2ch-browse-url-internal prop))))
           ((setq prop (get-text-property (point) 'content))
@@ -1606,7 +1606,6 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	     (and (get-text-property (point) 'help-echo)
 		  (let ((buffer-read-only nil))
 		    (navi2ch-article-change-help-echo-property (point)
-							       'help-echo
 							       (function navi2ch-article-help-echo))))
 	     (and (navi2ch-article-fetch-article board article force)
 		  (navi2ch-bm-remember-fetched-article board article)))))))
