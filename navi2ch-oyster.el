@@ -36,7 +36,9 @@
 
 ;; wl とか xemacs の w3 とかから持ってくる。
 ;; OpenSSL も必要っぽい。
-(require 'ssl)
+;; (require 'ssl)
+;; 使わない場合でもバイトコンパイルできるように。
+(autoload 'open-ssl-stream "ssl")
 
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
@@ -102,7 +104,7 @@ state はあぼーんされてれば aborn というシンボル。
 			  (and header (setq ret (list header 'kako)))
 			  ret
 			  )
-			 
+
 		      (let ((header (navi2ch-oyster-update-file-with-offlaw url file time nil)))
 			(message "getting from 0 offlaw.cgi")
 			(and header (setq ret (list header 'kako))))
@@ -128,12 +130,12 @@ state はあぼーんされてれば aborn というシンボル。
 		      (if navi2ch-oyster-session-id
 			  (cons "sid" navi2ch-oyster-session-id)
 			(cons "sid" "" ))
-    
-		   
+
+
 		      (if subject
 			  (cons "subject" subject)
 			(cons "key"    key)))))
-		      
+
     (let ((proc
 	   (navi2ch-net-send-request
 	    url "POST"
@@ -208,7 +210,7 @@ state はあぼーんされてれば aborn というシンボル。"
 		(insert (substring cont 0 cont-size)))
 	      (list header nil))
 	     ((string= "-INCR" state);; あぼーん
-	      (with-temp-file file 
+	      (with-temp-file file
 		(navi2ch-set-buffer-multibyte nil)
 		(insert (substring cont 0 cont-size))
 		(list header 'aborn)))

@@ -1,3 +1,10 @@
+2002-09-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-oyster.el (toplevel): ssl.el が無い環境でもバイトコンパ
+	イルできるよう、ssl を require じゃなくて autoload するように。
+	↓Makefile.in は automake で自動生成なんで ChangeLog には書く必要
+	ないっす。
+
 2002-09-02  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-oyster.el オイスター作戦対応ソース新規追加
@@ -40,7 +47,7 @@
 	上記 navi2ch-article-textize-article を使うように。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/843
 
-	* navi2ch-head.el (navi2ch-head-get-head-txt): 
+	* navi2ch-head.el (navi2ch-head-get-head-txt):
 	navi2ch-offline が t のときはファイルを取ってこないように。
 	insert-string を行ごとに分割。
 	インデント調整。

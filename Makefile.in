@@ -109,9 +109,9 @@ ELCFILES = navi2ch-article.elc navi2ch-articles.elc \
 	navi2ch-jbbs-net.elc navi2ch-jbbs-shitaraba.elc \
 	navi2ch-list.elc navi2ch-localfile.elc navi2ch-machibbs.elc \
 	navi2ch-message.elc navi2ch-mona.elc navi2ch-multibbs.elc \
-	navi2ch-net.elc navi2ch-popup-article.elc navi2ch-search.elc \
-	navi2ch-splash.elc navi2ch-util.elc navi2ch-vars.elc \
-	navi2ch-version.elc navi2ch.elc navi2ch-oyster.elc
+	navi2ch-net.elc navi2ch-oyster.elc navi2ch-popup-article.elc \
+	navi2ch-search.elc navi2ch-splash.elc navi2ch-util.elc \
+	navi2ch-vars.elc navi2ch-version.elc navi2ch.elc
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
