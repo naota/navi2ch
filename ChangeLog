@@ -1,3 +1,11 @@
+2002-01-31  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-list.el
+	(navi2ch-list-get-board-name-list): 変わった板は無視。
+
+	* navi2ch.el
+	(navi2ch-change-log-directory): まだないディレクトリは移動しない。
+
 2002-01-31  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-ignore-errors): 新マクロ。

@@ -539,9 +539,10 @@ changed-list は '((board-id old-board new-board) ...) な alist。
     (setq list (delq (assoc navi2ch-list-global-bookmark-category-name list) list))))
     
 (defun navi2ch-list-get-board-name-list (list)
-  (let (alist)
+  (let (alist name-list)
     (dolist (x list)
-      (setq alist (append (cdr (assq 'child x)) alist)))
+      (unless (string= (car x) navi2ch-list-changed-category-name)
+	(setq alist (append (cdr (assq 'child x)) alist))))
     alist))
 
 (defun navi2ch-list-two-pane ()

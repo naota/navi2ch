@@ -289,17 +289,18 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (let ((old-dir (navi2ch-board-get-file-name (cadr node) ""))
 	  (new-dir (navi2ch-board-get-file-name (caddr node) ""))
 	  tmp-dir)
-      (when (file-exists-p new-dir)
-	(catch 'loop
-	  (while t
-	    (setq tmp-dir (expand-file-name
-			   (make-temp-name (concat "navi2ch-" (car node)))
-			   temporary-file-directory))
-	    (unless (file-exists-p tmp-dir)
-	      (throw 'loop nil))))
-	(rename-file new-dir tmp-dir))
-      (make-directory (expand-file-name ".." new-dir) t)
-      (rename-file old-dir new-dir))))
+      (when (file-exists-p old-dir)
+	(when (file-exists-p new-dir)
+	  (catch 'loop
+	    (while t
+	      (setq tmp-dir (expand-file-name
+			     (make-temp-name (concat "navi2ch-" (car node)))
+			     temporary-file-directory))
+	      (unless (file-exists-p tmp-dir)
+		(throw 'loop nil))))
+	  (rename-file new-dir tmp-dir))
+	(make-directory (expand-file-name ".." new-dir) t)
+	(rename-file old-dir new-dir)))))
                       
 (defun navi2ch-update ()
   "navi2ch-update.el をダウンロードして実行する。"
