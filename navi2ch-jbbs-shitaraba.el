@@ -73,10 +73,8 @@
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	(url  (navi2ch-js-article-to-url board article))
-	(func 'navi2ch-js-article-callback)
-	ret)
-    (setq ret (navi2ch-net-update-file url file time func))
-    (list ret nil)))
+	(func 'navi2ch-js-article-callback))
+    (navi2ch-net-update-file url file time func)))
 
 (defun navi2ch-js-url-to-board (url)
   (let (uri id)

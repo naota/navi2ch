@@ -285,38 +285,35 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-2ch-article-update (board article)
   "BOARD, ARTICLE に対応するファイルを更新する。
-返り値は (header state) のリスト。
-state はあぼーんされてれば aborn というシンボル。
-過去ログを取得していれば kako というシンボル。"
+返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
-	url)
+	url header kako-p)
     (if (and (navi2ch-enable-readcgi-p
 	      (navi2ch-board-get-host board)))
 	(progn
 	  (setq url (navi2ch-article-get-readcgi-raw-url
 		     board article))
-	  (let ((ret (navi2ch-net-update-file-with-readcgi
-		      url file time (file-exists-p file))))
-	    (if (eq ret 'kako)
-		(progn
-		  (setq url (navi2ch-article-get-kako-url
-			     board article))
-		  (list
-		   (navi2ch-net-update-file url file)
-		   'kako))
-	      ret)))
+	  (setq header (navi2ch-net-update-file-with-readcgi
+			url file time (file-exists-p file)))
+	  (when (navi2ch-net-get-state 'kako header)
+	    (setq url (navi2ch-article-get-kako-url
+		       board article))
+	    (setq header (navi2ch-net-update-file url file))
+	    (setq kako-p t)))
       (setq url (navi2ch-article-get-url board article))
-      (let ((ret
-	     (if (and (file-exists-p file)
-		      navi2ch-article-enable-diff)
-		 (navi2ch-net-update-file-diff url file time)
-	       (let ((header (navi2ch-net-update-file url file time)))
-		 (and header (list header nil))))))
-	(if ret
-	    ret
-	  (setq url (navi2ch-article-get-kako-url board article))
-	  (list (navi2ch-net-update-file url file) 'kako))))))
+      (setq header
+	    (if (and (file-exists-p file)
+		     navi2ch-article-enable-diff)
+		(navi2ch-net-update-file-diff url file time)
+	      (navi2ch-net-update-file url file time)))
+      (unless header
+	(setq url (navi2ch-article-get-kako-url board article))
+	(setq header (navi2ch-net-update-file url file))
+	(setq kako-p t)))
+    (if kako-p
+	(navi2ch-net-add-state 'kako header)
+      header)))
 
 (defun navi2ch-2ch-url-to-board (url)
   (let (id uri)

@@ -3,10 +3,8 @@
 ・navi2ch-article-max-line, navi2ch-board-max-line をなんとかする
 ・expire をちゃんと実装する。
 ・過去ログをちゃんと見れるようにする(read.cgi でなんとかなる？)
-・ディレクトリにあるスレ一覧を表示できるようにする。
 ・フィルタをちゃんと実装する。
 ・ツールチップでレスを表示
 ・navi2ch2 の作成 :-)
 ・navi2ch-logo.el を Emacs20 に対応させる。
   convert で xbm に変換して bitmap-mule でいける？
-・板一覧に変更があったときになんとかする。

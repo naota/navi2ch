@@ -653,7 +653,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
                                          force))
            (file (navi2ch-article-get-file-name board article))
            (old-size (nth 7 (file-attributes file)))
-           state)
+           header)
       (when first
         (setq article (navi2ch-article-load-info)))
       (if (and (cdr (assq 'kako article))
@@ -664,14 +664,15 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	(let ((ret (navi2ch-article-update-file board article force)))
 	  (setq article (nth 0 ret)
 		navi2ch-article-current-article article
-		state (nth 1 ret))))
+		header (nth 1 ret))))
       (prog1
 	  ;; 更新できたら
 	  (when (or (and first (file-exists-p file))
-		    state)
+		    header)
 	    (setq list
 		  (if (or first
-			  (memq (nth 1 state) '(aborn kako))
+			  (navi2ch-net-get-state 'aborn header)
+			  (navi2ch-net-get-state 'kako header)
 			  (not navi2ch-article-enable-diff))
 		      (navi2ch-article-get-message-list file)
 		    (navi2ch-article-append-message-list
@@ -706,7 +707,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
                    board article))
       (save-excursion
 	(navi2ch-article-view-article board article force nil nil t))
-    (let (ret state file)
+    (let (ret header file)
       (setq article (navi2ch-article-load-info board article)
 	    file (navi2ch-article-get-file-name board article))
       (unless (and (cdr (assq 'kako article))
@@ -715,8 +716,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 			     (y-or-n-p "re-sync kako article?"))))
 	(setq ret (navi2ch-article-update-file board article force)
 	      article (nth 0 ret)
-	      state (nth 1 ret))
-	(when state
+	      header (nth 1 ret))
+	(when header
 	  (navi2ch-article-save-info board article)
 	  (navi2ch-article-set-summary-element board article t)
 	  t)))))
@@ -734,28 +735,23 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 
 (defun navi2ch-article-update-file (board article &optional force)
   "BOARD, ARTICLE に対応するファイルを更新する。
-返り値は (article (header state)) のリスト。
-state はあぼーんされてれば aborn というシンボル。
-過去ログを取得していれば kako というシンボル。"
-  (let (header-state)
+返り値は \(article header) のリスト。"
+  (let (header)
     (unless navi2ch-offline
-      (let* ((navi2ch-net-force-update (or navi2ch-net-force-update
-					   force))
-	     (ret      (navi2ch-multibbs-article-update board article))
-	     (header   (car ret))
-	     (state    (cadr ret)))
+      (let ((navi2ch-net-force-update (or navi2ch-net-force-update
+					  force)))
+	(setq header (navi2ch-multibbs-article-update board article))
 	(when header
-	  (unless (cdr (assoc "Not-Updated" header))
+	  (unless (navi2ch-net-get-state 'not-updated header)
 	    (setq article (navi2ch-put-alist 'time
 					     (or (cdr (assoc "Last-Modified"
 							     header))
 						 (cdr (assoc "Date"
 							     header)))
-					     article))
-	    (setq header-state ret))
-	  (when (eq state 'kako)
+					     article)))
+	  (when (navi2ch-net-get-state 'kako header)
 	    (setq article (navi2ch-put-alist 'kako t article))))))
-    (list article header-state)))
+    (list article header)))
 
 (defun navi2ch-article-sync-from-file ()
   "from-file なスレを更新する。"

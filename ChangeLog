@@ -1,3 +1,35 @@
+2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	navi2ch-net(upload|download)-* が header を返すのと 
+	'(header state) を返すのの2種類あるのが前からちょっと嫌だったので、
+	あぼーんとか過去ログの状態をヘッダに突っこむようにした。
+	一応この直前に、before_state_in_header タグを打ちますた。
+	* navi2ch-oyster.el (navi2ch-oyster-article-update): state を
+	header に突っこむようにしたのに合わせる。
+	(navi2ch-oyster-update-file-with-offlaw): 同上。
+	* navi2ch-multibbs.el (navi2ch-2ch-article-update): 同上。
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-update): 同上。
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-update): 同上。
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-update): 同上。
+	
+	* navi2ch-board.el (navi2ch-board-sync):
+	navi2ch-net-(add|get)-state を使うように。
+
+	* navi2ch-article.el (navi2ch-article-fetch-article): state を
+	header に突っこむようにしたのに合わせる。
+	(navi2ch-article-sync): navi2ch-net-(add|get)-state を使うように。
+	(navi2ch-article-update-file): 同上
+
+	* navi2ch-net.el (navi2ch-net-state-header-alist): 新変数。
+	(navi2ch-net-update-file): navi2ch-net-(add|get)-state を使うよう
+	に。
+	(navi2ch-net-update-file-diff): 同上。
+	(navi2ch-net-update-file-with-readcgi): 同上。
+	(navi2ch-net-add-state): 新関数。
+	(navi2ch-net-get-state): 同上。
+
+	* TODO: ちょっとだけ項目を消してみる。
+
 2002-10-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-vars.el (navi2ch-directory-mode-hook): 定義した。

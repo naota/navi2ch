@@ -65,11 +65,10 @@
    (replace-match "\n"))
 
 (defun navi2ch-jbbs-article-update (board article)
-  (let* ((file (navi2ch-article-get-file-name board article))
-	 (time (cdr (assq 'time article)))
-	 (url  (navi2ch-jbbs-get-offlaw-url board article))
-	 (header (navi2ch-net-update-file url file time)))
-    (and header (list header nil))))
+  (let ((file (navi2ch-article-get-file-name board article))
+	(time (cdr (assq 'time article)))
+	(url  (navi2ch-jbbs-get-offlaw-url board article)))
+    (navi2ch-net-update-file url file time)))
 
 (defun navi2ch-jbbs-get-offlaw-url (board article)
   (let ((uri (cdr (assq 'uri board))))

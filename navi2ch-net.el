@@ -41,6 +41,11 @@
 (defvar navi2ch-net-status nil)
 (defvar navi2ch-net-header nil)
 (defvar navi2ch-net-content nil)
+(defvar navi2ch-net-state-header-alist
+  '((aborn . "X-Navi2ch-Aborn")
+    (kako . "X-Navi2ch-Kako")
+    (not-updated . "X-Navi2ch-Not-Updated"))
+  "STATE $B$N%7%s%\%k$H(B $B<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B alist")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
@@ -456,8 +461,7 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 		   redo t)
 	     (message "%s: redirecting..." (current-message)))
 	    ((string= status "304")
-	     (setq header (cons '("Not-Updated" . "yes")
-				header)))
+	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    (t
 	     (setq header nil))))	; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
     header))
@@ -483,8 +487,7 @@ header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
 (defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE $B$r:9J,$G99?7$9$k!#(B
 TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
-$B99?7$G$-$l$P(B (header state) $B$J(B list $B$rJV$9!#(B
-state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
+$B99?7$G$-$l$P(B HEADER $B$rJV$9!#(B"
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
@@ -497,7 +500,7 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
 	      (coding-system-for-read 'binary)
 	      (status (navi2ch-net-get-status proc))
 	      (header (navi2ch-net-get-header proc))
-	      cont ret aborn-flag)
+	      cont aborn-flag)
 	  (setq aborn-flag (not (navi2ch-net-check-aborn size header)))
 	  (cond (aborn-flag
 		 nil)			; $B$H$j$"$($:2?$b$7$J$$(B
@@ -517,29 +520,29 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
 			  (insert-file-contents file nil nil size)
 			  (goto-char (point-max))
 			  (insert cont))
-			(message "%sdone" (current-message))
-			(setq ret (list header nil)))))
+			(message "%sdone" (current-message)))))
 		((string= status "200")
 		 (if (not (navi2ch-net-check-aborn size header))
 		     (setq aborn-flag t)
 		   (message "%s: getting whole file..." (current-message))
 		   (with-temp-file file
 		     (insert (navi2ch-net-get-content proc)))
-		   (message "%sdone" (current-message))
-		   (setq ret (list header nil))))
+		   (message "%sdone" (current-message))))
 		((string= status "304")
-		 (setq header (cons '("Not-Updated" . "yes")
-				    header))
-		 (setq ret (list header nil))))
+		 (setq header (navi2ch-net-add-state 'not-updated header)))
+		(t
+		 (setq header nil)))
 	  (if (not aborn-flag)
-	      ret
+	      header
 	    (message "$B$"$\!<$s(B!!!")
 	    (when (and navi2ch-net-save-old-file-when-aborn
 		       (or (not (eq navi2ch-net-save-old-file-when-aborn
 				    'ask))
 			   (y-or-n-p "$B$"$\!<$s(B!!! backup old file? ")))
 	      (copy-file file (read-file-name "file name: ")))
-	    (list (navi2ch-net-update-file url file nil nil) 'aborn)))
+	    (navi2ch-net-add-state
+	     'aborn
+	     (navi2ch-net-update-file url file nil nil))))
       nil)))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
@@ -584,18 +587,18 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B"
 		  (insert-file-contents file)
 		  (goto-char (point-max)))
 		(insert (substring cont 0 cont-size)))
-	      (list header nil))
+	      header)
 	     ((string= "-INCR" state);; $B$"$\!<$s(B
 	      (with-temp-file file
 		(navi2ch-set-buffer-multibyte nil)
 		(insert (substring cont 0 cont-size))
-		(list header 'aborn)))
+		(navi2ch-net-add-state 'aborn header)))
 	     ((string= "-ERR" state)
 	      (let ((err-msg (decode-coding-string
 			      data navi2ch-coding-system)))
 		(message "error! %s" err-msg)
 		(cond ((string-match "$B2a5n%m%0AR8K$GH/8+(B" err-msg)
-		       'kako)
+		       (navi2ch-net-add-state 'kako header))
 ;;; 		      ((and (string-match "html$B2=BT$A(B" err-msg)
 ;;; 			    (string-match "/read\\.cgi/" url))
 ;;; 		       (setq url (replace-match "/offlaw.cgi/" t nil url))
@@ -734,6 +737,17 @@ internet drafts directory for a copy.")
 	(setq file (navi2ch-board-get-file-name board file))
 	(when (navi2ch-net-update-file url file nil nil t)
 	  file)))))
+
+(defun navi2ch-net-add-state (state header)
+  "HEADER $B$K(B STATE $B$rDI2C$9$k!#(B"
+  (navi2ch-put-alist (cdr (assq state navi2ch-net-state-header-alist))
+		     "yes"
+		     header))
+
+(defun navi2ch-net-get-state (state header)
+  "HEADER $B$+$i(B STATE $B$r<hF@$9$k!#(B"
+  (cdr (assoc (cdr (assq state navi2ch-net-state-header-alist))
+	      header)))
 
 (run-hooks 'navi2ch-net-load-hook)
 ;;; navi2ch-net.el ends here

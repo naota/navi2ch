@@ -73,42 +73,37 @@
 
 (defun navi2ch-oyster-article-update (board article)
   "BOARD, ARTICLE に対応するファイルを更新する。
-返り値は (header state) のリスト。
-state はあぼーんされてれば aborn というシンボル。
-過去ログを取得していれば kako というシンボル。"
+返り値は HEADER のリスト。"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	(url (navi2ch-article-get-url board article))
-	header
-	ret)
-    (setq ret (if (and (file-exists-p file)
-		       navi2ch-article-enable-diff)
-		  (navi2ch-net-update-file-diff url file time)
-		(let ((header (navi2ch-net-update-file url file time)))
-		  (and header (list header nil)))))
-    (unless ret
+	header kako-p)
+    (setq header (if (and (file-exists-p file)
+			  navi2ch-article-enable-diff)
+		     (navi2ch-net-update-file-diff url file time)
+		   (navi2ch-net-update-file url file time)))
+    (unless header
       (setq url (navi2ch-article-get-kako-url board article))
-      (let ((header (navi2ch-net-update-file url file)))
-	(and header (setq ret (list header 'kako)))))
-    (unless ret
+      (setq kako-p t)
+      (setq header (navi2ch-net-update-file url file)))
+    (unless header
       (and (not navi2ch-oyster-session-id)
 	   (navi2ch-oyster-login))
       (setq url (navi2ch-oyster-get-offlaw-url
 		 board article navi2ch-oyster-session-id file))
+      (setq kako-p t)
       (message "offlaw url %s" url)
-      (setq ret
+      (setq header
 	    (if (file-exists-p file)
 		(progn
 		  (message "article %s" article)
-		  (setq header (navi2ch-oyster-update-file-with-offlaw
-				url file time t))
-		  (and header (setq ret (list header 'kako)))
-		  ret)
-	      (let ((header (navi2ch-oyster-update-file-with-offlaw
-			     url file time nil)))
-		(message "getting from 0 offlaw.cgi")
-		(and header (setq ret (list header 'kako)))))))
-    ret))
+		  (navi2ch-oyster-update-file-with-offlaw url file time t))
+	      (prog1
+		  (navi2ch-oyster-update-file-with-offlaw url file time nil)
+		(message "getting from 0 offlaw.cgi")))))
+    (if kako-p
+	(navi2ch-net-add-state 'kako header)
+      header)))
 
 (defun navi2ch-oyster-send-message
   (from mail message subject bbs key time board article)
@@ -160,8 +155,7 @@ state はあぼーんされてれば aborn というシンボル。
   "FILE を URL から offlaw.cgi を使って更新する。
 TIME が non-nil ならば TIME より新しい時だけ更新する。
 DIFF が non-nil ならば差分を取得する。
-更新できれば (header state) な list を返す。
-state はあぼーんされてれば aborn というシンボル。"
+更新できれば HEADER を返す。"
   (let ((dir (file-name-directory file))
 	proc header cont)
     (unless (file-exists-p dir)
@@ -198,17 +192,17 @@ state はあぼーんされてれば aborn というシンボル。"
 		  (insert-file-contents file)
 		  (goto-char (point-max)))
 		(insert (substring cont 0 cont-size)))
-	      (list header nil))
+	      header)
 	     ((string= "-INCR" state);; あぼーん
 	      (with-temp-file file
 		(navi2ch-set-buffer-multibyte nil)
-		(insert (substring cont 0 cont-size))
-		(list header 'aborn)))
+		(insert (substring cont 0 cont-size)))
+	      (navi2ch-net-add-state 'aborn header))
 	     ((string= "-ERR" state)
 	      (let ((err-msg (decode-coding-string
 			      data navi2ch-coding-system)))
-		(message "error! %s" err-msg))))))))))
-
+		(message "error! %s" err-msg))
+	      nil))))))))
 
 (defun navi2ch-oyster-get-status (proc)
   "オイスターサーバの接続のステータス部を返す。"
