@@ -308,7 +308,7 @@ nil is returned.  Otherwise the associated face object is returned."
 
 (defun navi2ch-mona-setup ()
   "*モナーフォントを使うためのフックを追加する。"
-  (when (and (eq window-system 'x)	; NT Emacs でも動くのかな?
+  (when (and (or (eq window-system 'x) (eq window-system 'w32))
 	     (or navi2ch-on-emacs21 navi2ch-on-xemacs))
     (navi2ch-mona-create-face-from-family-name navi2ch-mona-font-family-name)
     (navi2ch-mona-set-mona-face)	; 何回呼んでも大丈夫

@@ -417,24 +417,35 @@ START, END, NOFIRST で範囲を指定する"
   (insert (make-string (eval navi2ch-article-message-separator-width)
 		       navi2ch-article-message-separator) "\n"))
 
-(defsubst navi2ch-article-set-link-property ()
-  ">>1 とか http:// に property を付ける"
-  (goto-char (point-min))
-  (while (re-search-forward
-	  navi2ch-article-number-regexp nil t)
-    (add-text-properties (match-beginning 0)
-			 (match-end 0)
-			 (list 'face 'navi2ch-article-link-face
+(defsubst navi2ch-article-set-link-property-subr (start end type value)
+  (let ((face (cond ((eq type 'number) 'navi2ch-article-link-face)
+		    ((eq type 'url) 'navi2ch-article-url-face))))
+    (add-text-properties start end
+			 (list 'face face
 			       'help-echo (function navi2ch-article-help-echo)
 			       'link t
 			       'mouse-face navi2ch-article-mouse-face
-			       'number (navi2ch-match-string-no-properties 1)))
-    (add-text-properties (match-beginning 0)
-			 (1+ (match-beginning 0))
-			 (list 'link-head t)))
+			       type value))
+    (add-text-properties start (1+ start)
+			 (list 'link-head t))))
+
+(defsubst navi2ch-article-set-link-property ()
+  ">>1 とか http:// に property を付ける"
   (goto-char (point-min))
-  (while (re-search-forward
-	  navi2ch-article-url-regexp nil t)
+  (while (re-search-forward (concat navi2ch-article-number-prefix-regexp
+				    navi2ch-article-number-number-regexp)
+			    nil t)
+    (navi2ch-article-set-link-property-subr
+     (match-beginning 0) (match-end 0)
+     'number (navi2ch-match-string-no-properties 1))
+    (while (looking-at (concat navi2ch-article-number-separator-regexp
+			       navi2ch-article-number-number-regexp))
+      (navi2ch-article-set-link-property-subr
+       (match-beginning 1) (match-end 1)
+       'number (navi2ch-match-string-no-properties 1))
+      (goto-char (match-end 0))))
+  (goto-char (point-min))
+  (while (re-search-forward navi2ch-article-url-regexp nil t)
     (let* ((start (match-beginning 0))
 	   (end (match-end 0))
 	   (scheme (navi2ch-match-string-no-properties 1))
@@ -442,16 +453,7 @@ START, END, NOFIRST で範囲を指定する"
 	   (url (if (string-match "h?ttps?" scheme)
 		    (concat "http" path)
 		  (concat scheme path))))
-      (add-text-properties start
-			   end
-			   (list 'face 'navi2ch-article-url-face
-				 'help-echo (function navi2ch-article-help-echo)
-				 'link t
-				 'mouse-face navi2ch-article-mouse-face
-				 'url url))
-      (add-text-properties start
-			   (1+ start)
-			   (list 'link-head t)))))
+      (navi2ch-article-set-link-property-subr start end 'url url))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))

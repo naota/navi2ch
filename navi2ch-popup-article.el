@@ -47,7 +47,8 @@
     (define-key map "l" 'navi2ch-popup-article-pop-point-or-exit)
     (define-key map "L" 'navi2ch-article-pop-poped-point)
     (define-key map "m" 'navi2ch-article-push-point)
-
+    (define-key map "R" 'navi2ch-article-rotate-point)
+    (define-key map "U" 'navi2ch-popup-article-show-url)
     (define-key map "." 'navi2ch-article-redisplay-current-message)
     (define-key map "p" 'navi2ch-article-previous-message)
     (define-key map "n" 'navi2ch-article-next-message)
@@ -66,7 +67,7 @@
 (defvar navi2ch-popup-article-current-article nil)
 
 (defun navi2ch-popup-article-exit ()
-  "PopUp Article •‚°º•…§Ú»¥§±§Î°£"
+  "PopUp Article $B%b!<%I$rH4$1$k!#(B"
   (interactive)
   (run-hooks 'navi2ch-popup-article-exit-hook)
   (bury-buffer)
@@ -79,8 +80,8 @@
      navi2ch-popup-article-current-article)))
 
 (defun navi2ch-popup-article-exit-and-goto-number (&optional num)
-  "Article •‚°º•…§ÀÃ·§√§∆§´§È∫£§Œ∞Ã√÷§Œ•Ï•π§Œ»÷πÊ§À∞‹∆∞°£
-NUM §¨ªÿƒÍ§µ§Ï§Ï§–°¢ NUM »÷Ã‹§Œ•Ï•π§À∞‹∆∞°£"
+  "Article $B%b!<%I$KLa$C$F$+$i:#$N0LCV$N%l%9$NHV9f$K0\F0!#(B
+NUM $B$,;XDj$5$l$l$P!"(B NUM $BHVL\$N%l%9$K0\F0!#(B"
   (interactive)
   (setq num (or num (navi2ch-article-get-current-number)))
   (navi2ch-popup-article-exit)
@@ -89,8 +90,8 @@ NUM §¨ªÿƒÍ§µ§Ï§Ï§–°¢ NUM »÷Ã‹§Œ•Ï•π§À∞‹∆∞°£"
     (navi2ch-popup-article num)))
 
 (defun navi2ch-popup-article-pop-point-or-exit ()
-  "stack §´§È pop §∑§ø∞Ã√÷§À∞‹∆∞§π§Î°£
-stack §¨∂ı§ §È°¢PopUp Article •‚°º•…§Ú»¥§±§Î°£"
+  "stack $B$+$i(B pop $B$7$?0LCV$K0\F0$9$k!#(B
+stack $B$,6u$J$i!"(BPopUp Article $B%b!<%I$rH4$1$k!#(B"
   (interactive)
   (if navi2ch-article-point-stack
       (navi2ch-article-pop-point)
@@ -154,7 +155,7 @@ stack §¨∂ı§ §È°¢PopUp Article •‚°º•…§Ú»¥§±§Î°£"
       (goto-char (point-min)))))
 
 (defun navi2ch-popup-article-scroll-up ()
-  "≤ËÃÃ§Ú•π•Ø•Ì°º•Î§π§Î°£"
+  "$B2hLL$r%9%/%m!<%k$9$k!#(B"
   (interactive)
   (condition-case nil
       (scroll-up)
@@ -163,8 +164,8 @@ stack §¨∂ı§ §È°¢PopUp Article •‚°º•…§Ú»¥§±§Î°£"
   (force-mode-line-update t))
 
 (defun navi2ch-popup-article-select-current-link (&optional browse-p)
-  ;; §€§‹ navi2ch-article-select-current-link §»∆±§∏°£
-  "•´°º•Ω•Î∞Ã√÷§À±˛§∏§∆°¢•Í•Û•Ø¿Ë§Œ…Ωº®§‰•’•°•§•Î§ÿ§Œ ›¬∏§Úπ‘§¶°£"
+  ;; $B$[$\(B navi2ch-article-select-current-link $B$HF1$8!#(B
+  "$B%+!<%=%k0LCV$K1~$8$F!"%j%s%/@h$NI=<($d%U%!%$%k$X$NJ]B8$r9T$&!#(B"
   (interactive "P")
   (let (prop)
     (cond
@@ -191,10 +192,17 @@ stack §¨∂ı§ §È°¢PopUp Article •‚°º•…§Ú»¥§±§Î°£"
       (navi2ch-article-save-content)))))
 
 (defun navi2ch-popup-article-mouse-select (e)
-  "•ﬁ•¶•π§Œ∞Ã√÷§À±˛§∏§∆°¢•Í•Û•Ø¿Ë§Œ…Ωº®§‰•’•°•§•Î§ÿ§Œ ›¬∏§Úπ‘§¶°£"
+  "$B%^%&%9$N0LCV$K1~$8$F!"%j%s%/@h$NI=<($d%U%!%$%k$X$NJ]B8$r9T$&!#(B"
   (interactive "e")
   (mouse-set-point e)
   (navi2ch-popup-article-select-current-link))
+
+(defun navi2ch-popup-article-show-url ()
+  "url $B$rI=<($7$F!"$=$N(B url $B$r8+$k$+(B kill ring $B$K%3%T!<$9$k(B"
+  (interactive)
+  (let ((navi2ch-article-current-board navi2ch-popup-article-current-board)
+	(navi2ch-article-current-article navi2ch-popup-article-current-article))
+    (navi2ch-article-show-url)))
 
 (run-hooks 'navi2ch-popup-article-load-hook)
 ;;; navi2ch-popup-article.el ends here

@@ -98,7 +98,7 @@
     "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
 
 (defun navi2ch-http-date-encode (time)
-  "∆‚…Ù∑¡º∞ TIME §Ú RFC 1123 ∑¡º∞§À —¥π§π§Î°£"
+  "$BFbIt7A<0(B TIME $B$r(B RFC 1123 $B7A<0$KJQ49$9$k!#(B"
   (let* ((now (timezone-fix-time (current-time-string time)
 				 (current-time-zone time)
 				 "GMT"))
@@ -106,15 +106,15 @@
 						(aref now 2)))
 	 (wkday (nth (% abs 7) navi2ch-http-date-wkday-list))
 	 (month (nth (1- (aref now 1)) navi2ch-http-date-month-list)))
-	    ;; §∑§´§∑°¢§ §Û§«…∏Ω‡§À locale ∞Õ¬∏§ŒÕÀ∆¸§‰∑ÓÃæ§Ú∆˛§Ï§Î§´§Õ§ß°£
-	    ;; ISO 8601 ∑¡º∞§Œ yyyy-mm-dd HH:MM:SS §«§§°º§∏§„§Û§Ë°£
+	    ;; $B$7$+$7!"$J$s$GI8=`$K(B locale $B0MB8$NMKF|$d7nL>$rF~$l$k$+$M$'!#(B
+	    ;; ISO 8601 $B7A<0$N(B yyyy-mm-dd HH:MM:SS $B$G$$!<$8$c$s$h!#(B
     (format "%s, %02d %s %04d %02d:%02d:%02d GMT"
 	    wkday (aref now 2) month (aref now 0)
 	    (aref now 3) (aref now 4) (aref now 5))))
 
 (defun navi2ch-http-date-decode (http-date)
-  "HTTP-DATE §Ú∆‚…Ù∑¡º∞§À —¥π§π§Î°£"
-  ;; XEmacs §¿§» RFC 850 ∑¡º∞§Œ "-" …’§≠§Œ∆¸…’§Ú•—°º•π§«§≠§ §§§Œ§«°£
+  "HTTP-DATE $B$rFbIt7A<0$KJQ49$9$k!#(B"
+  ;; XEmacs $B$@$H(B RFC 850 $B7A<0$N(B "-" $BIU$-$NF|IU$r%Q!<%9$G$-$J$$$N$G!#(B
   (if (string-match "\\([0-9]+\\)-\\([A-Za-z]+\\)-\\([0-9]+\\)" http-date)
       (setq http-date (replace-match "\\1 \\2 \\3" nil nil http-date)))
   (let ((now (timezone-fix-time http-date "GMT" "GMT")))
@@ -122,7 +122,7 @@
 		 (aref now 2) (aref now 1) (aref now 0)
 		 (aref now 6))))
 
-;; •∆•π•»
+;; $B%F%9%H(B
 '(
   (navi2ch-http-date-encode
    (navi2ch-http-date-decode "Sun, 06 Nov 1994 08:49:37 GMT"))

@@ -523,9 +523,19 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-number-regexp
-  "[>＞<＜][>＞<＜ ]*\\(\\([0-9０-９]+,\\)*[0-9０-９]+\\(-[0-9０-９]+\\)?\\)"
+(defcustom navi2ch-article-number-prefix-regexp "[>＞<＜][>＞<＜]* *"
   "*同じスレ内へのリンクを表わす正規表現。"
+  :type 'regexp
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-number-separator-regexp " *, *"
+  "*同じスレ内へのリンクの数字を区切る文字列を表わす正規表現。"
+  :type 'regexp
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-number-number-regexp
+  "\\([0-9０-９]+\\(-[0-9０-９]+\\)?\\)"
+  "*同じスレ内へのリンクの数字を表わす正規表現。"
   :type 'regexp
   :group 'navi2ch-article)
 

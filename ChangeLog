@@ -1,3 +1,25 @@
+2002-11-11  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property):
+	>>1,2 形式に対応。text-properties をつける部分を別関数へ。
+	(navi2ch-article-set-link-property-subr): 新関数。
+
+	* navi2ch-vars.el (navi2ch-article-number-prefix-regexp): 新変数。
+	(navi2ch-article-number-separator-regexp): 同上。
+	(navi2ch-article-number-number-regexp): 同上。
+	(navi2ch-article-number-regexp): 削除。
+
+	* navi2ch-http-date.el (toplevel): euc-jp から iso-2022-jp に。
+
+	* navi2ch-popup-article.el (toplevel): euc-jp から iso-2022-jp に。
+	(navi2ch-popup-article-show-url): 新関数。
+	(navi2ch-popup-article-mode-map):
+	"R" に `navi2ch-article-rotate-point' を、
+	"U" に `navi2ch-popup-article-show-url' をバインド。
+
+	* navi2ch-mona.el (navi2ch-mona-setup): NTEmacs21 対応。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/743
+	
 2002-11-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): HTTP status code
