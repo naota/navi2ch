@@ -352,8 +352,9 @@
       (unless navi2ch-offline
 	(navi2ch-board-save-old-subject-file board)
 	(setq header (navi2ch-board-update-file board))
-	(setq time (or (cdr (assoc "Last-Modified" header))
-		       (cdr (assoc "Date" header))))
+	(setq time (and (not (assoc "Not-Updated" header))
+			(or (cdr (assoc "Last-Modified" header))
+			    (cdr (assoc "Date" header)))))
 	(when time
 	  (setq board (navi2ch-put-alist 'time time board))))
       (setq navi2ch-board-current-board board)
