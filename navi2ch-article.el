@@ -471,7 +471,7 @@ START, END, NOFIRST で範囲を指定する"
 	  (end (match-end 0))
 	  (url (navi2ch-match-string-no-properties 0)))
       (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
-	(setq url (replace-match "http\2" nil nil url)))
+	(setq url (replace-match "http\\2" nil nil url)))
       (navi2ch-article-set-link-property-subr start end 'url url))))
 
 (defsubst navi2ch-article-put-cite-face ()
