@@ -1,3 +1,15 @@
+2003-01-26  mami  <mami@users.sourceforge.net>
+
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/496
+
+	* navi2ch-vars.el (navi2ch-file-name-reserved-char-regexp): 新変数。
+
+	* navi2ch-util.el (navi2ch-expand-file-name): 上記変数で指定したも
+	のをエスケープするように。
+
+	* navi2ch-net.el (navi2ch-net-split-url): URL 中のポート番号を認識
+	するように。
+
 2003-01-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): Range ヘッダがある時

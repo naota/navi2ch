@@ -178,6 +178,13 @@ nil の場合は browse-url-browser-function を使う。
   :type 'string
   :group 'navi2ch)
 
+(defcustom navi2ch-file-name-reserved-char-regexp ":"
+  "*navi2ch-expand-file-name でエスケープする文字を表す正規表現。
+デフォルトは \":\" で、URL 中の \":\" がディレクトリ名では \"%3A\" にエスケープされる。
+\"~\" もエスケープしたいときは \"[:~]\" を指定する。"
+  :type 'regexp
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*板一覧ウィンドウの横幅。"

@@ -188,11 +188,12 @@ BODY の評価中にエラーが起こると nil を返す。"
            (cons 'file url)
            (cons 'port (string-to-number (match-string 3 proxy)))
            (cons 'host2ch host2ch)))
-      (string-match "http://\\([^/]+\\)\\(.*\\)" url)
+      (string-match "http://\\([^/:]+\\):?\\([0-9]+\\)?\\(.*\\)" url)
       (list
        (cons 'host (match-string 1 url))
-       (cons 'file (match-string 2 url))
-       (cons 'port  80)
+       (cons 'port (string-to-number (or (match-string 2 url)
+					 "80")))
+       (cons 'file (match-string 3 url))
        (cons 'host2ch host2ch)))))
 
 (defun navi2ch-net-http-proxy-basic-credentials (user pass)

@@ -314,7 +314,12 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (insert-file-contents file nil begin end)))
 
 (defun navi2ch-expand-file-name (file)
-  (expand-file-name file navi2ch-directory))
+  (expand-file-name (navi2ch-replace-string
+		     navi2ch-file-name-reserved-char-regexp
+		     (lambda (x)
+		       (format "%%%X" (string-to-char x)))
+		     file t)
+		    navi2ch-directory))
 
 (defun navi2ch-uudecode-region (start end)
   (interactive "r")
