@@ -61,13 +61,15 @@
   (get-text-property point 'buffer))
 
 (defun navi2ch-articles-get-article (item)
-  (when item
+  (when (and item
+	     (buffer-live-p item))
     (save-excursion
       (set-buffer item)
       navi2ch-article-current-article)))
 
 (defun navi2ch-articles-get-board (item)
-  (when item
+  (when (and item
+	     (buffer-live-p item))
     (save-excursion
       (set-buffer item)
       navi2ch-article-current-board)))

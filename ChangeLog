@@ -1,3 +1,10 @@
+2004-10-26  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-articles.el (navi2ch-articles-get-article): バッファが削
+	除されていたときエラーとならないように。
+	(navi2ch-articles-get-board): 同上。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/671
+
 2004-10-18  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-update): メッセージ調整。
