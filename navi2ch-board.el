@@ -367,11 +367,7 @@
 	   time header)
       (unless navi2ch-offline
 	(navi2ch-board-save-old-subject-file board)
-	(setq header (condition-case nil
-			 (navi2ch-board-update-file board)
-		       ((error quit)
-			(message "%sabort!" (current-message))
-			nil)))
+	(setq header (navi2ch-board-update-file board))
 	(setq time (or (cdr (assoc "Last-Modified" header))
 		       (cdr (assoc "Date" header))))
 	(when time
