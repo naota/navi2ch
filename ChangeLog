@@ -1,5 +1,10 @@
 2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-article-show-url-number): 新変数。
+	* navi2ch-article.el (navi2ch-article-show-url-subr): 'l' を押すと
+	上記変数の数だけ最新のレスを表示するように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/184
+
 	read-char 使用のクリーンアップ。動作が変になったとこは指摘してね。
 
 	* navi2ch-article.el (navi2ch-article-select-view-range-subr):

@@ -1256,13 +1256,19 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-show-url-subr ()
   "メニューを表示して、url を得る"
-  (let ((char (navi2ch-read-char-with-retry "a)ll c)urrent r)egion b)oard: "
-					    nil '(?a ?c ?r ?b))))
+  (let* ((prompt (format "a)ll c)urrent r)egion b)oard l)ast%d: "
+			 navi2ch-article-show-url-number))
+	 (char (navi2ch-read-char-with-retry prompt
+					     nil '(?a ?c ?r ?b ?l))))
     (if (eq char ?b)
 	(navi2ch-board-to-url navi2ch-article-current-board)
       (apply 'navi2ch-article-to-url
 	     navi2ch-article-current-board navi2ch-article-current-article
 	     (cond ((eq char ?a) nil)
+		   ((eq char ?l)
+		    (let ((l (format "l%d"
+				     navi2ch-article-show-url-number)))
+		      (list l l nil)))
 		   ((eq char ?c) (list (navi2ch-article-get-current-number)
 				       (navi2ch-article-get-current-number)
 				       t))

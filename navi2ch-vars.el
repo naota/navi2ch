@@ -530,6 +530,11 @@ window の幅いっぱいにしたいなら
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-show-url-number 50
+  "*url を表示・コピーする際、最後のレスをいくつ表示するか。 "
+  :type 'number
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")
