@@ -1,4 +1,12 @@
-2002-07-09  Nanashi San  <nanashi@users.sourceforge.net>
+2002-07-10  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-use-lock, navi2ch-lock-directory):
+	navi2ch-vars.el に移動。
+
+	* navi2ch-vars.el (navi2ch-use-lock): navi2ch.el から移動。デフォ
+	ルトを t (ロックする) に。
+	(navi2ch-lock-directory): navi2ch.el から移動。
+	(navi2ch-update-file): :type が間違ってた。
 
 	マウスフェイスがうざいという人がいるみたいなので、変数から指定でき
 	るようにしてみた。

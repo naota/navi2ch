@@ -104,7 +104,7 @@
   (message "save status...")
   (run-hooks 'navi2ch-save-status-hook)
   (message "save status...done"))
-  
+
 (defun navi2ch-exit (&optional suspend)
   "navi2ch を終了する
 SUSPEND が non-nil なら buffer を消さない"
@@ -331,7 +331,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 	   (when navi2ch-list-stay-list-window
 	     (split-window-horizontally navi2ch-list-window-width)
 	     (other-window 1))))))
-  
+
 (defun navi2ch-goto-url (url &optional force)
   "URL からスレまたは板を選ぶ"
   (interactive "sURL: ")
@@ -399,7 +399,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 	  (navi2ch-rename-file new-dir tmp-dir))
 	(make-directory (expand-file-name ".." new-dir) t)
 	(navi2ch-rename-file old-dir new-dir)))))
-                      
+
 (defun navi2ch-update ()
   "navi2ch-update.el をダウンロードして実行する。"
   (interactive)
@@ -453,14 +453,6 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 ;; ロックされているということになる。
 ;; シェルスクリプトで同じ手法を使い、cron で wget でも動かせば、
 ;; ~/.navi2ch/ 以下を常に新鮮に保てるかも。(w
-
-;; とりあえず、デフォルトでは nil
-(defvar navi2ch-use-lock nil
-  "non-nil なら、Navi2ch が起動する際に `navi2ch-directory' をロックする。")
-
-(defvar navi2ch-lock-directory
-  (expand-file-name "lockdir" navi2ch-directory)
-  "ロックディレクトリの絶対パス")
 
 (defun navi2ch-lock ()
   "`navi2ch-directory' をロックする。"

@@ -143,6 +143,17 @@
   :type '(repeat (string :tag "ホスト"))
   :group 'navi2ch)
 
+(defcustom navi2ch-use-lock t
+  "*non-nil なら、Navi2ch が起動する際に `navi2ch-directory' をロックする。"
+  :type 'boolean
+  :group 'navi2ch)
+
+(defcustom navi2ch-lock-directory  (expand-file-name "lockdir"
+						  navi2ch-directory)
+  "ロックディレクトリの絶対パス"
+  :type 'directory
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*板一覧ウィンドウの横幅。"
@@ -321,7 +332,7 @@ non-nil なら下に移動する
 non-nil ならば expire する。"
   :type 'boolean
   :group 'navi2ch-board)
-  
+
 (defcustom navi2ch-board-name-from-file "From File"
   "*ファイルから読み込んだスレを表わす板名。"
   :type 'string
@@ -660,7 +671,7 @@ nil なら、書きかけを破棄していいか問い合わせる。
 
 (defcustom navi2ch-message-aa-alist nil
   "*AA を入力するときのキーバインドと AA の alist。
-たとえば、((\"Z\" . \"ＺZｚz...\")) のように設定すると、Message Mode 
+たとえば、((\"Z\" . \"ＺZｚz...\")) のように設定すると、Message Mode
 でprefix-key (デフォルトでは (C-c C-a) あとに Z を入力すると
 ＺZｚz... と入力できる。
 SPC、C-l、C-g、C-vはリスト表示の際に使用されるのでキーには使用しないこと。"
@@ -762,7 +773,7 @@ ask なら保存する前に質問する
                                 (file-name-as-directory navi2ch-directory)
                                 "navi2ch-update.el")
   "*Navi2ch の自動更新に利用するファイルのローカルファイル名。"
-  :type 'string
+  :type 'file
   :group 'navi2ch)
 
 (defcustom navi2ch-update-base-url
