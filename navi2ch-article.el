@@ -114,6 +114,8 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-window-configuretion nil)
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
+(defvar navi2ch-article-save-info-keys
+  '(number name time hide importatnt mail kako))
 
 (defvar navi2ch-article-insert-message-separator-function
   (if (and window-system
@@ -989,14 +991,13 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	(or board (setq board navi2ch-article-current-board))
 	(or article (setq article navi2ch-article-current-article))))
     (when (and (not ignore) board article)
-      (setq alist (list
-		   (assq 'number article)
-		   (assq 'name article)
-		   (assq 'time article)
-		   (assq 'hide article)
-		   (assq 'important article)
-		   (assq 'mail article)
-		   (assq 'kako article)))
+      (let ((article-tmp (if navi2ch-article-save-info-wrapper-func
+			     (funcall navi2ch-article-save-info-wrapper-func article)
+			   article)))
+	(setq alist (mapcar
+		     (lambda (x)
+		       (assq x article-tmp))
+		     navi2ch-article-save-info-keys)))
       (navi2ch-save-info
        (navi2ch-article-get-info-file-name board article)
        alist))))

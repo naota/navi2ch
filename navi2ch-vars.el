@@ -736,6 +736,11 @@ ID が「hoGE0987」だとレスが「アボボーン」に置き換わる。
 		       (string :tag "置換後")))
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-save-info-wrapper-func nil
+  "*navi2ch-article-save-info 中で article の wrapper として使う関数。"
+  :type 'function
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")

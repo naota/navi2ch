@@ -1,5 +1,12 @@
 2002-11-17  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-article-save-info-wrapper-func): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-save-info-keys): 新変数。
+	(navi2ch-article-save-info): 上記2変数を使うように。
+
+2002-11-17  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-message.el (navi2ch-message-insert-header):
 	navi2ch-message-remember-user-name が nil のときは以前覚えた名前欄・
 	メール欄を再使用しないように。
