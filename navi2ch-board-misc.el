@@ -337,7 +337,7 @@
          (board (navi2ch-bm-get-board-internal item))
          (buf (current-buffer))
 	 (window-configuration (current-window-configuration)))
-    (condition-case err
+    (unwind-protect
 	(if article
 	    (progn
 	      (navi2ch-split-window 'article)
@@ -356,11 +356,10 @@
 		    (navi2ch-bm-remove-fetched-article board article)
 		    (if (eq major-mode 'navi2ch-board-mode)
 			(navi2ch-bm-insert-state item 'view 'seen)
-		      (navi2ch-bm-insert-state item 'view))))))
+		      (navi2ch-bm-insert-state item 'view)))))
+	      (setq window-configuration (current-window-configuration)))
 	  (message "Can't select this line!"))
-      ((error quit)
-       (set-window-configuration window-configuration)
-       (signal (car err) (cdr err))))))
+      (set-window-configuration window-configuration))))
 
 (defun navi2ch-bm-show-url ()
   "板の url を表示して、その url を見るか kill ring にコピーする"

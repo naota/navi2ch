@@ -1,3 +1,9 @@
+2003-10-18  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-article): 呼び出し先で
+	エラーが起きた際の backtrace を取りやすくするため、condition-case
+	ではなくunwind-protect を使用して後始末をするように。
+
 2003-10-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-change-help-echo-property):
