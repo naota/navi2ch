@@ -447,22 +447,23 @@
 	    (setq artid (cdr (assq 'artid article)))
 	    (setq element (cdr (assoc artid summary)))
 	    (setq seen (or (navi2ch-article-summary-element-seen element)
-			   (cdr (assoc artid navi2ch-board-last-seen-alist)))))
+			   (cdr (assoc artid navi2ch-board-last-seen-alist))
+			   0)))
 	  (setq state (navi2ch-article-fetch-article board article force))
 	  (when state
 	    (let ((state-mark 'update)
 		  (updated-mark (navi2ch-bm-get-updated-mark)))
 	      (when seen
-		(if (<= (string-to-number
-			 (or (cdr (assoc artid navi2ch-board-subject-alist))
-			     "1"))
-			(+ seen navi2ch-board-check-article-update-suppression-length))
-		    (setq seen (navi2ch-article-check-message-suppression
-				board
-				article
-				(1+ seen)
-				(+ seen navi2ch-board-check-article-update-suppression-length)))
-		  (setq seen nil)))
+		(setq seen
+		      (and (<= (string-to-number
+				(or (cdr (assoc artid navi2ch-board-subject-alist))
+				    "1"))
+			       (+ seen navi2ch-board-check-article-update-suppression-length))
+			   (navi2ch-article-check-message-suppression
+			    board
+			    article
+			    (1+ seen)
+			    (+ seen navi2ch-board-check-article-update-suppression-length)))))
 	      (if seen
 		  (progn
 		    (navi2ch-article-summary-element-set-seen element seen)
@@ -472,7 +473,6 @@
 		      (setq updated-mark 'seen))
 		    (message "No updates need seeing"))
 		(navi2ch-bm-remember-fetched-article board article))
-	      (navi2ch-put-alist artid nil navi2ch-board-last-seen-alist)
 	      (navi2ch-bm-insert-state item state-mark updated-mark))))
       (message "Can't select this line!"))
     state))

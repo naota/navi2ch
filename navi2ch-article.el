@@ -2143,8 +2143,27 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		  (let ((buffer-read-only nil))
 		    (navi2ch-article-change-help-echo-property (point)
 							       (function navi2ch-article-help-echo))))
-	     (and (navi2ch-article-fetch-article board article force)
-		  (navi2ch-bm-remember-fetched-article board article)))))))
+	     (let (summary artid element seen)
+	       (when (and navi2ch-board-check-article-update-suppression-length
+			  (not (navi2ch-bm-fetched-article-p board article)))
+		 (setq summary (navi2ch-article-load-article-summary board))
+		 (setq artid (cdr (assq 'artid article)))
+		 (setq element (cdr (assoc artid summary)))
+		 (setq seen (or (navi2ch-article-summary-element-seen element)
+				(cdr (assoc artid navi2ch-board-last-seen-alist))
+				0)))
+	       (and (navi2ch-article-fetch-article board article force)
+		    (if (and seen
+			     (setq seen
+				   (navi2ch-article-check-message-suppression
+				    board
+				    article
+				    (1+ seen)
+				    (+ seen navi2ch-board-check-article-update-suppression-length))))
+			(progn
+			  (navi2ch-article-summary-element-set-seen element seen)
+			  (navi2ch-article-save-article-summary board summary))
+		      (navi2ch-bm-remember-fetched-article board article)))))))))
 
 (defun navi2ch-article-detect-encoded-regions (&optional sort)
   "バッファから uuencode または base64 エンコードされた領域を探す。

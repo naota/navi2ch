@@ -1,3 +1,21 @@
+2003-06-05  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-quote-maybe): Emacs 21 でも keywordp() を
+	使うように。
+
+	* navi2ch-vars.el (navi2ch-board-other-field-form): 新変数。
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): 上記変数を
+	使うように。
+	(navi2ch-board-sync): 新スレは navi2ch-board-last-seen-alist に
+	追加しないように。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 上記変更に追随。
+
+	* navi2ch-article.el (navi2ch-article-fetch-link):
+	navi2ch-bm-fetch-article() と同様のフィルターのチェックが
+	できるように。
+
 2003-06-04  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-get-current-word-in-body):

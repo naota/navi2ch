@@ -1079,29 +1079,25 @@ This function is a cutdown version of cl-seq's one."
 
 ;; shut up byte-compile warnings
 (eval-when-compile
+  (navi2ch-defalias-maybe 'keywordp 'ignore)
   (navi2ch-defalias-maybe 'characterp 'ignore))
 
 (defun navi2ch-quote-maybe (sexp)
   "Quote SEXP if it is not self quoting."
   ;; `custom-quote'のパクり。
-  (if (navi2ch-ifxemacs
-	  (or (memq sexp '(t nil))
+  (if (or (memq sexp '(t nil))
+	  (if (fboundp 'keywordp)
 	      (keywordp sexp)
-	      (eq (car-safe sexp) 'lambda)
-	      (stringp sexp)
-	      (numberp sexp)
-	      (characterp sexp)
-	      (vectorp sexp)
-	      (bit-vector-p sexp))
-	(or (memq sexp '(t nil))
 	    (and (symbolp sexp)
-		 (eq (aref (symbol-name sexp) 0) ?:))
-	    (eq (car-safe sexp) 'lambda)
-	    (stringp sexp)
-	    (numberp sexp)
-	    (and (fboundp 'characterp)
-		 (characterp sexp))
-	    (vectorp sexp)))
+		 (eq (aref (symbol-name sexp) 0) ?:)))
+	  (eq (car-safe sexp) 'lambda)
+	  (stringp sexp)
+	  (numberp sexp)
+	  (and (fboundp 'characterp)
+	       (characterp sexp))
+	  (vectorp sexp)
+	  (navi2ch-ifxemacs
+	      (bit-vector-p sexp)))
       sexp
     (list 'quote sexp)))
 
