@@ -619,6 +619,13 @@ nil の場合は同じスレの内容のみを得る。"
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-decode-character-references t
+  "*non-nilなら、数値文字参照、文字実体参照の表示を試みる。
+GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
+それ以前のEmacsenではMule-UCSが必要です。 (require 'un-define) してね。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")

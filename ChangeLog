@@ -1,3 +1,18 @@
+2002-10-12  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
+	数値文字参照、文字実体参照を追加。
+	(navi2ch-entity-alist): 新変数。
+	(navi2ch-replace-html-tag-to-string): navi2ch-replace-html-tag-alist,
+	navi2ch-replace-html-tag-regexp-alist の置換先に関数を指定できる
+	ように。
+	(navi2ch-entity-reference-to-str): 新関数。
+	(navi2ch-numeric-reference-to-str): 同上。
+	(navi2ch-ucs-to-str): 同上。
+
+	* navi2ch-vars.el (navi2ch-article-decode-character-references):
+	新変数。
+
 2002-10-10  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
