@@ -581,13 +581,14 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 (defun navi2ch-article-kill-buffer-hook ()
   (navi2ch-article-save-info))
 
-(defun navi2ch-article-exit ()
-  (interactive)
+(defun navi2ch-article-exit (&optional kill)
+  (interactive "P")
   ;; (navi2ch-article-add-number)
   (run-hooks 'navi2ch-article-exit-hook)
   (navi2ch-article-save-info)
   (let ((buf (current-buffer)))
-    (if (null navi2ch-article-message-list)
+    (if (or kill
+	    (null navi2ch-article-message-list))
         (progn
           (delete-windows-on buf)
           (kill-buffer buf))
