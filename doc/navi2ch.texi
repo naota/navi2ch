@@ -1148,7 +1148,7 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item w
 @code{navi2ch-board-write-message} スレを立てる
 
-@item @kbd{ESC} e
+@item @key{ESC} e
 @code{navi2ch-board-expire} 古いキャッシュファイルを削除する
 
 @item m d
