@@ -1,3 +1,29 @@
+2002-11-04  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	Article モードでの検索機能を実装。
+
+	* navi2ch-article.el (navi2ch-article-mode-map):
+	`navi2ch-article-search' を "?" にバインド。
+	(navi2ch-article-get-current-name): 新関数。
+	(navi2ch-article-get-current-mail): 同上。
+	(navi2ch-article-get-current-date): 同上。
+	(navi2ch-article-get-current-id): 同上。
+	(navi2ch-article-search): 同上。
+	(navi2ch-article-search-name): 同上。
+	(navi2ch-article-search-mail): 同上。
+	(navi2ch-article-search-date): 同上。
+	(navi2ch-article-search-id): 同上。
+	(navi2ch-article-search-body): 同上。
+	(navi2ch-article-search-subr): 同上。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	`navi2ch-article-search' を "?" にバインド。
+	(navi2ch-popup-article): navi2ch-article-mode から実行されたときのみ
+	`navi2ch-popup-article-current-board' と
+	`navi2ch-popup-article-current-article' を設定。
+	(navi2ch-popup-article-select-current-link): popup-article 内かどうか
+	の判定法を変更。
+
 2002-11-02  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-view-article): 確実に

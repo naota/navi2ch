@@ -82,6 +82,7 @@
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "G" 'navi2ch-article-goto-board)
     (define-key map "e" 'navi2ch-article-textize-article)
+    (define-key map "?" 'navi2ch-article-search)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1372,6 +1373,28 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
            'current-number))
     (error nil)))
 
+(defun navi2ch-article-get-current-name ()
+  (cdr (assq 'name (cdr (assq (navi2ch-article-get-current-number)
+			      navi2ch-article-message-list)))))
+
+(defun navi2ch-article-get-current-mail ()
+  (cdr (assq 'mail (cdr (assq (navi2ch-article-get-current-number)
+			      navi2ch-article-message-list)))))
+
+(defun navi2ch-article-get-current-date ()
+  (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
+					  navi2ch-article-message-list))))))
+    (if (string-match " ID:[^ ]+$" date)
+	(replace-match "" nil t date)
+      date)))
+
+(defun navi2ch-article-get-current-id ()
+  (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
+					  navi2ch-article-message-list))))))
+    (if (string-match " ID:\\([^ ]+\\)$" date)
+	(match-string 1 date)
+      nil)))
+
 (defun navi2ch-article-show-url ()
   "url を表示して、その url を見るか kill ring にコピーする"
   (interactive)
@@ -2042,6 +2065,76 @@ gunzip に通してから文字コードの推測を試みる。"
        navi2ch-article-view-range)))
   (unless navi2ch-article-important-mode
     (navi2ch-article-load-number)))
+
+(defun navi2ch-article-search ()
+  "メッセージを検索する。
+名前 (name)、メール (mail)、日付 (date)、ID (id)、本文 (body) から
+検索条件を選ぶことができます。
+
+パーズ済みのメッセージのみを検索対象とするので、あらかじめ
+`navi2ch-article-redraw-range' を使うなどして検索したいメッセージを
+表示しておくこと。"
+  (interactive)
+  (let ((ch (navi2ch-read-char-with-retry
+	     "Search for: n)ame m)ail d)ate i)d b)ody: "
+	     nil
+	     '(?n ?m ?d ?i ?b)))
+	matched num)
+    (setq matched (cond
+		   ((eq ch ?n) (navi2ch-article-search-name))
+		   ((eq ch ?m) (navi2ch-article-search-mail))
+		   ((eq ch ?d) (navi2ch-article-search-date))
+		   ((eq ch ?i) (navi2ch-article-search-id))
+		   ((eq ch ?b) (navi2ch-article-search-body))))
+    (setq num (length matched))
+    (if (= num 0)
+	(message "No message found.")
+      (navi2ch-popup-article matched)
+      (message (format "%d message%s found."
+		       num
+		       (if (= num 1) "" "s"))))))
+
+(defun navi2ch-article-search-name ()
+  (let ((string (navi2ch-read-string "Name: "
+				     (navi2ch-article-get-current-name)
+				     'navi2ch-search-history)))
+    (navi2ch-article-search-subr 'name (regexp-quote string))))
+
+(defun navi2ch-article-search-mail ()
+  (let ((string (navi2ch-read-string "Mail: "
+				     (navi2ch-article-get-current-mail)
+				     'navi2ch-search-history)))
+    (navi2ch-article-search-subr 'mail (regexp-quote string))))
+
+(defun navi2ch-article-search-date ()
+  (let ((string (navi2ch-read-string "Date: "
+				     (navi2ch-article-get-current-date)
+				     'navi2ch-search-history)))
+    (navi2ch-article-search-subr 'date
+				 (concat (regexp-quote string)
+					 (if (navi2ch-article-get-current-id)
+					     ".* ID:" "")))))
+
+(defun navi2ch-article-search-id ()
+  (let ((string (navi2ch-read-string "ID: "
+				     (navi2ch-article-get-current-id)
+				     'navi2ch-search-history)))
+    (navi2ch-article-search-subr 'date
+				 (concat " ID:.*" (regexp-quote string)))))
+
+(defun navi2ch-article-search-body ()
+  (let ((string (navi2ch-read-string "Body: "
+				     nil
+				     'navi2ch-search-history)))
+    (navi2ch-article-search-subr 'data (regexp-quote string))))
+
+(defun navi2ch-article-search-subr (field regexp)
+  (let (num-list)
+    (dolist (msg navi2ch-article-message-list)
+      (when (and (listp (cdr msg))
+		 (string-match regexp (or (cdr (assq field (cdr msg))) "")))
+	(setq num-list (cons (car msg) num-list))))
+    (nreverse num-list)))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

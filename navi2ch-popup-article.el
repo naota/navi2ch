@@ -59,6 +59,7 @@
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
     (define-key map "\ed" 'navi2ch-article-base64-decode-message)
     (define-key map "v" 'navi2ch-article-view-aa)
+    (define-key map "?" 'navi2ch-article-search)
     (setq navi2ch-popup-article-mode-map map)))
 
 (defvar navi2ch-popup-article-current-board nil)
@@ -115,10 +116,11 @@ stack が空なら、PopUp Article モードを抜ける。"
 	(buf (get-buffer-create navi2ch-popup-article-buffer-name)))
     (setq navi2ch-popup-article-window-configuration
 	  (current-window-configuration))
-    (setq navi2ch-popup-article-current-board
-	  navi2ch-article-current-board
-	  navi2ch-popup-article-current-article
-	  navi2ch-article-current-article)
+    (when (eq major-mode 'navi2ch-article-mode)
+      (setq navi2ch-popup-article-current-board
+	    navi2ch-article-current-board
+	    navi2ch-popup-article-current-article
+	    navi2ch-article-current-article))
     (pop-to-buffer buf)
     (navi2ch-popup-article-mode)
     (setq navi2ch-article-message-list mlist)
@@ -170,8 +172,7 @@ stack が空なら、PopUp Article モードを抜ける。"
       (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
       (if (integerp prop)
 	  (progn
-	    (when (or (< prop (caar navi2ch-article-message-list))
-		      (> prop (caar (last navi2ch-article-message-list))))
+	    (unless (assq prop navi2ch-article-message-list)
 	      (navi2ch-popup-article-exit))
 	    (navi2ch-article-goto-number prop t t))
 	(navi2ch-popup-article-exit)
