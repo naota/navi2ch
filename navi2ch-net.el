@@ -220,7 +220,7 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 		 (and navi2ch-net-user-agent
 		      (cons "User-Agent" navi2ch-net-user-agent)))
            other-header))))
-    (message "checking file is updated...")
+    (message "checking if file is updated...")
     (let ((status (navi2ch-net-get-status proc)))
       (cond ((string= status "404")
              (message "%snot found" (current-message))
@@ -275,12 +275,12 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 		     (not header))
 		 (setq header nil))	; $BG0$N$?$a(B
 		((string= status "200")
-		 (message "%s getting new file..." (current-message))
+		 (message "%s: getting new file..." (current-message))
 		 (setq cont (navi2ch-net-get-content proc))
 		 (with-temp-file file
 		   (if (not func)
 		       (insert cont)
-		     (message "translating...")
+		     (message "%stranslating..." (current-message))
 		     (insert (funcall func cont))))
 		 (message "%sdone" (current-message)))
 		((and location
@@ -288,7 +288,7 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 		      (assoc "Location" header))
 		 (setq url (cdr (assoc "Location" header))
 		       redo t)
-		 (message "%s redirecting..." (current-message)))
+		 (message "%s: redirecting..." (current-message)))
 		((string= status "304")
 		 (setq header (cons '("Not-Updated" . "yes")
 				    header)))
@@ -343,7 +343,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 	      (cond (aborn-flag
 		     nil)		; $B$H$j$"$($:2?$b$7$J$$(B
 		    ((string= status "206")
-		     (message "%s getting file diff..." (current-message))
+		     (message "%s: getting file diff..." (current-message))
 		     (setq cont (navi2ch-net-get-content proc))
 		     (if (and (> size 0)
 			      (not (= (aref cont 0) ?\n)))
@@ -357,7 +357,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 		    ((string= status "200")
 		     (if (not (navi2ch-net-check-aborn size header))
 			 (setq aborn-flag t)
-		       (message "%s getting whole file..." (current-message))
+		       (message "%s: getting whole file..." (current-message))
 		       (with-temp-file file
 			 (insert (navi2ch-net-get-content proc)))
 		       (message "%sdone" (current-message))
@@ -396,7 +396,7 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
     (when proc
       (let ((coding-system-for-write 'binary)
 	    (coding-system-for-read 'binary))
-	(message "%s getting file with read.cgi..." (current-message))
+	(message "%s: getting file with read.cgi..." (current-message))
 	(setq header (navi2ch-net-get-header proc))
 	(setq cont (navi2ch-net-get-content proc))
 	(if (or (string= cont "")
