@@ -223,19 +223,21 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
     (message "checking file is updated...")
     (let ((status (navi2ch-net-get-status proc)))
       (cond ((string= status "404")
-             (message "file is not found")
-             (delete-process proc)
-             nil)
+             (message "%snot found" (current-message))
+	     (delete-process proc)
+	     (setq proc nil))
 	    ((string= status "304")
-	     (message "file is not updated")
-	     (if (and accept-status
-		      (member status accept-status))
-		 proc
-	       (delete-process proc)
-	       nil))
+             (message "%snot updated" (current-message)))
+	    ((string= status "302")
+	     (message "%smoved" (current-message)))
 	    (t
-	     (message "file is updated")
-	     proc)))))
+	     (message "%supdated" (current-message))))
+      (if (or (not accept-status)
+	      (member status accept-status))
+	  proc
+	(if (processp proc)
+	    (delete-process proc))
+	nil))))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range $B%X%C%@$r;H$C$F%U%!%$%k$r%@%&%s%m!<%I$9$k!#(B"
@@ -281,13 +283,15 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 		     (message "translating...")
 		     (insert (funcall func cont))))
 		 (message "%sdone" (current-message)))
-		((and (string= status "302")
+		((and location
+		      (string= status "302")
 		      (assoc "Location" header))
 		 (setq url (cdr (assoc "Location" header))
 		       redo t)
 		 (message "%s redirecting..." (current-message)))
 		((string= status "304")
-		 nil)			; $B2?$b$7$J$$(B
+		 (setq header (cons '("Not-Updated" . "yes")
+				    header)))
 		(t
 		 (setq header nil)))	; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
 	(if (processp proc)
@@ -359,6 +363,8 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 		       (message "%sdone" (current-message))
 		       (setq ret (list header nil))))
 		    ((string= status "304")
+		     (setq header (cons '("Not-Updated" . "yes")
+					header))
 		     (setq ret (list header nil))))
 	    (if (processp proc)
 		(delete-process proc)))

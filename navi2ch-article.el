@@ -683,6 +683,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		    (navi2ch-net-update-file url file)))))
 	(unless (listp (caar state))
 	  (setq state (list state nil)))
+	(if (and state
+		 (cdr (assoc "Not-Updated" (nth 0 state))))
+	    (setq state nil))
         (when state
 	  (setq article (navi2ch-put-alist 'time
 					   (cdr (assoc "Last-Modified"

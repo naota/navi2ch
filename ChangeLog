@@ -1,5 +1,9 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-update-file): ヘッダに
+	Not-Updated が含まれている場合は state に nil を入れるようにした。
+	これで update されてない時もバッファを split しなおすのが直るかな。
+
 	* navi2ch-net.el (navi2ch-net-update-file): Emacs Lisp では
 	tail-recursion を展開してくれないため、Location 時はループすること
 	にした。エラーチェックもちょっと厳密にしてみる。
@@ -8,6 +12,13 @@
 	(navi2ch-net-check-aborn): header の長さを取得できない場合は t を
 	返すようにした。
 	(navi2ch-net-update-file-diff): 差分取得時のあぼーん検出を強化。
+	(navi2ch-net-download-file): accept-status が non-nil の時、
+	accept-status に含まれていない status を返すことがあったので修正。
+	(navi2ch-net-update-file): location が指定されていない時は
+	Location ヘッダを見ないように。
+	(navi2ch-net-update-file): 更新されてない場合はヘッダに
+	Not-Updated を追加する。
+	(navi2ch-net-update-file-diff): 同上。
 
 	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
 	いでみる。navi2ch-board-misc.elc への依存関係追加。
