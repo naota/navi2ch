@@ -924,6 +924,30 @@ non-nil であっても、指定した板でしかモナーフォントが使われないというこ
 (setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
 @end lisp
 
+さらに、特定のスレでモナーフォントを使いたいときは
+以下の例のように @code{navi2ch-mona-enable-article-list} に
+板の ID とスレの ID の alist を入れておく。
+
+@lisp
+;; http://pc.2ch.net/test/read.cgi/unix/1037275862/
+;; http://pc.2ch.net/test/read.cgi/linux/1037806127/
+(setq navi2ch-mona-enable-article-list '(("unix" . "1037275862")
+					 ("linux" . "1037806127")))
+@end lisp
+
+また、特定のスレでモナーフォントを使いたくないときは
+以下の例のように @code{navi2ch-mona-disable-article-list} に
+板の ID とスレの ID の alist を入れておく。
+
+@lisp
+;; http://aa.2ch.net/test/read.cgi/mona/1047715077/
+;; http://aa.2ch.net/test/read.cgi/aastory/1032888547/
+(setq navi2ch-mona-disable-article-list '(("mona" . "1047715077")
+					  ("aastory" . "1032888547")))
+@end lisp
+
+これらのスレごとの設定は板ごとの設定より優先される。
+
 なお、Navi2ch 1.5.1 かそれ以前のバージョンでモナーフォントを使用したい場合は
 次のように書く必要がある。
 

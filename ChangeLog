@@ -1,3 +1,16 @@
+2003-03-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-mona.el (navi2ch-mona-arrange-message):
+	板の条件よりスレの条件を優先するように。
+	navi2ch-mona-enable-article-list が nil のとき
+	navi2ch-mona-enable-board-list が無視されていたのを修正。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/190-191n
+	(navi2ch-mona-enable-article-list): 上記変更に合わせて docstring
+	を変更。
+	(navi2ch-mona-disable-article-list): 同上。
+	docstring を修正。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/189
+
 2003-03-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-through-subr): N や P でスレ

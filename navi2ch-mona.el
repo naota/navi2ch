@@ -145,15 +145,15 @@ nil のときは `navi2ch-mona-disable-board-list' で指定した板以外の
 
 (defcustom navi2ch-mona-enable-article-list nil
   "*モナーフォントで表示するスレのリスト。
-nil のときは `navi2ch-mona-disable-article-list' で指定したスレ以外の
-すべてのスレでモナーフォントを使用する。"
+`navi2ch-mona-disable-board-list' よりも優先される。"
   :type '(repeat (cons (string :tag "板")
 		       (string :tag "スレ")))
   :group 'navi2ch-mona)
 
 (defcustom navi2ch-mona-disable-article-list nil
-  "*モナーフォントを使わない板のリスト。
-`navi2ch-mona-enable-article-list' よりも優先される。"
+  "*モナーフォントを使わないスレのリスト。
+`navi2ch-mona-enable-board-list', `navi2ch-mona-enable-article-list'
+よりも優先される。"
   :type '(repeat (cons (string :tag "板")
 		       (string :tag "スレ")))
   :group 'navi2ch-mona)
@@ -305,12 +305,11 @@ nil is returned.  Otherwise the associated face object is returned."
   "モナーフォントを使う板ならそのための関数を呼ぶ。"
   (let ((id (cdr (assq 'id navi2ch-article-current-board)))
 	(artid (cdr (assq 'artid navi2ch-article-current-article))))
-    (when (and (or (not navi2ch-mona-enable-board-list)
-		   (member id navi2ch-mona-enable-board-list)
-		   (not navi2ch-mona-enable-article-list)
+    (when (and (or (and (or (not navi2ch-mona-enable-board-list)
+			    (member id navi2ch-mona-enable-board-list))
+			(not (member id navi2ch-mona-disable-board-list)))
 		   (member (cons id artid)
 			   navi2ch-mona-enable-article-list))
-	       (not (member id navi2ch-mona-disable-board-list))
 	       (not (member (cons id artid)
 			    navi2ch-mona-disable-article-list)))
       (navi2ch-mona-put-face))

@@ -1,3 +1,9 @@
+2003-03-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (How to Use Mona Font):
+	navi2ch-mona-enable-article-list,
+	navi2ch-mona-disable-article-list について追記。
+
 2003-03-05  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): ◆YaAzLuckyc さんのページ移転に対応。
