@@ -540,6 +540,8 @@ base64デコードすべき内容がない場合はエラーになる。"
    ((consp obj)
     (let* ((ret (cons (car obj) (cdr obj)))
 	   (seq ret))
+      ;; 長いリストをコピーする際にスタックオーバーフローになるので
+      ;; 再帰をループに展開。
       (while (consp seq)
 	(setcar seq (navi2ch-strip-properties (car seq)))
 	(if (consp (cdr seq))
