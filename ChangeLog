@@ -1,3 +1,8 @@
+2003-03-22  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-insert-messages):
+	garbage-collect 中のメッセージを追加。
+
 2003-03-21  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-message-filter-subr): 

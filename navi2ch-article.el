@@ -648,7 +648,9 @@ START, END, NOFIRST で範囲を指定する"
 	(and (> (setq progress (+ progress 100)) 10000)
 	     (/= (/ progress len) percent)
 	     (navi2ch-no-logging-message "%s%d%%" msg (setq percent (/ progress len))))))
-    (garbage-collect);; navi2ch-parse-message は大量にゴミを残す
+    (message "Garbage collecting...")
+    (garbage-collect)			; navi2ch-parse-message は大量にゴミを残す
+    (message "Garbage collecting...done")
     (message "%sdone" msg)))
 
 (defun navi2ch-article-reinsert-partial-messages (start &optional end)
