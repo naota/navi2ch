@@ -1,3 +1,10 @@
+2002-11-02  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-view-article): 確実に
+	navi2ch-article-mode にするように(C-g 対策)。
+	(navi2ch-article-scroll-up): 最後のスレに移動しない。
+	(navi2ch-article-scroll-down): 最初のスレに移動しない。
+
 2002-11-01  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-get-matched-article): 

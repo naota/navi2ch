@@ -633,39 +633,33 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (let ((buf-name (navi2ch-article-get-buffer-name board article))
 	(navi2ch-article-max-line (cond ((numberp max-line) max-line)
 					(max-line nil)
-					(t navi2ch-article-max-line))))
-    (if (get-buffer buf-name)
-	(progn
-	  (if dont-display
-	      (set-buffer buf-name)
-	    (switch-to-buffer buf-name))
-	  (prog1 (navi2ch-article-sync force nil)
-	    (if (and number
-		     (not (equal (navi2ch-article-get-current-number)
-				 number)))
-		(navi2ch-article-goto-number number t))
-	    (navi2ch-history-add navi2ch-article-current-board
-				 navi2ch-article-current-article)))
-      (if (and navi2ch-article-auto-expunge
+					(t navi2ch-article-max-line)))
+	list)
+    (when (and (null (get-buffer buf-name))
+	       navi2ch-article-auto-expunge
 	       (> navi2ch-article-max-buffers 0))
-	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
-      (switch-to-buffer (get-buffer-create buf-name))
+      (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
+    (if dont-display
+	(set-buffer (get-buffer-create buf-name))
+      (switch-to-buffer (get-buffer-create buf-name)))
+    (if (eq major-mode 'navi2ch-article-mode)
+	(setq list (navi2ch-article-sync force nil))
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article)
       (when navi2ch-article-auto-range
         (if (file-exists-p (navi2ch-article-get-file-name board article))
             (setq navi2ch-article-view-range
-                  navi2ch-article-exist-message-range)
+		  navi2ch-article-exist-message-range)
           (setq navi2ch-article-view-range
-                navi2ch-article-new-message-range)))
-      (prog1 (navi2ch-article-sync force 'first)
-	(navi2ch-article-mode)
-	(if (and number
-		 (not (equal (navi2ch-article-get-current-number)
-			     number)))
-	    (navi2ch-article-goto-number number t))
-	(navi2ch-history-add navi2ch-article-current-board
-			     navi2ch-article-current-article)))))
+		navi2ch-article-new-message-range)))
+      (setq list (navi2ch-article-sync force 'first))
+      (navi2ch-article-mode))
+    (when (and number
+	       (not (equal (navi2ch-article-get-current-number) number)))
+      (navi2ch-article-goto-number number t))
+    (navi2ch-history-add navi2ch-article-current-board
+			 navi2ch-article-current-article)
+    list))
 
 (defun navi2ch-article-view-article-from-file (file)
   "FILE からスレを見る。"
@@ -1241,8 +1235,6 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (condition-case nil
       (scroll-up)
     (end-of-buffer
-     (let ((navi2ch-article-goto-number-recenter nil))
-       (navi2ch-article-goto-last-message))
      (funcall navi2ch-article-through-next-function)))
   (force-mode-line-update t))
 
@@ -1251,8 +1243,6 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (condition-case nil
       (scroll-down)
     (beginning-of-buffer
-     (let ((navi2ch-article-goto-number-recenter nil))
-       (navi2ch-article-goto-first-message))
      (funcall navi2ch-article-through-previous-function)))
   (force-mode-line-update t))
 
