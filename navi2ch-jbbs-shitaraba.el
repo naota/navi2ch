@@ -40,12 +40,13 @@
   '((bbs-p		. navi2ch-js-p)
     (subject-callback	. navi2ch-js-subject-callback)
     (article-update 	. navi2ch-js-article-update)
+    (article-to-url 	. navi2ch-js-article-to-url)
     (url-to-board   	. navi2ch-js-url-to-board)
     (url-to-article 	. navi2ch-js-url-to-article)
     (send-message   	. navi2ch-js-send-message)
     (send-success-p 	. navi2ch-js-send-message-success-p)
     (error-string   	. navi2ch-js-send-message-error-string)
-    (article-to-url 	. navi2ch-js-article-to-url)))
+    (board-update	. navi2ch-js-board-update)))
 
 (defvar navi2ch-js-variable-alist
   '((coding-system	. euc-japan)))
@@ -212,5 +213,12 @@ START, END, NOFIRST で範囲を指定する"
   (let ((uri (navi2ch-board-get-uri board)))
     (string-match "\\(.+\\)/[^/]+/$" uri)
     (format "%s/bbs/write.cgi" (match-string 1 uri))))
+
+(defun navi2ch-js-board-update (board)
+  (let ((url (navi2ch-board-get-url board))
+	(file (navi2ch-board-get-file-name board))
+	(time (cdr (assq 'time board)))
+	(func (navi2ch-multibbs-subject-callback board)))
+    (navi2ch-net-update-file url file time func)))
 
 ;;; navi2ch-jbbs-shitaraba.el ends here

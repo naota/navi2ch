@@ -79,7 +79,7 @@ START からじゃないかもしれないけど・・・。
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	(url (navi2ch-article-get-url board article))
-	header kako-p)
+	header)
     (setq header (if start
 		     (navi2ch-net-update-file-diff url file time)
 		   (navi2ch-net-update-file url file time)))

@@ -44,7 +44,8 @@
     (url-to-article 	. navi2ch-machibbs-url-to-article)
     (send-message   	. navi2ch-machibbs-send-message)
     (send-success-p 	. navi2ch-machibbs-send-message-success-p)
-    (error-string   	. navi2ch-machibbs-navi2ch-net-get-content)))
+    (error-string   	. navi2ch-machibbs-navi2ch-net-get-content)
+    (board-update	. navi2ch-machibbs-board-update)))
 
 (defvar navi2ch-machibbs-variable-alist
   '((coding-system	. shift_jis)))
@@ -210,5 +211,12 @@ START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
 
 (defun navi2ch-machibbs-article-callback-diff ()
   (navi2ch-machibbs-article-callback t))
+
+(defun navi2ch-machibbs-board-update (board)
+  (let ((url (navi2ch-board-get-url board))
+	(file (navi2ch-board-get-file-name board))
+	(time (cdr (assq 'time board)))
+	(func (navi2ch-multibbs-subject-callback board)))
+    (navi2ch-net-update-file url file time func)))
 
 ;;; navi2ch-machibbs.el ends here

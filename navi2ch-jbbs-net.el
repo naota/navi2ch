@@ -37,11 +37,12 @@
 (defvar navi2ch-jbbs-func-alist
   '((bbs-p		. navi2ch-jbbs-p)
     (subject-callback	. navi2ch-jbbs-subject-callback)
+    (article-update 	. navi2ch-jbbs-article-update)
+    (article-to-url 	. navi2ch-jbbs-article-to-url)
     (send-message   	. navi2ch-jbbs-send-message)
     (send-success-p 	. navi2ch-jbbs-send-message-success-p)
     (error-string   	. navi2ch-net-get-content)
-    (article-update 	. navi2ch-jbbs-article-update)
-    (article-to-url 	. navi2ch-jbbs-article-to-url)))
+    (board-update	. navi2ch-jbbs-board-update)))
 
 (defvar navi2ch-jbbs-variable-alist
   '((coding-system	. shift_jis)))
@@ -154,4 +155,12 @@ START, END, NOFIRST で範囲を指定する"
 	  (insert (or (cdr (assoc i alist))
 		      "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n"))
 	  (setq i (1+ i)))))))
+
+(defun navi2ch-jbbs-board-update (board)
+  (let ((url (navi2ch-board-get-url board))
+	(file (navi2ch-board-get-file-name board))
+	(time (cdr (assq 'time board)))
+	(func (navi2ch-multibbs-subject-callback board)))
+    (navi2ch-net-update-file url file time func)))
+
 ;;; navi2ch-jbbs-net.el ends here
