@@ -1,5 +1,9 @@
 2002-06-23  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-mode): article モードのバッ
+	ファの kill-buffer-hook に navi2ch-article-backward-buffer を追加。	
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/919
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map): 
 	navi2ch-bookmark-move-mark-article を "mo" にバインド。
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 
