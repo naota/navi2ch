@@ -1,3 +1,8 @@
+2002-04-02    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-goto-other-column):
+	スレタイトルが nil の場合は navi2ch-bm-empty-subject で検索。
+
 2002-03-27    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-recenter): 引数を numberp で
@@ -19,9 +24,9 @@
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/312
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/318
 
-	* navi2ch-board.el (navi2ch-board-save-spid): 新関数。SPID を保存
-	する。
-	(navi2ch-board-load-spid): 新関数。SPID を読み込む。
+	* navi2ch-board.el (navi2ch-board-save-spid): 新関数。SPID をファ
+	イルに保存する。
+	(navi2ch-board-load-spid): 新関数。SPID をファイルから読み込む。
 
 	* navi2ch-message.el (navi2ch-message-send-message):
 	navi2ch-net-send-message を呼ぶとき/呼んだ後に上記関数で SPID を使

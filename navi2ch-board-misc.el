@@ -659,6 +659,7 @@ ARG が non-nil なら移動方向を逆にする。"
                      (navi2ch-bm-get-property-internal (point)))))))
     (navi2ch-bm-goto-mark-column)
     (forward-char 1)
+    (unless sbj (setq sbj navi2ch-bm-empty-subject))
     (when (and (not (string= sbj ""))
                (search-forward sbj nil t))
       (goto-char (match-end 0)))
