@@ -239,6 +239,31 @@ XEmacs を使っていて、ホームディレクトリにインストールしたい場合は以下
 その際は @option{--with-xemacs="xemacs -no-site-file"} などを加えると
 うまくインストールできるかもしれない。
 
+@subsection configure を使用しないでコンパイルする
+
+Cygwin をインストールしてない Windows など、configure を動作させること
+ができない環境では、以下のとおりするとコンパイルできるかもしれない。
+
+@enumerate
+@item
+@file{EMACS-TOP-DIR/site-lisp}@footnote{@file{EMACS-TOP-DIR} は
+@file{C:/Meadow} など、Emacs をインストールしたディレクトリ} の下に
+@file{navi2ch} というディレクトリを作成する。
+
+@item
+Navi2ch の配布物を全て上記のディレクトリにコピーする。
+
+@item
+@kbd{C-x C-f @key{RET} @file{上記ディレクトリ/bcomp.el} @key{RET}}
+と入力して @file{bcomp.el} を開く。
+
+@item
+@kbd{M-x eval-current-buffer @key{RET}} と入力して実行する。
+
+@item
+Emacs を立ち上げ直す。
+@end enumerate
+
 @node Getting Develop Version
 @section 開発版の入手
 

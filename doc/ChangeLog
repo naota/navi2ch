@@ -1,3 +1,8 @@
+2002-07-26  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Compile): configure を使用しないコンパイル方法につ
+	いて追記。
+
 2002-07-24  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Compile): ./configure の --help オプションについて
