@@ -425,6 +425,14 @@ window の幅と同じにしたいなら
   "*名前"
   :type 'string
   :group 'navi2ch-message)
+
+(defcustom navi2ch-message-user-name-alist
+  '(("network" . "anonymous")
+    ("tv" . "名無しさん"))
+  "*板ごとのデフォルトの名前の alist"
+  :type '(repeat (cons string string))
+  :group 'navi2ch-message)
+
 (defcustom navi2ch-message-mail-address nil
   "*デフォルトのメールアドレス"
   :type 'string
@@ -439,6 +447,12 @@ window の幅と同じにしたいなら
 (defcustom navi2ch-message-ask-before-kill t
   "*書きこみをキャンセルする前に確認するか
 `non-nil' なら確認する"
+  :type 'boolean
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-always-pop-message nil
+  "*書きかけの message を常に復元するかどうか
+`non-nil' なら復元する"
   :type 'boolean
   :group 'navi2ch-message)
 

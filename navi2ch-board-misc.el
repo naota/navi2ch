@@ -565,7 +565,13 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-mark-region (begin end &optional arg)
   (interactive "r\nP")
-  (navi2ch-bm-mark-region-subr begin end (if arg " " "*")))
+  (navi2ch-bm-mark-region-subr (save-excursion (goto-char begin)
+					       (beginning-of-line)
+					       (point))
+			       (save-excursion (goto-char end)
+					       (end-of-line)
+					       (point))
+			       (if arg " " "*")))
 
 (defun navi2ch-bm-mark-all (&optional arg)
   (interactive "P")

@@ -324,6 +324,7 @@ START, END, NOFIRST で範囲を指定する"
   
 (defun navi2ch-browse-url (url)
   (cond ((and navi2ch-browse-url-image-program	; images
+	      (file-name-extension url)
 	      (member (downcase (file-name-extension url))
 		      navi2ch-browse-url-image-extentions))
 	 (navi2ch-browse-url-image url))

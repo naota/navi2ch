@@ -1,3 +1,27 @@
+2002-01-06  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el
+	(navi2ch-message-aa-alist): いくつか追加。
+	(navi2ch-message-user-name-alist): 新変数
+	(navi2ch-message-always-pop-message): 新変数
+	
+	* navi2ch-util.el
+	(navi2ch-browse-url): URL に extension がないときは
+	navi2ch-browse-url-image しない。
+	http://pc.2ch.net/test/read.cgi/unix/999166513/859
+
+	* navi2ch-message.el
+	(navi2ch-message-insert-header): 板ごとにデフォルトの名前を設定でき
+	るように。
+	http://pc.2ch.net/test/read.cgi/unix/999166513/860
+	(navi2ch-message-write-message): 書きかけの message を常に復元
+	http://pc.2ch.net/test/read.cgi/unix/999166513/866
+
+	* navi2ch-board-misc.el
+	(navi2ch-bm-mark-region): region の始点・終点が行頭・行末じゃないと
+	きの挙動を修正。
+	http://pc.2ch.net/test/read.cgi/unix/999166513/889
+
 2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el: かっこがずれていたのを直した

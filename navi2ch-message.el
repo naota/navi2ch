@@ -52,7 +52,8 @@
 
 (defun navi2ch-message-write-message (board article &optional new sage)
   (if (and (get-buffer navi2ch-message-buffer-name)
-           (not (navi2ch-message-kill-message)))
+	   (or navi2ch-message-always-pop-message
+	       (not (navi2ch-message-kill-message))))
       (navi2ch-message-pop-message-buffer)
     (setq navi2ch-message-window-configuration
 	  (current-window-configuration))
@@ -99,6 +100,8 @@
     (insert "Subject: \n"))
   (insert "From: "
 	  (or (cdr (assq 'name navi2ch-message-current-article))
+	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
+			  navi2ch-message-user-name-alist))
 	      navi2ch-message-user-name "") "\n"
 	      "Mail: "
 	      (or sage
