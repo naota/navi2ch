@@ -222,18 +222,40 @@ DIFF が non-nil ならば差分を取得する。
   "オイスターサーバの接続のステータス部を返す。"
   (navi2ch-net-ignore-errors
    (or (save-excursion
-	 (set-buffer (process-buffer proc))
-	 (while (and (eq (process-status proc) 'open)
-		     (goto-char (point-min))
-		     (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
-	   (accept-process-output proc)
-	   (message "retrying")
-	   (sit-for 3))
-	 (sit-for 5)			; 何だかうまく動かないのでwait入れた
-	 (goto-char (point-min))
-	 (search-forward "SESSION-ID=")
-	 (if (looking-at "\\(.*\\)\n")
-	     (match-string 1))))))
+         (set-buffer (process-buffer proc))
+         (while (and (eq (process-status proc) 'open)
+                     (goto-char (point-min))
+                     (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
+           (accept-process-output proc)
+           (message "retrying")
+           (sit-for 3))
+         (let ((i 10))
+           (catch 'loop
+             (while (>= (setq i (1- i)) 0)
+               (sit-for 1)              ; 何だかうまく動かないのでwait入れた
+               (goto-char (point-min))
+               ;; 最後まで見つからないままだとエラー
+               (when (search-forward "SESSION-ID=" nil (> i 0))
+                 (throw 'loop
+                        (if (looking-at "\\(.*\\)\n")
+                            (match-string 1)))))))))))
+
+;(defun navi2ch-oyster-get-status (proc)
+;  "オイスターサーバの接続のステータス部を返す。"
+;  (navi2ch-net-ignore-errors
+;   (or (save-excursion
+;	 (set-buffer (process-buffer proc))
+;	 (while (and (eq (process-status proc) 'open)
+;		     (goto-char (point-min))
+;		     (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
+;	   (accept-process-output proc)
+;	   (message "retrying")
+;	   (sit-for 3))
+;	 (sit-for 5)			; 何だかうまく動かないのでwait入れた
+;	 (goto-char (point-min))
+;	 (search-forward "SESSION-ID=")
+;	 (if (looking-at "\\(.*\\)\n")
+;	     (match-string 1))))))
 
 (defun navi2ch-oyster-login ()
   "オイスターのサーバにログインして session-id を取得する。"
