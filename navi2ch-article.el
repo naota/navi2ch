@@ -149,7 +149,7 @@ last が最後からいくつ表示するか。
   (define-key navi2ch-article-hide-mode-map "a" 'undefined))
 
 ;; add hook
-(add-hook 'navi2ch-load-status-hook 'navi2ch-article-save-all-info)
+(add-hook 'navi2ch-save-status-hook 'navi2ch-article-save-all-info)
 
 (defsubst navi2ch-article-inside-range-p (num range len)
   "NUM が RANGE で示す範囲に入ってるか

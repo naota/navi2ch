@@ -1,5 +1,8 @@
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (toplevel): 
+	navi2ch-load-status-hook -> nai2ch-save-status-hook
+
 	* navi2ch-vars.el: Emacs で編集する時 syntax-table がくさるので、
 	文字列中の行頭の '(' を '\(' にした。
 	(navi2ch-article-auto-expunge): 新変数。(今のところデフォルトは nil)
