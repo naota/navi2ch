@@ -1,5 +1,9 @@
 2002-07-22  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-message.el (navi2ch-message-write-message): モードライン
+	に書き込み先のスレや板を表示するようにした。誤爆対策。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/575
+
 	* navi2ch-http-date.el (navi2ch-http-date-encode):
 	Windows で TZ が設定されてなくても問題ないよう、set-time-zone-rule
 	を使わないようにした。

@@ -96,6 +96,13 @@
     (navi2ch-message-mode)
     (erase-buffer)
     (navi2ch-message-insert-header new sage)
+    (setq navi2ch-mode-line-identification
+	  (if new
+	      (format "*new message* [%s]"
+		      (cdr (assq 'name navi2ch-message-current-board)))
+	    (format "Re: %s [%s]"
+		    (cdr (assq 'subject navi2ch-message-current-article))
+		    (cdr (assq 'name navi2ch-message-current-board)))))
     (navi2ch-set-mode-line-identification)
     (run-hooks 'navi2ch-message-setup-message-hook)
     (when sage
