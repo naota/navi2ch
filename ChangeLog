@@ -1,3 +1,28 @@
+2002-12-19  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-view-article):
+	navi2ch-article-sync の後に switch-to-buffer する。
+
+	* navi2ch-board-misc.el (navi2ch-bm-state-alist):
+	navi2ch-bm-new-*-face 追加。
+	(navi2ch-bm-updated-mark-alist): '(new . "%") 追加。
+	(navi2ch-bm-set-property): 'new 追加。
+	(navi2ch-bm-sort-by-state): 知らない状態でもエラーにならないように。
+
+	* navi2ch-board.el (navi2ch-board-updated-article-p): 新スレのときは
+	'new を返す。
+	(navi2ch-board-insert-subjects): navi2ch-board-updated-article-p の
+	変更に追随。
+
+	* navi2ch-face.el (navi2ch-bm-new-unread-face): 新フェイス。
+	(navi2ch-bm-new-view-face): 同上。
+	(navi2ch-bm-new-cache-face): 同上。
+	(navi2ch-bm-new-update-face): 同上。
+	(navi2ch-bm-new-mark-face): 同上。
+
+	* navi2ch-vars.el (navi2ch-bm-sort-by-state-order):
+	新しいスレの状態を追加。
+
 2002-12-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-sort): "Sorting...done" のメッ

@@ -599,9 +599,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	       navi2ch-article-auto-expunge
 	       (> navi2ch-article-max-buffers 0))
       (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
-    (if dont-display
-	(set-buffer (get-buffer-create buf-name))
-      (switch-to-buffer (get-buffer-create buf-name)))
+    (set-buffer (get-buffer-create buf-name))
     (if (eq major-mode 'navi2ch-article-mode)
 	(setq list (navi2ch-article-sync force nil))
       (setq navi2ch-article-current-board board
@@ -614,6 +612,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 		navi2ch-article-new-message-range)))
       (setq list (navi2ch-article-sync force 'first))
       (navi2ch-article-mode))
+    (unless dont-display (switch-to-buffer (current-buffer)))
     (when (and number
 	       (not (equal (navi2ch-article-get-current-number) number)))
       (navi2ch-article-goto-number number t))

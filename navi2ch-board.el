@@ -229,15 +229,15 @@
 	  (nreverse list))))))
 
 (defsubst navi2ch-board-updated-article-p (article seen)
-  (let ((artid (cdr (assq 'artid article))))
-    (when (assoc artid navi2ch-board-subject-alist)
-      (let ((res (string-to-number
-		  (or (cdr (assoc artid
-				  navi2ch-board-subject-alist)) "0")))
-	    (old-res (string-to-number
-		      (or (cdr (assoc artid
-				      navi2ch-board-old-subject-alist)) "0"))))
-	(> res (or seen old-res))))))
+  (let* ((artid (cdr (assq 'artid article)))
+	 (res (cdr (assoc artid navi2ch-board-subject-alist)))
+	 old-res)
+    (when res
+      (if (setq old-res (cdr (assoc artid navi2ch-board-old-subject-alist)))
+	  (when (> (string-to-number res)
+		   (or seen (string-to-number old-res)))
+	    'updated)
+	'new))))
 
 (defun navi2ch-board-regexp-test ()
   (save-excursion
@@ -257,7 +257,8 @@
     (dolist (article list)
       (let* ((artid (cdr (assq 'artid article)))
 	     (seen (navi2ch-article-summary-element-seen
-		    (cdr (assoc artid summary)))))
+		    (cdr (assoc artid summary))))
+	     updated)
 	(when (cond (navi2ch-board-bookmark-mode
 		     (member artid bookmark))
 		    (navi2ch-board-hide-mode
@@ -274,8 +275,9 @@
 	   (cdr (assq 'subject article))
 	   (format "(%4s)" (cdr (assq 'response article)))
 	   (cond ((and navi2ch-board-check-updated-article-p
-		       (navi2ch-board-updated-article-p article seen))
-		  'updated)
+		       (setq updated
+			     (navi2ch-board-updated-article-p article seen)))
+		  updated)
 		 (seen 'seen)))
 	  (setq i (1+ i)))))))
 

@@ -103,27 +103,33 @@
 (defvar navi2ch-bm-state-alist
   '((view "V"
 	  navi2ch-bm-view-face
+	  navi2ch-bm-new-view-face
 	  navi2ch-bm-updated-view-face
 	  navi2ch-bm-seen-view-face)
     (cache "C"
 	   navi2ch-bm-cache-face
+	   navi2ch-bm-new-cache-face
 	   navi2ch-bm-updated-cache-face
 	   navi2ch-bm-seen-cache-face)
     (update "U"
 	    navi2ch-bm-update-face
+	    navi2ch-bm-new-update-face
 	    navi2ch-bm-updated-update-face
 	    navi2ch-bm-seen-update-face)
     (nil " "
 	 navi2ch-bm-unread-face
+	 navi2ch-bm-new-unread-face
 	 navi2ch-bm-updated-unread-face
 	 navi2ch-bm-seen-unread-face)
     (mark " "
 	  navi2ch-bm-mark-face
+	  navi2ch-bm-new-mark-face
 	  navi2ch-bm-updated-mark-face
 	  navi2ch-bm-seen-mark-face)))
 
 (defvar navi2ch-bm-updated-mark-alist
-  '((updated . "+")
+  '((new . "%")
+    (updated . "+")
     (seen . "=")
     (nil . " ")))
 
@@ -187,9 +193,10 @@
   (setq updated (or updated (get-text-property (1+ begin) 'updated)))
   (put-text-property begin end 'updated updated)
   (put-text-property begin end 'mouse-face navi2ch-bm-mouse-face)
-  (put-text-property begin end 'face (nth (cond ((eq updated 'updated) 3)
-						((eq updated 'seen) 4)
-						((eq updated nil) 2))
+  (put-text-property begin end 'face (nth (cond ((null updated) 2)
+						((eq updated 'new) 3)
+						((eq updated 'updated) 4)
+						((eq updated 'seen) 5))
 					  (assq state
 						navi2ch-bm-state-alist))))
 
@@ -720,9 +727,10 @@ ARG が non-nil なら移動方向を逆にする。"
    (lambda ()
      (navi2ch-bm-goto-state-column)
      (backward-char)
-     (cdr (assoc (buffer-substring (point)
-				   (+ (point) 2))
-		 navi2ch-bm-sort-by-state-order)))
+     (or (cdr (assoc (buffer-substring (point) (+ (point) 2))
+		     navi2ch-bm-sort-by-state-order))
+	 ;; 未知の状態。
+	 1000))
    nil))
 
 (defun navi2ch-bm-sort-by-subject (&optional rev)

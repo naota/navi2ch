@@ -88,6 +88,36 @@
   "マークしたスレの face"
   :group 'navi2ch-face)
 
+(defface navi2ch-bm-new-unread-face
+  '((((class color) (background light)) (:foreground "DarkOliveGreen" :bold t))
+    (((class color) (background dark)) (:foreground "GreenYellow" :bold t)))
+  "新しい読んでないスレの face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-bm-new-view-face
+  '((((class color) (background light)) (:foreground "FireBrick" :bold t))
+    (((class color) (background dark)) (:foreground "PaleGreen" :bold t)))
+  "新しい表示しているスレの face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-bm-new-cache-face
+  '((((class color) (background light)) (:foreground "Navy" :bold t))
+    (((class color) (background dark)) (:foreground "SkyBlue" :bold t)))
+  "新しい読んだ事があるスレの face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-bm-new-update-face
+  '((((class color) (background light)) (:foreground "SaddleBrown" :bold t))
+    (((class color) (background dark)) (:foreground "LightSkyBlue" :bold t)))
+  "新しい更新したスレの face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-bm-new-mark-face
+  '((((class color) (background light)) (:foreground "Tomato3" :bold t))
+    (((class color) (background dark)) (:foreground "tomato" :bold t)))
+  "新しいマークしたスレの face"
+  :group 'navi2ch-face)
+
 (defface navi2ch-bm-updated-unread-face
   '((((class color) (background light)) (:foreground "DarkOliveGreen" :bold t))
     (((class color) (background dark)) (:foreground "GreenYellow" :bold t)))
