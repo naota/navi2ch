@@ -1,3 +1,16 @@
+2002-01-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-util.el (toplevel): 先に mel を require するようにした。
+
+	* navi2ch-vars.el
+	(navi2ch-net-gunzip-program): gzip に変えた。
+	(navi2ch-net-gunzip-args): -d -c に変えた。
+
+	* navi2ch-board.el
+	(navi2ch-board-get-readcgi-url): やっぱり board-id の手前をベース
+	にした。
+	(navi2ch-board-get-home-uri): 上記変更により削除。
+
 2002-01-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-bookmark-node): 新関数。

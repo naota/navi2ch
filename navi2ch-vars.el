@@ -568,12 +568,12 @@ non-nil なら付加する。"
   :type 'boolean
   :group 'navi2ch-net)
 
-(defcustom navi2ch-net-gunzip-program "gunzip"
+(defcustom navi2ch-net-gunzip-program "gzip"
   "*gunzip のプログラム名。"
   :type 'file
   :group 'navi2ch-net)
 
-(defcustom navi2ch-net-gunzip-args nil
+(defcustom navi2ch-net-gunzip-args '("-d" "-c")
   "*gunzip を呼出すときの引数。"
   :type '(repeat :tag "引数" string)
   :group 'navi2ch-net)

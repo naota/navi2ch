@@ -128,12 +128,6 @@ kako ならばそれに対応した uri にする"
     (when (string-match "http://\\([^/]+\\)" uri)
       (match-string 1 uri))))
 
-(defsubst navi2ch-board-get-home-uri (board)
-  "後ろの / が付いた home ディレクトリな uri を返す。"
-  (let ((uri (cdr (assq 'uri board))))
-    (when (string-match "http://.+/~[^/]+" uri)
-      (concat (match-string 0 uri) "/"))))
-	       
 (defsubst navi2ch-board-get-url (board &optional file-name)
   (if (and file-name (string-match "^/" file-name))
       (concat "http://" (navi2ch-board-get-host board) file-name)
@@ -142,10 +136,10 @@ kako ならばそれに対応した uri にする"
 
 (defsubst navi2ch-board-get-readcgi-url (board)
   "read.cgi の板名までの url を返す。"
-  (let ((uri (navi2ch-board-get-home-uri board)))
-    (unless uri
-      (setq uri (format "http://%s/" (navi2ch-board-get-host board))))
-    (format "%stest/read.cgi/%s/" uri (cdr (assq 'id board)))))
+  (let ((uri (navi2ch-board-get-uri board))
+	(id (cdr (assq 'id board))))
+    (setq uri (navi2ch-replace-string (concat id "/") "" uri))
+    (format "%stest/read.cgi/%s/" uri id)))
 	  
 (defsubst navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))

@@ -29,10 +29,10 @@
 
 (unless (and (fboundp 'base64-encode-region)
 	     (fboundp 'base64-decode-region))
-  (cond ((locate-library "base64")
-	 (require 'base64))
-	((locate-library "mel")
-	 (require 'mel))))
+  (cond ((locate-library "mel")
+	 (require 'mel))
+	((locate-library "base64")
+	 (require 'base64))))
 
 (defvar navi2ch-mode-line-identification nil)
 (make-variable-buffer-local 'navi2ch-mode-line-identification)
