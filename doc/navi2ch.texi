@@ -34,7 +34,7 @@
 @end html
 @value{REVISION}
 
-Copyright (C) 2002 by navi2ch Project
+Copyright (C) 2002 by Navi2ch Project
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -72,7 +72,7 @@ translation approved by the Free Software Foundation.
 @page
 @vskip 0pt plus 1filll
 
-Copyright @copyright{} 2002 by navi2ch Project
+Copyright @copyright{} 2002 by Navi2ch Project
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -95,8 +95,8 @@ translation approved by the Free Software Foundation.
 @node Top
 @top Navi2ch
 
-Navi2ch は、Emacs、XEmacs、Mule、Meadow などのEmacsen で動作する、２ちゃ
-んねるナビゲータである。
+Navi2ch は、Emacs、XEmacs、Meadow などの Emacsen で動作する、２ちゃん
+ねるナビゲータである。
 
 @menu
 * Install::                     イントール
@@ -120,7 +120,7 @@ Navi2ch は、Emacs、XEmacs、Mule、Meadow などのEmacsen で動作する、２ちゃ
 
 使い方
 
-* Start navi2ch::               起動方法
+* Start Navi2ch::               起動方法
 * List Mode::                   List モード
 * Board Mode::                  Board モード
 * Bookmark Mode::               Bookmark モード
@@ -194,7 +194,7 @@ Navi2ch Project Summary Page
 
 (全部 sourceforge に移した方がいいかな。)
 
-２ちゃんねる UNIX 板、navi2ch スレも参照のこと。
+２ちゃんねる UNIX 板、Navi2ch スレも参照のこと。
 
 @menu
 * Getting Develop Version::     開発版の入手
@@ -203,7 +203,7 @@ Navi2ch Project Summary Page
 @node Getting Develop Version
 @subsection 開発版の入手
 
-navi2ch の開発版は CVS を使って入手することができる。
+Navi2ch の開発版は CVS を使って入手することができる。
 @code{CVS password:} と聞いてきたら何も入力せず @kbd{@key{RET}} を押すこと。
 
 @example
@@ -232,7 +232,7 @@ CVS についての詳しい説明は
 
 開発者になると CVS に commit することができるようになる。
 @uref{http://sourceforge.net/projects/navi2ch}
-から「プロジェクト管理者」にコンタクトを取って、ぜひ navi2ch の開発に
+から「プロジェクト管理者」にコンタクトを取って、ぜひ Navi2ch の開発に
 参加してほしい。
 
 @node Compile
@@ -256,7 +256,7 @@ Emacs の種類を指定
 XEmacs の種類を指定
 
 @item --with-lispdir
-navi2ch をインストールするディレクトリを指定。
+Navi2ch をインストールするディレクトリを指定。
 @end table
 
 例えば Meadow だったら
@@ -274,7 +274,7 @@ navi2ch をインストールするディレクトリを指定。
 @chapter 使い方
 
 @menu
-* Start navi2ch::               起動方法
+* Start Navi2ch::               起動方法
 * List Mode::                   List モード
 * Board Mode::                  Board モード
 * Bookmark Mode::               Bookmark モード
@@ -282,7 +282,7 @@ navi2ch をインストールするディレクトリを指定。
 * Message Mode::                Message モード
 @end menu
 
-@node Start navi2ch
+@node Start Navi2ch
 @section 起動方法
 
 @file{~/.emacs} に
@@ -300,15 +300,15 @@ Windows では 環境変数 @env{TZ} を @code{JST-9} としておいた方がいいらしい。
 @node List Mode
 @section List モード
 
-navi2ch を起動すると以下のような画面になる。
+Navi2ch を起動すると以下のような画面になる。
 
 @example
 @group
 [+]Navi2ch
 [+]ブックマーク
 [+]その他
+[+]変わった板
         :
-[+]他のサイト
 @end group
 @end example
 
@@ -361,7 +361,7 @@ Board モード (@ref{Board Mode}) を参照のこと。
 「履歴」には (現在のセッションに限らず) 表示したスレの一覧が追加される。
 @end itemize
 
-以上の3つの板には navi2ch が自動的にスレを追加していくが、それ以外はグ
+以上の3つの板には Navi2ch が自動的にスレを追加していくが、それ以外はグ
 ローバルブックマークと同等である。@xref{Browsing Bookmark}.
 
 「ブックマーク」カテゴリにはグローバルブックマークが含まれる。
@@ -370,6 +370,8 @@ Board モード (@ref{Board Mode}) を参照のこと。
 「その他」カテゴリには自分で追加した板が含まれる。@xref{Other Boards
 File}.
 
+「変わった板」カテゴリには前回 Navi2ch 起動してから追加された板、移転
+した板が含まれる。
 
 @node Board Mode
 @section Board モード
@@ -502,7 +504,7 @@ Mode Key Bindings}) を参照してちょ。
 
 @node Search Thread
 @subsection スレの検索
-navi2ch ではキャッシュを対象にスレ検索することができる。
+Navi2ch ではキャッシュを対象にスレ検索することができる。
 
 ボードモードで @kbd{?} を押すと、@code{Search for: s)ubject a)rticle}
 と聞いて来るので、スレのタイトルのみを対象に検索を行うなら @kbd{s} を、
@@ -644,11 +646,11 @@ Date: 01/12/26 13:17
 き、隠したレスを見るモードで @kbd{d} を押せばまた通常モードでみることが
 できるようになる。
 
-特定のれすをブックマークしたい場合は、カーソルをそのレスに合わせた上で 
+特定のレスをブックマークしたい場合は、カーソルをそのレスに合わせた上で 
 @kbd{a} を押す。ブックマークされたレスを見るには @kbd{$} を押す。再度 
 @kbd{$} を押せば元のレス一覧状態に戻る。
 
-navi2ch には、@code{>>1} などのように記述された他のレス参照や、
+Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 @code{http://} で始まるリンクなどを楽に追いかけられる機能が用意されてい
 る。@kbd{TAB} を押すことで、カーソルより後にあるそれらのリンクに移動でき、
 その状態で @key{RET} を押すことで該当する番号のレスに飛んだり、参照して
@@ -708,16 +710,16 @@ List}) したりして、思う存分煽り文句を書いたら、@kbd{C-c C-c} で書き込
 @node Emacs Customization Interface
 @section Emacs のカスタマイズインターフェイスを利用する。
 
-navi2ch のカスタマイズをしたい場合は、@kbd{M-x customize-group
+Navi2ch のカスタマイズをしたい場合は、@kbd{M-x customize-group
 @key{RET} navi2ch @key{RET}} と入力する。customization buffer の使い方
 については Emacs のマニュアルを参照してね。
 
 @node Init File
 @section 初期化ファイル
 
-navi2ch は起動時に @file{~/.navi2ch/init.el} をロードする。
+Navi2ch は起動時に @file{~/.navi2ch/init.el} をロードする。
 
-navi2ch の起動時に色んな処理をしたい場合や、Emacs のカスタマイズインター
+Navi2ch の起動時に色んな処理をしたい場合や、Emacs のカスタマイズインター
 フェイスなんか使ってられるかゴルァという人は、このファイルを編集する。
 
 存在しない場合は自分で作成すること。
@@ -726,8 +728,8 @@ navi2ch の起動時に色んな処理をしたい場合や、Emacs のカスタマイズインター
 @section その他のカテゴリに入れる板を追加する
 
 ２ちゃんねるに板が追加された後も List モードに板が表示されない場合や、
-２ちゃんねると互換性のある BBS を navi2ch で読みたい場合は、
-@file{~/.navi2ch/etc.txt} というファイルを作成すると navi2ch から読む
+２ちゃんねると互換性のある BBS を Navi2ch で読みたい場合は、
+@file{~/.navi2ch/etc.txt} というファイルを作成すると Navi2ch から読む
 ことができる。
 
 書式は以下のとおり。
@@ -828,7 +830,7 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @code{navi2ch-goto-url} 指定した URL の板・スレを表示
 
 @item C-c C-v
-@code{navi2ch-version} navi2ch のバージョンをミニバッファに表示
+@code{navi2ch-version} Navi2ch のバージョンをミニバッファに表示
 @end table
 
 Message モード以外では以下のキーバインドも使える。ただし、モードで上書
@@ -866,7 +868,7 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
 
 @item V
-@code{navi2ch-version} navi2ch のバージョンをミニバッファに表示
+@code{navi2ch-version} Navi2ch のバージョンをミニバッファに表示
 @end table
 
 @node List Mode Key Bindings
@@ -1315,14 +1317,14 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @appendix よくある質問とその答え
 @table @asis
 @item Q.
-navi2ch って何？
+Navi2ch って何？
 
 @item A.
-２ちゃんねる専用ブラウザです。Emacs、XEmacs、Mule、Meadow などの
-Emacsen で動作します。
+２ちゃんねる専用ブラウザです。Emacs、XEmacs、Meadow などの Emacsen で
+動作します。
 
 @item Q.
-Emacs の起動と同時に navi2ch を起動したいんだけど。
+Emacs の起動と同時に Navi2ch を起動したいんだけど。
 
 @item A.
 @code{emacs -e navi2ch} あるいは @code{emacs -f navi2ch} でどうぞ。
@@ -1401,7 +1403,7 @@ URL を指定してスレを開きたいんだけど。
 @item Q.
 ○○板がサーバ移転で見られなくなったみたい。どうしたらいい?
 
-同じ 2ch タイプの他の掲示板も navi2ch で読みたいんだけど。
+同じ 2ch タイプの他の掲示板も Navi2ch で読みたいんだけど。
 
 @item A.
 @file{~/.navi2ch/etc.txt} というファイルを作って、以下のように書きます。
@@ -1458,7 +1460,7 @@ Boards File}.
 します。@xref{Customize}.
 
 @item Q.
-navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
+Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 るんだけど。
 
 @item A.
@@ -1507,17 +1509,25 @@ proxy を使って書きこんでると、時間帯によって送信に失敗することが
 あるみたいだけど?
 
 @item A.
-にちゃんねる側の規制で、80番ポートが listen されていたりすると
+２ちゃんねる側の規制で、80番ポートが listen されていたりすると
 不正 proxy とみなされることがあるので、web サーバを落とすなり
 パケットフィルタリングでにちゃんねるからの接続のみを落とすなり
 すると動くかも。
 
-@ignore
 @item Q.
-ふーん、navi2ch って便利なんだね。ところで２ちゃんねるって何？
+「変わった板」って何?
 
 @item A.
-あなたには navi2ch は必要ないかもです。
+前回 Navi2ch を実行してから変更があった板のことです。新たに追加された
+り、サーバが移転になった板がこのカテゴリに含まれます。変な板のことでは
+ありません。
+
+@ignore
+@item Q.
+ふーん、Navi2ch って便利なんだね。ところで２ちゃんねるって何？
+
+@item A.
+あなたには Navi2ch は必要ないかもです。
 @end ignore
 @end table
 
@@ -1525,7 +1535,7 @@ proxy を使って書きこんでると、時間帯によって送信に失敗することが
 @node Thanks
 @appendix 謝辞
 
-navi2ch を作ってくれた (not 1) さん、どうもありがとう。
+Navi2ch を作ってくれた (not 1) さん、どうもありがとう。
 
 以下 README より引用
 

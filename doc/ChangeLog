@@ -1,3 +1,11 @@
+2002-02-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi: navi2ch -> Navi2ch
+	動作する Emacsen から Mule を抜いた。(Emacs と並列に Mule と書いた
+	場合は Mule 2.3 と勘違いされるかもしれないので)
+	(List Mode): 「変わった板」を追加。
+	(FAQ): 「変わった板」について追加。
+
 2002-01-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode Key Bindings): ESC b を ESC d に。
