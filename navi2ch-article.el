@@ -1350,20 +1350,41 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       end)))
 
 (defun navi2ch-article-cached-subject (board article)
-  "キャッシュされている dat ファイルからスレタイトルを得る。"
-  (let ((state (navi2ch-article-check-cached board article)))
-    (cond ((eq state 'view)
-	   (save-excursion
-	     (set-buffer (navi2ch-article-get-buffer-name board article))
-	     (or (cdr (assq 'subject navi2ch-article-current-article))
-		 navi2ch-bm-empty-subject)))
-	  ((eq state 'cache)
-	   (let* ((file (navi2ch-article-get-file-name board article))
-		  (list (navi2ch-article-get-message-list
-			 file 0 (navi2ch-article-cached-subject-minimum-size file))))
-	     (cdr (assq 'subject (navi2ch-article-parse-message (cdar list))))))
-	  (t
-	   "navi2ch: ???"))))	;; 変数にして navi2ch-vars.el に入れるべき?
+  "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
+  (let ((state (navi2ch-article-check-cached board article))
+	(artid (cdr (assq 'artid article)))
+	subject subject-list)
+    (if (eq state 'view)
+	(save-excursion
+	  (set-buffer (navi2ch-article-get-buffer-name board article))
+	  (setq subject		; nil になることがある
+		(cdr (assq 'subject
+			   navi2ch-article-current-article)))))
+    (when (not subject)
+      (if (eq state 'cache)
+	  (let* ((file (navi2ch-article-get-file-name board article))
+		 (msg-list (navi2ch-article-get-message-list
+			    file
+			    0
+			    (navi2ch-article-cached-subject-minimum-size file))))
+	    (setq subject
+		  (cdr (assq 'subject
+			     (navi2ch-article-parse-message (cdar msg-list))))))))
+    (when (not subject)
+      (if (equal (cdr (assq 'name board))
+		 (cdr (assq 'name navi2ch-board-current-board)))
+	  (setq subject-list navi2ch-board-subject-list)
+	(setq subject-list (navi2ch-board-get-subject-list
+			    (navi2ch-board-get-file-name board))))
+      (while (and (not subject)
+		  subject-list)
+	(if (equal artid
+		   (cdr (assq 'artid (car subject-list))))
+	    (setq subject (cdr (assq 'subject (car subject-list)))))
+	(pop subject-list)))
+    (when (not subject)
+      (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
+    subject))
 
 (defun navi2ch-article-display-link-minibuffer (point)
   "point のリンク先を minibuffer に表示"
