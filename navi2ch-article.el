@@ -480,18 +480,19 @@ START, END, NOFIRST で範囲を指定する"
 			      number-func)
 			(cons navi2ch-article-url-regexp
 			      url-func)))))
-	 match rep)
+	 match rep literal)
     (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
       (setq rep (cdr match))
       (when (functionp rep)
 	(save-match-data
-	  (setq rep (funcall rep (navi2ch-match-string-no-properties 0)))))
+	  (setq rep (funcall rep (navi2ch-match-string-no-properties 0))
+		literal t)))
       (when (stringp rep)
 	(let ((start (match-beginning 0))
 	      (end (match-end 0))
 	      (url (navi2ch-match-string-no-properties 0)))
 	  (when (string-match (concat "\\`" (car match) "\\'") url)
-	    (setq url (replace-match rep nil nil url))
+	    (setq url (replace-match rep nil literal url))
 	    (navi2ch-article-set-link-property-subr
 	     start end 'url url))
 	  (goto-char (max (1+ start) end)))))))

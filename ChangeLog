@@ -1,3 +1,11 @@
+2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): 置換先が
+	関数だった場合はその返却値の \ を特別扱いしない。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): docstring、
+	custom の設定を修正。
+
 2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el

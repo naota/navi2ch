@@ -660,9 +660,6 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
-;; '(("\\[\\(FreeBSD-[a-z]+-jp\\) \\([0-9]+\\)\\]" .
-;;    "http://home.jp.freebsd.org/cgi-bin/showmail/\\1/\\2"))
-;; とかすれば、URL じゃない物にもリンクを貼れる。
 (defcustom navi2ch-article-link-regexp-alist
   '(("<\\(UR[IL]:\\)?\\([^:>]+\\)>" . nil)
     ("<\\(UR[IL]:\\)?\\([a-z][-+.0-9a-z]*:[^>]*\\)>" . "\\2"))
@@ -672,11 +669,22 @@ cdr が nil の場合はリンクを貼らない。
 cdr が関数の場合はマッチした文字列を引数として呼び出し、返却値が文字列
 の場合、それをリンクとする。
 リストの先頭を優先し、同じ文字列には一度だけマッチする。
-navi2ch-article-url-regexp より優先される。"
+navi2ch-article-url-regexp より優先される。
+
+URL じゃない物にリンクを貼る:
+'((\"\\\\=\\[\\\\(FreeBSD-[a-z]+-jp\\\\) \\\\([0-9]+\\\\)\\\\]\" .
+   \"http://home.jp.freebsd.org/cgi-bin/showmail/\\\\1/\\\\2\"))
+
+置換先に関数を使用:
+'(\"\\\\=\\[postfix-jp: *\\\\([0-9]+\\\\)\\\\]\" .
+  (lambda (str)
+    (format \"http://www.kobitosan.net/postfix/ML/arc-2.1/msg%05d.html\"
+            (1- (string-to-number (match-string 1))))))"
   :type '(repeat (cons (regexp :tag "マッチする正規表現")
 		       (choice (const :tag "リンクを貼らない"
 				      :value nil)
-			       (string :tag "置換する文字列"))))
+			       (string :tag "置換する文字列")
+			       (function :tag "置換に利用する関数"))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-filter-list nil
