@@ -1,3 +1,8 @@
+2002-07-22  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-replace-html-tag):
+	navi2ch-replace-string の結果を返してなかった。。。
+
 2002-07-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-multibbs.el (navi2ch-2ch-url-to-board): 板のマッチをルー

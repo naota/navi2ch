@@ -318,12 +318,10 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
       ""))
 
 (defsubst navi2ch-replace-html-tag (str)
-  (unless (string= str "")
-    (let ((case-fold-search t))
-      (navi2ch-replace-string navi2ch-replace-html-tag-regexp
-			      'navi2ch-replace-html-tag-to-string
-			      str t)))
-  str)
+  (let ((case-fold-search t))
+    (navi2ch-replace-string navi2ch-replace-html-tag-regexp
+			    'navi2ch-replace-html-tag-to-string
+			    str t)))
 
 (defsubst navi2ch-replace-html-tag-with-buffer ()
   (goto-char (point-min))
