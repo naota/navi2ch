@@ -96,7 +96,7 @@
                   (setq image (navi2ch-logo-create-logo-image)))
               (t nil))
             (setq navi2ch-logo-image-alist
-                  (put-alist id (or image t) navi2ch-logo-image-alist)))
+                  (navi2ch-put-alist id (or image t) navi2ch-logo-image-alist)))
           (when (and image (not (eq image navi2ch-logo-previous-image)))
             (navi2ch-logo-remove-image (point-min))
             (navi2ch-logo-put-image (point-min) image)
