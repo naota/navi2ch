@@ -1,3 +1,8 @@
+2002-06-27  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-net.el (navi2ch-net-cleanup): buf が空のときは
+	kill-buffer しないように
+
 2002-06-26  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-ignore-errors): エラーや quit 時にコ

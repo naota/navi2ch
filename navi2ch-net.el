@@ -67,7 +67,8 @@ BODY の評価中にエラーが起こると nil を返す。"
 	(setq buf (process-buffer navi2ch-net-process)))
     (unwind-protect
 	(navi2ch-net-cleanup-process)
-      (kill-buffer buf))))
+      (if buf
+	  (kill-buffer buf)))))
 
 (defun navi2ch-net-cleanup-process ()
   (unwind-protect
