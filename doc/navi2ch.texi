@@ -1364,12 +1364,12 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item <
 @code{navi2ch-article-goto-first-message} 最初のレスに移動
 
-@item @key{ESC} u
-@code{navi2ch-article-uudecode-message} uuencode された記事を uudecode
-する
-
 @item @key{ESC} d
-@code{navi2ch-article-base64-decode-message} 記事をデコードする。
+@code{navi2ch-article-decode-message} 記事をデコードする。
+
+@item @key{ESC} i
+@code{navi2ch-article-auto-decode-toggle-text} 自動デコードした内容の表示を
+切り換える。
 
 @item v
 @code{navi2ch-article-view-aa} アスキーアートを表示 (要 aadisplay)

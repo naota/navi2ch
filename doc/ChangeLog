@@ -1,3 +1,8 @@
+2003-02-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode Key Bindings): "M-u" を削除。
+	"M-i" を追加。
+
 2003-02-16  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Compile): --with-packagedir, --with-icondir,
