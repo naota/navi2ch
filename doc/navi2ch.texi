@@ -178,10 +178,9 @@ Navi2ch Project Summary Page
 @uref{http://sourceforge.net/projects/navi2ch/}
 も要チェック。
 
-以前のリリースは作者の (not 1) さんのページから入手することができる。
-@uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
-
-(全部 sourceforge に移した方がいいかな。)
+@c 以前のリリースは作者の (not 1) さんのページから入手することができる。
+@c @uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
+@c (全部 sourceforge に移した方がいいかな。)
 
 ２ちゃんねる UNIX 板、Navi2ch スレも参照のこと。
 

@@ -1,3 +1,7 @@
+2002-07-18  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Getting): 以前のリリースについての記述をコメント化。
+
 2002-07-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi: Mona Fonts -> Mona Font
