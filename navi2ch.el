@@ -38,8 +38,6 @@
 
 (defvar navi2ch-ask-when-exit t)
 
-(defvar navi2ch-coding-system 'shift_jis)
-
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-offline-on "[ON] ")
 (defvar navi2ch-offline-off "[--] ")
@@ -233,14 +231,6 @@ SUSPEND が non-nil なら buffer を消さない"
       (setq url (match-string 1 url))
       (member url list))))
                       
-(defun navi2ch-insert-file-contents (file &optional begin end)
-  (let ((coding-system-for-read navi2ch-coding-system)
-        (coding-system-for-write navi2ch-coding-system))
-    (insert-file-contents file nil begin end)))
-
-(defun navi2ch-expand-file-name (file)
-  (expand-file-name file navi2ch-directory))
-  
 (provide 'navi2ch)
 
 ;;; navi2ch.el ends here

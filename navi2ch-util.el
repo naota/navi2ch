@@ -25,6 +25,7 @@
 
 (require 'navi2ch-vars)
 (require 'timezone)
+(require 'browse-url)
 
 (unless (and (fboundp 'base64-encode-region)
 	     (fboundp 'base64-decode-region))
@@ -77,6 +78,8 @@
    "^\\([+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z]\\)*"
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
   "base64コードのみが含まれる行にマッチする正規表現。")
+
+(defvar navi2ch-coding-system 'shift_jis)
 
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
@@ -134,6 +137,14 @@
               b (cdr b))))
     list))
 
+(defun navi2ch-insert-file-contents (file &optional begin end)
+  (let ((coding-system-for-read navi2ch-coding-system)
+        (coding-system-for-write navi2ch-coding-system))
+    (insert-file-contents file nil begin end)))
+
+(defun navi2ch-expand-file-name (file)
+  (expand-file-name file navi2ch-directory))
+  
 (defun navi2ch-uudecode-region (start end)
   (interactive "r")
   (let (dir)
@@ -478,5 +489,4 @@ base64デコードすべき内容がない場合はエラーになる。"
       (insert str))))
 
 (provide 'navi2ch-util)
-
-
+;;; navi2ch-util.el ends here
