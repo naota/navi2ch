@@ -1,4 +1,13 @@
 2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-chunk): (accept-process-output)
+	って point が point-max の時は point が動くみたいなんでもといた場
+	所に goto-char するようにした。
+	変な事があった場合はメッセージを表示するようにした。
+	last-chunk の時の処理が間違ってたので修正。
+	バッファ相手にネットワークコード書くの疲れる。。。
+
+2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
 	HTTP/1.1 に対応してみました。まだまだ不具合ありまくりなので素人に
 	はお勧めしない、です。ハクできる人の人柱きぼんぬ。
 

@@ -224,23 +224,30 @@ chunk のサイズを返す。point は chunk の直後に移動。"
     (let ((p (point))
 	  size end)
       (while (and (eq (process-status proc) 'open)
-		  (not (looking-at "\\([0-9a-fA-F]+\\).*\r\n")))
-	(accept-process-output proc))
-      (if (not (match-string 1))
-	  (throw 'ret 0))
-      (forward-line 1)
+		  (not (looking-at "\\([0-9a-fA-F]+\\)[^\r\n]*\r\n")))
+	(accept-process-output proc)
+	(goto-char p))
+      (when (not (match-string 1))
+	(message "no chunk-size line")
+	(throw 'ret 0))
+      (goto-char (match-end 0))
       (setq size (string-to-number (match-string 1) 16)
 	    end (+ p size 2))		; chunk-data CRLF
       (delete-region p (point))		; chunk size 行を消す
+      (if (= size 0)
+	  (throw 'ret 0))
       (while (and (eq (process-status proc) 'open)
 		  (goto-char end)
 		  (not (= (point) end)))
 	(accept-process-output proc))
-      (if (not (= (point) end))
-	  (throw 'ret 0))
-      (if (not (string= (buffer-substring (- (point) 2) (point))
-			"\r\n"))
-	  (throw 'ret 0))		; chunk-data の末尾が CRLF じゃない
+      (when (not (= (point) end))
+	(message "unable goto chunk end (size: %d, end: %d, point: %d)"
+		 size end (point))
+	(throw 'ret 0))
+      (when (not (string= (buffer-substring (- (point) 2) (point))
+			  "\r\n"))
+	(message "invalid chunk body")
+	(throw 'ret 0))		   ; chunk-data の末尾が CRLF じゃない
       (delete-region (- (point) 2) (point))
       size)))
 
@@ -258,7 +265,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 				      (or (cdr (assoc "Content-Encoding"
 						      header))
 					  ""))))
-	     p size)
+	     p)
 	(save-excursion
 	  (set-buffer (process-buffer proc))
 	  (goto-char (point-min))
