@@ -1,3 +1,9 @@
+2002-01-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-next-link): ミニバッファに表示
+	するレス番号を得るのに navi2ch-article-str-to-num を使うように。
+	「＞＞９５９」でうまく表示されなかったので。
+
 2002-01-30  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-add-replace-html-tag): ののたんの口を表

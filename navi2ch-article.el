@@ -1290,7 +1290,7 @@ article buffer から抜けるなら 'quit を返す。"
       (goto-char point)
       (let ((num (get-text-property (point) 'number)))
 	(when num
-	  (setq num (string-to-number num))
+	  (setq num (navi2ch-article-str-to-num (japanese-hankaku num)))
 	  (message "%s" (navi2ch-replace-string
 			 "\n" ""
 			 (navi2ch-article-get-message-string num) t)))))))
