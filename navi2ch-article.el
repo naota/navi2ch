@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;; 
+
 ;;; Code:
 (provide 'navi2ch-article)
 (defvar navi2ch-article-ident
@@ -1152,8 +1156,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		 (from (cdr (assq 'name msg)))
 		 (data (cdr (assq 'data msg))))
 	    (or (and from
-		     (string-match "[0-9０-９]+" from)
-		     (japanese-hankaku (match-string 0 from)))
+		     (string-match "^[^◆0-9０-９]*\\([0-9０-９]+\\)" from)
+		     (japanese-hankaku (match-string 1 from)))
 		(and data
 		     (string-match "[0-9０-９]+" data)
 		     (japanese-hankaku (match-string 0 data)))
@@ -1599,7 +1603,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     (if (eq state 'view)
 	(save-excursion
 	  (set-buffer (navi2ch-article-get-buffer-name board article))
-	  (setq subject		; nil になることがある
+	  (setq subject			; nil になることがある
 		(cdr (assq 'subject
 			   navi2ch-article-current-article)))))
     (when (not subject)

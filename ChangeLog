@@ -2,7 +2,10 @@
 
 	* navi2ch-list.el (navi2ch-list-insert-board-names-subr):
 	mouse-face が insert する次の行とつながっていたのを修正。
-	板名だけに property をつけるように。
+	板名だけに mouse-face をつけるように。
+
+	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
+	レス番号の候補を取得するとき、名前欄の「◆」以降を無視するように。
 
 2003-02-15  Nanashi San  <nanashi@users.sourceforge.net>
 
