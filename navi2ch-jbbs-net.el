@@ -91,8 +91,12 @@ START, END, NOFIRST で範囲を指定する"
     (concat
      (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
 	     (match-string 1 uri) (match-string 2 uri) artid)
-     (and start (format "&START=%d" start))
-     (and end (format "&END=%d" end))
+     (if (and (stringp start)
+	      (string-match "l\\([0-9]+\\)" start))
+	 (format "&LAST=%s" (match-string 1 start))
+       (concat
+	(and start (format "&START=%d" start))
+	(and end (format "&END=%d" end))))
      (and nofirst
 	  (not (eq start 1))
 	  "&NOFIRST=TRUE"))))

@@ -1,3 +1,12 @@
+2003-09-07  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-to-url): 
+	"最新レスn個" に対応。
+
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-to-url): 同上。
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): 同上。
+
 2003-09-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-send-message-error-string):
