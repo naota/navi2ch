@@ -1,3 +1,13 @@
+2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-copy-title): 引数を取るよう
+	にした。タイトルと同時にURLをコピーできるようにした。
+	(navi2ch-article-show-url): navi2ch-article-copy-title を引数付き
+	で呼び出すようにした。
+	* navi2ch-board-misc.el (navi2ch-bm-copy-title):
+	navi2ch-article-copy-title を呼び出すようにした。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/215
+
 2002-06-30  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-cached-subject): 書き直し。

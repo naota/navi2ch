@@ -1251,7 +1251,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		 (format "c)opy v)iew t)itle? URL: %s: " url)
 		 nil '(?c ?v ?t))))
       (if (eq char ?t)
-	  (navi2ch-article-copy-title)
+	  (navi2ch-article-copy-title navi2ch-article-current-board
+				      navi2ch-article-current-article)
 	(funcall (cond ((eq char ?c)
 			'(lambda (x)
 			   (kill-new x)
@@ -1289,18 +1290,25 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 				     (navi2ch-article-get-current-number))
 			      t)))))))))
 
-(defun navi2ch-article-copy-title ()
+(defun navi2ch-article-copy-title (board article)
   "メニューを表示して、タイトルを得る"
-  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
-					    nil '(?b ?a))))
-    (message "copy: %s"
-	     (kill-new
-	      (cond ((eq char ?b)
-		     (cdr (assq 'name
-				navi2ch-article-current-board)))
-		    ((eq char ?a)
-		     (cdr (assq 'subject
-				navi2ch-article-current-article))))))))
+  (let* ((char (navi2ch-read-char-with-retry 
+		"b)oard a)rticle B)oard&url A)rtile&url: "
+		nil '(?b ?a ?B ?A)))
+	 (title (cond ((eq char ?b)
+		       (cdr (assq 'name board)))
+		      ((eq char ?a)
+		       (cdr (assq 'subject article)))
+		      ((eq char ?B)
+		       (concat (cdr (assq 'name board))
+			       "\n"
+			       (navi2ch-board-to-url board)))
+		      ((eq char ?A)
+		       (concat (cdr (assq 'subject article))
+			       "\n"
+			       (navi2ch-article-to-url board article))))))
+    (kill-new title)
+    (message "copy: %s" title)))
 
 (defun navi2ch-article-redisplay-current-message ()
   "今いるレスを画面の中心(上？)に"

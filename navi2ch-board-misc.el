@@ -320,16 +320,10 @@
 
 (defun navi2ch-bm-copy-title (board)
   "メニューを表示して、タイトルを得る"
-  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
-					    nil '(?b ?a))))
-    (message "copy: %s"
-	     (kill-new
-	      (cond ((eq char ?b) (cdr (assq 'name board)))
-		    ((eq char ?a)
-		     (cdr (assq 'subject
-				(navi2ch-bm-get-article-internal
-				 (navi2ch-bm-get-property-internal
-				  (point)))))))))))
+  (navi2ch-article-copy-title board
+			      (navi2ch-bm-get-article-internal
+			       (navi2ch-bm-get-property-internal
+				(point)))))
 
 (defun navi2ch-bm-display-article (&optional max-line)
   (interactive "P")
