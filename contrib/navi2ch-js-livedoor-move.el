@@ -26,6 +26,11 @@
 
 ;;; Code:
 
+(provide 'navi2ch-js-livedoor-move)
+
+(eval-when-compile (require 'cl))
+(require 'navi2ch)
+
 (defun navi2ch-js-livedoor-move ()
   (interactive)
   (let* ((etc-category (navi2ch-list-get-etc-category))
@@ -68,7 +73,5 @@
       (save-buffer))
     (navi2ch-list)
     (navi2ch-list-sync t)))
-
-(provide 'navi2ch-js-livedoor-move)
 
 ;;; navi2ch-js-livedoor-move.el ends here
