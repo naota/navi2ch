@@ -156,7 +156,9 @@ Bookmark モード
 
 キーバインド
 
+* Global Key Bindings::         すべてのモードで共通のキーバインド
 * List Mode Key Bindings::      List モードでのキーバインド
+* Board Misc Mode Key Bindings::  Board 系モード共通のキーバインド
 * Board Mode Key Bindings::     Board モードでのキーバインド
 * Bookmark Mode Key Bindings::  Bookmark モードでのキーバインド
 * Article Mode Key Bindings::   Article モードでのキーバインド
@@ -795,13 +797,82 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @appendix キーバインド
 
 @menu
+* Global Key Bindings::         すべてのモードで共通のキーバインド
 * List Mode Key Bindings::      List モードでのキーバインド
+* Board Misc Mode Key Bindings::  Board 系モード共通のキーバインド
 * Board Mode Key Bindings::     Board モードでのキーバインド
 * Bookmark Mode Key Bindings::  Bookmark モードでのキーバインド
 * Article Mode Key Bindings::   Article モードでのキーバインド
 * Message Mode Key Bindings::   Message モードでのキーバインド
 * Message Mode AA List::        Message モードでのアスキーアート一覧
 @end menu
+
+@node Global Key Bindings
+@appendixsec すべてのモードで共通のキーバインド
+
+以下のキーバインドはすべてのモードで使用できる。ただし、モードで上書き
+されている場合はそちらに従う。
+
+@table @kbd
+@item C-c C-f
+@code{navi2ch-article-find-file} スレのログファイルを指定
+
+@item C-c C-g
+@code{navi2ch-list-goto-board} 指定した板を表示
+
+@item C-c C-t
+@code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
+
+@item C-c C-u
+@code{navi2ch-goto-url} 指定した URL の板・スレを表示
+
+@item C-c C-v
+@code{navi2ch-version} navi2ch のバージョンをミニバッファに表示
+
+@item C-c 1
+@code{navi2ch-one-pane} 1ペイン表示に切り替え
+
+@item C-c 3
+@code{navi2ch-tree-pane} 3ペイン表示に切り替え
+@end table
+
+Message モード以外では以下のキーバインドも使える。ただし、モードで上書
+きされている場合はそちらに従う。
+
+@table @kbd
+@item 1
+@code{navi2ch-one-pane} 1ペイン表示に切り替え
+
+@item 3
+@code{navi2ch-three-pane} 3ペイン表示に切り替え
+
+@item <
+@code{beginning-of-buffer} バッファの最初に移動
+
+@item >
+@code{navi2ch-end-of-buffer} バッファの最後に移動
+
+@item B
+@code{navi2ch-bookmark-goto-bookmark} Bookmark モードを表示
+
+@item g
+@code{navi2ch-goto-board} 指定した板を表示
+
+@item G
+@code{navi2ch-goto-board} 指定した板を表示
+
+@item n
+@code{next-line} 次の行に移動
+
+@item p
+@code{previout-line} 前の行に移動
+
+@item t
+@code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
+
+@item V
+@code{navi2ch-version} navi2ch のバージョンをミニバッファに表示
+@end table
 
 @node List Mode Key Bindings
 @appendixsec List モードでのキーバインド
@@ -823,16 +894,10 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @code{navi2ch-list-select-current-board} 板を表示
 
 @item @key{DEL}
-@code{scroll-down} 上にスクロール
+@code{scroll-down} 下にスクロール
 
 @item @key{BS}
-@code{scroll-down} 上にスクロール
-
-@item n
-@code{next-line} 次の行に移動
-
-@item p
-@code{previous-line} 前の行に移動
+@code{scroll-down} 下にスクロール
 
 @item a
 @code{navi2ch-list-add-bookmark} 板をブックマークに登録
@@ -840,14 +905,8 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @item b
 @code{navi2ch-list-toggle-bookmark} ブックマークと板リストの表示を切り替え
 
-@item t
-@code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
-
 @item [mouse-2]
 @code{navi2ch-list-mouse-select} 板を表示
-
-@item g
-@code{navi2ch-list-goto-board} 指定した板にジャンプ
 
 @item /
 @code{navi2ch-list-toggle-open} 板リストの開閉
@@ -858,30 +917,116 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @item ]
 @code{navi2ch-list-close-all-category} すべての板リストを閉じる
 
-@item >
-@code{end-of-buffer} 最終行に移動
-
-@item <
-@code{beginning-of-buffer} 先頭に移動
-
-@item 1
-@code{navi2ch-one-pain} 一画面表示
-
 @item 2
-@code{navi2ch-list-two-pain} 二画面表示
+@code{navi2ch-list-two-pane} 二画面表示
 
-@item 3
-@code{navi2ch-three-pain} 三画面表示
+@item D
+@code{navi2ch-list-delete-global-bookmark} グローバルブックマークを削除
 
-@item C-c C-f
-@code{navi2ch-article-find-file} スレのログファイルを指定
+@item C
+@code{navi2ch-list-change-global-bookmark} グローバルブックマークを編集
 
 @item ?
 @code{navi2ch-list-search} 検索
+
+@item e
+@code{navi2ch-list-expire} 古いキャッシュファイルを削除する
 @end table
+
+@node Board Misc Mode Key Bindings
+@appendixsec Board 系モード共通のキーバインド
+
+@table @kbd
+@item @kbd{RET}
+@code{navi2ch-bm-select-article} スレを表示
+
+@item [mouse-2]
+@code{navi2ch-bm-select-article} スレを表示
+
+@item @kbd{SPC}
+@code{navi2ch-bm-select-article-or-scroll-up} スレを表示 (すでに表示し
+ているスレならばスレ画面を上にスクロール)
+
+@item .
+@code{navi2ch-bm-display-article} スレを表示 (カーソルはスレに移動しな
+い)
+
+@item i
+@code{navi2ch-bm-fetch-article} スレを更新
+
+@item e
+@code{navi2ch-bm-textize-article} スレをテキストで保存
+
+@item @key{DEL}
+@code{navi2ch-bm-select-article-or-scroll-down} スレを表示 (すでに表示
+しているスレならばスレ画面を下にスクロール)
+
+@item @key{BS}
+@code{navi2ch-bm-select-article-or-scroll-down} スレを表示 (すでに表示
+しているスレならばスレ画面を下にスクロール)
+
+@item n
+@code{navi2ch-bm-next-line} 次の行に移動
+
+@item p
+@code{navi2ch-bm-previous-line} 前の行に移動
+
+@item U
+@code{navi2ch-board-show-url} 板またはスレの URL をコピー、または板を
+ブラウザで表示
+
+@item l
+@code{navi2ch-bm-view-logo} 板のロゴを表示
+
+@item A
+@code{navi2ch-board-add-global-bookmark} グローバルブックマークに登録
+
+@item q
+@code{navi2ch-bm-exit} 板を閉じる
+
+@item S
+@code{navi2ch-bm-sort} スレをソート
+
+@item ?
+@code{navi2ch-bm-search} 検索
+
+@item C-c C-m
+@code{navi2ch-message-pop-message-buffer} 書き込みのとき書き込み画面に
+戻る
+
+@item *
+@code{navi2ch-bm-mark} スレにマークをつける
+
+@item u
+@code{navi2ch-bm-unmark} スレのマークを解除
+
+@item m r
+@code{navi2ch-bm-mark-region} 選択領域のスレにマークをつける
+
+@item m a
+@code{navi2ch-bm-mark-all} すべてのスレにマークをつける
+
+@item m A
+@code{navi2ch-bm-add-global-bookmark-mark-article} マークしたスレをグ
+ローバルブックマークに登録
+
+@item m o
+@code{navi2ch-bm-display-mark-article} マークしたスレを表示
+
+@item m i
+@code{navi2ch-bm-fetch-mark-article} マークしたスレを更新
+
+@item m e
+@code{navi2ch-bm-textize-mark-article} マークしたスレをテキストで保存
+
+@item m m
+@code{navi2ch-bm-mark-marks} ある状態 (VCU) になっているスレをマーク
+@end @table
 
 @node Board Mode Key Bindings
 @appendixsec Board モードでのキーバインド
+
+Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @table @kbd
 @item s
@@ -899,136 +1044,43 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @item h
 @code{navi2ch-board-toggle-hide} 隠したスレを表示
 
+@item +
+@code{navi2ch-board-toggle-updated} 更新されたスレのみ表示
+
 @item b
 @code{navi2ch-board-toggle-bookmark} ブックマークを表示
 
-@item U
-@code{navi2ch-board-show-url} 板またはスレの URL をコピー、または板を
-ブラウザで表示
-
 @item w
-@code{navi2ch-board-write-message} レスを書き込む
+@code{navi2ch-board-write-message} スレを立てる
 
 @item 2
-@code{navi2ch-board-two-pain} 二画面表示
+@code{navi2ch-board-two-pane} 二画面表示
 
-@item A
-@code{navi2ch-board-add-global-bookmark} ブックマークに登録
-
-@item C-c C-f
-@code{'navi2ch-article-find-file} スレのログファイルを指定
-
-@item @key{RET}
-@code{navi2ch-bm-select-article} スレを表示
-
-@item [mouse-2]
-@code{navi2ch-bm-mouse-select} スレを表示
-
-@item @key{SPC}
-@code{navi2ch-bm-select-article-or-scroll-up} 一画面上へスクロール
-
-@item o
-@code{navi2ch-bm-display-article} スレを表示 (カーソルはスレに移動しない)
-
-@item i
-@code{'navi2ch-bm-fetch-article} スレを更新
-
-@item @key{DEL}
-@code{navi2ch-bm-select-article-or-scroll-down} スレを表示(すでに表示
-しているスレならばスレ画面を上にスクロール)
-
-@item @key{BS}
-@code{navi2ch-bm-select-article-or-scroll-down} スレを表示(すでに表示
-しているスレならばスレ画面を下にスクロール)
-
-@item n
-@code{next-line} 次の行に移動
-
-@item p
-@code{previous-line} 前の行に移動
-
-@item g
-@code{navi2ch-bm-goto-board} 指定した板にジャンプ
-
-@item q
-@code{navi2ch-bm-exit} 板を閉じる
-
-@item S
-@code{navi2ch-bm-sort} スレをソート
-
-@item >
-@code{end-of-buffer} 最後のスレに移動
-
-@item <
-@code{beginning-of-buffer} 最初のスレに移動
-
-@item t
-@code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
-
-@item 1
-@code{navi2ch-one-pain} 一画面表示
-
-@item 3
-@code{navi2ch-three-pain} 三画面表示
-
-@item ?
-@code{navi2ch-bm-search} 検索
-
-@item C-c C-f
-@code{navi2ch-article-find-file} スレのログファイルを指定
-
-@item C-c C-m
-@code{'navi2ch-message-pop-message-buffer}
-
-@item *
-@code{navi2ch-bm-mark} スレにマークをつける
-
-@item u
-@code{navi2ch-bm-unmark} スレのマークを解除
-
-@item m r
-@code{navi2ch-bm-mark-region} 選択領域のスレにマークをつける
-
-@item m a
-@code{navi2ch-bm-mark-all} すべてのスレにマークをつける
-
-@item m o
-@code{navi2ch-bm-display-mark-article} マークしたスレを表示
-
-@item m i
-@code{navi2ch-bm-fetch-mark-article} マークしたスレを更新
-
-@item m m
-@code{navi2ch-bm-mark-marks} ある状態(VCU)になっているファイルをマーク
-
-@item m A
-@code{navi2ch-bm-add-global-bookmark-mark-article} マークしたスレをブッ
-クマークに登録
-
-@item m e
-@code{navi2ch-bm-textize-mark-article} マークしたスレをテキストで保存
+@item @kbd{ESC} e
+@code{navi2ch-board-expire} 古いキャッシュファイルを削除する
 @end table
 
 @node Bookmark Mode Key Bindings
 @appendixsec Bookmark モードでのキーバインド
 
+Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
+
 @table @kbd
-@item O
-@code{navi2ch-bookmark-copy} 別のブックマークにコピー
-@item o
-@code{navi2ch-bookmark-move} 別のブックマークに移動
-@item C-y
-@code{navi2ch-bookmark-yank} キルリングからブックマークを張り付け
-@item C-k
-@code{navi2ch-bookmark-cut} ブックマークをカットし、キルリングに追加
 @item d
 @code{navi2ch-bookmark-delete} ブックマークを削除
-@item B
-@code{navi2ch-bookmark-goto-bookmark} 指定した ID のブックマークを開く
-@end table
 
-その他のキーバインドは Board モードと同じ。@xref{Board Mode Key
-Bindings}.
+@item C-k
+@code{navi2ch-bookmark-cut} ブックマークをカットし、キルリングに追加
+
+@item C-y
+@code{navi2ch-bookmark-yank} キルリングからブックマークを張り付け
+
+@item o
+@code{navi2ch-bookmark-move} 別のブックマークに移動
+
+@item O
+@code{navi2ch-bookmark-copy} 別のブックマークにコピー
+@end table
 
 @node Article Mode Key Bindings
 @appendixsec Article モードでのキーバインド
@@ -1040,18 +1092,23 @@ Bindings}.
 @item Q
 @code{navi2ch-article-goto-current-board} そのスレのある板を表示
 
-@item @key{SPC}
-@code{navi2ch-article-scroll-up} 一画面上へスクロール
-
 @item s
 @code{navi2ch-article-sync} スレを再読み込み
 
 @item S
-@code{navi2ch-article-sync-disable-diff} スレを差分なしで読み込み(今は
-動かないかも)
+@code{navi2ch-article-sync-disable-diff} スレを差分なしで読み込み
 
 @item r
 @code{navi2ch-article-redraw-range} レスの表示数を変更
+
+@item j
+@code{navi2ch-article-few-scroll-up} 一行上へスクロール
+
+@item k
+@code{navi2ch-article-few-scroll-down} 一行下へスクロール
+
+@item @key{SPC}
+@code{navi2ch-article-scroll-up} 一画面上へスクロール
 
 @item @key{DEL}
 @code{navi2ch-article-scroll-down} 一画面下へスクロール
@@ -1062,8 +1119,8 @@ Bindings}.
 @item w
 @code{navi2ch-article-write-message} レスを書き込む
 
-@item t
-@code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
+@item W
+@code{navi2ch-article-write-sage-message} レスを sage で書き込む
 
 @item @key{RET}
 @code{navi2ch-article-select-current-link} リンクを表示
@@ -1072,7 +1129,7 @@ Bindings}.
 @code{navi2ch-article-mouse-select} リンクをマウスで選択
 
 @item g
-@code{navi2ch-article-goto-number} 指定した番号のレスにジャンプ
+@code{navi2ch-article-goto-number-or-board} 指定したレスか板にジャンプ
 
 @item l
 @code{navi2ch-article-pop-point} 記憶されたカーソル位置にジャンプ
@@ -1123,6 +1180,10 @@ Bindings}.
 @code{navi2ch-article-uudecode-message} uuencode された記事を uudecode
 する
 
+@item @key{ESC} b
+@code{navi2ch-article-base64-decode-message} 記事を base64 デコードす
+る。
+
 @item v
 @code{navi2ch-article-view-aa} アスキーアートを表示 (要 aadisplay)
 
@@ -1147,27 +1208,18 @@ Bindings}.
 @item $
 @code{navi2ch-article-toggle-important} スレのブックマークを表示
 
-@item 1
-@code{navi2ch-one-pain} 一画面表示
-
 @item 2
-@code{navi2ch-article-two-pain} 二画面表示
-
-@item 3
-@code{navi2ch-three-pain} 三画面表示
+@code{navi2ch-article-two-pane} 二画面表示
 
 @item A
-@code{navi2ch-article-add-global-bookmark} スレをブックマークに登録
-
-@item C-c C-f
-@code{navi2ch-article-find-file} スレのログファイルを指定
+@code{navi2ch-article-add-global-bookmark} スレをグローバルブックマークに登録
 
 @item C-c C-m
 @code{navi2ch-message-pop-message-buffer} 書き込みのとき書き込み画面に
 戻る
 
-@item C-x C-k
-@code{'navi2ch-article-kill-buffer} 書き込みをキャンセル
+@item C-x k
+@code{'navi2ch-article-kill-buffer} バッファを保存して消去
 @end table
 
 @node Message Mode Key Bindings
@@ -1187,6 +1239,12 @@ Bindings}.
 @code{navi2ch-message-cite-original-from-number} 番号で指定したレスを
 引用
 
+@item C-c C-i
+@code{navi2ch-message-insert-backup} 前回書いたレスを挿入
+
+@item C-c C-b
+@code{navi2ch-base64-insert-file} ファイルを base64 エンコードして挿入
+
 @item @key{ESC} t
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
 @end table
@@ -1204,8 +1262,11 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @item a
 @samp{(´Д｀)}
 
+@item b
+@samp{ヽ(`Д´)ノ}
+
 @item f
-@samp{( ´＿ゝ‘)フーン}
+@samp{( ´_ゝ`)フーン}
 
 @item F
 @samp{(´ー｀)}
@@ -1219,6 +1280,9 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @item h
 @samp{(゜Д゜)ハァ?}
 
+@item H
+@samp{(;´Д｀)ハァハァ}
+
 @item i
 @samp{(・∀・)イイ!!}
 
@@ -1231,8 +1295,17 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @item m
 @samp{(´∀｀)}
 
+@item M
+@samp{ヽ(´▽｀)ノ}
+
 @item n
 @samp{(￣ー￣)ニヤリッ}
+
+@item N
+@samp{(´-`).。ｏＯ(なんでだろう？)}
+
+@item p
+@samp{（　゜д゜）ポカーン}
 
 @item s
 @samp{Σ(゜д゜lll)ガーン}
@@ -1420,42 +1493,11 @@ navi2ch を作ってくれた (not 1) さん、どうもありがとう。
 
 以下 README より引用
 
-
 @quotation
 @format
 謝辞::
  最初に perl 版を作った hc2ivan さんに感謝です。
 @end format
 @end quotation
-
-@ifhtml
-@html
-<hr>
-@end html
-Copyright @copyright{} 2002 by ２ちゃんねる
-
-Permission is granted to make and distribute verbatim copies of this
-manual provided the copyright notice and this permission notice are
-preserved on all copies.
-
-@ignore
-Permission is granted to process this file through TeX and print the
-results, provided the printed document carries a copying permission
-notice identical to this one except for the removal of this paragraph
-(this paragraph not being relevant to the printed manual).
-
-@end ignore
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided also that
-the sections entitled "Copying" and "GNU General Public License" are
-included exactly as in the original, and provided that the entire
-resulting derived work is distributed under the terms of a permission
-notice identical to this one.
-
-Permission is granted to copy and distribute translations of this
-manual into another language, under the above conditions for modified
-versions, except that this permission notice may be stated in a
-translation approved by the Free Software Foundation.
-@end ifhtml
 
 @bye

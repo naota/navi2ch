@@ -1,3 +1,12 @@
+2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi: 最新版に同期。
+	(Global Key Bindings): 新セクション。
+	(List Mode Key Bindings): 共通キーバインドを上記セクションに移動。
+	(Board Misc Mode Key Bindings): 新セクション。
+	(Board Mode Key Bindings): 共通キーバインドを上記セクションに移動。
+	(Bookmark Mode Key Bindings): 同上。
+
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
