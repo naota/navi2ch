@@ -219,6 +219,47 @@ LEN は RANGE で範囲を指定される list の長さ"
 (defmacro navi2ch-article-summary-element-set-access-time (element time)
   `(setq ,element (plist-put ,element :access-time ,time)))
 
+(defmacro navi2ch-article-save-view (&rest body)
+  "BODY 内で現在表示しているスレを表示しなおすときに、
+ウィンドウ内のカーソルの位置をできるだけ維持する。"
+  (let ((num (make-symbol "num"))
+	(win (make-symbol "win"))
+	(bol (make-symbol "bol"))
+	(col (make-symbol "col"))
+	(win-lin (make-symbol "win-lin"))
+	(msg-lin (make-symbol "msg-lin"))
+	(visible (make-symbol "visible")))
+    `(let ((navi2ch-article-goto-number-recenter nil)
+	   (,num (navi2ch-article-get-current-number))
+	   (,win (if (eq (window-buffer) (current-buffer))
+		     (selected-window)
+		   (get-buffer-window (current-buffer))))
+	   (,bol (navi2ch-line-beginning-position))
+	   (,col (current-column))
+	   ,win-lin ,msg-lin ,visible)
+       (save-excursion
+	 (goto-char (window-start ,win))
+	 (setq ,win-lin (count-lines (navi2ch-line-beginning-position) ,bol))
+	 (if (null ,num)
+	     (setq ,msg-lin ,win-lin)
+	   (navi2ch-article-goto-number ,num)
+	   (setq ,msg-lin
+		 (count-lines (navi2ch-line-beginning-position) ,bol))))
+       (prog1 (progn ,@body)
+	 (when ,num
+	   (setq ,visible (navi2ch-article-get-visible-numbers))
+	   (while (and (cdr ,visible)
+		       (< (car ,visible) ,num))
+	     (setq ,visible (cdr ,visible))))
+	 (navi2ch-article-goto-number (or (car ,visible)
+					  1))
+	 (forward-line ,msg-lin)
+	 (move-to-column ,col)
+	 (set-window-start ,win
+			   (navi2ch-line-beginning-position (- 1 ,win-lin)))))))
+
+(put 'navi2ch-article-save-view 'lisp-indent-function 0)
+
 (defun navi2ch-article-url-to-article (url)
   "URL から article に変換。"
   (navi2ch-multibbs-url-to-article url))
@@ -497,6 +538,58 @@ START, END, NOFIRST で範囲を指定する"
 	      (navi2ch-article-insert-message num alist))))))
     (garbage-collect) ; navi2ch-parse-message は大量にゴミを残す
     (message "inserting current messages...done")))
+
+(defun navi2ch-article-reinsert-partial-messages (start &optional end)
+  "START 番目から、最後または END 番目までのレスを挿入しなおす。"
+  (let* ((nums (mapcar 'car navi2ch-article-message-list))
+	 (len (length nums))
+	 (last (apply 'max nums))
+	 list visible start-marker start-ins-type end-marker end-ins-type)
+    (when (minusp start)
+      (setq start (+ start last 1)))
+    (when end
+      (when (minusp end)
+	(setq end (+ end last 1)))
+      (when (> start end)
+	(setq start (prog1 end
+		      (setq end start)))))
+    (dolist (num (nreverse nums))
+      (when (and (>= num start)
+		 (if end (<= num end) t)
+		 (or navi2ch-article-hide-mode
+		     navi2ch-article-important-mode
+		     (navi2ch-article-inside-range-p num
+						     navi2ch-article-view-range
+						     len)))
+	(let ((msg (navi2ch-article-get-message num)))
+	  (when msg
+	    (setq list (cons (cons num msg) list))))))
+    (if (null list)
+	(message "Out of view range")
+      (setq visible (navi2ch-article-get-visible-numbers))
+      (while (and visible
+		  (< (car visible) start))
+	(setq visible (cdr visible)))
+      (setq start-marker
+	    (if visible
+		(cdr (assq 'point (navi2ch-article-get-message (car visible))))
+	      (point-max-marker))
+	    start-ins-type (marker-insertion-type start-marker))
+      (set-marker-insertion-type start-marker nil)
+      (while (and visible
+		  (<= (car visible) end))
+	(setq visible (cdr visible)))
+      (setq end-marker
+	    (if visible
+		(cdr (assq 'point (navi2ch-article-get-message (car visible))))
+	      (point-max-marker))
+	    end-ins-type (marker-insertion-type end-marker))
+      (set-marker-insertion-type end-marker t)
+      (goto-char start-marker)
+      (delete-region start-marker end-marker)
+      (prog1 (navi2ch-article-insert-messages list nil)
+	(set-marker-insertion-type start-marker start-ins-type)
+	(set-marker-insertion-type end-marker end-ins-type)))))
 
 (defun navi2ch-article-apply-message-filters (alist)
   (catch 'loop
@@ -1364,6 +1457,24 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     (if (string-match " ID:\\([^ ]+\\)" date)
 	(match-string 1 date)
       nil)))
+
+(defun navi2ch-article-get-visible-numbers ()
+  "表示中のレスの番号のリストを得る。"
+  (let ((navi2ch-article-goto-number-recenter nil)
+	(navi2ch-article-through-previous-function
+	 (lambda () (throw 'loop nil)))
+	list num)
+    (save-excursion
+      (goto-char (point-max))
+      (setq num (navi2ch-article-get-current-number))
+      (when num
+	(navi2ch-article-goto-number num)
+	(catch 'loop
+	  (while num
+	    (setq list (cons num list))
+	    (navi2ch-article-previous-message)
+	    (setq num (navi2ch-article-get-current-number))))))
+    list))
 
 (defun navi2ch-article-show-url ()
   "url を表示して、その url を見るか kill ring にコピーする"

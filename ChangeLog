@@ -1,3 +1,21 @@
+2003-02-12  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 
+	"d" に navi2ch-popup-article-exclude-message、
+	"D" に navi2ch-popup-article-hide-messages、
+	"A" に navi2ch-popup-article-add-important-messages をバインド。
+	(navi2ch-popup-article-exclude-stack): 新変数。
+	(navi2ch-popup-article-mode): 上記変数を初期化するように。
+	(navi2ch-popup-article-exclude-message): 新関数。
+	(navi2ch-popup-article-undo-exclude-message): 新関数。
+	(navi2ch-popup-article-sift-messages): 新関数。
+	(navi2ch-popup-article-hide-messages): 新関数。
+	(navi2ch-popup-article-add-important-messages): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-save-view): 新マクロ。
+	(navi2ch-article-reinsert-partial-messages): 新関数。
+	(navi2ch-article-get-visible-numbers): 新関数。
+
 2003-02-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-default-bbscgi-path): 新変数。
