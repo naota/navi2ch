@@ -1,5 +1,8 @@
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-update-file): 304 の時に
+	'time をクリアしていたので修正。
+
 	* Makefile.am ($(ELCFILES)): ソースが変更されていた場合はすべてコ
 	ンパイルしなおすことにした。
 	(Makefile): MAINTAINER_MODE_TRUE でも依存関係をチェックするように。
