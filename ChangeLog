@@ -1,5 +1,14 @@
 2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-mona.el (navi2ch-mona-on-message-mode): 新変数。
+	(navi2ch-mona-message-mode-hook): 新関数。
+	レスを書くバッファをモナーフォントにする。
+	(navi2ch-mona-setup): navi2ch-mona-message-mode-hook を add-hook
+	するように。
+	(navi2ch-mona-undo-setup): navi2ch-mona-message-mode-hook を
+	remove-hook するように。
+	FR#531325
+
 	* navi2ch-article.el (navi2ch-article-view-article): point-stack
 	に以前の位置が保存されるよう、sync してから goto-number するように
 	した。番号付きリンクを踏んだ時に、ちょっと遅くなるかも。

@@ -197,6 +197,11 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
   :initialize 'custom-initialize-default
   :group 'navi2ch-mona)
 
+(defcustom navi2ch-mona-on-message-mode nil
+  "*non-nil の場合、レスを書く時にもモナーフォントを使う。"
+  :type 'boolean
+  :group 'navi2ch-mona)
+
 ;; defun find-face for GNU Emacs
 ;; the code is originated from apel.
 (defun navi2ch-find-face-subr (face-or-name)
@@ -269,14 +274,23 @@ nil is returned.  Otherwise the associated face object is returned."
     (when navi2ch-mona-pack-space-p
       (navi2ch-mona-pack-space))))
 
+(defun navi2ch-mona-message-mode-hook ()
+  (if navi2ch-mona-on-message-mode
+      (set (make-local-variable 'default-text-properties)
+	   (plist-put default-text-properties 'face 'navi2ch-mona-face))))
+
 (defun navi2ch-mona-setup ()
   "*モナーフォントを使うためのフックを追加する。"
   (add-hook 'navi2ch-article-arrange-message-hook
-	    'navi2ch-mona-arrange-message))
+	    'navi2ch-mona-arrange-message)
+  (add-hook 'navi2ch-message-mode-hook
+	    'navi2ch-mona-message-mode-hook))
 
 (defun navi2ch-mona-undo-setup ()
   (remove-hook 'navi2ch-article-arrange-message-hook
-	       'navi2ch-mona-arrange-message))
+	       'navi2ch-mona-arrange-message)
+  (remove-hook 'navi2ch-message-mode-hook
+	       'navi2ch-mona-message-mode-hook))
 
 (when (or navi2ch-on-emacs21 navi2ch-on-xemacs)
   (navi2ch-mona-set-mona-face)
