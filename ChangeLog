@@ -1,5 +1,16 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-find-file):
+	split-window-vertically の前に enlarge-window する。
+	(navi2ch-article-two-pain): 同上。
+	* navi2ch-board-misc.el (navi2ch-bm-select-article): 同上。
+	* navi2ch-board.el (navi2ch-board-two-pain): 同上。
+	* navi2ch.el (navi2ch-goto-url): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/280
+
+	* navi2ch-net.el: 各関数での delete-process をやめる。
+	明日のために、その2。
+
 	* navi2ch-article.el (navi2ch-article-view-article): V なスレを見
 	た時も navi2ch-history-add してみる。
 

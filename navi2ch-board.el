@@ -417,6 +417,7 @@
       (when buf
 	(if (eq buf list-buf)
 	    (split-window-horizontally navi2ch-list-window-width)
+	  (enlarge-window (frame-height))
 	  (split-window-vertically navi2ch-board-window-height)
 	  (other-window 1))
 	(switch-to-buffer buf))
