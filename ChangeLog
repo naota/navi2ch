@@ -1,3 +1,12 @@
+2002-03-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): 
+	navi2ch-board-hide-updated-article を見るよう変更
+
+	* navi2ch-vars.el (navi2ch-board-hide-updated-article): 新変数
+	(board-mode で + を押した時に hide されたスレッドを
+	表示するかどうかの選択)
+
 2002-02-24  UEYAMA Rui <rui314159@users.sourceforge.net>
 
 	* navi2ch-splash.el (navi2ch-splash-logo-ascii):

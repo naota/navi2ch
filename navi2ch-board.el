@@ -266,7 +266,10 @@
 		    (navi2ch-board-hide-mode
 		     (member artid hide))
 		    (navi2ch-board-updated-mode
-		     (navi2ch-board-updated-article-p article seen))
+		     (if navi2ch-board-hide-updated-article
+			 (and (navi2ch-board-updated-article-p article seen)
+			      (not (member artid hide)))
+		       (navi2ch-board-updated-article-p article seen)))
 		    (t
 		     (not (member artid hide))))
 	  (navi2ch-bm-insert-subject

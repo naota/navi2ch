@@ -1540,6 +1540,15 @@ URL を w3m.el で開きたいんだけど。
 (setq browse-url-browser-function 'w3m-browse-url)
 @end lisp
 
+@item Q.
+board mode で + をすると hide したスレッドも出てくるんだけど。
+
+@item A.
+@lisp
+(setq navi2ch-board-hide-updated-article t)
+@end lisp
+すれば出てこなくなる。
+
 @ignore
 @item Q.
 ふーん、Navi2ch って便利なんだね。ところで２ちゃんねるって何？

@@ -237,6 +237,11 @@ nil なら expire しない。"
   :type 'boolean
   :group 'navi2ch-board)
 
+(defcustom navi2ch-board-hide-updated-article nil
+  "*non-nil なら、navi2ch-board-updated-mode で hide されたスレッドを表示しない。"
+  :type 'boolean
+  :group 'navi2ch-board)
+
 (defcustom navi2ch-bm-subject-width 50
   "*各スレの題名の幅。"
   :type 'integer
