@@ -2559,66 +2559,79 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 `navi2ch-article-redraw-range' $B$r;H$&$J$I$7$F8!:w$7$?$$%a%C%;!<%8$r(B
 $BI=<($7$F$*$/$3$H!#(B"
   (interactive)
-  (let ((ch (navi2ch-read-char-with-retry
-	     "Search for: n)ame m)ail d)ate i)d b)ody: "
-	     nil
-	     '(?n ?m ?d ?i ?b)))
-	matched num)
-    (setq matched (cond
-		   ((eq ch ?n) (navi2ch-article-search-name))
-		   ((eq ch ?m) (navi2ch-article-search-mail))
-		   ((eq ch ?d) (navi2ch-article-search-date))
-		   ((eq ch ?i) (navi2ch-article-search-id))
-		   ((eq ch ?b) (navi2ch-article-search-body))))
-    (setq num (length matched))
-    (if (= num 0)
-	(message "No message found.")
-      (navi2ch-popup-article matched)
-      (message (format "%d message%s found."
-		       num
-		       (if (= num 1) "" "s"))))))
+  (let* ((has-id (navi2ch-article-get-current-id))
+	 (ch (navi2ch-read-char-with-retry
+	      (if has-id
+		  "Search for: n)ame m)ail d)ate i)d b)ody: "
+		"Search for: n)ame m)ail d)ate b)ody: ")
+	      nil
+	      (if has-id
+		  '(?n ?m ?d ?i ?b)
+		'(?n ?m ?d ?b)))))
+    (cond
+     ((eq ch ?n) (navi2ch-article-search-name))
+     ((eq ch ?m) (navi2ch-article-search-mail))
+     ((eq ch ?d) (navi2ch-article-search-date))
+     ((eq ch ?i) (navi2ch-article-search-id))
+     ((eq ch ?b) (navi2ch-article-search-body)))))
 
-(defun navi2ch-article-search-name ()
-  (let ((string (navi2ch-read-string "Name: "
-				     (navi2ch-article-get-current-name)
-				     'navi2ch-search-history)))
-    (navi2ch-article-search-subr 'name (regexp-quote string))))
+(defun navi2ch-article-search-name (&optional name)
+  (interactive)
+  (unless name
+    (setq name (navi2ch-read-string "Name: "
+				    (navi2ch-article-get-current-name)
+				    'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'name (regexp-quote name)))
 
-(defun navi2ch-article-search-mail ()
-  (let ((string (navi2ch-read-string "Mail: "
-				     (navi2ch-article-get-current-mail)
-				     'navi2ch-search-history)))
-    (navi2ch-article-search-subr 'mail (regexp-quote string))))
+(defun navi2ch-article-search-mail (&optional mail)
+  (interactive)
+  (unless mail
+    (setq mail (navi2ch-read-string "Mail: "
+				    (navi2ch-article-get-current-mail)
+				    'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'mail (regexp-quote mail)))
 
-(defun navi2ch-article-search-date ()
-  (let ((string (navi2ch-read-string "Date: "
-				     (navi2ch-article-get-current-date)
-				     'navi2ch-search-history)))
-    (navi2ch-article-search-subr 'date
-				 (concat (regexp-quote string)
-					 (if (navi2ch-article-get-current-id)
-					     ".* ID:" "")))))
+(defun navi2ch-article-search-date (&optional date)
+  (interactive)
+  (unless date
+    (setq date (navi2ch-read-string "Date: "
+				    (navi2ch-article-get-current-date)
+				    'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'date
+			       (concat (regexp-quote date)
+				       (if (navi2ch-article-get-current-id)
+					   ".* ID:" ""))))
 
-(defun navi2ch-article-search-id ()
-  (let ((string (navi2ch-read-string "ID: "
-				     (navi2ch-article-get-current-id)
-				     'navi2ch-search-history)))
-    (navi2ch-article-search-subr 'date
-				 (concat " ID:[^ ]*" (regexp-quote string)))))
+(defun navi2ch-article-search-id (&optional id)
+  (interactive)
+  (unless id
+    (setq id (navi2ch-read-string "ID: "
+				  (navi2ch-article-get-current-id)
+				  'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'date
+			       (concat " ID:[^ ]*" (regexp-quote id))))
 
-(defun navi2ch-article-search-body ()
-  (let ((string (navi2ch-read-string "Body: "
-				     nil
-				     'navi2ch-search-history)))
-    (navi2ch-article-search-subr 'data (regexp-quote string))))
+(defun navi2ch-article-search-body (&optional body)
+  (interactive)
+  (unless body
+    (setq body (navi2ch-read-string "Body: "
+				    nil
+				    'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'data (regexp-quote body)))
 
 (defun navi2ch-article-search-subr (field regexp)
-  (let (num-list)
+  (let (num-list len)
     (dolist (msg navi2ch-article-message-list)
       (when (and (listp (cdr msg))
 		 (string-match regexp (or (cdr (assq field (cdr msg))) "")))
 	(setq num-list (cons (car msg) num-list))))
-    (nreverse num-list)))
+    (setq len (length num-list))
+    (if (= len 0)
+	(message "No message found.")
+      (navi2ch-popup-article (nreverse num-list))
+      (message (format "%d message%s found."
+		       len
+		       (if (= len 1) "" "s"))))))
 
 (defun navi2ch-article-save-dat-file (board article)
   (interactive (list navi2ch-article-current-board

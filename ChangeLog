@@ -1,3 +1,13 @@
+2003-02-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-search): 単なるラッパーに。
+	(navi2ch-article-search-name): 単独で使い易く。
+	(navi2ch-article-search-mail): 同上。
+	(navi2ch-article-search-date): 同上。
+	(navi2ch-article-search-id): 同上。
+	(navi2ch-article-search-body): 同上。
+	(navi2ch-article-search-subr): 検索結果の表示を行う。
+
 2003-02-26  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-net-http-proxy-userid): user option に。
