@@ -1,3 +1,13 @@
+2002-08-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-send-request): 条件をちょい厳密に。
+	メッセージをちょっと多くしてみた。(うるさかったらゴメン)
+	(navi2ch-net-get-protocol): 新関数。
+	(navi2ch-net-get-content): 以下のインプリメントが間違ってた。
+	> HTTP/1.1 が有効な時も HTTP/1.0 形式のループにフォールバックするよ
+	> うに。
+	相手が HTTP/1.0 と返して来た時だけフォールバックするように。
+
 2002-08-01  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): "checking file..."
