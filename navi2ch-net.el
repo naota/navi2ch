@@ -40,6 +40,20 @@
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
+(defmacro navi2ch-net-ignore-errors (&rest body)
+  "BODY を評価し、その値を返す。
+BODY の評価中にエラー、quit が起こると nil を返す。"
+  `(condition-case nil
+       ,(cons 'progn body)
+     (error
+      (ding)
+      (message "Error")
+      nil)
+     (quit
+      (ding)
+      (message "Quit")
+      nil)))
+
 (defun navi2ch-net-cleanup ()
   (if (processp navi2ch-net-process)
       (let ((buf (process-buffer navi2ch-net-process)))
@@ -157,34 +171,36 @@
 
 (defun navi2ch-net-get-status (proc)
   "PROC の接続のステータス部を返す"
-  (save-excursion
-    (set-buffer (process-buffer proc))
-    (while (and (eq (process-status proc) 'open)
-                (goto-char (point-min))
-                (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
-      (accept-process-output proc))
-    (goto-char (point-min))
-    (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
-	(match-string 1))))
+  (navi2ch-net-ignore-errors
+   (save-excursion
+     (set-buffer (process-buffer proc))
+     (while (and (eq (process-status proc) 'open)
+		 (goto-char (point-min))
+		 (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
+       (accept-process-output proc))
+     (goto-char (point-min))
+     (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
+	 (match-string 1)))))
 
 (defun navi2ch-net-get-header (proc)
   "PROC の接続のヘッダ部を返す"
-  (or navi2ch-net-header
-      (save-excursion
-	(set-buffer (process-buffer proc))
-	(while (and (eq (process-status proc) 'open)
-		    (goto-char (point-min))
-		    (not (re-search-forward "\r\n\r?\n" nil t)))
-	  (accept-process-output proc))
-	(goto-char (point-min))
-	(re-search-forward "\r\n\r?\n")
-	(let ((end (match-end 0))
-	      list)
-	  (goto-char (point-min))
-	  (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
-	    (setq list (cons (cons (match-string 1) (match-string 2)) 
-			     list)))
-	  (setq navi2ch-net-header (nreverse list))))))
+  (navi2ch-net-ignore-errors
+   (or navi2ch-net-header
+       (save-excursion
+	 (set-buffer (process-buffer proc))
+	 (while (and (eq (process-status proc) 'open)
+		     (goto-char (point-min))
+		     (not (re-search-forward "\r\n\r?\n" nil t)))
+	   (accept-process-output proc))
+	 (goto-char (point-min))
+	 (re-search-forward "\r\n\r?\n")
+	 (let ((end (match-end 0))
+	       list)
+	   (goto-char (point-min))
+	   (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
+	     (setq list (cons (cons (match-string 1) (match-string 2)) 
+			      list)))
+	   (setq navi2ch-net-header (nreverse list)))))))
 
 (defun navi2ch-net-get-content-subr-with-temp-file (gzip-p start end)
   (if gzip-p
@@ -254,39 +270,40 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
-  (or navi2ch-net-content
-      (let* ((header (navi2ch-net-get-header proc))
-	     (gzip (and navi2ch-net-accept-gzip
-			(string-match "gzip"
-				      (or (cdr (assoc "Content-Encoding"
-						      header))
-					  ""))))
-	     p)
-	(save-excursion
-	  (set-buffer (process-buffer proc))
-	  (goto-char (point-min))
-	  (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
-	  (setq p (point))
-	  (cond ((equal (cdr (assoc "Transfer-Encoding" header))
-			"chunked")
-		 (while (> (navi2ch-net-get-chunk proc) 0)
-		   nil))
-		((assoc "Content-Length" header)
-		 (let ((size (string-to-number (cdr (assoc "Content-Length"
-							   header)))))
-		   (while (and (eq (process-status proc) 'open)
-			       (goto-char (+ p size))
-			       (not (= (point) (+ p size))))
-		     (accept-process-output))
-		   (goto-char (+ p size))))
-		((not navi2ch-net-enable-http11)
-		 (while (eq (process-status proc) 'open)
-		   (accept-process-output proc))
-		 (goto-char (point-max))))
-	  (navi2ch-net-get-content-subr gzip p (point))
-	  (setq navi2ch-net-content
-		(navi2ch-string-as-multibyte
-		 (buffer-substring-no-properties p (point))))))))
+  (navi2ch-net-ignore-errors
+   (or navi2ch-net-content
+       (let* ((header (navi2ch-net-get-header proc))
+	      (gzip (and navi2ch-net-accept-gzip
+			 (string-match "gzip"
+				       (or (cdr (assoc "Content-Encoding"
+						       header))
+					   ""))))
+	      p)
+	 (save-excursion
+	   (set-buffer (process-buffer proc))
+	   (goto-char (point-min))
+	   (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
+	   (setq p (point))
+	   (cond ((equal (cdr (assoc "Transfer-Encoding" header))
+			 "chunked")
+		  (while (> (navi2ch-net-get-chunk proc) 0)
+		    nil))
+		 ((assoc "Content-Length" header)
+		  (let ((size (string-to-number (cdr (assoc "Content-Length"
+							    header)))))
+		    (while (and (eq (process-status proc) 'open)
+				(goto-char (+ p size))
+				(not (= (point) (+ p size))))
+		      (accept-process-output))
+		    (goto-char (+ p size))))
+		 ((not navi2ch-net-enable-http11)
+		  (while (eq (process-status proc) 'open)
+		    (accept-process-output proc))
+		  (goto-char (point-max))))
+	   (navi2ch-net-get-content-subr gzip p (point))
+	   (setq navi2ch-net-content
+		 (navi2ch-string-as-multibyte
+		  (buffer-substring-no-properties p (point)))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)
@@ -296,43 +313,44 @@ TIME が `non-nil' ならば TIME より新しい時だけダウンロードする。
 $Bている時だけダウンロードする。
 OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 ダウンロードできればその接続を返す。"
-  (let (proc status)
-    (while (not status)
-      (setq proc
-	    (navi2ch-net-send-request 
-	     url "GET"
-	     (append
-	      (list (if navi2ch-net-force-update
-			(cons "Pragma" "no-cache")
-		      (and time (cons "If-Modified-Since" time)))
-		    (and navi2ch-net-accept-gzip
-			 '("Accept-Encoding" . "gzip"))
-		    (and navi2ch-net-user-agent
-			 (cons "User-Agent" navi2ch-net-user-agent)))
-	      other-header)))
-      (setq status (navi2ch-net-get-status proc))
-      (unless status
-	(message "retrying...")
-	(sit-for 3)))			; リトライする前にちょっと待つ
-    (message "checking file...")
-    (cond ((not (stringp status))
-	   (message "%serror" (current-message))
-	   (setq proc nil))
-	  ((string= status "404")
-	   (message "%snot found" (current-message))
-	   (setq proc nil))
-	  ((string= status "304")
-	   (message "%snot updated" (current-message)))
-	  ((string= status "302")
-	   (message "%smoved" (current-message)))
-	  ((string-match "\\`2[0-9][0-9]\\'" status)
-	   (message "%supdated" (current-message)))
-	  (t
-	   (message "%serror" (current-message))
-	   (setq proc nil)))
-    (if (or (not accept-status)
-	    (member status accept-status))
-	proc)))
+  (navi2ch-net-ignore-errors
+   (let (proc status)
+     (while (not status)
+       (setq proc
+	     (navi2ch-net-send-request 
+	      url "GET"
+	      (append
+	       (list (if navi2ch-net-force-update
+			 (cons "Pragma" "no-cache")
+		       (and time (cons "If-Modified-Since" time)))
+		     (and navi2ch-net-accept-gzip
+			  '("Accept-Encoding" . "gzip"))
+		     (and navi2ch-net-user-agent
+			  (cons "User-Agent" navi2ch-net-user-agent)))
+	       other-header)))
+       (setq status (navi2ch-net-get-status proc))
+       (unless status
+	 (message "retrying...")
+	 (sit-for 3)))			; リトライする前にちょっと待つ
+     (message "checking file...")
+     (cond ((not (stringp status))
+	    (message "%serror" (current-message))
+	    (setq proc nil))
+	   ((string= status "404")
+	    (message "%snot found" (current-message))
+	    (setq proc nil))
+	   ((string= status "304")
+	    (message "%snot updated" (current-message)))
+	   ((string= status "302")
+	    (message "%smoved" (current-message)))
+	   ((string-match "\\`2[0-9][0-9]\\'" status)
+	    (message "%supdated" (current-message)))
+	   (t
+	    (message "%serror" (current-message))
+	    (setq proc nil)))
+     (if (or (not accept-status)
+	     (member status accept-status))
+	 proc))))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range ヘッダを使ってファイルをダウンロードする。"
@@ -579,45 +597,46 @@ internet drafts directory for a copy.")
 (defun navi2ch-net-send-message (from mail message subject url referer bbs key)
   "メッセージを送る。
 送信成功なら t を返す"
-  (let ((param-alist
-         (list
-          (cons "submit" "書き込む")
-          (cons "FROM" (or from ""))
-          (cons "mail" (or mail ""))
-          (cons "bbs" bbs)
-          (cons "time"
-                (mapconcat 'int-to-string
-                           (let ((time (current-time)))
-                             (navi2ch-bigint-add
-                              (navi2ch-bigint-multiply
-                               (nth 0 time) (expt 2 16)) (nth 1 time)))
-                           ""))
-          (cons "MESSAGE" message)
-          (if subject
-              (cons "subject" subject)
-            (cons "key" key))))
-	(navi2ch-net-http-proxy (if navi2ch-net-send-message-use-http-proxy
-				    navi2ch-net-http-proxy)))
-    (let (proc)
-      (setq proc (navi2ch-net-send-request
-		  url "POST"
-                  (list (cons "Content-Type"
-                              "application/x-www-form-urlencoded")
-                        (cons "Cookie"
-                              (concat "NAME=" from
-                                      "; MAIL=" mail))
-                        (cons "Referer" referer))
-                  (navi2ch-net-get-param-string param-alist)))
-      (message "send message...")
-      (if (navi2ch-net-send-message-success-p proc)
-          (progn
-            (message "send message...succeed")
-	    t)
-	(let ((err (navi2ch-net-send-message-error-string proc)))
-	  (if (stringp err)
-	      (message "send message...failed: %s" err)
-	    (message "send message...failed")))
-        nil))))
+  (navi2ch-net-ignore-errors
+   (let ((param-alist
+	  (list
+	   (cons "submit" "書き込む")
+	   (cons "FROM" (or from ""))
+	   (cons "mail" (or mail ""))
+	   (cons "bbs" bbs)
+	   (cons "time"
+		 (mapconcat 'int-to-string
+			    (let ((time (current-time)))
+			      (navi2ch-bigint-add
+			       (navi2ch-bigint-multiply
+				(nth 0 time) (expt 2 16)) (nth 1 time)))
+			    ""))
+	   (cons "MESSAGE" message)
+	   (if subject
+	       (cons "subject" subject)
+	     (cons "key" key))))
+	 (navi2ch-net-http-proxy (if navi2ch-net-send-message-use-http-proxy
+				     navi2ch-net-http-proxy)))
+     (let (proc)
+       (setq proc (navi2ch-net-send-request
+		   url "POST"
+		   (list (cons "Content-Type"
+			       "application/x-www-form-urlencoded")
+			 (cons "Cookie"
+			       (concat "NAME=" from
+				       "; MAIL=" mail))
+			 (cons "Referer" referer))
+		   (navi2ch-net-get-param-string param-alist)))
+       (message "send message...")
+       (if (navi2ch-net-send-message-success-p proc)
+	   (progn
+	     (message "send message...succeed")
+	     t)
+	 (let ((err (navi2ch-net-send-message-error-string proc)))
+	   (if (stringp err)
+	       (message "send message...failed: %s" err)
+	     (message "send message...failed")))
+	 nil)))))
 
 (defun navi2ch-net-download-logo (board)
   (let* ((coding-system-for-read 'binary)
