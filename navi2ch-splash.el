@@ -45,7 +45,12 @@
 (require 'navi2ch-version)
 
 (defconst navi2ch-splash-copyright-notice
-  "Copyright (C) 2000-2003  Navi2ch Project."
+  (concat "Copyright (C) 2000-2004  Navi2ch Project.
+Copyright (C) 1993-2000 Free Software Foundation, Inc.
+Copyright (C) 1998-2001 Yuuichi Teranishi <teranisi@gohome.org>
+Copyright (C) 2000,2001 Katsumi Yamaoka <yamaoka@jpl.org>\n"
+	  (substitute-command-keys "
+Navi2ch comes with ABSOLUTELY NO WARRANTY; type \\[describe-no-warranty] for full details."))
   "A declaration of the copyright on Navi2ch.")
 
 (defconst navi2ch-splash-logo-image-name
@@ -64,8 +69,7 @@
 　■　　　　　　　　　　■■■■■■■　　　　　　　　　　■　
 　　■　　　　　　　　　■　　　　　■　　　　　　　　　■　　
 
-                            Navi2ch
-                 Navigator for 2ch for Emacsen"
+                            Navi2ch"
   "Ascii picture used to splash the startup screen.")
 
 (eval-and-compile

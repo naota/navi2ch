@@ -1,3 +1,10 @@
+2004-03-24  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-splash.el (navi2ch-splash-copyright-notice):
+	著作権表示と無保証条項を追加。
+	(navi2ch-splash-logo-ascii):
+	24 行の端末でも上記が全て表示されるように。
+
 2004-03-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-message-filter-by-message):
