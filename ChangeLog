@@ -1,3 +1,9 @@
+2002-11-18  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-save-info-keys): スペルミス
+	を修正。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/797
+
 2002-11-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-apply-filters): 

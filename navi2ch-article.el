@@ -115,7 +115,7 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
 (defvar navi2ch-article-save-info-keys
-  '(number name time hide importatnt mail kako))
+  '(number name time hide important mail kako))
 
 (defvar navi2ch-article-insert-message-separator-function
   (if (and window-system
