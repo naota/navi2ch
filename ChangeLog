@@ -2,6 +2,10 @@
 
 	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date): 
 	(interactive "P") を追加。
+	(navi2ch-bm-exit): 単に板一覧バッファに切り替えるのではなく
+	navi2ch-list を実行するように。
+	板一覧バッファがなくなったときに空バッファに切り替えられたので。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/97
 
 2002-06-15  Nanashi San  <nanashi@users.sourceforge.net>
 

@@ -229,7 +229,7 @@
     (let ((win (get-buffer-window navi2ch-list-buffer-name)))
       (if win
 	  (select-window win)
-	(switch-to-buffer navi2ch-list-buffer-name)))))
+	(navi2ch-list)))))
 
 (defun navi2ch-bm-goto-state-column ()
   (beginning-of-line)
