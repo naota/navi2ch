@@ -25,23 +25,16 @@
 ;; http://salad.2ch.net/bbstable.html から、作った方がいいんかな。
 
 ;;; Code:
+(provide 'navi2ch-list)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-util)
-(require 'navi2ch-board)
-(require 'navi2ch-net)
 
-(require 'navi2ch-search)
-(require 'navi2ch-history)
-(require 'navi2ch-bookmark)
-(require 'navi2ch-articles)
-
-(require 'navi2ch-face)
-(require 'navi2ch-vars)
+(require 'navi2ch)
 
 (defvar navi2ch-list-mode-map nil)
 (unless navi2ch-list-mode-map
   (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-view-map)
     (define-key map "\r" 'navi2ch-list-select-current-board)
     (define-key map "q" 'navi2ch-exit)
     (define-key map "z" 'navi2ch-suspend)
@@ -49,26 +42,15 @@
     (define-key map " " 'navi2ch-list-select-current-board)
     (define-key map [del] 'scroll-down)
     (define-key map [backspace] 'scroll-down)
-    (define-key map "n" 'next-line)
-    (define-key map "p" 'previous-line)
     (define-key map "a" 'navi2ch-list-add-bookmark)
     (define-key map "b" 'navi2ch-list-toggle-bookmark)
-    (define-key map "t" 'navi2ch-toggle-offline)
     (navi2ch-define-mouse-key map 2 'navi2ch-list-mouse-select)
-    (define-key map "g" 'navi2ch-list-goto-board)
     (define-key map "/" 'navi2ch-list-toggle-open)
     (define-key map "[" 'navi2ch-list-open-all-category)
     (define-key map "]" 'navi2ch-list-close-all-category)
-    (define-key map ">" 'navi2ch-end-of-buffer)
-    (define-key map "<" 'beginning-of-buffer)
-    (define-key map "1" 'navi2ch-one-pain)
-    (define-key map "2" 'navi2ch-list-two-pain)
-    (define-key map "3" 'navi2ch-three-pain)
-    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
-    (define-key map "\C-c\C-u" 'navi2ch-goto-url)
+    (define-key map "2" 'navi2ch-list-two-pane)
     (define-key map "D" 'navi2ch-list-delete-global-bookmark)
     (define-key map "C" 'navi2ch-list-change-global-bookmark)
-    (define-key map "B" 'navi2ch-bookmark-goto-bookmark)
     (define-key map "?" 'navi2ch-list-search)
     (define-key map "e" 'navi2ch-list-expire)
     (setq navi2ch-list-mode-map map)))
@@ -478,7 +460,7 @@
       (setq alist (append (cdr (assq 'child x)) alist)))
     alist))
 
-(defun navi2ch-list-two-pain ()
+(defun navi2ch-list-two-pane ()
   (interactive)
   (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
 	 (board-buf (get-buffer navi2ch-board-buffer-name))
@@ -646,6 +628,5 @@
 	  ((eq ch ?c) (navi2ch-list-expire-current-category 'ask))
 	  ((eq ch ?a) (navi2ch-list-expire-all 'ask)))))
 
-(provide 'navi2ch-list)
-
+(run-hooks 'navi2ch-list-load-hook)
 ;;; navi2ch-list.el ends here

@@ -1,9 +1,11 @@
-lisp_LISP = navi2ch-article.el navi2ch-articles.el \
-	navi2ch-board-misc.el navi2ch-board.el navi2ch-bookmark.el \
-	navi2ch-face.el navi2ch-head.el navi2ch-history.el \
-	navi2ch-list.el navi2ch-message.el navi2ch-mona.el \
-	navi2ch-net.el navi2ch-popup-article.el navi2ch-search.el \
-	navi2ch-util.el navi2ch-vars.el navi2ch-version.el navi2ch.el
+lisp_LISP = navi2ch-vars.el navi2ch-face.el navi2ch-util.el \
+	navi2ch-net.el navi2ch-list.el navi2ch-article.el \
+	navi2ch-popup-article.el navi2ch-board-misc.el \
+	navi2ch-board.el navi2ch-articles.el navi2ch-bookmark.el \
+	navi2ch-history.el navi2ch-search.el navi2ch-message.el \
+	navi2ch-version.el navi2ch.el \
+	navi2ch-head.el navi2ch-mona.el
+
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) navi2ch-version.el.in
 BUILT_SOURCES = navi2ch-version.el
 SUBDIRS = doc
@@ -19,18 +21,21 @@ snap:
 	  make VERSION=@VERSION@-`date +%y%m%d` dist; \
 	  rm -f navi2ch-version.el
 
-# defmacro / defsubst dependencies
-# should be fixed: thre are many defsubst cross references between files.
+recompile:
+	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
+
+# defmacro / defsubst / toplevel dependencies
+# # should be fixed: thre are some defsubst cross references between files.
+# maybe fixed: thanks (not 1) san!
+navi2ch-util.elc: navi2ch-vars.elc
 navi2ch-article.elc: navi2ch-util.elc
 navi2ch-board-misc.elc: navi2ch-article.elc navi2ch-util.elc
 navi2ch-list.elc: navi2ch-util.elc
-navi2ch-board.elc: navi2ch-article.elc navi2ch-util.elc
-navi2ch-bookmark.elc: navi2ch-article.elc
-navi2ch-search.elc: navi2ch-article.elc
 navi2ch-popup-article.elc: navi2ch-article.elc
 # board-misc delivered modes
 navi2ch-articles.elc: navi2ch-board-misc.elc
 navi2ch-board.elc: navi2ch-board-misc.elc
 navi2ch-bookmark.elc: navi2ch-board-misc.elc
 navi2ch-history.elc: navi2ch-board-misc.elc
-navi2ch-search.elc: navi2ch-board-misc.elc
+navi2ch-search.elc: navi2ch-board-misc.elc navi2ch-board.elc
+navi2ch.elc: navi2ch-version.elc

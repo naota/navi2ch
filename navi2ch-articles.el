@@ -25,13 +25,16 @@
 ;; 
 
 ;;; Code:
+(provide 'navi2ch-articles)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-board-misc)
+
+(require 'navi2ch)
 
 (defvar navi2ch-articles-mode-map nil)
 (unless navi2ch-articles-mode-map
-  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
     (define-key map "d" 'navi2ch-articles-delete)
     (setq navi2ch-articles-mode-map map)))
@@ -65,7 +68,8 @@
       (set-buffer item)
       navi2ch-article-current-board)))
 
-(defun navi2ch-articles-exit ())
+(defun navi2ch-articles-exit ()
+  (run-hooks 'navi2ch-articles-exit-hook))
 
 ;; regist board
 (navi2ch-bm-regist-board 'articles 'navi2ch-articles
@@ -124,8 +128,7 @@
   (setq buffer-read-only t)
   (use-local-map navi2ch-articles-mode-map)
   (navi2ch-articles-setup-menu)
-  (run-hooks 'navi2ch-articles-mode-hook))
+  (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-articles-mode-hook))
 
-(provide 'navi2ch-articles)
-        
+(run-hooks 'navi2ch-articles-load-hook)        
 ;;; navi2ch-articles.el ends here

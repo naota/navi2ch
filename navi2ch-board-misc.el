@@ -21,16 +21,16 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch-board-misc)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-article)
-(require 'navi2ch-message)
-(require 'navi2ch-face)
-(require 'navi2ch-vars)
+
+(require 'navi2ch)
 
 (defvar navi2ch-bm-mode-map nil)
 (unless navi2ch-bm-mode-map
   (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-view-map)
     (define-key map "\r" 'navi2ch-bm-select-article)
     (navi2ch-define-mouse-key map 2 'navi2ch-bm-mouse-select)
     (define-key map " " 'navi2ch-bm-select-article-or-scroll-up)
@@ -43,19 +43,10 @@
     (define-key map "p" 'navi2ch-bm-previous-line)
     (define-key map "U" 'navi2ch-bm-show-url)
     (define-key map "l" 'navi2ch-bm-view-logo)
-    (define-key map "g" 'navi2ch-bm-goto-board)
-    (define-key map "B" 'navi2ch-bookmark-goto-bookmark)
     (define-key map "A" 'navi2ch-bm-add-global-bookmark)
     (define-key map "q" 'navi2ch-bm-exit)
     (define-key map "S" 'navi2ch-bm-sort)
-    (define-key map ">" 'navi2ch-end-of-buffer)
-    (define-key map "<" 'beginning-of-buffer)
-    (define-key map "t" 'navi2ch-toggle-offline)
-    (define-key map "1" 'navi2ch-one-pain)
-    (define-key map "3" 'navi2ch-three-pain)
     (define-key map "?" 'navi2ch-bm-search)
-    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
-    (define-key map "\C-c\C-u" 'navi2ch-goto-url)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
 
     ;; mark command
@@ -158,7 +149,7 @@
 	  '("----")
 	  menu-spec))
 
-(defvar navi2ch-list-navi2ch-category-alist nil) ; コンパイルを通す為
+;; (defvar navi2ch-list-navi2ch-category-alist nil) ; コンパイルを通す為
   
 (defun navi2ch-bm-regist-board (type open-func &optional board)
   "TYPE な板を開く関数 OPEN-FUNC を `navi2ch-bm-board-type-alist' に登
@@ -216,6 +207,7 @@
     (when x
       (delete-windows-on x)))
   (navi2ch-bm-exit-internal)
+  (run-hooks 'navi2ch-bm-exit-hook)
   (when (get-buffer navi2ch-board-buffer-name)
     (delete-windows-on navi2ch-board-buffer-name)
     (bury-buffer navi2ch-board-buffer-name))
@@ -723,6 +715,5 @@ ARG が non-nil なら移動方向を逆にする。"
   (setq navi2ch-bm-fetched-article-list
 	(navi2ch-load-info navi2ch-bm-fetched-info-file)))
    
-(provide 'navi2ch-board-misc)
-
+(run-hooks 'navi2ch-board-misc-load-hook)
 ;;; navi2ch-board-misc.el ends here

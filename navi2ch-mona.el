@@ -36,8 +36,9 @@
 ;; を加えて。
 
 ;;; Code:
+(provide 'navi2ch-mona)
 
-(require 'navi2ch-article)
+(require 'navi2ch)
 
 (defvar navi2ch-mona-enable nil
   "mona フォントを使用するかどうか")
@@ -213,6 +214,5 @@
       )
   )
 
-(provide 'navi2ch-mona)
-
+(run-hooks 'navi2ch-mona-load-hook)
 ;;; navi2ch-mona.el ends here

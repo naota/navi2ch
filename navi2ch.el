@@ -21,14 +21,24 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch)
 
 (eval-when-compile (require 'cl))
+
+;; BEWARE: order is important.
+(require 'navi2ch-vars)
+(require 'navi2ch-face)
 (require 'navi2ch-util)
 (require 'navi2ch-net)
-(require 'navi2ch-board)
-(require 'navi2ch-board-misc)
 (require 'navi2ch-list)
 (require 'navi2ch-article)
+(require 'navi2ch-popup-article)
+(require 'navi2ch-board-misc)
+(require 'navi2ch-board)
+(require 'navi2ch-articles)
+(require 'navi2ch-bookmark)
+(require 'navi2ch-history)
+(require 'navi2ch-search)
 (require 'navi2ch-message)
 (require 'navi2ch-version)
 
@@ -96,7 +106,7 @@ SUSPEND が non-nil なら buffer を消さない"
   (interactive)
   (navi2ch-exit 'suspend))
 
-(defun navi2ch-three-pain ()
+(defun navi2ch-three-pane ()
   (interactive)
   (delete-other-windows)
   (let ((list-buf (get-buffer navi2ch-list-buffer-name))
@@ -122,7 +132,7 @@ SUSPEND が non-nil なら buffer を消さない"
       (switch-to-buffer art-buf))
     (select-window (get-buffer-window buf))))
 
-(defun navi2ch-one-pain ()
+(defun navi2ch-one-pane ()
   (interactive)
   (let ((list-buf (get-buffer navi2ch-list-buffer-name))
         (board-buf (get-buffer navi2ch-board-buffer-name))
@@ -207,6 +217,5 @@ SUSPEND が non-nil なら buffer を消さない"
 		  navi2ch-list-category-list)))
 	  (member host list)))))
                       
-(provide 'navi2ch)
-
+(run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

@@ -21,17 +21,16 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
-(require 'navi2ch-vars)
-(eval-when-compile
-  (provide 'navi2ch-popup-article)
-  (require 'navi2ch-article))
+(provide 'navi2ch-popup-article)
+
+(require 'navi2ch)
 
 (defvar navi2ch-popup-article-buffer-name "*navi2ch popup article*")
 (defvar navi2ch-popup-article-window-configuration nil)
-(defvar navi2ch-popup-article-mode-hook nil)
 (defvar navi2ch-popup-article-mode-map nil)
 (unless navi2ch-popup-article-mode-map
   (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-view-map)
     (define-key map " " 'navi2ch-article-scroll-up)
     (define-key map [del] 'navi2ch-article-scroll-down)
     (define-key map [backspace] 'navi2ch-article-scroll-down)
@@ -55,12 +54,11 @@
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
     (define-key map "\eb" 'navi2ch-article-base64-decode-message)
     (define-key map "v" 'navi2ch-article-view-aa)
-    (define-key map "1" 'navi2ch-one-pain)
-    (define-key map "3" 'navi2ch-three-pain)
     (setq navi2ch-popup-article-mode-map map)))
     
 (defun navi2ch-popup-article-exit ()
   (interactive)
+  (run-hooks 'navi2ch-popup-article-exit-hook)
   (bury-buffer)
   (set-window-configuration navi2ch-popup-article-window-configuration))
   
@@ -123,5 +121,5 @@
      (navi2ch-popup-article-exit)))
   (force-mode-line-update t))
 
-(provide 'navi2ch-popup-article)
+(run-hooks 'navi2ch-popup-article-load-hook)
 ;;; navi2ch-popup-article.el ends here

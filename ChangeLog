@@ -1,4 +1,75 @@
 2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
+	require / provide の方法を変更した。
+	provide をファイルの先頭に移動。(こういうのも OK みたい)
+	ほぼ全てのファイルの require を navi2ch のみにして、navi2ch.el で
+	順番に気を付けて require することにした。
+	Makefile を使わない場合は navi2ch.el で require してる順番でバイト
+	コンパイルしてください。
+
+	* navi2ch*.el: 上記の変更。
+
+	* Makefile.am (lisp_LISP): コンパイルすべき順番にした。
+	(recompile): 新ターゲット。全てのファイルをバイトコンパイルする。
+
+2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
+	hook の追加。provide の後で navi2ch-hoge-load-hook を実行、-exit 
+	の最初に -exit-hook を実行するようにしました。board 系のモードでは、
+	-mode-hook の前に navi2ch-bm-mode-hook も実行するようにしました。
+
+	* navi2ch-articles.el (navi2ch-articles-mode): bm-mode-hook も実行。
+	* navi2ch-board.el (navi2ch-board-mode): 同上。
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode): 同上。
+	* navi2ch-history.el (navi2ch-history-mode): 同上。
+	* navi2ch-search.el (navi2ch-history-mode): 同上。
+	* navi2ch-article.el (-exit): -exit-hook の実行。
+	(toplevel): -load-hook の実行。
+	* navi2ch-articles.el: 同上。
+	* navi2ch-board-misc.el: 同上。
+	* navi2ch-board.el: 同上。
+	* navi2ch-bookmark.el: 同上。
+	* navi2ch-head.el: 同上。
+	* navi2ch-history.el: 同上。
+	* navi2ch-message.el: 同上。
+	* navi2ch-popup-article.el: 同上。
+	* navi2ch-search.el: 同上。
+	* navi2ch-face.el (toplevel): -load-hook の実行。
+	* navi2ch-list.el: 同上。
+	* navi2ch-mona.el: 同上。
+	* navi2ch-net.el: 同上。
+	* navi2ch-util.el: 同上。
+	* navi2ch.el: 同上。
+	* navi2ch-vars.el (toplevel): -load-hook の実行。
+	hook の defvar 追加。
+
+2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
+	keymap の掃除。同じバインドが色々なファイルにまたがってると更新し
+	忘れちゃいそうなので。あと、copy-keymap から set-keymap-panret に
+	変えたので、(define-key navi2ch-bm-mode-map ...) すれば全ての 
+	board 系のモードで有効になります。
+
+	* navi2ch-message.el (navi2ch-message-mode-map):
+	navi2ch-global-map を set-keymap-parent する。(必要かなあ)
+
+	* navi2ch-articles.el (navi2ch-articles-mode-map):
+	navi2ch-bm-mode-map を copy-keymap -> set-keymap-parent。
+	* navi2ch-board.el (navi2ch-board-mode-map): 同上。
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map): 同上。
+	* navi2ch-history.el (navi2ch-history-mode-map): 同上。
+	* navi2ch-search.el (navi2ch-search-mode-map): 同上。
+
+	* navi2ch-article.el (navi2ch-article-mode-map):
+	navi2ch-global-view-map を set-keymap-parent し、共通部を削除。
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 同上。
+	* navi2ch-head.el (navi2ch-head-mode-map): 同上。
+	* navi2ch-list.el (navi2ch-list-mode-map): 同上。
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 同上。
+
+	* navi2ch-vars.el (navi2ch-global-map): 新変数。
+	(navi2ch-global-view-map): 新変数。
+
+	* navi2ch.elその他: pain -> pane ;)
+
+2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-sync): やっぱ条件変更。
 	force を指定しない場合は「re-sync kako article?」と聞かず、過去ロ

@@ -21,11 +21,13 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
-(eval-when-compile (require 'cl))
+(provide 'navi2ch-util)
 
-(require 'navi2ch-vars)
+(eval-when-compile (require 'cl))
 (require 'timezone)
 (require 'browse-url)
+
+(require 'navi2ch-vars)
 
 (unless (and (fboundp 'base64-encode-region)
 	     (fboundp 'base64-decode-region))
@@ -506,5 +508,5 @@ base64デコードすべき内容がない場合はエラーになる。"
   (when (and url (string-match "http://\\([^/]+\\)" url))
     (match-string 1 url)))
 
-(provide 'navi2ch-util)
+(run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

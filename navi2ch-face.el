@@ -25,6 +25,7 @@
 ;; 
 
 ;;; Code:
+(provide 'navi2ch-face)
 
 (defgroup navi2ch-face nil
   "Navi2ch, FAces."
@@ -163,6 +164,5 @@
   "引用の face"
   :group 'navi2ch-face)
 
-(provide 'navi2ch-face)
-
+(run-hooks 'navi2ch-face-load-hook)
 ;;; navi2ch-face.el ends here

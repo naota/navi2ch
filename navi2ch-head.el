@@ -29,18 +29,20 @@
 ;;;; navi2ch-head.el
 
 ;; Preamble
+(provide 'navi2ch-head)
 
-(require 'navi2ch-net)
-(require 'navi2ch-vars)
+(require 'navi2ch)
 
 ;; navi2ch-head-mode
 
 (defvar navi2ch-head-mode-map nil
   "ローカルルールのビュワーのキーマップ")
 (unless navi2ch-head-mode-map
-  (setq navi2ch-head-mode-map (make-sparse-keymap))
-  (define-key navi2ch-head-mode-map "q" 'navi2ch-head-exit)
-  (define-key navi2ch-head-mode-map "l" 'navi2ch-head-exit))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-view-map)
+    (define-key map "q" 'navi2ch-head-exit)
+    (define-key map "l" 'navi2ch-head-exit)
+    (setq navi2ch-head-mode-map map)))
 
 (defun navi2ch-head-mode ()
   "\\{navi2ch-head-mode-map}"
@@ -48,13 +50,15 @@
   (setq major-mode 'navi2ch-head-mode)
   (setq mode-name "Navi2ch Head")
   (setq buffer-read-only t)
-  (use-local-map navi2ch-head-mode-map)) 
+  (use-local-map navi2ch-head-mode-map)
+  (run-hooks 'navi2ch-head-mode-hook))
 
 ;; Functions
 
 (defun navi2ch-head-exit ()
   "ローカルルールバッファを消す。どこへ行くかはemacsまかせ。これ直さないと…FIXME"
   (interactive)
+  (run-hooks 'navi2ch-head-exit-hook)
   (let* ((buf (current-buffer)))
     (delete-windows-on buf)
     (kill-buffer buf)))
@@ -88,5 +92,5 @@
       (set-buffer-modified-p nil)
       (navi2ch-head-mode))))
 
-(provide 'navi2ch-head)
+(run-hooks 'navi2ch-head-load-hook)
 ;;; navi2ch-head.el ends here

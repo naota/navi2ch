@@ -21,22 +21,17 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch-article)
 
 (eval-when-compile (require 'cl))
-
-(eval-when-compile
-  (provide 'navi2ch-article)
-  (require 'navi2ch))
-
-(require 'navi2ch-net)
 (require 'browse-url)
-(require 'navi2ch-vars)
-(require 'navi2ch-face)
-(require 'navi2ch-popup-article)
+
+(require 'navi2ch)
 
 (defvar navi2ch-article-mode-map nil)
 (unless navi2ch-article-mode-map
   (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-view-map)
     (define-key map "q" 'navi2ch-article-exit)
     (define-key map "Q" 'navi2ch-article-goto-current-board)
     (define-key map "s" 'navi2ch-article-sync)
@@ -50,17 +45,14 @@
     (define-key map "\177" 'navi2ch-article-scroll-down)
     (define-key map "w" 'navi2ch-article-write-message)
     (define-key map "W" 'navi2ch-article-write-sage-message)
-    (define-key map "t" 'navi2ch-toggle-offline)
     (define-key map "\r" 'navi2ch-article-select-current-link)
     (navi2ch-define-mouse-key map 2 'navi2ch-article-mouse-select)
     (define-key map "g" 'navi2ch-article-goto-number-or-board)
     ;; (define-key map "g" 'navi2ch-article-goto-number)
-    (define-key map "G" 'navi2ch-list-goto-board)
     (define-key map "l" 'navi2ch-article-pop-point)
     (define-key map "L" 'navi2ch-article-pop-poped-point)
     (define-key map "m" 'navi2ch-article-push-point)
     (define-key map "U" 'navi2ch-article-show-url)
-  
     (define-key map "." 'navi2ch-article-redisplay-current-message)
     (define-key map "p" 'navi2ch-article-previous-message)
     (define-key map "n" 'navi2ch-article-next-message)
@@ -80,13 +72,8 @@
     (define-key map "a" 'navi2ch-article-add-important-message)
     (define-key map "h" 'navi2ch-article-toggle-hide)
     (define-key map "$" 'navi2ch-article-toggle-important)
-    (define-key map "1" 'navi2ch-one-pain)
-    (define-key map "2" 'navi2ch-article-two-pain)
-    (define-key map "3" 'navi2ch-three-pain)
+    (define-key map "2" 'navi2ch-article-two-pane)
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
-    (define-key map "B" 'navi2ch-bookmark-goto-bookmark)
-    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
-    (define-key map "\C-c\C-u" 'navi2ch-goto-url)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "\C-xk" 'navi2ch-article-kill-buffer)
     (setq navi2ch-article-mode-map map)))
@@ -530,6 +517,7 @@ NUM $B$r;XDj$7$J$$>l9g$O(B `navi2ch-article-max-buffers' $B$r;HMQ!#(B"
 (defun navi2ch-article-exit ()
   (interactive)
   ;; (navi2ch-article-add-number)
+  (run-hooks 'navi2ch-article-exit-hook)
   (let ((buf (current-buffer)))
     (if (null navi2ch-article-message-list)
         (progn
@@ -1116,7 +1104,7 @@ article buffer $B$+$iH4$1$k$J$i(B 'quit $B$rJV$9!#(B"
 		 (message "Don't through previous article"))))
       (message "Don't through previous article"))))
 
-(defun navi2ch-article-two-pain ()
+(defun navi2ch-article-two-pane ()
   (interactive)
   (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
          (board-buf (get-buffer navi2ch-board-buffer-name))
@@ -1475,6 +1463,5 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
   (unless navi2ch-article-important-mode
     (navi2ch-article-load-number)))
 
-(provide 'navi2ch-article)
-
+(run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

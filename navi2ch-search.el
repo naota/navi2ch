@@ -40,17 +40,16 @@
 
 
 ;;; Code:
+(provide 'navi2ch-search)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-board-misc)
-(require 'navi2ch-board)
-(eval-when-compile
-  (provide 'navi2ch-search)
-  (require 'navi2ch-list))
+
+(require 'navi2ch)
 
 (defvar navi2ch-search-mode-map nil)
 (unless navi2ch-search-mode-map
-  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-bm-mode-map)
     (define-key map "Q" 'navi2ch-search-return-previous-board-maybe)
     (setq navi2ch-search-mode-map map)))
   
@@ -83,7 +82,8 @@
 (defun navi2ch-search-get-article (item)
   (cdr item))
 
-(defun navi2ch-search-exit ())
+(defun navi2ch-search-exit ()
+  (run-hooks 'navi2ch-search-exit-hook))
 
 ;; regist board
 (navi2ch-bm-regist-board 'search 'navi2ch-search
@@ -167,7 +167,7 @@
   (setq buffer-read-only t)
   (use-local-map navi2ch-search-mode-map)
   (navi2ch-search-setup-menu)
-  (run-hooks 'navi2ch-search-mode-hook))
+  (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-search-mode-hook))
 
 (defun navi2ch-search (&rest args)
   (navi2ch-search-mode)
@@ -214,5 +214,5 @@
     (navi2ch-list-get-normal-category-list
      navi2ch-list-category-list))))
 
-(provide 'navi2ch-search)
+(run-hooks 'navi2ch-search-load-hook)
 ;;; navi2ch-search.el ends here

@@ -25,6 +25,7 @@
 ;; 
 
 ;;; Code:
+(provide 'navi2ch-vars)
 
 (defgroup navi2ch nil
   "*Navigator for 2ch."
@@ -636,27 +637,94 @@ non-nil なら付加する。"
 (defvar navi2ch-before-startup-hook nil)
 (defvar navi2ch-after-startup-hook nil)
 (defvar navi2ch-list-mode-hook nil)
+(defvar navi2ch-list-exit-hook nil)
 (defvar navi2ch-list-after-sync-hook nil)
 (defvar navi2ch-board-mode-hook nil)
+(defvar navi2ch-board-exit-hook nil)
 (defvar navi2ch-board-before-sync-hook nil)
 (defvar navi2ch-board-after-sync-hook nil)
 (defvar navi2ch-board-select-board-hook nil)
 (defvar navi2ch-article-mode-hook nil)
+(defvar navi2ch-article-exit-hook nil)
 (defvar navi2ch-article-before-sync-hook nil)
 (defvar navi2ch-article-after-sync-hook nil)
 (defvar navi2ch-article-arrange-message-hook nil)
 (defvar navi2ch-bookmark-mode-hook nil)
+(defvar navi2ch-bookmark-exit-hook nil)
 (defvar navi2ch-articles-mode-hook nil)
+(defvar navi2ch-articles-exit-hook nil)
 (defvar navi2ch-history-mode-hook nil)
+(defvar navi2ch-history-exit-hook nil)
 (defvar navi2ch-search-mode-hook nil)
+(defvar navi2ch-search-exit-hook nil)
 (defvar navi2ch-message-mode-hook nil)
+(defvar navi2ch-message-exit-hook nil)
 (defvar navi2ch-message-before-send-hook nil)
 (defvar navi2ch-message-after-send-hook nil)
 (defvar navi2ch-message-setup-message-hook nil)
 (defvar navi2ch-message-setup-sage-message-hook nil)
+(defvar navi2ch-bm-mode-hook nil)
+(defvar navi2ch-bm-exit-hook nil)
+(defvar navi2ch-popup-article-mode-hook nil)
+(defvar navi2ch-popup-article-exit-hook nil)
+(defvar navi2ch-head-mode-hook nil)
+(defvar navi2ch-head-exit-hook nil)
+;; load hooks
+(defvar navi2ch-article-load-hook nil)
+(defvar navi2ch-articles-load-hook nil)
+(defvar navi2ch-board-misc-load-hook nil)
+(defvar navi2ch-board-load-hook nil)
+(defvar navi2ch-bookmark-load-hook nil)
+(defvar navi2ch-face-load-hook nil)
+(defvar navi2ch-head-load-hook nil)
+(defvar navi2ch-history-load-hook nil)
+(defvar navi2ch-list-load-hook nil)
+(defvar navi2ch-message-load-hook nil)
+(defvar navi2ch-mona-load-hook nil)
+(defvar navi2ch-net-load-hook nil)
+(defvar navi2ch-popup-article-load-hook nil)
+(defvar navi2ch-search-load-hook nil)
+(defvar navi2ch-util-load-hook nil)
+(defvar navi2ch-vars-load-hook nil)
+(defvar navi2ch-load-hook nil)
 
 ;;; errors symbols
 (put 'navi2ch-update-failed 'error-conditions '(error navi2ch-errors navi2ch-update-failed))
 
-(provide 'navi2ch-vars)
+;;; global keybindings
+;; 別の場所の方がいいんかな。
+(defvar navi2ch-global-map nil
+  "navi2ch のどのモードでも使える keymap。")
+(unless navi2ch-global-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
+    (define-key map "\C-c\C-g" 'navi2ch-list-goto-board)
+    (define-key map "\C-c\C-t" 'navi2ch-toggle-offline)
+    (define-key map "\C-c\C-u" 'navi2ch-goto-url)
+    (define-key map "\C-c\C-v" 'navi2ch-version)
+    (define-key map "\C-c1" 'navi2ch-one-pane)
+    ;; (define-key map "\C-c2" 'navi2ch-two-pane)
+    (define-key map "\C-c3" 'navi2ch-three-pane)
+    (setq navi2ch-global-map map)))
+
+(defvar navi2ch-global-view-map nil
+  "navi2ch の message モード以外で使える keymap。")
+(unless navi2ch-global-view-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-map)
+    (define-key map "1" 'navi2ch-one-pane)
+    ;; (define-key map "2" 'navi2ch-two-pane)
+    (define-key map "3" 'navi2ch-three-pane)
+    (define-key map "<" 'beginning-of-buffer)
+    (define-key map ">" 'navi2ch-end-of-buffer)
+    (define-key map "B" 'navi2ch-bookmark-goto-bookmark)
+    (define-key map "g" 'navi2ch-list-goto-board)
+    (define-key map "G" 'navi2ch-list-goto-board)
+    (define-key map "n" 'next-line)
+    (define-key map "p" 'previous-line)
+    (define-key map "t" 'navi2ch-toggle-offline)
+    (define-key map "V" 'navi2ch-version)
+    (setq navi2ch-global-view-map map)))
+
+(run-hooks 'navi2ch-vars-load-hook)
 ;;; navi2ch-vars.el ends here

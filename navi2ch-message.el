@@ -21,13 +21,14 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch-message)
 
-(require 'navi2ch-article)
-(require 'navi2ch-vars)
+(require 'navi2ch)
 
 (defvar navi2ch-message-mode-map nil)
 (unless navi2ch-message-mode-map
   (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-global-map)
     (define-key map "\C-c\C-c" 'navi2ch-message-send-message)
     (define-key map "\C-c\C-k" 'navi2ch-message-exit)
     (define-key map "\C-c\C-y" 'navi2ch-message-cite-original)
@@ -213,6 +214,7 @@
     
 (defun navi2ch-message-exit (&optional after-send)
   (interactive)
+  (run-hooks 'navi2ch-message-exit-hook)
   (when (navi2ch-message-kill-message after-send)
     ;; むぅ、set-window-configuration を使うとカーソル位置が変になるんかい？
     (set-window-configuration navi2ch-message-window-configuration)
@@ -272,6 +274,5 @@
 ;; ロードした時に呼ばれる
 (navi2ch-message-add-aa navi2ch-message-aa-alist)
 				    
-(provide 'navi2ch-message)
-
+(run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

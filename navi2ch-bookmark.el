@@ -25,13 +25,16 @@
 ;; 
 
 ;;; Code:
+(provide 'navi2ch-bookmark)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-board-misc)
+
+(require 'navi2ch)
 
 (defvar navi2ch-bookmark-mode-map nil)
 (unless navi2ch-bookmark-mode-map
-  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key map "q" 'navi2ch-bookmark-exit)
     (define-key map "i" 'navi2ch-bookmark-fetch-article)
     (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
@@ -74,7 +77,8 @@
 			 (cddr (assoc navi2ch-bookmark-current-bookmark-id
 				      navi2ch-bookmark-list)))))))
 
-(defun navi2ch-bookmark-exit ())
+(defun navi2ch-bookmark-exit ()
+  (run-hooks 'navi2ch-bookmark-exit-hook))
 
 ;; regist board
 (navi2ch-bm-regist-board 'bookmark 'navi2ch-bookmark)
@@ -288,7 +292,7 @@
   (setq buffer-read-only t)
   (use-local-map navi2ch-bookmark-mode-map)
   (navi2ch-bookmark-setup-menu)
-  (run-hooks 'navi2ch-bookmark-mode-hook))
+  (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-bookmark-mode-hook))
 
 (defun navi2ch-bookmark-save-info ()
   (navi2ch-save-info
@@ -351,6 +355,5 @@
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article))
 
-(provide 'navi2ch-bookmark)
-	
+(run-hooks 'navi2ch-bookmark-load-hook)	
 ;;; navi2ch-bookmark.el ends here

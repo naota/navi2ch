@@ -25,13 +25,16 @@
 ;; 
 
 ;;; Code:
+(provide 'navi2ch-history)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-board-misc)
+
+(require 'navi2ch)
 
 (defvar navi2ch-history-mode-map nil)
 (unless navi2ch-history-mode-map
-  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key map "q" 'navi2ch-history-exit)
     (define-key map "\C-k" 'navi2ch-history-cut)
     (define-key map "\C-y" 'navi2ch-history-yank)
@@ -68,7 +71,8 @@
 (defun navi2ch-history-get-article (item)
   (nth 2 (assoc item navi2ch-history-alist)))
 
-(defun navi2ch-history-exit ())
+(defun navi2ch-history-exit ()
+  (run-hooks 'navi2ch-history-exit-hook))
 
 ;; regist board
 (navi2ch-bm-regist-board 'history 'navi2ch-history
@@ -142,7 +146,7 @@
   (setq buffer-read-only t)
   (use-local-map navi2ch-history-mode-map)
   (navi2ch-history-setup-menu)
-  (run-hooks 'navi2ch-history-mode-hook))
+  (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-history-mode-hook))
 
 (defun navi2ch-history-save-info ()
   (navi2ch-save-info navi2ch-history-file
@@ -209,6 +213,5 @@
 	  (navi2ch-bm-renumber))
       (message "stack is empty"))))
 
-(provide 'navi2ch-history)
-        
+(run-hooks 'navi2ch-history-load-hook)        
 ;;; navi2ch-history.el ends here

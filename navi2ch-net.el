@@ -21,14 +21,12 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch-net)
 
 (eval-when-compile (require 'cl))
 (require 'timezone)
-(require 'navi2ch-util)
-(require 'navi2ch-vars)
-(eval-when-compile
-  (provide 'navi2ch-net)
-  (require 'navi2ch))
+
+(require 'navi2ch)
 
 (defvar navi2ch-net-connection-name "navi2ch connection")
 (defvar navi2ch-net-user-agent "Navi2ch")
@@ -547,4 +545,5 @@ internet drafts directory for a copy.")
 	(when (navi2ch-net-update-file url file nil nil t)
 	  file)))))
 
-(provide 'navi2ch-net)
+(run-hooks 'navi2ch-net-load-hook)
+;;; navi2ch-net.el ends here

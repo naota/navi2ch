@@ -21,19 +21,16 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Code:
+(provide 'navi2ch-board)
 
 (eval-when-compile (require 'cl))
-(require 'navi2ch-article)
-(require 'navi2ch-board-misc)
-(require 'navi2ch-net)
 
-(eval-when-compile
-  (provide 'navi2ch-board)
-  (require 'navi2ch))
+(require 'navi2ch)
 
 (defvar navi2ch-board-mode-map nil)
 (unless navi2ch-board-mode-map
-  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key map "q" 'navi2ch-board-exit)
     (define-key map "s" 'navi2ch-board-sync)
     (define-key map "r" 'navi2ch-board-select-view-range)
@@ -43,8 +40,7 @@
     (define-key map "+" 'navi2ch-board-toggle-updated)
     (define-key map "b" 'navi2ch-board-toggle-bookmark)
     (define-key map "w" 'navi2ch-board-write-message)
-    (define-key map "2" 'navi2ch-board-two-pain)
-    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
+    (define-key map "2" 'navi2ch-board-two-pane)
     (define-key map "\M-e" 'navi2ch-board-expire)
     (setq navi2ch-board-mode-map map)))
 
@@ -115,6 +111,7 @@
   navi2ch-board-current-board)
 
 (defun navi2ch-board-exit ()
+  (run-hooks 'navi2ch-board-exit-hook)
   (navi2ch-board-save-info))
  
 ;; regist board
@@ -307,7 +304,7 @@
   (setq buffer-read-only t)
   (use-local-map navi2ch-board-mode-map)
   (navi2ch-board-setup-menu)
-  (run-hooks 'navi2ch-board-mode-hook)
+  (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-board-mode-hook)
   (force-mode-line-update))
 
 (defun navi2ch-board-save-old-subject-file (board)
@@ -395,7 +392,7 @@
   (interactive)
   (navi2ch-message-write-message navi2ch-board-current-board nil t))
 
-(defun navi2ch-board-two-pain ()
+(defun navi2ch-board-two-pane ()
   (interactive)
   (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
 	 (board-buf (get-buffer navi2ch-board-buffer-name))
@@ -594,6 +591,5 @@
   (interactive)
   (navi2ch-board-toggle-minor-mode 'navi2ch-board-updated-mode))
 
-(provide 'navi2ch-board)
-
+(run-hooks 'navi2ch-board-load-hook)
 ;;; navi2ch-board.el ends here
