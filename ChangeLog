@@ -1,5 +1,14 @@
 2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): cookie 要求
+	のメッセージを表示し、同意を求める。(結構不穏な事書いてあります)
+	(navi2ch-2ch-send-message): cookie の expire を確認。
+
+	* navi2ch-oyster.el (navi2ch-oyster-send-message): 同上。
+
+	* navi2ch-net.el (navi2ch-net-send-message-get-spid): cookie の
+	expire 日時も返す。
+
 	* navi2ch.el (navi2ch): navi2ch-auto-update が nil の時、lock が行
 	われなかったのを修正。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/667>

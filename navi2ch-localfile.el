@@ -358,7 +358,6 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	  nil)))
 
 (defun navi2ch-localfile-send-message-success-p (proc)
-					;  (string-match "302 Found" (navi2ch-net-get-content proc)))
   (null navi2ch-localfile-last-error))
 
 (defun navi2ch-localfile-error-string (proc)

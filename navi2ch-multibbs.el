@@ -1,6 +1,6 @@
 ;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch.
 
-;; Copyright (C) 2002, 2003 by Navi2ch Project
+;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -263,25 +263,37 @@ START, END, NOFIRST で範囲を指定する"
 	 (tries 2)	; 送信試行の最大回数
 	 (message-str "send message...")
 	 (result 'retry))
-    (while (eq result 'retry)
+    (dotimes (i tries)
       (let ((proc (funcall send from mail message subject bbs key time
 			   board article)))
 	(message message-str)
 	(setq result (funcall success-p proc))
-	(if (and result
-		 (not (eq result 'retry)))
-	    (message (concat message-str "succeed"))
-	  (let ((err (funcall error-string proc)))
-	    (if (stringp err)
-		(message (concat message-str "failed: %s") err)
-	      (message (concat message-str "failed"))))
-	  (if (eq result 'retry)
-	      (if (= tries 1)
-		  (setq result nil)
-		(setq tries (1- tries))
-		(sit-for navi2ch-message-retry-wait-time)
-		(setq message-str "re-send message..."))))))
-      result))
+	(cond ((eq result 'retry)
+	       (save-window-excursion
+		 (with-temp-buffer
+		   (insert (decode-coding-string
+			    (navi2ch-net-get-content proc)
+			    navi2ch-coding-system))
+		   (navi2ch-replace-html-tag-with-buffer)
+		   (goto-char (point-min))
+		   (while (re-search-forward "[ \t]*\n\\([ \t]*\n\\)*" nil t)
+		     (replace-match "\n"))
+		   (delete-other-windows)
+		   (switch-to-buffer (current-buffer))
+		   (unless (yes-or-no-p "Retry? ")
+		     (navi2ch-board-save-spid board nil)
+		     (return nil))))
+	       (sit-for navi2ch-message-retry-wait-time)
+	       (setq message-str "re-send message..."))
+	      (result
+	       (message (concat message-str "succeed"))
+	       (return result))
+	      (t
+	       (let ((err (funcall error-string proc)))
+		 (if (stringp err)
+		     (message (concat message-str "failed: %s") err)
+		   (message (concat message-str "failed"))))
+	       (return nil)))))))
 
 (defun navi2ch-multibbs-board-update (board)
   (let ((func (navi2ch-multibbs-get-func-from-board
@@ -396,6 +408,10 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 		      (if subject
 			  (cons "subject" subject)
 			(cons "key"    key)))))
+    (setq spid
+	  (when (and (consp spid)
+		     (navi2ch-compare-times (cdr spid) (current-time)))
+	    (car spid)))
     (let ((proc
 	   (navi2ch-net-send-request
 	    url "POST"
