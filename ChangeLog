@@ -1,3 +1,10 @@
+2002-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el 
+	(navi2ch-article-set-link-property): text-proprety をはずすように
+	してみた。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/623
+
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-chunk): goto-char の前にコネクショ
