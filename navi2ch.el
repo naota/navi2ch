@@ -52,6 +52,7 @@
 (require 'navi2ch-machibbs)
 (require 'navi2ch-multibbs)
 (require 'navi2ch-mona)
+(require 'navi2ch-oyster)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
