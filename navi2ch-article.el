@@ -624,11 +624,11 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	    (board-buf (switch-to-buffer board-buf))
 	    (t (navi2ch-list))))))
 
-(defun navi2ch-article-goto-current-board ()
+(defun navi2ch-article-goto-current-board (&optional kill)
   "スレッドと同じ板へ移動"
-  (interactive)
+  (interactive "P")
   (let ((board navi2ch-article-current-board))
-    (navi2ch-article-exit)
+    (navi2ch-article-exit kill)
     (navi2ch-board-select-board board)))
 
 (defun navi2ch-article-fix-range (num)

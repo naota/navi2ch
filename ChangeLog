@@ -1,5 +1,8 @@
 2002-10-03  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-goto-current-board): 引数追
+	加。navi2ch-article-exit に渡す。
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-yank): (beginning-of-line)
 	を追加。
 	行頭以外で C-y すると崩れてたのに対処。
