@@ -2,6 +2,7 @@
 
 	* navi2ch-article.el (navi2ch-article-cached-subject): 書き直し。
 	板のスレ一覧からもスレタイトルを取得するように。
+	……重いんで、やっぱり外します。
 
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 

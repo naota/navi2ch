@@ -1350,7 +1350,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       end)))
 
 (defun navi2ch-article-cached-subject (board article)
-  "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
+  "キャッシュされている dat ファイルからスレタイトルを得る。"
+;  "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
   (let ((state (navi2ch-article-check-cached board article))
 	(artid (cdr (assq 'artid article)))
 	subject subject-list)
@@ -1370,18 +1371,18 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	    (setq subject
 		  (cdr (assq 'subject
 			     (navi2ch-article-parse-message (cdar msg-list))))))))
-    (when (not subject)
-      (if (equal (cdr (assq 'name board))
-		 (cdr (assq 'name navi2ch-board-current-board)))
-	  (setq subject-list navi2ch-board-subject-list)
-	(setq subject-list (navi2ch-board-get-subject-list
-			    (navi2ch-board-get-file-name board))))
-      (while (and (not subject)
-		  subject-list)
-	(if (equal artid
-		   (cdr (assq 'artid (car subject-list))))
-	    (setq subject (cdr (assq 'subject (car subject-list)))))
-	(pop subject-list)))
+;    (when (not subject)
+;      (if (equal (cdr (assq 'name board))
+;		 (cdr (assq 'name navi2ch-board-current-board)))
+;	  (setq subject-list navi2ch-board-subject-list)
+;	(setq subject-list (navi2ch-board-get-subject-list
+;			    (navi2ch-board-get-file-name board))))
+;      (while (and (not subject)
+;		  subject-list)
+;	(if (equal artid
+;		   (cdr (assq 'artid (car subject-list))))
+;	    (setq subject (cdr (assq 'subject (car subject-list)))))
+;	(pop subject-list)))
     (when (not subject)
       (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
     subject))
