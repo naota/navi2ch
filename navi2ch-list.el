@@ -73,6 +73,7 @@
 (defvar navi2ch-list-buffer-name "*navi2ch list*")
 (defvar navi2ch-list-current-list nil)
 (defvar navi2ch-list-category-list nil)
+(defvar navi2ch-list-board-name-list nil)
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
 (defvar navi2ch-list-changed-category-name "$BJQ$o$C$?HD(B")
@@ -116,7 +117,9 @@
     (setcdr category
 	    (list
 	     (cadr category)
-	     (cons 'child list)))))
+	     (cons 'child list))))
+  (setq navi2ch-list-board-name-list (navi2ch-list-get-board-name-list
+				      navi2ch-list-category-list)))
 
 (defun navi2ch-list-get-global-bookmark-board-list ()
   (mapcar (lambda (x)
@@ -482,7 +485,9 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			     (navi2ch-list-get-etc-category)
 			     (navi2ch-list-get-changed-category
 			      category-list)))
-		 category-list)))
+		 category-list))
+	  (setq navi2ch-list-board-name-list
+		(navi2ch-list-get-board-name-list navi2ch-list-category-list)))
 	(navi2ch-set-mode-line-identification)
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
   (run-hooks 'navi2ch-list-after-sync-hook))
@@ -558,10 +563,8 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 (defun navi2ch-list-goto-board (&optional default)
   (interactive)
   (let (alist board)
-    (setq alist (mapcar
-		 (lambda (x) (cons (cdr (assq 'id x)) x))
-		 (navi2ch-list-get-board-name-list
-		  navi2ch-list-category-list)))
+    (setq alist (mapcar (lambda (x) (cons (cdr (assq 'id x)) x))
+			navi2ch-list-board-name-list))
     (save-window-excursion
       (setq board (cdr (assoc
 			(completing-read
@@ -749,8 +752,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (and (interactive-p) (setq ask t))
   (when (or (not ask)
 	    (y-or-n-p "Expire all boards?"))
-    (dolist (board (navi2ch-list-get-board-name-list
-		    navi2ch-list-category-list))
+    (dolist (board navi2ch-list-board-name-list)
       (when (eq (cdr (assq 'type board)) 'board)
 	(navi2ch-board-expire board)))
     (message "expiring all board is done")))

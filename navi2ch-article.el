@@ -972,10 +972,8 @@ state はあぼーんされてれば aborn というシンボル。
 		     (string-match "[0-9０-９]+" data)
 		     (japanese-hankaku (match-string 0 data)))
 		nil)))
-    (setq alist (mapcar
-		 (lambda (x) (cons (cdr (assq 'id x)) x))
-		 (navi2ch-list-get-board-name-list
-		  navi2ch-list-category-list)))
+    (setq alist (mapcar (lambda (x) (cons (cdr (assq 'id x)) x))
+			navi2ch-list-board-name-list))
     (setq ret (completing-read
 	       (concat "input number or board"
 		       (and default (format "(%s)" default))

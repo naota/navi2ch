@@ -1,5 +1,23 @@
 2002-08-01  Nanashi San  <nanashi@users.sourceforge.net>
 
+	板が増えれば増える程
+	 (navi2ch-get-board-name-list navi2ch-list-category-list)
+	が重くなっていくので、よく使う値は変数につっこんじゃえ、ってことで。
+	article モードでカーソルが URL にかかった時の動作なんかがかなり軽
+	くなりますた。
+
+	* navi2ch-list.el (navi2ch-list-board-name-list): 新変数。
+	(navi2ch-list-set-category): 上記変数も変更するように。
+	(navi2ch-list-sync): 同上。
+	(navi2ch-list-goto-board): navi2ch-list-board-name-list を使うように。
+	(navi2ch-list-expire-all): 同上。
+
+	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
+	navi2ch-list-board-name-list を使うように。
+	* navi2ch-board.el (navi2ch-board-url-to-board): 同上。
+	* navi2ch-bookmark.el (navi2ch-bookmark-create-bookmark): 同上。
+	* navi2ch.el (navi2ch-2ch-url-p): 同上。
+
 	* navi2ch-net.el (navi2ch-net-get-content):
 	accept-process-output へ proc を渡すように。(引数を省略した場合は
 	ブロックせずに戻るため、CPU 負荷がすごいことになってた。)

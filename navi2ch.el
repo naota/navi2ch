@@ -367,11 +367,9 @@ DISPLAY が `article' のときは article を表示する用に分割する。
     (and (or (member host navi2ch-2ch-host-list)
 	     (let (list)
 	       (setq list
-		     (mapcar
-		      (lambda (x)
-			(navi2ch-url-to-host (cdr (assq 'uri x))))
-		      (navi2ch-list-get-board-name-list
-		       navi2ch-list-category-list)))
+		     (mapcar (lambda (x)
+			       (navi2ch-url-to-host (cdr (assq 'uri x))))
+			     navi2ch-list-board-name-list))
 	       (member host list)))
 	 (or (navi2ch-article-url-to-article url)
 	     (navi2ch-board-url-to-board url))

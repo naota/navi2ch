@@ -142,8 +142,7 @@ KEY は (concat URI ARTID) ")
   (unless (assoc bookmark-id navi2ch-bookmark-list)
     (when (member bookmark-id
 		  (mapcar (lambda (x) (cdr (assq 'id x)))
-			  (navi2ch-list-get-board-name-list
-			   navi2ch-list-category-list)))
+			  navi2ch-list-board-name-list))
       (error "Can't create this id's bookmark!"))
     (let ((name (read-string
 		 (concat "Input bookmark name for [" bookmark-id "]: ")

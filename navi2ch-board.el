@@ -192,8 +192,7 @@
 	 (id   (cdr (assq 'id alist)))
 	 board)
     (when id
-      (dolist (x (navi2ch-list-get-board-name-list
-		  navi2ch-list-category-list))
+      (dolist (x navi2ch-list-board-name-list)
 	(when (string= (cdr (assq 'uri x)) uri)
 	  (setq board x)))
       (unless board
