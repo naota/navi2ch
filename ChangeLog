@@ -1,3 +1,10 @@
+2003-03-13  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-no-logging-message): 定義位置を移動。
+	(navi2ch-read-char): 上記関数を使うように。
+	(navi2ch-read-event): 同上。
+	(message-log-max): 上記変更に伴い、定義部分を削除。
+
 2003-03-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.el (toplevel): inline 関数をあらかじめバイトコンパイルし

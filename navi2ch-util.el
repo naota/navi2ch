@@ -196,7 +196,6 @@
 
 ;; shut up XEmacs warnings
 (eval-when-compile
-  (defvar message-log-max)
   (defvar minibuffer-allow-text-properties))
 
 ;;;; macros
@@ -279,6 +278,12 @@ See also the function `defalias'."
 
 
 ;;;; other misc stuff
+(defsubst navi2ch-no-logging-message (fmt &rest args)
+  (navi2ch-ifxemacs
+      (apply #'lmessage 'no-log fmt args)
+    (let ((message-log-max nil))
+      (apply #'message fmt args))))
+
 (defsubst navi2ch-replace-string (regexp rep string
 					 &optional all fixedcase literal)
   "STRING に含まれる REGEXP を REP で置換する。
@@ -426,13 +431,12 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 (defun navi2ch-read-char (&optional prompt)
   "PROMPT (non-nil の場合) を表示して `read-char' を呼び出す。"
   (let ((cursor-in-echo-area t)
-	(message-log-max nil)
 	c)
     (if prompt
-	(message "%s" prompt))
+	(navi2ch-no-logging-message "%s" prompt))
     (setq c (read-char))
     (if prompt
-	(message "%s%c" prompt c))
+	(navi2ch-no-logging-message "%s%c" prompt c))
     c))
 
 (defun navi2ch-read-char-with-retry (prompt retry-prompt list)
@@ -454,15 +458,14 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 (defun navi2ch-read-event (&optional prompt)
   "PROMPT (non-nil の場合) を表示して event を読む。"
   (let ((cursor-in-echo-area t)
-	(message-log-max nil)
 	e)
     (if prompt
-	(message "%s" prompt))
+	(navi2ch-no-logging-message "%s" prompt))
     (navi2ch-ifxemacs
 	(setq e (next-command-event nil prompt))
       (setq e (read-event prompt)))
     (if prompt
-	(message "%s%s" prompt (single-key-description e)))
+	(navi2ch-no-logging-message "%s%s" prompt (single-key-description e)))
     e))
 
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
@@ -1072,12 +1075,6 @@ This function is a cutdown version of cl-seq's one."
                            x))
                        filter))
       (funcall filter))))
-
-(defsubst navi2ch-no-logging-message (fmt &rest args)
-  (navi2ch-ifxemacs
-      (apply #'lmessage 'no-log fmt args)
-    (let ((message-log-max nil))
-      (apply #'message fmt args))))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
