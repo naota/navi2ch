@@ -557,5 +557,32 @@ base64デコードすべき内容がない場合はエラーになる。"
     (vconcat (mapcar 'navi2ch-strip-properties obj)))
    (t obj)))
 
+(defun navi2ch-add-replace-html-tag (tag value)
+  "TAG を表示する際に VALUE で置き換える。
+ののたんのAAを表示するなら ~/.navi2ch/init.el に
+\(navi2ch-add-replace-html-tag (navi2ch-string-as-multibyte \"\\372D\")
+                              \"ｖ\")
+と書く。"
+  ;; ののたんの口を navi2ch-replace-html-tag-alist に入れると
+  ;; regexp-opt が無限再帰になっちゃうのれす。
+  (add-to-list 'navi2ch-replace-html-tag-regexp-alist
+	       (cons (regexp-quote tag) value))
+  (setq navi2ch-replace-html-tag-regexp
+	(concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
+		"\\|"
+		(mapconcat 'car
+			   navi2ch-replace-html-tag-regexp-alist "\\|"))))
+
+(defun navi2ch-add-replace-html-tag-regexp (tag value)
+  "TAG を表示する際に VALUE で置き換える。
+TAG は正規表現。"
+  (add-to-list 'navi2ch-replace-html-tag-regexp-alist
+	       (cons tag value))
+  (setq navi2ch-replace-html-tag-regexp
+	(concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
+		"\\|"
+		(mapconcat 'car
+			   navi2ch-replace-html-tag-regexp-alist "\\|"))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
