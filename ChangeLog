@@ -1,3 +1,11 @@
+2002-01-20  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-list.el
+	(navi2ch-list-changed-category-name): 新変数。
+	(navi2ch-list-get-changed-category): 新関数。
+	(navi2ch-list-sync): 上の変更に合わせる。あと old-category-list を
+	設定するところを直す。
+
 2002-01-20  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-subback-file-name): 新変数。

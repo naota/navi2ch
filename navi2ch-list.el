@@ -74,6 +74,7 @@
 (defvar navi2ch-list-category-list nil)
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
+(defvar navi2ch-list-changed-category-name "変わった板")
 
 (defvar navi2ch-list-navi2ch-category-alist nil)
 
@@ -401,6 +402,16 @@ changed-list は '((board-id . board) ...) な alist。"
 		    (cdr (assq 'change changed-status))))
 	   navi2ch-list-current-list))))
 
+(defun navi2ch-list-get-changed-category (category-list)
+  (let ((alist (navi2ch-alist-list-to-alist
+		(navi2ch-list-get-board-name-list category-list)
+		'id)))
+    (navi2ch-list-get-category
+     navi2ch-list-changed-category-name
+     (mapcar (lambda (pair)
+	       (cdr (assoc (car pair) alist)))
+	     (cdr (assq 'change navi2ch-list-current-list))))))
+
 (defun navi2ch-list-sync (&optional force first)
   (interactive "P")
   (save-excursion
@@ -408,20 +419,13 @@ changed-list は '((board-id . board) ...) な alist。"
 	  (navi2ch-net-force-update (or navi2ch-net-force-update
 					force))
 	  (file (navi2ch-list-get-file-name))
-	  updated old-list)
+	  updated old-category-list)
       (if first
 	  (progn
 	    (navi2ch-list-load-info)
-	    (setq old-list
-		  (append
-		   (delq nil
-			 (list (navi2ch-list-get-category
-				navi2ch-list-navi2ch-category-name
-				navi2ch-list-navi2ch-category-alist)
-			       (navi2ch-list-get-global-bookmark-category)
-			       (navi2ch-list-get-etc-category)))
-		   (navi2ch-list-get-category-list file))))
-	(setq old-list navi2ch-list-category-list))
+	    (setq old-category-list (navi2ch-list-get-category-list file)))
+	(setq old-category-list (navi2ch-list-get-normal-category-list
+				 navi2ch-list-category-list)))
       (unless (or navi2ch-offline
 		  (and first
 		       (not navi2ch-list-sync-update-on-boot)
@@ -431,22 +435,23 @@ changed-list は '((board-id . board) ...) な alist。"
 		       'navi2ch-list-make-board-txt)))
       (when t ;(or first updated)
 	(erase-buffer)
-	(setq navi2ch-list-category-list
-	      (append
-	       (delq nil
-		     (list (navi2ch-list-get-category
-			    navi2ch-list-navi2ch-category-name
-			    navi2ch-list-navi2ch-category-alist)
-			   (navi2ch-list-get-global-bookmark-category)
-			   (navi2ch-list-get-etc-category)))
-	       (navi2ch-list-get-category-list file)))
-	
-	(when updated
-	  (navi2ch-list-apply-changed-status
-	   (navi2ch-list-get-changed-status
-	    (navi2ch-list-get-normal-category-list navi2ch-list-category-list)
-	    (navi2ch-list-get-normal-category-list old-list))))
-	
+	(let ((category-list (navi2ch-list-get-category-list file)))
+	  (when updated
+	    (navi2ch-list-apply-changed-status
+	     (navi2ch-list-get-changed-status
+	      category-list
+	      old-category-list)))
+	  (setq navi2ch-list-category-list
+		(append
+		 (delq nil
+		       (list (navi2ch-list-get-category
+			      navi2ch-list-navi2ch-category-name
+			      navi2ch-list-navi2ch-category-alist)
+			     (navi2ch-list-get-global-bookmark-category)
+			     (navi2ch-list-get-etc-category)
+			     (navi2ch-list-get-changed-category
+			      category-list)))
+		 category-list)))
 	(setq navi2ch-mode-line-identification "%12b")
 	(navi2ch-set-mode-line-identification)
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
