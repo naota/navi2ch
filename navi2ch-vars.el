@@ -1549,11 +1549,27 @@ ask なら保存する前に質問する
   :group 'navi2ch)
 
 ;;; auto modify variables
-(defcustom navi2ch-auto-modify-file navi2ch-init-file
+(defcustom navi2ch-auto-modify-file
+  (let ((file (or (locate-library navi2ch-init-file)
+		  (and (file-name-absolute-p navi2ch-init-file)
+		       (expand-file-name navi2ch-init-file)))))
+    (when (and file
+	       (not (string-match "\\.elc\\(\\.\\(Z\\|gz\\|bz2\\)\\)?\\'"
+				  file)))
+      file))
   "*設定を自動的に変更して保存するファイル。
-nil なら、`customize'を利用して`custom-file'に保存する。"
+nil なら、`customize'を利用して`custom-file'に保存する。
+
+このファイル単体が自動的にロードされることはないので、
+`navi2ch-init-file'以外のファイルを指定した場合
+\(`navi2ch-init-file'を byte-compile した場合を含む)は必要に応じて、
+
+\(load navi2ch-auto-modify-file)
+
+を`navi2ch-init-file'に追加するなどの方法で明示的にファイルを
+ロードすること。"
   :type '(choice (file :tag "ファイル")
-		 (const :tag "`customize'を利用" nil))
+		 (const :tag "custom-file" nil))
   :group 'navi2ch)
 
 (defcustom navi2ch-auto-modify-truncate-list-alist nil

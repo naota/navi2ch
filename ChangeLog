@@ -1,3 +1,29 @@
+2003-07-23  extra  <ekisutora@users.sourceforge.net>
+
+	今回の変更により
+	navi2ch-auto-modify-file が自動的にはロードされなくなったので、
+	navi2ch-auto-modify-file の値を変更している場合や、
+	navi2ch-init-file を byte-compile している場合など、
+	デフォルトから外れた使い方をしている場合は
+	必要に応じて明示的にロードしてください。
+
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/519
+
+	* navi2ch-vars.el (navi2ch-auto-modify-file): 
+	初期値と docstring を変更。
+
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-file): 
+	上記変更にともない廃止。
+	(navi2ch-auto-modify-load): 同上。
+	(navi2ch-auto-modify-customize-variable-p): 
+	変数 navi2ch-auto-modify-file を直接参照するように。
+	(navi2ch-auto-modify-save): 同上。
+	また、default-major-mode を 'fundamental-mode に束縛して
+	navi2ch-auto-modify-file で指定されたファイルを開くように。
+	navi2ch-auto-modify-save-variables に引き数を渡すように。
+	(navi2ch-auto-modify-save-variables): 引き数にバッファを受け取り、
+	buffer-local な変数を参照できるように。
+
 2003-07-21  mami  <mami@users.sourceforge.net>
 
 	* configure.in: 1.7-DEV にアップデート。

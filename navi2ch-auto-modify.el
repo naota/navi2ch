@@ -33,7 +33,6 @@
 (defvar navi2ch-auto-modify-variable-list nil
   "設定を自動的に変更して保存する変数名のリスト。")
 
-(add-hook 'navi2ch-hook 'navi2ch-auto-modify-load)
 (add-hook 'navi2ch-exit-hook 'navi2ch-auto-modify-save)
 
 (defmacro navi2ch-auto-modify (&rest body)
@@ -81,44 +80,26 @@ Navi2ch 終了時に自動的に変更・保存される。
 	    (append navi2ch-auto-modify-variable-list (nreverse added)))))
   (navi2ch-auto-modify-save))
 
-(defun navi2ch-auto-modify-file ()
-  (and navi2ch-auto-modify-file
-       (let ((file (expand-file-name navi2ch-auto-modify-file)))
-	 (or (locate-library file)
-	     file))))
-
-(defun navi2ch-auto-modify-load ()
-  (let ((file (navi2ch-auto-modify-file)))
-    (when file
-      (catch 'loop
-	(dolist (navi2ch-auto-modify-file (list navi2ch-init-file
-						custom-file
-						user-init-file))
-	  (when (equal file (navi2ch-auto-modify-file))
-	    (throw 'loop nil)))
-	(load file t)))))
-
 (defun navi2ch-auto-modify-save ()
   (run-hooks 'navi2ch-auto-modify-save-hook)
   (navi2ch-auto-modify-truncate-lists)
   (when navi2ch-auto-modify-variable-list
-    (let ((file (navi2ch-auto-modify-file)))
-      (when file
+    (when navi2ch-auto-modify-file
+      (let ((inhibit-read-only t)
+	    (require-final-newline (eq require-final-newline t))
+	    (value-buffer (current-buffer))
+	    (exist-buffer (get-file-buffer navi2ch-auto-modify-file)))
 	(save-current-buffer
-	  (let ((inhibit-read-only t)
-		(require-final-newline (eq require-final-newline t))
-		(buffer (get-file-buffer file)))
-	    (let ((default-major-mode nil))
-	      (set-buffer (or buffer
-			      (find-file-noselect file))))
-	    (save-excursion
-	      (save-restriction
-		(widen)
-		(navi2ch-auto-modify-narrow)
-		(navi2ch-auto-modify-save-variables)))
-	    (unless buffer
-	      (basic-save-buffer)
-	      (kill-buffer (current-buffer)))))))
+	  (let ((default-major-mode 'fundamental-mode))
+	    (set-buffer (find-file-noselect navi2ch-auto-modify-file)))
+	  (save-excursion
+	    (save-restriction
+	      (widen)
+	      (navi2ch-auto-modify-narrow)
+	      (navi2ch-auto-modify-save-variables value-buffer)))
+	  (unless exist-buffer
+	    (basic-save-buffer)
+	    (kill-buffer (current-buffer))))))
     (navi2ch-auto-modify-customize-variables)))
 
 (defun navi2ch-auto-modify-narrow ()
@@ -152,7 +133,7 @@ Navi2ch 終了時に自動的に変更・保存される。
       (narrow-to-region (point) (point)))
     (insert "(navi2ch-auto-modify)")))
 
-(defun navi2ch-auto-modify-save-variables ()
+(defun navi2ch-auto-modify-save-variables (&optional buffer)
   (goto-char (1+ (point-min)))		; "\\`("
   (forward-sexp)			; "navi2ch-auto-modify"
   (while (forward-comment 1))
@@ -176,7 +157,12 @@ Navi2ch 終了時に自動的に変更・保存される。
 			(setq start (point))
 			(forward-sexp)
 			(delete-region start (point))
-			(pp (navi2ch-quote-maybe (symbol-value var)))
+			(pp (navi2ch-quote-maybe
+			     (if (and buffer
+				      (local-variable-p var buffer))
+				 (with-current-buffer buffer
+				   (symbol-value var))
+			       (symbol-value var))))
 			(setq end (point-marker))
 			(goto-char start)
 			(indent-sexp)
@@ -200,7 +186,12 @@ Navi2ch 終了時に自動的に変更・保存される。
 			  'setq-default
 			'setq)
 		      var
-		      (navi2ch-quote-maybe (symbol-value var))))
+		      (navi2ch-quote-maybe
+		       (if (and buffer
+				(local-variable-p var buffer))
+			   (with-current-buffer buffer
+			     (symbol-value var))
+			 (symbol-value var)))))
 	    (setq end (point-marker))
 	    (goto-char start)
 	    (indent-sexp)
@@ -210,7 +201,7 @@ Navi2ch 終了時に自動的に変更・保存される。
     (setq navi2ch-auto-modify-variable-list (nreverse modified))))
 
 (defun navi2ch-auto-modify-customize-variable-p (variable)
-  (or (null (navi2ch-auto-modify-file))
+  (or (null navi2ch-auto-modify-file)
       (get variable 'saved-value)	; From `customize-saved'
       (get variable 'saved-variable-comment))) ; For XEmacs
 
