@@ -1,3 +1,9 @@
+2003-09-06  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-send-message-error-string):
+	Samba24 に対応。
+	http://age.s22.xrea.com/talk2ch/new.txt
+
 2003-09-06  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch.el : (require 'navi2ch-futaba)追加
