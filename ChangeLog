@@ -1,5 +1,15 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el: navi2ch-exit-hook に navi2ch-net-cleanup を追加。
+	(navi2ch-net-process): 新変数。
+	(navi2ch-net-cleanup): 新関数。
+	(navi2ch-net-send-request): navi2ch-net-process に proc を代入。
+	明日のために、その1。
+
+	* navi2ch.el (navi2ch-exit): navi2ch-exit-hook を run-hooks する。
+
+	* navi2ch-vars.el (navi2ch-exit-hook): 新変数。
+
 	* navi2ch-net.el (navi2ch-net-download-file): 表示をちょっと変えて
 	みた。
 	(navi2ch-net-update-file): 同上

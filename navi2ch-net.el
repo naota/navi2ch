@@ -34,9 +34,22 @@
 (defvar navi2ch-net-user-agent "Navi2ch")
 (defvar navi2ch-net-setting-file-name "SETTING.TXT")
 (defvar navi2ch-net-last-url nil)
+(defvar navi2ch-net-process nil)
+
+(add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
+
+(defun navi2ch-net-cleanup ()
+  (if (processp navi2ch-net-process)
+      (let ((buf (process-buffer navi2ch-net-process)))
+	(delete-process navi2ch-net-process)
+	(kill-buffer buf)))
+  (setq navi2ch-net-process nil))
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
+  (if (processp navi2ch-net-process)
+      (delete-process navi2ch-net-process))
+  (setq navi2ch-net-process nil)
   (let ((buf (get-buffer-create (concat " *" navi2ch-net-connection-name)))
         (process-connection-type nil)
 	(inherit-process-coding-system
@@ -79,8 +92,8 @@
                    (format "Content-length: %d\r\n\r\n%s"
                            (length content) content)
                  "")))
-      (message "now connecting...connected")
-      proc)))
+      (message "%sconnected" (current-message))
+      (setq navi2ch-net-process proc))))
       
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host file port host2ch)
