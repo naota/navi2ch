@@ -107,9 +107,13 @@ Navi2ch 終了時に自動的に変更・保存される。
 	    (kill-buffer (current-buffer))))))
     (navi2ch-auto-modify-customize-variables)))
 
+(defun navi2ch-auto-modify-skip-comments ()
+  (while (and (not (eobp))
+	      (forward-comment 1))))
+
 (defun navi2ch-auto-modify-narrow ()
   (goto-char (point-min))
-  (while (forward-comment 1))
+  (navi2ch-auto-modify-skip-comments)
   ;; Test for scan errors.
   (save-excursion
     (while (not (eobp))
@@ -129,7 +133,7 @@ Navi2ch 終了時に自動的に変更・保存される。
 					    (1+ beg) t)
 		    (goto-char (1+ beg))))))
 	  (invalid-read-syntax nil))
-	(while (forward-comment 1))))
+	(navi2ch-auto-modify-skip-comments)))
     (unless (bobp)
       (skip-chars-backward "\n" (1- (point)))
       (let ((count (save-excursion (skip-chars-backward "\n"))))
@@ -141,7 +145,7 @@ Navi2ch 終了時に自動的に変更・保存される。
 (defun navi2ch-auto-modify-save-variables (&optional buffer)
   (goto-char (1+ (point-min)))		; "\\`("
   (forward-sexp)			; "navi2ch-auto-modify"
-  (while (forward-comment 1))
+  (navi2ch-auto-modify-skip-comments)
   (let ((standard-input (current-buffer))
 	(standard-output (current-buffer))
 	(print-length nil)
@@ -155,12 +159,12 @@ Navi2ch 終了時に自動的に変更・保存される。
 	      (save-excursion
 		(goto-char (1+ beg))	; "("
 		(forward-sexp)		; "setq\\(-default\\)?"
-		(while (forward-comment 1))
+		(navi2ch-auto-modify-skip-comments)
 		(condition-case nil
 		    (while (not (eobp))
 		      (let ((var (read))
 			    start end)
-			(while (forward-comment 1))
+			(navi2ch-auto-modify-skip-comments)
 			(setq start (point))
 			(forward-sexp)
 			(delete-region start (point))
@@ -177,9 +181,9 @@ Navi2ch 終了時に自動的に変更・保存される。
 			(delete-region (point) end)
 			(unless (memq var modified)
 			  (setq modified (cons var modified))))
-		      (while (forward-comment 1)))
+		      (navi2ch-auto-modify-skip-comments))
 		  (invalid-read-syntax nil)))))	; ")"
-	  (while (forward-comment 1)))
+	  (navi2ch-auto-modify-skip-comments))
       (invalid-read-syntax nil))	; ")\\'"
     (backward-char)
     (dolist (var navi2ch-auto-modify-variable-list)
