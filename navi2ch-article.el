@@ -26,7 +26,6 @@
   "$Id$")
 
 (eval-when-compile (require 'cl))
-(require 'browse-url)
 
 (require 'navi2ch)
 
@@ -912,7 +911,7 @@ state はあぼーんされてれば aborn というシンボル。
                           (navi2ch-article-url-to-article prop))
                       (not browse-p))
                  (navi2ch-goto-url prop)
-               (navi2ch-browse-url prop))))
+               (navi2ch-browse-url-internal prop))))
           ((setq prop (get-text-property (point) 'content))
            (let ((default-filename (file-name-nondirectory
                                     (get-text-property (point) 'file-name)))
@@ -1222,7 +1221,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 			  (message "copy: %s" x)))
 		       ((eq char ?v)
 			(lambda (x)
-			  (navi2ch-browse-url x)
+			  (navi2ch-browse-url-internal x)
 			  (message "view: %s" x))))
 		 (navi2ch-article-show-url-subr))))))
 

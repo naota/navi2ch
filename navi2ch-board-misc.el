@@ -312,7 +312,7 @@
 			  (message "copy: %s" x)))
 		       ((eq char ?v)
 			(lambda (x)
-			  (navi2ch-browse-url x)
+			  (navi2ch-browse-url-internal x)
 			  (message "view: %s" x))))
 		 (navi2ch-bm-show-url-subr board))))))
 

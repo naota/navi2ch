@@ -744,7 +744,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 		 (format "c)opy v)iew t)itle u)rl&title? URL: %s: " uri)
 		 nil '(?c ?v ?t ?u))))
       (if (eq char ?v)
-	  (navi2ch-browse-url uri)
+	  (navi2ch-browse-url-internal uri)
 	(let ((str (cond ((eq char ?c)
 			  uri)
 			 ((eq char ?t)

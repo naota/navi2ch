@@ -1,3 +1,31 @@
+2002-07-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	他のパッケージ (GNUS とか) から URL を開く時、2ch は Navi2ch で見
+	られるといいよね、ってことで。
+	~/.emacs で、
+	(autoload 'navi2ch-browse-url "navi2ch" nil t)
+	(setq navi2ch-browse-url-browser-function 'w3m-browse-url)
+	(setq browse-url-browser-function 'navi2ch-browse-url)
+	みたいな感じで使えるようになる。
+
+	* navi2ch.el (navi2ch-browse-url): 新関数。
+	browse-url-function に設定できる。
+	(navi2ch-goto-url): ボードバッファがないとき変だったので、
+	navi2ch-board-select-board -> navi2ch-list-select-board
+
+	* navi2ch-util.el (navi2ch-browse-url):
+	navi2ch-browse-url-internal に変更。
+	(navi2ch-browse-url-internal): navi2ch-browse-url から変更。
+	navi2ch-browse-url-function を browse-url-function に束縛。
+
+	* navi2ch-article.el (navi2ch-article-select-current-link):
+	navi2ch-browse-url -> navi2ch-browse-url-internal
+	(navi2ch-article-show-url): 同上。
+	* navi2ch-list.el (navi2ch-list-show-url): 同上。
+	* navi2ch-board-misc.el (navi2ch-bm-show-url): 同上。
+
+	* navi2ch-vars.el (navi2ch-browse-url-browser-function): 新変数。
+
 2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-through-subr): 板の最後のス

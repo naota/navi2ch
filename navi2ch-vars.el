@@ -119,6 +119,17 @@
   :type '(repeat (string :tag "ホスト"))
   :group 'navi2ch)
 
+(defcustom navi2ch-browse-url-browser-function nil
+  "*Navi2ch から使用するブラウザ関数。
+nil の場合は browse-url-browser-function を使う。
+\(autoload 'navi2ch-browse-url \"navi2ch\" nil t)
+\(setq navi2ch-browse-url-browser-function 'w3m-browse-url)
+\(setq browse-url-browser-function 'navi2ch-browse-url)
+のように設定しておくと、他のパッケージから Navi2ch を呼び出す事ができる。"
+  :type '(choice (const :tag "browsw-url にまかせる" nil)
+		 (function :tag "関数を指定する"))
+  :group 'navi2ch)
+
 (defcustom navi2ch-browse-url-image-program nil
   "*`navi2ch-browse-url-image' に使うプログラム。"
   :type '(choice string (const :tag "None" nil))

@@ -351,7 +351,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 					 (cdr (assq 'number article))))
 	  (board
 	   (navi2ch-split-window 'board)
-	   (navi2ch-board-select-board board force)))))
+	   (navi2ch-list-select-board board force)))))
 
 (defun navi2ch-find-file (file)
   "FILE からスレまたは板を選ぶ"
@@ -485,6 +485,22 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 						    (symbol-name b)))))
       (with-output-to-temp-buffer "*Navi2ch Ident List*"
 	(princ (mapconcat 'symbol-value ident-list "\n"))))))
+
+(eval-when-compile
+  (autoload 'browse-url-interactive-arg "browse-url"))
+
+;;;###autoload
+(defun navi2ch-browse-url (url &rest args)
+  "Navi2ch interface function for browse-url.el."
+  (interactive
+   (browse-url-interactive-arg "Navi2ch URL: "))
+  (unless navi2ch-init
+    (save-window-excursion
+      (navi2ch)))
+  (if (navi2ch-2ch-url-p url)
+      (navi2ch-goto-url url)
+    (message "falling back...")
+    (apply 'navi2ch-browse-url-internal url args)))
 
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

@@ -354,16 +354,23 @@ bnoundp $B$H0c$$!"(BSYMBOL $B$,%P%$%s%I$5$l$F$$$k;~$O(B t $B$G$O$J$/%7%s%\%
 fbnoundp $B$H0c$$!"(BSYMBOL $B$,%P%$%s%I$5$l$F$$$k;~$O(B t $B$G$O$J$/%7%s%\%k$rJV$9!#(B"
   (and (fboundp symbol) symbol))
 
-(defun navi2ch-browse-url (url)
-  (cond ((and navi2ch-browse-url-image-program	; images
-	      (file-name-extension url)
-	      (member (downcase (file-name-extension url))
-		      navi2ch-browse-url-image-extentions))
-	 (navi2ch-browse-url-image url))
-	(t (browse-url				; others
-	    url
-	    (symbol-value (or (navi2ch-boundp 'browse-url-new-window-flag)
-			      (navi2ch-boundp 'browse-url-new-window-p)))))))
+(defun navi2ch-browse-url-internal (url &rest args)
+  (let ((browse-url-browser-function (or navi2ch-browse-url-browser-function
+					 browse-url-browser-function))
+	(new-window-flag (symbol-value (or (navi2ch-boundp
+					    'browse-url-new-window-flag)
+					   (navi2ch-boundp
+					    'browse-url-new-window-p)))))
+    (if (eq browse-url-browser-function 'navi2ch-browse-url)
+	(error "Set navi2ch-browse-url-browser-function correctly."))
+    (cond ((and navi2ch-browse-url-image-program ; images
+		(file-name-extension url)
+		(member (downcase (file-name-extension url))
+			navi2ch-browse-url-image-extentions))
+	   (navi2ch-browse-url-image url))
+	  (t				; others
+	   (setq args (or args (list new-window-flag)))
+	   (apply 'browse-url url args)))))
 
 (defun navi2ch-browse-url-image (url &optional new-window)
   ;; new-window ignored
