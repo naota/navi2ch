@@ -372,7 +372,6 @@
 	(setq header (navi2ch-board-update-file board))
 	(setq time (or (cdr (assoc "Last-Modified" header))
 		       (cdr (assoc "Date" header))))
-	(message "%s" time)
 	(when time
 	  (setq board (navi2ch-put-alist 'time time board))))
       (setq navi2ch-board-current-board board)
