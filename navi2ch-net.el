@@ -74,20 +74,19 @@ BODY の評価中にエラーが起こると nil を返す。"
   (unwind-protect
       (if (processp navi2ch-net-process)
 	  (delete-process navi2ch-net-process))
+    (setq navi2ch-net-process nil)
     (navi2ch-net-cleanup-vars)))
 
 (defun navi2ch-net-cleanup-vars ()
   (setq navi2ch-net-status nil
 	navi2ch-net-header nil
-	navi2ch-net-content nil
-	navi2ch-net-process nil))
+	navi2ch-net-content nil))
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
-  (unless navi2ch-net-enable-http11
-    (if (processp navi2ch-net-process)
-	(delete-process navi2ch-net-process))
-    (setq navi2ch-net-process nil))
+  (if navi2ch-net-enable-http11
+      (navi2ch-net-cleanup-vars)
+    (navi2ch-net-cleanup-process))
   (let ((buf (get-buffer-create (concat " *" navi2ch-net-connection-name)))
         (process-connection-type nil)
 	(inherit-process-coding-system
@@ -151,7 +150,6 @@ BODY の評価中にエラーが起こると nil を返す。"
                            (length content) content)
                  "")))
       (message "%sconnected" (current-message))
-      (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
       
 (defun navi2ch-net-split-url (url &optional proxy)
@@ -655,31 +653,32 @@ internet drafts directory for a copy.")
 	     (cons "key" key))))
 	 (navi2ch-net-http-proxy (if navi2ch-net-send-message-use-http-proxy
 				     navi2ch-net-http-proxy)))
-     (let (proc)
-       (setq proc (navi2ch-net-send-request
-		   url "POST"
-		   (list (cons "Content-Type"
-			       "application/x-www-form-urlencoded")
-			 (cons "Cookie"
-			       (concat "NAME=" from
-				       "; MAIL=" mail
-				       (if spid
-					   (concat "; SPID=" spid))))
-			 (cons "Referer" referer))
-		   (navi2ch-net-get-param-string param-alist)))
-       (message "send message...")
-       (setq spid (navi2ch-net-send-message-get-spid proc))
-       (cons
-	(if (navi2ch-net-send-message-success-p proc)
-	    (progn
-	      (message "send message...succeed")
-	      t)
-	  (let ((err (navi2ch-net-send-message-error-string proc)))
-	    (if (stringp err)
-		(message "send message...failed: %s" err)
-	      (message "send message...failed")))
-	  nil)
-	spid)))))
+     (unwind-protect
+	 (let ((proc (navi2ch-net-send-request
+		      url "POST"
+		      (list (cons "Content-Type"
+				  "application/x-www-form-urlencoded")
+			    (cons "Cookie"
+				  (concat "NAME=" from
+					  "; MAIL=" mail
+					  (if spid
+					      (concat "; SPID=" spid))))
+			    (cons "Referer" referer))
+		      (navi2ch-net-get-param-string param-alist))))
+	   (message "send message...")
+	   (setq spid (navi2ch-net-send-message-get-spid proc))
+	   (cons
+	    (if (navi2ch-net-send-message-success-p proc)
+		(progn
+		  (message "send message...succeed")
+		  t)
+	      (let ((err (navi2ch-net-send-message-error-string proc)))
+		(if (stringp err)
+		    (message "send message...failed: %s" err)
+		  (message "send message...failed")))
+	      nil)
+	    spid))
+       (navi2ch-net-cleanup-process))))) ; 念のため接続を切る。
 
 (defun navi2ch-net-download-logo (board)
   (let* ((coding-system-for-read 'binary)

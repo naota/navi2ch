@@ -1,5 +1,15 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-wait-time): 5秒はあまりにも長す
+	ぎなので3秒に変更。
+
+	* navi2ch-net.el (navi2ch-net-cleanup-process):
+	navi2ch-net-process の設定をこっちに移動。
+	(navi2ch-net-cleanup-vars): navi2ch-net-process の設定を削除。
+	(navi2ch-net-send-request): clean-up の場所を変えてみた。
+	(navi2ch-net-send-message): メッセージをポストした後は接続を切るよ
+	うにしてみた。send message -> not updated の確率が下がったかな。
+
 	* navi2ch-vars.el (navi2ch-message-wait-time): 1 秒だと更新されな
 	いことが多いので長くしてみた。
 
@@ -50,7 +60,7 @@
 	* navi2ch-article.el (navi2ch-article-view-article-from-file): 引
 	数を渡したままでした・・・
 
-	* navi2ch-directory.el (navi2ch-directory-set-current-board): 
+	* navi2ch-directory.el (navi2ch-directory-set-current-board):
 	navi2ch-bm-board-name-from-file -> navi2ch-board-name-from-file
 
 	* navi2ch-board-misc.el (navi2ch-bm-insert-subject):
@@ -150,22 +160,22 @@
 
 	* navi2ch-directory.el: 新ファイル。ディレクトリにあるスレを全て表
 	示するモード。
-	
+
 	* navi2ch.el (toplevel): navi2ch-directory を require するように。
 	(navi2ch-split-window): 新関数。
 	(navi2ch-goto-url): navi2ch-split-window を使うように。
 	(navi2ch-find-file): navi2ch-article-find-file からリネーム。ディ
 	レクトリを指定した場合は navi2ch-directory を呼ぶように。
-	navi2ch-split-window を使うように。	
+	navi2ch-split-window を使うように。
 
 	* navi2ch-vars.el (navi2ch-global-map): C-cC-f を
 	navi2ch-find-file に変更。
 
 	* navi2ch-util.el (navi2ch-filename-to-url): 新関数。
 
-	* navi2ch-search.el (navi2ch-search-article-regexp): 
+	* navi2ch-search.el (navi2ch-search-article-regexp):
 	navi2ch-article-get-first-message を使うように。
-	
+
 	* navi2ch-list.el (navi2ch-list-select-board):
 	navi2ch-split-window を使うように。
 	(navi2ch-list-two-pane): 削除。
@@ -248,12 +258,12 @@
 2002-06-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode): article モードのバッ
-	ファの kill-buffer-hook に navi2ch-article-backward-buffer を追加。	
+	ファの kill-buffer-hook に navi2ch-article-backward-buffer を追加。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/919
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map): 
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode-map):
 	navi2ch-bookmark-move-mark-article を "mo" にバインド。
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map):
 	navi2ch-bm-display-mark-article を "mo" から "m." に変更。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/124
 
@@ -273,7 +283,7 @@
 	(navi2ch-bookmark-add-subr): message を表示しないように。
 	(navi2ch-bookmark-add): こっちで message を表示するように。
 
-	* navi2ch-article.el (navi2ch-article-sync): 
+	* navi2ch-article.el (navi2ch-article-sync):
 	必ず navi2ch-article-goto-number するように。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/111-113n
 
@@ -298,7 +308,7 @@
 
 2002-06-21  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date): 
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date):
 	(interactive "P") を追加。
 	(navi2ch-bm-exit): 単に板一覧バッファに切り替えるのではなく
 	navi2ch-list を実行するように。
@@ -319,14 +329,14 @@
 
 2002-06-13    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-exec-subr): 
+	* navi2ch-board-misc.el (navi2ch-bm-exec-subr):
 	board 系モードで "md" がちゃんと動くように、処理手順を変更。
 	マークがついたスレでは「マークを外す→関数を実行→移動しない」、
 	マークがついてないスレでは「次の行に移動」。
 
 2002-06-13  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-net.el (navi2ch-net-send-message-success-p): 
+	* navi2ch-net.el (navi2ch-net-send-message-success-p):
 	サーバによって、書き込み完了時のメッセージが変更になっていたので対
 	応。<!-- 2ch_X:***** --> になるんじゃなかったの?
 
@@ -383,15 +393,15 @@
 	(navi2ch-history-delete-mark-articlle): 新関数。
 	(navi2ch-history-mode-map): 上記関数を "md" にバインド。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/887
-	
+
 	* navi2ch-article.el (navi2ch-article-fetch-link): 新関数。
 	(navi2ch-article-mode-map): 上記関数を "i" にバインド。
 
 	fetch 時にスレバッファがあっても表示しないように。
-	* navi2ch-article.el (navi2ch-article-view-article): 
+	* navi2ch-article.el (navi2ch-article-view-article):
 	引数 dont-display を追加。
 	non-nil のときは switch-to-buffer ではなく set-buffer する。
-	(navi2ch-article-fetch-article): 
+	(navi2ch-article-fetch-article):
 	save-excursion し、もとのバッファに switch-to-buffer しない。
 	(navi2ch-article-goto-number):
 	current buffer を表示していないときは navi2ch-article-recenter
@@ -400,7 +410,7 @@
 2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	久々の commit。mami さんすんません。
-	* navi2ch-article.el (navi2ch-article-through-subr): 
+	* navi2ch-article.el (navi2ch-article-through-subr):
 	navi2ch-article-through-nextから名前を変更。
 	中で呼んでた(interactive-p)を外で呼んで引数として渡す事に。
 	navi2ch-article-enable-through に 'ask を入れても P 押すと常に聞か
@@ -411,13 +421,13 @@
 
 2002-05-19    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-cached-subject): 
+	* navi2ch-article.el (navi2ch-article-cached-subject):
 	スレのバッファがあるときは navi2ch-article-current-article からス
 	レタイトルを取得するように。
 	スレタイトル不明のときもなんか表示するように。
 	(navi2ch-article-display-link-minibuffer): リンク先が板の URL のと
 	きに板名を表示するように。
-	(navi2ch-article-cached-subject-minimum-size): 
+	(navi2ch-article-cached-subject-minimum-size):
 	navi2ch-insert-file-contents で挿入したサイズもチェックするように。
 	リンク先スレにレスが1つのときに無限ループに入っていたので。
 	(navi2ch-article-goto-number-or-board): レス本文からもデフォルトの
@@ -425,17 +435,17 @@
 
 	navi2ch-article-find-file で読みこんだスレも bookmark に入れられる
 	ように。
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article): 
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
 	navi2ch-article-get-file-name が nil を返したときもエラーにならな
 	いように。
-	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): 
+	* navi2ch-board-misc.el (navi2ch-bm-insert-subject):
 	ファイルから読んだスレも V, C のマークがつくように。
 	(navi2ch-bm-select-article):
 	ファイルから読んだスレはファイルから読むように。
-	(navi2ch-bm-fetch-article): 
+	(navi2ch-bm-fetch-article):
 	ファイルから読んだスレは fetch しないように。
 	* navi2ch-vars.el (navi2ch-bm-board-name-from-file): 新変数。
-	* navi2ch-article.el (navi2ch-article-view-article-from-file): 
+	* navi2ch-article.el (navi2ch-article-view-article-from-file):
 	navi2ch-bm-board-name-from-file を使うように。
 
 2002-05-16    mami  <mami@users.sourceforge.net>
@@ -461,7 +471,7 @@
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/721
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/726
 
-	* navi2ch-article.el (navi2ch-article-display-link-minibuffer): 
+	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
 	message を調整。
 	major-mode が navi2ch-article-mode のときだけ処理するように。
 
@@ -486,20 +496,20 @@
 	置が元の行のままになるように。
 
 	一番下から連続で d するのに便利なように。
-	* navi2ch-articles.el (navi2ch-articles-delete): 
+	* navi2ch-articles.el (navi2ch-articles-delete):
 	save-excursion する位置を変更。
 	一番下のレスで実行したときは一行上に移動。
-	* navi2ch-board.el (navi2ch-board-delete-line): 
+	* navi2ch-board.el (navi2ch-board-delete-line):
 	一番下のレスで実行したときは一行上に移動。
-	* navi2ch-bookmark.el (navi2ch-bookmark-delete-subr): 
+	* navi2ch-bookmark.el (navi2ch-bookmark-delete-subr):
 	save-excursion する位置を変更。
 	一番下のレスで実行したときは一行上に移動。
-	(navi2ch-bookmark-cut): 
+	(navi2ch-bookmark-cut):
 	save-excursion する位置を変更。
 
 2002-05-06    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-temp-directory): 
+	* navi2ch-util.el (navi2ch-temp-directory):
 	マクロを廃止。関数として作成。
 	navi2ch-directory 以下の tmp/ ディレクトリを使用するように。
 
@@ -507,19 +517,19 @@
 	マクロ navi2ch-temp-directory ではなく関数 navi2ch-temp-directory
 	を使うように。
 
-	* navi2ch-article.el (navi2ch-article-call-aadisplay): 
+	* navi2ch-article.el (navi2ch-article-call-aadisplay):
 	変数 temporary-file-directory ではなく関数 navi2ch-temp-directory
 	を使うように。
 	* navi2ch.el (navi2ch-change-log-directory): 同上。
 
 2002-04-18    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-list.el (navi2ch-list-make-board-txt): 
+	* navi2ch-list.el (navi2ch-list-make-board-txt):
 	板一覧 html 中の <a href="..."> の a が小文字でも動くように。
 
 2002-04-09  タカノ  <504@unix.2ch.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map):
 	"m?" に navi2ch-bm-mark-by-query を設定。
 	(navi2ch-bm-mode-map): "mb" に navi2ch-bm-add-bookmark-mark-article を
 	設定。
@@ -530,13 +540,13 @@
 
 	* navi2ch-board.el (navi2ch-board-save-info): logo を save しない
 	ようにた。
-	
+
 	* navi2ch-board.el (navi2ch-board-expire):
 	navi2ch-board-expire-bookmark-p で bookmark を expire するかどうか
 	判断するようにした。
 	navi2ch-bookmark-delete-article-all を使うように。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/460
-	
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-delete-key): 新関数。
 	(navi2ch-bookmark-delete-article): 同上。
 	(navi2ch-bookmark-delete-article-all): 同上。
@@ -565,7 +575,7 @@
 	(navi2ch-global-map): C-c C-g の binding をはずした。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/313
 
-	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
 	navi2ch-article-base64-decode-message を M-b から M-d に変更。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/331
 
@@ -611,23 +621,23 @@
 
 2002-03-17    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board.el (navi2ch-board-make-subject-txt): 
+	* navi2ch-board.el (navi2ch-board-make-subject-txt):
 	新スクリプトで subback.html のスレ番号とスレタイトルの区切りが
 	「: 」から「：」に変更されたのに対応。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/228
-	* navi2ch-util.el (navi2ch-bigint-add): 
+	* navi2ch-util.el (navi2ch-bigint-add):
 	桁あふれに対応。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/226-227n
 
 2002-03-07  NOKUBI Takatsugu  <knok@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-show-url-subr): 
+	* navi2ch-article.el (navi2ch-article-show-url-subr):
 	typo 修正
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/177
 
 2002-03-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* navi2ch-board.el (navi2ch-board-insert-subjects): 
+	* navi2ch-board.el (navi2ch-board-insert-subjects):
 	navi2ch-board-hide-updated-article を見るよう変更
 
 	* navi2ch-vars.el (navi2ch-board-hide-updated-article): 新変数
@@ -673,12 +683,12 @@
 
 2002-02-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* navi2ch-vars.el (navi2ch-list-bbstable-url): 
+	* navi2ch-vars.el (navi2ch-list-bbstable-url):
 	http://www6.ocn.ne.jp/~mirv/2chmenu.html に変更
 
 2002-02-20    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board-misc.el (navi2ch-bm-textize-article): 
+	* navi2ch-board-misc.el (navi2ch-bm-textize-article):
 	ディレクトリではなくファイル名を聞くように変更。
 	従来どおりディレクトリでの指定にも対応。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/630
@@ -720,7 +730,7 @@
 	と (navi2ch-article-set-link-property) の順序を逆に。
 	引用中でも「>>1」はリンクに見えた方がいいっしょ。
 
-	* navi2ch-vars.el (navi2ch-article-number-regexp): 
+	* navi2ch-vars.el (navi2ch-article-number-regexp):
 	「>>> 1」や「<<1」もリンクとなるように。
 
 2002-02-13  Nanashi San  <nanashi@users.sourceforge.net>
@@ -742,7 +752,7 @@
 	まだ発言のないレスの番号でエラーになる件に対処。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/947-950n
 
-	* navi2ch-mona.el 
+	* navi2ch-mona.el
 	(navi2ch-mona-enable-board-list): 変数を defcustom 化。
 	(navi2ch-mona-disable-board-list): 同上。
 	(navi2ch-mona-pack-space-p): 同上。
@@ -785,7 +795,7 @@
 
 	(navi2ch-on-xemacs): 新変数。XEmacs のとき t。
 	(navi2ch-on-emacs20): 新変数。GNU Emacs 20 のとき t。
-	
+
 	(navi2ch-disable-readcgi-host-list): DOCSTRING の書き間違いを修正。
 	(navi2ch-article-max-buffers): カスタマイズするとき見やすく
 	なるようにカスタマイズ定義を微調撃。
@@ -803,7 +813,7 @@
 
 	* navi2ch-vars.el (navi2ch-bm-select-board-hook): 新変数。
 
-	* contrib/navi2ch-logo.el (navi2ch-logo-init): 
+	* contrib/navi2ch-logo.el (navi2ch-logo-init):
 	navi2ch-board-select-board-hook にかわり上記のフックを利用。
 	このフックは板を読み直したとき常に呼ばれるので、ブックマークなどに
 	移動したときにロゴをきちんと消せるようになった。
@@ -813,7 +823,7 @@
 
 2002-02-07    mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (toplevel): 
+	* navi2ch-article.el (toplevel):
 	kill-emacs-hook に (navi2ch-article-expunge-buffers 0) を追加。
 	Emacs 終了時に navi2ch-article-save-info されるように。
 	(navi2ch-article-exit): (navi2ch-article-save-info) を追加。
@@ -832,7 +842,7 @@
 
 2002-02-05  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
-	* navi2ch-article (navi2ch-article-auto-decode-base64-section): 
+	* navi2ch-article (navi2ch-article-auto-decode-base64-section):
 	新関数。レスの BASE64 でエンコードされたテキストをデコードして
 	インライン展開する。さらには (BASE64しただけの)	もとのファイル
 	へのアンカーとして link を挿入し、contents プロパティにもとの
@@ -903,18 +913,18 @@
 	* Makefile.am (SUBDIRS): contrib を追加。
 
 	* configure.in: contirb/Makefile を追加。
-	
+
 
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-mode): 
+	* navi2ch-article.el (navi2ch-article-mode):
 	バッファローカルにしたいフックをまず make-local-hook する。
 	add-hook の引数だけでフックをバッファローカルにできるのは Emacs 21
 	だけの話で、Emacs 20 や XEmacs ではこうしておかなくちゃダメだった。
 
 2002-02-04  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-save-info): 
+	* navi2ch-article.el (navi2ch-article-save-info):
 	navi2ch-article-mode 以外では何もしないで終了。
 
 2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
@@ -938,7 +948,7 @@
 
 	* navi2ch-articles.el (navi2ch-articles-delete):
 	上記の関数削除に対応。
-	
+
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-replace-string): TO-STRING に `\1'
@@ -1025,8 +1035,8 @@
 	(navi2ch-article-display-link-width): 新変数。
 	navi2ch-article-display-link-minibuffer で使用。
 
-	* navi2ch-article.el 
-	(navi2ch-article-display-link-minibuffer): 
+	* navi2ch-article.el
+	(navi2ch-article-display-link-minibuffer):
 	引用とかを省略するように。
 	navi2ch-article-display-link-minibuffer の幅で表示する。
 
@@ -1060,14 +1070,14 @@
 
 2002-01-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-next-link): 普通に string-to-number でいい事に気
 	付いた。
 	(navi2ch-article-previous-link): 同上。
 
 2002-01-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-get-message-string): 新関数
 	(navi2ch-article-next-link): 上の関数を使って、そのリンクのレスを
 	表示するように。
@@ -1135,7 +1145,7 @@
 	新関数。中身は旧 navi2ch-bookmark-delete ほぼそのまま。
 	(navi2ch-bookmark-delete):
 	y-or-n-p 後に navi2ch-bookmark-delete-subr を呼ぶ、に変更。
-	(navi2ch-bookmark-move): 
+	(navi2ch-bookmark-move):
 	navi2ch-bookmark-delete ではなく -subr を使うように。
 	(navi2ch-bookmark-cut): 同上。
 
@@ -1147,12 +1157,12 @@
 
 	* navi2ch-article.el (navi2ch-article-cleanup-message): レス末尾の
 	空行を取り除くことができるようにした。
-	* navi2ch-vars.el (navi2ch-article-cleanup-white-space-after-old-br): 
+	* navi2ch-vars.el (navi2ch-article-cleanup-white-space-after-old-br):
 	:type を 'boolean に。
 	(navi2ch-article-cleanup-trailing-whitespace): 同上。
 	(navi2ch-article-cleanup-trailing-newline): 新変数。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/705
-	
+
 2002-01-26  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (toplevel): バッファローカルな変数を
@@ -1184,7 +1194,7 @@
 
 2002-01-25  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-write-message): 
+	* navi2ch-article.el (navi2ch-article-write-message):
 	(navi2ch-article-save-number) を追加。
 	レス書き込み前に見ていたレス番号を保存するように。
 
@@ -1260,7 +1270,7 @@
 	* navi2ch-vars.el (navi2ch-message-user-name):
 	"名無しさん＠Ｍｅａｄｏｗ" を追加。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/641
-	
+
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-update-file): 304 の時に
@@ -1286,13 +1296,13 @@
 	* navi2ch-article.el (navi2ch-article-set-link-property):
 	match-string-no-properties -> navi2ch-match-string-no-properties
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/643
-	
+
 	* navi2ch.el (navi2ch-save-info): 保存する前に INFO のテキスト属性
 	をすべて削除するようにした。
 
 2002-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-set-link-property): text-proprety をはずすように
 	してみた。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/623
@@ -1304,7 +1314,7 @@
 	(navi2ch-net-get-content): 同上。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/612
 
-	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file): 
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file):
 	リージョンを直接処理するよう変更。Unix と Windows では動くことを確
 	認したけど、肝心の Windows CE ではテストしてない。
 	(navi2ch-net-get-content-subr-region): リージョンを直接処理するよ
@@ -1422,7 +1432,7 @@
 
 2002-01-19  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-list.el 
+	* navi2ch-list.el
 	(navi2ch-list-state-alist): 新変数。
 	(navi2ch-list-insert-board-names-subr): navi2ch-list-state-alist
 	を使うように。
@@ -1564,12 +1574,12 @@
 
 2002-01-16  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): 
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
 	.dat の形式が変わって <br> の後に空白が入らなくなったようなので対応。
 	インデント崩れちゃうけど、とりあえず。
 	(navi2ch-replace-html-tag-alist): 同上
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/388-
-	
+
 2002-01-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (lisp_LISP): navi2ch-version.el を先頭に持って来た。
@@ -1591,7 +1601,7 @@
 	(recompile): 新ターゲット。全てのファイルをバイトコンパイルする。
 
 2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
-	hook の追加。provide の後で navi2ch-hoge-load-hook を実行、-exit 
+	hook の追加。provide の後で navi2ch-hoge-load-hook を実行、-exit
 	の最初に -exit-hook を実行するようにしました。board 系のモードでは、
 	-mode-hook の前に navi2ch-bm-mode-hook も実行するようにしました。
 
@@ -1623,7 +1633,7 @@
 2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
 	keymap の掃除。同じバインドが色々なファイルにまたがってると更新し
 	忘れちゃいそうなので。あと、copy-keymap から set-keymap-panret に
-	変えたので、(define-key navi2ch-bm-mode-map ...) すれば全ての 
+	変えたので、(define-key navi2ch-bm-mode-map ...) すれば全ての
 	board 系のモードで有効になります。
 
 	* navi2ch-message.el (navi2ch-message-mode-map):
@@ -1682,7 +1692,7 @@
 
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-net.el (navi2ch-net-download-file): 
+	* navi2ch-net.el (navi2ch-net-download-file):
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/362
 	たしかにくどいですね。
 
@@ -1769,7 +1779,7 @@
 
 	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
 	いでみる。navi2ch-board-misc.elc への依存関係追加。
-	
+
 	* navi2ch-net.el (navi2ch-net-download-file): http status が "304"
 	の時、accept-status であれば delete-process しないようにした。
 	(navi2ch-net-download-file-range): http status "304" も OK にした。
@@ -1789,7 +1799,7 @@
 	(navi2ch-2ch-url-p): navi2ch-2ch-host-list と navi2ch-url-to-host
 	を使うように。
 
-	* navi2ch-vars.el 
+	* navi2ch-vars.el
 	(navi2ch-2ch-host-list): 新変数。
 
 	* navi2ch-util.el
@@ -1839,7 +1849,7 @@
 
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (toplevel): 
+	* navi2ch-article.el (toplevel):
 	navi2ch-load-status-hook -> nai2ch-save-status-hook
 
 	* navi2ch-vars.el: Emacs で編集する時 syntax-table がくさるので、
@@ -1876,7 +1886,7 @@
 2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	今度は navi2ch-board-misc 関連の整理。おかしくなっていたら御免なさ
 	い。
-	
+
 	* navi2ch-vars.el (navi2ch-save-status-hook): 新変数。
 	(navi2ch-load-status-hook): 同上。
 
@@ -1884,7 +1894,7 @@
 	(navi2ch): navi2ch-load-status-hook を呼ぶように。
 	(navi2ch-save-status): navi2ch-save-status-hook を呼ぶように。
 
-	* navi2ch-list.el 
+	* navi2ch-list.el
 	(navi2ch-list-navi2ch-category-alist): 初期値を nil に。こいつは
 	navi2ch-bm-regist-board で設定される(navi2ch-list な関数で設定され
 	る方がよかったか？)。
@@ -1900,12 +1910,12 @@
 	navi2ch-bm-regist-board を呼ぶように。
 	navi2ch-(save|load)-status-hook に登録するように。
 
-	* navi2ch-history.el 
+	* navi2ch-history.el
 	(toplevel): navi2ch-bm-regist-board を呼ぶように。
 	navi2ch-(save|load)-status-hook に登録するように。
 	(navi2ch-history): 引数に args を取るように。
 
-	* navi2ch-bookmark.el 
+	* navi2ch-bookmark.el
 	(toplevel): navi2ch-bm-regist-board を呼ぶように。
 	navi2ch-(save|load)-status-hook に登録するように。
 	(navi2ch-bookmark-board): 削除。
@@ -1917,14 +1927,14 @@
 	* navi2ch-board-misc.el
 	(toplevel): navi2ch-(save|load)-hook に登録するように。
 	(navi2ch-bm-regist-board): 新関数
-	
+
 
 2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-board-misc.el 
+	* navi2ch-board-misc.el
 	navi2ch-bm-*-function の funcall がうっとおしかったのでで fset し
 	て navi2ch-bm-*internal を funcall しないでも呼べるようにした。
-	
+
 	(navi2ch-bm-set-func): fset もするようにした。
 	(navi2ch-bm-*): 上の変更に合わせる。
 	(navi2ch-bm-get-property-internal): 関数名定義。
@@ -1933,8 +1943,8 @@
 	(navi2ch-bm-get-article-internal): 同上。
 	(navi2ch-bm-exit-internal): 同上。
 	(色々): 上の変更に合わせる。
-	
-	* navi2ch-article.el 
+
+	* navi2ch-article.el
 	(navi2ch-article-show-url): ソースをちょっと整えてみた。
 	(navi2ch-article-copy-title): 同上。
 
@@ -1997,7 +2007,7 @@
 	(navi2ch-net-send-message-success-p): 同上
 	(navi2ch-net-send-message-error-string): 同上
 
-	* navi2ch-list.el 
+	* navi2ch-list.el
 	(toplevel): navi2ch-search, navi2ch-history, navi2ch-bookmark,
 	navi2ch-article を require するように。
 	(navi2ch-list-make-board-txt): navi2ch-coding-system の名前変更に
@@ -2061,7 +2071,7 @@
 	* configure.in: Cygwin では emacs の候補として Meadow*.exe も加える。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/259
 	Emacs の下だと環境変数 EMACS が t になるので、空にする。
-	
+
 	* navi2ch-article.el (navi2ch-article-view-article):
 	navi2ch-article-expunge-buffers の位置を変更。
 	(navi2ch-article-view-article-from-file): expunge するようにしてみ
@@ -2098,7 +2108,7 @@
 	EMACS に直接代入する。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/239-240n
 
-	* navi2ch-article.el (navi2ch-article-summary-element-set-seen): 
+	* navi2ch-article.el (navi2ch-article-summary-element-set-seen):
 	マクロ引数の element が展開されてなかったので修正。
 	(navi2ch-article-summary-element-set-access-time): 同上
 	(navi2ch-article-expunge-buffers): article buffer の掃除を別関数に
@@ -2111,7 +2121,7 @@
 
 2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-history.el 
+	* navi2ch-history.el
 	(navi2ch-history-add): なるべく subject を表示できるように。
 	(navi2ch-history-insert-subject): 同上。
 
@@ -2125,15 +2135,15 @@
 	* configure.in: 同上。
 
 	* Makefile.am: automake 1.4 対応。
-	
+
 2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-net.el (toplevel): cl を require するようにした。
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-view-article): navi2ch-add-history を使うように。
 
-	* navi2ch-util.el 
+	* navi2ch-util.el
 	(navi2ch-goto-url): navi2ch-add-history を使わないように。
 
 	* navi2ch-board-misc.el
@@ -2149,12 +2159,12 @@
 
 2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-net.el 
+	* navi2ch-net.el
 	(navi2ch-net-http-proxy-basic-credentials): 新関数。
 	(navi2ch-net-make-request-header): 新関数。
 	(navi2ch-net-split-url): 上記関数を使うように。Proxy 認証に対応。
 
-	* navi2ch-vars.el　 
+	* navi2ch-vars.el　
 	上記 Proxy 認証につかう。
 	(navi2ch-net-http-proxy-userid): 新変数。
 	(navi2ch-net-http-proxy-password): 同上。
@@ -2187,7 +2197,7 @@
 	(navi2ch-article-insert-messages): Emacs の gc はとても lazy なの
 	で明示的に (garbage-collect) を呼んでみる。俺の所ではメモリ使用量
 	がそこそこ減った。
-	
+
 
 2002-01-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
@@ -2219,7 +2229,7 @@
 	* navi2ch-board.el ~giko なところにある板に対処。
 	(navi2ch-board-get-home-uri): 新関数。
 	(navi2ch-board-get-readcgi-url): 上記関数を使うように。
-	
+
 2002-01-07  Taiki SUGAWARA <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
@@ -2268,8 +2278,8 @@
 2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	base64 関係の追加。
 	http://pc.2ch.net/test/read.cgi/unix/999166513/962
-	
-	* navi2ch-util.el 
+
+	* navi2ch-util.el
 	(navi2ch-base64-begin-delimiter): 新定数。
 	(navi2ch-base64-end-delimiter): 同上。
 	(navi2ch-base64-begin-delimiter-regexp): 同上。
@@ -2279,15 +2289,15 @@
 	(navi2ch-base64-write-region): 新関数。
 	(navi2ch-base64-insert-file): 同上。
 
-	* navi2ch-popup-article.el 
+	* navi2ch-popup-article.el
 	(navi2ch-popup-article-mode-map): "M-b" に
 	navi2ch-article-base64-decode-message を設定。
 
-	* navi2ch-message.el 
+	* navi2ch-message.el
 	(navi2ch-message-mode-map): "C-cC-b" に navi2ch-base64-insert-file
 	を設定。
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-mode-map): "M-b" に
 	navi2ch-article-base64-decode-message を設定。
 	(navi2ch-article-base64-decode-message): 新関数。
@@ -2300,7 +2310,7 @@
 	(navi2ch-message-always-pop-message): 新変数
 	(navi2ch-article-citation-regexp): 行が ">" だけのとき次の行も含めて
 	引用と認識されてたので修正。
-	
+
 	* navi2ch-util.el
 	(navi2ch-browse-url): URL に extension がないときは
 	navi2ch-browse-url-image しない。
@@ -2326,17 +2336,17 @@
 	* navi2ch-net.el
 	(navi2ch-net-send-message): 投稿失敗時のエラーメッセージを表示。
 	http://pc.2ch.net/test/read.cgi/unix/1009340234/46
-	
+
 2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el: かっこがずれていたのを直した
 
 2001-12-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch.el 
+	* navi2ch.el
 	(navi2ch-load-info): read-string ではなく read を使うように
 
-	* navi2ch-board.el 
+	* navi2ch-board.el
 	(navi2ch-board-mode-map): "A" のキーバインドをはずす。
 	(navi2ch-board-updated-article-p): seen-list ではなく seen も貰うように
 	(navi2ch-board-insert-subjects): article-summary を使うように
@@ -2344,7 +2354,7 @@
 	(navi2ch-board-expire-date-p): やっぱり board と article を貰うのはやめ。
 	(navi2ch-board-expire): article-summary を使うように
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-summary-file-name): 新変数
 	(navi2ch-article-summary-element-set-access-time): 新マクロ
 	(navi2ch-article-summary-element-set-seen): 同上
@@ -2363,18 +2373,18 @@
 
 2001-11-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-vars.el 
+	* navi2ch-vars.el
 	(navi2ch-list-bbstable-url): newbbsmenu.html に変更
 
-	* navi2ch-bookmark.el 
+	* navi2ch-bookmark.el
 	(navi2ch-bookmark-exist-all): 新関数
 
-	* navi2ch-board.el 
+	* navi2ch-board.el
 	(navi2ch-board-expire-date-p): board と article を取るように変更
 	(navi2ch-board-expire): bookmark に登録してあるものは expire しな
 	いように。access-time を見るように。
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-sync): access-time を保存するように
 	(navi2ch-article-save-info): 同上
 	(navi2ch-article-remove-seen): navi2ch-get-major-mode を使うように
@@ -2383,20 +2393,20 @@
 2001-11-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	saparater を separator に修正
-	
-	* navi2ch-util.el 
+
+	* navi2ch-util.el
 	(navi2ch-y-or-n-p): read-event を read-char に変更
 
-	* navi2ch-board.el 
+	* navi2ch-board.el
 	(navi2ch-board-get-file-name): uri が nil のときに対処
 
-	* navi2ch-articles.el 
+	* navi2ch-articles.el
 	(navi2ch-articles-get-article): item が nil のときに対処
 	(navi2ch-articles-get-board): 同上
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	(navi2ch-article-mode-map): "C-cC-u" を navi2ch-goto-url に変更
-	
+
 	(navi2ch-article-add-global-bookmark): navi2ch-bookmark-add の新し
 	い仕様に追随
 
@@ -2405,7 +2415,7 @@
 	* navi2ch.el (navi2ch-version): 新関数
 	(navi2ch-save-info): ファイルが存在するかのチェックをもっとまとも
 	に
-	
+
 
 	* navi2ch-net.el
 	(navi2ch-net-last-url): 新変数。
@@ -2420,7 +2430,7 @@
 	* navi2ch-bookmark.el
 	(navi2ch-bookmark-add): bookmark-id を貰うように
 
-	* navi2ch-board.el 
+	* navi2ch-board.el
 	(navi2ch-board-get-file-name): string-match に失敗したら nil
 	(navi2ch-board-update-file): read.cgi を使わないように
 	(navi2ch-board-add-global-bookmark): navi2ch-bm.el に移動
@@ -2500,7 +2510,7 @@
 
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map): navi2ch-end-of-buffer
 	を "<" に設定
-	
+
 	* navi2ch-article.el (navi2ch-set-make-seen):
 	navi2ch-board-current-board ではなくて
 	navi2ch-article-current-board を間違って使っていたのを直した
@@ -2643,7 +2653,7 @@
 
 	* navi2ch-board-misc.el (navi2ch-bm-insert-subject): subject が
 	nil なら navi2ch-bm-empty-subject を表示するように
-	(navi2ch-bm-fetch-article): 
+	(navi2ch-bm-fetch-article):
 	(navi2ch-bm-textize-article): buffer があるときだけ html を書き出
 	すように
 	(navi2ch-bm-exec-subr): navi2ch-update-failed が返ってきたら
@@ -2872,7 +2882,7 @@
 	* navi2ch-article.el
 	(navi2ch-article-default-header-format-function): 細切れ String 対
 	策？
-	
+
 2001-09-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el (navi2ch-board-sync): max-line を渡さなくした
@@ -2897,8 +2907,8 @@
 	* navi2ch-vars.el (navi2ch-article-enable-through): ask-always を
 	追加
 	(navi2ch-message-trip): 追加
-	(navi2ch-message-aa-prefix-key): 
-	(navi2ch-message-aa-alist): 
+	(navi2ch-message-aa-prefix-key):
+	(navi2ch-message-aa-alist):
 
 	* navi2ch-net.el (navi2ch-net-send-message-success-p): 追加。書き
 	込めたかチェックする。
@@ -2975,14 +2985,14 @@
 	(navi2ch-article-uudecode-message): 同上
 
 2001-07-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
-	
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-convert): 修正
 	(navi2ch-bookmark-convert): さらに修正
 
 2001-07-28  874の名無しさん <874@unix.2ch.net>
 
 	* navi2ch-mona.el (toplevel): emacs21 用の設定追加
-	
+
 2001-07-26  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-util.el (navi2ch-clear-seen): 新関数。デバッグ用
@@ -3243,7 +3253,7 @@
 
 2001-06-09  名無しさん  <431@unix.2ch.net>
 	* navi2ch-mona.el (toplevel): サイズを変えれるように
-	
+
 2001-06-09  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-search.el (navi2ch-search-return-previous-board-maybe):
@@ -3485,13 +3495,13 @@
 	(navi2ch-message-cite-original-from-number): set-mark-command
 	するように
 
-	* navi2ch.el (navi2ch-offline-on): 
+	* navi2ch.el (navi2ch-offline-on):
 	(navi2ch-offline-off): 追加。
 	(navi2ch-exit): 聞くようにした。
 
 	* navi2ch-util.el (navi2ch-set-mode-line-identification): 追加
 	offline の on, off を表示するように。
-	
+
 	* navi2ch-net.el (navi2ch-net-send-request): HTTP/1.0 にしてみた。
 
 2001-03-28  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
@@ -3504,9 +3514,9 @@
 	(navi2ch-bm-search-current-board-subject): 名前変更
 	(navi2ch-bm-search): 追加。search を使う user interface
 
-	* navi2ch-list.el (navi2ch-list-search-current-board-article): 
+	* navi2ch-list.el (navi2ch-list-search-current-board-article):
 	(navi2ch-list-search-current-category-article): 追加
-	(navi2ch-list-search-current-board-subject): 
+	(navi2ch-list-search-current-board-subject):
 	(navi2ch-list-search-current-category-subject): 名前変更
 	(navi2ch-list-search): 追加。search を使う user interface
 
@@ -3515,7 +3525,7 @@
 	* navi2ch-board.el (navi2ch-board-search-board):
 	板からタイトルを検索
 
-	* navi2ch-list.el (navi2ch-list-search-current-subject): 
+	* navi2ch-list.el (navi2ch-list-search-current-subject):
 	(navi2ch-list-search-current-category): 板リストからタイトルを検索
 
 	* navi2ch-search.el: 追加。検索モジュール。
@@ -3539,11 +3549,11 @@
 	* navi2ch-article.el (navi2ch-article-goto-current-board): 追加。
 	スレと同じ板へ移動。
 	(navi2ch-article-pop-poped-point): stack を進むさせるみたいな。
-	(navi2ch-article-push-point): 
+	(navi2ch-article-push-point):
 	(navi2ch-article-pop-point): それにより修正。
-	(navi2ch-article-aadisplay-program): 
-	(navi2ch-article-view-aa-function): 
-	(navi2ch-article-call-aadisplay): 
+	(navi2ch-article-aadisplay-program):
+	(navi2ch-article-view-aa-function):
+	(navi2ch-article-call-aadisplay):
 	(navi2ch-article-view-aa): 追加。aa を見る
 
 2001-03-23  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
@@ -3551,8 +3561,8 @@
 	* navi2ch-board-misc.el (navi2ch-bm-set-func): 追加
 	(navi2ch-bm-setup): 修正。関数を引数に入れなくてもよくした。
 	(navi2ch-bm-insert-subject): 番号も書くように。	引数の追加。
-	(navi2ch-bm-goto-state-column): 
-	(navi2ch-bm-insert-state): 
+	(navi2ch-bm-goto-state-column):
+	(navi2ch-bm-insert-state):
 	(navi2ch-bm-goto-mark-column): 追加。これらに関する他の関数を変更
 	(navi2ch-bm-sort-*): 追加。ソートできるように。
 
@@ -3563,7 +3573,7 @@
 
 	* navi2ch-board.el (navi2ch-board-get-uri):
 	追加。後ろの / を付ける
-	(navi2ch-board-get-url): 
+	(navi2ch-board-get-url):
 	(navi2ch-board-get-file-name): navi2ch-board-get-url を使う
 
 	* navi2ch-mona.el (toplevel): このファイルを追加
@@ -3574,20 +3584,20 @@
 
 	* navi2ch-board-misc.el (navi2ch-bm-select-board): 追加。
 
-	* navi2ch-article.el (navi2ch-article-through-previous): 
+	* navi2ch-article.el (navi2ch-article-through-previous):
 	(navi2ch-article-through-next): board をもっと統合した事により修正。
 	(navi2ch-article-set-link-property): やっぱ narrow
 	(navi2ch-article-arrange-message-hook):
 	functions から hook (buffer 全体を指定するよう)に。
-	(navi2ch-article-get-url): 
-	(navi2ch-article-get-file-name): 
+	(navi2ch-article-get-url):
+	(navi2ch-article-get-file-name):
 	(navi2ch-article-get-info-file-name): navi2ch-board-get-uri を使う
 
 	* navi2ch-util.el (navi2ch-2ch-url-p): 修正
 
-	* navi2ch-list.el (navi2ch-list-etc-category-name): 
-	(navi2ch-list-etc-category-alist): 
-	(navi2ch-list-navi2ch-category-name): 
+	* navi2ch-list.el (navi2ch-list-etc-category-name):
+	(navi2ch-list-etc-category-alist):
+	(navi2ch-list-navi2ch-category-name):
 	(navi2ch-list-navi2ch-category-alist): 追加
 	(navi2ch-list-get-category):
 	navi2ch-list-get-category-list から分離
@@ -3601,12 +3611,12 @@
 
 2001-03-21  名無しさん <447@unix.2ch.net>
 
-	* navi2ch-article.el (navi2ch-article-through-next): 
+	* navi2ch-article.el (navi2ch-article-through-next):
 	(navi2ch-article-through-previous): 修正。
-	
+
 2001-03-20  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-util.el (navi2ch-set-buffer-multibyte): 
+	* navi2ch-util.el (navi2ch-set-buffer-multibyte):
 	* navi2ch-util.el (nav2ch-string-as-unibyte):
 	追加(Xemacs 対策)
 
@@ -3615,7 +3625,7 @@
 
 2001-03-18  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-net.el (navi2ch-net-update-file): 
+	* navi2ch-net.el (navi2ch-net-update-file):
 	(navi2ch-net-update-file-diff):
 	line 対応。やっぱし、時間じゃなくてヘッダを返すように。
 	(navi2ch-net-turn-back-file): エンバグしてた・・・(泣)。
@@ -3641,19 +3651,19 @@
 
 2001-03-16  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-list.el (navi2ch-list-select-board): 
+	* navi2ch-list.el (navi2ch-list-select-board):
 	(navi2ch-list-stay-list-window): 追加
 
 	* navi2ch-article.el (navi2ch-article-show-url):
 	key binding を 'U' に変更
 
-	* navi2ch-board-misc.el (navi2ch-bm-mark): 
-	(navi2ch-bm-unmark): 
-	(navi2ch-bm-exec-subr): 
-	(navi2ch-bm-display-mark-article): 
-	(navi2ch-bm-fetch-mark-article): 
-	(navi2ch-bm-mark-region-subr): 
-	(navi2ch-bm-mark-region): 
+	* navi2ch-board-misc.el (navi2ch-bm-mark):
+	(navi2ch-bm-unmark):
+	(navi2ch-bm-exec-subr):
+	(navi2ch-bm-display-mark-article):
+	(navi2ch-bm-fetch-mark-article):
+	(navi2ch-bm-mark-region-subr):
+	(navi2ch-bm-mark-region):
 	(navi2ch-bm-mark-all): mark 系コマンドを追加
 
 	* navi2ch-board.el (navi2ch-board-show-url):
@@ -3673,12 +3683,12 @@
 2001-03-12  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el (navi2ch-article-sync): hide important をやめる
-	(navi2ch-article-save-number): 
+	(navi2ch-article-save-number):
 	(navi2ch-article-load-number): hide important ならしない
 
 2001-03-11  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el (navi2ch-article-hide-mode): 
+	* navi2ch-article.el (navi2ch-article-hide-mode):
 	(navi2ch-article-important-mode): 追加
 	(navi2ch-article-enable-through): ask を追加
 
@@ -3688,19 +3698,19 @@
 
 2001-03-10  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el (navi2ch-article-next-message): 
+	* navi2ch-article.el (navi2ch-article-next-message):
 	(navi2ch-article-previous-message): 範囲を見なくてもいいように修正。
-	(navi2ch-article-through-next): 
+	(navi2ch-article-through-next):
 	(navi2ch-article-through-previous): 修正。
 
-	* navi2ch-util.el (navi2ch-next-property): 
+	* navi2ch-util.el (navi2ch-next-property):
 	(navi2ch-previous-property): 追加。
 
 2001-03-09  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-board.el (navi2ch-board-regexp-list): 
+	* navi2ch-board.el (navi2ch-board-regexp-list):
 	(navi2ch-board-regexp-test): 追加
-	* navi2ch-article.el (navi2ch-article-check-cached): 
+	* navi2ch-article.el (navi2ch-article-check-cached):
 	(navi2ch-board-get-subject-list): 速くなった・・・かな？
 
 	* navi2ch-article.el (navi2ch-article-get-separater): 追加
@@ -3715,23 +3725,23 @@
 
 	* navi2ch-article.el (navi2ch-article-goto-last-message):
 	t の位置がずれてた・・・
-	(navi2ch-article-view-article): 
+	(navi2ch-article-view-article):
 	(navi2ch-article-select-current-link): レス番号を指定できるように。
-	(navi2ch-article-through-next): 
+	(navi2ch-article-through-next):
 	(navi2ch-article-through-prev):
 	board-mode の板と article-mode の板が同じときだけ移動するように。
-	(navi2ch-article-sync): 
-	(navi2ch-article-save-info): 
-	(navi2ch-article-load-info): 
+	(navi2ch-article-sync):
+	(navi2ch-article-save-info):
+	(navi2ch-article-load-info):
 	(navi2ch-article-write-message):
 	ファイル指定で読んだときは何もしないように。
-	(navi2ch-article-view-article-from-file): 
+	(navi2ch-article-view-article-from-file):
 	(navi2ch-article-sync-from-file): ファイルから読み込む。
 	(navi2ch-article-set-mode-line): 板の名前も表示
 	(navi2ch-article-find-file): ファイルからスレを選ぶ。
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-alist): &amp をはずす
-	(navi2ch-replace-html-tag): 
+	(navi2ch-replace-html-tag):
 	(navi2ch-replace-html-tag-with-temp-buffer): &amp を別処理するように
 	(navi2ch-replace-string): defsubst に。if を一つはずす。
 
@@ -3742,7 +3752,7 @@
 
 
 	* navi2ch-article.el (navi2ch-article-sync):
-	* navi2ch-net.el (navi2ch-net-update-file-diff): 
+	* navi2ch-net.el (navi2ch-net-update-file-diff):
 	あぼーん関連で修正。
 
 	* navi2ch-list.el (navi2ch-list-get-category-list):
@@ -3753,11 +3763,11 @@
 
 2001-03-05  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el (navi2ch-article-scroll-down): 
+	* navi2ch-article.el (navi2ch-article-scroll-down):
 	(navi2ch-article-through-next): 修正
 
 	* navi2ch-list.el (navi2ch-list-select-board):	修正
-	(navi2ch-list-open-all-category): 
+	(navi2ch-list-open-all-category):
 	(navi2ch-list-close-all-category):
 	追加。全てのカテゴリの開閉。
 	(navi2ch-list-indent-width):
@@ -3765,14 +3775,14 @@
 
 2001-03-04  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-article.el (navi2ch-article-through-next): 
+	* navi2ch-article.el (navi2ch-article-through-next):
 	(navi2ch-article-through-prev): 追加。
 	移動系のコマンドをこれに追随。
 
-	* navi2ch-net.el (navi2ch-net-check-margin): 
-	(navi2ch-net-turn-back-step): 
-	(navi2ch-net-turn-back-when-aborn): 
-	(navi2ch-net-check-file): 
+	* navi2ch-net.el (navi2ch-net-check-margin):
+	(navi2ch-net-turn-back-step):
+	(navi2ch-net-turn-back-when-aborn):
+	(navi2ch-net-check-file):
 	(navi2ch-net-turn-back-file): あぼーん対応。
 
 	* navi2ch-message.el (navi2ch-message-exit):
@@ -3837,7 +3847,7 @@
 	* navi2ch-board.el (navi2ch-board-show-url): u にバインド
 	(navi2ch-board-show-url-subr): 追加
 	(navi2ch-board-browse-url(-at-point)?): 上記関数の追加により削除
-	
+
 	* navi2ch-article.el (navi2ch-article-show-url-subr): 追加
 	(navi2ch-article-show-url): 追加 u にバインド。
 	(navi2ch-article-browse-url(-at-point)?): 上記関数の追加により削除
@@ -3876,13 +3886,13 @@
 
 	* navi2ch-util.el (navi2ch-replace-html-tag): 修正
 	(navi2ch-replace-html-tag-with-temp-buffer): 追加
-	
+
 	* navi2ch-article.el (navi2ch-article-parse-message): 追加
 	(navi2ch-article-add-global-bookmark): 追加
 
 2001-01-18  名無しさん  <293@unix.2ch.net>
 	* navi2ch.el (navi2ch): C-u で offline を反転
-	
+
 2001-01-18  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el (navi2ch-article-get-message-list): 修正。
@@ -3893,12 +3903,12 @@
 
 
 	* navi2ch-article.el (navi2ch-article-check-cached): 追加
-	(navi2ch-article-arrange-message): 
+	(navi2ch-article-arrange-message):
 	(navi2ch-article-arrange-message-functions): 追加
 	(navi2ch-article-insert-messages): 修正。
 
-	* navi2ch-board.el (navi2ch-board-select-article): 
-	(navi2ch-board-get-subject-list): 
+	* navi2ch-board.el (navi2ch-board-select-article):
+	(navi2ch-board-get-subject-list):
 	(navi2ch-board-insert-subjects): 修正
 	(navi2ch-board-select-article-or-scroll): 修正。
 
@@ -3910,16 +3920,16 @@
 	ちょっと debug 用に修正。
 	(navi2ch-article-view-range): buffer local な変数に。
 	それに関連して少し変更。
-	(navi2ch-article-new-message-range): 
-	(navi2ch-article-exist-message-range): 
+	(navi2ch-article-new-message-range):
+	(navi2ch-article-exist-message-range):
 	(navi2ch-article-auto-range): 追加。
 	(navi2ch-article-view-article): 修正。
 	(navi2ch-article-select-view-range-subr): 追加。
-	
+
 	* all: buffer が無いときは delete-windows-on しないように。
 
 2001-01-15  名無しさん <279@unix.2ch.net>
-	* navi2ch-board.el (navi2ch-board-select-article): 
+	* navi2ch-board.el (navi2ch-board-select-article):
 
 2001-01-15  名無しさん <243@unix.2ch.net>
 
@@ -3929,14 +3939,14 @@
 2001-01-13  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
 
-	* navi2ch.el (navi2ch-one-pain): 
-	* navi2ch-list.el (navi2ch-list-two-pain): 
-	* navi2ch-board.el (navi2ch-board-two-pain): 
+	* navi2ch.el (navi2ch-one-pain):
+	* navi2ch-list.el (navi2ch-list-two-pain):
+	* navi2ch-board.el (navi2ch-board-two-pain):
 	(navi2ch-board-select-article): 修正。
-	(navi2ch-board-add-bookmark): 
-	(navi2ch-board-delete-bookmark): 
-	(navi2ch-board-insert-subjects): 
-	(navi2ch-board-save-info): 
+	(navi2ch-board-add-bookmark):
+	(navi2ch-board-delete-bookmark):
+	(navi2ch-board-insert-subjects):
+	(navi2ch-board-save-info):
 	(navi2ch-board-load-info): 修正。
 
 	* navi2ch-article.el (navi2ch-article-two-pain): 追加
@@ -3957,37 +3967,37 @@
 
 	* navi2ch-message.el (navi2ch-message-current-article-buffer):
 	追加
-	(navi2ch-message-write-message): 
+	(navi2ch-message-write-message):
 	(navi2ch-message-set-name): 修正。
 
-	* navi2ch.el (navi2ch-save-status): 
-	(navi2ch-exit): 
+	* navi2ch.el (navi2ch-save-status):
+	(navi2ch-exit):
 	(navi2ch-suspend): 追加。
 
 	* navi2ch-util.el (navi2ch-put-alist): 追加。
 
 	* navi2ch-article.el (navi2ch-article-parse-message):
 	xemacs で <br> の置換が失敗するのをとりあえず修正
-	(navi2ch-article-kill-buffer): 
-	(navi2ch-article-save-info): 
+	(navi2ch-article-kill-buffer):
+	(navi2ch-article-save-info):
 	(navi2ch-article-load-info): 追加。
-	(navi2ch-article-save-number): 
+	(navi2ch-article-save-number):
 	(navi2ch-article-load-number): *-(add|open)-number から変更。
-	(navi2ch-article-view-article): 
+	(navi2ch-article-view-article):
 	(navi2ch-article-sync): 対応。
 
 2001-01-08  名無しさん  <251@unix.2ch.net>
 	* navi2ch-article.el (navi2ch-article-recenter) 追加。
 	* navi2ch-article.el (navi2ch-article-redisplay-current-message):
 	修正。
-	
+
 2001-01-08  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el (navi2ch-board-select-board):
 	host 名を modeline に。
 
-	* navi2ch-util.el (navi2ch-url-to-board): 
-	(navi2ch-url-to-article): 
+	* navi2ch-util.el (navi2ch-url-to-board):
+	(navi2ch-url-to-article):
 	(navi2ch-2ch-url-p): 追加。
 
 	* navi2ch-article.el (navi2ch-article-set-link-property):
@@ -4002,7 +4012,7 @@
 	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
 	修正。
 
-	* navi2ch-article.el (navi2ch-article-get-message-list): 
+	* navi2ch-article.el (navi2ch-article-get-message-list):
 	範囲を取れるように修正
 	(navi2ch-article-append-message-list): 追加
 	(navi2ch-article-sync): 差分を取ったら
@@ -4026,23 +4036,23 @@
 	* navi2ch-article.el (navi2ch-article-get-buffer-name): 追加
 	(navi2ch-article-buffer-name-prefix): 追加。
 	スレッドの複数 buffer 化計画開始。
-	(navi2ch-article-get-buffer-name): 
-	(navi2ch-article-buffer-list): 
-	(navi2ch-article-current-buffer): 
-	(navi2ch-article-forward-buffer): 
+	(navi2ch-article-get-buffer-name):
+	(navi2ch-article-buffer-list):
+	(navi2ch-article-current-buffer):
+	(navi2ch-article-forward-buffer):
 	(navi2ch-article-backward-buffer): 追加。
 	* all: 色々対応(ってかどこいじったかあんま覚えてない)。
 
 2001-01-05  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-list.el (navi2ch-list-delete-bookmark): 
+	* navi2ch-list.el (navi2ch-list-delete-bookmark):
 	(navi2ch-list-add-bookmark): coding-system-for-(read|write)
 	を with-temp-file の前に付けてみる。
 
 	* navi2ch-article.el (navi2ch-article-previous-link): 修正
 	(navi2ch-article-set-link-property):
 	navi2ch-article-insert-messages から分離、追加。
-	(navi2ch-article-link-face): 
+	(navi2ch-article-link-face):
 	(navi2ch-article-link-mouse-face): url-*-face から変更(気分)
 	url-*-face は defalias して残してある。
 	(toplevel) shift tab を navi2ch-article-previous-link にバインド
@@ -4057,21 +4067,21 @@
 	(navi2ch-article-redisplay-current-message): 追加。
 
 2001-01-03  名無しさん  <243@unix.2ch.net>
-	
+
 	* navi2ch-net.el (navi2ch-net-send-request):
 	(navi2ch-net-split-url): proxy の修正。
 
 
 2001-01-03  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-message.el (navi2ch-message-write-message): 
-	(navi2ch-message-insert-header): 
-	(navi2ch-message-send-message): 
+	* navi2ch-message.el (navi2ch-message-write-message):
+	(navi2ch-message-insert-header):
+	(navi2ch-message-send-message):
 	* navi2ch-net.el (navi2ch-net-send-message):
 	修正。新スレ立てれるように。でもうまく行かない・・・
 
-	* navi2ch-article.el (navi2ch-article-insert-messages): 
-	(navi2ch-article-get-message): 
+	* navi2ch-article.el (navi2ch-article-insert-messages):
+	(navi2ch-article-get-message):
 	(navi2ch-article-redraw): 修正。
 	(navi2ch-article-header-format-function): 追加
 	(navi2ch-article-default-header-format-function): 追加。
@@ -4080,13 +4090,13 @@
 	(navi2ch-article-exit): 修正。
 	(navi2ch-article-parse-message): 修正
 
-	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-list): 
-	(navi2ch-replace-html-tag-regexp): 
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-list):
+	(navi2ch-replace-html-tag-regexp):
 	(navi2ch-replace-html-tag): *-article-replace-* から変更、移動。
-	* navi2ch-board.el (navi2ch-board-get-subject-list): 
+	* navi2ch-board.el (navi2ch-board-get-subject-list):
 	(navi2ch-board-exit): 修正。
 
-	* navi2ch-article.el (navi2ch-article-parse-message): 対応。 
+	* navi2ch-article.el (navi2ch-article-parse-message): 対応。
 
 2001-01-02  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
@@ -4115,16 +4125,16 @@
 
 	* navi2ch-article.el (navi2ch-article-view-range): 追加
 	表示する範囲を指定。
-	(navi2ch-article-get-article-list): 
-	(navi2ch-article-next-message): 
-	(navi2ch-article-previous-message): 
+	(navi2ch-article-get-article-list):
+	(navi2ch-article-next-message):
+	(navi2ch-article-previous-message):
 	(navi2ch-article-insert-articles): 対応。
 
 2000-12-26  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
 	* configure, configure.in, etc...: 追加。
-	
-	* navi2ch-article.el (navi2ch-article-enable-fill-list): 
+
+	* navi2ch-article.el (navi2ch-article-enable-fill-list):
 	(navi2ch-article-disable-fill-list): 追加
 	(navi2ch-article-insert-articles): 対応
 
@@ -4132,18 +4142,18 @@
 
 	* navi2ch-message.el (navi2ch-message-remember-user-name): 追加
 	基本的にそのスレでの名前しか覚えないように
-	
+
 	* navi2ch-article.el (navi2ch-article-goto-number-recenter): 追加
 
 2000-12-26  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-util.el (navi2ch-uudecode-region): 
+	* navi2ch-util.el (navi2ch-uudecode-region):
 	* navi2ch-article (navi2ch-article-uudecode-message): 追加
 	M-u にバインド
-	
+
 	* navi2ch-article.el (navi2ch-article-insert-articles):
 	レスの区切りに underline を使うように。
-	(navi2ch-article-next-link): 
+	(navi2ch-article-next-link):
 	(navi2ch-article-previous-link): 追加
 	C-i と M-C-i にキーバインド
 
@@ -4157,7 +4167,7 @@
 
 	* navi2ch-net.el (navi2ch-net-send-message): 302 でチェックするように
 
-	* navi2ch-article.el (navi2ch-article-next-message): 
+	* navi2ch-article.el (navi2ch-article-next-message):
 	(navi2ch-article-previous-message): 追加。
 	(navi2ch-article-next-link): 追加(途中)
 
@@ -4185,11 +4195,11 @@
 	* navi2ch-article.el (navi2ch-article-*-bookmark): *-number に変更。
 	(navi2ch-article-parse-field-list): 追加
 	(navi2ch-article-get-article-list): 対応。
-	(navi2ch-article-borwse-url): 
+	(navi2ch-article-borwse-url):
 	(navi2ch-article-browse-url-at-point): 追加。
 	ブラウザで見る
 
-	* navi2ch-message.el (navi2ch-message-send-message): 
+	* navi2ch-message.el (navi2ch-message-send-message):
 	(navi2ch-message-insert-header): 対応
 	(navi2ch-message-set-name): 追加
 
@@ -4200,7 +4210,7 @@
 	(navi2ch-board-save-info): 追加
 	(navi2ch-board-load-info): 追加
 	(navi2ch-board-*-bookmark): board.info を使うように。
-	(navi2ch-board-browse-url): 
+	(navi2ch-board-browse-url):
 	(navi2ch-board-browse-url-at-point): 追加。
 	ブラウザで見る
 
@@ -4210,11 +4220,11 @@
 
 	* navi2ch-board.el (*-bookmark): 修正。
 
-	* navi2ch.el (navi2ch-save-info): 
+	* navi2ch.el (navi2ch-save-info):
 	(navi2ch-load-info): 追加
-	* navi2ch-article.el (navi2ch-article-view-article): 
+	* navi2ch-article.el (navi2ch-article-view-article):
 	(navi2ch-article-exit): 対応
-	(navi2ch-article-add-bookmark): 
+	(navi2ch-article-add-bookmark):
 	(navi2ch-article-open-bookmark): 対応
 
 2000-12-20  Taiki Sugawara  <taiki.s@cityfujisawa.ne.jp>
@@ -4228,14 +4238,14 @@
 	(navi2ch-article-get-article-list): mail 欄も整形。
 	(navi2ch-article-insert-articles):
 	current-number って property も入れるように。
-	(navi2ch-article-get-message): 
+	(navi2ch-article-get-message):
 	(navi2ch-article-get-current-number): 追加。
 	* navi2ch-message.el (navi2ch-message-cite-original):
 	(navi2ch-message-cite-original-from-number): 対応。
 
-2000-12-19  
+2000-12-19
 
-	* navi2ch-board.el (navi2ch-board-toggle-bookmark): 
+	* navi2ch-board.el (navi2ch-board-toggle-bookmark):
 
 	* navi2ch-net.el (navi2ch-net-get-content): 追加。
 	(navi2ch-net-update-file): 変更。
@@ -4243,13 +4253,13 @@
 	(*-insert-*): list から得るように変更
 	(*-sync): ファイルが更新されなかったら書換えないように変更。
 	(*-bookmark-*): 対応。
-	
 
 
-2000-12-18  
+
+2000-12-18
 
 	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
-	(navi2ch-message-cite-original): 
+	(navi2ch-message-cite-original):
 	(navi2ch-message-cite-prefix): 追加。引用ができるように。
 
 	* navi2ch-board.el (navi2ch-board-delete-bookmark): 修正
@@ -4260,13 +4270,13 @@
 	* navi2ch-article.el (navi2ch-article-get-article-list):
 	ラウンジに対応
 	(navi2ch-article-get-article-list): 先頭の空白を消す。
-	(navi2ch-article-replace-string): 
-	(navi2ch-article-replace-regexp-alist): 
+	(navi2ch-article-replace-string):
+	(navi2ch-article-replace-regexp-alist):
 	(navi2ch-article-replace-regexp): 追加。
 	(navi2ch-article-get-article-list): 対応。
 	(toplevel): 読み込み中のメッセージ変更。
 
-2000-12-18  
+2000-12-18
 
 	* all: 気分が乗ったのだけ docstring を付けてみる :-)
 	* navi2ch-article.el (navi2ch-article-mode):
@@ -4275,7 +4285,7 @@
 	nil なら fill-region しない。
 	(navi2ch-article-insert-articles): 対応。
 
-2000-12-18  
+2000-12-18
 
 	* navi2ch-util.el (navi2ch-replace-string): 修正。
 
@@ -4284,9 +4294,9 @@
 	(navi2ch-net-update-file): diff 関係の修正。
 	(navi2ch-net-send-message): Cookie, Referer を送るように。
 
-2000-12-17  
+2000-12-17
 
-	* navi2ch-message.el (navi2ch-message-send-message): 
+	* navi2ch-message.el (navi2ch-message-send-message):
 	ユーザ名前を覚えるようにした。
 	* navi2ch-list.el (navi2ch-list-insert-board-names):
 	何故か、navi2ch-offline を t に束縛してたのを直した。
@@ -4295,11 +4305,11 @@
 	(navi2ch-net-update-file):
 	強制読み込みのときに "Pragma: no-chache" を付けた。
 
-2000-12-16    
+2000-12-16
 
 	* navi2ch-list.el (navi2ch-list-mouse-select): 修正。
 
-2000-12-16    
+2000-12-16
 
 	* navi2ch-message.el (navi2ch-message-user-name): 追加。
 	(navi2ch-message-write-message): 対応。
@@ -4308,24 +4318,24 @@
 	t なら差分を持ってくる。
 	(navi2ch-article-get-article-list): 対応。
 	(navi2ch-article-sync-disable-diff): 追加。S にバインド。
-	
+
 
 	* navi2ch-net.el (navi2ch-net-update-file): diff オプションを付ける。
 
 	* navi2ch-list.el (navi2ch-list-goto-board): completing-read の引数の修正。
 	(navi2ch-list-get-board-name-list): やっぱ get-board に変更 :-)
 	(navi2ch-list-insert-board-names): 対応。
-	* navi2ch-board.el (navi2ch-board-get-subject-list): 
-	(navi2ch-board-get-subject-list): 
-	* navi2ch-article.el (navi2ch-article-get-article-list): 
+	* navi2ch-board.el (navi2ch-board-get-subject-list):
+	(navi2ch-board-get-subject-list):
+	* navi2ch-article.el (navi2ch-article-get-article-list):
 	(navi2ch-article-insert-articles): 同じく
 
-	* navi2ch-article.el (navi2ch-article-set-article-list): 
+	* navi2ch-article.el (navi2ch-article-set-article-list):
 	, が化けるのを直す。
 
-2000-12-16  
+2000-12-16
 
-	* navi2ch-article.el 
+	* navi2ch-article.el
 	* navi2ch-list.el (navi2ch-list-delete-bookmark): 修正。
 	(navi2ch-list-add-bookmark): 修正。
 	(navi2ch-list-sync): bookmark 終了をやめ。
@@ -4337,7 +4347,7 @@
 	(navi2ch-board-delete-bookmark): 修正。
 	(navi2ch-board-sync): bookmark 終了をやめ。
 
-2000-12-16  
+2000-12-16
 
 	* navi2ch-util.el (navi2ch-insert-file-contents): 追加。
 	(navi2ch-expand-file-name): navi2ch.el から移動
@@ -4373,21 +4383,21 @@
 	* navi2ch-net.el (navi2ch-net-update-file):
 	navi2ch-net-get-file から変更。アップデートするだけに。
 	(navi2ch-net-get-file): 削除
-	
 
-2000-12-16  
+
+2000-12-16
 
 	* navi2ch-board.el (navi2ch-board-insert-subjects):
 	(navi2ch-board-mouse-select): マウス対応。
 	* navi2ch-list.el (navi2ch-list-insert-board-names):
 	(navi2ch-list-mouse-select): マウス対応
 
-2000-12-15  
+2000-12-15
 
 	* navi2ch-article.el (navi2ch-article-get-article-list):
 	From: のとこも置換するように。
 
-2000-12-15  
+2000-12-15
 
 	* navi2ch-message.el (navi2ch-message-write-message):
 	article と message buffer だけ表示するように変更。
@@ -4395,7 +4405,7 @@
 	* navi2ch-net.el (navi2ch-net-split-url):
 	navi2ch-net-send-request から分割。
 	いくつか変更。
-	
+
 	* navi2ch-board.el (navi2ch-board-mode-map):
 	navi2ch-board-select-article に変更
 	(navi2ch-board-get-subject-list): 正規表現の変更。
@@ -4403,8 +4413,8 @@
 	* navi2ch-list.el (navi2ch-list-mode-map):
 	navi2ch-list-select-board に変更
 
-2000-12-15 
-	
+2000-12-15
+
 	* *.el: GPL なことを表明(多分)。
 	* navi2ch-net.el (navi2ch-net-send-request): プロクシ対応してみた。
 	(navi2ch-net-http-proxy): 追加
@@ -4420,8 +4430,8 @@
 	* navi2ch-article.el (navi2ch-article-get-article-list):
 	&amp &quot の置換追加
 
-	
-2000-12-14  
+
+2000-12-14
 
 	* all: オフラインモードを追加
 	* navi2ch-net.el, navi2ch.article.el, navi2ch-list.el
@@ -4434,14 +4444,14 @@
 	* navi2ch-util.el: 追加
 
 2000-12-12
-	
+
 	* navi2ch-net.el: navi2ch-net-file-updated の間違いを修正。
 	binary で読み書きするようにした。
 	* all: exit するとき burry-buffer を呼ぶようにした。
 	(require 'cl) し忘れるっていうあほなミスを修正。
 
-2000-12-12  
-	
+2000-12-12
+
 	* all: とりあえず完成。
 
 $Id$

@@ -576,7 +576,7 @@ nil なら、書きかけを破棄していいか問い合わせる。
   :type 'boolean
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-wait-time 5
+(defcustom navi2ch-message-wait-time 3
   "*レスを送ったあとスレをリロードするまでの待ち時間(秒)。"
   :type 'integer
   :group 'navi2ch-message)
