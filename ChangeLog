@@ -1,5 +1,9 @@
 2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el
+	(navi2ch-article-disable-display-link-commands):
+	navi2ch-article-show-url-at-point → navi2ch-show-url-at-point
+
 	* navi2ch-util.el (navi2ch-disabled-key): 新関数。
 
 	* navi2ch-vars.el (navi2ch-global-map): "C-xC-e" に ignore ではな
