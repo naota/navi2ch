@@ -225,6 +225,12 @@
   "スレのエンコードされたセクションの face"
   :group 'navi2ch-face)
 
+(defface navi2ch-article-message-separator-face
+  '((((class color) (background light)) (:foreground "SpringGreen4"))
+    (((class color) (background dark)) (:foreground "firebrick")))
+  "レスの区切の face"
+  :group 'navi2ch-face)
+
 (defface navi2ch-splash-screen-face
   '((((type tty) (background dark)) (:foreground "cyan"))
     (((class color) (background dark)) (:foreground "SkyBlue"))

@@ -510,10 +510,13 @@ BOARD non-nil ならば、その板の coding-system を使う。"
     (put-text-property p (point) 'face 'underline)))
 
 (defun navi2ch-article-insert-message-separator-by-char ()
-  (insert (make-string (max 0
-			    (- (eval navi2ch-article-message-separator-width)
-			       (current-column)))
-		       navi2ch-article-message-separator) "\n"))
+  (let ((pos (point)))
+    (insert (make-string (max 0
+			      (- (eval navi2ch-article-message-separator-width)
+				 (current-column)))
+			 navi2ch-article-message-separator))
+    (put-text-property pos (point) 'face 'navi2ch-article-message-separator-face)
+    (insert "\n")))
 
 (defsubst navi2ch-article-set-link-property-subr (start end type value
 							&optional object)
