@@ -1384,14 +1384,14 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-get-current-date ()
   (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
 					  navi2ch-article-message-list))))))
-    (if (string-match " ID:[^ ]+$" date)
+    (if (string-match " ID:.*" date)
 	(replace-match "" nil t date)
       date)))
 
 (defun navi2ch-article-get-current-id ()
   (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
 					  navi2ch-article-message-list))))))
-    (if (string-match " ID:\\([^ ]+\\)$" date)
+    (if (string-match " ID:\\([^ ]+\\)" date)
 	(match-string 1 date)
       nil)))
 
@@ -2120,7 +2120,7 @@ gunzip に通してから文字コードの推測を試みる。"
 				     (navi2ch-article-get-current-id)
 				     'navi2ch-search-history)))
     (navi2ch-article-search-subr 'date
-				 (concat " ID:.*" (regexp-quote string)))))
+				 (concat " ID:[^ ]*" (regexp-quote string)))))
 
 (defun navi2ch-article-search-body ()
   (let ((string (navi2ch-read-string "Body: "
