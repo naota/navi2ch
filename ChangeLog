@@ -1,3 +1,7 @@
+2004-10-08  mami  <mami@users.sourceforge.net>
+
+	* NEWS: 更新。
+
 2004-10-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-host-list): 新変数。
