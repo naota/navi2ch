@@ -1,9 +1,17 @@
+2003-03-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (toplevel): inline 関数をあらかじめバイトコンパイルし
+	ておくように。
+
+	* Makefile.am (recompile): 上記変更に伴い、バイトコンパイルを一度
+	だけに。
+
 2003-03-11  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-no-logging-message): 新関数。
 	http://pc.2ch.net/test/read.cgi/unix/1046402063/136
 
-	* navi2ch-article.el (navi2ch-article-insert-messages): 
+	* navi2ch-article.el (navi2ch-article-insert-messages):
 	上記関数を使うように。
 	また、navi2ch-article-auto-activate-message-filter の評価部分を削除。
 	(navi2ch-article-view-article): 上記削除部分を追加。
@@ -58,7 +66,7 @@
 
 2003-03-01  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-message-filter-by-subject): 
+	* navi2ch-article.el (navi2ch-article-message-filter-by-subject):
 	navi2ch-article-current-article にスレタイが入っていない場合を
 	考えてなかったバグを修正。
 	http://pc.2ch.net/test/read.cgi/unix/1046402063/17
@@ -94,19 +102,19 @@
 
 	* navi2ch-util.el (navi2ch-apply-filters): 新関数。
 
-	* navi2ch-list.el (navi2ch-list-get-category-list): 
+	* navi2ch-list.el (navi2ch-list-get-category-list):
 	上記関数を使うように。
 
 	* navi2ch-board.el (navi2ch-board-get-subject-list): 同上。
 
 	* navi2ch-article.el (navi2ch-article-get-message-list): 同上。
 	(navi2ch-article-apply-filters): 廃止。
-	(navi2ch-article-get-message-filter-cache-file-name): 
+	(navi2ch-article-get-message-filter-cache-file-name):
 	optional だった引き数を必須に。
 	(navi2ch-article-save-message-filter-cache): 上記変更に追随。
 	また、optional な引き数を追加。
 	(navi2ch-article-save-info): 上記変更に追随。
-	(navi2ch-article-load-message-filter-cache): 
+	(navi2ch-article-load-message-filter-cache):
 	navi2ch-article-save-message-filter-cache と同様。
 	また、navi2ch-article-message-filter-cache を直接変更しないように。
 	(navi2ch-article-insert-messages): 上記変更に追随。

@@ -497,5 +497,13 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (message "falling back...")
     (apply 'navi2ch-browse-url-internal url args)))
 
+(eval-when-compile
+  (mapatoms (lambda (symbol)
+	      (if (and (fboundp symbol)
+		       (string-match "\\`navi2ch-" (symbol-name symbol))
+		       (eq (get symbol 'byte-optimizer)
+			   'byte-compile-inline-expand))
+		  (byte-compile symbol)))))
+
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here
