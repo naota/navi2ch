@@ -99,7 +99,9 @@
 (defun navi2ch-list-get-category (name list)
   (list name
 	(cons 'open
-	      navi2ch-list-init-open-category)
+	      (or navi2ch-list-init-open-category
+		  (cdr (assq 'open
+			     (cdr (assoc name navi2ch-list-category-list))))))
 	(cons 'child list)))
 
 (defun navi2ch-list-set-category (name list)
@@ -486,14 +488,25 @@
       (other-window 1))))
 
 (defun navi2ch-list-save-info ()
+  (when navi2ch-list-category-list
+    (let ((list (mapcar (lambda (elt)
+			  (list (car elt)
+				(assq 'open (cdr elt))))
+			navi2ch-list-category-list)))
+      (setq navi2ch-list-current-list
+	    (navi2ch-put-alist 'category list
+			       navi2ch-list-current-list))))
   (when navi2ch-list-current-list
     (navi2ch-save-info
      (navi2ch-list-get-file-name "list.info")
-     (list (assq 'bookmark navi2ch-list-current-list)))))
+     (list (assq 'bookmark navi2ch-list-current-list)
+	   (assq 'category navi2ch-list-current-list)))))
 
 (defun navi2ch-list-load-info ()
   (setq navi2ch-list-current-list
-	(navi2ch-load-info (navi2ch-list-get-file-name "list.info"))))
+	(navi2ch-load-info (navi2ch-list-get-file-name "list.info"))
+	navi2ch-list-category-list
+	(cdr (assq 'category navi2ch-list-current-list))))
 
 (defun navi2ch-list-get-current-category-list ()
   (save-excursion
