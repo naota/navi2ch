@@ -878,37 +878,30 @@ state はあぼーんされてれば aborn というシンボル。
       (navi2ch-article-goto-number (or num 1)))))
 
 (defun navi2ch-article-save-info (&optional board article first)
-  (let (ignore alist)
-    (when (eq major-mode 'navi2ch-article-mode)
-      (if navi2ch-article-from-file-p
-	  (setq ignore t)
+  (if (eq major-mode 'navi2ch-article-mode)
+      (when (not navi2ch-article-from-file-p)
 	(when (and navi2ch-article-message-list (not first))
 	  (navi2ch-article-save-number))
 	(or board (setq board navi2ch-article-current-board))
-	(or article (setq article navi2ch-article-current-article))))
-    (when (and (not ignore) board article)
-      (setq alist (list
-		   (assq 'number article)
-		   (assq 'name article)
-		   (assq 'time article)
-		   (assq 'hide article)
-		   (assq 'important article)
-		   (assq 'mail article)
-		   (assq 'kako article)))
-      (navi2ch-save-info
-       (navi2ch-article-get-info-file-name board article)
-       alist))))
+	(or article (setq article navi2ch-article-current-article))
+	(let ((alist (list
+		      (assq 'number article)
+		      (assq 'name article)
+		      (assq 'time article)
+		      (assq 'hide article)
+		      (assq 'important article)
+		      (assq 'mail article)
+		      (assq 'kako article))))
+	  (navi2ch-save-info
+	   (navi2ch-article-get-info-file-name board article)
+	   alist)))))
 
 (defun navi2ch-article-load-info (&optional board article)
-  (let (ignore alist)
-    (when (eq major-mode 'navi2ch-article-mode)
-      (if navi2ch-article-from-file-p
-	  (setq ignore t)
-	(or board (setq board navi2ch-article-current-board))
-	(or article (setq article navi2ch-article-current-article))))
-    (when (and (not ignore) board article)
-      (setq alist (navi2ch-load-info
-		   (navi2ch-article-get-info-file-name board article)))
+  (when (not navi2ch-article-from-file-p)
+    (or board (setq board navi2ch-article-current-board))
+    (or article (setq article navi2ch-article-current-article))
+    (let ((alist (navi2ch-load-info
+                  (navi2ch-article-get-info-file-name board article))))
       (dolist (x alist)
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
