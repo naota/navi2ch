@@ -91,7 +91,7 @@ Navi2ch は、Emacs、XEmacs、Meadow などの Emacsen で動作する、２ちゃん
 ねるナビゲータである。
 
 @menu
-* Install::                     イントール
+* Install::                     インストール
 * Usage::                       使い方
 * Customize::                   カスタマイズ
 * Key Bindings::                キーバインド

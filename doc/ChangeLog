@@ -1,3 +1,8 @@
+2002-10-28  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Top): 「イントール」を「インストール」に修正。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/554
+
 2002-09-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Board Misc Mode Key Bindings): "R" の説明を補足。
