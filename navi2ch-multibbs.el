@@ -32,6 +32,7 @@
 (defconst navi2ch-multibbs-ident
   "$Id$")
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-http-date)
 (require 'navi2ch)
 

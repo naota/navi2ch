@@ -1,3 +1,7 @@
+2005-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-multibbs.el (toplevel): cl を require。
+
 2005-01-22  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-get-number-list): 
