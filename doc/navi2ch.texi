@@ -219,6 +219,12 @@ XEmacs の種類を指定。
 @item --with-lispdir
 Navi2ch をインストールするディレクトリを指定。
 
+@item --with-icondir
+アイコンなどの画像ファイルをインストールするディレクトリを指定。
+
+@item --infodir
+Info ファイルをインストールするディレクトリを指定。
+
 @item --with-packagedir
 Navi2ch をインストールパッケージディレクトリを指定。(XEmacs のみ)
 @end table
