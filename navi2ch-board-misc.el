@@ -672,21 +672,21 @@ ARG が non-nil なら移動方向を逆にする。"
       (sort-subr rev 'forward-line 'end-of-line
                  start-key-fun end-key-fun))))
 
-(defun navi2ch-bm-sort-by-number (rev)
+(defun navi2ch-bm-sort-by-number (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
    rev
    'beginning-of-line
    'navi2ch-bm-goto-state-column))
 
-(defun navi2ch-bm-sort-by-state (rev)
+(defun navi2ch-bm-sort-by-state (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
    (not rev)
    'navi2ch-bm-goto-state-column
    'forward-char))
 
-(defun navi2ch-bm-sort-by-subject (rev)
+(defun navi2ch-bm-sort-by-subject (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
    rev
@@ -695,7 +695,7 @@ ARG が non-nil なら移動方向を逆にする。"
      (forward-char 1))
    'navi2ch-bm-goto-other-column))
 
-(defun navi2ch-bm-sort-by-other (rev)
+(defun navi2ch-bm-sort-by-other (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
    rev
@@ -704,7 +704,7 @@ ARG が non-nil なら移動方向を逆にする。"
      nil) ; end-key-fun を呼ばせるには nil が欲しいらしい。はまった(泣)。
    'end-of-line))
 
-(defun navi2ch-bm-sort-by-date (rev)
+(defun navi2ch-bm-sort-by-date (&optional rev)
   (interactive "P")
   (navi2ch-bm-sort-subr
    (not rev)

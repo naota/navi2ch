@@ -1,5 +1,13 @@
 2002-08-29  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-number): 引数を
+	&optional に。
+	(navi2ch-bm-sort-by-state): 同上。
+	(navi2ch-bm-sort-by-subject): 同上。
+	(navi2ch-bm-sort-by-other): 同上。
+	(navi2ch-bm-sort-by-date): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/901
+
 	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): 試行回数の
 	上限が効いてなかったので修正。
 
