@@ -91,7 +91,7 @@
       (let (start (len (length new)))
 	(while (setq start (string-match rep str start))
 	  (setq str (replace-match new nil nil str))
-	  (setq start (+ start new))))
+	  (setq start (+ start len))))
     (when (string-match rep str)
       (setq str (replace-match new nil nil str))))
   str)

@@ -1,3 +1,14 @@
+2002-01-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el 
+	(navi2ch-article-get-message-string): 新関数
+	(navi2ch-article-next-link): 上の関数を使って、そのリンクのレスを
+	表示するように。
+	(navi2ch-article-previous-link): 同上。
+
+	* navi2ch-util.el
+	(navi2ch-replace-string): (+ start new) となっていたので修正。
+
 2002-01-29  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-history.el

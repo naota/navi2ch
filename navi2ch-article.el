@@ -1275,17 +1275,41 @@ article buffer から抜けるなら 'quit を返す。"
     (error
      (funcall navi2ch-article-through-previous-function))))
 
+(defun navi2ch-article-get-message-string (num)
+  "num 番目のレスの文章を得る。"
+  (let ((msg (navi2ch-article-get-message num)))
+    (when (stringp msg)
+      (setq msg (navi2ch-article-parse-message msg)))
+    (cdr (assq 'data msg))))
+
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
   (interactive)
   (let ((point (navi2ch-next-property (point) 'link)))
-    (and point (goto-char point))))
-
+    (when point
+      (goto-char point)
+      (let ((num (get-text-property (point) 'number)))
+	(when num
+	  (setq num (navi2ch-article-str-to-num num))
+	  (when (listp num)
+	    (setq num (car num)))
+	  (message "%s" (navi2ch-replace-string
+			 "\n" ""
+			 (navi2ch-article-get-message-string num) t)))))))
+			
 (defun navi2ch-article-previous-link ()
   "前のリンクへ"
   (interactive)
   (let ((point (navi2ch-previous-property (point) 'link)))
-    (and point (goto-char point))))
+    (when point (goto-char point)
+	  (let ((num (get-text-property (point) 'number)))
+	    (when num
+	      (setq num (navi2ch-article-str-to-num num))
+	      (when (listp num)
+		(setq num (car num)))
+	      (message "%s" (navi2ch-replace-string
+			     "\n" ""
+			     (navi2ch-article-get-message-string num) t)))))))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)
