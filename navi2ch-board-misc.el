@@ -49,6 +49,7 @@
     (define-key map "S" 'navi2ch-bm-sort)
     (define-key map "?" 'navi2ch-bm-search)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
+    (define-key map "R" 'navi2ch-bm-remove-article)
 
     ;; mark command
     (define-key map "*" 'navi2ch-bm-mark)
@@ -768,7 +769,51 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-load-info ()
   (setq navi2ch-bm-fetched-article-list
-	(navi2ch-load-info navi2ch-bm-fetched-info-file)))
-   
+        (navi2ch-load-info navi2ch-bm-fetched-info-file)))
+
+(defun navi2ch-bm-remove-article-subr (board article)
+  "BOARD と ARTICLE で指定されるスレの情報を消す。"
+  (let ((same-board nil)
+	(artid (cdr (assq 'artid article))))
+    (if (eq board navi2ch-board-current-board)
+	(setq same-board t)
+      (setq board (navi2ch-board-load-info board)))
+    (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board
+							       article))))
+      (when buffer
+	(delete-windows-on buffer)
+	(kill-buffer buffer)))
+    (dolist (file (list (navi2ch-article-get-info-file-name board article)
+			(navi2ch-article-get-file-name board article)))
+      (condition-case nil
+	  (if (file-exists-p file)
+	      (delete-file file))
+	(error nil)))
+    (navi2ch-bm-remove-fetched-article board article)
+    (let ((summary (navi2ch-article-load-article-summary board))
+	  elt)
+      (when summary
+	(while (setq elt (assoc artid summary)) ; クドい?
+	  (setq summary (delq elt summary)))
+	(navi2ch-article-save-article-summary board summary)))
+    (dolist (elt board)
+      (if (listp (cdr elt))
+	  (while (member artid (cdr elt))
+	    (setcdr elt (delete artid (cdr elt))))))
+    (if same-board
+	(setq navi2ch-board-current-board board))
+    (navi2ch-board-save-info board)))
+
+(defun navi2ch-bm-remove-article ()
+  (interactive)
+  (let* ((item (navi2ch-bm-get-property-internal (point)))
+	 (article (navi2ch-bm-get-article-internal item))
+	 (board (navi2ch-bm-get-board-internal item)))
+    (when (and board article)
+      (navi2ch-bm-remove-article-subr board article)
+      (save-excursion
+	(let ((buffer-read-only nil))
+	  (navi2ch-bm-insert-state item nil nil))))))
+
 (run-hooks 'navi2ch-board-misc-load-hook)
 ;;; navi2ch-board-misc.el ends here

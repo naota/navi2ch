@@ -992,10 +992,12 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-recenter (num)
   "NUM 番目のレスを画面の一番上に"
-  (if (numberp num)
-      (save-excursion
-	(goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
-	(recenter 0))))
+  (let ((win (if (eq (window-buffer) (current-buffer))
+		 (selected-window)
+	       (get-buffer-window (current-buffer)))))
+    (if (and win (numberp num))
+	(set-window-start
+	 win (cdr (assq 'point (navi2ch-article-get-message num)))))))
 
 (defun navi2ch-article-goto-number-or-board ()
   "入力された数字の位置に移動するか、入力された板を表示する。
@@ -1067,8 +1069,7 @@ state はあぼーんされてれば aborn というシンボル。
       (condition-case nil
 	  (goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
 	(error nil))
-      (if (and navi2ch-article-goto-number-recenter
-	       (eq (window-buffer) (current-buffer)))
+      (if navi2ch-article-goto-number-recenter
 	  (navi2ch-article-recenter (navi2ch-article-get-current-number))))
     (force-mode-line-update t)))
 

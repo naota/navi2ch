@@ -1,3 +1,17 @@
+2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map):
+	navich-bm-remove-article を `R' にバインド。
+	(navi2ch-bm-remove-article-subr): 新関数。
+	(navi2ch-bm-remove-article): 新関数。
+	指定したレスに関する情報をスカっと忘れる。
+	FR#572678 FR#572680
+
+	* navi2ch-article.el (navi2ch-article-recenter): 現在のバッファが
+	ウインドウを持っている時のみ、そのウインドウの表示位置を変える。
+	(navi2ch-article-goto-number): 条件分けを
+	`navi2ch-article-recenter' に移動。
+
 2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-mode-map): C-c C-a ? に
