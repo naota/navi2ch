@@ -27,6 +27,9 @@
 
 (eval-when-compile (require 'cl))
 
+;; Avoid byte-compile warnings (contrib/izonmoji-mode.el).
+(eval-when-compile (defvar izonmoji-mode nil))
+
 (require 'navi2ch)
 
 (defvar navi2ch-bm-mode-map nil)

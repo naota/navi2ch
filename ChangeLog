@@ -1,5 +1,10 @@
 2002-10-09  SAITO Takuya  <tabmore@users.sourceforge.net>
 
+	* navi2ch-board-misc.el (toplevel): byte-compile時のwarning
+	が出ないように。
+
+2002-10-09  SAITO Takuya  <tabmore@users.sourceforge.net>
+
 	* navi2ch-board-misc.el (navi2ch-bm-insert-subject):
 	contrib/izonmoji-mode.el が使われているときは buffer-display-table
 	を nil に。
