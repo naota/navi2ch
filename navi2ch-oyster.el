@@ -133,7 +133,8 @@ START からじゃないかもしれないけど・・・。
 	    url "POST"
 	    (list (cons "Content-Type" "application/x-www-form-urlencoded")
 		  (cons "Cookie" (concat "NAME=" from "; MAIL=" mail
-					 (if spid (concat "; SPID=" spid))))
+					 (if spid (concat "; SPID=" spid
+							  "; PON=" spid))))
 		  (cons "Referer" referer))
 	    (navi2ch-net-get-param-string param-alist))))
       (setq spid (navi2ch-net-send-message-get-spid proc))

@@ -7,6 +7,9 @@
 
 	* navi2ch-net.el (navi2ch-net-send-message-get-spid): 同上。
 
+	* navi2ch-oyster.el (navi2ch-oyster-send-message): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/996
+
 2002-11-18  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-save-info-keys): スペルミス
