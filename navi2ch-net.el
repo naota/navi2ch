@@ -167,8 +167,8 @@
                 (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
       (accept-process-output proc))
     (goto-char (point-min))
-    (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
-    (match-string 1)))
+    (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
+	(match-string 1))))
 
 (defun navi2ch-net-get-header (proc)
   "PROC の接続のヘッダ部を返す"
@@ -300,32 +300,43 @@ TIME が `non-nil' ならば TIME より新しい時だけダウンロードする。
 $Bている時だけダウンロードする。
 OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 ダウンロードできればその接続を返す。"
-  (let ((proc
-         (navi2ch-net-send-request 
-          url "GET"
-          (append
-           (list (if navi2ch-net-force-update
-                     (cons "Pragma" "no-cache")
-                   (and time (cons "If-Modified-Since" time)))
-		 (and navi2ch-net-accept-gzip
-		      '("Accept-Encoding" . "gzip"))
-		 (and navi2ch-net-user-agent
-		      (cons "User-Agent" navi2ch-net-user-agent)))
-           other-header))))
+  (let (proc status)
+    (while (not status)
+      (setq proc
+	    (navi2ch-net-send-request 
+	     url "GET"
+	     (append
+	      (list (if navi2ch-net-force-update
+			(cons "Pragma" "no-cache")
+		      (and time (cons "If-Modified-Since" time)))
+		    (and navi2ch-net-accept-gzip
+			 '("Accept-Encoding" . "gzip"))
+		    (and navi2ch-net-user-agent
+			 (cons "User-Agent" navi2ch-net-user-agent)))
+	      other-header)))
+      (setq status (navi2ch-net-get-status proc))
+      (unless status
+	(message "retrying...")
+	(sit-for 3)))			; リトライする前にちょっと待つ
     (message "checking file...")
-    (let ((status (navi2ch-net-get-status proc)))
-      (cond ((string= status "404")
-             (message "%snot found" (current-message))
-	     (setq proc nil))
-	    ((string= status "304")
-             (message "%snot updated" (current-message)))
-	    ((string= status "302")
-	     (message "%smoved" (current-message)))
-	    (t
-	     (message "%supdated" (current-message))))
-      (if (or (not accept-status)
-	      (member status accept-status))
-	  proc))))
+    (cond ((not (stringp status))
+	   (message "%serror" (current-message))
+	   (setq proc nil))
+	  ((string= status "404")
+	   (message "%snot found" (current-message))
+	   (setq proc nil))
+	  ((string= status "304")
+	   (message "%snot updated" (current-message)))
+	  ((string= status "302")
+	   (message "%smoved" (current-message)))
+	  ((string-match "\\`2[0-9][0-9]\\'" status)
+	   (message "%supdated" (current-message)))
+	  (t
+	   (message "%serror" (current-message))
+	   (setq proc nil)))
+    (if (or (not accept-status)
+	    (member status accept-status))
+	proc)))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range ヘッダを使ってファイルをダウンロードする。"

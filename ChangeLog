@@ -1,3 +1,10 @@
+2002-01-22  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-status): HTTP status が見付から
+	ない時は nil を返すようにした。
+	(navi2ch-net-download-file): HTTP status が nil の場合は retry す
+	るようにした。HTTP/1.1 が常用できるようになった感じ。
+
 2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-parse-message):
