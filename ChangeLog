@@ -1,5 +1,18 @@
 2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch.el (navi2ch-lock): navi2ch-lock-directory を使用するように。
+	(navi2ch-unlock): navi2ch-unlock-directory を使用するように。
+
+	* navi2ch-vars.el (navi2ch-lock-name): navi2ch-lock-directory から
+	名称変更。絶対パスから相対パスへ。
+
+	* navi2ch-util.el (navi2ch-boundp): 新インライン関数。
+	(navi2ch-fboundp): 新インライン関数。
+	(navi2ch-browse-url): browse-url-new-window-flag を優先。
+	navi2ch-boundp を使うように。
+	(navi2ch-lock-directory): 新関数。
+	(navi2ch-unlock-directory): 新関数。
+
 	* navi2ch-board-misc.el (navi2ch-bm-exec-subr):
 	せっかく (sit-for 0) してもイベントが起こると画面更新されなくなる
 	ので、(discard-input) するようにした。

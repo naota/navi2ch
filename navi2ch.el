@@ -448,57 +448,26 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 	    (equal feature 'navi2ch))
 	(unload-feature feature 'force))))
 
-;;; ロック
-;; 最も汎用的な mkdir ロックを実装してみた。
-;; ~/.navi2ch/lockdir というディレクトリがある場合はそのディレクトリは
-;; ロックされているということになる。
-;; シェルスクリプトで同じ手法を使い、cron で wget でも動かせば、
-;; ~/.navi2ch/ 以下を常に新鮮に保てるかも。(w
-
 (defun navi2ch-lock ()
   "`navi2ch-directory' をロックする。"
-  (let* ((lockdir (navi2ch-chop-/ (expand-file-name navi2ch-lock-directory)))
-	 (basedir (file-name-directory navi2ch-lock-directory))
-	 ;; make-directory-internal は mkdir(2) を呼び出すので、アトミッ
-	 ;; クなロックが期待できる。
-	 (make-directory-function (if (fboundp 'make-directory-internal)
-				      'make-directory-internal
-				    'make-directory))
-	 (redo t)
-	 error-message)
-    ;; まず、下でエラーが起きないよう、親ディレクトリを作っておく
-    (unless (file-exists-p basedir)
-      (ignore-errors
-	(make-directory basedir t)))
+  (let ((redo t)
+	error-message)
     (while redo
       (setq redo nil)
-      (if (file-exists-p lockdir)	; lockdir がすでにあると失敗
-	  (setq error-message "ロックディレクトリがすでにあります。")
-	;; file-name-handler-alist があると mkdir が直接呼ばれな
-	;; い可能性がある。
-	(condition-case error
-	    (let ((file-name-handler-alist nil))
-	      (funcall make-directory-function lockdir))
-	  (error
-	   (message "%s" (error-message-string error))
-	   (sit-for 3)
-	   (discard-input)
-	   (setq error-message "ロックディレクトリの作成に失敗しました。"))))
-      (unless (file-exists-p lockdir)	; 念のため、確認しておく
-	(setq error-message "ロックディレクトリを作成できませんでした。"))
-      (if (and error-message
-	       (y-or-n-p (format "%sもう一度試しますか? "
-				 error-message)))
-	  (setq redo t)))
-    (if (and error-message
-	     (not (yes-or-no-p (format "%s危険を承知で続けますか? "
-				       error-message))))
-	(error "lock failed: %s" lockdir))))
+      (unless (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name)
+	(setq error-message "ディレクトリのロックに失敗しました。")
+	(cond ((y-or-n-p (format "%sもう一度試しますか? "
+				 error-message))
+	       (setq redo t))
+	      ((yes-or-no-p (format "%s危険を承知で続けますか? "
+				    error-message))
+	       nil)
+	      (t
+	       (error "lock failed")))))))
 
 (defun navi2ch-unlock ()
   "`navi2ch-directory' のロックを解除する。"
-  (ignore-errors
-    (delete-directory navi2ch-lock-directory)))
+  (navi2ch-unlock-directory navi2ch-directory navi2ch-lock-name))
 
 (defun navi2ch-ident-list ()
   "ロードしている Navi2ch の各モジュールの Id を表示する。"

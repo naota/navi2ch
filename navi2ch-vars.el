@@ -149,10 +149,11 @@
   :type 'boolean
   :group 'navi2ch)
 
-(defcustom navi2ch-lock-directory  (expand-file-name "lockdir"
-						  navi2ch-directory)
-  "ロックディレクトリの絶対パス"
-  :type 'directory
+(defcustom navi2ch-lock-name "lockdir"
+  "*ロックディレクトリの名前。
+絶対パスにすれば `navi2ch-directory' 以外の場所にもロックディレクトリ
+を作れるが、素人にはお勧めしない。"
+  :type 'string
   :group 'navi2ch)
 
 ;;; list variables

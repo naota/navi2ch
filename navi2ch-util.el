@@ -343,6 +343,16 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	  ((memq c '(?n ?N ?\177))
 	   nil))))
 
+(defsubst navi2ch-boundp (symbol)
+  "SYMBOL がバインドされていない時は nil を返す。
+bnoundp と違い、SYMBOL がバインドされている時は t ではなくシンボルを返す。"
+  (and (boundp symbol) symbol))
+
+(defsubst navi2ch-fboundp (symbol)
+  "SYMBOL がバインドされていない時は nil を返す。
+fbnoundp と違い、SYMBOL がバインドされている時は t ではなくシンボルを返す。"
+  (and (fboundp symbol) symbol))
+
 (defun navi2ch-browse-url (url)
   (cond ((and navi2ch-browse-url-image-program	; images
 	      (file-name-extension url)
@@ -351,10 +361,8 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	 (navi2ch-browse-url-image url))
 	(t (browse-url				; others
 	    url
-	    (symbol-value (cond ((boundp 'browse-url-new-window-p)
-				 'browse-url-new-window-p)
-				((boundp 'browse-url-new-window-flag)
-				 'browse-url-new-window-flag)))))))
+	    (symbol-value (or (navi2ch-boundp 'browse-url-new-window-flag)
+			      (navi2ch-boundp 'browse-url-new-window-p)))))))
 
 (defun navi2ch-browse-url-image (url &optional new-window)
   ;; new-window ignored
@@ -695,6 +703,50 @@ properties to add to the result"
   (navi2ch-ifxemacs
       (characterp obj)
     (char-valid-p obj)))
+
+;;; ロック
+;; 最も汎用的な mkdir ロックを実装してみた。
+;; DIRECTORY に LOCKNAME というディレクトリがある場合はそのディレクトリは
+;; ロックされているということになる。
+(defun navi2ch-lock-directory (directory &optional lockname)
+  "LOCKNAME を使い、DIRECTORY をロックする。
+LOCKNAME が省略された場合は \"lockdir\" を使用する。
+LOCKNAME が絶対パスではない場合、DIRECTORY からの相対パスとして扱う。
+ロックに成功したら non-nil を、失敗したら nil を返す。"
+  (setq lockname (navi2ch-chop-/ (expand-file-name (or lockname "lockdir")
+						   directory))
+	directory (file-name-directory lockname))
+  (let ((make-directory-function (or (navi2ch-fboundp 'make-directory-internal)
+				     'make-directory)))
+    (if (not (file-exists-p lockname))	; lockdir がすでにあると失敗
+	(condition-case error
+	    (and (progn
+		   ;; まず、親ディレクトリを作っておく。
+		   (unless (file-directory-p directory)
+		     (make-directory directory t))
+		   (file-directory-p directory))
+		 (progn
+		   ;; file-name-handler-alist があると mkdir が直接呼
+		   ;; ばれない可能性がある。
+		   (let ((file-name-handler-alist nil))
+		     (funcall make-directory-function lockname))
+		   (file-exists-p lockname))) ; 念のため、確認しておく
+	  (error
+	   (message "%s" (error-message-string error))
+	   (sit-for 3)
+	   (discard-input)
+	   nil)))))
+
+(defun navi2ch-unlock-directory (directory &optional lockname)
+  "LOCKNAME を使い、DIRECTORY のロックを解除する。
+LOCKNAME が省略された場合は \"lockdir\" を使用する。
+LOCKNAME が絶対パスではない場合、DIRECTORY からの相対パスとして扱う。
+ロックの解除に成功したら non-nil を、失敗したら nil を返す。"
+  (setq lockname (navi2ch-chop-/ (expand-file-name (or lockname "lockdir")
+						   directory)))
+  (ignore-errors
+    (delete-directory lockname))
+  (not (file-exists-p lockname)))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
