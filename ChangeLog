@@ -1,5 +1,7 @@
 2003-06-30  extra  <ekisutora@users.sourceforge.net>
 
+	* NEWS: navi2ch-auto-modify についての記述を追加。
+
 	* navi2ch-vars.el (navi2ch-article-message-filter-list): docstring 内の
 	関数の記述例で、括弧の数がおかしかったのを修正。
 
