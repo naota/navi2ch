@@ -219,11 +219,14 @@
 	 (setq navi2ch-board-current-board nil)))
     (navi2ch-bm-exit)))
 
-(defun navi2ch-search-subject-subr (board-list)
-  (setq navi2ch-search-searched-subject-list
-        (navi2ch-search-board-subject-regexp
-         board-list (navi2ch-read-string "Subject regexp: " nil
-					 'navi2ch-search-history)))
+(defun navi2ch-search-subject-subr (board-list-or-function)
+  (let ((regexp (navi2ch-read-string "Subject regexp: " nil
+				     'navi2ch-search-history))
+	(board-list (if (functionp board-list-or-function)
+			(funcall board-list-or-function)
+		      board-list-or-function)))
+    (setq navi2ch-search-searched-subject-list
+	  (navi2ch-search-board-subject-regexp board-list regexp)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-for-each-directory-recursive (function directory)
@@ -263,18 +266,21 @@
 
 (defun navi2ch-search-all-subject ()
   (interactive)
-  (navi2ch-search-subject-subr (navi2ch-search-all-board-list)))
+  (navi2ch-search-subject-subr #'navi2ch-search-all-board-list))
 
-(defun navi2ch-search-article-subr (board-list)
-  (setq navi2ch-search-searched-subject-list
-        (navi2ch-search-article-regexp
-         board-list (navi2ch-read-string "Search regexp: " nil
-					 'navi2ch-search-history)))
+(defun navi2ch-search-article-subr (board-list-or-function)
+  (let ((regexp (navi2ch-read-string "Search regexp: " nil
+				     'navi2ch-search-history))
+	(board-list (if (functionp board-list-or-function)
+			(funcall board-list-or-function)
+		      board-list-or-function)))
+    (setq navi2ch-search-searched-subject-list
+	  (navi2ch-search-article-regexp board-list regexp)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-article ()
   (interactive)
-  (navi2ch-search-article-subr (navi2ch-search-all-board-list)))
+  (navi2ch-search-article-subr #'navi2ch-search-all-board-list))
 
 (defun navi2ch-search-cache-subr (board-list)
   (setq navi2ch-search-searched-subject-list

@@ -1,3 +1,13 @@
+2004-02-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-search.el (navi2ch-search-subject-subr): 引数に板リスト
+	を得る関数を渡せるように。
+	(navi2ch-search-article-subr): 同上。
+	(navi2ch-search-all-subject): 上記関数を使うように。
+	(navi2ch-search-all-article): 同上。
+	全ての板で検索する場合、"a" を押してから "regexp:" のプロンプトが
+	出るまでにラグがあるのを軽減。
+
 2004-01-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-url-regexp):
