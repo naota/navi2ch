@@ -438,13 +438,38 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	       (cons num (cdr x)))
 	     list2))))
 
+(defun navi2ch-article-insert-hide-number-following (&optional number)
+  "レス番号 NUMBER の後に続く hide されたレス数を挿入する。 "
+  (setq number (or number (navi2ch-article-get-current-number)))
+  (unless (or navi2ch-article-hide-mode navi2ch-article-important-mode)
+    (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
+	  beg end cnt)
+      (setq beg (car (memq (1+ number) hide)))
+      (when beg
+	(setq end beg)
+	(while (memq (1+ end) hide)
+	  (setq end (1+ end)))
+	(setq cnt (1+ (- end beg)))
+	(let ((number-str (if (= cnt 1)
+			      (format "%d" beg)
+			    (format "%d-%d" beg end))))
+	  (insert (format "[%d hide message(s) (" cnt))
+	  (let ((pos (point)))
+	    (insert ">>" number-str)
+	    (navi2ch-article-set-link-property-subr pos (point)
+						    'number number-str)
+	    (insert ")]")))))))
+
 (defun navi2ch-article-insert-message-separator-by-face ()
   (let ((p (point)))
+    (navi2ch-article-insert-hide-number-following)
     (insert "\n")
     (put-text-property p (point) 'face 'underline)))
 
 (defun navi2ch-article-insert-message-separator-by-char ()
-  (insert (make-string (eval navi2ch-article-message-separator-width)
+  (navi2ch-article-insert-hide-number-following)
+  (insert (make-string (- (eval navi2ch-article-message-separator-width)
+			  (current-column))
 		       navi2ch-article-message-separator) "\n"))
 
 (defsubst navi2ch-article-set-link-property-subr (start end type value
