@@ -109,7 +109,7 @@
     (dolist (board board-list)
       (message "searching subject in %s..." (cdr (assq 'name board)))
       (let ((file (navi2ch-board-get-file-name board)))
-        (when (file-exists-p file)
+        (when (and file (file-exists-p file))
           (let (rep)
             (with-temp-buffer
               (navi2ch-insert-file-contents file)

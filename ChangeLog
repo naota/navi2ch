@@ -1,3 +1,22 @@
+2002-10-13  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-goto-number):
+	移動先のレス番号がスレの範囲外だった場合の対処方法
+	を変更(popup-article-mode対応)。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article ): stateを返す
+	ように。
+
+	* navi2ch-list.el (navi2ch-list-search): category上で実行したら、
+	b)oard を選択肢からはずす。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	"j" に navi2ch-article-few-scroll-up、
+	"k" に navi2ch-article-few-scroll-down をバインド。
+
+	* navi2ch-search.el (navi2ch-search-board-subject-regexp):
+	file が nil かどうかをチェック。
+
 2002-10-12  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):

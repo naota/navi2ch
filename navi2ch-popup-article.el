@@ -33,6 +33,8 @@
 (unless navi2ch-popup-article-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-view-map)
+    (define-key map "j" 'navi2ch-article-few-scroll-up)
+    (define-key map "k" 'navi2ch-article-few-scroll-down)
     (define-key map " " 'navi2ch-article-scroll-up)
     (define-key map [del] 'navi2ch-article-scroll-down)
     (define-key map [backspace] 'navi2ch-article-scroll-down)

@@ -732,8 +732,11 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (interactive)
   (let ((ch (navi2ch-read-char-with-retry
 	     "Search for: s)ubject a)rticle c)ache: " nil '(?s ?a ?c)))
-	(ch2 (navi2ch-read-char-with-retry
-	      "Search from: b)oard c)ategory a)ll: " nil '(?b ?c ?a))))
+	(ch2 (if (get-text-property (point) 'board)
+		 (navi2ch-read-char-with-retry
+		  "Search from: b)oard c)ategory a)ll: " nil '(?b ?c ?a))
+	       (navi2ch-read-char-with-retry
+		"Search from: c)ategory a)ll: " nil '(?c ?a)))))
     (cond ((eq ch ?s)
 	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-subject))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-subject))

@@ -428,7 +428,8 @@
 	    (let ((buffer-read-only nil))
 	      (save-excursion
 		(navi2ch-bm-insert-state item 'update)))))
-      (message "Can't select this line!"))))
+      (message "Can't select this line!"))
+    state))
 
 (defun navi2ch-bm-textize-article (&optional dir-or-file buffer)
   (interactive)

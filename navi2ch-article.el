@@ -1041,8 +1041,11 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
       (navi2ch-article-push-point))
     (catch 'break
       (let ((len (length navi2ch-article-message-list))
-	    (range navi2ch-article-view-range))
-	(and (> num len) (setq num len))
+	    (range navi2ch-article-view-range)
+	    (first (caar navi2ch-article-message-list))
+	    (last (caar (last navi2ch-article-message-list))))
+	(when (< num first) (setq num first))
+	(when (> num last) (setq num last))
 	(unless (navi2ch-article-inside-range-p num range len)
 	  (if navi2ch-article-redraw-when-goto-number
 	      (progn
