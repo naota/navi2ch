@@ -1,3 +1,8 @@
+2002-02-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-save-info): 
+	navi2ch-article-mode 以外では何もしないで終了。
+
 2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* icons/plugged.xpm: 上下の空白を削って高さを 12 dot にした。
