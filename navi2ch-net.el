@@ -43,21 +43,39 @@
 
 (defmacro navi2ch-net-ignore-errors (&rest body)
   "BODY を評価し、その値を返す。
-BODY の評価中にエラー、quit が起こると nil を返す。"
+BODY の評価中にエラーが起こると nil を返す。"
   `(condition-case err
        ,(cons 'progn body)
      (error
+      (condition-case nil
+	  (navi2ch-net-cleanup-process)
+	(error nil))
       (ding)
       (if err
 	  (message "Error: %s" (error-message-string err))
 	(message "Error"))
-      nil)))
+      nil)
+     (quit
+      (condition-case nil
+	  (navi2ch-net-cleanup-process)
+	(error nil))
+      (signal (car err) (cdr err)))))
 
 (defun navi2ch-net-cleanup ()
-  (if (processp navi2ch-net-process)
-      (let ((buf (process-buffer navi2ch-net-process)))
-	(delete-process navi2ch-net-process)
-	(kill-buffer buf)))
+  (let (buf)
+    (if (processp navi2ch-net-process)
+	(setq buf (process-buffer navi2ch-net-process)))
+    (unwind-protect
+	(navi2ch-net-cleanup-process)
+      (kill-buffer buf))))
+
+(defun navi2ch-net-cleanup-process ()
+  (unwind-protect
+      (if (processp navi2ch-net-process)
+	  (delete-process navi2ch-net-process))
+    (navi2ch-net-cleanup-vars)))
+
+(defun navi2ch-net-cleanup-vars ()
   (setq navi2ch-net-status nil
 	navi2ch-net-header nil
 	navi2ch-net-content nil
@@ -132,10 +150,8 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
                            (length content) content)
                  "")))
       (message "%sconnected" (current-message))
-      (setq navi2ch-net-status nil
-	    navi2ch-net-header nil
-	    navi2ch-net-content nil
-	    navi2ch-net-process proc))))
+      (navi2ch-net-cleanup-vars)
+      (setq navi2ch-net-process proc))))
       
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host file port host2ch)

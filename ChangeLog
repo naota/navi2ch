@@ -1,3 +1,12 @@
+2002-06-26  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-ignore-errors): エラーや quit 時にコ
+	ネクションの後始末をするように。
+	(navi2ch-net-cleanup-process): 新関数。
+	(navi2ch-net-cleanup-vars): 新関数。
+	(navi2ch-net-cleanup): 上記関数を使うように。
+	(navi2ch-net-send-request): navi2ch-net-cleanup-vars を使うように。
+
 2002-06-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-net.el (navi2ch-net-update-file-diff): 更新した内容が
