@@ -580,15 +580,15 @@ ARG が non-nil なら移動方向を逆にする。"
     (goto-char (point-min))
     (while (not (eobp))
       (navi2ch-bm-goto-mark-column)
-      (when (looking-at "\\*")
-	(condition-case nil
-	    (progn
-	      (save-excursion
-		(apply func args))
-	      (navi2ch-bm-unmark))
-	  (navi2ch-update-failed nil))
-	(sit-for 0))
-      (forward-line))))
+      (if (looking-at "\\*")
+	  (progn
+	    (condition-case nil
+		(save-excursion
+		  (navi2ch-bm-unmark)
+		  (apply func args))
+	      (navi2ch-update-failed nil))
+	    (sit-for 0))
+	(forward-line)))))
 
 (defun navi2ch-bm-display-mark-article ()
   (interactive)

@@ -1,3 +1,10 @@
+2002-06-13    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-exec-subr): 
+	board 系モードで "md" がちゃんと動くように、処理手順を変更。
+	マークがついたスレでは「マークを外す→関数を実行→移動しない」、
+	マークがついてないスレでは「次の行に移動」。
+
 2002-06-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-send-message-success-p): 
