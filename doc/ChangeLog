@@ -1,3 +1,7 @@
+2002-04-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch.texi (FAQ): C-u s についての記述を追加。
+
 2002-03-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch.texi (FAQ): 新変数 navi2ch-board-hide-updated-article
