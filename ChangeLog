@@ -1,3 +1,21 @@
+2002-07-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-send-message):
+	navi2ch-offline が t のときはすぐ終了するように。
+
+	navi2ch-ask-when-exit と同様の挙動を実装。
+	デフォルトの挙動と変数の値が t のときの挙動は変更していないはず。
+	* navi2ch-message.el (navi2ch-message-write-message): 最初に
+	navi2ch-message-ask-before-write の値により問い合わせるように。
+	(navi2ch-message-send-message): navi2ch-message-ask-before-send に
+	関数を入れられるように。
+	(navi2ch-message-kill-message): navi2ch-message-ask-before-kill に
+	関数を入れられるように。
+	* navi2ch-vars.el (navi2ch-message-ask-before-write): 新変数。
+	(navi2ch-message-ask-before-send): デフォルト値を 'y-or-n-p に。
+	:type を 'boolean から '(choice	...) に。
+	(navi2ch-message-ask-before-kill): 同上。
+
 2002-07-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-url-to-board): url が

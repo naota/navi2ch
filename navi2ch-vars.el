@@ -617,14 +617,25 @@ nil の場合は同じスレの内容のみを得る。"
   :type 'string
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-ask-before-send t
-  "*non-nil なら、書き込み送信の確認メッセージを表示する。"
-  :type 'boolean
+(defcustom navi2ch-message-ask-before-write nil
+  "*non-nil なら、レスを書き始めるときに確認メッセージを表示する。"
+  :type '(choice (const :tag "yes-or-no-p で確認" yes-or-no-p)
+                 (const :tag "y-or-n-p で確認" y-or-n-p)
+                 (const :tag "確認しない" nil))
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-ask-before-kill t
+(defcustom navi2ch-message-ask-before-send 'y-or-n-p
+  "*non-nil なら、書き込み送信の確認メッセージを表示する。"
+  :type '(choice (const :tag "yes-or-no-p で確認" yes-or-no-p)
+                 (const :tag "y-or-n-p で確認" y-or-n-p)
+                 (const :tag "確認しない" nil))
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-ask-before-kill 'y-or-n-p
   "*non-nil なら、書きこみキャンセルの確認メッセージを表示する。"
-  :type 'boolean
+  :type '(choice (const :tag "yes-or-no-p で確認" yes-or-no-p)
+                 (const :tag "y-or-n-p で確認" y-or-n-p)
+                 (const :tag "確認しない" nil))
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-always-pop-message nil

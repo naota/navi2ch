@@ -78,35 +78,39 @@
   "*`navi2ch-message-mode' で使用される `paragraph-start'。")
 
 (defun navi2ch-message-write-message (board article &optional new sage)
-  (if (and (get-buffer navi2ch-message-buffer-name)
-	   (or navi2ch-message-always-pop-message
-	       (not (navi2ch-message-kill-message))))
-      (navi2ch-message-pop-message-buffer)
-    (setq navi2ch-message-window-configuration
-	  (current-window-configuration))
-    (delete-other-windows)
-    (split-window-vertically)
-    (other-window 1)
-    (setq navi2ch-message-current-article article)
-    (setq navi2ch-message-current-board board)
-    (setq navi2ch-message-new-message-p new)
-    (setq navi2ch-message-current-article-buffer
-	  (if new nil (current-buffer)))
-    (switch-to-buffer (get-buffer-create navi2ch-message-buffer-name))
-    (navi2ch-message-mode)
-    (erase-buffer)
-    (navi2ch-message-insert-header new sage)
-    (setq navi2ch-mode-line-identification
-	  (if new
-	      (format "*new message* [%s]"
-		      (cdr (assq 'name navi2ch-message-current-board)))
-	    (format "Re: %s [%s]"
-		    (cdr (assq 'subject navi2ch-message-current-article))
-		    (cdr (assq 'name navi2ch-message-current-board)))))
-    (navi2ch-set-mode-line-identification)
-    (run-hooks 'navi2ch-message-setup-message-hook)
-    (when sage
-      (run-hooks 'navi2ch-message-setup-sage-message-hook))))
+  (when (or (not navi2ch-message-ask-before-write)
+	    (if (functionp navi2ch-message-ask-before-write)
+		(funcall navi2ch-message-ask-before-write "Write new message?")
+	      (y-or-n-p "Write new message?")))
+    (if (and (get-buffer navi2ch-message-buffer-name)
+	     (or navi2ch-message-always-pop-message
+		 (not (navi2ch-message-kill-message))))
+	(navi2ch-message-pop-message-buffer)
+      (setq navi2ch-message-window-configuration
+	    (current-window-configuration))
+      (delete-other-windows)
+      (split-window-vertically)
+      (other-window 1)
+      (setq navi2ch-message-current-article article)
+      (setq navi2ch-message-current-board board)
+      (setq navi2ch-message-new-message-p new)
+      (setq navi2ch-message-current-article-buffer
+	    (if new nil (current-buffer)))
+      (switch-to-buffer (get-buffer-create navi2ch-message-buffer-name))
+      (navi2ch-message-mode)
+      (erase-buffer)
+      (navi2ch-message-insert-header new sage)
+      (setq navi2ch-mode-line-identification
+	    (if new
+		(format "*new message* [%s]"
+			(cdr (assq 'name navi2ch-message-current-board)))
+	      (format "Re: %s [%s]"
+		      (cdr (assq 'subject navi2ch-message-current-article))
+		      (cdr (assq 'name navi2ch-message-current-board)))))
+      (navi2ch-set-mode-line-identification)
+      (run-hooks 'navi2ch-message-setup-message-hook)
+      (when sage
+	(run-hooks 'navi2ch-message-setup-sage-message-hook)))))
 
 (defun navi2ch-message-pop-message-buffer ()
   (interactive)
@@ -161,59 +165,63 @@
 
 (defun navi2ch-message-send-message ()
   (interactive)
-  (when (or (not navi2ch-message-ask-before-send)
-            (y-or-n-p "send message?"))
-    (run-hooks 'navi2ch-message-before-send-hook)
-    (navi2ch-message-cleanup-message)
-    (save-excursion
-      (let (subject from mail message)
-        (goto-char (point-min))
-        (when navi2ch-message-new-message-p
-	  (re-search-forward "^Subject: ?\\(.*\\)" nil t)
-          (setq subject (match-string 1)))
-        (re-search-forward "^From: ?\\(.*\\)")
-        (setq from (match-string 1))
-        (when navi2ch-message-remember-user-name
-          (setq navi2ch-message-user-name from))
-        (when (not navi2ch-message-new-message-p)
-          (navi2ch-message-set-name from))
-        (re-search-forward "^Mail: ?\\(.*\\)")
-        (setq mail (match-string 1))
-	(when (not navi2ch-message-new-message-p)
-	  (navi2ch-message-set-mail mail))
-        (forward-line 2)
-        (setq message (buffer-substring-no-properties (point) (point-max)))
-        (let ((buffer (current-buffer))
-	      (inhibit-read-only t))
-          (save-excursion
-            (set-buffer (get-buffer-create
-                         navi2ch-message-backup-buffer-name))
-	    (erase-buffer)
-	    (insert-buffer buffer)
-            (bury-buffer)))
-	(when navi2ch-message-trip
-	  (setq from (concat from "#" navi2ch-message-trip)))
-	(let ((board navi2ch-message-current-board)
-	      (article navi2ch-message-current-article)
-	      result)
-	  ; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
-	  ; ↓   navi2ch-2ch-send-message で処理する。
-	  (setq result (navi2ch-multibbs-send-message
-			from mail message subject board article))
-	  (when result
-	    (message "waiting new message...")
-	    (sleep-for navi2ch-message-wait-time)
-	    (message "%s%s" (current-message) "done")
+  (if navi2ch-offline
+      (message "Now offline.")
+    (when (or (not navi2ch-message-ask-before-send)
+	      (if (functionp navi2ch-message-ask-before-send)
+		  (funcall navi2ch-message-ask-before-send "Send message?")
+		(y-or-n-p "Send message?")))
+      (run-hooks 'navi2ch-message-before-send-hook)
+      (navi2ch-message-cleanup-message)
+      (save-excursion
+	(let (subject from mail message)
+	  (goto-char (point-min))
+	  (when navi2ch-message-new-message-p
+	    (re-search-forward "^Subject: ?\\(.*\\)" nil t)
+	    (setq subject (match-string 1)))
+	  (re-search-forward "^From: ?\\(.*\\)")
+	  (setq from (match-string 1))
+	  (when navi2ch-message-remember-user-name
+	    (setq navi2ch-message-user-name from))
+	  (when (not navi2ch-message-new-message-p)
+	    (navi2ch-message-set-name from))
+	  (re-search-forward "^Mail: ?\\(.*\\)")
+	  (setq mail (match-string 1))
+	  (when (not navi2ch-message-new-message-p)
+	    (navi2ch-message-set-mail mail))
+	  (forward-line 2)
+	  (setq message (buffer-substring-no-properties (point) (point-max)))
+	  (let ((buffer (current-buffer))
+		(inhibit-read-only t))
 	    (save-excursion
-	      (if navi2ch-message-new-message-p
-		  (progn
-		    (set-buffer navi2ch-board-buffer-name)
-		    (navi2ch-board-sync))
-		(when (buffer-live-p navi2ch-message-current-article-buffer)
-		  (set-buffer navi2ch-message-current-article-buffer)
-		  (navi2ch-article-sync navi2ch-message-force-sync))))))))
-    (run-hooks 'navi2ch-message-after-send-hook)
-    (navi2ch-message-exit 'after-send)))
+	      (set-buffer (get-buffer-create
+			   navi2ch-message-backup-buffer-name))
+	      (erase-buffer)
+	      (insert-buffer buffer)
+	      (bury-buffer)))
+	  (when navi2ch-message-trip
+	    (setq from (concat from "#" navi2ch-message-trip)))
+	  (let ((board navi2ch-message-current-board)
+		(article navi2ch-message-current-article)
+		result)
+					; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
+					; ↓   navi2ch-2ch-send-message で処理する。
+	    (setq result (navi2ch-multibbs-send-message
+			  from mail message subject board article))
+	    (when result
+	      (message "waiting new message...")
+	      (sleep-for navi2ch-message-wait-time)
+	      (message "%s%s" (current-message) "done")
+	      (save-excursion
+		(if navi2ch-message-new-message-p
+		    (progn
+		      (set-buffer navi2ch-board-buffer-name)
+		      (navi2ch-board-sync))
+		  (when (buffer-live-p navi2ch-message-current-article-buffer)
+		    (set-buffer navi2ch-message-current-article-buffer)
+		    (navi2ch-article-sync navi2ch-message-force-sync))))))))
+      (run-hooks 'navi2ch-message-after-send-hook)
+      (navi2ch-message-exit 'after-send))))
 
 (defun navi2ch-message-set-name (name)
   (save-excursion
@@ -288,7 +296,9 @@
 (defun navi2ch-message-kill-message (&optional no-ask)
   (when (or no-ask
 	    (not navi2ch-message-ask-before-kill)
-	    (y-or-n-p "kill current message?"))
+	    (if (functionp navi2ch-message-ask-before-kill)
+		(funcall navi2ch-message-ask-before-kill "Kill current message?"))
+	    (y-or-n-p "Kill current message?"))
     (kill-buffer navi2ch-message-buffer-name)
     t))
 
