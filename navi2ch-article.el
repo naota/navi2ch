@@ -2778,26 +2778,26 @@ NO-SYNC が non-nil のときは sync しない。"
 (defun navi2ch-article-delete-message (sym func msg &optional perm)
   (let* ((article navi2ch-article-current-article)
          (list (cdr (assq sym article)))
-	 (unfilter (cdr (assq 'unfilter article)))
-	 (cache navi2ch-article-message-filter-cache)
-	 (f-list (cdr (assq sym cache)))
          (num (navi2ch-article-get-current-number)))
-    (setq list (funcall func num list)
-	  f-list (funcall func num f-list))
-    (setq article (navi2ch-put-alist sym list article)
-	  cache (navi2ch-put-alist sym f-list cache))
-    (when num
-      (when perm
-	(unless (memq num unfilter)
+    (setq list (funcall func num list))
+    (setq article (navi2ch-put-alist sym list article))
+    (unless (memq num list)
+      (let* ((cache navi2ch-article-message-filter-cache)
+	     (f-list (cdr (assq sym cache)))
+	     (unfilter (cdr (assq 'unfilter article))))
+	(setq f-list (delq num f-list))
+	(setq cache (navi2ch-put-alist sym f-list cache))
+	(setq navi2ch-article-message-filter-cache
+	      (navi2ch-put-alist 'cache
+				 (delq num (cdr (assq 'cache cache)))
+				 cache))
+	(when (and perm
+		   (not (memq num unfilter)))
 	  (setq article (navi2ch-put-alist 'unfilter
 					   (cons num unfilter)
-					   article)))
-	(setq cache (navi2ch-put-alist 'cache
-				       (delq num
-					     (cdr (assq 'cache cache)))
-				       cache)))
-      (setq navi2ch-article-current-article article
-	    navi2ch-article-message-filter-cache cache)
+					   article)))))
+    (setq navi2ch-article-current-article article)
+    (when num
       (save-excursion
 	(let ((buffer-read-only nil))
 	  (delete-region

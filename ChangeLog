@@ -1,3 +1,10 @@
+2003-09-10  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-delete-message):
+	手動 hide のときは navi2ch-article-message-filter-cache を
+	いじらないように。
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/715
+
 2003-09-10  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message-user-name-alist): 新変数。
