@@ -1,5 +1,53 @@
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-force-sync): 新変数。
+	
+	* navi2ch-message.el (navi2ch-message-send-message): 上記変数を
+	navi2ch-article-sync の引数に。
+	でも、send 後に not updated になるなぁ。wait 増やすしかないか?
+
+	* navi2ch-list.el (navi2ch-list-insert-bookmarks): 同じブックマー
+	クノードが出て来たら、以前追加したノードを削除するようにした。
+	後から出て来る方が適切な名前がついてるっぽいので。。。
+	FR#572681
+
+2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	Navi2ch を unload できるようにしてみました。M-x navi2ch-unload です。
+	.emacs や ~/.navi2ch/init.el で色々やってる人は navi2ch-unload-hook 
+	で掃除するようにしてちょ。
+
+	* navi2ch.el (navi2ch-unload): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-kill-emacs-hook): 新関数。
+	(kill-emacs-hook): 上記関数を add-hook するように。
+	(navi2ch-article-unload): 新関数。
+	(navi2ch-article-unload-hook): 新変数。
+	(navi2ch-article-mode-menu): toplevel に。
+	
+	* navi2ch-articles.el (navi2ch-articles-mode-menu): toplevel に。
+
+	* navi2ch-board-misc.el (navi2ch-bm-get-property-internal) 
+	(navi2ch-bm-set-property-internal, navi2ch-bm-get-board-internal) 
+	(navi2ch-bm-get-article-internal, navi2ch-bm-exit-internal): nil
+	に fset してたのを空の関数に。
+
+	* navi2ch-board.el (navi2ch-board-mode-menu): toplevel に。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-mode-menu): toplevel に。
+
+	* navi2ch-directory.el (navi2ch-directory-mode-menu): toplevel に。
+
+	* navi2ch-history.el (navi2ch-history-mode-menu): toplevel に。
+
+	* navi2ch-list.el (navi2ch-list-mode-menu): toplevel に。
+
+	* navi2ch-message.el (navi2ch-message-mode-menu): toplevel に。
+
+	* navi2ch-search.el (navi2ch-search-mode-menu): toplevel に。
+
+2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
+
 	WC 終わったので今更ですが。。。
 
 	* navi2ch-vars.el (navi2ch-list-board-id-alist): 新変数。

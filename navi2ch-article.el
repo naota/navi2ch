@@ -146,9 +146,15 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-through-previous-function)
 
 ;; add hook
-(add-hook 'kill-emacs-hook
-	  (lambda ()
-	    (navi2ch-article-expunge-buffers 0)))
+(defun navi2ch-article-kill-emacs-hook ()
+  (navi2ch-article-expunge-buffers 0))
+
+(add-hook 'kill-emacs-hook 'navi2ch-article-kill-emacs-hook)
+
+(defun navi2ch-article-unload ()
+  (remove-hook 'kill-emacs-hook 'navi2ch-article-kill-emacs-hook))
+
+(defvar navi2ch-article-unload-hook '(navi2ch-article-unload))
 
 ;;; navi2ch-article functions
 (defun navi2ch-article-get-url (board article &optional no-kako)
@@ -544,11 +550,12 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	(navi2ch-article-set-mode-line)
 	(navi2ch-article-mode)))))
 
+(easy-menu-define navi2ch-article-mode-menu
+  navi2ch-article-mode-map
+  "Menu used in navi2ch-article"
+  navi2ch-article-mode-menu-spec)
+
 (defun navi2ch-article-setup-menu ()
-  (easy-menu-define navi2ch-article-mode-menu
-		    navi2ch-article-mode-map
-		    "Menu used in navi2ch-article"
-		    navi2ch-article-mode-menu-spec)
   (easy-menu-add navi2ch-article-mode-menu))
 
 (defun navi2ch-article-mode ()
@@ -1497,7 +1504,7 @@ gunzip に通してから文字コードの推測を試みる。"
                                             (detect-coding-region (point-min) (point-max) t)
                                             'mime-charset)))
                               (if charset
-                                  (cons str (decode-coding-string (buffer-string) charset t))
+                                  (cons str (decode-coding-string (buffer-string) charset))
                                 (cons str nil)))))))
         (when decoded
           (let ((noconv (car decoded))

@@ -328,11 +328,12 @@ KEY は (concat URI ARTID) ")
     (navi2ch-bm-setup 'navi2ch-bookmark)
     (navi2ch-bookmark-sync)))
 
+(easy-menu-define navi2ch-bookmark-mode-menu
+  navi2ch-bookmark-mode-map
+  "Menu used in navi2ch-bookmark"
+  navi2ch-bookmark-mode-menu-spec)
+
 (defun navi2ch-bookmark-setup-menu ()
-  (easy-menu-define navi2ch-bookmark-mode-menu
-		    navi2ch-bookmark-mode-map
-		    "Menu used in navi2ch-bookmark"
-		    navi2ch-bookmark-mode-menu-spec)
   (easy-menu-add navi2ch-bookmark-mode-menu))
 
 (defun navi2ch-bookmark-mode ()

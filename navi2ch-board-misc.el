@@ -85,11 +85,12 @@
   "スレを得る関数。引数は ITEM")
 (defvar navi2ch-bm-exit-function nil)
 
-(fset 'navi2ch-bm-get-property-internal nil)
-(fset 'navi2ch-bm-set-property-internal nil)
-(fset 'navi2ch-bm-get-board-internal nil)
-(fset 'navi2ch-bm-get-article-internal nil)
-(fset 'navi2ch-bm-exit-internal nil)
+;; stub functions
+(defun navi2ch-bm-get-property-internal (point))
+(defun navi2ch-bm-set-property-internal (begin end item))
+(defun navi2ch-bm-get-board-internal (item))
+(defun navi2ch-bm-get-article-internal (item))
+(defun navi2ch-bm-exit-internal ())
 
 (defvar navi2ch-bm-fetched-article-list nil)
 (defvar navi2ch-bm-board-type-alist nil)

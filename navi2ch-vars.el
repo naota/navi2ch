@@ -652,6 +652,11 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(
   :type 'number
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-force-sync nil
+  "*non-nil $B$J$i!"%l%9$rAw?.$7$?$"$H6/@)E*$K(B sync $B$9$k!#(B"
+  :type 'boolean
+  :group 'navi2ch-message)
+
 ;; net variables
 (defcustom navi2ch-net-http-proxy
   (if (string= (getenv "HTTP_PROXY") "")

@@ -244,6 +244,12 @@
     (dolist (x (navi2ch-list-get-board-name-list list))
       (let ((node (navi2ch-list-bookmark-node x)))
 	(when (member node bookmark)
+	  ;; リストの後にあるノードを優先
+	  (let ((found (catch 'break
+			 (dolist (y list2)
+			   (if (equal (navi2ch-list-bookmark-node y) node)
+			       (throw 'break y))))))
+	    (if found (setq list2 (delete found list2))))
 	  (setq list2 (cons x list2)))))
     (navi2ch-list-insert-board-names-subr (nreverse list2))))
 
@@ -333,11 +339,12 @@
     (navi2ch-split-window 'board)
     (navi2ch-bm-select-board board force)))
 
+(easy-menu-define navi2ch-list-mode-menu
+  navi2ch-list-mode-map
+  "Menu used in navi2ch-list"
+  navi2ch-list-mode-menu-spec)
+
 (defun navi2ch-list-setup-menu ()
-  (easy-menu-define navi2ch-list-mode-menu
-		    navi2ch-list-mode-map
-		    "Menu used in navi2ch-list"
-		    navi2ch-list-mode-menu-spec)
   (easy-menu-add navi2ch-list-mode-menu))
 
 (defun navi2ch-list-mode ()

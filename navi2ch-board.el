@@ -297,11 +297,12 @@
 	(setq navi2ch-board-current-board (navi2ch-board-load-info board))
 	(navi2ch-board-sync force 'first)))))
 
+(easy-menu-define navi2ch-board-mode-menu
+  navi2ch-board-mode-map
+  "Menu used in navi2ch-board"
+  navi2ch-board-mode-menu-spec)
+
 (defun navi2ch-board-setup-menu ()
-  (easy-menu-define navi2ch-board-mode-menu
-		    navi2ch-board-mode-map
-		    "Menu used in navi2ch-board"
-		    navi2ch-board-mode-menu-spec)
   (easy-menu-add navi2ch-board-mode-menu))
   
 (defun navi2ch-board-mode ()

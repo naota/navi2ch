@@ -178,7 +178,7 @@
 		    (set-buffer navi2ch-board-buffer-name)
 		    (navi2ch-board-sync))
 		(set-buffer (navi2ch-article-current-buffer))
-		(navi2ch-article-sync)))))))
+		(navi2ch-article-sync navi2ch-message-force-sync)))))))
     (run-hooks 'navi2ch-message-after-send-hook)
     (navi2ch-message-exit 'after-send)))
 
@@ -248,11 +248,12 @@
     (kill-buffer navi2ch-message-buffer-name)
     t))
 
+(easy-menu-define navi2ch-message-mode-menu
+  navi2ch-message-mode-map
+  "Menu used in navi2ch-message"
+  navi2ch-message-mode-menu-spec)
+
 (defun navi2ch-message-setup-menu ()
-  (easy-menu-define navi2ch-message-mode-menu
-    navi2ch-message-mode-map
-    "Menu used in navi2ch-message"
-    navi2ch-message-mode-menu-spec)
   (easy-menu-add navi2ch-message-mode-menu))
 
 (defun navi2ch-message-fill-paragraph (arg)

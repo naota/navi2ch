@@ -123,11 +123,12 @@
     (save-excursion
       (navi2ch-directory-insert-subjects))))
 
+(easy-menu-define navi2ch-directory-mode-menu
+  navi2ch-directory-mode-map
+  "Menu used in navi2ch-directory"
+  navi2ch-directory-mode-menu-spec)
+
 (defun navi2ch-directory-setup-menu ()
-  (easy-menu-define navi2ch-directory-mode-menu
-		    navi2ch-directory-mode-map
-		    "Menu used in navi2ch-directory"
-		    navi2ch-directory-mode-menu-spec)
   (easy-menu-add navi2ch-directory-mode-menu))
 
 (defun navi2ch-directory-mode ()

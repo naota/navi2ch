@@ -115,11 +115,12 @@
     (save-excursion
       (navi2ch-articles-insert-subjects))))
 
+(easy-menu-define navi2ch-articles-mode-menu
+  navi2ch-articles-mode-map
+  "Menu used in navi2ch-articles"
+  navi2ch-articles-mode-menu-spec)
+
 (defun navi2ch-articles-setup-menu ()
-  (easy-menu-define navi2ch-articles-mode-menu
-		    navi2ch-articles-mode-map
-		    "Menu used in navi2ch-articles"
-		    navi2ch-articles-mode-menu-spec)
   (easy-menu-add navi2ch-articles-mode-menu))
 
 (defun navi2ch-articles-mode ()

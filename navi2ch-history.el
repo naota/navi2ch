@@ -135,11 +135,12 @@ key は (concat uri artid)。
     (save-excursion
       (navi2ch-history-insert-subjects))))
 
+(easy-menu-define navi2ch-history-mode-menu
+  navi2ch-history-mode-map
+  "Menu used in navi2ch-history"
+  navi2ch-history-mode-menu-spec)
+
 (defun navi2ch-history-setup-menu ()
-  (easy-menu-define navi2ch-history-mode-menu
-		    navi2ch-history-mode-map
-		    "Menu used in navi2ch-history"
-		    navi2ch-history-mode-menu-spec)
   (easy-menu-add navi2ch-history-mode-menu))
 
 (defun navi2ch-history-mode ()

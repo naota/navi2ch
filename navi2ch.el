@@ -388,5 +388,17 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
              "online"))
   (navi2ch-set-mode-line-identification))
 
+(defun navi2ch-unload ()
+  "Unload all navi2ch features."
+  (interactive)
+  (if (and (symbolp 'navi2ch-init)
+	   navi2ch-init)
+      (navi2ch-exit))
+  (dolist (feature features)
+    (if (or (save-match-data (string-match "\\`navi2ch-"
+					   (symbol-name feature)))
+	    (equal feature 'navi2ch))
+	(unload-feature feature 'force))))
+
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

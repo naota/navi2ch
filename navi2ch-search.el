@@ -147,11 +147,12 @@
     (message "searching article...%s" (if alist "done" "not found"))
     (nreverse alist)))
 
+(easy-menu-define navi2ch-search-mode-menu
+  navi2ch-search-mode-map
+  "Menu used in navi2ch-search"
+  navi2ch-search-mode-menu-spec)
+
 (defun navi2ch-search-setup-menu ()
-  (easy-menu-define navi2ch-search-mode-menu
-		    navi2ch-search-mode-map
-		    "Menu used in navi2ch-search"
-		    navi2ch-search-mode-menu-spec)
   (easy-menu-add navi2ch-search-mode-menu))
 
 (defun navi2ch-search-mode ()
