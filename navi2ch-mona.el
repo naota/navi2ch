@@ -193,8 +193,8 @@ gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
 
 ;; defun find-face for GNU Emacs
 ;; the code is originated from apel.
-(if (not navi2ch-on-xemacs)
-    (defun-maybe find-face (face-or-name)
+(if (and (not (featurep 'poe)) (not navi2ch-on-xemacs))
+    (defun find-face (face-or-name)
       "Retrieve the face of the given name.
 If FACE-OR-NAME is a face object, it is simply returned.
 Otherwise, FACE-OR-NAME should be a symbol.  If there is no such face,
