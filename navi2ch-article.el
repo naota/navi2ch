@@ -1167,9 +1167,12 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	  (cond ((eq ret 'quit)
 		 (navi2ch-article-exit))
 		(ret
-		 (if (get-buffer-window navi2ch-board-buffer-name)
-		     (select-window (get-buffer-window navi2ch-board-buffer-name))
-		   (switch-to-buffer navi2ch-board-buffer-name))
+		 (let ((window (get-buffer-window navi2ch-board-buffer-name)))
+		   (if window
+		       (progn
+			 (delete-window)
+			 (select-window window))
+		     (switch-to-buffer navi2ch-board-buffer-name)))
 		 (if (eq num 1)
 		     (navi2ch-bm-next-line)
 		   (navi2ch-bm-previous-line))

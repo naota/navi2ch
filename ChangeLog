@@ -1,5 +1,8 @@
 2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-through-subr): 板の最後のス
+	レを読んだ後の動作が気に入らなかったので変更。
+
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-parse-subject):
 	case-fold-search を nil に。
 	(navi2ch-js-parse): 同上。
