@@ -715,6 +715,7 @@ ARG が non-nil なら移動方向を逆にする。"
    'end-of-line))
 
 (defun navi2ch-bm-sort-by-date (rev)
+  (interactive "P")
   (navi2ch-bm-sort-subr
    (not rev)
    (lambda ()

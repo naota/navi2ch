@@ -1,3 +1,8 @@
+2002-06-21  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date): 
+	(interactive "P") を追加。
+
 2002-06-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: 1.5.2-DEV にアップデート。
