@@ -1,3 +1,8 @@
+2002-02-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch-vars.el (navi2ch-list-bbstable-url): 
+	http://www6.ocn.ne.jp/~mirv/2chmenu.html に変更
+
 2002-02-20    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-textize-article): 
