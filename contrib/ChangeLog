@@ -1,3 +1,11 @@
+2002-10-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	いろいろ追加したので、適当に。
+	* gikope.el (gikope-list-*): AA の名前一覧表示、選択モード用のあれこれ。
+	(gikope-view-*): AA 表示用モードのあれこれ。
+	(gikope): 新コマンド。ギコペモードに入る。
+	他にも既存の関数を少し手直ししたりとか。
+
 2002-07-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* README: 新ファイル。各ファイルの簡単な説明。
