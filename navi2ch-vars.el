@@ -118,6 +118,11 @@ non-nil なら read.cgi を使う"
   :type '(repeat (string :tag "拡張子"))
   :group 'navi2ch)
 
+(defcustom navi2ch-base64-fill-column 64
+  "*base64でエンコードされた文字列を何文字でfillするか。"
+  :type 'integer
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*list window の幅"

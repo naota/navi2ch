@@ -45,6 +45,21 @@
   "置換する html のタグの正規表現
 `navi2ch-replace-html-tag-alist' から生成される")
 
+(defconst navi2ch-base64-begin-delimiter "----BEGIN BASE64----")
+(defconst navi2ch-base64-end-delimiter "----END BASE64----")
+
+(defconst navi2ch-base64-begin-delimiter-regexp
+  (format "^%s *$" (regexp-quote navi2ch-base64-begin-delimiter)))
+(defconst navi2ch-base64-end-delimiter-regexp
+  (format "^%s *$" (regexp-quote navi2ch-base64-end-delimiter)))
+(defconst navi2ch-base64-line-regexp
+  (concat
+   "^\\([+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z]\\)*"
+   "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$"))
+(defconst navi2ch-base64-begin-delimiter-with-name-regexp
+  (format "^%s(\\([^\)]+\\)) *$"
+	  (regexp-quote navi2ch-base64-begin-delimiter)))
+
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
       (let (start)
@@ -510,4 +525,91 @@ return new alist whose car is the new pair and cdr is ALIST.
   (goto-char (point-max))
   (forward-line -1))
 
+(defun navi2ch-base64-write-region (start end &optional filename)
+  "STARTとENDの間のリージョンをbase64デコードし、FILENAMEに書き出す。
+
+リージョン内に`navi2ch-base64-begin-delimiter'がある場合はそれ以前を無
+視し、`navi2ch-base64-end-delimiter'がある場合はそれ以降の
+`navi2ch-base64-begin-delimiter'まで、もしくはリージョンの最後までを無
+視する。さらに、最初に`navi2ch-base64-line-regexp'にマッチする直前まで
+と、最後に`navi2ch-base64-line-regexp'にマッチする直後までも無視する。
+
+base64デコードすべき内容がない場合はエラーになる。"
+  (interactive "r")
+  (save-excursion
+    (let ((buf (current-buffer))
+	  (default-filename nil))
+      ;; insertした後に削るのは無駄なのであらかじめ絞り込んでおく
+      (goto-char start)
+      (if (re-search-forward navi2ch-base64-begin-delimiter-with-name-regexp
+			     end t)
+	  (progn (setq default-filename (match-string 1))
+		 (goto-char (match-end 0))))
+      (if (re-search-forward navi2ch-base64-begin-delimiter-regexp end t)
+	  (goto-char (match-end 0)))
+      (if (re-search-forward navi2ch-base64-line-regexp end t)
+	  (setq start (match-beginning 0))
+	(error "No base64 data"))
+      (goto-char end)
+      (if (re-search-backward navi2ch-base64-end-delimiter-regexp start t)
+	  (goto-char (match-beginning 0)))
+      (if (re-search-backward navi2ch-base64-line-regexp start t)
+	  (setq end (match-end 0)))
+      (with-temp-buffer
+	(let ((buffer-file-coding-system 'binary)
+	      (file-coding-system 'binary)
+	      (coding-system-for-write 'binary)
+	      ;; auto-compress-modeをdisableにする
+	      (inhibit-file-name-operation 'write-region)
+	      (inhibit-file-name-handlers (cons 'jka-compr-handler
+						inhibit-file-name-handlers))
+	      cur-point)
+	  (insert-buffer-substring buf start end)
+	  (goto-char (point-min))
+	  (while (re-search-forward navi2ch-base64-end-delimiter-regexp
+				    nil t)
+	    (setq cur-point (match-beginning 0))
+	    (if (re-search-forward navi2ch-base64-begin-delimiter-regexp
+				   nil t)
+		(delete-region cur-point (match-end 0))
+	      (delete-region cur-point (point-max)))
+	    (goto-char cur-point))
+	  (base64-decode-region (point-min) (point-max))
+	  (if (not filename)
+	      (setq filename (read-file-name
+			      (if default-filename
+				  (format "Decode to file (default `%s'): "
+					  default-filename)
+				"Decode to file: ")
+			      nil default-filename)))
+	  (when (file-directory-p filename)
+	    (setq filename (expand-file-name default-filename filename)))
+	  (if (or (not (file-exists-p filename))
+		  (y-or-n-p (format "File `%s' exists; overwrite? "
+				    filename)))
+	      (write-region (point-min) (point-max) filename)))))))
+
+(defun navi2ch-base64-insert-file (filename)
+  "FILENAMEをbase64エンコードし、現在のポイントに挿入する。"
+  (interactive "fEncode and insert file: ")
+  (save-excursion
+    (let ((str nil))
+      (with-temp-buffer
+	(let ((buffer-file-coding-system 'binary)
+	      (file-coding-system 'binary))
+	  (insert-file-contents-literally filename)
+	  (base64-encode-region (point-min) (point-max) t)
+	  (goto-char (point-min))
+	  (insert (format "%s(%s)\n" navi2ch-base64-begin-delimiter
+			  (file-name-nondirectory filename)))
+	  (while (= (move-to-column navi2ch-base64-fill-column)
+		    navi2ch-base64-fill-column)
+	    (insert "\n"))
+	  (goto-char (point-max))
+	  (insert (format "\n%s\n" navi2ch-base64-end-delimiter))
+	  (setq str (buffer-string))))
+      (insert str))))
+
 (provide 'navi2ch-util)
+
+

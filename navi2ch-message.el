@@ -33,6 +33,7 @@
   (define-key navi2ch-message-mode-map "\C-c\C-y" 'navi2ch-message-cite-original)
   (define-key navi2ch-message-mode-map "\C-cy" 'navi2ch-message-cite-original-from-number)
   (define-key navi2ch-message-mode-map "\C-c\C-i" 'navi2ch-message-insert-backup)
+  (define-key navi2ch-message-mode-map "\C-c\C-b" 'navi2ch-base64-insert-file)
   (define-key navi2ch-message-mode-map "\et" 'navi2ch-toggle-offline))
 
 (defvar navi2ch-message-mode-menu-spec

@@ -71,6 +71,7 @@
   (define-key navi2ch-article-mode-map ">" 'navi2ch-article-goto-last-message)
   (define-key navi2ch-article-mode-map "<" 'navi2ch-article-goto-first-message)
   (define-key navi2ch-article-mode-map "\eu" 'navi2ch-article-uudecode-message)
+  (define-key navi2ch-article-mode-map "\eb" 'navi2ch-article-base64-decode-message)
   (define-key navi2ch-article-mode-map "v" 'navi2ch-article-view-aa)
   (define-key navi2ch-article-mode-map "f" 'navi2ch-article-forward-buffer)
   (define-key navi2ch-article-mode-map "b" 'navi2ch-article-backward-buffer)
@@ -1127,6 +1128,24 @@ article buffer から抜けるなら 'quit を返す。"
       (insert "\n"))
     (navi2ch-uudecode-region (point-min) (point-max))))
 
+(defun navi2ch-article-base64-decode-message (prefix &optional filename)
+  "現在のレスをbase64デコードし、FILENAMEに書き出す
+PREFIXを指定した場合は、markのあるレスと現在のレスの間の範囲が対象になる"
+  (interactive "P")
+  (save-excursion
+    (let* ((num (navi2ch-article-get-current-number))
+	   (num2 (or (and prefix
+			  (car (navi2ch-article-get-point (mark))))
+		     num))
+	   (begin (or (cdr (assq 'point (navi2ch-article-get-message
+					 (min num num2))))
+		      (point-min-marker)))
+	   (end (or (cdr (assq 'point (navi2ch-article-get-message
+				       (1+ (max num num2)))))
+		    (point-max-marker))))
+      (navi2ch-base64-write-region (marker-position begin)
+				   (marker-position end) filename))))
+
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
 	 (file (make-temp-name (concat temporary-file-directory "navi2ch"))))
@@ -1260,6 +1279,8 @@ article buffer から抜けるなら 'quit を返す。"
   (interactive)
   (navi2ch-article-delete-message 'hide 'delq
                                   "Cansel hide message"))
+
+
   
 (defun navi2ch-article-toggle-hide ()
   (interactive)

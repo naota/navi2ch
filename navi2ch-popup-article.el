@@ -53,6 +53,7 @@
     (define-key map ">" 'navi2ch-article-goto-last-message)
     (define-key map "<" 'navi2ch-article-goto-first-message)
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
+    (define-key map "\eb" 'navi2ch-article-base64-decode-message)
     (define-key map "v" 'navi2ch-article-view-aa)
     (define-key map "1" 'navi2ch-one-pain)
     (define-key map "3" 'navi2ch-three-pain)

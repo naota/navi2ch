@@ -1,3 +1,30 @@
+2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+	base64 関係の追加。
+	http://pc.2ch.net/test/read.cgi/unix/999166513/962
+	
+	* navi2ch-util.el 
+	(navi2ch-base64-begin-delimiter): 新定数。
+	(navi2ch-base64-end-delimiter): 同上。
+	(navi2ch-base64-begin-delimiter-regexp): 同上。
+	(navi2ch-base64-end-delimiter-regexp): 同上。
+	(navi2ch-base64-line-regexp): 同上。
+	(navi2ch-base64-begin-delimiter-with-name-regexp): 同上。
+	(navi2ch-base64-write-region): 新関数。
+	(navi2ch-base64-insert-file): 同上。
+
+	* navi2ch-popup-article.el 
+	(navi2ch-popup-article-mode-map): "M-b" に
+	navi2ch-article-base64-decode-message を設定。
+
+	* navi2ch-message.el 
+	(navi2ch-message-mode-map): "C-cC-b" に navi2ch-base64-insert-file
+	を設定。
+
+	* navi2ch-article.el 
+	(navi2ch-article-mode-map): "M-b" に
+	navi2ch-article-base64-decode-message を設定。
+	(navi2ch-article-base64-decode-message): 新関数。
+
 2002-01-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el
