@@ -12,6 +12,14 @@
 	「list window」と「板一覧」、「board window」と「スレ一覧」、
 	「スレ」と「スレッド」、「Navi2ch」と「navi2ch」などなど…。
 
+	* navi2ch-vars.el (navi2ch-init-file): わかりにくいので
+	navi2ch-directory を展開するのをやめた。カスタマイズするときは、
+	展開しない値だけを提示したほうがパッと見て理解しやすくなる。
+	(navi2ch-bm-fetched-info-file): 同上。
+	(navi2ch-bookmark-file): 同上。
+	(navi2ch-history-file): 同上。
+	(navi2ch-update-file): 同上。
+
 2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (SUBDIRS): contrib を追加。
