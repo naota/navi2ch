@@ -187,5 +187,12 @@
   "スレの BASE64 セクションの face"
   :group 'navi2ch-face)
 
+(defface navi2ch-splash-screen-face
+  '((((type tty) (background dark)) (:foreground "cyan"))
+    (((class color) (background dark)) (:foreground "SkyBlue"))
+    (((class color) (background light)) (:foreground "SteelBlue")))
+  "Face used for displaying splash screen."
+  :group 'navi2ch-face)
+
 (run-hooks 'navi2ch-face-load-hook)
 ;;; navi2ch-face.el ends here

@@ -40,7 +40,9 @@
 (require 'navi2ch-history)
 (require 'navi2ch-search)
 (require 'navi2ch-message)
-(and navi2ch-on-emacs21 (require 'navi2ch-e21))
+(and navi2ch-on-emacs21
+     (require 'navi2ch-e21))
+(require 'navi2ch-splash)
 (require 'navi2ch-version)
 
 (defgroup navi2ch nil
@@ -56,16 +58,29 @@
   (interactive "P")
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
-    (if arg (setq navi2ch-offline (not navi2ch-offline)))
-    (when (file-exists-p navi2ch-update-file)
-      (load-file navi2ch-update-file))
-    (load navi2ch-init-file t)
-    (if navi2ch-auto-update
-	(navi2ch-update))
-    (add-hook 'kill-emacs-hook 'navi2ch-save-status)
-    (run-hooks 'navi2ch-load-status-hook)
-    (setq navi2ch-init t)
-    (run-hooks 'navi2ch-hook))
+    (let ((splash-buffer (and navi2ch-display-splash-screen
+                              (navi2ch-splash))))
+      (condition-case err
+          (progn
+            (if arg (setq navi2ch-offline (not navi2ch-offline)))
+            (when (file-exists-p navi2ch-update-file)
+              (load-file navi2ch-update-file))
+            (load navi2ch-init-file t)
+            (if navi2ch-auto-update
+                (navi2ch-update))
+            (add-hook 'kill-emacs-hook 'navi2ch-save-status)
+            (run-hooks 'navi2ch-load-status-hook)
+            (setq navi2ch-init t)
+            (run-hooks 'navi2ch-hook)
+            (navi2ch-list))
+        (error
+         (when (buffer-live-p splash-buffer)
+           (kill-buffer splash-buffer))
+         (setq navi2ch-init nil)
+         (signal (car err) (cdr err)))
+        (quit))
+      (when (buffer-live-p splash-buffer)
+        (kill-buffer splash-buffer))))
   (navi2ch-list)
   (run-hooks 'navi2ch-after-startup-hook))
 

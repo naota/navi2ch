@@ -1,6 +1,7 @@
 ## アイコンは Wanderlust (ftp://ftp.gohome.org/pub/elisp/) からもらった。
 icondir = @icondir@
-icon_DATA = plugged.xpm unplugged.xpm
+icon_DATA = plugged.xpm unplugged.xpm \
+            navi2ch-logo.xpm navi2ch-logo.xbm navi2ch-logo.img
 
 EXTRA_DIST = $(icon_DATA)
 

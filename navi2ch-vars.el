@@ -745,6 +745,26 @@ ask なら保存する前に質問する
   :type '(choice (directory :tag "directory") (const :tag "nil" nil))
   :group 'navi2ch)
 
+
+;; Splash screen.
+(defcustom navi2ch-splash-display-logo (when (or (featurep 'xemacs)
+                                                 (featurep 'image)
+                                                 (featurep 'bitmap))
+                                         t)
+  "If it is T, show graphic logo in the startup screen.  You can set it to
+a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
+  :type '(radio (const :tag "Off" nil)
+                (const :tag "On (any format)" t)
+                (const xpm)
+                (const xbm)
+                (const :tag "bitmap (using BITMAP-MULE)" bitmap))
+  :group 'navi2ch)
+
+(defcustom navi2ch-display-splash-screen t
+  "*Display splash screen at start time."
+  :type 'boolean
+  :group 'navi2ch)
+
 ;; Mona fonts.
 (when (or navi2ch-on-xemacs navi2ch-on-emacs21)
   (defgroup navi2ch-mona nil

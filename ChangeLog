@@ -1,3 +1,28 @@
+2002-02-21  UEYAMA Rui <rui314159@users.sourceforge.net>
+
+	* navi2ch-splash.el: 新ファイル。navi2ch の起動時にスプラッシュ
+	スクリーンを表示する。Wanderlust からもらったファイルを
+	navi2ch 向けに少しいじっただけで、内身は wl-demo.el とほとんど
+	いっしょ。
+
+	* navi2ch-face.el (navi2ch-splash-screen-face): 新 face。
+	スプラッシュスクリーンで利用する。
+
+	* navi2ch-util.el (navi2ch-defalias-maybe): 新マクロ。
+
+	* navi2ch-vars.el (navi2ch-splash-display-logo): 新変数。
+	スプラッシュスクリーンのオン／オフ、画像フォーマットの選択に
+	利用する。
+
+	* navi2ch.el (navi2ch): スプラッシュスクリーンを表示するように。
+
+	* icons/navi2ch-logo.xpm: 新ファイル。この画像をスプラッシュ
+	スクリーンで表示する。誰かマトモなやつ作ってくれ…。
+
+	* icons/navi2ch-logo.xbm: 上のファイルの XBM 版。
+
+	* icons/navi2ch-logo.img: 同じく bitmap-mule 版。
+
 2002-02-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-vars.el (navi2ch-list-bbstable-url): 

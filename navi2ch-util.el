@@ -283,6 +283,19 @@ don't offer a form of remote control."
          (append navi2ch-browse-url-image-args (list url))))
 
 ;; from apel
+(defmacro navi2ch-defalias-maybe (symbol definition)
+  "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
+See also the function `defalias'."
+  (setq symbol (eval symbol))
+  (or (and (fboundp symbol)
+           (not (get symbol 'defalias-maybe)))
+      (` (or (fboundp (quote (, symbol)))
+             (prog1
+                 (defalias (quote (, symbol)) (, definition))
+               ;; `defalias' updates `load-history' internally.
+               (put (quote (, symbol)) 'defalias-maybe t))))))
+
+;; from apel
 (defsubst navi2ch-put-alist (item value alist)
   "Modify ALIST to set VALUE to ITEM.
 If there is a pair whose car is ITEM, replace its cdr by VALUE.
