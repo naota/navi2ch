@@ -188,7 +188,7 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
 
 (defun navi2ch-net-get-header (proc)
   "PROC の接続のヘッダ部を返す"
-  (when (navi2ch-net-get-status)
+  (when (navi2ch-net-get-status proc)
     (navi2ch-net-ignore-errors
      (or navi2ch-net-header
 	 (save-excursion
@@ -274,7 +274,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
-  (when (and (navi2ch-net-get-status) (navi2ch-net-get-header))
+  (when (and (navi2ch-net-get-status proc) (navi2ch-net-get-header proc))
     (navi2ch-net-ignore-errors
      (or navi2ch-net-content
 	 (let* ((header (navi2ch-net-get-header proc))
