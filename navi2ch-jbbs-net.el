@@ -76,15 +76,17 @@
 	    (match-string 1  uri) (match-string 2 uri)
 	    (cdr (assq 'artid article)))))
 
-(defun navi2ch-jbbs-article-to-url
-  (board article &optional start end nofirst)
-  "BOARD, ARTICLE から url に変換。
-START, END, NOFIRST は無視する。(jbbs.netにそういう機能が無い)"
+(defun navi2ch-jbbs-article-to-url (board article &optional start end nofirst)
+  "BOARD, ARTICLE から url に変換。"	; START, END, NOFIRST が効かなかったら教えてください。
   (let ((uri   (cdr (assq 'uri board)))
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
-    (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
-	    (match-string 1 uri) (match-string 2 uri) artid)))
+    (concat
+     (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
+	     (match-string 1 uri) (match-string 2 uri) artid)
+     (and start (format "&START=%d" start))
+     (and end (format "&END=%d" end))
+     (and nofirst "&NOFIRST=TRUE"))))
 
 (defun navi2ch-jbbs-send-message
   (from mail message subject bbs key time board article)

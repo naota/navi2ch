@@ -88,7 +88,7 @@
     (list ret nil)))
 
 (defun navi2ch-machibbs-article-to-url (board article &optional start end nofirst)
-  "BOARD, ARTICLE から url に変換。"
+  "BOARD, ARTICLE から url に変換。"	; START, END, NOFIRST が効かなかったら教えてください。
   (let ((uri   (cdr (assq 'uri board)))
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri) ; \\/ --> / ?
