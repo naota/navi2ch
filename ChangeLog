@@ -1,3 +1,9 @@
+2004-02-29  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* configure.in (AC_PREREQ): Autoconf 2.53 以降を要求。
+
+	* Makefile.am (AUTOMAKE_OPTIONS): Automake 1.5 以降を要求。
+
 2004-02-28  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-mona.el (navi2ch-mona-enable-list): 新変数。

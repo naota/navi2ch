@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = 1.5
 lisp_LISP = navi2ch-version.el \
 	navi2ch-vars.el navi2ch-face.el navi2ch-util.el \
 	navi2ch-net.el navi2ch-list.el navi2ch-article.el \
