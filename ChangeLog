@@ -1,3 +1,8 @@
+2002-02-14    mami  <mami@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-exit): navi2ch-ask-when-exit の評価方法を修正。
+	n で答えるともう一回 y-or-n-p で聞かれることがあった。
+
 2002-02-13    mami  <mami@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-exit): navi2ch-ask-when-exit が nil や t の
