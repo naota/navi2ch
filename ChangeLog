@@ -1,3 +1,8 @@
+2002-03-27    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-recenter): 引数を numberp で
+	チェック。
+
 2002-03-24    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-enable-readcgi): デフォルトを nil に。

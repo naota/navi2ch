@@ -979,9 +979,10 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-recenter (num)
   "NUM 番目のレスを画面の一番上に"
-  (save-excursion
-    (goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
-    (recenter 0)))
+  (if (numberp num)
+      (save-excursion
+	(goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
+	(recenter 0))))
 
 (defun navi2ch-article-goto-number-or-board ()
   "入力された数字の位置に移動するか、入力された板を表示する。
