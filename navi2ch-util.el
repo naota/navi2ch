@@ -48,7 +48,8 @@
   "置換する html のタグの連想リスト(正規表現は使えない)")
 
 (defvar navi2ch-replace-html-tag-regexp-alist
-  '(("<[^<>]+>" . "")
+  '(("<[0-9]+>" . identity)
+    ("<[^<>]+>" . "")
     ("&[a-z][a-z0-9]*;?" . navi2ch-entity-reference-to-str)
     ("&#[0-9]+;?" . navi2ch-numeric-reference-to-str))
   "置換する html のタグの連想リスト(正規表現)
