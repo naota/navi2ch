@@ -87,7 +87,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-splash.el navi2ch-directory.el \
 	navi2ch-multibbs.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
-	navi2ch-http-date.el navi2ch-localfile.el
+	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el
 
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
@@ -111,7 +111,7 @@ ELCFILES = navi2ch-article.elc navi2ch-articles.elc \
 	navi2ch-message.elc navi2ch-mona.elc navi2ch-multibbs.elc \
 	navi2ch-net.elc navi2ch-popup-article.elc navi2ch-search.elc \
 	navi2ch-splash.elc navi2ch-util.elc navi2ch-vars.elc \
-	navi2ch-version.elc navi2ch.elc
+	navi2ch-version.elc navi2ch.elc navi2ch-oyster.elc
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
