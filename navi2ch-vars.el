@@ -1733,6 +1733,8 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
     ;; (define-key map "\C-c2" 'navi2ch-two-pane)
     ;; (define-key map "\C-c3" 'navi2ch-three-pane)
     (define-key map "\C-c\C-o" 'navi2ch-message-jump-to-message-buffer)
+    (define-key map "\C-c\C-n" 'navi2ch-article-forward-sticky-buffer)
+    (define-key map "\C-c\C-p" 'navi2ch-article-backward-sticky-buffer)
     (setq navi2ch-global-map map)))
 
 (defvar navi2ch-global-view-map nil

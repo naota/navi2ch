@@ -91,6 +91,7 @@
     (define-key map "F" 'navi2ch-article-toggle-message-filter)
     (define-key map "x" 'undefined)
     (define-key map "!" 'navi2ch-article-add-message-filter-rule)
+    (define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -166,6 +167,11 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 (defvar navi2ch-article-save-message-filter-cache-keys
   '(cache replace hide important aborn))
 
+;; sticky mode
+(defvar navi2ch-article-sticky-mode nil)
+(make-variable-buffer-local 'navi2ch-article-sticky-mode)
+(add-to-list 'minor-mode-alist '(navi2ch-article-sticky-mode " Sticky"))
+
 ;; local variables
 (make-variable-buffer-local 'navi2ch-article-current-article)
 (make-variable-buffer-local 'navi2ch-article-current-board)
@@ -180,7 +186,7 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 
 ;; add hook
 (defun navi2ch-article-kill-emacs-hook ()
-  (navi2ch-article-expunge-buffers 0))
+  (navi2ch-article-expunge-buffers -1))
 
 (add-hook 'navi2ch-kill-emacs-hook 'navi2ch-article-kill-emacs-hook)
 
@@ -883,14 +889,29 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
       d)))
 
 (defun navi2ch-article-expunge-buffers (&optional num)
-  "$B%9%l$N%P%C%U%!$N?t$r(B NUM $B$K@)8B$9$k!#(B
-NUM $B$r;XDj$7$J$$>l9g$O(B `navi2ch-article-max-buffers' $B$r;HMQ!#(B"
+  "$B%9%l$N%P%C%U%!$r:o=|$7$F(B NUM $B8D$K$9$k!#(B
+NUM $B$r;XDj$7$J$$>l9g$O(B `navi2ch-article-max-buffers' $B$r;HMQ!#(B
+NUM $B$,(B 0 $B0J>e$N$H$-$O(B sticky $B%P%C%U%!$O:o=|$7$J$$!#(B
+NUM $B$,(B -1 $B$N$H$-$O(B sticky $B%P%C%U%!$b4^$a$F$9$Y$F:o=|!#(B"
   (interactive "P")
-  (if (not (numberp num)) ; C-u$B$N$_$N;~(B4$B8D$K$7$?$$$o$1$8$c$J$$$H;W$o$l(B
-      (setq num navi2ch-article-max-buffers))
-  (save-excursion
-    (dolist (buf (nthcdr num (navi2ch-article-buffer-list)))
-      (kill-buffer buf))))
+  (when (not (numberp num))		; C-u $B$N$_$N;~(B4$B8D$K$7$?$$$o$1$8$c$J$$$H;W$o$l(B
+    (setq num navi2ch-article-max-buffers))
+  (let ((buffer-num (length (navi2ch-article-buffer-list)))
+	buffer-list)
+    (when (> buffer-num num)
+	(if (< num 0)
+	    (setq buffer-list (navi2ch-article-buffer-list))
+	  (save-excursion
+	    (dolist (buf (navi2ch-article-buffer-list))
+	      (set-buffer buf)
+	      (unless navi2ch-article-sticky-mode
+		(push buf buffer-list)))))
+	(catch 'loop
+	  (dolist (buf buffer-list)
+	    (kill-buffer buf)
+	    (setq buffer-num (1- buffer-num))
+	    (when (<= buffer-num num)
+	      (throw 'loop nil)))))))
 
 (defun navi2ch-article-view-article (board
 				     article
@@ -2629,34 +2650,86 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
         (setq list (cons x list))))
     (nreverse list)))
 
-(defun navi2ch-article-current-buffer ()
-  "BUFFER-LIST $B$N0lHV:G=i$N(B `navi2ch-article-mode' $B$N(B buffer $B$rJV$9(B"
+(defun navi2ch-article-toggle-sticky ()
+  "$B8=:_$N%P%C%U%!$N(B sticky $B%b!<%I$r(B toggle $B$9$k!#(B"
+  (interactive)
+  (setq navi2ch-article-sticky-mode
+	(not navi2ch-article-sticky-mode))
+  (force-mode-line-update)
+  (if navi2ch-article-sticky-mode
+      (message "Marked as sticky")
+    (message "Marked as non-sticky")))
+
+(defun navi2ch-article-current-buffer (&optional sticky)
+  "BUFFER-LIST $B$N0lHV:G=i$N(B `navi2ch-article-mode' $B$N(B buffer $B$rJV$9!#(B
+STICKY $B$,(B non-nil $B$N$H$-$O0lHV:G=i$N(B sticky article buffer $B$rJV$9!#(B"
   (let ((list (buffer-list)))
     (catch 'loop
       (while list
         (when (save-excursion
                 (set-buffer (car list))
-                (eq major-mode 'navi2ch-article-mode))
-          (throw 'loop (car list)))
+		(and (eq major-mode 'navi2ch-article-mode)
+		     (or (not sticky)
+			 navi2ch-article-sticky-mode)))
+	  (throw 'loop (car list)))
         (setq list (cdr list)))
       nil)))
 
-(defun navi2ch-article-forward-buffer ()
-  "$B<!$N(B article buffer $B$X(B"
-  (interactive)
+(defun navi2ch-article-forward-buffer (&optional sticky)
+  "$B<!$N(B article buffer $B$K@Z$jBX$($k!#(B
+STICKY $B$,(B non-nil $B$N$H$-$O<!$N(B sticky article buffer $B$K@Z$jBX$($k!#(B"
+  (interactive "P")
   (let (buf)
     (dolist (x (buffer-list))
       (when (save-excursion
               (set-buffer x)
-              (eq major-mode 'navi2ch-article-mode))
-        (setq buf x)))
-    (switch-to-buffer buf)))
+              (and (eq major-mode 'navi2ch-article-mode)
+		   (or (not sticky)
+		       navi2ch-article-sticky-mode)))
+	(setq buf x)))
+    (if buf
+	(progn
+	  (navi2ch-split-window 'article)
+	  (switch-to-buffer buf))
+      (if sticky
+	  (message "No sticky aritcle buffer")
+	(message "No aritcle buffer"))
+      nil)))
 
-(defun navi2ch-article-backward-buffer ()
-  "$BA0$N(B article buffer $B$X(B"
-  (interactive)
-  (bury-buffer)
-  (switch-to-buffer (navi2ch-article-current-buffer)))
+(defun navi2ch-article-backward-buffer (&optional sticky)
+  "$BA0$N(B article buffer $B$K@Z$jBX$($k!#(B
+STICKY $B$,(B non-nil $B$N$H$-$OA0$N(B sticky article buffer $B$K@Z$jBX$($k!#(B"
+  (interactive "P")
+  (let ((orig (current-buffer))
+	buf)
+    (when (setq buf (navi2ch-article-current-buffer))
+      (bury-buffer buf))
+    (setq buf (navi2ch-article-current-buffer sticky))
+    (if buf
+	(progn
+	  (navi2ch-split-window 'article)
+	  (switch-to-buffer buf))
+      (switch-to-buffer orig)
+      (if sticky
+	  (message "No sticky aritcle buffer")
+	(message "No aritcle buffer"))
+      nil)))
+
+(defun navi2ch-article-forward-sticky-buffer (&optional no-sync)
+  "$B<!$N(B sticky article buffer $B$K@Z$jBX$(!"(Bsync $B$9$k!#(B
+NO-SYNC $B$,(B non-nil $B$N$H$-$O(B sync $B$7$J$$!#(B"
+  (interactive "P")
+  (and (navi2ch-article-forward-buffer t)
+       (not no-sync)
+       (navi2ch-article-sync)))
+
+(defun navi2ch-article-backward-sticky-buffer (&optional no-sync)
+  "$BA0$N(B sticky article buffer $B$K@Z$jBX$(!"(Bsync $B$9$k!#(B
+NO-SYNC $B$,(B non-nil $B$N$H$-$O(B sync $B$7$J$$!#(B"
+  (interactive "P")
+  (and (navi2ch-article-backward-buffer t)
+       (not no-sync)
+       (navi2ch-article-sync)))
 
 (defun navi2ch-article-delete-message (sym func msg &optional perm)
   (let* ((article navi2ch-article-current-article)

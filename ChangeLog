@@ -1,5 +1,28 @@
 2003-06-07  mami  <mami@users.sourceforge.net>
 
+	新機能 sticky article buffer
+
+	* navi2ch-article.el (navi2ch-article-sticky-mode): 新変数。
+	(navi2ch-article-toggle-sticky): 新関数。
+	(navi2ch-article-expunge-buffers): 引き数が正のときは sitcky なバッ
+	ファを kill しないように。
+	(navi2ch-article-kill-emacs-hook): navi2ch-article-expunge-buffers
+	の引き数を変更。sticky なバッファも kill するように。
+	(navi2ch-article-current-buffer): 引き数 sticky を追加し、sticky
+	なバッファを扱えるように。
+	(navi2ch-article-forward-buffer): 同上。
+	(navi2ch-article-backward-buffer): 同上。
+	(navi2ch-article-forward-sticky-buffer): 新関数。
+	(navi2ch-article-backward-sticky-buffer): 新関数。
+	(navi2ch-article-mode-map):
+	C-c C-SPC に navi2ch-article-toggle-sticky をバインド。
+
+	* navi2ch-vars.el (navi2ch-global-map):
+	C-c C-n に navi2ch-article-forward-sticky-buffer を、
+	C-c C-p に navi2ch-article-backward-sticky-buffer をバインド。
+
+2003-06-07  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-net.el (navi2ch-net-update-file-diff):
 	navi2ch-net-update-file と同様に func を指定できるように。
 
