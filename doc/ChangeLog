@@ -1,3 +1,9 @@
+2003-02-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode): @key を @kbd で囲んだ。
+	(Article View Range): 新規ノード。表示範囲について。
+	(FAQ): 表示範囲についてを追加。
+
 2003-02-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Board Misc Mode Key Bindings): "C-o" を追加。

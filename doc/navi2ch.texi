@@ -130,6 +130,10 @@ Bookmark モード
 * Operating Bookmark::          ブックマークを操作する
 * Browsing Bookmark::           ブックマークを閲覧する
 
+Article モード
+
+* Article View Range::          スレの表示範囲
+
 Message モード
 
 * Saving Send Log::             送信控えをとる
@@ -704,8 +708,8 @@ Date: 01/12/26 13:17
 
 Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 @code{http://} で始まるリンクなどを楽に追いかけられる機能が用意されてい
-る。@kbd{TAB} を押すことで、カーソルより後にあるそれらのリンクに移動でき、
-その状態で @key{RET} を押すことで該当する番号のレスに飛んだり、参照して
+る。@kbd{@key{TAB}} を押すことで、カーソルより後にあるそれらのリンクに移動でき、
+その状態で @kbd{@key{RET}} を押すことで該当する番号のレスに飛んだり、参照して
 いる URL を引数にブラウザを呼び出したりできる。
 レス参照したのち、@kbd{l} を押すことで元のレスに戻ることができる。
 また、戻りすぎたら @kbd{L} を押すことで逆方向に戻る事ができる。
@@ -718,6 +722,24 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 検索条件を選び、検索したい文字列を入力する。
 パーズ済みのメッセージのみを検索対象とするので、あらかじめ
 検索したい範囲のメッセージを表示しておくこと。
+
+@menu
+* Article View Range::          スレの表示範囲
+@end menu
+
+@node Article View Range
+@subsection スレの表示範囲
+
+Navi2ch では、スレ中のすべてのレスを一度に処理するのは負荷が高いため、
+表示するスレを一部のレスのみにすることができる。
+
+デフォルトでは、そのスレを初めて開いた場合は先頭の 100 レスと最後のレ
+ス、以前開いた事がある場合は先頭のレスと最後の 100 レスが表示される。
+この動作を変えたい場合は @code{navi2ch-article-auto-range}、
+@code{navi2ch-article-new-message-range}、
+@code{navi2ch-article-exist-message-range} を変更する。@xref{Customize}.
+
+現在表示中のスレの表示領域を変えたい場合は @kbd{r} を押す。
 
 @node Message Mode
 @section Message モード
@@ -1615,6 +1637,12 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 また、変数 @code{navi2ch-article-auto-expunge} を
 @code{nil} 以外 (@code{t} とか) に設定すると
 スレを開いたときに自動的にバッファの最大数が上記の値に制限される。@xref{Customize}.
+
+@item Q.
+スレを開くと一部のレスしか表示されないよ。全部読みたいんだけど。
+
+@item A.
+@kbd{r 0} でどうよ。詳しくは @ref{Article View Range} を見てね。
 
 @c 読めない
 @item Q.
