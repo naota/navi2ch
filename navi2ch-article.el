@@ -151,6 +151,20 @@ last が最後からいくつ表示するか。
 ;; add hook
 (add-hook 'navi2ch-save-status-hook 'navi2ch-article-save-all-info)
 
+(defun navi2ch-article-get-url (board article)
+  (concat (navi2ch-board-get-uri board)
+          (if (cdr (assq 'kako board)) "" "dat/")
+          (cdr (assq 'artid article))
+          ".dat"))
+
+(defun navi2ch-article-get-file-name (board article)
+  (navi2ch-board-get-file-name board
+                               (concat (cdr (assq 'artid article)) ".dat")))
+
+(defun navi2ch-article-get-info-file-name (board article)
+  (navi2ch-board-get-file-name board
+                               (concat "info/" (cdr (assq 'artid article)))))
+
 (defsubst navi2ch-article-inside-range-p (num range len)
   "NUM が RANGE で示す範囲に入ってるか
 LEN は RANGE で範囲を指定される list の長さ"
@@ -164,20 +178,6 @@ LEN は RANGE で範囲を指定される list の長さ"
           "/"
           (cdr (assq 'artid article))))
                     
-(defsubst navi2ch-article-get-url (board article)
-  (concat (navi2ch-board-get-uri board)
-          (if (cdr (assq 'kako board)) "" "dat/")
-          (cdr (assq 'artid article))
-          ".dat"))
-
-(defsubst navi2ch-article-get-file-name (board article)
-  (navi2ch-board-get-file-name board
-                               (concat (cdr (assq 'artid article)) ".dat")))
-
-(defsubst navi2ch-article-get-info-file-name (board article)
-  (navi2ch-board-get-file-name board
-                               (concat "info/" (cdr (assq 'artid article)))))
-
 (defsubst navi2ch-article-check-cached (board article)
   "BOARD と ARTICLE で指定されるスレッドがキャッシュされてるか。"
   (cond ((get-buffer (navi2ch-article-get-buffer-name board article))

@@ -1,3 +1,25 @@
+2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-util.el
+	(navi2ch-alist-list-to-alist): defsubst から defunに変更。
+
+	* navi2ch-list.el
+	(navi2ch-list-get-file-name): defsubst から defunに変更。
+
+	* navi2ch-board.el
+	(navi2ch-board-get-uri): defsubst から defunに変更。
+	(navi2ch-board-get-host): 同上。
+	(navi2ch-board-get-url): 同上。
+	(navi2ch-board-get-readcgi-url): 同上。
+	(navi2ch-board-get-bbscgi-url): 同上。
+	(navi2ch-board-equal): 同上。
+	(navi2ch-board-get-file-name): 同上。
+
+	* navi2ch-article.el
+	(navi2ch-article-get-url): defsubst から defunに変更。
+	(navi2ch-article-get-file-name): 同上。
+	(navi2ch-article-get-info-file-name): 同上。
+
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (toplevel): 

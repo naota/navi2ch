@@ -124,7 +124,7 @@
 (add-hook 'navi2ch-save-status-hook 'navi2ch-board-save-info)
 
 ;;; navi2ch-board functions
-(defsubst navi2ch-board-get-uri (board)
+(defun navi2ch-board-get-uri (board)
   "後ろの / が付いた uri を返す。
 kako ならばそれに対応した uri にする"
   (let ((uri (cdr (assq 'uri board))))
@@ -133,36 +133,36 @@ kako ならばそれに対応した uri にする"
 	(setq uri (concat uri "/")))
       (concat uri (cdr (assq 'kako board))))))
 
-(defsubst navi2ch-board-get-host (board)
+(defun navi2ch-board-get-host (board)
   (let ((uri (cdr (assq 'uri board))))
     (when (string-match "http://\\([^/]+\\)" uri)
       (match-string 1 uri))))
 
-(defsubst navi2ch-board-get-url (board &optional file-name)
+(defun navi2ch-board-get-url (board &optional file-name)
   (if (and file-name (string-match "^/" file-name))
       (concat "http://" (navi2ch-board-get-host board) file-name)
     (concat (navi2ch-board-get-uri board)
 	    (or file-name navi2ch-board-subject-file-name))))
 
-(defsubst navi2ch-board-get-readcgi-url (board)
+(defun navi2ch-board-get-readcgi-url (board)
   "read.cgi の板名までの url を返す。"
   (let ((uri (navi2ch-board-get-uri board))
 	(id (cdr (assq 'id board))))
     (setq uri (navi2ch-replace-string (concat id "/") "" uri))
     (format "%stest/read.cgi/%s/" uri id)))
 
-(defsubst navi2ch-board-get-bbscgi-url (board)
+(defun navi2ch-board-get-bbscgi-url (board)
   "bbs.cgi の url を返す"
   (let ((uri (navi2ch-board-get-uri board))
 	(id (cdr (assq 'id board))))
     (setq uri (navi2ch-replace-string (concat id "/") "" uri))
     (format "%stest/bbs.cgi" uri)))
 	  
-(defsubst navi2ch-board-equal (board1 board2)
+(defun navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))
 	   (cdr (assq 'uri board2))))
   
-(defsubst navi2ch-board-get-file-name (board &optional file-name)
+(defun navi2ch-board-get-file-name (board &optional file-name)
   (let ((uri (navi2ch-board-get-uri board)))
      (when (and uri (string-match "http://\\(.+\\)" uri))
        (setq uri (match-string 1 uri))

@@ -97,7 +97,7 @@
 ;; add hook
 (add-hook 'navi2ch-save-status-hook 'navi2ch-list-save-info)
 
-(defsubst navi2ch-list-get-file-name (&optional name)
+(defun navi2ch-list-get-file-name (&optional name)
   (navi2ch-expand-file-name
    (or name "board.txt")))
 
