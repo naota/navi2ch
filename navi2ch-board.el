@@ -29,19 +29,20 @@
 
 (defvar navi2ch-board-mode-map nil)
 (unless navi2ch-board-mode-map
-  (setq navi2ch-board-mode-map (copy-keymap navi2ch-bm-mode-map))
-  ;; (define-key navi2ch-board-mode-map "q" 'navi2ch-board-exit)
-  (define-key navi2ch-board-mode-map "s" 'navi2ch-board-sync)
-  (define-key navi2ch-board-mode-map "r" 'navi2ch-board-select-view-range)
-  (define-key navi2ch-board-mode-map "a" 'navi2ch-board-add-bookmark)
-  (define-key navi2ch-board-mode-map "d" 'navi2ch-board-hide-article)
-  (define-key navi2ch-board-mode-map "h" 'navi2ch-board-toggle-hide)
-  (define-key navi2ch-board-mode-map "+" 'navi2ch-board-toggle-updated)
-  (define-key navi2ch-board-mode-map "b" 'navi2ch-board-toggle-bookmark)
-  (define-key navi2ch-board-mode-map "w" 'navi2ch-board-write-message)
-  (define-key navi2ch-board-mode-map "2" 'navi2ch-board-two-pain)
-  (define-key navi2ch-board-mode-map "\C-c\C-f" 'navi2ch-article-find-file)
-  (define-key navi2ch-board-mode-map "\M-e" 'navi2ch-board-expire))
+  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+    ;; (define-key map "q" 'navi2ch-board-exit)
+    (define-key map "s" 'navi2ch-board-sync)
+    (define-key map "r" 'navi2ch-board-select-view-range)
+    (define-key map "a" 'navi2ch-board-add-bookmark)
+    (define-key map "d" 'navi2ch-board-hide-article)
+    (define-key map "h" 'navi2ch-board-toggle-hide)
+    (define-key map "+" 'navi2ch-board-toggle-updated)
+    (define-key map "b" 'navi2ch-board-toggle-bookmark)
+    (define-key map "w" 'navi2ch-board-write-message)
+    (define-key map "2" 'navi2ch-board-two-pain)
+    (define-key map "\C-c\C-f" 'navi2ch-article-find-file)
+    (define-key map "\M-e" 'navi2ch-board-expire)
+    (setq navi2ch-board-mode-map map)))
 
 (defvar navi2ch-board-mode-menu-spec
   (navi2ch-bm-make-menu-spec

@@ -31,12 +31,12 @@
 
 (defvar navi2ch-history-mode-map nil)
 (unless navi2ch-history-mode-map
-  (setq navi2ch-history-mode-map
-        (copy-keymap navi2ch-bm-mode-map))
-  ;; (define-key navi2ch-history-mode-map "q" 'navi2ch-history-exit)
-  (define-key navi2ch-history-mode-map "\C-k" 'navi2ch-history-cut)
-  (define-key navi2ch-history-mode-map "\C-y" 'navi2ch-history-yank)
-  (define-key navi2ch-history-mode-map "d" 'navi2ch-history-delete))
+  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+    ;; (define-key map "q" 'navi2ch-history-exit)
+    (define-key map "\C-k" 'navi2ch-history-cut)
+    (define-key map "\C-y" 'navi2ch-history-yank)
+    (define-key map "d" 'navi2ch-history-delete)
+    (setq navi2ch-history-mode-map map)))
   
 (defvar navi2ch-history-mode-menu-spec
   (navi2ch-bm-make-menu-spec

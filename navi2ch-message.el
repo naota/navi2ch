@@ -27,14 +27,15 @@
 
 (defvar navi2ch-message-mode-map nil)
 (unless navi2ch-message-mode-map
-  (setq navi2ch-message-mode-map (make-sparse-keymap))
-  (define-key navi2ch-message-mode-map "\C-c\C-c" 'navi2ch-message-send-message)
-  (define-key navi2ch-message-mode-map "\C-c\C-k" 'navi2ch-message-exit)
-  (define-key navi2ch-message-mode-map "\C-c\C-y" 'navi2ch-message-cite-original)
-  (define-key navi2ch-message-mode-map "\C-cy" 'navi2ch-message-cite-original-from-number)
-  (define-key navi2ch-message-mode-map "\C-c\C-i" 'navi2ch-message-insert-backup)
-  (define-key navi2ch-message-mode-map "\C-c\C-b" 'navi2ch-base64-insert-file)
-  (define-key navi2ch-message-mode-map "\et" 'navi2ch-toggle-offline))
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-c\C-c" 'navi2ch-message-send-message)
+    (define-key map "\C-c\C-k" 'navi2ch-message-exit)
+    (define-key map "\C-c\C-y" 'navi2ch-message-cite-original)
+    (define-key map "\C-cy" 'navi2ch-message-cite-original-from-number)
+    (define-key map "\C-c\C-i" 'navi2ch-message-insert-backup)
+    (define-key map "\C-c\C-b" 'navi2ch-base64-insert-file)
+    (define-key map "\et" 'navi2ch-toggle-offline)
+    (setq navi2ch-message-mode-map map)))
 
 (defvar navi2ch-message-mode-menu-spec
   '("Message"

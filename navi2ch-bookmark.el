@@ -31,18 +31,17 @@
 
 (defvar navi2ch-bookmark-mode-map nil)
 (unless navi2ch-bookmark-mode-map
-  (setq navi2ch-bookmark-mode-map
-	(copy-keymap navi2ch-bm-mode-map))
-  ;; (define-key navi2ch-bookmark-mode-map "q" 'navi2ch-bookmark-exit)
-  (define-key navi2ch-bookmark-mode-map "i" 'navi2ch-bookmark-fetch-article)
-  (define-key navi2ch-bookmark-mode-map "mi" 'navi2ch-bookmark-fetch-mark-article)
-  (define-key navi2ch-bookmark-mode-map "d" 'navi2ch-bookmark-delete)
-  (define-key navi2ch-bookmark-mode-map "\C-k" 'navi2ch-bookmark-cut)
-  (define-key navi2ch-bookmark-mode-map "\C-y" 'navi2ch-bookmark-yank)
-  (define-key navi2ch-bookmark-mode-map "o" 'navi2ch-bookmark-move)
-  (define-key navi2ch-bookmark-mode-map "O" 'navi2ch-bookmark-copy))
-  
-  
+  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+    ;; (define-key map "q" 'navi2ch-bookmark-exit)
+    (define-key map "i" 'navi2ch-bookmark-fetch-article)
+    (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
+    (define-key map "d" 'navi2ch-bookmark-delete)
+    (define-key map "\C-k" 'navi2ch-bookmark-cut)
+    (define-key map "\C-y" 'navi2ch-bookmark-yank)
+    (define-key map "o" 'navi2ch-bookmark-move)
+    (define-key map "O" 'navi2ch-bookmark-copy)
+    (setq navi2ch-bookmark-mode-map map)))
+    
 (defvar navi2ch-bookmark-mode-menu-spec
   (navi2ch-bm-make-menu-spec
    "Bookmark"

@@ -47,9 +47,9 @@
 
 (defvar navi2ch-search-mode-map nil)
 (unless navi2ch-search-mode-map
-  (setq navi2ch-search-mode-map
-        (copy-keymap navi2ch-bm-mode-map))
-  (define-key navi2ch-search-mode-map "Q" 'navi2ch-search-return-previous-board-maybe))
+  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+    (define-key map "Q" 'navi2ch-search-return-previous-board-maybe)
+    (setq navi2ch-search-mode-map map)))
   
 (defvar navi2ch-search-mode-menu-spec
   (navi2ch-bm-make-menu-spec

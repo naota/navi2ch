@@ -31,10 +31,10 @@
 
 (defvar navi2ch-articles-mode-map nil)
 (unless navi2ch-articles-mode-map
-  (setq navi2ch-articles-mode-map
-        (copy-keymap navi2ch-bm-mode-map))
-  ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
-  (define-key navi2ch-articles-mode-map "d" 'navi2ch-articles-delete))
+  (let ((map (copy-keymap navi2ch-bm-mode-map)))
+    ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
+    (define-key map "d" 'navi2ch-articles-delete)
+    (setq navi2ch-articles-mode-map map)))
 
 (defvar navi2ch-articles-mode-menu-spec
   (navi2ch-bm-make-menu-spec
