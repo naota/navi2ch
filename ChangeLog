@@ -1,3 +1,10 @@
+2003-02-24  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-parse-field-list): 廃止。
+
+	* navi2ch-splash.el (navi2ch-splash-image-type-alist): xpm の優先度
+	を下げてみる。
+
 2003-02-22  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-content): 壊れた proxy でも動く

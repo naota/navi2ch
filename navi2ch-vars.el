@@ -495,14 +495,6 @@ ask なら明示的に移動する時以外なら質問する
 			navi2ch-article-through-ask-last-command-p))
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-parse-field-list '(data name mail)
-  "*メッセージのフィールドのうち、パーズ対象にするもののリスト。
-遅くてもいいんなら '(data mail name) とかするといいかも"
-  :type '(set (const :tag "記事" data)
-              (const :tag "メール" mail)
-              (const :tag "名前" name))
-  :group 'navi2ch-article)
-
 (defcustom navi2ch-article-goto-number-recenter t
   "*non-nil なら、goto-number したあと recenter する。"
   :type 'boolean

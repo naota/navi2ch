@@ -131,8 +131,8 @@
 	(if (and navi2ch-on-emacs21
 		 (image-type-available-p 'xbm))
 	    ;; Prefer xbm rather than bitmap on Emacs 21.
-	    (delq nil (list xpm xbm bitmap '("ascii")))
-	  (delq nil (list xpm bitmap xbm '("ascii")))))
+	    (delq nil (list xbm bitmap xpm '("ascii")))
+	  (delq nil (list bitmap xbm xpm '("ascii")))))
     '(("ascii"))))
 
 (defun navi2ch-splash-insert-image (image-type)
