@@ -59,12 +59,12 @@
   :group 'navi2ch)
 
 (defgroup navi2ch-message nil
-  "*Navi2ch, article buffer."
+  "*Navi2ch, message buffer."
   :prefix "navi2ch-"
   :group 'navi2ch)
 
 (defgroup navi2ch-net nil
-  "*Navi2ch, article buffer."
+  "*Navi2ch, networking."
   :prefix "navi2ch-"
   :group 'navi2ch)
 

@@ -30,7 +30,7 @@
   "$Id$")
 
 (defgroup navi2ch-face nil
-  "Navi2ch, FAces."
+  "Navi2ch, Faces."
   :prefix "navi2ch-"
   :group 'navi2ch)
 
