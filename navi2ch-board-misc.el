@@ -171,10 +171,12 @@
 	  (cons board navi2ch-list-navi2ch-category-alist))))
 
 (defun navi2ch-bm-select-board (board &optional force)
-  (switch-to-buffer (get-buffer-create navi2ch-board-buffer-name))
-  (let ((type (cdr (assq 'type board))))
+  (let ((buf (get-buffer-create navi2ch-board-buffer-name))
+	(type (cdr (assq 'type board))))
+    (set-buffer buf)
     (funcall (cdr (assq type navi2ch-bm-board-type-alist))
-	     board force))
+	     board force)
+    (switch-to-buffer buf))
   (run-hooks 'navi2ch-bm-select-board-hook)
   (navi2ch-set-mode-line-identification))
 
