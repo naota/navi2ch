@@ -590,6 +590,7 @@ internet drafts directory for a copy.")
   (string-match "書きこみました。"
 		(decode-coding-string (navi2ch-net-get-content proc)
 				      navi2ch-coding-system)))
+
 (defun navi2ch-net-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)
 				   navi2ch-coding-system)))
@@ -598,7 +599,15 @@ internet drafts directory for a copy.")
 	  ((string-match "<b>\\([^<]+\\)" str)
 	   (match-string 1 str)))))
 		   
-(defun navi2ch-net-send-message (from mail message subject url referer bbs key)
+;; Set-Cookie: SPID=6w9HFhEM; expires=Tuesday, 23-Apr-2002 00:00:00 GMT; path=/
+(defun navi2ch-net-send-message-get-spid (proc)
+  (dolist (pair (navi2ch-net-get-header proc))
+    (if (string-equal "Set-Cookie" (car pair))
+	(let ((str (cdr pair)))
+	  (if (string-match "^SPID=\\([^;]+\\);" str)
+	      (return (match-string 1 str)))))))
+
+(defun navi2ch-net-send-message (from mail message subject url referer bbs key spid)
   "メッセージを送る。
 送信成功なら t を返す"
   (navi2ch-net-ignore-errors
@@ -628,19 +637,24 @@ internet drafts directory for a copy.")
 			       "application/x-www-form-urlencoded")
 			 (cons "Cookie"
 			       (concat "NAME=" from
-				       "; MAIL=" mail))
+				       "; MAIL=" mail
+				       (if spid
+					   (concat "; SPID=" spid))))
 			 (cons "Referer" referer))
 		   (navi2ch-net-get-param-string param-alist)))
        (message "send message...")
-       (if (navi2ch-net-send-message-success-p proc)
-	   (progn
-	     (message "send message...succeed")
-	     t)
-	 (let ((err (navi2ch-net-send-message-error-string proc)))
-	   (if (stringp err)
-	       (message "send message...failed: %s" err)
-	     (message "send message...failed")))
-	 nil)))))
+       (setq spid (navi2ch-net-send-message-get-spid proc))
+       (cons
+	(if (navi2ch-net-send-message-success-p proc)
+	    (progn
+	      (message "send message...succeed")
+	      t)
+	  (let ((err (navi2ch-net-send-message-error-string proc)))
+	    (if (stringp err)
+		(message "send message...failed: %s" err)
+	      (message "send message...failed")))
+	  nil)
+	spid)))))
 
 (defun navi2ch-net-download-logo (board)
   (let* ((coding-system-for-read 'binary)

@@ -483,6 +483,15 @@
 			       board)))
     board))
 
+(defun navi2ch-board-save-spid (board spid)
+  (navi2ch-save-info
+   (navi2ch-board-get-file-name board "spid.txt")
+   spid))
+
+(defun navi2ch-board-load-spid (board)
+  (navi2ch-load-info
+   (navi2ch-board-get-file-name board "spid.txt")))
+
 (defun navi2ch-board-select-view-range ()
   (interactive)
   (setq-default navi2ch-article-view-range

@@ -1,3 +1,23 @@
+2002-03-24    mami  <mami@users.sourceforge.net>
+	SPID Cookie に対応。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/312
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/318
+
+	* navi2ch-board.el (navi2ch-board-save-spid): 新関数。SPID を保存
+	する。
+	(navi2ch-board-load-spid): 新関数。SPID を読み込む。
+
+	* navi2ch-message.el (navi2ch-message-send-message):
+	navi2ch-net-send-message を呼ぶとき/呼んだ後に上記関数で SPID を使
+	うように。
+
+	* navi2ch-net.el (navi2ch-net-send-message-get-spid): 新関数。
+	サーバの応答の Set-Cookies: から SPID を取得。
+	(navi2ch-net-send-message): 引き数に spid を追加。
+	返り値を (送信成功/失敗 . SPID) に変更。
+	navi2ch-net-send-request に Cookie: で SPID も渡し、
+	実行後に navi2ch-net-send-message-get-spid で SPID を取得。
+
 2002-03-19    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-logo): SETTING.TXT の
