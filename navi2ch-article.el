@@ -438,12 +438,38 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	       (cons num (cdr x)))
 	     list2))))
 
-(defun navi2ch-article-insert-hide-number-following (&optional number)
+(defun navi2ch-article-update-previous-message-separator ()
+  "現在位置の直前のレス区切を更新する。"
+  (save-excursion
+    (let ((buffer-read-only nil)
+	  end beg)
+      (setq end (previous-single-property-change (point) 'message-separator))
+      (when end
+	(setq beg (previous-single-property-change end 'message-separator)))
+      (when (and beg end)
+	(let ((number (get-text-property beg 'message-separator)))
+	  (goto-char beg)
+	  (delete-region beg end)
+	  (navi2ch-article-insert-message-separator number))))))
+
+(defun navi2ch-article-insert-message-separator (number)
+  "レス区切を挿入する。"
+  (let ((p (point)))
+    (funcall navi2ch-article-insert-message-separator-function number)
+    (put-text-property p (point) 'message-separator number)))
+
+(defun navi2ch-article-insert-hide-number-following (number)
   "レス番号 NUMBER の後に続く hide されたレス数を挿入する。 "
-  (setq number (or number (navi2ch-article-get-current-number)))
   (unless (or navi2ch-article-hide-mode navi2ch-article-important-mode)
-    (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
-	  beg end cnt)
+    (let (hide beg end cnt)
+      ;; hide 情報は filter mode かどうかで変わってくる
+      (setq hide
+	    (funcall
+	     (if navi2ch-article-message-filter-mode
+		 'navi2ch-union
+	       'navi2ch-set-difference)
+	     (cdr (assq 'hide navi2ch-article-current-article))
+	     (cdr (assq 'hide navi2ch-article-message-filter-cache))))
       (setq beg (car (memq (1+ number) hide)))
       (when beg
 	(setq end beg)
@@ -453,21 +479,21 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	(let ((number-str (if (= cnt 1)
 			      (format "%d" beg)
 			    (format "%d-%d" beg end))))
-	  (insert (format "[%d hide message(s) (" cnt))
+	  (insert (format "__[%d hidden message(s) (" cnt))
 	  (let ((pos (point)))
 	    (insert ">>" number-str)
 	    (navi2ch-article-set-link-property-subr pos (point)
 						    'number number-str)
 	    (insert ")]")))))))
 
-(defun navi2ch-article-insert-message-separator-by-face ()
+(defun navi2ch-article-insert-message-separator-by-face (number)
   (let ((p (point)))
-    (navi2ch-article-insert-hide-number-following)
+    (navi2ch-article-insert-hide-number-following number)
     (insert "\n")
     (put-text-property p (point) 'face 'underline)))
 
-(defun navi2ch-article-insert-message-separator-by-char ()
-  (navi2ch-article-insert-hide-number-following)
+(defun navi2ch-article-insert-message-separator-by-char (number)
+  (navi2ch-article-insert-hide-number-following number)
   (insert (make-string (max 0
 			    (- (eval navi2ch-article-message-separator-width)
 			       (current-column)))
@@ -575,7 +601,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
         (if navi2ch-article-auto-decode-p
             (navi2ch-article-auto-decode-encoded-section))
 	(navi2ch-article-arrange-message))))
-  (funcall navi2ch-article-insert-message-separator-function)
+  (navi2ch-article-insert-message-separator num)
   (insert "\n"))
 
 (defun navi2ch-article-insert-messages (list range)
@@ -727,7 +753,8 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 					     navi2ch-article-message-filter-cache)))))))
 	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
 	  ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
-	  (unless suppress
+	  (if suppress
+	      (navi2ch-article-update-previous-message-separator)
 	    (navi2ch-article-insert-message num alist)))
 	;; 進捗表示
 	(and (> (setq progress (+ progress 100)) 10000)
@@ -2937,7 +2964,8 @@ NO-SYNC が non-nil のときは sync しない。"
      (if (memq num list)
          list
        (cons num list)))
-   "Hide message"))
+   "Hide message")
+  (navi2ch-article-update-previous-message-separator))
 
 (defun navi2ch-article-cancel-hide-message (&optional prefix)
   (interactive "P")

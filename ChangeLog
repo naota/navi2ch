@@ -1,3 +1,22 @@
+2005-02-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el
+	(navi2ch-article-insert-hide-number-following):
+	number を 必須にした。
+	hide 情報の取得を navi2ch-article-message-filter-mode で切り替える
+	ように。
+	頭にちょっとだけセパレータを入れてみる。
+	hide -> hidden (^^;
+	(navi2ch-article-update-previous-message-separator): 新関数。
+	(navi2ch-article-insert-message-separator): 同上。
+	(navi2ch-article-insert-message):
+	navi2ch-article-insert-message-separator-function への funcall を
+	navi2ch-article-insert-message-separatorに置き換え。
+	suppress されていたときに、
+	navi2ch-article-update-previous-message-separator を呼ぶように。
+	(navi2ch-article-hide-message):
+	navi2ch-article-update-previous-message-separator を呼ぶように。
+
 2005-01-30  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
