@@ -1,3 +1,9 @@
+2002-03-19    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-download-logo): SETTING.TXT の
+	BBS_FIGUREHEAD からもロゴ URL を取得できるよう変更。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/248-250n
+
 2002-03-18    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-rotate-point): 新関数。

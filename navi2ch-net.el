@@ -650,8 +650,9 @@ internet drafts directory for a copy.")
 		    (navi2ch-board-get-url board
 					   navi2ch-net-setting-file-name))))
 	 src)
-    (when (string-match "BBS_TITLE_PICTURE=\\(.+\\)" content)
-      (setq src (match-string 1 content)))
+    (when (string-match
+	   "BBS_\\(TITLE_PICTURE\\|FIGUREHEAD\\)=\\(.+\\)" content)
+      (setq src (match-string 2 content)))
     (let (url file)
       (setq url (if (string-match "http://" src)
 		    src
