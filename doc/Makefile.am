@@ -21,4 +21,4 @@ pdf: navi2ch.pdf
 # create HTML file
 html: navi2ch.html
 .texi.html:
-	makeinfo --html --ifinfo --no-split -o $@ $<
+	makeinfo --html --no-split -o $@ $<

@@ -31,6 +31,11 @@
 
 (set-language-environment "Japanese")
 
+;; workaround for emacs20
+(unless (symbol-plist 'ifnottex)
+  (put 'ifnottex 'texinfo-format 'texinfo-discard-line)
+  (put 'ifnottex 'texinfo-end 'texinfo-discard-command))
+
 ;; batch-texinfo-format からほぼコピペ
 (defun batch-texi2info ()
   "Runs  texi2info  on the files remaining on the command line.
