@@ -162,11 +162,13 @@
 (defvar navi2ch-machibbs-parse-subject-regexp "<title>\\(.*\\)</title>")
 
 (defun navi2ch-machibbs-parse-subject ()
-  (re-search-forward navi2ch-machibbs-parse-subject-regexp nil t)
-  (match-string 1))
+  (let ((case-fold-search t))
+    (re-search-forward navi2ch-machibbs-parse-subject-regexp nil t)
+    (match-string 1)))
 
 (defun navi2ch-machibbs-parse ()
-  (re-search-forward navi2ch-machibbs-parse-regexp nil t))
+  (let ((case-fold-search t))
+    (re-search-forward navi2ch-machibbs-parse-regexp nil t)))
 
 (defun navi2ch-machibbs-make-article (&optional subject)
   (let ((no (match-string 1))

@@ -138,11 +138,13 @@ START, END, NOFIRST は無視する。(jbbs.shitarabaにそういう機能が無い)
 (defvar navi2ch-js-parse-subject-regexp "<title>\\([^\\n]*\\)</title>")
 
 (defun navi2ch-js-parse-subject ()
-  (re-search-forward navi2ch-js-parse-subject-regexp nil t)
-  (match-string 1))
+  (let ((case-fold-search t))
+    (re-search-forward navi2ch-js-parse-subject-regexp nil t)
+    (match-string 1)))
 
 (defun navi2ch-js-parse ()
-  (re-search-forward navi2ch-js-parse-regexp nil t))
+  (let ((case-fold-search t))
+    (re-search-forward navi2ch-js-parse-regexp nil t)))
 
 (defun navi2ch-js-make-article (&optional subject)
   (let ((no (match-string 1))

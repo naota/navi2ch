@@ -1,5 +1,12 @@
 2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-parse-subject):
+	case-fold-search を nil に。
+	(navi2ch-js-parse): 同上。
+	* navi2ch-machibbs.el (navi2ch-machibbs-parse-subject): 同上。
+	(navi2ch-machibbs-parse): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/436
+
 	* navi2ch.el (navi2ch-lock): navi2ch-lock-directory を使用するように。
 	(navi2ch-unlock): navi2ch-unlock-directory を使用するように。
 	(navi2ch-ident-list): navi2ch-ident が含まれるように。
