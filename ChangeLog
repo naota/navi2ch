@@ -1,5 +1,15 @@
 2002-10-18  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el
+	(navi2ch-article-filter-by-name): 微調整。
+	(navi2ch-article-filter-by-message): 新関数。
+	(navi2ch-article-apply-filters): 上記関数を使うように。
+
+	* navi2ch-vars.el (navi2ch-article-filter-by-message-alist): 新変
+	数。
+
+2002-10-18  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-oyster.el (navi2ch-oyster-article-update): 不要な束縛を
 	削除。
 

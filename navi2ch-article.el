@@ -308,7 +308,8 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-article-apply-filters (board)
   (let ((sep-str (navi2ch-article-get-separator-string)))
-    (navi2ch-article-filter-by-name sep-str))
+    (navi2ch-article-filter-by-name sep-str)
+    (navi2ch-article-filter-by-message sep-str))
   (dolist (filter navi2ch-article-filter-list)
     (if (stringp (car-safe filter))
 	(apply 'navi2ch-call-process-buffer
@@ -325,14 +326,38 @@ START, END, NOFIRST で範囲を指定する"
     (let ((regexp (concat
 		   "^.*"
 		   (regexp-quote (car pair))
-		   ".*" sep		; name
-		   "\\(.*\\)" sep	; mail address
-		   "\\(.*\\)" sep	; date
-		   ".*" sep))		; message
+		   ".*"		sep	; name
+		   "\\(.*\\)"	sep	; mail address
+		   "\\(.*\\)"	sep	; date
+		   ".*"		sep))	; message
 	  mail date)
       (while (re-search-forward regexp nil t)
-	(setq date (match-string 2))
 	(setq mail (match-string 1))
+	(setq date (match-string 2))
+	(delete-region (match-beginning 0) (match-end 0))
+	(insert-string
+	 (concat (cdr pair) sep		; name
+		 (if (string-match "sage" mail)
+		     "sage"
+		   "")
+		 sep			; mail address
+		 date sep		; date
+		 (cdr pair) sep))))))	; message
+
+(defun navi2ch-article-filter-by-message (sep)
+  (dolist (pair navi2ch-article-filter-by-message-alist)
+    (goto-char (point-min))
+    (let ((regexp (concat
+		   "^.*"	sep	; name
+		   "\\(.*\\)"	sep	; mail address
+		   "\\(.*\\)"	sep	; date
+		   ".*"
+		   (regexp-quote (car pair))
+		   ".*"		sep))	; message
+	  mail date)
+      (while (re-search-forward regexp nil t)
+	(setq mail (match-string 1))
+	(setq date (match-string 2))
 	(delete-region (match-beginning 0) (match-end 0))
 	(insert-string
 	 (concat (cdr pair) sep		; name
