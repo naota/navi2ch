@@ -1,3 +1,13 @@
+2003-04-21  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-sync): 挿入済みのレスを変更する
+	必要のない場合は、追加のレスのみ挿入するように。
+	(navi2ch-article-select-current-link): ID とトリップにもスレ内リンクを
+	張れるように。
+	(navi2ch-article-get-link-text-subr): 同上。
+	(navi2ch-article-get-current-word-in-body): 新関数。
+	(navi2ch-article-search-body): 上記関数を使うように。
+
 2003-04-19  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): 

@@ -1030,7 +1030,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
                                          force))
            (file (navi2ch-article-get-file-name board article))
            (old-size (nth 7 (file-attributes file)))
-           header)
+           header start)
       (when first
         (setq article (navi2ch-article-load-info)))
       (navi2ch-article-set-mode-line)
@@ -1049,15 +1049,18 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		    (and header
 			 (not (navi2ch-net-get-state 'not-updated header))
 			 (not (navi2ch-net-get-state 'error header))))
-	    (setq list
-		  (if (or first
-			  (navi2ch-net-get-state 'aborn header)
-			  (navi2ch-net-get-state 'kako header)
-			  (not navi2ch-article-enable-diff))
-		      (navi2ch-article-get-message-list file)
-		    (navi2ch-article-append-message-list
-		     list (navi2ch-article-get-message-list
-			   file old-size))))
+	    (if (or first
+		    (navi2ch-net-get-state 'aborn header)
+		    (navi2ch-net-get-state 'kako header)
+		    (not navi2ch-article-enable-diff))
+		(setq list (navi2ch-article-get-message-list file))
+	      (unless (or (null (cdr list))
+			  navi2ch-article-hide-mode
+			  navi2ch-article-important-mode)
+		(setq start (1+ (length list))))
+	      (setq list (navi2ch-article-append-message-list
+			  list (navi2ch-article-get-message-list
+				file old-size))))
 	    (setq navi2ch-article-message-list list)
 	    (let ((num (or number (cdr (assq 'number article)))))
 	      (when (and navi2ch-article-fix-range-when-sync num)
@@ -1067,9 +1070,11 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 	    (setq navi2ch-article-hide-mode nil
 		  navi2ch-article-important-mode nil)
 	    (let ((buffer-read-only nil))
-	      (erase-buffer)
-	      (navi2ch-article-insert-messages list
-					       navi2ch-article-view-range))
+	      (if start
+		  (navi2ch-article-reinsert-partial-messages start)
+		(erase-buffer)
+		(navi2ch-article-insert-messages list
+						 navi2ch-article-view-range)))
 	    (navi2ch-article-load-number)
 	    (navi2ch-article-save-info board article first)
 	    (navi2ch-article-set-mode-line)
@@ -1313,7 +1318,31 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'number))
 	   (navi2ch-article-select-current-link-number
-	    (navi2ch-article-str-to-num (japanese-hankaku prop))
+	    (or (and (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" prop)
+		     (let (nums)
+		       (dolist (msg navi2ch-article-message-list (nreverse nums))
+			 (when (and (listp (cdr msg))
+				    (or (and (string-match
+					      ;; ID:??? $B$O%9%k!<(B
+					      " ID:\\([^ ][^ ][^ ][^ ]+\\)"
+					      (or (cdr (assq 'date (cdr msg)))
+						  ""))
+					     (string-match
+					      (regexp-quote
+					       (match-string
+						1 (cdr (assq 'date (cdr msg)))))
+					      prop))
+					(and (string-match
+					      "$B"!(B\\([^ ]+\\)"
+					      (or (cdr (assq 'name (cdr msg)))
+						  ""))
+					     (string-match
+					      (regexp-quote
+					       (match-string
+						1 (cdr (assq 'name (cdr msg)))))
+					      prop))))
+			   (setq nums (cons (car msg) nums))))))
+		(navi2ch-article-str-to-num (japanese-hankaku prop)))
 	    browse-p))
           ((setq prop (get-text-property (point) 'url))
            (navi2ch-article-select-current-link-url prop browse-p nil))
@@ -1704,6 +1733,20 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 	(match-string 1 date)
       nil)))
 
+(defun navi2ch-article-get-current-word-in-body ()
+  (let ((face (get-text-property (point) 'face)))
+    (cond
+     ((memq face '(navi2ch-article-url-face))
+      (buffer-substring-no-properties
+       (if (eq (get-text-property (1- (point)) 'face) face)
+	   (previous-single-property-change (point) 'face)
+	 (point))
+       (next-single-property-change (point) 'face)))
+     ((memq face '(navi2ch-article-face
+		   navi2ch-article-citation-face
+		   navi2ch-article-link-face))
+      (current-word)))))
+
 (defun navi2ch-article-get-visible-numbers ()
   "$BI=<(Cf$N%l%9$NHV9f$N%j%9%H$rF@$k!#(B"
   (let* ((navi2ch-article-goto-number-recenter nil)
@@ -1891,8 +1934,37 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 	      num-list num)
 	  (cond
 	   (num-prop
-	    (setq num-list (navi2ch-article-str-to-num
-			    (japanese-hankaku num-prop)))
+	    (setq num-list
+		  (or (and (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" num-prop)
+			   (let ((limit (navi2ch-article-get-current-number))
+				 last)
+			     (catch 'loop
+			       (dolist (msg (reverse navi2ch-article-message-list) last)
+				 (when (and (listp (cdr msg))
+					    (or (and (string-match
+						      ;; ID:??? $B$O%9%k!<(B
+						      " ID:\\([^ ][^ ][^ ][^ ]+\\)"
+						      (or (cdr (assq 'date (cdr msg)))
+							  ""))
+						     (string-match
+						      (regexp-quote
+						       (match-string
+							1 (cdr (assq 'date (cdr msg)))))
+						      num-prop))
+						(and (string-match
+						      "$B"!(B\\([^ ]+\\)"
+						      (or (cdr (assq 'name (cdr msg)))
+							  ""))
+						     (string-match
+						      (regexp-quote
+						       (match-string
+							1 (cdr (assq 'name (cdr msg)))))
+						      num-prop))))
+				   (if (< (car msg) limit)
+				       (throw 'loop (car msg))
+				     (setq last (car msg))))))))
+		      (navi2ch-article-str-to-num
+		       (japanese-hankaku num-prop))))
 	    (cond ((numberp num-list)
 		   (setq num num-list))
 		  (t
@@ -2666,7 +2738,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
   (interactive)
   (unless body
     (setq body (navi2ch-read-string "Body: "
-				    nil
+				    (navi2ch-article-get-current-word-in-body)
 				    'navi2ch-search-history)))
   (navi2ch-article-search-subr 'data (regexp-quote body)))
 
