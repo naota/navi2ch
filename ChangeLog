@@ -3,7 +3,9 @@
 	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): 
 	.dat の形式が変わって <br> の後に空白が入らなくなったようなので対応。
 	インデント崩れちゃうけど、とりあえず。
-
+	(navi2ch-replace-html-tag-alist): 同上
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/388-
+	
 2002-01-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (lisp_LISP): navi2ch-version.el を先頭に持って来た。
