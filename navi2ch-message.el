@@ -297,8 +297,8 @@
   (when (or no-ask
 	    (not navi2ch-message-ask-before-kill)
 	    (if (functionp navi2ch-message-ask-before-kill)
-		(funcall navi2ch-message-ask-before-kill "Kill current message?"))
-	    (y-or-n-p "Kill current message?"))
+		(funcall navi2ch-message-ask-before-kill "Kill current message?")
+	      (y-or-n-p "Kill current message?")))
     (kill-buffer navi2ch-message-buffer-name)
     t))
 

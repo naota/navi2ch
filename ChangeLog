@@ -1,3 +1,10 @@
+2002-07-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-kill-message):
+	一回余分に y-or-n-p で聞かれることがあった。
+	括弧の対応を間違ってたので、修正。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/684
+
 2002-07-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-add-bookmark-subr): せっかく
