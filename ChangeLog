@@ -1,3 +1,8 @@
+2002-11-06  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-goto-number): スレ内にレスが
+	ないときにエラーになっていたので、すぐ終了するように。
+
 2002-11-04  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	Article モードでの検索機能を実装。

@@ -1126,7 +1126,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM 番目のレスに移動"
   (interactive "ninput number: ")
-  (when (and num (> num 0))
+  (when (and num (> num 0)
+	     navi2ch-article-message-list)
     (when (or (interactive-p) save)
       (navi2ch-article-push-point))
     (catch 'break
