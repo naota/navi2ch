@@ -1,3 +1,8 @@
+2003-03-21  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-subr): 
+	フィルタ条件のマッチ確認方法を修正。点数が正しく加算されるように。
+
 2003-03-20  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message): DOC 修正。

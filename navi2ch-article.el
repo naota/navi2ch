@@ -783,39 +783,43 @@ START, END, NOFIRST で範囲を指定する"
 	    result))))))
 
 (defun navi2ch-article-message-filter-subr (rules string)
-  (catch 'loop
-    (dolist (rule rules)
-      (let ((expand t))
-	(when (stringp (car rule))
-	  (setq rule (cons (list (car rule) 'S) (cdr rule))
-		expand nil))
-	(let* ((char (string-to-char (symbol-name (cadar rule))))
-	       (case-fold-search (= char
-				    (setq char (downcase char))))
+  (let (score)
+    (catch 'loop
+      (dolist (rule rules)
+	(let* ((char (and (listp (car rule))
+			  (string-to-char (symbol-name (cadar rule)))))
+	       (case-fold-search (and char
+				      (eq char
+					  (setq char (downcase char)))))
 	       (regexp (cond
-			((= char ?r)
+			((null char)
+			 (regexp-quote (car rule)))
+			((eq char ?r)
 			 (caar rule))
-			((= char ?s)
+			((eq char ?s)
 			 (regexp-quote (caar rule)))
-			((= char ?e)
+			((eq char ?e)
 			 (concat "\\`" (regexp-quote (caar rule)) "\\'"))
-			((= char ?f)
+			((eq char ?f)
 			 (regexp-quote
 			  (apply #'concat
 				 (split-string
 				  (japanese-hankaku (caar rule) t))))))))
 	  (when (and regexp
 		     (string-match regexp
-				   (if (= char ?f)
+				   (if (eq char ?f)
 				       (apply #'concat
 					      (split-string
 					       (japanese-hankaku string t)))
 				     string)))
-	    (throw 'loop
-		   (if (and expand
-			    (stringp (cdr rule)))
-		       (navi2ch-expand-newtext (cdr rule) string)
-		     (cdr rule)))))))))
+	    (if (numberp (cdr rule))
+		(setq score (+ (or score 0) (cdr rule)))
+	      (throw 'loop
+		     (if (and char
+			      (stringp (cdr rule)))
+			 (navi2ch-expand-newtext (cdr rule) string)
+		       (cdr rule)))))))
+      score)))
 
 (defun navi2ch-article-default-header-format-function (number name mail date)
   "デフォルトのヘッダをフォーマットする関数
