@@ -44,7 +44,12 @@
     (error-string   	. navi2ch-js-send-message-error-string)
     (article-to-url 	. navi2ch-js-article-to-url)))
 
-(navi2ch-multibbs-regist 'jbbs-shitaraba navi2ch-js-func-alist)
+(defvar navi2ch-js-variable-alist
+  '((coding-system	. euc-japan)))
+
+(navi2ch-multibbs-regist 'jbbs-shitaraba
+			 navi2ch-js-func-alist
+			 navi2ch-js-variable-alist)
 
 ;;-------------
 	
@@ -52,13 +57,11 @@
   "URI がJBBS＠したらばなら non-nilを返す。"
   (string-match "http://jbbs.shitaraba.com/" uri))
 
-(defun navi2ch-js-subject-callback ()
+(navi2ch-multibbs-defcallback navi2ch-js-subject-callback (jbbs-shitaraba)
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
-   (decode-coding-region (point-min) (point-max) 'euc-japan)
    (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-     (replace-match "\\1dat\\2"))
-   (encode-coding-region (point-min) (point-max) navi2ch-coding-system))
+     (replace-match "\\1dat\\2")))
 
 (defun navi2ch-js-article-update (board article)
   "BOARD ARTICLEの記事を更新する。"
@@ -148,20 +151,16 @@ START, END, NOFIRST は無視する。(jbbs.shitarabaにそういう機能が無い)
     (format "%s<>%s<>%s<>%s<>%s\n"
 	    name (or mail "") date contents (or subject ""))))
 
-(defun navi2ch-js-article-callback ()
-  (let ((coding-system-for-read 'binary)
-	(coding-system-for-write 'binary)
-	(beg (point))
+(navi2ch-multibbs-defcallback navi2ch-js-article-callback (jbbs-shitaraba)
+  (let ((beg (point))
 	subject)
-    (decode-coding-region (point-min) (point-max) 'euc-japan)
     (setq subject (navi2ch-js-parse-subject))
     (while (navi2ch-js-parse)
       (insert (prog1 (navi2ch-js-make-article subject)
 		(delete-region beg (point))))
       (setq subject nil)
       (setq beg (point)))
-    (delete-region beg (point-max))
-    (encode-coding-region (point-min) (point-max) navi2ch-coding-system)))
+    (delete-region beg (point-max))))
 
 (defun navi2ch-js-get-writecgi-url (board)
   "write.cgi の url を返す"

@@ -43,7 +43,12 @@
     (send-success-p 	. navi2ch-machibbs-send-message-success-p)
     (error-string   	. navi2ch-machibbs-navi2ch-net-get-content)))
 
-(navi2ch-multibbs-regist 'machibbs navi2ch-machibbs-func-alist)
+(defvar navi2ch-machibbs-variable-alist
+  '((coding-system	. shift_jis)))
+
+(navi2ch-multibbs-regist 'machibbs
+			 navi2ch-machibbs-func-alist
+			 navi2ch-machibbs-variable-alist)
 
 ;; (defvar navi2ch-machibbs-subject-max-bytes 5000
 ;;   "スレの一覧をどれだけ表示するか。
@@ -64,13 +69,11 @@
 ;;     (navi2ch-replace-string 
 ;;      "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" "\\1dat\\2" sub-string t)))
 
-(defun navi2ch-machibbs-subject-callback ()
+(navi2ch-multibbs-defcallback navi2ch-machibbs-subject-callback (machibbs)
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
-  (decode-coding-region (point-min) (point-max) 'shift_jis)
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-    (replace-match "\\1dat\\2"))
-  (encode-coding-region (point-min) (point-max) navi2ch-coding-system))
+    (replace-match "\\1dat\\2")))
 
 (defun navi2ch-machibbs-article-update (board article)
   "BOARD ARTICLEの記事を更新する。"
@@ -174,18 +177,14 @@
 	    name (or mail "") (concat date (or date-tail ""))
 	    contents (or subject ""))))
 
-(defun navi2ch-machibbs-article-callback ()
-  (let ((coding-system-for-read 'binary)
-	(coding-system-for-write 'binary)
-	(beg (point))
+(navi2ch-multibbs-defcallback navi2ch-machibbs-article-callback (machibbs)
+  (let ((beg (point))
 	str subject)
-    (decode-coding-region (point-min) (point-max) 'shift_jis)
     (setq subject (navi2ch-machibbs-parse-subject))
     (while (navi2ch-machibbs-parse)
       (insert (prog1 (navi2ch-machibbs-make-article subject)
 		(delete-region beg (point))))
       (setq subject nil)
       (setq beg (point)))
-    (delete-region beg (point-max))
-    (encode-coding-region (point-min) (point-max) navi2ch-coding-system)))
+    (delete-region beg (point-max))))
 ;;; navi2ch-machibbs.el ends here

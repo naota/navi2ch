@@ -1,3 +1,28 @@
+2002-07-03  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	callback を定義する為の仕組みを作ってみました。
+	
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-variable-alist): 新変数。
+	(navi2ch-jbbs-subject-callback): navi2ch-multibbs-defcallback で定
+	義するように。
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-variable-alist): 新変数。
+	(navi2ch-js-subject-callback): navi2ch-multibbs-defcallback で定義
+	するように。
+	(navi2ch-js-article-callback): 同上
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-variable-alist): 新変数。
+	(navi2ch-machibbs-subject-callback): navi2ch-multibbs-defcallback
+	で定義するように。
+	(navi2ch-machibbs-article-callback): 同上。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-variable-alist): 新変数。
+	bbstype 毎の変数はこれに設定する。
+	(navi2ch-multibbs-defcallback): 新マクロ。navi2ch-net-update-file
+	に渡すコールバックを定義する。
+	(navi2ch-multibbs-regist): variable-alist も引数に取るように。
+	(navi2ch-multibbs-get-variable): 新関数。
+
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-subject-callback): バッファ

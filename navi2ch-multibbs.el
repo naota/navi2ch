@@ -48,7 +48,7 @@ FUNC-ALIST は以下の通り
  (url-to-article	. URL-TO-ARTICLE-FUNC)
  (send-message		. SEND-MESSAGE-FUNC)
  (send-success-p	. SEND-MESSAGE-SUCCESS-P-FUNC)
- (error-string		. ERROR-STRING-FUNC)
+ (error-string		. ERROR-STRING-FUNC))
 
 BBS-P-FUNC(URI): 
     URI がその BBS のものならば non-nil を返す。
@@ -79,8 +79,22 @@ SEND-MESSAGE-SUCCESS-P-FUNC(PROC):
 
 ERROR-STRING-FUNC(PROC):
     PROC の送信セッションが失敗したときのエラーメッセージを返す。
-
 ")
+
+(defvar navi2ch-multibbs-variable-alist nil
+  "BBS の種類と変数群の alist。
+各要素は
+(BBSTYPE . FUNC-ALIST)
+BBSTYPE: BBS の種類を表すシンボル。
+VARIABLE-ALIST: その BBS の設定を指定する変数群。
+
+VARIABLE-ALIST は以下の通り
+((coding-system		. CODING-SYSTEM-VAR))
+
+CODING-SYSTEM-VAR:
+    その BBS のファイルの文字コード
+")
+  
 
 (defun navi2ch-multibbs-get-bbstype-subr (uri list)
   (if list
@@ -108,6 +122,33 @@ ERROR-STRING-FUNC(PROC):
    (navi2ch-multibbs-get-bbstype board)
    'subject-callback 'navi2ch-2ch-subject-callback))
 
+(defmacro navi2ch-multibbs-defcallback (name spec &rest body)
+  "navi2ch-net-update-file に渡す callback を定義する。
+SPEC は (BBSTYPE)。
+実際には、callback を定義するのに必要な BBSTYPE な板の coding-system
+による decode, encode 処理を、BODY を評価する前後に行なう NAME という
+関数が定義される。"
+  (let ((bbstype (gensym "--bbstype--"))
+	(decoding (gensym "--decoding--"))
+	docstring)
+    (when (stringp (car body))
+	  (setq docstring (car body))
+	  (setq body (cdr body)))
+    `(defun ,name ()
+       ,docstring
+       (let* ((coding-system-for-read 'binary)
+	      (coding-system-for-write 'binary)
+	      (,bbstype ',(car spec))
+	      (,decoding (navi2ch-multibbs-get-variable
+			  ,bbstype 'coding-system
+			  navi2ch-coding-system)))
+	 (decode-coding-region (point-min) (point-max)
+			       ,decoding)
+	 ,@body
+	 (encode-coding-region (point-min) (point-max)
+			       navi2ch-coding-system)))))
+(put 'navi2ch-multibbs-defcallback 'lisp-indent-function 2)
+	      
 (defun navi2ch-multibbs-article-update (board article)
   (let* ((bbstype (navi2ch-multibbs-get-bbstype board))
 	 (func    (navi2ch-multibbs-get-func
@@ -115,9 +156,13 @@ ERROR-STRING-FUNC(PROC):
     (funcall func board article)))
 
 
-(defun navi2ch-multibbs-regist (bbstype func-alist)
+(defun navi2ch-multibbs-regist (bbstype func-alist variable-alist)
   (setq navi2ch-multibbs-func-alist
-	(cons (cons bbstype func-alist) navi2ch-multibbs-func-alist)))
+	(cons (cons bbstype func-alist)
+	      navi2ch-multibbs-func-alist))
+  (setq navi2ch-multibbs-variable-alist
+	(cons (cons bbstype variable-alist)
+	      navi2ch-multibbs-variable-alist)))
 
 (defsubst navi2ch-multibbs-get-func-from-board
   (board func &optional default-func)
@@ -126,8 +171,17 @@ ERROR-STRING-FUNC(PROC):
    func default-func))
 
 (defun navi2ch-multibbs-get-func (bbstype func &optional default-func)
-  (or (cdr (assq func (cdr (assq bbstype navi2ch-multibbs-func-alist))))
+  (or (cdr (assq func
+		 (cdr (assq bbstype
+			    navi2ch-multibbs-func-alist))))
       default-func))
+
+(defun navi2ch-multibbs-get-variable
+  (bbstype variable &optional default-value)
+  (or (cdr (assq variable
+		 (cdr (assq bbstype
+			    navi2ch-multibbs-variable-alist))))
+      default-value))
 
 (defun navi2ch-multibbs-url-to-bbstype (url)
   (or

@@ -41,7 +41,12 @@
     (article-update 	. navi2ch-jbbs-article-update)
     (article-to-url 	. navi2ch-jbbs-article-to-url)))
 
-(navi2ch-multibbs-regist 'jbbs-net navi2ch-jbbs-func-alist)
+(defvar navi2ch-jbbs-variable-alist
+  '((coding-system	. shift_jis)))
+
+(navi2ch-multibbs-regist 'jbbs-net
+			 navi2ch-jbbs-func-alist
+			 navi2ch-jbbs-variable-alist)
 
 ;;-------------
 
@@ -49,7 +54,7 @@
   "URI が jbbs.net なら non-nilを返す。"
   (string-match "http://[^\\.]+\\.jbbs\\.net/" uri))
 
-(defun navi2ch-jbbs-subject-callback ()
+(navi2ch-multibbs-defcallback navi2ch-jbbs-subject-callback (jbbs-net)
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
