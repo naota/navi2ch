@@ -24,62 +24,84 @@
 
 ;;; Commentary:
 
-;; 
+;; XEmacs では以下の設定が必要らしいです。
+;; <http://pc.2ch.net/test/read.cgi/unix/1031231315/145> より。
+;; (make-charset
+;;  'japanese-jisx0213-1
+;;  "JIS X 0213:2000 Plain 1"
+;;  '(registry "jisx0213\\(\\.2000\\)-1"
+;;             dimension 2 chars 94 final ?O graphic 0))
+;; (make-charset
+;;  'japanese-jisx0213-2
+;;  "JIS X 0213:2000 Plain 2"
+;;  '(registry "jisx0213\\(\\.2000\\)-2"
+;;             dimension 2 chars 94 final ?P graphic 0))
+
 
 ;;; Code:
 
 (require 'navi2ch-vars)
 (require 'navi2ch-util)
 
-(unless navi2ch-on-xemacs		;誰かXEmacs対応お願いします
-  (defun navi2ch-jisx0213-make-char-list (i js je)
-    (let ((j js) list)
-      (while (<= j je)
-	(setq list (cons (make-char 'japanese-jisx0208 i j) list))
-	(setq j (1+ j)))
-      (nreverse list)))
+(defun navi2ch-jisx0213-make-char-list (i js je)
+  (let ((j js) list)
+    (while (<= j je)
+      (setq list (cons (make-char 'japanese-jisx0208 i j) list))
+      (setq j (1+ j)))
+    (nreverse list)))
 
-  (defvar navi2ch-jisx0213-win-chars-list
-    (append
-     (navi2ch-jisx0213-make-char-list  45  33  52) ;まる数字
-     (navi2ch-jisx0213-make-char-list  45  53  62) ;ローマ数字(大文字)
-     (navi2ch-jisx0213-make-char-list 124 113 122) ;ローマ数字(小文字)
-     (navi2ch-jisx0213-make-char-list  45  64  86) ;単位
-     (navi2ch-jisx0213-make-char-list  45  95 111) ;元号など
-     (navi2ch-jisx0213-make-char-list  45 112 124) ;数学記号
-     ))
+(defvar navi2ch-jisx0213-win-chars-list
+  (append
+   (navi2ch-jisx0213-make-char-list  45  33  52) ;まる数字
+   (navi2ch-jisx0213-make-char-list  45  53  62) ;ローマ数字(大文字)
+   (navi2ch-jisx0213-make-char-list 124 113 122) ;ローマ数字(小文字)
+   (navi2ch-jisx0213-make-char-list  45  64  86) ;単位
+   (navi2ch-jisx0213-make-char-list  45  95 111) ;元号など
+   (navi2ch-jisx0213-make-char-list  45 112 124) ;数学記号
+   ))
 
-  (defvar navi2ch-jisx0213-jisx0123-chars-list
-    '(?① ?② ?③ ?④ ?⑤ ?⑥ ?⑦ ?⑧ ?⑨ ?⑩
-	  ?⑪ ?⑫ ?⑬ ?⑭ ?⑮ ?⑯ ?⑰ ?⑱ ?⑲ ?⑳
-	  ?Ⅰ ?Ⅱ ?Ⅲ ?Ⅳ ?Ⅴ ?Ⅵ ?Ⅶ ?Ⅷ ?Ⅸ ?Ⅹ
-	  ?ⅰ ?ⅱ ?ⅲ ?ⅳ ?ⅴ ?ⅵ ?ⅶ ?ⅷ ?ⅸ ?ⅹ
-	  ?㍉ ?㌔ ?㌢ ?㍍ ?㌘ ?㌧ ?㌃ ?㌶ ?㍑ ?㍗ ?㌍ ?㌦
-	  ?㌣ ?㌫ ?㍊ ?㌻ ?㎜ ?㎝ ?㎞ ?㎎ ?㎏ ?㏄ ?㎡
-	  ?㍻ ?“ ?” ?№ ?㏍ ?℡ ?㊤ ?㊥ ?㊦ ?㊧ ?㊨ ?㈱ ?㈲ ?㈹ ?㍾ ?㍽ ?㍼
-	  ?≒ ?≡ ?∫ ?∮ ?Σ ?√ ?⊥ ?∠ ?∟ ?⊿ ?∵ ?∩ ?∪))
+(defvar navi2ch-jisx0213-jisx0123-chars-list
+  '(?① ?② ?③ ?④ ?⑤ ?⑥ ?⑦ ?⑧ ?⑨ ?⑩
+	?⑪ ?⑫ ?⑬ ?⑭ ?⑮ ?⑯ ?⑰ ?⑱ ?⑲ ?⑳
+	?Ⅰ ?Ⅱ ?Ⅲ ?Ⅳ ?Ⅴ ?Ⅵ ?Ⅶ ?Ⅷ ?Ⅸ ?Ⅹ
+	?ⅰ ?ⅱ ?ⅲ ?ⅳ ?ⅴ ?ⅵ ?ⅶ ?ⅷ ?ⅸ ?ⅹ
+	?㍉ ?㌔ ?㌢ ?㍍ ?㌘ ?㌧ ?㌃ ?㌶ ?㍑ ?㍗ ?㌍ ?㌦
+	?㌣ ?㌫ ?㍊ ?㌻ ?㎜ ?㎝ ?㎞ ?㎎ ?㎏ ?㏄ ?㎡
+	?㍻ ?“ ?” ?№ ?㏍ ?℡ ?㊤ ?㊥ ?㊦ ?㊧ ?㊨ ?㈱ ?㈲ ?㈹ ?㍾ ?㍽ ?㍼
+	?≒ ?≡ ?∫ ?∮ ?Σ ?√ ?⊥ ?∠ ?∟ ?⊿ ?∵ ?∩ ?∪))
 
-  (defvar navi2ch-jisx0213-display-table nil)
-  (let ((table (make-display-table))
-	(from navi2ch-jisx0213-win-chars-list)
-	(to navi2ch-jisx0213-jisx0123-chars-list))
-    (while (and from to)
-      (aset table (car from) (vector (car to)))
-      (setq from (cdr from) to (cdr to)))
-    (setq navi2ch-jisx0213-display-table table))
+(defvar navi2ch-jisx0213-display-table nil)
+(let ((from navi2ch-jisx0213-win-chars-list)
+      (to navi2ch-jisx0213-jisx0123-chars-list)
+      table)
+  (if navi2ch-on-xemacs
+      (setq table (make-vector
+		   (1+ (apply 'max navi2ch-jisx0213-win-chars-list))
+		   nil))
+    (setq table (make-display-table)))
+  (while (and from to)
+    (aset table (car from) (vector (car to)))
+    (setq from (cdr from) to (cdr to)))
+  (setq navi2ch-jisx0213-display-table table))
 
-  (defun navi2ch-jisx0213-set-display-table ()
+(defun navi2ch-jisx0213-set-display-table ()
+  (if navi2ch-on-xemacs
+      (set-specifier current-display-table navi2ch-jisx0213-display-table
+		     (current-buffer))
     (setq buffer-display-table
-	  (copy-sequence navi2ch-jisx0213-display-table)))
+	  (copy-sequence navi2ch-jisx0213-display-table))))
 
-  (add-hook 'navi2ch-bm-mode-hook      'navi2ch-jisx0213-set-display-table)
-  (add-hook 'navi2ch-article-mode-hook 'navi2ch-jisx0213-set-display-table)
+(add-hook 'navi2ch-bm-mode-hook      'navi2ch-jisx0213-set-display-table)
+(add-hook 'navi2ch-article-mode-hook 'navi2ch-jisx0213-set-display-table)
 
-  ;; なんでこんなのが必要なの?
+;; これが嫌なら、navi2ch-bm-insert-subjectでbuffer-display-tableをnilにするか
+;; navi2ch-{articles,board,bookmark,directory,history,search}-insert-subjects
+;; にdefadvice
+(unless navi2ch-on-xemacs
   (defadvice string-width (around display-table-hack activate)
     (let ((buffer-display-table nil))
-      ad-do-it))
-  )
+      ad-do-it)))
+
 
 ;; とりあえず4つ
 (setq navi2ch-replace-html-tag-alist
@@ -91,9 +113,9 @@
 
 ;; 正規表現を作りなおす
 (setq navi2ch-replace-html-tag-regexp
-  (concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
-          "\\|"
-          (mapconcat 'car navi2ch-replace-html-tag-regexp-alist "\\|")))
+      (concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
+	      "\\|"
+	      (mapconcat 'car navi2ch-replace-html-tag-regexp-alist "\\|")))
 
 (provide 'navi2ch-jisx0213)
 

@@ -21,6 +21,10 @@ Copyright (C) 2000-2002 Navi2ch Project
 
 * navi2ch-jisx0213.el
   Windowsの機種依存文字を表示しよう & ついでにハートとかも。
-  Emacs20 では Mule-UCS の jisx0213.el が必要です。
+  Emacs20 では Mule-UCS の jisx0213.el が必要。
+  XEmacs の場合は Commentary にある設定をしてあげてね。
+  GNU Emacs ではstring-widthにdefadviceする、という結構ひどいことをし
+  てるので、他のelispに影響があるかもしてないので注意。
+  
 
 $Id$
