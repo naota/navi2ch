@@ -1,3 +1,12 @@
+2003-11-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): htp: を
+	サポート。
+
+	* navi2ch-vars.el (navi2ch-article-url-regexp): htp: をサポート。
+
+	* navi2ch-http-date.el (toplevel): コンパイル時にテストするように。
+
 2003-11-09  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-search.el (navi2ch-search-for-each-directory-recursive):
