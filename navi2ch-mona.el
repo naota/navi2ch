@@ -3,8 +3,9 @@
 ;; Copyright (C) 2001 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
-;; 431 $B$NL>L5$7$5$s(B
-;; 874 $B$NL>L5$7$5$s(B
+;; 431 ¤ÎÌ¾Ìµ¤·¤µ¤ó
+;; 874 ¤ÎÌ¾Ìµ¤·¤µ¤ó
+;; UEYAMA Rui <rui314159@users.sourceforge.net>
 
 ;; Keywords: 2ch, network
 
@@ -25,207 +26,230 @@
 
 ;;; Commentary:
 
-;; (require 'navi2ch-mona)
-;; (add-hook 'navi2ch-article-arrange-message-hook
-;;           'navi2ch-mona-arrange-message)
-;; (setq navi2ch-mona-enable t)
-;; $B$9$l$P<h$j4:$($:$*$C$1!#(B          
-
-;; GNU emacs21 $B$G%U%)%s%H%5%$%:$r(B XXpt (== 12, 14, 16) $B$KJQ$($k;~$O!"(B
-;; (setq navi2ch-mona-font "-mona-gothic-*-*-*--XX-*-*-*-*-*-fontset-monaXX")
-;; $B$r2C$($F!#(B
+;; custom ¤ò»È¤Ã¤Æ M-x customize-group navi2ch-mona ¤«¤é
+;; ÀßÄê¤¹¤ë¤È¥é¥¯¥Á¥ó¡£
 
 ;;; Code:
 (provide 'navi2ch-mona)
+(eval-when-compile (require 'cl))
+(require 'navi2ch-vars)
 
-(require 'navi2ch)
+(make-face 'navi2ch-mona-face)
+(make-face 'navi2ch-mona12-face)
+(make-face 'navi2ch-mona14-face)
+(make-face 'navi2ch-mona16-face)
 
-(defvar navi2ch-mona-enable nil
-  "mona $B%U%)%s%H$r;HMQ$9$k$+$I$&$+(B")
-(defvar navi2ch-mona-enable-board-list nil
-  "mona $B%U%)%s%H$r;HMQ$9$kHD$N%j%9%H(B.")
-(defvar navi2ch-mona-disable-board-list nil
-  "mona $B%U%)%s%H$r;HMQ$7$J$$HD$N%j%9%H(B")
-(defvar navi2ch-mona-pack-space-p nil
-  "2$B$D0J>e$N6uGr$r$^$H$a$k$+(B")
-(defmacro navi2ch-mona-font-height ()
-  (if (featurep 'xemacs)
-      '(font-height (face-font 'default))
-    '(frame-char-height)))
-(defvar navi2ch-mona-font
-  (let ((font-size (navi2ch-mona-font-height)))
-    (unless (memq font-size '(12 14 16))
-      (setq font-size 16))
-    (cond
-     ((featurep 'xemacs)
-      (format "-mona-gothic-medium-r-*--%d-*-p-*"
-	      font-size))
-     ((and (boundp 'emacs-major-version)
-	   (>= emacs-major-version 21))
-      (format "-mona-gothic-*-*-*--%d-*-*-*-*-*-fontset-mona%d"
-	      font-size font-size))))
-  "$B;HMQ$9$k(B mona $B%U%)%s%H$NL>A0(B")
+;; ¥«¥¹¥¿¥Þ¥¤¥ºÊÑ¿ô¤Î defcustom ¤ËÉ¬Í×¤Ê´Ø¿ô
+(defun navi2ch-mona-create-fontset-from-family-name (family-name height)
+  "navi2ch ¤¬É¬Í×¤È¤¹¤ë¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ê¡¢¤½¤ÎÌ¾Á°¤òÊÖ¤¹¡£
 
-;; mona $BMQ$N(B face $B$r:n@.!#(B
-(add-hook
- 'navi2ch-hook
- '(lambda ()
-    (make-face 'navi2ch-mona-face)
-    (set-face-font 'navi2ch-mona-face navi2ch-mona-font)))
+FAMILY-NAME ¤Ï \"foundry-family\" ¤«¤é¤Ê¤ëÊ¸»úÎó¡£HEIGHT ¤Ï pixelsize¡£
 
-;; face $B$,FC$K;XDj$5$l$F$$$J$$ItJ,$r(B mona-face $B$K$9$k(B
-;; navi2ch-article-face $B$NItJ,$b(B mona-face $B$K$9$k(B
+XEmacs ¤Ç¤ÏÌÀ¼¨Åª¤Ë¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ëÉ¬Í×¤¬¤Ê¤¤¤Î¤Ç¡¢
+¥Õ¥©¥ó¥È¥»¥Ã¥ÈÌ¾¤È¤·¤Æ°ÕÌ£¤Î¤¢¤ëÊ¸»úÎó
+ \"-<FAMILY-NAME>-medium-r-*--<height>-*-*-*-p-*-*-*\"
+¤òÊÖ¤¹¤À¤±¡£"
+  (let ((fontset-name (format "-%s-medium-r-*--%d-*-*-*-p-*-*-*"
+                              family-name height)))
+    (cond (navi2ch-on-xemacs
+           fontset-name)
+          (navi2ch-on-emacs21
+           (let* ((fields (x-decompose-font-name fontset-name))
+                  (foundry (aref fields 0))
+                  (family (aref fields 1))
+                  (slant (aref fields 3))
+                  (swidth (aref fields 4))
+                  (fontset-templ (format
+                                  "-%s-%s-%%s-%s-%s--%d-*-*-*-p-*-fontset-mona%d"
+                                  foundry family slant swidth height height))
+                  (font-templ (progn
+                                (string-match "^\\(.*\\)\\(fontset-mona[^-]+\\)$"
+                                              fontset-templ)
+                                (concat (match-string 1 fontset-templ) "%s")))
+                  (fontset (format "-%s-%s-*-*-*--%d-*-*-*-*-*-%s"
+                                   foundry family height
+                                   (match-string 2 fontset-templ))))
+             (setq fontset-name fontset)
+             (dolist (weight '("medium" "bold"))
+               (let ((fontset (format fontset-templ weight))
+                     (font (format font-templ weight "%s")))
+                 (unless (query-fontset fontset)
+                   (new-fontset fontset
+                                (list (cons 'ascii
+                                            (format font "iso8859-1"))
+                                      (cons 'latin-iso8859-1
+                                            (format font "iso8859-1"))
+                                      (cons 'katakana-jisx0201
+                                            (format font "jisx0201.1976-0"))
+                                      (cons 'latin-jisx0201
+                                            (format font "jisx0201.1976-0"))
+                                      (cons 'japanese-jisx0208
+                                            (format font "jisx0208.1990-0"))))))))
+           fontset-name))))
+
+
+;; Customizable variables.
+(defcustom navi2ch-mona-enable-board-list nil
+  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ÇÉ½¼¨¤¹¤ëÈÄ¤Î¥ê¥¹¥È¡£"
+  :type '(repeat (string :tag "ÈÄ"))
+  :group 'navi2ch-mona)
+
+(defcustom navi2ch-mona-disable-board-list nil
+  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤ï¤Ê¤¤ÈÄ¤Î¥ê¥¹¥È¡£"
+  :type '(repeat (string :tag "ÈÄ"))
+  :group 'navi2ch-mona)
+
+(defcustom navi2ch-mona-pack-space-p nil
+  "*non-nil ¤Ê¤é¡¢Web ¥Ö¥é¥¦¥¶¤Î¤è¤¦¤Ë2¤Ä°Ê¾å¤Î¶õÇò¤Ï1¤Ä¤Ë¤Þ¤È¤á¤ÆÉ½¼¨¤¹¤ë¡£"
+  :type 'boolean
+  :group 'navi2ch-mona)
+
+(defcustom navi2ch-mona-font-family-name "mona-gothic"
+  "*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤È¤·¤Æ»È¤¦¥Õ¥©¥ó¥È¤Î family Ì¾¡£
+XLFD ¤Ç¤¤¤¦ \`foundry-family\' ¤ò»ØÄê¤¹¤ë¡£Í×¤¹¤ë¤Ë X ¤Ç¤Î
+¥Õ¥©¥ó¥ÈÌ¾¤ÎºÇ½é¤Î2¥Õ¥£¡¼¥ë¥É¤ò½ñ¤±¤Ð¤¤¤¤¤Ã¤Æ¤³¤Ã¤¿¡£
+
+XEmacs ¤Ç¤Ï¡¢»ØÄê¤µ¤ì¤¿ family ¤ËÂÐ¤·¤Æ pixelsize: 12/14/16
+¤Î 3¤Ä¤Î¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ë¡£
+
+Emacs 21 ¤Ç¤Ï¡¢¤½¤ì¤Ë²Ã¤¨¤Æ medium/bold ¤Ê¥Õ¥©¥ó¥È¤òÊÌ¡¹¤Ëºî¤ë¡£
+¤¿¤È¤¨¤Ð°ú¿ô \`moga-gothic\' ¤¬¤ï¤¿¤µ¤ì¤ë¤È¡¢
+
+ -mona-gothic-medium-r-*--12-*-*-*-*-*-fontset-mona12
+ -mona-gothic-medium-r-*--14-*-*-*-*-*-fontset-mona14
+ -mona-gothic-medium-r-*--16-*-*-*-*-*-fontset-mona16
+ -mona-gothic-bold-r-*--12-*-*-*-*-*-fontset-mona12
+ -mona-gothic-bold-r-*--14-*-*-*-*-*-fontset-mona14
+ -mona-gothic-bold-r-*--16-*-*-*-*-*-fontset-mona16
+
+¤È¤¤¤¦ 6 ¤Ä¤Î¥Õ¥©¥ó¥È¥»¥Ã¥È¤òºî¤ë¤³¤È¤Ë¤Ê¤ë¡£
+
+Ê¸»ú¤Î¤«¤ï¤ê¤Ë¥È¡¼¥Õ¤¬É½¼¨¤µ¤ì¤Á¤ã¤¦¤Î¤Ï¡¢¤¿¤Ö¤ó¥Õ¥©¥ó¥È¤¬
+¸«¤Ä¤«¤é¤Ê¤«¤Ã¤¿¤»¤¤¤Ê¤Î¤Ç¡¢\`xlsfonts\' ¤ò¼Â¹Ô¤·¤Æ
+
+-<»ØÄê¤·¤¿Ê¸»úÎó>-{medium,bold}-r-*--{12,14,16}-*-*\\
+-*-*-*-{iso8859-1,jisx0201.1976-0,jisx0208.(1983|1990)-0}
+
+¤¬¤¢¤ë¤«¤É¤¦¤«³Î¤«¤á¤Æ¤Í¡£"
+  :type '(choice (string :tag "family name")
+		 (string :tag "Mona fonts"
+			 :value "mona-gothic")
+		 (string :tag "MS P Gothic"
+			 :value "microsoft-pgothic"))
+  :set (function (lambda (symbol value)
+		   (condition-case nil
+		       (progn
+			 (dolist (height '(12 14 16))
+			   (let ((fontset (navi2ch-mona-create-fontset-from-family-name
+					   value height))
+				 (face (intern (format "navi2ch-mona%d-face" height))))
+			     (set-face-font face fontset)))
+			 (set-default symbol value))
+		     (error nil))))
+  :initialize 'custom-initialize-reset
+  :group 'navi2ch-mona)
+
+(defconst navi2ch-mona-sample-string
+  (concat "¥µ¥ó¥×¥ë¥Æ¥­¥¹¥È¥²¥Ã¥È¥©¡ª¡ª ¤Ò¤é¤¬¤Ê¡¢¥«¥¿¥«¥Ê¡¢Roman Alphabet¡£\n"
+          (decode-coding-string
+           (base64-decode-string
+            "gVCBUIFQgVCBUIHJgVCBUIFQgVCBUIFQgVCBUIFAgUAogUyBTAqBQIFAgUCBQCCB
+yIHIgUCBQIFAgWqBQIFAgUCBQIFAgUAogUyB3CiBTAqBQIFAgbyBad+ERN+BvIHc
+gU2CwoHfgd+B3yiBTIHcOzs7gd+B34HfCoFAgUCBQIFAgUCBQCCBUIFQgUAgKIFM
+gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
+	   'shift_jis)))
+
+(defcustom navi2ch-mona-face-variable t
+  "*¥Ç¥Õ¥©¥ë¥È¤Î Mona face ¤òÁª¤Ö¡£"
+  :type `(radio (const :tag "navi2ch-mona16-face"
+                       :sample-face navi2ch-mona16-face
+                       :doc ,navi2ch-mona-sample-string
+                       :format "%t:\n%{%d%}\n"
+                       navi2ch-mona16-face)
+                (const :tag "navi2ch-mona14-face"
+                       :sample-face navi2ch-mona14-face
+                       :doc ,navi2ch-mona-sample-string
+                       :format "%t:\n%{%d%}\n"
+                       navi2ch-mona14-face)
+                (const :tag "navi2ch-mona12-face"
+                       :sample-face navi2ch-mona12-face
+                       :doc ,navi2ch-mona-sample-string
+                       :format "%t:\n%{%d%}\n"
+                       navi2ch-mona12-face)
+                (const :tag "¥Ç¥Õ¥©¥ë¥È¤Î¥Õ¥©¥ó¥È¤ÈÆ±¤¸¥µ¥¤¥º¤Î face ¤ò¼«Æ°ÁªÂò¤¹¤ë"
+                       t))
+  :set (function (lambda (symbol value)
+                   (set-default symbol value)
+                   (navi2ch-mona-set-mona-face)))
+  :initialize 'custom-initialize-default
+  :group 'navi2ch-mona)
+
+;; functions
+(defun navi2ch-mona-set-mona-face ()
+(let ((parent navi2ch-mona-face-variable))
+  (when (eq t parent)
+    (let* ((height (cond (navi2ch-on-xemacs
+                          (font-height (face-font 'default)))
+                         (navi2ch-on-emacs21
+                          (frame-char-height))))
+           (face-name (if height
+                          (format "navi2ch-mona%d-face" height)
+                        "navi2ch-mona16-face")))
+      (setq parent (intern face-name))))
+  (when (facep parent)
+    (cond (navi2ch-on-xemacs
+           (set-face-parent 'navi2ch-mona-face parent))
+          (navi2ch-on-emacs21
+           (set-face-attribute 'navi2ch-mona-face nil
+                               :inherit parent))))))
+
 (defun navi2ch-mona-put-face ()
-  (save-excursion
-    (goto-char (point-min))
-    (let (p face)
-      (while (not (eobp))
-        (setq p (next-single-property-change (point)
-                                             'face nil (point-max)))
-	(setq face (get-text-property (point) 'face))
-	(if (or (null face)
-		(eq face 'navi2ch-article-face))
-	    (put-text-property (point) (1- p)
-			       'face 'navi2ch-mona-face))
-        (goto-char p)))))
+"face ¤¬ÆÃ¤Ë»ØÄê¤µ¤ì¤Æ¤¤¤Ê¤¤ÉôÊ¬¤ò mona-face ¤Ë¤¹¤ë¡£
+`navi2ch-article-face' ¤ÎÉôÊ¬¤â mona-face ¤Ë¤¹¤ë¡£"
+(save-excursion
+  (goto-char (point-min))
+  (let (p face)
+    (while (not (eobp))
+      (setq p (next-single-property-change (point)
+                                           'face nil (point-max)))
+      (setq face (get-text-property (point) 'face))
+      (if (or (null face)
+              (eq face 'navi2ch-article-face))
+          (put-text-property (point) (1- p)
+                             'face 'navi2ch-mona-face))
+      (goto-char p)))))
 
 (defun navi2ch-mona-pack-space ()
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "^ +" nil t)
-      (replace-match ""))
-    (goto-char (point-min))
-    (while (re-search-forward"  +" nil t)
-      (replace-match " "))))
+"Ï¢Â³¤¹¤ë2¤Ä°Ê¾å¤Î¶õÇò¤ò1¤Ä¤Ë¤Þ¤È¤á¤ë¡£"
+(save-excursion
+  (goto-char (point-min))
+  (while (re-search-forward "^ +" nil t)
+    (replace-match ""))
+  (goto-char (point-min))
+  (while (re-search-forward"  +" nil t)
+    (replace-match " "))))
 
 (defun navi2ch-mona-arrange-message ()
-  (let ((id (cdr (assq 'id navi2ch-article-current-board))))
-    (when (or (member id navi2ch-mona-enable-board-list)
-              (and (not (member id navi2ch-mona-disable-board-list))
-                   navi2ch-mona-enable))
-      (navi2ch-mona-put-face))
-    (when navi2ch-mona-pack-space-p
-      (navi2ch-mona-pack-space))))
+"¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦ÈÄ¤Ê¤é¤½¤Î¤¿¤á¤Î´Ø¿ô¤ò¸Æ¤Ö¡£"
+(let ((id (cdr (assq 'id navi2ch-article-current-board))))
+  (when (or (member id navi2ch-mona-enable-board-list)
+            (and (not (member id navi2ch-mona-disable-board-list))
+                 navi2ch-mona-enable))
+    (navi2ch-mona-put-face))
+  (when navi2ch-mona-pack-space-p
+    (navi2ch-mona-pack-space))))
 
-;; GNU emacs21 $B$G$OL@<(E*$K(B fontset $B$r:n$kI,MW$,$"$k(B
-(if (and (boundp 'emacs-major-version)
-	 (>= emacs-major-version 21)
-	 (null (featurep 'xemacs))
-	 window-system)
-    (progn
-      ;; roman - normalface (16pt)
-      (new-fontset
-       "-mona-gothic-medium-r-normal--16-*-*-*-*-*-fontset-mona16"
-       '((ascii
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-80-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-80-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-medium-r-normal--16-150-75-75-p-160-jisx0208.1990-0")
-	 (japanese-jisx0208
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-160-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-medium-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 ))
-      ;; roman - boldface (16pt)
-      (new-fontset
-       "-mona-gothic-bold-r-normal--16-*-*-*-*-*-fontset-mona16"
-       '((ascii
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-80-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-80-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-bold-r-normal--16-150-75-75-p-160-jisx0208.1990-0")
-	 (japanese-jisx0208
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-160-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-bold-r-normal--16-150-75-75-p-80-jisx0201.1976-0")
-	 ))
+(defun navi2ch-mona-setup ()
+"*¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦¤¿¤á¤Î¥Õ¥Ã¥¯¤òÄÉ²Ã¤¹¤ë¡£"
+(add-hook 'navi2ch-article-arrange-message-hook
+          'navi2ch-mona-arrange-message))
 
-      ;; roman - normalface (14pt)
-      (new-fontset
-       "-mona-gothic-medium-r-normal--14-*-*-*-*-*-fontset-mona14"
-       '((ascii
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-70-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-70-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-medium-r-normal--14-130-75-75-p-140-jisx0208.1990-0")
-	 (japanese-jisx0208
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-140-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-medium-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 ))
-      ;; roman - boldface (14pt)
-      (new-fontset
-       "-mona-gothic-bold-r-normal--14-*-*-*-*-*-fontset-mona14"
-       '((ascii
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-70-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-70-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-bold-r-normal--14-130-75-75-p-140-jisx0208.1990-0")
-	 (japanese-jisx0208
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-140-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-bold-r-normal--14-130-75-75-p-70-jisx0201.1976-0")
-	 ))
+(defun navi2ch-mona-undo-setup ()
+(remove-hook 'navi2ch-article-arrange-message-hook
+             'navi2ch-mona-arrange-message))
 
-      ;; roman - normalface (12pt)
-      (new-fontset
-       "-mona-gothic-medium-r-normal--12-*-*-*-*-*-fontset-mona12"
-       '((ascii
-	  . "-mona-gothic-medium-r-normal--12-110-75-75-p-60-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-medium-r-normal--12-110-75-75-p-60-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-medium-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-medium-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-medium-r-normal--12-110-75-75-p-120-jisx0208.1990-0")
-	 (japanese-jisx0208
-          . "-mona-gothic-medium-r-normal--12-110-75-75-p-120-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-medium-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 ))
-
-      ;; roman - boldface (12pt)
-      (new-fontset
-       "-mona-gothic-gothic-r-normal--12-*-*-*-*-*-fontset-mona12"
-       '((ascii
-	  . "-mona-gothic-bold-r-normal--12-110-75-75-p-60-iso8859-1")
-	 (latin-iso8859-1
-	  . "-mona-gothic-bold-r-normal--12-110-75-75-p-60-iso8859-1")
-	 (katakana-jisx0201 
-	  . "-mona-gothic-bold-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 (latin-jisx0201
-	  . "-mona-gothic-bold-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 (japanese-jisx0208-1978
-          . "-mona-gothic-bold-r-normal--12-110-75-75-p-120-jisx0208.1990-0")
-	 (japanese-jisx0208
-          . "-mona-gothic-bold-r-normal--12-110-75-75-p-120-jisx0208.1990-0")
-	 (japanese-jisx0212
-	  . "-mona-gothic-bold-r-normal--12-110-75-75-p-60-jisx0201.1976-0")
-	 ))
-      )
-  )
+(navi2ch-mona-set-mona-face)
+(navi2ch-mona-setup)
 
 (run-hooks 'navi2ch-mona-load-hook)
 ;;; navi2ch-mona.el ends here

@@ -22,13 +22,16 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-vars)
 
-(defconst navi2ch-on-emacs21 (and (not (featurep 'xemacs))
+(defconst navi2ch-on-xemacs (featurep 'xemacs))
+(defconst navi2ch-on-emacs21 (and (not navi2ch-on-xemacs)
                                   (>= emacs-major-version 21)))
+(defconst navi2ch-on-emacs20 (and (not navi2ch-on-xemacs)
+                                  (= emacs-major-version 20)))
 
 (defgroup navi2ch nil
   "*Navigator for 2ch."
@@ -63,11 +66,12 @@
   :prefix "navi2ch-"
   :group 'navi2ch)
 
-
 ;;; navi2ch variables
-(defcustom navi2ch-ask-when-exit t
+(defcustom navi2ch-ask-when-exit 'y-or-n-p
   "*non-nil なら、navi2ch 終了の確認メッセージを表示する。"
-  :type 'boolean
+  :type '(choice (const :tag "yes-or-no-p で確認" yes-or-no-p)
+                 (const :tag "y-or-n-p で確認" y-or-n-p)
+                 (const :tag "聞かずに終了" nil))
   :group 'navi2ch)
 
 (defcustom navi2ch-directory "~/.navi2ch"
@@ -109,7 +113,7 @@
 
 (defcustom navi2ch-disable-readcgi-host-list nil
   "*read.cgi の raw mode を使わないでファイルを取ってくるホストのリスト。
-`navi2ch-enable-readcgi' が nil の時に有効"
+`navi2ch-enable-readcgi' が t の時に有効"
   :type '(repeat (string :tag "ホスト"))
   :group 'navi2ch)
 
@@ -471,7 +475,8 @@ window の幅いっぱいにしたいなら
 
 (defcustom navi2ch-article-max-buffers 20
   "*バッファとして保持するスレの最大数。0 ならば無制限。"
-  :type 'integer
+  :type '(choice (const :tag "無制限" 0)
+                 (integer :tag "制限値"))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-cleanup-white-space-after-old-br t
@@ -492,9 +497,10 @@ window の幅いっぱいにしたいなら
 
 (defcustom navi2ch-article-display-link-width '(1- (window-width))
   "*スレのリンク先などを minibuffer に表示するときの文字列の最大長。
-これより長いテキストは切り詰められる。関数とかを指定する事もできる。"
+これより長いテキストは切り詰められる。
+数値のほか、eval で数値を返す任意の S 式を指定できる。"
   :type '(choice (integer :tag "数値で指定")
-		 (sexp :tag "関数とか"))
+                 (sexp :tag "関数とか"))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-auto-decode-base64-p nil
@@ -739,7 +745,43 @@ ask なら保存する前に質問する
   :type '(choice (directory :tag "directory") (const :tag "nil" nil))
   :group 'navi2ch)
 
-;; folder icons. filename relative to wl-icon-directory
+;; Mona fonts.
+(when (or navi2ch-on-xemacs navi2ch-on-emacs21)
+  (defgroup navi2ch-mona nil
+    "*Navi2ch, モナーフォント
+
+Mona fonts (モナーフォント) は 2ちゃんねるのアスキーアート (以下 AA) を
+X11 上で見るために作られたフリーのフォントです。
+
+2ちゃんねるのアスキーアートはその多くが MS P ゴシック 12pt を
+想定してつくられており、 X の固定幅フォントを使った Netscape 等で見ると
+ずれてしまいます。 モナーフォントはフリーで配布されている
+東雲 (しののめ) フォントの文字幅を MS P ゴシックに合わせたもので、
+これを使うと Windows ユーザ向けに作られた AA を正しく見ることができます。
+
+                   (http://members.tripod.co.jp/s42335/mona/ より)"
+    :prefix "navi2ch-"
+    :link '(url-link :tag "モナーフォント ホームページ"
+                     "http://members.tripod.co.jp/s42335/mona/")
+    :group 'navi2ch
+    :load 'navi2ch-mona)
+
+  (defcustom navi2ch-mona-enable nil
+    "*non-nil なら、モナーフォントを使ってスレを表示する。"
+    :set (function (lambda (symbol value)
+                     (if value
+                         (navi2ch-mona-setup)
+                       (navi2ch-mona-undo-setup))
+                     (set-default symbol value)))
+    :initialize 'custom-initialize-default
+    :type 'boolean
+    :group 'navi2ch-mona)
+
+  (when navi2ch-mona-enable
+    (add-hook 'navi2ch-load-hook
+              (lambda () (load "navi2ch-mona")))))
+
+;; folder icons. filename relative to navi2ch-icon-directory
 (defvar navi2ch-online-icon "plugged.xpm"
   "*Icon file for online state.")
 (defvar navi2ch-offline-icon "unplugged.xpm"

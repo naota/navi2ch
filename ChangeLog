@@ -1,3 +1,63 @@
+2002-02-11  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
+	まだ発言のないレスの番号でエラーになる件に対処。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/947-950n
+
+	* navi2ch-mona.el 
+	(navi2ch-mona-enable-board-list): 変数を defcustom 化。
+	(navi2ch-mona-disable-board-list): 同上。
+	(navi2ch-mona-pack-space-p): 同上。
+
+	(navi2ch-mona-font): 削除。
+	(navi2ch-mona-font-height): 削除。
+
+	(navi2ch-mona12-face): 新 face。12ドットの mona-face。
+	(navi2ch-mona14-face): 新 face。14ドットの mona-face。
+	(navi2ch-mona16-face): 新 face。16ドットの mona-face。
+
+	(navi2ch-mona-font-family-name): 新変数。モナーフォントとして
+	使いたいフォントの "foundry-family" からなる文字列。
+	(navi2ch-mona-sample-string): 新変数。mona-face の表示例に使う文字列。
+	(navi2ch-mona-face-variable): 新変数。12/14/16 ドットの
+	3つの mona-face のうち、デフォルトの mona-face の候補を束縛する。
+
+	(navi2ch-mona-create-fontset-from-family-name): 新関数。
+	指定された foundry, family, pixelsize から、
+	mona-face のために必要なフォントセットを作る。
+	(navi2ch-mona-set-mona-face): 新関数。デフォルト候補の
+	mona-face か、現在のフレームのフォントサイズから、
+	デフォルトの mona-face を決める。
+	(toplevel): Emacs 21 用の fontset をハードコードしていたのを削除。
+	(navi2ch-mona-setup): 新関数。モナーフォントを使うための
+	フックを追加する。
+	(navi2ch-mona-undo-setup): 新関数。上で追加したフックを取り消す。
+
+	(navi2ch-mona-enable): navi2ch-vars.el に移動。
+	(toplevel): 上記変更にともない navi2ch-vars を require。
+
+	* navi2ch-vars.el (navi2ch-mona): 新 custom-group。モナーフォント
+	を扱える Emacs の上でだけ定義される。このグループを選択すると
+	自動的に navi2ch-mona.el がロードされる。
+	(navi2ch-mona-enable): navi2ch-mona.el から移動。この変数が t なら
+	navi2ch-mona.el を load するようにして、明示的にロードする必要を
+	なくした。
+	(toplevel): `navi2ch-mona-enable' が t なら navi2ch-mona.el を
+	ロードするように。
+
+	(navi2ch-on-xemacs): 新変数。XEmacs のとき t。
+	(navi2ch-on-emacs20): 新変数。GNU Emacs 20 のとき t。
+	
+	(navi2ch-disable-readcgi-host-list): DOCSTRING の書き間違いを修正。
+	(navi2ch-article-max-buffers): カスタマイズするとき見やすく
+	なるようにカスタマイズ定義を微調撃。
+	(navi2ch-ask-when-exit): カスタマイズ定義を変更。navi2ch の終了
+	確認について、尋ねる/尋ねない の2択から、
+	yes-or-no/y-or-n/尋ねない の3択に。
+
+	* navi2ch.el (navi2ch-exit): `navi2ch-ask-when-exit' のカスタマイズ
+	定義変更に追随。
+
 2002-02-08  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-select-board):
