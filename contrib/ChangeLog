@@ -1,3 +1,7 @@
+2003-01-27  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-pizaunix.el: 新ファイル。
+
 2003-01-21  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* izonmoji-mode.el (toplevel): Wanderlust の設定例を追加
