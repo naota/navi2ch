@@ -367,15 +367,32 @@ non-nil ならば expire する。"
   :group 'navi2ch-board)
 
 (defcustom navi2ch-bm-sort-by-state-order
-  '(("U" . 0)
-    ("V" . 1)
-    ("C" . 2)
-    (" " . 3))
+  '(("+U" . 0)
+    ("+V" . 1)
+    ("+C" . 2)
+    ("+ " . 3)
+    (" U" . 4)
+    (" V" . 5)
+    (" C" . 6)
+    ("  " . 7)
+    ("=U" . 8)
+    ("=V" . 9)
+    ("=C" . 10)
+    ("= " . 11))
   "*状態でソートするときの順序を決めるリスト。"
-  :type '(list (cons (const :tag "状態 U" "U") (number :tag "順番"))
-	       (cons (const :tag "状態 V" "V") (number :tag "順番"))
-	       (cons (const :tag "状態 C" "C") (number :tag "順番"))
-	       (cons (const :tag "状態 	" " ") (number :tag "順番")))
+  :type '(list (cons (const :tag "状態 +U" "+U") (number :tag "順番"))
+	       (cons (const :tag "状態 +V" "+V") (number :tag "順番"))
+	       (cons (const :tag "状態 +C" "+C") (number :tag "順番"))
+	       (cons (const :tag "状態 + " "+ ") (number :tag "順番"))
+	       (cons (const :tag "状態  U" " U") (number :tag "順番"))
+	       (cons (const :tag "状態  V" " V") (number :tag "順番"))
+	       (cons (const :tag "状態  C" " C") (number :tag "順番"))
+	       (cons (const :tag "状態   " "  ") (number :tag "順番"))
+	       (cons (const :tag "状態 =U" "=U") (number :tag "順番"))
+	       (cons (const :tag "状態 =V" "=V") (number :tag "順番"))
+	       (cons (const :tag "状態 =C" "=C") (number :tag "順番"))
+	       (cons (const :tag "状態 = " "= ") (number :tag "順番"))
+	       (cons (const :tag "状態   " "  ") (number :tag "順番")))
   :group 'navi2ch-board)
 
 ;;; article variables
@@ -440,6 +457,13 @@ ask なら明示的に移動する時以外なら質問する
 		 (const :tag "明示的に移動するとき以外は質問する" ask)
 		 (const :tag "聞かずに移動" t)
 		 (const :tag "移動しない" nil))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-through-ask-function #'navi2ch-y-or-n-p
+  "*次のスレッドに移動するときの確認に使用する関数。"
+  :type '(choice (const :tag "y or n で確認" navi2ch-y-or-n-p)
+		 (const :tag "直前のコマンドと同じかで確認"
+			navi2ch-gnus-like-y-or-n-p))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-parse-field-list '(data name mail)

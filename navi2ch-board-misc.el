@@ -310,6 +310,14 @@
 			  (cons (cadr x) (car x)))
 			navi2ch-bm-state-alist)))))
 
+(defun navi2ch-bm-get-updated-mark (&optional point)
+  "その位置の updated-mark を調べる"
+  (save-excursion
+    (and point (goto-char point))
+    (navi2ch-bm-goto-updated-mark-column)
+    (car (rassoc (char-to-string (char-after))
+		 navi2ch-bm-updated-mark-alist))))
+
 (defun navi2ch-bm-select-article (&optional max-line)
   (interactive "P")
   (let* ((item (navi2ch-bm-get-property-internal (point)))
@@ -427,7 +435,8 @@
 	    (navi2ch-bm-remember-fetched-article board article)
 	    (let ((buffer-read-only nil))
 	      (save-excursion
-		(navi2ch-bm-insert-state item 'update)))))
+		(navi2ch-bm-insert-state item 'update
+					 (navi2ch-bm-get-updated-mark))))))
       (message "Can't select this line!"))
     state))
 
@@ -712,8 +721,9 @@ ARG が non-nil なら移動方向を逆にする。"
    rev
    (lambda ()
      (navi2ch-bm-goto-state-column)
+     (backward-char)
      (cdr (assoc (buffer-substring (point)
-				   (1+ (point)))
+				   (+ (point) 2))
 		 navi2ch-bm-sort-by-state-order)))
    nil))
 

@@ -1,3 +1,34 @@
+2002-10-15  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-util.el (navi2ch-gnus-like-y-or-n-p): xemacs のときだけ
+	character-to-event を使うように。
+
+2002-10-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board-misc.el (navi2ch-bm-get-updated-mark): 新関数。
+	(navi2ch-bm-fetch-article): navi2ch-bm-get-updated-mark() を使うよ
+	うに。
+	* navi2ch-util.el (navi2ch-boundp): docstring の typo 修正。
+	(navi2ch-fboundp): 同上。
+
+2002-10-14  ARISAWA Akihiro  <ari@mbf.sphere.ne.jp>
+
+	* navi2ch-util.el (navi2ch-gnus-like-y-or-n-p): 新関数。
+
+	* navi2ch-vars.el (navi2ch-article-through-ask-function): 新変数。
+
+	* navi2ch-article.el (navi2ch-article-through-ask):
+	`navi2ch-article-through-ask-function' を使うように。
+
+2002-10-14  part 7 スレの 424 の名無しさん
+<http://pc.2ch.net/test/read.cgi/unix/1031231315/424>
+
+	* navi2ch-vars.el (navi2ch-bm-sort-by-state-order): ソート順の
+	cell 追加。
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-state): updated-mark
+	でもソートするように。
+
 2002-10-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-oyster.el (navi2ch-oyster-article-update):

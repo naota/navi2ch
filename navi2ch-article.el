@@ -1198,19 +1198,19 @@ article buffer から抜けるなら 'quit を返す。"
   (if (or (eq navi2ch-article-enable-through 'ask-always)
 	  (and (not no-ask)
 	       (eq navi2ch-article-enable-through 'ask)))
-      (navi2ch-y-or-n-p
-       (concat (save-excursion
-		 (set-buffer navi2ch-board-buffer-name)
-		 (save-excursion
-		   (forward-line num)
-		   (cdr (assq 'subject
-			      (navi2ch-bm-get-article-internal
-			       (navi2ch-bm-get-property-internal
-				(point)))))))
-	       " --- Through "
-	       (if (< num 0) "previous" "next")
-	       " article or quit?")
-       'quit)
+      (funcall navi2ch-article-through-ask-function
+	       (concat (save-excursion
+			 (set-buffer navi2ch-board-buffer-name)
+			 (save-excursion
+			   (forward-line num)
+			   (cdr (assq 'subject
+				      (navi2ch-bm-get-article-internal
+				       (navi2ch-bm-get-property-internal
+					(point)))))))
+		       " --- Through "
+		       (if (< num 0) "previous" "next")
+		       " article or quit?")
+	       'quit)
     (or no-ask
 	navi2ch-article-enable-through)))
 
