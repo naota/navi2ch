@@ -450,7 +450,8 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 					     (concat "; MDMD=" navi2ch-be2ch-mdmd
 						     "; DMDM=" navi2ch-be2ch-dmdm))))
 		  (cons "Referer" referer))
-	    (navi2ch-net-get-param-string param-alist))))
+	    (navi2ch-net-get-param-string param-alist
+					  (navi2ch-board-get-coding-system board)))))
       (setq spid (navi2ch-net-send-message-get-spid proc))
       (if spid (navi2ch-board-save-spid board spid))
       proc)))

@@ -1,5 +1,17 @@
 2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	BE への書き込みで文字ばけないようにする修正。
+	* navi2ch-multibbs.el (navi2ch-2ch-send-message):
+	navi2ch-board-get-coding-system の結果を
+	navi2ch-net-get-param-string に渡すように。
+
+	* navi2ch-net.el (navi2ch-net-url-hexify-string):
+	引数の coding-system がある場合は、それで encode するように。
+	(navi2ch-net-get-param-string): coding-system を
+	navi2ch-net-url-hexify-string に渡すように。
+
+2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	BE のログイン、書き込み対応。
 	multibbs module としては作ってない。
 	他の multibbs module に変更を加えないために、

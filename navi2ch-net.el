@@ -733,18 +733,18 @@ DIFF が non-nil ならば差分を取得する。
 This is taken from RFC 2396.")
 
 ;; from Emacs/W3
-(defun navi2ch-net-url-hexify-string (str)
+(defun navi2ch-net-url-hexify-string (str &optional coding-system)
   "Escape characters in a string."
   (mapconcat (lambda (char)
 	       (if (not (memq char navi2ch-net-url-unreserved-chars))
 		   (format "%%%02X" char)
 		 (char-to-string char)))
-	     (encode-coding-string str navi2ch-coding-system) ""))
+	     (encode-coding-string str (or coding-system navi2ch-coding-system)) ""))
 
-(defun navi2ch-net-get-param-string (param-alist)
+(defun navi2ch-net-get-param-string (param-alist &optional coding-system)
   (mapconcat (lambda (x)
-	       (concat (navi2ch-net-url-hexify-string (car x)) "="
-		       (navi2ch-net-url-hexify-string (cdr x))))
+	       (concat (navi2ch-net-url-hexify-string (car x) coding-system) "="
+		       (navi2ch-net-url-hexify-string (cdr x) coding-system)))
 	     param-alist "&"))
 
 (defun navi2ch-net-send-message-success-p (proc coding-system)
