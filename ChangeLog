@@ -1,3 +1,15 @@
+2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-insert-backup): erase-buffer
+	する前に read-only を解除。
+	(navi2ch-message-send-message): str を中継せず、直接バッファからコ
+	ピー。その際、read-only を解除。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/425
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message):
+	navi2ch-net-send-message-use-http-proxy を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/423
+
 2002-07-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	各ファイルに $ I d $ を入れました。

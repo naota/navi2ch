@@ -232,6 +232,8 @@ START, END, NOFIRST で範囲を指定する"
 				     (navi2ch-bigint-multiply
 				      (nth 0 time) (expt 2 16)) (nth 1 time)))
 				  ""))
+	 (navi2ch-net-http-proxy (and navi2ch-net-send-message-use-http-proxy
+				      navi2ch-net-http-proxy))
 	 (proc      (funcall send from mail message subject bbs key time
 			     board article)))
     (message "send message...")

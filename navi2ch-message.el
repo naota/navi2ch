@@ -117,7 +117,8 @@
 (defun navi2ch-message-insert-backup ()
   (interactive)
   (when (get-buffer navi2ch-message-backup-buffer-name)
-    (erase-buffer)
+    (let ((inhibit-read-only t))
+      (erase-buffer))
     (insert-buffer navi2ch-message-backup-buffer-name)))
 
 (defun navi2ch-message-insert-header (new sage)
@@ -174,13 +175,13 @@
 	  (navi2ch-message-set-mail mail))
         (forward-line 2)
         (setq message (buffer-substring-no-properties (point) (point-max)))
-        (let ((str (buffer-substring-no-properties
-                    (point-min) (point-max))))
+        (let ((buffer (current-buffer))
+	      (inhibit-read-only t))
           (save-excursion
             (set-buffer (get-buffer-create
                          navi2ch-message-backup-buffer-name))
-            (erase-buffer)
-            (insert str)
+	    (erase-buffer)
+	    (insert-buffer buffer)
             (bury-buffer)))
 	(when navi2ch-message-trip
 	  (setq from (concat from "#" navi2ch-message-trip)))
