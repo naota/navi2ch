@@ -1,3 +1,8 @@
+2003-09-09  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-save-variables):
+	print-length と print-level を nil に束縛するように。
+
 2003-09-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map): C-c C-r に下記関

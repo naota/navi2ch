@@ -139,6 +139,8 @@ Navi2ch 終了時に自動的に変更・保存される。
   (while (forward-comment 1))
   (let ((standard-input (current-buffer))
 	(standard-output (current-buffer))
+	(print-length nil)
+	(print-level nil)
 	modified)
     (condition-case nil
 	(while (not (eobp))
