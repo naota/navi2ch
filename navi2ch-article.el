@@ -1241,7 +1241,7 @@ article buffer から抜けるなら 'quit を返す。"
 
 (defun navi2ch-article-show-url-subr ()
   "メニューを表示して、url を得る"
-  (message "a)ll c)rrent r)egion b)oard")
+  (message "a)ll c)urrent r)egion b)oard")
   (let ((char (read-char)))
     (if (eq char ?b)
 	(navi2ch-board-to-url navi2ch-article-current-board)

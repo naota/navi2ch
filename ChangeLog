@@ -1,3 +1,9 @@
+2002-03-07  NOKUBI Takatsugu  <knok@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-show-url-subr): 
+	typo 修正
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/177
+
 2002-03-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-board.el (navi2ch-board-insert-subjects): 
