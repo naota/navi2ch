@@ -1,5 +1,10 @@
 2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-view-article): point-stack
+	に以前の位置が保存されるよう、sync してから goto-number するように
+	した。番号付きリンクを踏んだ時に、ちょっと遅くなるかも。
+	FR#572691
+
 	* navi2ch-util.el (navi2ch-online-indicator): risky-local-variable
 	(navi2ch-offline-indicator): 同上
 	FR#572685

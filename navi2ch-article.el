@@ -518,7 +518,11 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	  (if dont-display
 	      (set-buffer buf-name)
 	    (switch-to-buffer buf-name))
-	  (prog1 (navi2ch-article-sync force nil number)
+	  (prog1 (navi2ch-article-sync force nil)
+	    (if (and number
+		     (not (equal (navi2ch-article-get-current-number)
+				 number)))
+		(navi2ch-article-goto-number number t))
 	    (navi2ch-history-add navi2ch-article-current-board
 				 navi2ch-article-current-article)))
       (if (and navi2ch-article-auto-expunge
@@ -533,8 +537,12 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
                   navi2ch-article-exist-message-range)
           (setq navi2ch-article-view-range
                 navi2ch-article-new-message-range)))
-      (prog1 (navi2ch-article-sync force 'first number)
+      (prog1 (navi2ch-article-sync force 'first)
 	(navi2ch-article-mode)
+	(if (and number
+		 (not (equal (navi2ch-article-get-current-number)
+			     number)))
+	    (navi2ch-article-goto-number number t))
 	(navi2ch-history-add navi2ch-article-current-board
 			     navi2ch-article-current-article)))))
 
