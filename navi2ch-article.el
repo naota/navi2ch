@@ -154,7 +154,7 @@ last が最後からいくつ表示するか。
 (defun navi2ch-article-get-url (board article)
   (let ((artid (cdr (assq 'artid article)))
 	(url (navi2ch-board-get-uri board)))
-    (if (assq 'kako article)
+    (if (cdr (assq 'kako article))
 	(navi2ch-article-get-kako-url board article)
       (concat url "dat/" artid ".dat"))))
 
@@ -654,7 +654,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
     (unless navi2ch-offline
       (let ((file (navi2ch-article-get-file-name board article))
 	    (time (cdr (assq 'time article)))
-	    full-size url kako)
+	    url kako)
         (setq state
 	      (if (and (navi2ch-enable-readcgi-p
 			(navi2ch-board-get-host board)))
