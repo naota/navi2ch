@@ -457,6 +457,18 @@ non-nil ならば expire する。"
   :type '(repeat sexp)
   :group 'navi2ch-board)
 
+(defcustom navi2ch-board-check-article-update-suppression-length nil
+  "*スレを更新する際、フィルター処理をチェックする新着レス数。
+
+たとえば 10 を指定すると、
+スレの新着レスが10個以下でそのすべてが非表示になるときは、
+新着なしと見なされる。
+
+nil を指定すると、新着レスへのフィルター処理をチェックしない。"
+  :type '(choice (integer :tag "新着レス数")
+		 (const :tag "チェックしない" nil))
+  :group 'navi2ch-board)
+
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)
@@ -1167,6 +1179,24 @@ important	レスをブックマークに登録する
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-sort-message-filter-rules nil
+  "*non-nil なら、条件が一致したフィルタ項目を alist の先頭に持ってくる。
+
+例えば、`navi2ch-article-message-filter-by-name-alist'を
+下記の値に設定していて「ホゲ」という名前欄のレスに当たった場合、
+
+'((\"ふが\" . \"あぼぼーん\")
+  ((\"ホゲ\" S) . hide))
+
+`navi2ch-article-message-filter-by-name-alist'の値は
+条件が一致した '((\"ホゲ\" S) . hide) が先頭に来るように並び換えられ、
+次のように変更される。
+
+'(((\"ホゲ\" S) . hide)
+  (\"ふが\" . \"あぼぼーん\"))"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 (defcustom navi2ch-article-message-replace-below nil
   "*フィルタによってレスを置き換えるための得点のしきい値と、
 置き換える文字列。
@@ -1508,6 +1538,28 @@ ask なら保存する前に質問する
   :type 'boolean
   :group 'navi2ch)
 
+;;; auto modify variables
+(defcustom navi2ch-auto-modify-file navi2ch-init-file
+  "*設定を自動的に変更して保存するファイル。
+nil なら、`customize'を利用して`custom-file'に保存する。"
+  :type '(choice (file :tag "ファイル")
+		 (const :tag "`customize'を利用" nil))
+  :group 'navi2ch)
+
+(defcustom navi2ch-auto-modify-truncate-list-alist nil
+  "*リスト型変数を保存するときの、変数名とその最大要素数の alist。
+
+例えば下記の値を設定すると、
+`navi2ch-article-message-filter-by-id-alist'と
+`navi2ch-article-message-filter-by-message-alist'の要素は、
+自動変更・保存の際にそれぞれ10個以下・100個以下に切り詰められる。
+
+'((navi2ch-article-message-filter-by-id-alist . 10)
+  (navi2ch-article-message-filter-by-message-alist . 100))"
+  :type '(repeat (cons (variable :tag "変数名")
+		       (integer :tag "最大要素数")))
+  :group 'navi2ch)
+
 (defcustom navi2ch-icon-directory
   (cond ((fboundp 'locate-data-directory)
 	 (locate-data-directory "navi2ch"))
@@ -1620,6 +1672,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
 (defvar navi2ch-mona-undo-setup-hook nil)
 (defvar navi2ch-directory-mode-hook nil)
 (defvar navi2ch-directory-exit-hook nil)
+(defvar navi2ch-auto-modify-save-hook nil)
 
 ;; load hooks
 (defvar navi2ch-article-load-hook nil)

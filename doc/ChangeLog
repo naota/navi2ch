@@ -1,3 +1,7 @@
+2003-05-13  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode Key Bindings): "!" を追加。
+
 2003-04-09  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): navi2ch-message-user-name の変更に対応。

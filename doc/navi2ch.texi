@@ -1445,6 +1445,10 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @code{navi2ch-article-toggle-message-filter} カーソルのあるレスに対する
 レス置換の有効・無効を切り替える
 
+@item !
+@code{navi2ch-article-add-message-filter-rule} レスに対する
+フィルタ処理の条件を対話的に追加する
+
 @end table
 
 @node Message Mode Key Bindings

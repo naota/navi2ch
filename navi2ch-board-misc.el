@@ -438,12 +438,27 @@
          state)
     (if (and article
 	     (not (navi2ch-board-from-file-p board)))
-	(progn
+	(let* ((artid (cdr (assq 'artid article)))
+	       (element (cdr (assoc artid (navi2ch-article-load-article-summary
+					   board))))
+	       (seen (navi2ch-article-summary-element-seen element)))
 	  (setq state (navi2ch-article-fetch-article board article force))
 	  (when state
-	    (navi2ch-bm-remember-fetched-article board article)
-	    (navi2ch-bm-insert-state item 'update
-				     (navi2ch-bm-get-updated-mark))))
+	    (let ((state-mark 'update)
+		  (updated-mark (navi2ch-bm-get-updated-mark))
+		  (suppressed (and (or seen
+				       (member artid (cdr (assq 'hot board))))
+				   (navi2ch-board-check-article-update-suppression
+				    article seen))))
+	      (if suppressed
+		  (progn
+		    (navi2ch-article-summary-element-set-seen element
+							      suppressed)
+		    (setq state-mark (navi2ch-bm-get-state)
+			  updated-mark 'seen)
+		    (message "No updates need seeing"))
+		(navi2ch-bm-remember-fetched-article board article))
+	      (navi2ch-bm-insert-state item state-mark updated-mark))))
       (message "Can't select this line!"))
     state))
 

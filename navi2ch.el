@@ -56,6 +56,7 @@
 (require 'navi2ch-mona)
 (require 'navi2ch-oyster)
 (require 'navi2ch-localfile)
+(require 'navi2ch-auto-modify)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."

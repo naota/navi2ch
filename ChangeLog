@@ -1,3 +1,50 @@
+2003-05-13  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-auto-modify.el: 新ファイル。
+
+	* Makefile.am (lisp_LISP): 上記ファイルを追加。
+
+	* navi2ch.el (toplevel): navi2ch-auto-modify を require するように。
+
+	* navi2ch-vars.el (navi2ch-auto-modify-file): 新変数。
+	(navi2ch-auto-modify-truncate-list-alist): 新変数。
+	(navi2ch-auto-modify-save-hook): 新変数。
+	(navi2ch-article-sort-message-filter-rules): 新変数。
+	(navi2ch-board-check-article-update-suppression-length): 新変数。
+
+	* navi2ch-util.el (navi2ch-quote-maybe): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-add-message-filter-rule): 新関数。
+	(navi2ch-article-mode-map): "!" に上記関数をバインド。
+	(navi2ch-article-add-message-filter-by-name): 新関数。
+	(navi2ch-article-add-message-filter-by-mail): 新関数。
+	(navi2ch-article-add-message-filter-by-id): 新関数。
+	(navi2ch-article-add-message-filter-by-message): 新関数。
+	(navi2ch-article-add-message-filter-by-subject): 新関数。
+	(navi2ch-article-add-message-filter-rule-subr): 新関数。
+	(navi2ch-article-read-message-filter-match): 新関数。
+	(navi2ch-article-read-message-filter-result): 新関数。
+	(navi2ch-article-get-current-subject): 新関数。
+	(navi2ch-article-message-filter-subr): フィルター条件を適用した順番に
+	並べかえられるように。
+	(navi2ch-article-toggle-message-filter): 
+	`navi2ch-article-sort-message-filter-rules' を nil にバインドして
+	レスを挿入しなおすように。
+	(navi2ch-article-check-message-suppression): 新関数。
+
+	* navi2ch-board.el (navi2ch-board-check-article-update-suppression): 
+	新関数。
+	(navi2ch-board-insert-subjects): 新スレの ID を
+	`navi2ch-board-current-board' に保持するように。
+	(navi2ch-board-update-seen-articles): 前回読んだスレの ID を
+	`navi2ch-board-current-board' に保持するように。
+	(navi2ch-board-sync): `navi2ch-board-current-board' に保持しておいた
+	前回読んだスレと新スレの ID をいったんクリアするように。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 取得したスレの
+	更新分のレスがすべてフィルターにより非表示になる場合、新着なしと
+	見なせるように。
+
 2003-05-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-search.el (navi2ch-search-article-regexp): 検索対象ファ

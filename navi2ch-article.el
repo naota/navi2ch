@@ -90,6 +90,7 @@
     (define-key map "\C-o" 'navi2ch-article-save-dat-file)
     (define-key map "F" 'navi2ch-article-toggle-message-filter)
     (define-key map "x" 'undefined)
+    (define-key map "!" 'navi2ch-article-add-message-filter-rule)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -818,6 +819,11 @@ START, END, NOFIRST で範囲を指定する"
 					      (split-string
 					       (japanese-hankaku string t)))
 				     string)))
+	    ;; 適用したフィルタ条件を age
+	    (when (and navi2ch-article-sort-message-filter-rules
+		       (not (eq rule (car rules))))
+	      (setcdr rules (cons (car rules) (delq rule (cdr rules))))
+	      (setcar rules rule))
 	    (if (numberp (cdr rule))
 		(setq score (+ (or score 0) (cdr rule)))
 	      (throw 'loop
@@ -1118,6 +1124,55 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	  (navi2ch-article-save-info board article)
 	  (navi2ch-article-set-summary-element board article t)
 	  t)))))
+
+(defun navi2ch-article-check-message-suppression (board article number)
+  (let ((buffer (get-buffer (navi2ch-article-get-buffer-name board article)))
+	suppressed)
+    (if buffer
+	(with-current-buffer buffer
+	  (when navi2ch-article-message-filter-mode
+	    (let ((res (length navi2ch-article-message-list)))
+	      (when (>= res number)
+		(let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
+		      (i number))
+		  (while (memq i hide)
+		    (setq i (1+ i)))
+		  (when (> i res)
+		    (setq suppressed res)))))))
+      (when navi2ch-article-auto-activate-message-filter
+	(with-temp-buffer
+	  (setq navi2ch-article-current-board board
+		navi2ch-article-current-article (navi2ch-article-load-info
+						 board article)
+		navi2ch-article-message-list (navi2ch-article-get-message-list
+					      (navi2ch-article-get-file-name
+					       board article)))
+	  (message "filtering current messages...")
+	  (let ((res (length navi2ch-article-message-list)))
+	    (when (>= res number)
+	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article))))
+		(catch 'loop
+		  (dolist (x (nthcdr (1- number) navi2ch-article-message-list))
+		    (if (eq (navi2ch-article-apply-message-filters
+			     (navi2ch-put-alist
+			      'number
+			      (car x)
+			      (navi2ch-article-parse-message (cdr x))))
+			    'hide)
+			(progn
+			  (setq hide (cons (car x) hide))
+			  (setq navi2ch-article-current-article
+				(navi2ch-put-alist
+				 'hide
+				 hide
+				 navi2ch-article-current-article)))
+		      (throw 'loop nil)))
+		  (setq suppressed res)))))
+	  (message "Garbage collecting...")
+	  (garbage-collect)		; `navi2ch-article-parse-message' のゴミ掃除
+	  (message "Garbage collecting...done")
+	  (message "filtering current messages...done"))))
+    suppressed))
 
 (defun navi2ch-article-get-readcgi-raw-url (board article &optional start)
   (let ((url (navi2ch-article-to-url board article))
@@ -1757,6 +1812,14 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		   navi2ch-article-citation-face
 		   navi2ch-article-link-face))
       (current-word)))))
+
+(defun navi2ch-article-get-current-subject ()
+  (or (cdr (assq 'subject navi2ch-article-current-article))
+      (cdr (assq 'subject
+		 (let ((msg (navi2ch-article-get-message 1)))
+		   (if (stringp msg)
+		       (navi2ch-article-parse-message msg)
+		     msg))))))
 
 (defun navi2ch-article-get-visible-numbers ()
   "表示中のレスの番号のリストを得る。"
@@ -2913,13 +2976,133 @@ PREFIX が与えられた場合は、
       (setq navi2ch-article-message-filter-cache nil))
     (setq navi2ch-article-message-filter-mode t))
   (force-mode-line-update)
-  (let ((buffer-read-only nil))
+  (let ((buffer-read-only nil)
+	(navi2ch-article-sort-message-filter-rules nil))
     (navi2ch-article-save-view
       (erase-buffer)
       (navi2ch-article-insert-messages
        navi2ch-article-message-list
        navi2ch-article-view-range)))
   navi2ch-article-message-filter-mode)
+
+(defun navi2ch-article-add-message-filter-rule (&optional prefix)
+  "レスのフィルタ条件を対話的に追加する。"
+  (interactive "P")
+  (let* ((has-id (navi2ch-article-get-current-id))
+	 (char (navi2ch-read-char-with-retry
+		(if has-id
+		    "Filter by: n)ame m)ail i)d b)ody s)ubject: "
+		  "Filter by: n)ame m)ail b)ody s)ubject: ")
+		nil
+		(if has-id
+		    '(?n ?m ?i ?b ?s)
+		  '(?n ?m ?b ?s)))))
+    (cond
+     ((eq char ?n) (navi2ch-article-add-message-filter-by-name prefix))
+     ((eq char ?m) (navi2ch-article-add-message-filter-by-mail prefix))
+     ((eq char ?i) (navi2ch-article-add-message-filter-by-id prefix))
+     ((eq char ?b) (navi2ch-article-add-message-filter-by-message prefix))
+     ((eq char ?s) (navi2ch-article-add-message-filter-by-subject prefix)))))
+
+(defun navi2ch-article-add-message-filter-by-name (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-name-alist
+   "Name: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-name))))
+
+(defun navi2ch-article-add-message-filter-by-mail (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-mail-alist
+   "Mail: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-mail))))
+
+(defun navi2ch-article-add-message-filter-by-id (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-id-alist
+   "ID: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-id))))
+
+(defun navi2ch-article-add-message-filter-by-message (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-message-alist
+   "Body: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-word-in-body))))
+
+(defun navi2ch-article-add-message-filter-by-subject (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-subject-alist
+   "Subject: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-subject))))
+
+(defun navi2ch-article-add-message-filter-rule-subr (variable
+						     prompt
+						     &optional initial-input)
+  (let* ((match (navi2ch-article-read-message-filter-match prompt
+							   initial-input))
+	 (current (assoc match (symbol-value variable)))
+	 (result (navi2ch-article-read-message-filter-result (cdr current))))
+    (set variable (cons (cons match result)
+			(delq current (symbol-value variable))))
+    (navi2ch-auto-modify-variables (list variable))
+    (when (y-or-n-p "Apply new rules to current messages now? ")
+      (navi2ch-article-toggle-message-filter t))))
+
+(defun navi2ch-article-read-message-filter-match (prompt
+						  &optional initial-input)
+  (let (char str)
+    (when (y-or-n-p "Use extensional match? ")
+      (setq char (navi2ch-read-char-with-retry
+		  "Match for: s)ubstring f)uzzy-substring e)xact-string r)egxp"
+		  nil
+		  '(?s ?f ?e ?r)))
+      (when (and (eq char ?r)
+		 initial-input)
+	(setq initial-input (regexp-quote initial-input)))
+      (unless (y-or-n-p "Ignore case? ")
+	(setq char (upcase char))))
+    (setq str (navi2ch-read-string prompt
+				   initial-input
+				   'navi2ch-search-history))
+    (if char
+	(list str (intern (char-to-string char)))
+      str)))
+
+(defun navi2ch-article-read-message-filter-result (&optional initial-input)
+  (let ((char (navi2ch-read-char-with-retry
+	       "Result: r)eplace h)ide i)mportant s)core"
+	       nil
+	       '(?r ?h ?i ?s))))
+    (cond
+     ((eq char ?r)
+      (navi2ch-read-string "Relace with: "
+			   (if (stringp initial-input)
+			       initial-input
+			     "あぼぼーん")))
+     ((eq char ?h)
+      'hide)
+     ((eq char ?i)
+      'important)
+     ((eq char ?s)
+      (string-to-number
+       (navi2ch-read-string "Score: "
+			    (if (numberp initial-input)
+				(number-to-string initial-input)
+			      "0")))))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

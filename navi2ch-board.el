@@ -267,6 +267,21 @@
 	    'updated)
 	'new))))
 
+(defun navi2ch-board-check-article-update-suppression (article seen)
+  (when (and navi2ch-board-check-article-update-suppression-length
+	     (navi2ch-board-updated-article-p article seen))
+    (let* ((artid (cdr (assq 'artid article)))
+	   (last (or seen
+		     (string-to-number
+		      (or (cdr (assoc artid navi2ch-board-old-subject-alist))
+			  "0")))))
+      (when (<= (string-to-number
+		 (cdr (assoc artid navi2ch-board-subject-alist)))
+		(+ last navi2ch-board-check-article-update-suppression-length))
+	(navi2ch-article-check-message-suppression navi2ch-board-current-board
+						   article
+						   (1+ last))))))
+
 (defun navi2ch-board-regexp-test ()
   (save-excursion
     (beginning-of-line)
@@ -279,6 +294,7 @@
 (defun navi2ch-board-insert-subjects (list)
   (let ((bookmark (cdr (assq 'bookmark navi2ch-board-current-board)))
 	(hide (cdr (assq 'hide navi2ch-board-current-board)))
+	(hot (cdr (assq 'hot navi2ch-board-current-board)))
 	(summary (navi2ch-article-load-article-summary
 		  navi2ch-board-current-board))
 	(i 1))
@@ -305,6 +321,13 @@
 	   (cond ((and navi2ch-board-check-updated-article-p
 		       (setq updated
 			     (navi2ch-board-updated-article-p article seen)))
+		  (when (and (eq updated 'new)
+			     (not (member artid hot)))
+		    (setq hot (cons artid hot))
+		    (setq navi2ch-board-current-board
+			  (navi2ch-put-alist 'hot
+					     hot
+					     navi2ch-board-current-board)))
 		  updated)
 		 (seen 'seen)))
 	  (setq i (1+ i)))))))
@@ -356,7 +379,8 @@
 	  (navi2ch-insert-file-contents from))))))
 
 (defun navi2ch-board-update-seen-articles ()
-  (let ((summary (navi2ch-article-load-article-summary
+  (let ((hot (cdr (assq 'hot navi2ch-board-current-board)))
+	(summary (navi2ch-article-load-article-summary
 		  navi2ch-board-current-board)))
     (dolist (x summary)
       (let ((element (cdr x))
@@ -364,7 +388,13 @@
 	(when (navi2ch-board-updated-article-p
 	       (list (cons 'artid artid))
 	       (navi2ch-article-summary-element-seen element))
-	  (navi2ch-article-summary-element-set-seen element nil))
+	  (navi2ch-article-summary-element-set-seen element nil)
+	  (unless (member artid hot)
+	    (setq hot (cons artid hot))
+	    (setq navi2ch-board-current-board
+		  (navi2ch-put-alist 'hot
+				     hot
+				     navi2ch-board-current-board))))
 	(navi2ch-put-alist artid element summary)))
     (navi2ch-article-save-article-summary
      navi2ch-board-current-board summary)))
@@ -398,6 +428,7 @@
 			    (cdr (assoc "Date" header)))))
 	(when time
 	  (setq board (navi2ch-put-alist 'time time board))))
+      (navi2ch-put-alist 'hot nil board)
       (setq navi2ch-board-current-board board)
       (when (or first time)
 	(erase-buffer)

@@ -87,7 +87,8 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-splash.el navi2ch-directory.el \
 	navi2ch-multibbs.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
-	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el
+	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
+	navi2ch-auto-modify.el
 
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
@@ -102,7 +103,7 @@ CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 LISP = $(lisp_LISP)
 
-ELCFILES = navi2ch-article.elc navi2ch-articles.elc \
+ELCFILES = navi2ch-article.elc navi2ch-articles.elc navi2ch-auto-modify.elc \
 	navi2ch-board-misc.elc navi2ch-board.elc navi2ch-bookmark.elc \
 	navi2ch-directory.elc navi2ch-e21.elc navi2ch-face.elc \
 	navi2ch-head.elc navi2ch-history.elc navi2ch-http-date.elc \
