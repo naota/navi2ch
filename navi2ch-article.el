@@ -667,8 +667,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	    list)
 	(when (and navi2ch-article-fix-range-when-sync number)
 	  (navi2ch-article-fix-range number)
-	  (navi2ch-article-redraw)
-	  (navi2ch-article-goto-number number))
+	  (navi2ch-article-redraw))
+	(navi2ch-article-goto-number (or number
+					 (navi2ch-article-get-current-number)))
 	(navi2ch-article-set-summary-element board article nil)))))
 
 (defun navi2ch-article-fetch-article (board article &optional force)
