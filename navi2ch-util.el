@@ -26,7 +26,13 @@
 (require 'regexp-opt)
 (require 'navi2ch-vars)
 (require 'timezone)
-(require 'base64)
+
+(unless (and (fboundp 'base64-encode-region)
+	     (fboundp 'base64-decode-region))
+  (cond ((locate-library "base64")
+	 (require 'base64))
+	((locate-library "mel")
+	 (require 'mel))))
 
 (defvar navi2ch-mode-line-identification nil)
 (make-variable-buffer-local 'navi2ch-mode-line-identification)

@@ -1,5 +1,8 @@
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el: base64 の require 方法を変えた。
+	XEmacs でも w3 か FLIM を入れてれば base64 機能を使えるように。
+
 	* navi2ch-article.el, navi2ch-articles.el, navi2ch-board-misc.el,
 	navi2ch-board.el, navi2ch-bookmark.el, navi2ch-history.el,
 	navi2ch-list.el, navi2ch-popup-article.el, navi2ch-search.el,
