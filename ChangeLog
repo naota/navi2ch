@@ -1,5 +1,12 @@
 2002-07-20  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-mona.el
+	(navi2ch-mona-create-face-from-family-name): 新関数。
+	(navi2ch-mona-set-font-family-name): 上記関数を使うように。
+	(navi2ch-mona-font-family-name): type が間違ってたので修正。
+	initialize で副作用のある関数を呼ばないように。
+	(navi2ch-mona-setup): ここで face を作成するようにした。
+
 	* navi2ch-article.el (navi2ch-article-call-aadisplay):
 	navi2ch-article-aa-display-program に渡すファイル名を
 	expand-file-name するように。

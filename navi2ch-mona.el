@@ -104,17 +104,18 @@ XEmacs では明示的にフォントセットを作る必要がないので、
 				       (format font "jisx0208.1990-0"))))))))
       fontset-name)))
 
-(defun navi2ch-mona-set-font-family-name (symbol value)
+(defun navi2ch-mona-create-face-from-family-name (family-name)
   "VALUEで指定されるフォントセットに応じてフェイスを作成する。"
-  (condition-case nil
-      (progn
-	(dolist (height '(12 14 16))
-	  (let ((fontset (navi2ch-mona-create-fontset-from-family-name
-			  value height))
-		(face (intern (format "navi2ch-mona%d-face" height))))
-	    (set-face-font face fontset)))
-	(set-default symbol value))
-    (error nil)))
+  (dolist (height '(12 14 16))
+    (ignore-errors
+      (let ((fontset (navi2ch-mona-create-fontset-from-family-name
+		      family-name height))
+	    (face (intern (format "navi2ch-mona%d-face" height))))
+	(set-face-font face fontset)))))
+
+(defun navi2ch-mona-set-font-family-name (symbol value)
+  (navi2ch-mona-create-face-from-family-name value)
+  (set-default symbol value))
 
 ;; Customizable variables.
 (defcustom navi2ch-mona-enable nil
@@ -173,13 +174,13 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
 -*-*-*-{iso8859-1,jisx0201.1976-0,jisx0208.(1983|1990)-0}
 
 があるかどうか確かめてね。"
-  :type '(choice (string :tag "Mona Font"
-			 :value "mona-gothic")
+  :type '(choice (const :tag "Mona Font"
+			"mona-gothic")
 		 (const :tag "MS P Gothic"
-			:value "microsoft-pgothic")
+			"microsoft-pgothic")
 		 (string :tag "family name"))
   :set 'navi2ch-mona-set-font-family-name
-  :initialize 'custom-initialize-reset
+  :initialize 'custom-initialize-default
   :group 'navi2ch-mona)
 
 (defconst navi2ch-mona-sample-string
@@ -309,6 +310,7 @@ nil is returned.  Otherwise the associated face object is returned."
   "*モナーフォントを使うためのフックを追加する。"
   (when (and (eq window-system 'x)	; NT Emacs でも動くのかな?
 	     (or navi2ch-on-emacs21 navi2ch-on-xemacs))
+    (navi2ch-mona-create-face-from-family-name navi2ch-mona-font-family-name)
     (navi2ch-mona-set-mona-face)	; 何回呼んでも大丈夫
     (add-hook 'navi2ch-article-arrange-message-hook
 	      'navi2ch-mona-arrange-message)
