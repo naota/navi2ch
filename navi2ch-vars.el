@@ -684,7 +684,8 @@ navi2ch-article-message-filter-by-message-alist を使用してください。"
     navi2ch-article-message-filter-by-message)
   "*レスをフィルタするための関数のリスト。
 リストの member となる関数としては、
-レスの alist を引き数に取りフィルタ後の文字列を返すものを指定する。
+レスの alist を引き数に取り、
+フィルタ後の文字列もしくは 'hide か 'important を返すものを指定する。
 
 下記は名前欄が「ほげ」のときに「あぼぼーん」に置換するための
 (ちょっと冗長な) 関数の例。
@@ -702,36 +703,39 @@ navi2ch-article-message-filter-by-message-alist を使用してください。"
 
 (defcustom navi2ch-article-message-filter-by-name-alist nil
   "*レスをフィルタする名前と、置き換える文字列の alist。
+置き換える文字列の代わりに hide や important を指定できる。
 例えば下記の値を設定すると、
 名前欄に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
-名前欄に「ホゲ」が含まれているとレスが「アボボーン」に置き換わる。
+名前欄に「ホゲ」が含まれているとレスが隠される。
 
 '((\"ふが\" . \"あぼぼーん\")
-  (\"ホゲ\" . \"アボボーン\"))"
+  (\"ホゲ\" . hide))"
   :type '(repeat (cons (string :tag "名前欄")
 		       (string :tag "置換後")))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-message-alist nil
   "*レスをフィルタするためのレス本文中の文字列と、置き換える文字列の alist。
+置き換える文字列の代わりに hide や important を指定できる。
 例えば下記の値を設定すると、
 レス本文中に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
-レス本文中に「ホゲ」が含まれているとレスが「アボボーン」に置き換わる。
+レス本文中に「ホゲ」が含まれているとレスが隠される。
 
 '((\"ふが\" . \"あぼぼーん\")
-  (\"ホゲ\" . \"アボボーン\"))"
+  (\"ホゲ\" . hide))"
   :type '(repeat (cons (string :tag "本文中")
 		       (string :tag "置換後")))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-id-alist nil
   "*レスをフィルタするための ID 中の文字列と、置き換える文字列の alist。
+置き換える文字列の代わりに hide や important を指定できる。
 例えば下記の値を設定すると、
 ID が「FUga1234」だとレスが「あぼぼーん」に置き換わり、
-ID が「hoGE0987」だとレスが「アボボーン」に置き換わる。
+ID が「hoGE0987」だとレスが隠される。
 
 '((\"FUga1234\" . \"あぼぼーん\")
-  (\"hoGE0987\" . \"アボボーン\"))"
+  (\"hoGE0987\" . hide))"
   :type '(repeat (cons (string :tag "ID")
 		       (string :tag "置換後")))
   :group 'navi2ch-article)

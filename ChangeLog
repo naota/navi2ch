@@ -1,5 +1,16 @@
 2002-11-17  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-insert-messages): フィルタが
+	返す値によってレスを hide や important に入れられるように。
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-list): docstring
+	を変更。
+	(navi2ch-article-message-filter-by-name-alist): 同上。
+	(navi2ch-article-message-filter-by-message-alist): 同上。
+	(navi2ch-article-message-filter-by-id-alist): 同上。
+
+2002-11-17  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-vars.el (navi2ch-article-save-info-wrapper-func): 新変数。
 
 	* navi2ch-article.el (navi2ch-article-save-info-keys): 新変数。

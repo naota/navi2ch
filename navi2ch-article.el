@@ -518,25 +518,41 @@ START, END, NOFIRST で範囲を指定する"
 			       (not (memq num hide))))))
           (when (stringp alist)
             (setq alist (navi2ch-article-parse-message alist)))
-	  (let ((filtered (navi2ch-article-apply-message-filters alist)))
-	    (when filtered
-	      (cond ((stringp filtered)
-		     (navi2ch-put-alist 'name filtered alist)
-		     (navi2ch-put-alist 'data filtered alist)
-		     (navi2ch-put-alist 'mail
-					(if (string-match "sage"
-							  (cdr (assq 'mail alist)))
-					    "sage"
-					  "")
-					alist))
-		    ;((eq filtered 'delete)
-		    ; (...))
-		    ;((eq filtered 'important)
-		    ; (...))
-		    )))
-	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
-          ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
-          (navi2ch-article-insert-message num alist))))
+	  (let (filter-result)
+	    (setq filter-result
+		  (let ((filtered (navi2ch-article-apply-message-filters alist)))
+		    (when filtered
+		      (cond ((stringp filtered)
+			     (navi2ch-put-alist 'name filtered alist)
+			     (navi2ch-put-alist 'data filtered alist)
+			     (navi2ch-put-alist 'mail
+						(if (string-match "sage"
+								  (cdr (assq 'mail alist)))
+						    "sage"
+						  "")
+						alist))
+			    ((eq filtered 'hide)
+			     'hide)
+			    ((eq filtered 'important)
+			     'important)))))
+	    (if (and (eq filter-result 'hide)
+		     (not navi2ch-article-hide-mode))
+		(progn
+		  (setq hide (cons num hide))
+		  (setq navi2ch-article-current-article
+			(navi2ch-put-alist 'hide
+					   hide
+					   navi2ch-article-current-article)))
+	      (when (and (eq filter-result 'important)
+			 (not navi2ch-article-important-mode))
+		    (setq imp (cons num imp))
+		    (setq navi2ch-article-current-article
+			  (navi2ch-put-alist 'important
+					     imp
+					     navi2ch-article-current-article)))
+	      (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
+	      ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
+	      (navi2ch-article-insert-message num alist))))))
     (garbage-collect) ; navi2ch-parse-message は大量にゴミを残す
     (message "inserting current messages...done")))
 
