@@ -57,7 +57,8 @@
 
 (defun navi2ch-js-p (uri)
   "URI がJBBS＠したらばなら non-nilを返す。"
-  (string-match "http://jbbs.shitaraba.com/" uri))
+  (or (string-match "http://jbbs.shitaraba.com/" uri)
+      (string-match "http://jbbs.shitaraba.net/" uri)))
 
 (navi2ch-multibbs-defcallback navi2ch-js-subject-callback (jbbs-shitaraba)
   "subject.txt を取得するとき navi2ch-net-update-file
@@ -80,13 +81,13 @@
 (defun navi2ch-js-url-to-board (url)
   (let (uri id)
     (cond ((string-match
-	    "\\(http://jbbs.shitaraba.com/[^/]+/\\([0-9]+\\)/\\)" url)
+	    "\\(http://[^/]+/[^/]+/\\([0-9]+\\)/\\)" url)
 	   (setq uri (match-string 1 url)
 		 id  (match-string 2 url)))
 	  ((string-match
-	    "\\(http://jbbs.shitaraba.com/[^/]+\\)/bbs/read\\.cgi.*BBS=\
-\\([0-9]+\\)" url)
-	   (setq uri (format "%s/%s/" (match-string 1 url)
+	    "\\(http://[^/]+/[^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
+	   (setq uri (format "%s/%s/"
+			     (match-string 1 url)
 			     (match-string 2 url))
 		 id  (match-string 2 url))))
     (if id (list (cons 'uri uri) (cons 'id id)))))
@@ -95,7 +96,7 @@
   "URL から article に変換。"
   (let (list)
     (if (string-match
-	 "http://jbbs.shitaraba.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+	 "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
 	(progn
 	  (setq list (list (cons 'artid (match-string 1 url))))
 	  (when (string-match "&START=\\([0-9]+\\)" url)
