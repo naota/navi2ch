@@ -1,3 +1,10 @@
+2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode): 
+	バッファローカルにしたいフックをまず make-local-hook する。
+	add-hook の引数だけでフックをバッファローカルにできるのは Emacs 21
+	だけの話で、Emacs 20 や XEmacs ではこうしておかなくちゃダメだった。
+
 2002-02-04  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-save-info): 

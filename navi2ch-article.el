@@ -556,6 +556,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
+  (make-local-hook 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'navi2ch-article-save-info t t)
   (run-hooks 'navi2ch-article-mode-hook))
 
