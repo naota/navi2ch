@@ -1,3 +1,8 @@
+2003-06-08  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-sync): ~/.navi2ch/etc.txt の変更が
+	反映されなくなっていたのを修正。
+
 2003-06-08  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-save-aborn-file): 新関数。

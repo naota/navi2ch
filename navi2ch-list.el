@@ -526,27 +526,29 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 	(setq navi2ch-list-current-list
 	      (navi2ch-put-alist 'bbstable bbstable
 				 navi2ch-list-current-list)))
-      (when (or updated change)
-	(let ((category-list (navi2ch-list-get-category-list file)))
+      ;; bbstable, etc.txt, navi2ch-list-navi2ch-category-alist
+      ;; $Bのいずれかが更新されていれば 以下の処理が必要。
+      ;; とりあえず、常に実行しておく。
+      (let ((category-list (navi2ch-list-get-category-list file)))
+	(when (or updated change)
 	  (navi2ch-list-apply-changed-status
-	   (navi2ch-list-get-changed-status old-category-list category-list))
-	  (setq navi2ch-list-category-list
-		(append
-		 (delq nil
-		       (list (navi2ch-list-get-category
-			      navi2ch-list-navi2ch-category-name
-			      navi2ch-list-navi2ch-category-alist)
-			     (navi2ch-list-get-global-bookmark-category)
-			     (navi2ch-list-get-etc-category)
-			     (navi2ch-list-get-changed-category
-			      category-list)))
-		 category-list))
-	  (setq navi2ch-list-board-name-list
-		(navi2ch-list-get-board-name-list
-		 navi2ch-list-category-list))))
-      (when (or updated change first)
-	(erase-buffer)
-	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
+	   (navi2ch-list-get-changed-status old-category-list category-list)))
+	(setq navi2ch-list-category-list
+	      (append
+	       (delq nil
+		     (list (navi2ch-list-get-category
+			    navi2ch-list-navi2ch-category-name
+			    navi2ch-list-navi2ch-category-alist)
+			   (navi2ch-list-get-global-bookmark-category)
+			   (navi2ch-list-get-etc-category)
+			   (navi2ch-list-get-changed-category
+			    category-list)))
+	       category-list))
+	(setq navi2ch-list-board-name-list
+	      (navi2ch-list-get-board-name-list
+	       navi2ch-list-category-list)))
+      (erase-buffer)
+      (navi2ch-list-insert-board-names navi2ch-list-category-list)))
   (run-hooks 'navi2ch-list-after-sync-hook))
 
 (defun navi2ch-list-board-id-from-url (url)
