@@ -1,3 +1,7 @@
+2003-12-09  mami  <mami@users.sourceforge.net>
+
+	* NEWS: 更新。
+
 2003-12-08  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-str-to-num): 数値の最小値・
@@ -154,7 +158,7 @@
 
 	* navi2ch-search.el (navi2ch-search-for-each-board): 新関数。
 	(navi2ch-search-for-each-article): 新関数。
-	(navi2ch-search-board-subject-regexp): -for-each-borad() を使用。
+	(navi2ch-search-board-subject-regexp): -for-each-board() を使用。
 	navi2ch-board-get-subject-list を使うように。
 	(navi2ch-search-article-regexp): -for-each-article() を使用。
 	(navi2ch-search-cache): 新関数。-for-each-article() を使用。
