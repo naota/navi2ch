@@ -1,3 +1,9 @@
+2002-10-01  miz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-article.el: YYYY/MM/DD HH:MM形式に対応
+
+	* navi2ch-vars.el: navi2ch-message-aa-default-alistに顔文字追加
+
 2002-10-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-directory.el (navi2ch-directory-sync): かっこを付けた。
