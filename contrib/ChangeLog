@@ -1,0 +1,5 @@
+2002-01-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-logo.el: ファイル追加。レス一覧の先頭にロゴを張る。
+	http://pc.2ch.net/test/read.cgi/unix/999166513/895
+
