@@ -1,8 +1,9 @@
 2002-07-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-add-board-bookmark): 新関数。
-	(navi2ch-article-add-important-message): C-u a で上記関数を呼ぶよ
-	うに。
+	(navi2ch-article-add-important-message): C-u a で上記関数を呼ぶ。
+	article-mode から board-bookmark に登録できるようになります	た。
+	FR#531322
 
 	* navi2ch-board.el (navi2ch-board-update-buffer): 新関数。
 	(navi2ch-board-add-bookmark-subr): 新関数。
