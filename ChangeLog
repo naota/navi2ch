@@ -1,3 +1,13 @@
+2002-01-20  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-subback-file-name): 新変数。
+	(navi2ch-board-use-subback-html): 新変数。
+	(navi2ch-board-make-subject-txt): subject.html から subject.txt を
+	作る。２ちゃんねるの仕様変更に振り回されそうな予感。
+	(navi2ch-board-update-file): navi2ch-board-use-subback-html が
+	non-nil の場合は上記関数を使うように。ためす場合は
+	navi2ch-board-enable-readcgi を nil にしてください。
+
 2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-sync): first のとき old-list に設

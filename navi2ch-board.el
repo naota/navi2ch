@@ -66,6 +66,9 @@
 (defvar navi2ch-board-old-subject-file-name "old-subject.txt")
 (defvar navi2ch-board-enable-readcgi nil)
 
+(defvar navi2ch-board-subback-file-name "subback.html")
+(defvar navi2ch-board-use-subback-html nil)
+
 (defvar navi2ch-board-minor-mode-list
   '(navi2ch-board-bookmark-mode
     navi2ch-board-hide-mode
@@ -341,7 +344,12 @@
       (if navi2ch-board-enable-readcgi
 	  (car (navi2ch-net-update-file-with-readcgi
 		(navi2ch-board-get-readcgi-raw-url board) file time))
-	(navi2ch-net-update-file (navi2ch-board-get-url board) file time)))))
+	(let ((url (navi2ch-board-get-url
+		    board (if navi2ch-board-use-subback-html
+			      navi2ch-board-subback-file-name)))
+	      (func (if navi2ch-board-use-subback-html
+			'navi2ch-board-make-subject-txt)))
+	  (navi2ch-net-update-file url file time func))))))
 
 (defun navi2ch-board-sync (&optional force first)
   (interactive "P")
@@ -384,6 +392,26 @@
 	(navi2ch-board-save-info)
 	(navi2ch-board-set-mode-line))))
   (run-hooks 'navi2ch-board-after-sync-hook))
+
+(defun navi2ch-board-make-subject-txt (str)
+  "subback.html から (navi2ch 用の) subject.txt を作る
+`navi2ch-net-update-file' のハンドラ。"
+  (let ((coding-system-for-read 'binary)
+	(coding-system-for-write 'binary))
+    (with-temp-buffer
+      (insert str)
+      (let ((case-fold-search t)
+	    str2)
+	(goto-char (point-min))
+	(while (re-search-forward
+		;; この正規表現も仕様変更でだめになるのかも。
+		"<a +href=\"\\([0-9]+\\).*\">[0-9]+: \\(.*\\)</a>" nil t)
+	  (let ((dat (match-string 1))
+		(title (match-string 2)))
+	    (setq str2
+		  (concat str2
+			  (format "%s.dat<>%s\n" dat title)))))
+	str2))))
 
 (defun navi2ch-board-set-mode-line ()
   (let* ((board navi2ch-board-current-board)
