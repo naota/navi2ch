@@ -407,7 +407,9 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$1%@%&%s%m!<%I$9$k!#
 OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 $B%@%&%s%m!<%I$G$-$l$P$=$N@\B3$rJV$9!#(B"
   (navi2ch-net-ignore-errors
-   (let (proc status)
+   (let ((time (if (or (null time) (stringp time)) time
+		 (navi2ch-http-date-encode time)))
+	 proc status)
      (while (not status)
        (setq proc
 	     (navi2ch-net-send-request
@@ -464,12 +466,16 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 (defun navi2ch-net-update-file (url file &optional time func location diff)
   "FILE $B$r99?7$9$k!#(B
 TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
+TIME $B$,(B 'file $B$J$i$P%U%!%$%k$N99?7F|;~$r(B TIME $B$H$9$k!#(B
 FUNC $B$,(B non-nil $B$J$i$P99?78e(B FUNC $B$r;H$C$F%U%!%$%k$rJQ49$9$k!#(B
 FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$k$h$&(B
 $B$K$9$k!#(B
 DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9$k!#(B
 $B99?7$G$-$l$P(B header $B$rJV$9(B"
+  (when (eq time 'file)
+    (setq time (and (file-exists-p file)
+		    (nth 5 (file-attributes file)))))
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
@@ -761,15 +767,21 @@ This is taken from RFC 2396.")
 		 (return (cons (match-string 1 str) date))))))))
 
 (defun navi2ch-net-download-logo (board)
-  (let* ((coding-system-for-read 'binary)
-	 (coding-system-for-write 'binary)
-	 (content (navi2ch-net-get-content
-		   (navi2ch-net-download-file
-		    (navi2ch-board-get-url board
-					   navi2ch-net-setting-file-name))))
-	 src)
-    (when (string-match
-	   "BBS_\\(TITLE_PICTURE\\|FIGUREHEAD\\)=\\(.+\\)" content)
+  (let ((coding-system-for-read 'binary)
+	(coding-system-for-write 'binary)
+	(setting-file (navi2ch-board-get-file-name
+		       board navi2ch-net-setting-file-name))
+	(setting-url (navi2ch-board-get-url
+		      board navi2ch-net-setting-file-name))
+	content src)
+    (when (and (navi2ch-net-update-file setting-url setting-file 'file)
+	       (file-exists-p setting-file))
+      (setq content (with-temp-buffer
+		      (insert-file-contents setting-file)
+		      (buffer-string))))
+    (when (and content
+	       (string-match
+		"BBS_\\(TITLE_PICTURE\\|FIGUREHEAD\\)=\\(.+\\)" content))
       (setq src (match-string 2 content))
       (let (url file)
 	(setq url (if (string-match "http://" src)
@@ -779,7 +791,7 @@ This is taken from RFC 2396.")
 	(setq file (match-string 1 url))
 	(when file
 	  (setq file (navi2ch-board-get-file-name board file))
-	  (when (navi2ch-net-update-file url file nil nil t)
+	  (when (navi2ch-net-update-file url file 'file nil t)
 	    file))))))
 
 (defun navi2ch-net-add-state (state header)

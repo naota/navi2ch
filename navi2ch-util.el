@@ -1231,5 +1231,27 @@ STRING2 の方が大きい場合は負数を返す。
 			     (split-string (match-string 0 s) "\\."))))
 		 (list string1 string2))))
 
+(defun navi2ch-verify-signature-file (signature-file file)
+  "FILE を SIGNATURE-FILE で検証する。
+正しく検証できると non-nil を返す。"
+  (interactive "f署名ファイル: \nf検証ファイル: ")
+  (let (exitcode)
+    (with-temp-buffer
+      (setq exitcode
+	    (call-process shell-file-name nil t nil
+			  shell-command-switch
+			  (format navi2ch-pgp-verify-command-line
+				  signature-file file)))
+      (goto-char (point-min))
+      ;; 後から *Message* バッファで参照できるよう、コマンド出力をすべ
+      ;; て表示しておく
+      (while (not (eobp))
+	(let ((s (buffer-substring (navi2ch-line-beginning-position)
+					(navi2ch-line-end-position))))
+	  (when (> (length s) 0)
+	    (message "%s" s)))
+	(forward-line)))
+    (= exitcode 0)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

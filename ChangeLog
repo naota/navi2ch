@@ -1,5 +1,17 @@
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch.el (navi2ch-update): pgp 等が利用できる場合は検証する。
+
+	* navi2ch-util.el (navi2ch-verify-signature-file): 新関数。
+
+	* navi2ch-vars.el (navi2ch-pgp-verify-command-line): 新変数。
+
+	* navi2ch-net.el (navi2ch-net-download-file): time に文字列だけで
+	はなく current-time() 形式も許す。
+	(navi2ch-net-update-file): time が 'file なら更新するファイルの更
+	新日時を用いる。
+	(navi2ch-net-download-logo): SETTING.TXT も保存しておく。
+
 	* navi2ch-util.el (navi2ch-coding-system): 可能であれば cp932 を使
 	用。
 	* navi2ch-futaba.el (navi2ch-futaba-variable-alist): 'shift_jis で

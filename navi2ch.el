@@ -427,12 +427,23 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 (defun navi2ch-update ()
   "navi2ch-update.el をダウンロードして実行する。"
   (interactive)
-  (let ((new (concat navi2ch-update-file ".new")))
+  (let ((new (concat navi2ch-update-file ".new"))
+	(time (and (file-exists-p navi2ch-update-file)
+		   (nth 5 (file-attributes navi2ch-update-file))))
+	(asc (concat navi2ch-update-file ".asc"))
+	(asc-url (concat navi2ch-update-url ".asc"))
+	verified)
     (when (and navi2ch-update-url
 	       (not (string= navi2ch-update-url ""))
 	       (not navi2ch-offline)
-	       (navi2ch-net-update-file navi2ch-update-url new)
+	       (navi2ch-net-update-file navi2ch-update-url new time)
 	       (file-exists-p new)
+	       (if navi2ch-pgp-verify-command-line
+		   (and (navi2ch-net-update-file asc-url asc 'file)
+			(file-exists-p asc)
+			(navi2ch-verify-signature-file asc new)
+			(setq verified t))
+		 t)
 	       (or (not (file-exists-p navi2ch-update-file))
 		   (not (= (nth 7 (file-attributes navi2ch-update-file))
 			   (nth 7 (file-attributes new))))
@@ -444,7 +455,9 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 			   (insert-file-contents-literally new)
 			   (buffer-string)))))
 	       (yes-or-no-p
-		"navi2ch-update.elが更新されました。保存して実行しますか? "))
+		(concat "navi2ch-update.el が更新されました"
+			(unless verified "(未検証)")
+			"。保存して実行しますか? ")))
       (navi2ch-rename-file new navi2ch-update-file t)
       (load navi2ch-update-file))
     (if (file-exists-p new)

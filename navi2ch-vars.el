@@ -197,6 +197,15 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
   :type 'boolean
   :group 'navi2ch)
 
+(defcustom navi2ch-pgp-verify-command-line nil
+  "PGP 署名を検証するコマンドライン。
+署名ファイル名、署名元ファイル名と共に `format' の引数となる。"
+  :type '(choice (const :tag "無効" nil)
+		 (const :tag "PGP" "pgp %s %s")
+		 (const :tag "GPG" "gpg --verify %s %s")
+		 (string :tag "指定"))
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*板一覧ウィンドウの横幅。"
@@ -1650,11 +1659,12 @@ ask なら保存する前に質問する
   "*non-nil なら、起動時に `navi2ch-update-file' を更新して実行する。
 ファイルが実行されるのは、
  - `navi2ch-update-file' が更新されていて、
+ - `navi2ch-pgp-verify-command-line' が non-nil の場合は検証可能で、
  - そこで表示される確認するメッセージに yes と答えたとき
 のみ。
 
-ヤバいコードが入っているとまずいので、実行する前にまず navi2ch の
-スレなどを確認したほうがいい。"
+ヤバいコードが入っているとまずいので、なるべく pgp か gpg をインストー
+ルして `navi2ch-pgp-verify-command-line' を設定しよう。"
   :type 'boolean
   :group 'navi2ch)
 
