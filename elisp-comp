@@ -1,6 +1,6 @@
 #!/bin/sh
 # Copyright (C) 1995 Free Software Foundation, Inc.
-# François Pinard <pinard@iro.umontreal.ca>, 1995.
+# Fran,Ag(Bois Pinard <pinard@iro.umontreal.ca>, 1995.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,17 @@
 # be compiled are made visible between themselves, in the event
 # they require or load-library one another.
 
+# set -x
+
+load_path=""
+while test $# -gt 1 && test $1 = "-L"; do
+   # get absolute path
+   dir=`cd "$2"; pwd`
+   # use "::" as path separator
+   load_path="$dir::$load_path"
+   shift
+   shift
+done
 if test $# = 0; then
    echo 1>&2 "No files given to $0"
    exit 1
@@ -34,6 +45,17 @@ else
       # Just assume Emacs is called "emacs".
       EMACS=emacs
    fi
-
-   $EMACS -q -batch -eval "(setq load-path (cons nil load-path))" -f batch-byte-compile $*
+   compile=./compile.$$
+   trap 'rm -f $compile; exit 1' 1 2 13 15
+   rm -f $compile
+   cat >$compile <<EOF
+(let ((extra-load-path (split-string "$load_path" "::")))
+  (if extra-load-path
+      (setq load-path (nconc extra-load-path load-path))))
+(setq load-path (cons nil load-path))
+EOF
+   $EMACS -q -batch -l $compile -f batch-byte-compile $*
+   exit_status=$?
+   rm -f $compile
+   exit $exit_status
 fi

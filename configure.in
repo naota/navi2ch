@@ -53,7 +53,11 @@ if test "$EMACS" = "no"; then
 fi
 
 AC_MSG_CHECKING([detecting your emacs type])
-emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))" | sed -e '/^$/d'`
+AC_EMACS_LISP(emacstype, [dnl
+(princ (cond ((featurep 'xemacs) 'xemacs)
+             ((>= emacs-major-version 21) 'emacs21)
+             ((= emacs-major-version 20) 'emacs20)
+             (t 'UNKNOWN)))])
 AC_MSG_RESULT([$emacstype])
 
 if test -z "$emacstype" || test "$emacstype" = UNKNOWN; then
@@ -68,7 +72,9 @@ AC_ARG_WITH(packagedir,
 [ AC_MSG_CHECKING([where package files should go])
 test "$emacstype" != xemacs && AC_MSG_ERROR(packagedir only works with XEmacs)
 case "$withval" in
-yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))' | sed -e '/^$/d'` ;;
+yes) AC_EMACS_LISP(packagedir, [dnl
+(princ (expand-file-name "../site-packages" data-directory))])
+;;
 no)  unset packagedir ;;
 *)   packagedir="$withval" ;;
 esac
@@ -92,7 +98,8 @@ AC_MSG_RESULT([$icondir])],
 [
 if test -z "${icondir}"; then
   AC_CACHE_CHECK([where icon files should go], [cv_icondir], [dnl
-    cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))' | sed -e '/^$/d'`
+    AC_EMACS_LISP(cv_icondir,[dnl
+(princ (expand-file-name "navi2ch/icons" data-directory))])
     if test -z "$cv_icondir"; then
       cv_icondir='${datadir}/pixmaps/navi2ch'
     fi

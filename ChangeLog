@@ -1,6 +1,17 @@
+2002-07-31  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* elisp-comp: -L で load-path を追加できるようにしてみた。
+	-eval は使わず、中間ファイルに書き出してそれを -l するように。
+
+	* acinclude.m4 (AC_EMACS_LISP): elisp を一旦中間ファイルに出力して
+	から実行するマクロ。quote に気を使わずに済むので楽ちん。
+	(AM_PATH_LISPDIR): 上記マクロを使うように。
+
+	* configure.in: AC_EMACS_LISP を使うように。
+
 2002-07-30  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-kill-buffer-hook): 
+	* navi2ch-article.el (navi2ch-article-kill-buffer-hook):
 	navi2ch-article-backward-buffer を呼ばないようにした。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/674
 

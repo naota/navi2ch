@@ -1700,7 +1700,19 @@ fi
 
 echo "$as_me:$LINENO: checking detecting your emacs type" >&5
 echo $ECHO_N "checking detecting your emacs type... $ECHO_C" >&6
-emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))" | sed -e '/^$/d'`
+{ ac_temp=./conftemp.$$
+ac_output=confout.$$
+rm -f $ac_temp $ac_output
+cat >$ac_temp <<\_ACEOF
+(princ (cond ((featurep 'xemacs) 'xemacs)
+             ((>= emacs-major-version 21) 'emacs21)
+             ((= emacs-major-version 20) 'emacs20)
+             (t 'UNKNOWN)))
+(princ "\n") ; make sure the output has trailing newline.
+_ACEOF
+$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+emacstype=`cat $ac_output`
+rm -f $ac_temp $ac_output; }
 echo "$as_me:$LINENO: result: $emacstype" >&5
 echo "${ECHO_T}$emacstype" >&6
 
@@ -1721,7 +1733,17 @@ test "$emacstype" != xemacs && { { echo "$as_me:$LINENO: error: packagedir only 
 echo "$as_me: error: packagedir only works with XEmacs" >&2;}
    { (exit 1); exit 1; }; }
 case "$withval" in
-yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))' | sed -e '/^$/d'` ;;
+yes) { ac_temp=./conftemp.$$
+ac_output=confout.$$
+rm -f $ac_temp $ac_output
+cat >$ac_temp <<\_ACEOF
+(princ (expand-file-name "../site-packages" data-directory))
+(princ "\n") ; make sure the output has trailing newline.
+_ACEOF
+$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+packagedir=`cat $ac_output`
+rm -f $ac_temp $ac_output; }
+;;
 no)  unset packagedir ;;
 *)   packagedir="$withval" ;;
 esac
@@ -1754,7 +1776,22 @@ echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6
 if test "${am_cv_lispdir+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-        am_cv_lispdir=`$EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) "\n")) (setq load-path (cdr load-path)))' | sed -n -e 's,/$,,' -e '/site-lisp$/ { p; q; }'`
+        { ac_temp=./conftemp.$$
+ac_output=confout.$$
+rm -f $ac_temp $ac_output
+cat >$ac_temp <<\_ACEOF
+(defvar result nil)
+(while load-path
+  (if (string-match "\\`\\(.+/site-lisp\\)/?\\'" (car load-path))
+      (setq result (match-string 1 (car load-path))
+            load-path nil)
+    (setq load-path (cdr load-path))))
+(princ (or result (expand-file-name "../site-lisp" data-directory)))
+(princ "\n") ; make sure the output has trailing newline.
+_ACEOF
+$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+am_cv_lispdir=`cat $ac_output`
+rm -f $ac_temp $ac_output; }
       if test -z "$am_cv_lispdir"; then
 	am_cv_lispdir='${datadir}/emacs/site-lisp'
       fi
@@ -1786,7 +1823,16 @@ echo $ECHO_N "checking where icon files should go... $ECHO_C" >&6
 if test "${cv_icondir+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-      cv_icondir=`$EMACS -batch -q -eval '(princ (expand-file-name "navi2ch/icons" data-directory))' | sed -e '/^$/d'`
+      { ac_temp=./conftemp.$$
+ac_output=confout.$$
+rm -f $ac_temp $ac_output
+cat >$ac_temp <<\_ACEOF
+(princ (expand-file-name "navi2ch/icons" data-directory))
+(princ "\n") ; make sure the output has trailing newline.
+_ACEOF
+$EMACS -batch -q -l $ac_temp | sed -e '/^ *$/d' > $ac_output
+cv_icondir=`cat $ac_output`
+rm -f $ac_temp $ac_output; }
     if test -z "$cv_icondir"; then
       cv_icondir='${datadir}/pixmaps/navi2ch'
     fi
