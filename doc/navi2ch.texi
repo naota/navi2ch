@@ -1877,15 +1877,17 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 
 @lisp
 (setq navi2ch-list-moved-board-alist
-      (("http://pc.2ch.net/unix/" . "http://pc3.2ch.net/unix/")
-       ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
+      '(("http://pc.2ch.net/unix/" . "http://pc3.2ch.net/unix/")
+        ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
 @end lisp
+
+などとして、List モードで @kbd{C-u s}。
 
 キーの部分は板 URL と完全マッチなので、@file{~/.navi2ch/board.txt} を
 見てそれと同じように書いてね。
 
-Navi2ch 1.7.2 以前 (navi2ch-list.el:1.66 より前) を使ってる場合、
-この方法は使えないので次の質問を参照。
+Navi2ch 1.7.3 より古いバージョンを使ってる場合、この方法は使えないので
+次の質問を参照。
 
 @item Q.
 同じ 2ch タイプの他の掲示板も Navi2ch で読みたいんだけど。
@@ -1959,7 +1961,7 @@ Boards File}.
 @end lisp
 
 板のデフォルトの「名無しさん」を使いたいときは空文字列 @code{""} を設定する。
-(navi2ch-vars.el:1.118 以降ではデフォルトで空文字列)
+(Navi2ch 1.7 以降ではデフォルトで空文字列)
 これだと板によって書き込めなかったり名前が fusianasan になったりするので注意。
 
 @item Q.
@@ -2075,7 +2077,7 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 @lisp
 (setq navi2ch-article-get-url-text nil)
 @end lisp
-すれば軽くなるかも。(navi2ch-article.el:1.126 以降)
+すれば軽くなるかも。(Navi2ch 1.6 以降)
 
 @item Q.
 bookmark モードで sort しても、次にブックマークを開くと元の並び順に戻っ

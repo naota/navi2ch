@@ -1,3 +1,10 @@
+2004-05-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Board Questions): typo 修正。
+	設定後に C-u s が必要なことを明記。
+	(Board Questions, How to Write, Misc Questions): ファイルの
+	リビジョンではなく、Navi2ch のバージョンを記載。
+
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Message Mode AA List): 最新版に同期。
