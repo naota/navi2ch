@@ -1,6 +1,10 @@
 2003-10-20  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-spamfilter.el: spamfilter.el 最新版に同期。
+	* navi2ch-spamfilter.el (toplevel): navi2ch-exit-hook ではなく、
+	navi2ch-save-status-hook でコーパスを保存するように。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/136
+
+	* navi2ch-spamfilter.el: spamfilter.el 0.11 に対応。
 	http://pc.2ch.net/test/read.cgi/unix/1065246418/130
 
 2003-10-13  Nanashi San  <nanashi@users.sourceforge.net>
