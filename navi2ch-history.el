@@ -155,19 +155,20 @@ key は (concat uri artid)。
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-history-mode-hook))
 
 (defun navi2ch-history-save-info ()
-  (navi2ch-save-info navi2ch-history-file
-		     (mapcar
-		      (lambda (x)
-			(let ((board (nth 1 x))
-			      (article (nth 2 x)))
-			  (list (list 
-				 (assq 'name board)
-				 (assq 'uri board)
-				 (assq 'id board))
-				(list
-				 (assq 'subject article)
-				 (assq 'artid article)))))
-		      navi2ch-history-alist)))
+  (let ((info (mapcar
+	       (lambda (x)
+		 (let ((board (nth 1 x))
+		       (article (nth 2 x)))
+		   (list (list 
+			  (assq 'name board)
+			  (assq 'uri board)
+			  (assq 'id board))
+			 (list
+			  (assq 'subject article)
+			  (assq 'artid article)))))
+	       navi2ch-history-alist)))
+    (if info
+	(navi2ch-save-info navi2ch-history-file info t))))
 
 (defun navi2ch-history-load-info ()
   (setq navi2ch-history-alist

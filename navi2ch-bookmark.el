@@ -348,27 +348,27 @@ KEY は (concat URI ARTID) ")
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-bookmark-mode-hook))
 
 (defun navi2ch-bookmark-save-info ()
-  (navi2ch-save-info
-   navi2ch-bookmark-file
-   (mapcar (lambda (y)
-	     (append
-	      (list (car y) (cadr y))
-	      (mapcar
-	       (lambda (x)
-		 (let ((board (cdr (assq 'board (cdr x))))
-		       (article (cdr (assq 'article (cdr x)))))
-		   (cons (car x)
-			 (list (cons 'board
-				     (list 
-				      (assq 'name board)
-				      (assq 'uri board)
-				      (assq 'id board)))
-			       (cons 'article
-				     (list
-				      (assq 'subject article)
-				      (assq 'artid article)))))))
-	       (cddr y))))
-	   navi2ch-bookmark-list)))
+  (let ((info (mapcar (lambda (y)
+			(append
+			 (list (car y) (cadr y))
+			 (mapcar
+			  (lambda (x)
+			    (let ((board (cdr (assq 'board (cdr x))))
+				  (article (cdr (assq 'article (cdr x)))))
+			      (cons (car x)
+				    (list (cons 'board
+						(list 
+						 (assq 'name board)
+						 (assq 'uri board)
+						 (assq 'id board)))
+					  (cons 'article
+						(list
+						 (assq 'subject article)
+						 (assq 'artid article)))))))
+			  (cddr y))))
+		      navi2ch-bookmark-list)))
+    (if info
+	(navi2ch-save-info navi2ch-bookmark-file info t))))
 
 (defun navi2ch-bookmark-load-info ()
   (setq navi2ch-bookmark-list

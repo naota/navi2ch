@@ -238,19 +238,61 @@ SUSPEND が non-nil なら buffer を消さない"
     (select-window (get-buffer-window buf))
     (set-window-start (selected-window) start)))
 
-(defun navi2ch-save-info (file info)
-  (setq info (navi2ch-strip-properties info))
+(defun navi2ch-make-backup-file-name (file)
+  "FILE で指定されるファイルからバックアップファイルの名前を返す。"
+  ;; とりあえずは、OS ごとのバックアップ名の違いは Emacs にまかせる。
+  ;; 後々変えたくなった時に変更し忘れるのを防ぐため。
+  (make-backup-file-name file))
+
+;; make-temp-file の方が安全だけど、存在しない環境では make-temp-name を使う。
+(defun navi2ch-make-temp-file (file)
+  "テンポラリファイルを作る。"
+  (funcall (if (fboundp 'make-temp-file)
+	       'make-temp-file
+	     'make-temp-name) file))
+
+(defun navi2ch-save-info (file info &optional backup)
+  "lisp-object INFO を FILE に保存する。
+BACKUP が non-nil の場合は元のファイルをバックアップする。"
+  (setq info (navi2ch-strip-properties info)
+	file (expand-file-name file))	; 絶対パスにしておく
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
   (when (or (file-regular-p file)
 	    (not (file-exists-p file)))
-    (let ((coding-system-for-write navi2ch-coding-system))
-      (with-temp-file file
-	(let ((standard-output (current-buffer)))
-	  (prin1 info))))))
+    (let ((coding-system-for-write navi2ch-coding-system)
+	  (backup-file (navi2ch-make-backup-file-name file))
+	  temp-file)
+      (unwind-protect
+	  (progn
+	    ;; ファイルが確実に消えるよう、下の setq は上の let に移動
+	    ;; してはダメ
+	    (setq temp-file (navi2ch-make-temp-file
+			     (file-name-directory file)))
+	    (with-temp-file temp-file
+	      (let ((standard-output (current-buffer)))
+		(prin1 info)))
+	    (if (and backup (file-exists-p file))
+		(rename-file file backup-file t))
+	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info 
+	    ;; がバックアップファイルから読んでくれる。
+	    (rename-file temp-file file t))
+	(if (and temp-file (file-exists-p temp-file))
+	    (delete-file temp-file))))))
 
 (defun navi2ch-load-info (file)
+  "FILE から lisp-object を読み込み、それを返す。"
+  (setq file (expand-file-name file))	; 絶対パスにしておく
+  (let ((backup-file (navi2ch-make-backup-file-name file)))
+    (when (and (file-exists-p backup-file)
+	       (file-regular-p backup-file)
+	       (or (not (file-exists-p file))
+		   (not (file-regular-p file))
+		   (file-newer-than-file-p backup-file file))
+	       (yes-or-no-p
+		"問題発生。バックアップファイルから読み込みますか? "))
+      (setq file backup-file)))
   (when (file-regular-p file)
     (let ((coding-system-for-read navi2ch-coding-system))
       (with-temp-buffer

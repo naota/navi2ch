@@ -575,7 +575,8 @@ changed-list は '((board-id old-board new-board) ...) な alist。
      (navi2ch-list-get-file-name "list.info")
      (list (assq 'bookmark navi2ch-list-current-list)
 	   (assq 'category navi2ch-list-current-list)
-	   (assq 'change navi2ch-list-current-list)))))
+	   (assq 'change navi2ch-list-current-list))
+     t)))
 
 (defun navi2ch-list-load-info ()
   (setq navi2ch-list-current-list
