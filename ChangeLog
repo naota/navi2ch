@@ -1,3 +1,9 @@
+2005-01-22  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-get-number-list): 
+	数字部分が8文字以上のレスアンカーで、正しくレス番を指せないバグを修正。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/929
+
 2005-01-22  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	復活記念という事で。

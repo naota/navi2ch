@@ -1548,30 +1548,30 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (length navi2ch-article-message-list))))
 
 (defun navi2ch-article-get-number-list (number-property &optional limit)
-  (if (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" number-property)
-      (let (nums)
-	(dolist (msg navi2ch-article-message-list (nreverse nums))
-	  (when (listp (cdr msg))
-	    (let ((date (cdr (assq 'date (cdr msg))))
-		  (name (cdr (assq 'name (cdr msg)))))
-	      (when (or (and date
-			     (string-match " ID:\\([^ ][^ ][^ ][^ ]+\\)"
-					   ;; ID:??? はスルー
-					   date)
-			     (string-match (regexp-quote
-					    (match-string 1 date))
-					   number-property))
-			(and name
-			     (string-match "◆\\([^ ]+\\)" name)
-			     (string-match (regexp-quote
-					    (match-string 1 name))
-					   number-property)))
-		(if (and (numberp limit)
-			 (>= (car msg) limit)
-			 nums)
-		    (return (car nums))
-		  (push (car msg) nums)))))))
-    (navi2ch-article-str-to-num (japanese-hankaku number-property))))
+  (or (and (string-match "[^ ][^ ][^ ][^ ][^ ][^ ][^ ][^ ]" number-property)
+	   (let (nums)
+	     (dolist (msg navi2ch-article-message-list (nreverse nums))
+	       (when (listp (cdr msg))
+		 (let ((date (cdr (assq 'date (cdr msg))))
+		       (name (cdr (assq 'name (cdr msg)))))
+		   (when (or (and date
+				  (string-match " ID:\\([^ ][^ ][^ ][^ ]+\\)"
+						;; ID:??? はスルー
+						date)
+				  (string-match (regexp-quote
+						 (match-string 1 date))
+						number-property))
+			     (and name
+				  (string-match "◆\\([^ ]+\\)" name)
+				  (string-match (regexp-quote
+						 (match-string 1 name))
+						number-property)))
+		     (if (and (numberp limit)
+			      (>= (car msg) limit)
+			      nums)
+			 (return (car nums))
+		       (push (car msg) nums))))))))
+      (navi2ch-article-str-to-num (japanese-hankaku number-property))))
 
 (defun navi2ch-article-select-current-link (&optional browse-p)
   (interactive "P")
