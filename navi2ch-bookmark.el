@@ -385,8 +385,7 @@ KEY は (concat URI ARTID) ")
 						 (assq 'artid article)))))))
 			  (cddr y))))
 		      navi2ch-bookmark-list)))
-    (if info
-	(navi2ch-save-info navi2ch-bookmark-file info t))))
+    (navi2ch-save-info navi2ch-bookmark-file info t)))
 
 (defun navi2ch-bookmark-load-info ()
   (setq navi2ch-bookmark-list

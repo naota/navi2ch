@@ -1,3 +1,12 @@
+2003-04-06  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-save-info):
+	navi2ch-bm-fetched-article-list が空のときも保存。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-save-info): ブックマークが
+	空のときも保存。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/347
+
 2003-04-01  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): 削除の結

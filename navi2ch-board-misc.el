@@ -834,11 +834,9 @@ ARG が non-nil なら移動方向を逆にする。"
 
 ;;; save and load info
 (defun navi2ch-bm-save-info ()
-  (if navi2ch-bm-fetched-article-list
-      (navi2ch-save-info
-       navi2ch-bm-fetched-info-file
-       navi2ch-bm-fetched-article-list
-       t)))
+  (navi2ch-save-info navi2ch-bm-fetched-info-file
+		     navi2ch-bm-fetched-article-list
+		     t))
 
 (defun navi2ch-bm-load-info ()
   (setq navi2ch-bm-fetched-article-list
