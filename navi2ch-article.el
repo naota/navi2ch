@@ -194,24 +194,20 @@ LEN は RANGE で範囲を指定される list の長さ"
 (defmacro navi2ch-article-summary-element-set-access-time (element time)
   `(setq element (plist-put ,element :access-time ,time)))
 
-(defun navi2ch-article-parse-message (str &optional sep)
+(defsubst navi2ch-article-parse-message (str &optional sep)
   (or sep (setq sep navi2ch-article-separator))
   (unless (string= str "")
     (let ((strs (split-string str sep))
 	  (syms '(name mail date data subject))
-	  list)
-      (while syms
-	(setq list (cons
-		    (cons (car syms)
-			  (funcall
-			   (if (eq (car syms) 'data)
-			       'navi2ch-replace-html-tag-with-temp-buffer
-			     'navi2ch-replace-html-tag)
-			   (or (car strs) "")))
-		    list)
-	      strs (cdr strs)
-	      syms (cdr syms)))
-      list)))
+	  s)
+      (mapcar (lambda (sym)
+		(setq s (or (car strs) "")
+		      strs (cdr strs))
+		(cons sym
+		      (if (eq sym 'data)
+			  (navi2ch-replace-html-tag-with-temp-buffer s)
+			(navi2ch-replace-html-tag s))))
+	      syms))))
 
 (defun navi2ch-article-get-separator ()
   (save-excursion
@@ -316,6 +312,7 @@ LEN は RANGE で範囲を指定される list の長さ"
             (setq alist (navi2ch-article-parse-message alist)))
           (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
           (navi2ch-article-insert-message num alist))))
+    (garbage-collect) ; navi2ch-parse-message は大量にゴミを残す
     (message "inserting current messages...done")))
 
 (defun navi2ch-article-default-header-format-function (number name mail date)

@@ -42,13 +42,22 @@
     ("&lt;" . "<")
     ("&quot;" . "\"")
     ("&nbsp;" . " ")
+    ("&amp;" . "&")
+    (" <br> " . "\n")		; 無くても動くけど、あると10%くらい速くなる
     ("＠｀" . ","))
   "置換する html のタグの連想リスト(正規表現は使えない)")
 
+(defvar navi2ch-replace-html-tag-regexp-alist
+  '((" *<br> " . "\n")
+    ("<[^<>]+>" . "")
+    ("&#[0-9]+;" . "〓"))
+  "置換する html のタグの連想リスト(正規表現)
+正規表現が必要ない場合は `navi2ch-replace-html-tag-alist' に入れる")
+
 (defvar navi2ch-replace-html-tag-regexp
-  (regexp-opt (mapcar
-               'car
-               navi2ch-replace-html-tag-alist))
+  (concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
+	  "\\|"
+	  (mapconcat 'car navi2ch-replace-html-tag-regexp-alist "\\|"))
   "置換する html のタグの正規表現
 `navi2ch-replace-html-tag-alist' から生成される")
 
@@ -72,13 +81,14 @@
 
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
-      (let (start)
-        (while (setq start (string-match rep str start))
-          (setq str (replace-match new nil nil str))))
+      (let (start (len (length new)))
+	(while (setq start (string-match rep str start))
+	  (setq str (replace-match new nil nil str))
+	  (setq start (+ start new))))
     (when (string-match rep str)
       (setq str (replace-match new nil nil str))))
   str)
-  
+
 (if (featurep 'xemacs)
     (defmacro navi2ch-define-mouse-key (map num command)
       `(define-key ,map ',(intern (format "button%d" num)) ,command))
@@ -171,40 +181,35 @@
 ;;       (message "Please enter a number.")
 ;;       (sit-for 1))))
 
+(defsubst navi2ch-replace-html-tag-to-string (str)
+  (or (cdr (assoc str navi2ch-replace-html-tag-alist))
+      (save-match-data
+	(let ((alist navi2ch-replace-html-tag-regexp-alist)
+	      elt value)
+	  (while alist
+	    (setq elt (car alist)
+		  alist (cdr alist))
+	    (when (string-match (car elt) str)
+	      (setq value (cdr elt)
+		    alist nil)))
+	  value))))
+
 (defsubst navi2ch-replace-html-tag (str)
   (unless (string= str "")
-    (setq str (navi2ch-replace-string " *<br> " "\n" str t))
-    (setq str (navi2ch-replace-string "<[^<]+>" "" str t))
-    (setq str (navi2ch-replace-string "&amp" "&" str t))
-    (let (start)
-      (while (setq start (string-match
-                          navi2ch-replace-html-tag-regexp
-                          str start))
-        (let ((new (cdr (assoc (match-string 0 str)
-                               navi2ch-replace-html-tag-alist))))
-          (setq str (replace-match new nil nil str)))))
-    (setq str (navi2ch-replace-string "&#[0-9]+;" "〓" str t)))
+    (let (start new)
+      (while (setq start (string-match navi2ch-replace-html-tag-regexp
+				       str start))
+	(setq new (navi2ch-replace-html-tag-to-string (match-string 0 str)))
+	(setq str (replace-match new nil nil str))
+	(setq start (+ start (length new))))))
   str)
 
 (defsubst navi2ch-replace-html-tag-with-temp-buffer (str)
   (with-temp-buffer
     (insert str)
     (goto-char (point-min))
-    (while (re-search-forward " *<br> " nil t)
-      (replace-match "\n"))
-    (goto-char (point-min))
-    (while (re-search-forward "<[^<]+>" nil t)
-      (replace-match ""))
-    (goto-char (point-min))
-    (while (re-search-forward "&amp" nil t)
-      (replace-match "&"))
-    (goto-char (point-min))
     (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
-      (replace-match (cdr (assoc (match-string 0)
-                                 navi2ch-replace-html-tag-alist))))
-    (goto-char (point-min))
-    (while (re-search-forward "&#[0-9]+;" nil t)
-      (replace-match "〓"))
+      (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))
     (buffer-string)))
       
       
