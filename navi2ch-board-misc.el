@@ -749,18 +749,27 @@ ARG が non-nil なら移動方向を逆にする。"
    (list (navi2ch-bm-get-board-internal
 	  (navi2ch-bm-get-property-internal (point))))))
 
+(defun navi2ch-bm-search-current-board-cache ()
+  (interactive)
+  (navi2ch-search-cache-subr
+   (list (navi2ch-bm-get-board-internal
+	  (navi2ch-bm-get-property-internal (point))))))
+
 (defun navi2ch-bm-search ()
   (interactive)
-  (let ((ch (navi2ch-read-char-with-retry "Search for: s)ubject a)rticle: "
-					   nil '(?s ?a)))
-	(ch2 (navi2ch-read-char-with-retry "Search from: b)oard a)ll: "
-					   nil '(?b ?a))))
+  (let ((ch (navi2ch-read-char-with-retry
+	     "Search for: s)ubject a)rticle c)ache: " nil '(?s ?a ?c)))
+	(ch2 (navi2ch-read-char-with-retry
+	      "Search from: b)oard a)ll: " nil '(?b ?a))))
     (cond ((eq ch ?s)
            (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-subject))
                  ((eq ch2 ?a) (navi2ch-search-all-subject))))
           ((eq ch ?a)
            (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-article))
-                 ((eq ch2 ?a) (navi2ch-search-all-article)))))))
+                 ((eq ch2 ?a) (navi2ch-search-all-article))))
+	  ((eq ch ?c)
+	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-cache))
+		 ((eq ch2 ?a) (navi2ch-search-all-cache)))))))
   
 ;;; save and load info
 (defun navi2ch-bm-save-info ()

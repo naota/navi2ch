@@ -1,5 +1,23 @@
 2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
 
+	キャッシュが存在するかどうかでスレを検索できるようにしてみました。
+	出て来るスレは search のとこで a して regexp に . を入れたのと同じ
+	ですが、ちょっぴり高速です。
+	article-summary に subject 入れちゃおうかなあ。。。
+
+	* navi2ch-search.el (navi2ch-search-load-hook): 新関数。
+	(navi2ch-search-load-hook): 新関数。
+
+	* navi2ch-list.el (navi2ch-list-search-current-category-cache):
+	新関数。
+	(navi2ch-list-search): 検索条件にキャッシュが存在するかどうかを追加。
+
+	* navi2ch-board-misc.el (navi2ch-bm-search-current-board-cache):
+	新関数。
+	(navi2ch-bm-search): 検索条件にキャッシュが存在するかどうかを追加。
+
+2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-mode-map): G に
 	navi2ch-article-goto-board をバインド。
 	(navi2ch-article-goto-board): 新関数。

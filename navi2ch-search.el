@@ -211,5 +211,43 @@
     (navi2ch-list-get-normal-category-list
      navi2ch-list-category-list))))
 
+(defun navi2ch-search-cache-subr (board-list)
+  (let (alist node)
+    (dolist (board board-list)
+      (message "searching cache in %s..." (cdr (assq 'name board)))
+      (let ((default-directory (navi2ch-board-get-file-name board ""))
+	    (subject-alist (mapcar
+			    (lambda (x)
+			      (cons (concat (cdr (assq 'artid x))
+					    ".dat")
+				    x))
+			    (navi2ch-board-get-subject-list
+			     (navi2ch-board-get-file-name board)))))
+        (dolist (file (and (file-directory-p default-directory)
+                           (directory-files default-directory
+					    nil "[0-9]+\\.dat")))
+	  (setq node 
+		(or (cdr (assoc file subject-alist))
+		    (with-temp-buffer
+		      (navi2ch-insert-file-contents file)
+		      (goto-char (point-min))
+		      (let ((subject
+			     (cdr (assq 'subject
+					(navi2ch-article-get-first-message)))))
+			(list (cons 'subject subject)
+			      (cons 'artid
+				    (file-name-sans-extension file)))))))
+	  (setq alist (cons (cons board node) alist)))))
+    (message "searching cache...%s" (if alist "done" "not found"))
+    (setq navi2ch-search-searched-subject-list (nreverse alist))
+    (navi2ch-bm-select-board navi2ch-search-board)))
+
+(defun navi2ch-search-all-cache ()
+  (interactive)
+  (navi2ch-search-cache-subr
+   (navi2ch-list-get-board-name-list
+    (navi2ch-list-get-normal-category-list
+     navi2ch-list-category-list))))
+
 (run-hooks 'navi2ch-search-load-hook)
 ;;; navi2ch-search.el ends here

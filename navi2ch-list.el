@@ -664,10 +664,15 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (navi2ch-search-article-subr
    (navi2ch-list-get-current-category-list)))
 
+(defun navi2ch-list-search-current-category-cache ()
+  (interactive)
+  (navi2ch-search-cache-subr
+   (navi2ch-list-get-current-category-list)))
+
 (defun navi2ch-list-search ()
   (interactive)
-  (let ((ch (navi2ch-read-char-with-retry "Search for: s)ubject a)rticle: "
-					  nil '(?s ?a)))
+  (let ((ch (navi2ch-read-char-with-retry
+	     "Search for: s)ubject a)rticle c)ache: " nil '(?s ?a ?c)))
 	(ch2 (navi2ch-read-char-with-retry
 	      "Search from: b)oard c)ategory a)ll: " nil '(?b ?c ?a))))
     (cond ((eq ch ?s)
@@ -677,7 +682,11 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  ((eq ch ?a)
 	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-article))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-article))
-		 ((eq ch2 ?a) (navi2ch-search-all-article)))))))
+		 ((eq ch2 ?a) (navi2ch-search-all-article))))
+	  ((eq ch ?c)
+	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-cache))
+		 ((eq ch2 ?c) (navi2ch-list-search-current-category-cache))
+		 ((eq ch2 ?a) (navi2ch-search-all-cache)))))))
 
 ;;; expire
 (defun navi2ch-list-expire-current-board (&optional ask)
