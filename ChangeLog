@@ -1,5 +1,9 @@
 2002-07-12  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-board-misc.el (navi2ch-bm-exec-subr):
+	せっかく (sit-for 0) してもイベントが起こると画面更新されなくなる
+	ので、(discard-input) するようにした。
+
 	* navi2ch-message.el (navi2ch-message-insert-backup): erase-buffer
 	する前に read-only を解除。
 	(navi2ch-message-send-message): str を中継せず、直接バッファからコ

@@ -586,7 +586,8 @@ ARG が non-nil なら移動方向を逆にする。"
 		  (navi2ch-bm-unmark)
 		  (apply func args))
 	      (navi2ch-update-failed nil))
-	    (sit-for 0))
+	    (sit-for 0)
+	    (discard-input))
 	(forward-line)))))
 
 (defun navi2ch-bm-display-mark-article ()
