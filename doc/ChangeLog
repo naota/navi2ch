@@ -1,3 +1,8 @@
+2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (Makefile): MAINTAINER_MODE_TRUE でも依存関係をチェッ
+	クするように。
+
 2002-01-19  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch.texi (FAQ): part4 にあった質問をいくつかまとめた。

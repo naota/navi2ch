@@ -36,18 +36,10 @@ bcomp.el: @MAINTAINER_MODE_TRUE@ bcomp.el.in Makefile.am
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
 	sed -e "s/@\(lisp_LISP\)@/$$list/" < bcomp.el.in > $@
 
-# defmacro / defsubst / toplevel dependencies
-# # should be fixed: thre are some defsubst cross references between files.
-# maybe fixed: thanks (not 1) san!
-navi2ch-util.elc: navi2ch-vars.elc
-navi2ch-article.elc: navi2ch-util.elc
-navi2ch-board-misc.elc: navi2ch-article.elc navi2ch-util.elc
-navi2ch-list.elc: navi2ch-util.elc
-navi2ch-popup-article.elc: navi2ch-article.elc
-# board-misc delivered modes
-navi2ch-articles.elc: navi2ch-board-misc.elc
-navi2ch-board.elc: navi2ch-board-misc.elc
-navi2ch-bookmark.elc: navi2ch-board-misc.elc
-navi2ch-history.elc: navi2ch-board-misc.elc
-navi2ch-search.elc: navi2ch-board-misc.elc navi2ch-board.elc
-navi2ch.elc: navi2ch-version.elc
+$(ELCFILES): $(lisp_LISP)
+	$(MAKE) $(AM_MAKEFLAGS) recompile
+
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	CONFIG_HEADERS= CONFIG_LINKS= \
+	CONFIG_FILES=$@ $(SHELL) ./config.status

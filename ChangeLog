@@ -1,5 +1,9 @@
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* Makefile.am ($(ELCFILES)): ソースが変更されていた場合はすべてコ
+	ンパイルしなおすことにした。
+	(Makefile): MAINTAINER_MODE_TRUE でも依存関係をチェックするように。
+
 	* navi2ch.el (navi2ch): 自動更新ファイルを持って来るようにした。
 	navi2ch-offline を init.el を呼ぶ前に参照しているので、
 	navi2ch-offline は .emacs 等で設定しなくてはいけない。
