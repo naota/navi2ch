@@ -104,52 +104,67 @@
          (format "[%s]" (cdr (assq 'name board))))
         (setq i (1+ i))))))
 
-(defun navi2ch-search-board-subject-regexp (board-list regexp)
+(defun navi2ch-search-for-each-board (board-func board-list)
   (let (alist)
     (dolist (board board-list)
-      (message "searching subject in %s..." (cdr (assq 'name board)))
-      (let ((file (navi2ch-board-get-file-name board)))
-        (when (and file (file-exists-p file))
-          (let (rep article)
-            (with-temp-buffer
-              (navi2ch-insert-file-contents file)
-              (navi2ch-replace-html-tag-with-buffer)
-              (goto-char (point-min))
-              (setq rep (navi2ch-board-regexp-test))
-              (while (re-search-forward regexp nil t)
-                (beginning-of-line)
-                (looking-at rep)
-                (setq article (navi2ch-board-get-matched-article))
-                (when (string-match regexp (cdr (assq 'subject article)))
-                  (setq alist (cons (cons board article) alist)))
-                (forward-line)))))))
-    (message "searching subject...%s" (if alist "done" "not found"))
+      (message "searching in %s..." (cdr (assq 'name board)))
+      (setq alist (nconc (funcall board-func board)
+			 alist)))
+    (message "searching...%s" (if alist "done" "not found"))
     (nreverse alist)))
 
+(defun navi2ch-search-for-each-article (article-func board-list)
+  (navi2ch-search-for-each-board
+   (lambda (board)
+     (let ((default-directory (navi2ch-board-get-file-name board ""))
+	   alist)
+       (dolist (file (and (file-directory-p default-directory)
+			  (directory-files default-directory
+					   nil "[0-9]+\\.dat$")))
+	 (let ((result (funcall article-func board file)))
+	   (if result
+	       (push result alist))))
+       alist))
+   board-list))
+
+(defun navi2ch-search-board-subject-regexp (board-list regexp)
+  (navi2ch-search-for-each-board
+   (lambda (board)
+     (let* ((file (navi2ch-board-get-file-name board))
+	    (subject-list (navi2ch-board-get-subject-list file))
+	    alist)
+       (dolist (article subject-list)
+	 (let ((subject (cdr (assq 'subject article))))
+	   (when (string-match regexp subject)
+	     (push (cons board article) alist))))
+       alist))
+   board-list))
+
 (defun navi2ch-search-article-regexp (board-list regexp)
-  (let (alist)
-    (dolist (board board-list)
-      (message "searching article in %s..." (cdr (assq 'name board)))
-      (let ((default-directory (navi2ch-board-get-file-name board "")))
-        (dolist (file (and (file-directory-p default-directory)
-                           (directory-files default-directory
-					    nil "[0-9]+\\.dat$")))
-          (with-temp-buffer
-            (navi2ch-insert-file-contents file)
-            (goto-char (point-min))
-            (when (re-search-forward regexp nil t)
-              (let ((subject
-                     (cdr (assq 'subject
-                                (navi2ch-article-get-first-message)))))
-                (setq alist
-		      (cons
-		       (cons board
-			     (list (cons 'subject subject)
-				   (cons 'artid
-					 (file-name-sans-extension file))))
-		       alist))))))))
-    (message "searching article...%s" (if alist "done" "not found"))
-    (nreverse alist)))
+  (navi2ch-search-for-each-article
+   (lambda (board file)
+     (with-temp-buffer
+       (navi2ch-insert-file-contents file)
+       (goto-char (point-min))
+       (when (re-search-forward regexp nil t)
+	 (let ((subject
+		(cdr (assq 'subject
+			   (navi2ch-article-get-first-message)))))
+	   (list board
+		 (cons 'subject subject)
+		 (cons 'artid
+		       (file-name-sans-extension file)))))))
+   board-list))
+
+(defun navi2ch-search-cache (board-list)
+  (navi2ch-search-for-each-article
+   (lambda (board file)
+     (let ((subject (assq 'subject
+			  (navi2ch-article-get-first-message-from-file
+			   file))))
+       (list board subject
+	     (cons 'artid (file-name-sans-extension file)))))
+   board-list))
 
 (easy-menu-define navi2ch-search-mode-menu
   navi2ch-search-mode-map
@@ -221,30 +236,9 @@
      navi2ch-list-category-list))))
 
 (defun navi2ch-search-cache-subr (board-list)
-  (let (alist node)
-    (dolist (board board-list)
-      (message "searching cache in %s..." (cdr (assq 'name board)))
-      (let ((default-directory (navi2ch-board-get-file-name board ""))
-	    (subject-alist (mapcar
-			    (lambda (x)
-			      (cons (concat (cdr (assq 'artid x))
-					    ".dat")
-				    x))
-			    (navi2ch-board-get-subject-list
-			     (navi2ch-board-get-file-name board)))))
-        (dolist (file (and (file-directory-p default-directory)
-                           (directory-files default-directory
-					    nil "[0-9]+\\.dat$")))
-	  (setq node
-		(or (cdr (assoc file subject-alist))
-		    (let ((subject (assq 'subject
-					 (navi2ch-article-get-first-message-from-file file))))
-		      (list subject
-			    (cons 'artid (file-name-sans-extension file))))))
-	  (setq alist (cons (cons board node) alist)))))
-    (message "searching cache...%s" (if alist "done" "not found"))
-    (setq navi2ch-search-searched-subject-list (nreverse alist))
-    (navi2ch-bm-select-board navi2ch-search-board)))
+  (setq navi2ch-search-searched-subject-list
+	(navi2ch-search-cache board-list))
+  (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-cache ()
   (interactive)

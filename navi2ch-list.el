@@ -254,18 +254,15 @@
 
 (defun navi2ch-list-insert-bookmarks (list)
   (let ((bookmark (cdr (assq 'bookmark navi2ch-list-current-list)))
-	list2)
+	alist)
     (dolist (x (navi2ch-list-get-board-name-list list))
       (let ((node (navi2ch-list-bookmark-node x)))
 	(when (member node bookmark)
 	  ;; リストの後にあるノードを優先
-	  (let ((found (catch 'break
-			 (dolist (y list2)
-			   (if (equal (navi2ch-list-bookmark-node y) node)
-			       (throw 'break y))))))
-	    (if found (setq list2 (delete found list2))))
-	  (setq list2 (cons x list2)))))
-    (navi2ch-list-insert-board-names-subr (nreverse list2))))
+	  (setq alist (delq (assoc node alist) alist))
+	  (push (cons node x) alist))))
+    (navi2ch-list-insert-board-names-subr (mapcar #'cdr
+						  (nreverse alist)))))
 
 (defun navi2ch-list-toggle-open ()
   "カテゴリを開いたり閉じたりする。"

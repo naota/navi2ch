@@ -368,10 +368,12 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-article-get-separator ()
   (save-excursion
-    (beginning-of-line)
-    (if (search-forward "<>" (navi2ch-line-end-position) t 2)
-        " *<> *"
-      " *, *")))
+    (let ((string (buffer-substring (navi2ch-line-beginning-position)
+				    (navi2ch-line-end-position))))
+      (if (or (string-match "<>.*<>.*<>" string)
+	      (not (string-match ",.*,.*," string)))
+	  " *<> *"
+	" *, *"))))
 
 (defsubst navi2ch-article-get-first-message ()
   "current-buffer の article の最初の message を返す。"

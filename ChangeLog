@@ -1,3 +1,20 @@
+2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-insert-bookmarks): 気になったので
+	若干書き直し。
+
+	* navi2ch-article.el (navi2ch-article-get-separator): "," 区切りか
+	どうかの確認も行い、失敗したら "<>" 区切りと見なすように。
+	壊れたスレを開いた時、区切りが "<>" になる確立が上がる。
+
+	* navi2ch-search.el (navi2ch-search-for-each-board): 新関数。
+	(navi2ch-search-for-each-article): 新関数。
+	(navi2ch-search-board-subject-regexp): -for-each-borad() を使用。
+	navi2ch-board-get-subject-list を使うように。
+	(navi2ch-search-article-regexp): -for-each-article() を使用。
+	(navi2ch-search-cache): 新関数。-for-each-article() を使用。
+	(navi2ch-search-cache-subr): 他の -subr 関数に合わせて分割。
+
 2003-10-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-global-view-map): C-x C-s に
