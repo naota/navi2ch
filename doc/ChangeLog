@@ -1,3 +1,7 @@
+2002-07-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): navi2ch-article-get-url-text について追記。
+
 2002-07-10  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (CLEANFILES): navi2ch.info を削除。
