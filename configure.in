@@ -1,5 +1,5 @@
 AC_INIT(navi2ch.el)
-AM_INIT_AUTOMAKE(navi2ch, 1.7.1)
+AM_INIT_AUTOMAKE(navi2ch, 1.7.1-DEV)
 AM_MAINTAINER_MODE
 
 # Emacs set environment variable EMACS as t
