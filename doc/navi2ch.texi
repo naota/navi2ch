@@ -230,6 +230,12 @@ XEmacs を使っていて、ホームディレクトリにインストールしたい場合は以下
 @end group
 @end example
 
+サイトによっては、管理者がインストールした Lisp パッケージによって
+メッセージが表示され、configure がうまく動作しない場合がある。
+
+その際は @option{--with-xemacs="xemacs -no-site-file"} などを加えると
+うまくインストールできるかもしれない。
+
 @node Getting Develop Version
 @section 開発版の入手
 
@@ -802,21 +808,23 @@ GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 
 これですべての板でモナーフォントが使われる。
 
-特定の板でモナーフォントを使いたくないときは、
-さらに以下の例のように @code{navi2ch-mona-disable-board-list} に
-板の ID のリストを入れておく。
-
-@lisp
-(setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
-@end lisp
-
-逆に特定の板でのみモナーフォントを使いたいときは、
-@code{(setq navi2ch-mona-enable t)} に加えて
+特定の板でのみモナーフォントを使いたいときは、上記に加えて
 以下の例のように @code{navi2ch-mona-enable-board-list} に
 板の ID のリストを入れておく。
+@footnote{つまり、以前のバージョンとは異なり、navi2ch-mona-enabe が
+non-nil であっても、指定した板でしかモナーフォントが使われないというこ
+となので注意。}
 
 @lisp
 (setq navi2ch-mona-enable-board-list '("mona" "aastory" "kao"))
+@end lisp
+
+いずれの場合も、特定の板でモナーフォントを使いたくないときは、
+以下の例のように @code{navi2ch-mona-disable-board-list} に
+板の ID のリストを入れておけば、その板ではモナーフォントは使われない。
+
+@lisp
+(setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
 @end lisp
 
 @c @code{navi2ch-mona-enable-board-list} がデフォルト値の @code{nil} のときは、

@@ -1,3 +1,10 @@
+2002-07-20  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Compile): site-start.el でメッセージを表示してると
+	マズーなので、-no-site-file について追加。
+	(How to Use Mona Font): ちょいと順番を変えて脚注を追加してみました。
+	こんなんでどうでしょ。
+
 2002-07-20  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): 「にちゃんねる」→「２ちゃんねる」に変更。
