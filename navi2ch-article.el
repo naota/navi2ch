@@ -633,8 +633,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
         (setq state (navi2ch-article-view-article board article force))
         (switch-to-buffer buf)
         state)
-    (let (ret state)
-      (setq article (navi2ch-article-load-info board article))
+    (let (ret state file)
+      (setq article (navi2ch-article-load-info board article)
+	    file (navi2ch-article-get-file-name board article))
       (unless (and (cdr (assq 'kako article))
 		   (file-exists-p file)
 		   (not (and force ; force が指定されない限りsyncしない
