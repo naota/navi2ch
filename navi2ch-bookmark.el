@@ -51,7 +51,15 @@
    "Bookmark"
    nil))
 
-(defvar navi2ch-bookmark-list nil "bookmark を表すリスト")
+(defvar navi2ch-bookmark-list nil
+  "bookmark を表すリスト
+((bookmark-id bookmark-name
+  (key
+   (board board)
+   (article article))...)
+ ...)
+という形をしている。
+key は (concat uri artid) ")
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-current-bookmark-id nil)
 
@@ -110,9 +118,12 @@
 (defun navi2ch-bookmark-read-id (prompt)
   (completing-read prompt navi2ch-bookmark-list nil nil))
 
+(defun navi2ch-bookmark-get-key (board article)
+  (concat (cdr (assq 'uri board))
+	  (cdr (assq 'artid article))))
+
 (defun navi2ch-bookmark-exist (bookmark-id board article)
-  (assoc (concat (cdr (assq 'uri board))
-		 (cdr (assq 'artid article)))
+  (assoc (navi2ch-bookmark-get-key board article)
 	 (cddr (assoc bookmark-id navi2ch-bookmark-list))))
 
 (defun navi2ch-bookmark-exist-all (board article)
@@ -128,8 +139,9 @@
 			  (navi2ch-list-get-board-name-list
 			   navi2ch-list-category-list)))
       (error "Can't create this id's bookmark!"))
-    (let ((name (navi2ch-read-string (concat "Input bookmark name for [" bookmark-id "]: ")
-			     bookmark-id)))
+    (let ((name (read-string
+		 (concat "Input bookmark name for [" bookmark-id "]: ")
+		 bookmark-id)))
       (push (list bookmark-id name)
 	    navi2ch-bookmark-list)
       (save-excursion
@@ -162,13 +174,11 @@
   "BOARD と ARTICLE で表される スレッドを追加"
   (unless (assoc bookmark-id navi2ch-bookmark-list)
     (navi2ch-bookmark-create-bookmark bookmark-id))
-  (let* ((item (concat (cdr (assq 'uri board))
-		     (cdr (assq 'artid article))))
-	 (bookmark (assoc bookmark-id navi2ch-bookmark-list)))
+  (let ((bookmark (assoc bookmark-id navi2ch-bookmark-list)))
     (setcdr (cdr bookmark)
 	    (navi2ch-put-alist
-	     item (list
-		   (cons 'board board)
+	     (navi2ch-bookmark-get-key board article)
+	     (list (cons 'board board)
 		   (cons 'article article))
 	     (cddr bookmark))))
   (navi2ch-bookmark-save-info)
@@ -354,8 +364,9 @@
 		   (goto-char (point-min))
 		   (setq sep (navi2ch-article-get-separator))
 		   (cdr (assq 'subject (navi2ch-article-parse-message
-					(buffer-substring-no-properties (point)
-							  (progn (end-of-line) (point)))
+					(buffer-substring-no-properties
+					 (point)
+					 (progn (end-of-line) (point)))
 					sep))))))))
 	(when newsubject 
 	  (setq article (navi2ch-put-alist 'subject newsubject article))
@@ -366,6 +377,31 @@
 (defun navi2ch-bookmark-fetch-mark-article ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article))
+
+(defun navi2ch-bookmark-change (changed-list)
+  "変更された板の bookmark を修正する。
+CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
+  (setq navi2ch-bookmark-list
+	(mapcar
+	 (lambda (bookmark)
+	   (append (list (car bookmark)
+			 (cadr bookmark))
+		   (mapcar
+		    (lambda (node)
+		      (let* ((board (cdr (assq 'board node)))
+			     (article (cdr (assq 'article node)))
+			     (changed (assoc (cdr (assq 'id board))
+					     changed-list)))
+			(if changed
+			    (let ((new-board (caddr changed)))
+			      (list
+			       (navi2ch-bookmark-get-key new-board article)
+			       (cons 'board new-board)
+			       (cons 'article article)))
+			  node)))
+		    (cddr bookmark))))
+	 navi2ch-bookmark-list))
+  (navi2ch-bookmark-save-info))
 
 (run-hooks 'navi2ch-bookmark-load-hook)	
 ;;; navi2ch-bookmark.el ends here

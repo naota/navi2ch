@@ -363,14 +363,14 @@
     (save-excursion
       (navi2ch-list-sync nil t))))
 
-(defun navi2ch-list-get-changed-status (category-list old-category-list)
-  "現在の板の一覧 CATEGORY-LIST と以前の板の一覧 OLD-CATEGORY-LIST を
+(defun navi2ch-list-get-changed-status (old-category-list category-list)
+  "以前の板の一覧 OLD-CATEGORY-LIST と現在の板の一覧 CATEGORY-LIST を
 比べて、追加、変更のあった板を 
 '((add . added-list)
   (change . changed-list))
 の alist にして返す。
 added-list は '(board-id ...) な list。
-changed-list は '((board-id . board) ...) な alist。"
+changed-list は '((board-id old-board new-board) ...) な alist。"
   (let ((list (navi2ch-alist-list-to-alist
 	       (navi2ch-list-get-board-name-list category-list)
 	       'id))
@@ -381,26 +381,34 @@ changed-list は '((board-id . board) ...) な alist。"
     (dolist (new list)
       (let ((old (assoc (car new) old-list)))
 	(if old
-	    (unless (string= (cdr (assq 'uri (cdr new)))
-			     (cdr (assq 'uri (cdr old))))
-	      (push new changed-list))
+	    (let ((old-uri (cdr (assq 'uri (cdr old))))
+		  (new-uri (cdr (assq 'uri (cdr new)))))
+	      (unless (string= old-uri new-uri)
+		(push (list (car new) (cdr old) (cdr new))
+		      changed-list)))
 	  (push (car new) added-list))))
     (list (cons 'add added-list)
  	  (cons 'change changed-list))))
 
 (defun navi2ch-list-apply-changed-status (changed-status)
+  "CHANGED-STATUS をもとに板の変更をいろんな所に反映する。"
+  (message "applying board changes...")
+  (let ((added-list (cdr (assq 'add changed-status)))
+	(changed-list (cdr (assq 'change changed-status))))
   (when changed-status
     (setq navi2ch-list-current-list
-	  (navi2ch-put-alist
-	   'change
-	   (append
-	    (mapcar (lambda (id)
-		      (cons id 'add))
-		    (cdr (assq 'add changed-status)))
-	    (mapcar (lambda (pair)
-		      (cons (car pair) 'change))
-		    (cdr (assq 'change changed-status))))
-	   navi2ch-list-current-list))))
+	  (navi2ch-put-alist 'change
+			     (append (mapcar (lambda (id)
+					       (cons id 'add))
+					     added-list)
+				     (mapcar (lambda (pair)
+					       (cons (car pair) 'change))
+					     changed-list))
+			     navi2ch-list-current-list))
+    (navi2ch-change-log-directory changed-list)
+    (navi2ch-bookmark-change changed-list)
+    (navi2ch-history-change changed-list)
+    (message "applying board changes...done"))))
 
 (defun navi2ch-list-get-changed-category (category-list)
   (let ((alist (navi2ch-alist-list-to-alist
@@ -439,8 +447,7 @@ changed-list は '((board-id . board) ...) な alist。"
 	  (when updated
 	    (navi2ch-list-apply-changed-status
 	     (navi2ch-list-get-changed-status
-	      category-list
-	      old-category-list)))
+	      old-category-list category-list)))
 	  (setq navi2ch-list-category-list
 		(append
 		 (delq nil

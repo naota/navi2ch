@@ -1,3 +1,29 @@
+2002-01-29  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-history.el
+	(navi2ch-history-change): 新関数。
+	navi2ch-list-apply-changed-status で呼ばれる。
+
+	* navi2ch-bookmark.el
+	(navi2ch-bookmark-get-key): 新関数。
+	(navi2ch-bookmark-exist): 上の関数を使うように。
+	(navi2ch-bookmark-add-subr): 同上。
+	(navi2ch-bookmark-change): 新関数。
+	navi2ch-list-apply-changed-status で呼ばれる。
+
+	* navi2ch.el
+	(navi2ch-change-log-directory): 新関数。
+	navi2ch-list-apply-changed-status で呼ばれる。
+
+	* navi2ch-list.el
+	(navi2ch-list-get-changed-status): 引数の順番変更。
+	old-category-list を最初の引数にした。
+	changed-list に old-board も追加。
+	(navi2ch-list-sync): 上の変更に対応
+	(navi2ch-list-apply-changed-status): 同上。
+	log-directory, bookmark, history にも変更を反映するように。
+	ここでゴニョゴニョするのはあんましよくない気もするけど。
+
 2002-01-28  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-select-board):

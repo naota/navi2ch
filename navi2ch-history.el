@@ -46,7 +46,11 @@
    "History"
    nil))
 
-(defvar navi2ch-history-alist nil "history を表す連想リスト")
+(defvar navi2ch-history-alist nil
+  "history を表す連想リスト
+'((key board article) ...) という形をしている。
+key は (concat uri artid)。
+")
 (defvar navi2ch-history-buffer-name "*navi2ch history*")
 
 (defvar navi2ch-history-board
@@ -212,6 +216,24 @@
 	    (navi2ch-history-insert-subject 0 (car pair)))
 	  (navi2ch-bm-renumber))
       (message "stack is empty"))))
+
+(defun navi2ch-history-change (changed-list)
+  "変更された板の履歴を修正する。
+CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
+  (setq navi2ch-history-alist
+	(mapcar
+	 (lambda (node)
+	   (let* ((board (cadr node))
+		  (article (caddr node))
+		  (changed (assoc (cdr (assq 'id board)) changed-list)))
+	     (if changed
+		 (let ((new-board (caddr changed)))
+		   (list (navi2ch-history-get-key new-board article)
+			 new-board
+			 article))
+	       node)))
+	 navi2ch-history-alist))
+  (navi2ch-history-save-info))
 
 (run-hooks 'navi2ch-history-load-hook)        
 ;;; navi2ch-history.el ends here
