@@ -783,7 +783,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
             navi2ch-article-current-article article))
     (setq navi2ch-mode-line-identification
           (format "%s (%d/%s) [%s]"
-                  (cdr (assq 'subject article))
+                  (or (cdr (assq 'subject article))
+		      navi2ch-bm-empty-subject)
                   (length navi2ch-article-message-list)
                   (or (cdr (assq 'response article)) "-")
                   (cdr (assq 'name navi2ch-article-current-board)))))

@@ -1,3 +1,8 @@
+2002-10-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-mode-line): スレタイトル
+	が nil のときは navi2ch-bm-empty-subject を使うように。
+
 2002-10-03  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el: (require 'cl) 追加。
