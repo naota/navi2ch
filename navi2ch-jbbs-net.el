@@ -61,8 +61,8 @@
 で使われるコールバック関数"
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
     (replace-match "\\1dat\\2"))
-   (re-search-backward "\\(\n.*\n\\)")
-   (replace-match "\n"))
+  (re-search-backward "\\(\n.*\n\\)")
+  (replace-match "\n"))
 
 (defun navi2ch-jbbs-article-update (board article)
   (let ((file (navi2ch-article-get-file-name board article))

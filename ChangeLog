@@ -1,5 +1,13 @@
 2002-10-03  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-jbbs-shitaraba.el: (require 'cl) 追加。
+	(navi2ch-js-article-callback): 透明あぼーんに対応。
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/10
+	(navi2ch-js-subject-callback): インデント調整。
+
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-subject-callback): インデント
+	調整。
+
 	* navi2ch-article.el (navi2ch-article-goto-current-board): 引数追
 	加。navi2ch-article-exit に渡す。
 

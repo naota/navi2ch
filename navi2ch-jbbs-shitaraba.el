@@ -32,6 +32,7 @@
 (defvar navi2ch-jbbs-shitaraba-ident
   "$Id$")
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
 
@@ -63,10 +64,10 @@
 (navi2ch-multibbs-defcallback navi2ch-js-subject-callback (jbbs-shitaraba)
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
-   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-     (replace-match "\\1dat\\2"))
-   (re-search-backward "\\(\n.*\n\\)")
-   (replace-match "\n"))
+  (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
+    (replace-match "\\1dat\\2"))
+  (re-search-backward "\\(\n.*\n\\)")
+  (replace-match "\n"))
 
 (defun navi2ch-js-article-update (board article)
   "BOARD ARTICLEの記事を更新する。"
@@ -178,14 +179,20 @@ START, END, NOFIRST で範囲を指定する"
 
 (navi2ch-multibbs-defcallback navi2ch-js-article-callback (jbbs-shitaraba)
   (let ((beg (point))
-	subject)
+	(max-num 0)
+	subject alist num)
     (setq subject (navi2ch-js-parse-subject))
     (while (navi2ch-js-parse)
-      (insert (prog1 (navi2ch-js-make-article subject)
-		(delete-region beg (point))))
-      (setq subject nil)
-      (setq beg (point)))
-    (delete-region beg (point-max))))
+      (setq num (string-to-number (match-string 1))
+	    max-num (max max-num num)
+	    alist (cons (cons (string-to-number (match-string 1))
+			      (navi2ch-js-make-article subject))
+			alist)
+	    subject nil))
+    (delete-region beg (point-max))
+    (dotimes (i max-num)
+      (insert (or (cdr (assoc (1+ i) alist))
+		  "あぼーん<>あぼーん<>あぼーん<>あぼーん<>\n")))))
 
 (defun navi2ch-js-get-writecgi-url (board)
   "write.cgi の url を返す"
