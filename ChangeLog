@@ -1,3 +1,17 @@
+2004-05-05  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch: 1.7.3 リリース。
+	* configure.in: 1.7.3 にアップデート。
+
+	* navi2ch-util.el (navi2ch-set-mode-line-identification):
+	navi2ch-mode-line-identification を値ではなくシンボルとして
+	mode-line-buffer-identification に設定。
+	http://pc3.2ch.net/test/read.cgi/unix/1075905430/813
+
+	* navi2ch-multibbs.el
+	(navi2ch-multibbs-send-message-retry-comfirm-function): 新変数。
+	(navi2ch-multibbs-send-message): 上記変数を使用。
+
 2004-05-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* NEWS: 更新。

@@ -236,6 +236,8 @@ START, END, NOFIRST で範囲を指定する"
 	      h (- h 0)))
       (cons h l))))
 
+(defvar navi2ch-multibbs-send-message-retry-comfirm-function #'yes-or-no-p)
+
 (defun navi2ch-multibbs-send-message
   (from mail message subject board article)
   (let* ((bbstype      (navi2ch-multibbs-get-bbstype board))
@@ -282,7 +284,9 @@ START, END, NOFIRST で範囲を指定する"
 		     (replace-match "\n"))
 		   (delete-other-windows)
 		   (switch-to-buffer (current-buffer))
-		   (unless (yes-or-no-p "Retry? ")
+		   (unless (funcall (or navi2ch-multibbs-send-message-retry-comfirm-function
+					#'yes-or-no-p)
+				    "Retry? ")
 		     (navi2ch-board-save-spid board nil)
 		     (return nil))))
 	       (sit-for navi2ch-message-retry-wait-time)
