@@ -1,3 +1,10 @@
+2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* configure.in: version を 1.4-DEV に変えた。
+	autoconf / automake のを自動的に実行しないよう、AM_MAINTAINER_MODE
+	を有効にした。./configure --enable-maintainer-mode でこれまでと同
+	じ動作になる。
+
 2002-01-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-version.el.in: 新ファイル。navi2ch-version を設定するファ

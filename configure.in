@@ -1,5 +1,6 @@
 AC_INIT(navi2ch.el)
-AM_INIT_AUTOMAKE(navi2ch, 1.4)
+AM_INIT_AUTOMAKE(navi2ch, 1.4-DEV)
+AM_MAINTAINER_MODE
 
 # Emacs set environment variable EMACS as t
 test "x$EMACS" = xt && EMACS=
