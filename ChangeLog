@@ -1,3 +1,9 @@
+2002-01-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* doc/navi2ch.texi: スレ/レスを隠す方法について記述.
+	プロクシに関する記述に追加.
+	typo の修正.
+
 2002-01-10  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: --with-x?emacs に明示的にパスを指定した場合は
