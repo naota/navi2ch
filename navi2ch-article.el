@@ -249,6 +249,10 @@ START, END, NOFIRST で範囲を指定する"
 
 (defsubst navi2ch-article-cleanup-message ()
   (let (re str)
+    (when navi2ch-article-cleanup-trailing-newline ; レス末尾の空白を取り除く
+      (goto-char (point-min))
+      (when (re-search-forward "\\(<br> *\\)+<>" nil t)
+	(replace-match "<>")))
     (when navi2ch-article-cleanup-white-space-after-old-br
       (goto-char (point-min))
       (while (re-search-forward "<br> *" nil t)

@@ -236,7 +236,7 @@
 	(id (cdr (assq 'id board))))
     (cond ((eq type 'board)
 	   uri)
-	  ((and (eq type 'bookmark) id)
+	  ((and type id)
 	   (cons type id)))))
 	    
 (defun navi2ch-list-insert-bookmarks (list)

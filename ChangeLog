@@ -1,3 +1,17 @@
+2002-01-27  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-bookmark-node): type を bookmark
+	に限る必要はないんじゃ。。。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/710
+
+	* navi2ch-article.el (navi2ch-article-cleanup-message): レス末尾の
+	空行を取り除くことができるようにした。
+	* navi2ch-vars.el (navi2ch-article-cleanup-white-space-after-old-br): 
+	:type を 'boolean に。
+	(navi2ch-article-cleanup-trailing-whitespace): 同上。
+	(navi2ch-article-cleanup-trailing-newline): 新変数。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/705
+	
 2002-01-26  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (toplevel): バッファローカルな変数を
