@@ -1927,7 +1927,7 @@ Navi2ch 1.7.3 より古いバージョンを使ってる場合、この方法は使えないので
 
 @item A.
 変数 @code{navi2ch-list-bbstable-url} の値を板リストの URL に設定しま
-す。@code{nil} に設定すると本家のものを使用します。xref{Customize}.
+す。@code{nil} に設定すると本家のものを使用します。@xref{Customize}.
 
 本家の他、有志がメンテナンスしている板リストが
 AzLucky さんの
