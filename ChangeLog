@@ -1,3 +1,11 @@
+2003-09-10  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-message-user-name-alist): 新変数。
+
+	* navi2ch-message.el (navi2ch-message-insert-header): 上記変数を使
+	うように。
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/354
+
 2003-09-09  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-board): parse 方法

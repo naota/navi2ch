@@ -155,6 +155,8 @@
 	  (or sage
 	      (and navi2ch-message-remember-user-name
 		   (cdr (assq 'mail navi2ch-message-current-article)))
+	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
+			  navi2ch-message-mail-address-alist))
 	      navi2ch-message-mail-address "")
 	  "\n"
 	  (navi2ch-propertize navi2ch-message-header-separator

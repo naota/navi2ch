@@ -1269,6 +1269,17 @@ important	レスをブックマークに登録する
   :type 'string
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-mail-address-alist nil
+  "*板ごとのデフォルトのメールアドレスの alist。
+
+たとえば次のように設定しておくと、
+ニュース速報板では \"someone@example.com\"、UNIX 板では \"sage\" が
+デフォルトのメールアドレスになる。
+  '((\"news\" . \"someone@example.com\")
+    (\"unix\" . \"sage\"))"
+  :type '(repeat (cons (string :tag "板  ") (string :tag "名前")))
+  :group 'navi2ch-message)
+
 (defcustom navi2ch-message-ask-before-write nil
   "*non-nil なら、レスを書き始めるときに確認メッセージを表示する。"
   :type '(choice (const :tag "yes-or-no-p で確認" yes-or-no-p)
