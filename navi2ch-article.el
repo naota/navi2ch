@@ -980,37 +980,49 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 	(navi2ch-article-max-line (cond ((numberp max-line) max-line)
 					(max-line nil)
 					(t navi2ch-article-max-line)))
-	list)
-    (when (and (null (get-buffer buf-name))
-	       navi2ch-article-auto-expunge
-	       (> navi2ch-article-max-buffers 0))
-      (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
-    (if dont-display
-	(set-buffer (get-buffer-create buf-name))
-      (switch-to-buffer (get-buffer-create buf-name)))
-    (if (eq major-mode 'navi2ch-article-mode)
-	(setq list (navi2ch-article-sync force nil))
-      (setq navi2ch-article-current-board board
-            navi2ch-article-current-article article)
-      (when navi2ch-article-auto-range
-        (if (file-exists-p (navi2ch-article-get-file-name board article))
-            (setq navi2ch-article-view-range
-		  navi2ch-article-exist-message-range)
-          (setq navi2ch-article-view-range
-		navi2ch-article-new-message-range)))
-      (when navi2ch-article-auto-activate-message-filter
-	(setq navi2ch-article-message-filter-mode t
-	      navi2ch-article-message-filter-cache
-	      (navi2ch-article-load-message-filter-cache)))
-      (setq list (navi2ch-article-sync force 'first))
-      (navi2ch-article-mode))
-    (when (and number
-	       (not (equal (navi2ch-article-get-current-number) number)))
-      (navi2ch-article-goto-number number t))
-    (navi2ch-history-add navi2ch-article-current-board
-			 navi2ch-article-current-article)
-    (navi2ch-bm-update-article navi2ch-article-current-board
+	(window-configuration (current-window-configuration))
+	buffer list)
+    (unwind-protect
+	(progn
+	  (when (and (null (get-buffer buf-name))
+		     navi2ch-article-auto-expunge
+		     (> navi2ch-article-max-buffers 0))
+	    (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
+	  (setq buffer (get-buffer-create buf-name))
+	  (if dont-display
+	      (set-buffer buffer)
+	    (switch-to-buffer buffer))
+	  (if (eq major-mode 'navi2ch-article-mode)
+	      (setq list (navi2ch-article-sync force nil))
+	    (setq navi2ch-article-current-board board
+		  navi2ch-article-current-article article)
+	    (when navi2ch-article-auto-range
+	      (if (file-exists-p (navi2ch-article-get-file-name board article))
+		  (setq navi2ch-article-view-range
+			navi2ch-article-exist-message-range)
+		(setq navi2ch-article-view-range
+		      navi2ch-article-new-message-range)))
+	    (when navi2ch-article-auto-activate-message-filter
+	      (setq navi2ch-article-message-filter-mode t
+		    navi2ch-article-message-filter-cache
+		    (navi2ch-article-load-message-filter-cache)))
+	    (setq list (navi2ch-article-sync force 'first))
+	    (navi2ch-article-mode))
+	  (when (and number
+		     (not (equal (navi2ch-article-get-current-number) number)))
+	    (navi2ch-article-goto-number number t))
+	  (navi2ch-history-add navi2ch-article-current-board
 			       navi2ch-article-current-article)
+	  (navi2ch-bm-update-article navi2ch-article-current-board
+				     navi2ch-article-current-article))
+      (when (and (buffer-live-p buffer)
+		 (or (not (eq (navi2ch-get-major-mode buffer)
+			      'navi2ch-article-mode))
+		     (null (with-current-buffer buffer
+			     navi2ch-article-message-list))))
+	(set-window-configuration window-configuration)
+	(kill-buffer buffer)
+	(setq list nil)))
     list))
 
 (defun navi2ch-article-view-article-from-file (file)

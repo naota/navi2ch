@@ -552,6 +552,9 @@ header に長さが含まれていない場合は nil を返す。"
 	(>= len (or size 0))
       t)))				; ホントにこれでいいかな?
 
+(defconst navi2ch-net-update-file-diff-size 16
+  "差分取得する際にオーバーラップさせる幅。")
+
 (defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE を差分で更新する。
 TIME が `non-nil' ならば TIME より新しい時だけ更新する。
@@ -562,8 +565,14 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
   (let* ((coding-system-for-write 'binary)
 	 (coding-system-for-read 'binary)
 	 ;; ファイルサイズと等しい値を range にするとファイルを全部送っ
-	 ;; てくるので 1- する。
-	 (size (max 0 (1- (nth 7 (file-attributes file)))))
+	 ;; てくるので引いておく。
+	 (size (max 0 (- (nth 7 (file-attributes file))
+			 navi2ch-net-update-file-diff-size)))
+	 (last (and (> size 0)
+		    (with-temp-buffer
+		      (navi2ch-set-buffer-multibyte nil)
+		      (insert-file-contents file nil size)
+		      (buffer-string))))
 	 proc header status aborn-p)
     (setq proc (navi2ch-net-download-file-range url (format "%d-" size) time))
     (setq header (and proc
@@ -581,21 +590,21 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 	       (setq aborn-p t)
 	     (message "%s: getting file diff..." (current-message))
 	     (let ((cont (navi2ch-net-get-content proc)))
-	       (cond ((and (> size 0)
-			   (not (= (aref cont 0) ?\n)))
-		      (setq aborn-p t)) ; \n で始まってない場合はあぼーん
-;;; 		       ((string= cont "\n")
-;;; 			(message "%snot updated" (current-message))
-;;; 			(setq header (cons '("Not-Updated" . "yes")
-;;; 					   header))
-;;; 			(setq ret (list header nil)))
-		       (t
-			(with-temp-file file
-			  (navi2ch-set-buffer-multibyte nil)
-			  (insert-file-contents file nil nil size)
-			  (goto-char (point-max))
-			  (insert cont))
-			(message "%sdone" (current-message)))))))
+	       (cond ((and (> size 0) last
+			   (not (string= (substring cont 0 (length last))
+					 last)))
+		      (setq aborn-p t))	; 前回と一致しない場合はあぼーん
+		     ((string= cont last)
+		      (message "%snot updated" (current-message))
+		      (setq header
+			    (navi2ch-net-add-state 'not-updated header)))
+		     (t
+		      (with-temp-file file
+			(navi2ch-set-buffer-multibyte nil)
+			(insert-file-contents file nil nil size)
+			(goto-char (point-max))
+			(insert cont))
+		      (message "%sdone" (current-message)))))))
 	  ((string= status "200")
 	   (if (not (navi2ch-net-check-aborn size header))
 	       (setq aborn-p t)
