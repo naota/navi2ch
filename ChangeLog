@@ -1,3 +1,11 @@
+2002-06-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch: 1.5.2 リリース。
+	* configure.in: 1.5.2 にアップデート。
+
+	* Makefile.am (elcdist): tar.gz にディレクトリを入れるようにした。
+	(update): 新ターゲット。
+
 2002-06-13    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-exec-subr): 

@@ -444,8 +444,12 @@ recompile: $(lisp_LISP)
 	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP) && \
 	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
 
-elcdist: recompile
-	$(AMTAR) chof - $(ELCFILES) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz
+elcdist: $(ELCFILES)
+	rm -rf $(distdir) && \
+	mkdir $(distdir) && \
+	cp -p $(ELCFILES) $(distdir) && \
+	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz && \
+	rm -rf $(distdir)
 
 bcomp.el: @MAINTAINER_MODE_TRUE@ bcomp.el.in Makefile.am
 	rm -f $@ && \
@@ -459,6 +463,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	CONFIG_HEADERS= CONFIG_LINKS= \
 	CONFIG_FILES=$@ $(SHELL) ./config.status
+
+update:
+	cvs update -P -d
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
