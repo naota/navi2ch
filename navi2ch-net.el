@@ -233,7 +233,7 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 		 (and navi2ch-net-user-agent
 		      (cons "User-Agent" navi2ch-net-user-agent)))
            other-header))))
-    (message "checking if file is updated...")
+    (message "checking file...")
     (let ((status (navi2ch-net-get-status proc)))
       (cond ((string= status "404")
              (message "%snot found" (current-message))

@@ -1,5 +1,9 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-download-file): 
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/362
+	たしかにくどいですね。
+
 	* navi2ch-article.el (navi2ch-article-find-file):
 	enlarge-window を condition-case で囲む。
 	(navi2ch-article-two-pain): 同上。
