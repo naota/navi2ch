@@ -44,6 +44,11 @@ if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
   AC_MSG_ERROR(specify one of --with-xemacs or --with-emacs)
 fi
 
+AC_CHECK_PROGS(EMACS, ${emacsen}, no)
+if test $EMACS = "no"; then
+  AC_MSG_ERROR(cannot find emacs)
+fi
+
 AM_PATH_LISPDIR
 
 AC_OUTPUT([Makefile doc/Makefile])

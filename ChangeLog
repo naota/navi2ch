@@ -1,5 +1,10 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* configure.in: EMACS のチェックを acinclude.m4 から移動。
+
+	* acinclude.m4 (AM_PATH_LISPDIR): EMACS のチェックを configure.in
+	に移動。
+
 	* navi2ch-article.el (navi2ch-article-find-file):
 	split-window-vertically の前に enlarge-window する。
 	(navi2ch-article-two-pain): 同上。
