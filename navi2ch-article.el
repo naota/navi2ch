@@ -325,6 +325,7 @@ START, END, NOFIRST で範囲を指定する"
     (save-excursion
       (save-restriction
 	(narrow-to-region p (point))
+	(navi2ch-article-cleanup-message)
 	(navi2ch-article-set-link-property)
 	(navi2ch-article-put-cite-face)
 	(navi2ch-article-arrange-message))))
@@ -374,6 +375,23 @@ START, END, NOFIRST で範囲を指定する"
     (put-text-property p (setq p (+ p (length date)))
 		       'face 'navi2ch-article-header-contents-face str)
     str))
+
+(defun navi2ch-article-cleanup-message ()
+  (when navi2ch-article-cleanup-white-space-after-old-br
+    (goto-char (point-min))
+    (if (not (re-search-forward "\n[^ ]" nil t))
+	(while (re-search-forward "^ " nil t)
+	  (replace-match ""))))
+  (when navi2ch-article-cleanup-trailing-whitespace
+    (goto-char (point-min))
+    (while (re-search-forward "[ \t]+$" nil t)
+      (replace-match "")))
+  (when navi2ch-article-cleanup-trailing-blankline
+    (goto-char (point-max))
+    (while (looking-at "^[ \t]*$")
+      (forward-line -1))
+    (if (re-search-forward "\n[ \t\n]*" nil t)
+	(replace-match "\n"))))
 
 (defun navi2ch-article-arrange-message ()
   (goto-char (point-min))

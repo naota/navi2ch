@@ -461,6 +461,22 @@ window の幅と同じにしたいなら
   :type 'integer
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-cleanup-white-space-after-old-br t
+  "*`non-nil' の場合、<br> の後にある空白を取り除く。
+ただし、すべての <br> の直後に空白がある場合のみ。"
+  :type 'integer
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-cleanup-trailing-whitespace t
+  "*`non-nil' の場合、各行の末尾の空白を取り除く。"
+  :type 'integer
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-cleanup-trailing-blankline t
+  "*`non-nil' の場合、各レスの末尾の空行を取り除く。"
+  :type 'interger
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (if (featurep 'xemacs)

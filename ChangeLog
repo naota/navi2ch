@@ -1,5 +1,16 @@
 2002-01-18  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-replace-html-tag-alist): 改行として認識
+	するのは "<br>" のみとした。前後の空白は navi2ch-article で掃除。
+
+	* navi2ch-article.el (navi2ch-article-cleanup-message): 新関数。
+	(navi2ch-article-insert-message): 上記関数を使うようにした。
+
+	* navi2ch-vars.el: 上記の変更で使用する変数追加。
+	(navi2ch-article-cleanup-white-space-after-old-br): 新変数。
+	(navi2ch-article-cleanup-trailing-whitespace): 新変数。
+	(navi2ch-article-cleanup-trailing-blankline): 新変数。
+
 	* configure.in: 1.5-DEV にアップデート。
 
 2002-01-18  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
