@@ -1,3 +1,9 @@
+2002-01-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-message-user-name):
+	"名無しさん＠Ｍｅａｄｏｗ" を追加。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/641
+	
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-update-file): 304 の時に

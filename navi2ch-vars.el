@@ -473,9 +473,9 @@ window の幅と同じにしたいなら
 
 ;;; message variables
 (defcustom navi2ch-message-user-name
-  (if (featurep 'xemacs)
-      "名無しさん＠ＸＥｍａｃｓ"
-    "名無しさん＠Ｅｍａｃｓ")
+  (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")
+	((featurep 'meadow) "名無しさん＠Ｍｅａｄｏｗ")
+	(t "名無しさん＠Ｅｍａｃｓ"))
   "*名前"
   :type 'string
   :group 'navi2ch-message)
