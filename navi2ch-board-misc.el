@@ -385,14 +385,16 @@
 
 (defun navi2ch-bm-show-url-subr (board)
   "メニューを表示して、url を得る"
-  (let ((char (navi2ch-read-char-with-retry "b)oard a)rticle: "
-					    nil '(?b ?a))))
+  (let ((char (navi2ch-read-char-with-retry
+	       (format "b)oard a)rticle l)ast%d: "
+		       navi2ch-article-show-url-number)
+	       nil '(?b ?a ?l)))
+	(article (navi2ch-bm-get-article-internal
+		  (navi2ch-bm-get-property-internal (point)))))
     (cond ((eq char ?b) (navi2ch-board-to-url board))
-	  ((eq char ?a)
-	   (navi2ch-article-to-url
-	    board
-	    (navi2ch-bm-get-article-internal
-	     (navi2ch-bm-get-property-internal (point))))))))
+	  ((eq char ?a) (navi2ch-article-to-url board article))
+	  ((eq char ?l) (let ((l (format "l%d" navi2ch-article-show-url-number)))
+			  (navi2ch-article-to-url board article l l))))))
 
 (defun navi2ch-bm-copy-title (board)
   "メニューを表示して、タイトルを得る"
