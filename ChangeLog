@@ -1,3 +1,10 @@
+2003-10-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-change-help-echo-property):
+	レスアンカーが連続している場合のバグを修正 & ちょっと書き直し。
+	例えば「>>1>>2」とあったとき、「>>1」の help-echo に2番のレスの内
+	容がつく場合があった。
+
 2003-10-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	板の subject.txt からもグローバルブックマークからも参照されていな
@@ -32,7 +39,7 @@
 
 	* navi2ch-article.el (navi2ch-article-get-separator): "," 区切りか
 	どうかの確認も行い、失敗したら "<>" 区切りと見なすように。
-	壊れたスレを開いた時、区切りが "<>" になる確立が上がる。
+	壊れたスレを開いた時、区切りが "<>" になる確率が上がる。
 
 	* navi2ch-search.el (navi2ch-search-for-each-board): 新関数。
 	(navi2ch-search-for-each-article): 新関数。
