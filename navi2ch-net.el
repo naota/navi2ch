@@ -506,23 +506,30 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
       (make-directory dir t)))
   ;; ファイルサイズと等しい値を range にするとファイルを全部送ってくる
   ;; ので 1- する。
-  (let* ((size (max 0 (1- (nth 7 (file-attributes file)))))
-         (proc (navi2ch-net-download-file-range url (format "%d-" size) time)))
-    (if proc
-	(let ((coding-system-for-write 'binary)
-	      (coding-system-for-read 'binary)
-	      (status (navi2ch-net-get-status proc))
-	      (header (navi2ch-net-get-header proc))
-	      cont aborn-flag)
-	  (setq aborn-flag (not (navi2ch-net-check-aborn size header)))
-	  (cond (aborn-flag
-		 nil)			; とりあえず何もしない
-		((string= status "206")
-		 (message "%s: getting file diff..." (current-message))
-		 (setq cont (navi2ch-net-get-content proc))
-		 (cond ((and (> size 0)
-			     (not (= (aref cont 0) ?\n)))
-			(setq aborn-flag t)) ; \n で始まってない場合はあぼーん
+  (let* ((coding-system-for-write 'binary)
+	 (coding-system-for-read 'binary)
+	 (size (max 0 (1- (nth 7 (file-attributes file)))))
+	 proc header status aborn-p)
+    (setq proc (navi2ch-net-download-file-range url (format "%d-" size) time))
+    (setq header (and proc
+		      (navi2ch-net-get-header proc)))
+    (setq status (and proc
+		      (navi2ch-net-get-status proc)))
+    (cond ((or (not proc)
+	       (not header)
+	       (not status))
+	   (setq header (navi2ch-net-add-state 'not-updated header))
+	   (setq header (navi2ch-net-add-state 'kako header)))
+	  ((string= status "304")
+	   (setq header (navi2ch-net-add-state 'not-updated header)))
+	  ((string= status "206")
+	   (if (not (navi2ch-net-check-aborn size header))
+	       (setq aborn-p t)
+	     (message "%s: getting file diff..." (current-message))
+	     (let ((cont (navi2ch-net-get-content proc)))
+	       (cond ((and (> size 0)
+			   (not (= (aref cont 0) ?\n)))
+		      (setq aborn-p t)) ; \n で始まってない場合はあぼーん
 ;;; 		       ((string= cont "\n")
 ;;; 			(message "%snot updated" (current-message))
 ;;; 			(setq header (cons '("Not-Updated" . "yes")
@@ -533,31 +540,30 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 			  (insert-file-contents file nil nil size)
 			  (goto-char (point-max))
 			  (insert cont))
-			(message "%sdone" (current-message)))))
-		((string= status "200")
-		 (if (not (navi2ch-net-check-aborn size header))
-		     (setq aborn-flag t)
-		   (message "%s: getting whole file..." (current-message))
-		   (with-temp-file file
-		     (insert (navi2ch-net-get-content proc)))
-		   (message "%sdone" (current-message))))
-		((string= status "304")
-		 (setq header (navi2ch-net-add-state 'not-updated header)))
-		(t
-		 (setq header (navi2ch-net-add-state 'kako header))
-		 (setq header (navi2ch-net-add-state 'not-updated header))))
-	  (if (not aborn-flag)
-	      header
-	    (message "あぼーん!!!")
-	    (when (and navi2ch-net-save-old-file-when-aborn
-		       (or (not (eq navi2ch-net-save-old-file-when-aborn
-				    'ask))
-			   (y-or-n-p "あぼーん!!! backup old file? ")))
-	      (copy-file file (read-file-name "file name: ")))
-	    (navi2ch-net-add-state
-	     'aborn
-	     (navi2ch-net-update-file url file nil nil))))
-      nil)))
+			(message "%sdone" (current-message)))))))
+	  ((string= status "200")
+	   (if (not (navi2ch-net-check-aborn size header))
+	       (setq aborn-p t)
+	     (message "%s: getting whole file..." (current-message))
+	     (with-temp-file file
+	       (insert (navi2ch-net-get-content proc)))
+	     (message "%sdone" (current-message))))
+	  ((string= status "304")
+	   (setq header (navi2ch-net-add-state 'not-updated header)))
+	  (t
+	   (setq header (navi2ch-net-add-state 'kako header))
+	   (setq header (navi2ch-net-add-state 'not-updated header))))
+    (if (not aborn-p)
+	header
+      (message "あぼーん!!!")
+      (when (and navi2ch-net-save-old-file-when-aborn
+		 (or (not (eq navi2ch-net-save-old-file-when-aborn
+			      'ask))
+		     (y-or-n-p "あぼーん!!! backup old file? ")))
+	(copy-file file (read-file-name "file name: ")))
+      (navi2ch-net-add-state
+       'aborn
+       (navi2ch-net-update-file url file nil nil)))))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
   "FILE を URL から read.cgi を使って更新する。
@@ -565,62 +571,74 @@ TIME が non-nil ならば TIME より新しい時だけ更新する。
 DIFF が non-nil ならば差分を取得する。
 更新できれば HEADER を返す。"
   (let ((dir (file-name-directory file))
-	proc header cont)
+	proc header status)
     (unless (file-exists-p dir)
       (make-directory dir t))
     (setq proc (navi2ch-net-download-file url time))
-    (when (and proc
-	       (string= (navi2ch-net-get-status proc) "304"))
-      (setq proc nil))
-    (when proc
-      (let ((coding-system-for-write 'binary)
-	    (coding-system-for-read 'binary))
-	(message (if diff
-		     "%s: getting file diff with read.cgi..."
-		   "%s: getting new file with read.cgi...")
-		 (current-message))
-	(setq header (navi2ch-net-get-header proc))
-	(setq cont (navi2ch-net-get-content proc))
-	(if (or (not cont)
-		(string= cont ""))
-	    (progn (message "%sfailed" (current-message))
-		   (signal 'navi2ch-update-failed nil))
-	  (message "%sdone" (current-message))
-	  (let (state data cont-size)
-	    (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
-	      (setq state (match-string 1 cont))
-	      (setq data (match-string 2 cont))
-	      (setq cont (replace-match "" t nil cont)))
-	    (when (and (string-match "\\(OK\\|INCR\\)" state)
-		       (string-match "\\(.+\\)/\\(.+\\)K" data))
-	      (setq cont-size (string-to-number (match-string 1 data))))
-	    (setq cont (navi2ch-string-as-unibyte cont))
-	    (cond
-	     ((string= "+OK" state)
-	      (with-temp-file file
-		(navi2ch-set-buffer-multibyte nil)
-		(when (and (file-exists-p file) diff)
-		  (insert-file-contents file)
-		  (goto-char (point-max)))
-		(insert (substring cont 0 cont-size)))
-	      header)
-	     ((string= "-INCR" state);; あぼーん
-	      (with-temp-file file
-		(navi2ch-set-buffer-multibyte nil)
-		(insert (substring cont 0 cont-size))
-		(navi2ch-net-add-state 'aborn header)))
-	     ((string= "-ERR" state)
-	      (let ((err-msg (decode-coding-string
-			      data navi2ch-coding-system)))
-		(message "error! %s" err-msg)
-		(cond ((string-match "過去ログ倉庫で発見" err-msg)
-		       (navi2ch-net-add-state 'kako header))
+    (setq header (and proc
+		      (navi2ch-net-get-header proc)))
+    (setq status (and proc
+		      (navi2ch-net-get-status proc)))
+    (cond ((or (not proc)
+	       (not header)
+	       (not status))
+	   (setq header (navi2ch-net-add-state 'not-updated header))
+	   (setq header (navi2ch-net-add-state 'kako header)))
+	  ((string= status "304")
+	   (setq header (navi2ch-net-add-state 'not-updated header)))
+	  (t
+	   (let ((coding-system-for-write 'binary)
+		 (coding-system-for-read 'binary)
+		 cont)
+	     (message (if diff
+			  "%s: getting file diff with read.cgi..."
+			"%s: getting new file with read.cgi...")
+		      (current-message))
+	     (setq cont (navi2ch-net-get-content proc))
+	     (if (or (not cont)
+		     (string= cont ""))
+		 (progn (message "%sfailed" (current-message))
+			(signal 'navi2ch-update-failed nil))
+	       (message "%sdone" (current-message))
+	       (let (state data cont-size)
+		 (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
+		   (setq state (match-string 1 cont))
+		   (setq data (match-string 2 cont))
+		   (setq cont (replace-match "" t nil cont)))
+		 (when (and (string-match "\\(OK\\|INCR\\)" state)
+			    (string-match "\\(.+\\)/\\(.+\\)K" data))
+		   (setq cont-size (string-to-number (match-string 1 data))))
+		 (setq cont (navi2ch-string-as-unibyte cont))
+		 (cond
+		  ((string= "+OK" state)
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (when (and (file-exists-p file) diff)
+		       (insert-file-contents file)
+		       (goto-char (point-max)))
+		     (insert (substring cont 0 cont-size))))
+		  ((string= "-INCR" state);; あぼーん
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (insert (substring cont 0 cont-size)))
+		   (setq header (navi2ch-net-add-state 'aborn header)))
+		  ((string= "-ERR" state)
+		   (let ((err-msg (decode-coding-string
+				   data navi2ch-coding-system)))
+		     (message "error! %s" err-msg)
+		     (cond
+		      ((string-match "過去ログ倉庫で発見" err-msg)
+		       (setq header (navi2ch-net-add-state 'kako header)))
 ;;; 		      ((and (string-match "html化待ち" err-msg)
 ;;; 			    (string-match "/read\\.cgi/" url))
 ;;; 		       (setq url (replace-match "/offlaw.cgi/" t nil url))
 ;;; 		       (navi2ch-net-update-file-with-readcgi
 ;;; 			url file time diff))
-		      ))))))))))
+		      (t
+		       (setq header
+			     (navi2ch-net-add-state 'not-updated header))))
+		     ))))))))
+    header))
 
 ;; from Emacs/W3
 (defconst navi2ch-net-url-unreserved-chars

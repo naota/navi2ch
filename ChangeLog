@@ -1,3 +1,10 @@
+2002-10-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-net.el (navi2ch-net-update-file-diff): aborn とか
+	not-updated のとこを調整。作りを navi2ch-net-update-file に合わせ
+	てみた。
+	(navi2ch-net-update-file-with-readcgi): 同上。
+
 2002-10-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-net.el (navi2ch-net-state-header-alist): コメント書いた。
