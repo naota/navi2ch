@@ -1,3 +1,11 @@
+2002-01-10  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am: 依存関係追加。
+	* acinclude.m4 config.guess config.sub: 新ファイル。
+	* configure.in: lispdir のデフォルトを site-lisp/navi2ch に。
+	--with-bash: 新オプション。Cygwin の時 bash でないとうまく make で
+	きないらしいので、Cygwin の時は自動的に有効に。
+
 2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-net.el 
