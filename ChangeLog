@@ -1,3 +1,9 @@
+2002-08-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-content): サーバが HTTP/1.1 を返
+	してきて、かつ Connection: close の時の動作が変だった。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/717,719
+
 2002-08-02  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-article): &START=
