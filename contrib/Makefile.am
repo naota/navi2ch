@@ -1,4 +1,4 @@
-EXTRA_DIST = navi2ch-logo.el
+EXTRA_DIST = navi2ch-logo.el gikope.el
 
 all:
 
