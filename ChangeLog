@@ -1,3 +1,9 @@
+2003-10-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-global-view-map): C-x C-s に
+	navi2ch-save-status をバインド。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/75
+
 2003-10-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-next-message-hook)
