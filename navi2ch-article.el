@@ -1007,9 +1007,16 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'number))
            (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
-           (if (numberp prop)
-               (navi2ch-article-goto-number prop t t)
-             (navi2ch-popup-article prop)))
+	   (if browse-p
+               (navi2ch-browse-url-internal 
+		(navi2ch-article-to-url navi2ch-article-current-board
+					navi2ch-article-current-article
+					(if (numberp prop) prop (apply 'min prop))
+					(if (numberp prop) prop (apply 'max prop))
+					t))
+	     (if (numberp prop)
+		 (navi2ch-article-goto-number prop t t)
+	       (navi2ch-popup-article prop))))
           ((setq prop (get-text-property (point) 'url))
            (let ((2ch-url-p (navi2ch-2ch-url-p prop)))
              (if (and 2ch-url-p
