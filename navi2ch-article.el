@@ -219,7 +219,7 @@ LEN は RANGE で範囲を指定される list の長さ"
 	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
            (setq list (list (cons 'artid (match-string 1 url))))
            (when (string-match
-		  "http://.+/test/read\\.cgi/.+/[ni.]?\\([0-9]+\\)[^/]*$" url)
+		  "http://.+/test/read\\.cgi/[^/]+/[^/]+/[ni.]?\\([0-9]+\\)[^/]*$" url)
              (setq list (cons (cons 'number
                                     (string-to-number (match-string 1 url)))
                               list))))

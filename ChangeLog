@@ -1,5 +1,9 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-url-to-article):
+	http://pc.2ch.net/test/read.cgi/unix/1023884490 のような形式の URL
+	を変換すると '(number . 1023884490.0) となってしまっていたのを修正。
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
 	navi2ch-board-misc.el と同様。
 	(navi2ch-bookmark-fetch-mark-article): 同上。
