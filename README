@@ -1,170 +1,33 @@
-ƒCƒ“ƒXƒg[ƒ‹::
- %./configure; make
- #make install
- ‚¨I‚¢EEE‚¾‚¯‚¶‚á‚ ‚ê‚È‚ñ‚Åˆê‰d—v‚È configure ‚ÌƒIƒvƒVƒ‡ƒ“‚ğB
+Copyright (C) 2000-2002 Navi2ch Project
 
- --with-emacs           Emacs ‚Ìí—Ş‚ğw’è
- --with-xemacs          XEmacs ‚Ìí—Ş‚ğw’è
- --with-lispdir         navi2ch ‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ğw’èB
+Navi2ch $B$O!"(BGNU Emacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B$GF0:n$9$k!"#2$A$c(B
+$B$s$M$k%J%S%2!<%?$G$9!#(B
 
- —á‚¦‚Î Meadow ‚¾‚Á‚½‚ç(‰´‚Ìê‡)
+$B%$%s%9%H!<%kJ}K!!";H$$J}$K$D$$$F$O%^%K%e%"%k$r$*FI$_$/$@$5$$!#(B
 
- ./configure --with-emacs=meadow95.exe
-             --with-lispdir=/app/meadow/site-lisp/navi2ch
+$B%^%K%e%"%k$rFI$`$K$O(B Emacs $B$+$i(B C-u M-x info RET doc/navi2ch.info $B$H$9(B
+$B$k$+!"%&%'%V%V%V%i%&%6$+$i(B http://navi2ch.sourceforge.net/ $B$r3+$$$F$/(B
+$B$@$5$$!#(B
 
- ‚Á‚Ä‚È‚éB
- 
-g‚¢•û::
- .emacs ‚É (require 'navi2ch) ‚Æ‘‚­B
- XEmacs ‚Å mona font ‚ğg‚¢‚½‚¢ê‡‚ÍˆÈ‰º‚Ì‚æ‚¤‚É .emacs ‚É‘‚­
+$B%&%'%V%5%$%H(B::
+ Navi2ch Project Home Page <http://navi2ch.sourceforge.net/>
+ UNIX$B!w(B2ch$B7G<(HD(B <http://pc.2ch.net/unix/>
 
-  (require 'navi2ch-mona)
-  (add-hook 'navi2ch-article-arrange-message-hook
-            'navi2ch-mona-arrange-message)
+$B%U%!%$%k9=@.(B::
+ $B%H%C%W%G%#%l%/%H%j(B:
+  elisp $B%U%!%$%k!"$$$/$D$+$N%I%-%e%a%s%H$,F~$C$F$$$^$9!#(B
+ contrib:
+  Navi2ch $B$H$$$C$7$g$K;H$&$HJXMx$J%U%!%$%k$,F~$C$F$$$^$9!#(B
+  $B$"$^$jG.?4$K%a%s%F%J%s%9$5$l$F$J$$$N$GCm0U!#(B
+ doc:
+  $B%^%K%e%"%k$,F~$C$F$$$^$9!#(B
+ icons:
+  $B%$%a!<%8%U%!%$%k$,F~$C$F$$$^$9!#(B
 
-  (setq navi2ch-mona-enable-board-list '("mona"))
+$BCm0U(B::
+ Windows $B$J$I$G$O4D6-JQ?t(B TZ $B$r(B JST-9 $B$H$+$K$7$H$$$?J}$,$$$$$G$9!#(B
+ Emacs 20 $B0J9_!"(BXEmacs 21 $B0J9_$G$J$$$HF0$-$^$;$s!#(B
+ XEmacs $B$G$O(B mail-lib $B%Q%C%1!<%8$+(B flim $B$r%$%s%9%H!<%k$7$F$/$@$5$$!#(B
 
-  M-x navi2ch ‚Å‹N“®B
-
-
-ƒL[ƒoƒCƒ“ƒh(467 ‚³‚ñƒTƒ“ƒNƒXI)::
-article mode:
-
-"q" navi2ch-article-exit ƒXƒŒ‚ğ•Â‚¶‚é
-"Q" navi2ch-article-goto-current-board ‚»‚ÌƒXƒŒ‚Ì‚ ‚é”Â‚ğ•\¦
-" " navi2ch-article-scroll-up ˆê‰æ–Êã‚ÖƒXƒNƒ[ƒ‹
-"s" navi2ch-article-sync ƒXƒŒ‚ğÄ“Ç‚İ‚İ
-"S" navi2ch-article-sync-disable-diff ƒXƒŒ‚ğ·•ª‚È‚µ‚Å“Ç‚İ‚İ(¡‚Í“®‚©‚È‚¢‚©‚à)
-"r" navi2ch-article-redraw-range ƒŒƒX‚Ì•\¦”‚ğ•ÏX
-[del] navi2ch-article-scroll-down ˆê‰æ–Ê‰º‚ÖƒXƒNƒ[ƒ‹
-[backspace] navi2ch-article-scroll-down ˆê‰æ–Ê‰º‚ÖƒXƒNƒ[ƒ‹
-"\177" navi2ch-article-scroll-down ˆê‰æ–Ê‰º‚ÖƒXƒNƒ[ƒ‹
-"w" navi2ch-article-write-message ƒŒƒX‚ğ‘‚«‚Ş
-"t" navi2ch-toggle-offline ƒIƒtƒ‰ƒCƒ“EƒIƒ“ƒ‰ƒCƒ“‚ÌØ‚è‘Ö‚¦
-"\r" navi2ch-article-select-current-link ƒŠƒ“ƒN‚ğ•\¦
-[mouse-2] navi2ch-article-mouse-select ƒŠƒ“ƒN‚ğƒ}ƒEƒX‚Å‘I‘ğ
-"g" navi2ch-article-goto-number w’è‚µ‚½”Ô†‚ÌƒŒƒX‚ÉƒWƒƒƒ“ƒv
-"l" navi2ch-article-pop-point ‹L‰¯‚³‚ê‚½ƒJ[ƒ\ƒ‹ˆÊ’u‚ÉƒWƒƒƒ“ƒv
-"L" navi2ch-article-pop-poped-point ‹L‰¯‚µ‚½ƒJ[ƒ\ƒ‹ˆÊ’u‚É‹t•ûŒü‚ÉƒWƒƒƒ“ƒv
-"m" navi2ch-article-push-point Œ»İ‚ÌƒJ[ƒ\ƒ‹ˆÊ’u‚ğ‹L‰¯
-"U" navi2ch-article-show-url ƒXƒŒE“Á’è‚ÌƒŒƒXE”Â‚Ì URL ‚ğƒRƒs[A‚ ‚é‚¢‚Íƒuƒ‰ƒEƒU‚Å•\¦
-"." navi2ch-article-redisplay-current-message ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒŒƒX‚ğƒoƒbƒtƒ@‚Ìˆê”Ôã‚ÉˆÚ“®
-"p" navi2ch-article-previous-message ‚Ğ‚Æ‚Â‘O‚ÌƒŒƒX‚ÉˆÚ“®
-"n" navi2ch-article-next-message Ÿ‚ÌƒŒƒX‚ÉˆÚ“®
-"P" navi2ch-article-through-previous ‚Ğ‚Æ‚Âã‚ÌƒXƒŒ‚ÉˆÚ“®
-"N" navi2ch-article-through-next ‚Ğ‚Æ‚Â‰º‚ÌƒXƒŒ‚ÉˆÚ“®
-[(shift tab)] navi2ch-article-previous-link ‚Ğ‚Æ‚Â‘O‚ÌƒŠƒ“ƒN‚ÉˆÚ“®
-"\e\C-i" navi2ch-article-previous-link ‚Ğ‚Æ‚Â‘O‚ÌƒŠƒ“ƒN‚ÉˆÚ“®
-"\C-\i" navi2ch-article-next-link Ÿ‚ÌƒŠƒ“ƒN‚ÉˆÚ“®
-">" navi2ch-article-goto-last-message ÅŒã‚ÌƒŒƒX‚ÉˆÚ“®
-"<" navi2ch-article-goto-first-message Å‰‚ÌƒŒƒX‚ÉˆÚ“®
-"\eu" navi2ch-article-uudecode-message uuencode ‚³‚ê‚½‹L–‚ğ uudecode ‚·‚é
-"v" navi2ch-article-view-aa ƒAƒXƒL[ƒA[ƒg‚ğ•\¦i—v aadisplayj
-"f" navi2ch-article-forward-buffer Ÿ‚Ìƒoƒbƒtƒ@‚ÉˆÚ“®
-"b" navi2ch-article-backward-buffer ‘O‚Ìƒoƒbƒtƒ@‚ÉˆÚ“®
-"d" navi2ch-article-hide-message ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒŒƒX‚ğ‰B‚·Ei"h" ‚Ì‚ ‚Æj‰B‚µ‚½ƒŒƒX‚ğ–ß‚·Ei"$" ‚Ì‚ ‚ÆjƒŒƒX‚ğƒuƒbƒNƒ}[ƒN‚©‚çíœ
-"a" navi2ch-article-add-important-message ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒŒƒX‚ğƒuƒbƒNƒ}[ƒN‚É“o˜^
-"h" navi2ch-article-toggle-hide ‰B‚µ‚½ƒŒƒX‚Ì•\¦‚ÆƒXƒŒ‚Ì•\¦‚ÌØ‚è‘Ö‚¦
-"$" navi2ch-article-toggle-important ƒXƒŒ‚ÌƒuƒbƒNƒ}[ƒN‚ğ•\¦
-"1" navi2ch-one-pain ˆê‰æ–Ê•\¦
-"2" navi2ch-article-two-pain “ñ‰æ–Ê•\¦
-"3" navi2ch-three-pain O‰æ–Ê•\¦
-"A" navi2ch-article-add-global-bookmark ƒXƒŒ‚ğƒuƒbƒNƒ}[ƒN‚É“o˜^
-"\C-c\C-f" navi2ch-article-find-file ƒXƒŒ‚ÌƒƒOƒtƒ@ƒCƒ‹‚ğw’è
-"\C-c\C-m" navi2ch-message-pop-message-buffer ‘‚«‚İ‚Ì‚Æ‚«‘‚«‚İ‰æ–Ê‚É–ß‚é
-"\C-x\C-k" 'navi2ch-article-kill-buffer ‘‚«‚İ‚ğƒLƒƒƒ“ƒZƒ‹
-
-
-board mode:
-
-"s" navi2ch-board-sync ”Â‚ğÄ“Ç‚İ‚İ
-"r" navi2ch-board-select-view-range ƒXƒŒ‚Ì•\¦”‚ğ•ÏX
-"a" navi2ch-board-add-bookmark ”Â‚ÌƒuƒbƒNƒ}[ƒN‚ÉƒXƒŒ‚ğ“o˜^
-"d" navi2ch-board-hide-article ƒXƒŒ‚ğ‰B‚·
-"h" navi2ch-board-toggle-hide ‰B‚µ‚½ƒXƒŒ‚ğ•\¦
-"b" navi2ch-board-toggle-bookmark ƒuƒbƒNƒ}[ƒN‚ğ•\¦
-"U" navi2ch-board-show-url ”Â‚Ü‚½‚ÍƒXƒŒ‚Ì URL ‚ğƒRƒs[A‚Ü‚½‚Í”Â‚ğƒuƒ‰ƒEƒU‚Å•\¦
-"w" navi2ch-board-write-message ƒŒƒX‚ğ‘‚«‚Ş
-"2" navi2ch-board-two-pain “ñ‰æ–Ê•\¦
-"A" navi2ch-board-add-global-bookmark ƒuƒbƒNƒ}[ƒN‚É“o˜^
-"\C-c\C-f" 'navi2ch-article-find-file ƒXƒŒ‚ÌƒƒOƒtƒ@ƒCƒ‹‚ğw’è
-"\r" navi2ch-bm-select-article ƒXƒŒ‚ğ•\¦
-[mouse-2] navi2ch-bm-mouse-select ƒXƒŒ‚ğ•\¦
-" " navi2ch-bm-select-article-or-scroll-up ˆê‰æ–Êã‚ÖƒXƒNƒ[ƒ‹
-"o" navi2ch-bm-display-article ƒXƒŒ‚ğ•\¦iƒJ[ƒ\ƒ‹‚ÍƒXƒŒ‚ÉˆÚ“®‚µ‚È‚¢j
-"i" 'navi2ch-bm-fetch-article ƒXƒŒ‚ğXV
-[del] navi2ch-bm-select-article-or-scroll-down ƒXƒŒ‚ğ•\¦(‚·‚Å‚É•\¦‚µ‚Ä‚¢‚éƒXƒŒ‚È‚ç‚ÎƒXƒŒ‰æ–Ê‚ğã‚ÉƒXƒNƒ[ƒ‹)
-[backspace] navi2ch-bm-select-article-or-scroll-down ƒXƒŒ‚ğ•\¦(‚·‚Å‚É•\¦‚µ‚Ä‚¢‚éƒXƒŒ‚È‚ç‚ÎƒXƒŒ‰æ–Ê‚ğ‰º‚ÉƒXƒNƒ[ƒ‹)
-"n" next-line Ÿ‚Ìs‚ÉˆÚ“®
-"p" previous-line ‘O‚Ìs‚ÉˆÚ“®
-"g" navi2ch-bm-goto-board w’è‚µ‚½”Â‚ÉƒWƒƒƒ“ƒv
-"q" navi2ch-bm-exit ”Â‚ğ•Â‚¶‚é
-"S" navi2ch-bm-sort ƒXƒŒ‚ğƒ\[ƒg
-">" end-of-buffer ÅŒã‚ÌƒXƒŒ‚ÉˆÚ“®
-"<" beginning-of-buffer Å‰‚ÌƒXƒŒ‚ÉˆÚ“®
-"t" navi2ch-toggle-offline ƒIƒtƒ‰ƒCƒ“EƒIƒ“ƒ‰ƒCƒ“‚ÌØ‚è‘Ö‚¦
-"1" navi2ch-one-pain ˆê‰æ–Ê•\¦
-"3" navi2ch-three-pain O‰æ–Ê•\¦
-"?" navi2ch-bm-search ŒŸõ
-"\C-c\C-f" navi2ch-article-find-file ƒXƒŒ‚ÌƒƒOƒtƒ@ƒCƒ‹‚ğw’è
-"\C-c\C-m" 'navi2ch-message-pop-message-buffer
-"*" navi2ch-bm-mark ƒXƒŒ‚Éƒ}[ƒN‚ğ‚Â‚¯‚é
-"u" navi2ch-bm-unmark ƒXƒŒ‚Ìƒ}[ƒN‚ğ‰ğœ
-"mr" navi2ch-bm-mark-region ‘I‘ğ—Ìˆæ‚ÌƒXƒŒ‚Éƒ}[ƒN‚ğ‚Â‚¯‚é
-"ma" navi2ch-bm-mark-all ‚·‚×‚Ä‚ÌƒXƒŒ‚Éƒ}[ƒN‚ğ‚Â‚¯‚é
-"mo" navi2ch-bm-display-mark-article ƒ}[ƒN‚µ‚½ƒXƒŒ‚ğ•\¦
-"mi" navi2ch-bm-fetch-mark-article ƒ}[ƒN‚µ‚½ƒXƒŒ‚ğXV
-"mm" navi2ch-bm-mark-marks ‚ ‚éó‘Ô(VCU)‚É‚È‚Á‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚ğƒ}[ƒN
-
-
-bookmark mode:
-
-"d" navi2ch-bookmark-delete ƒuƒbƒNƒ}[ƒN‚©‚çíœ
-
-
-list mode:
-
-"\r" navi2ch-list-select-current-board ”Â‚ğ•\¦
-"q" navi2ch-exit Navi2ch ‚ğI—¹
-"z" navi2ch-suspend Navi2ch ‚ğ’†’f
-"s" navi2ch-list-sync ”ÂƒŠƒXƒg‚ğÄ“Ç‚İ‚İ
-" " navi2ch-list-select-current-board ”Â‚ğ•\¦
-[del] scroll-down ã‚ÉƒXƒNƒ[ƒ‹
-[backspace] scroll-down ã‚ÉƒXƒNƒ[ƒ‹
-"n" next-line Ÿ‚Ìs‚ÉˆÚ“®
-"p" previous-line ‘O‚Ìs‚ÉˆÚ“®
-"a" navi2ch-list-add-bookmark ”Â‚ğƒuƒbƒNƒ}[ƒN‚É“o˜^
-"b" navi2ch-list-toggle-bookmark ƒuƒbƒNƒ}[ƒN‚Æ”ÂƒŠƒXƒg‚Ì•\¦‚ğØ‚è‘Ö‚¦
-"t" navi2ch-toggle-offline ƒIƒtƒ‰ƒCƒ“EƒIƒ“ƒ‰ƒCƒ“‚ÌØ‚è‘Ö‚¦
-[mouse-2] navi2ch-list-mouse-select ”Â‚ğ•\¦
-"g" navi2ch-list-goto-board w’è‚µ‚½”Â‚ÉƒWƒƒƒ“ƒv
-"/" navi2ch-list-toggle-open ”ÂƒŠƒXƒg‚ÌŠJ•Â
-"[" navi2ch-list-open-all-category ‚·‚×‚Ä‚Ì”ÂƒŠƒXƒg‚ğŠJ‚­
-"]" navi2ch-list-close-all-category ‚·‚×‚Ä‚Ì”ÂƒŠƒXƒg‚ğ•Â‚¶‚é
-">" end-of-buffer ÅIs‚ÉˆÚ“®
-"<" beginning-of-buffer æ“ª‚ÉˆÚ“®
-"1" navi2ch-one-pain ˆê‰æ–Ê•\¦
-"2" navi2ch-list-two-pain “ñ‰æ–Ê•\¦
-"3" navi2ch-three-pain O‰æ–Ê•\¦
-"\C-c\C-f" navi2ch-article-find-file ƒXƒŒ‚ÌƒƒOƒtƒ@ƒCƒ‹‚ğw’è
-"?" navi2ch-list-search ŒŸõ
-
-
-message mode:
-
-"\C-c\C-c" navi2ch-message-send-message ‘‚«‚İ‚ğ‘—M
-"\C-c\C-k" navi2ch-message-exit ‘‚«‚İ‚ğƒLƒƒƒ“ƒZƒ‹
-"\C-c\C-y" navi2ch-message-cite-original ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒŒƒX‚ğˆø—p
-"\C-c\y" navi2ch-message-cite-original-from-number ”Ô†‚Åw’è‚µ‚½ƒŒƒX‚ğˆø—p
-"\et" navi2ch-toggle-offline ƒIƒtƒ‰ƒCƒ“EƒIƒ“ƒ‰ƒCƒ“‚ÌØ‚è‘Ö‚¦
-
-
-’ˆÓ::
- ŠÂ‹«•Ï” TZ ‚ğ JST-9 ‚Æ‚©‚É‚µ‚Æ‚¢‚½•û‚ª‚¢‚¢‚Å‚·B
- Emacs 20 ˆÈ~‚¶‚á‚È‚¢‚Æ“®‚©‚È‚¢‚Å‚·(‘½•ª)B
- XEmacs ‚Í‚Á‚Ä‚È‚¢‚ñ‚Å’m‚è‚Ü‚¹‚ñ(‚Å‚à“®‚­‚ç‚µ‚¢‚Å‚·)B
- elisp ‚¾‚¯‚ÌÀ‘•‚È‚ñ‚Å Meadow ‚È‚ñ‚©‚Å‚à“®‚«‚Ü‚·B
-
-Ó«::
- Å‰‚É perl ”Å‚ğì‚Á‚½ hc2ivan ‚³‚ñ‚ÉŠ´Ó‚Å‚·B
-
+$B<U<-(B::
+ $B:G=i$K(B perl $BHG$r:n$C$?(B hc2ivan $B$5$s$K46<U$G$9!#(B

@@ -1,5 +1,15 @@
 2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* README: 書き直し。
+	内容が古いしメンテしきれないのでマニュアルに誘導。
+
+	* NEWS: リリース前にあわてて作るとろくなことがないので 1.5.2 から
+	の主な変更点を追加。
+
+	TODO ファイルはどうしましょ。
+
+2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
+
 	キャッシュが存在するかどうかでスレを検索できるようにしてみました。
 	出て来るスレは search のとこで a して regexp に . を入れたのと同じ
 	ですが、ちょっぴり高速です。
