@@ -1,3 +1,11 @@
+2004-08-03  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-select-current-link-number):
+	navi2ch-article-select-current-link-number-style が 'jump で
+	navi2ch-article-redraw-when-goto-number が nil の場合、リンク先レ
+	スが表示されてないときに popup せず表示範囲を広げるように。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/154
+
 2004-07-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
