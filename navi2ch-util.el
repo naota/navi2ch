@@ -509,16 +509,6 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	  ((memq c '(?n ?N ?\177))
 	   nil))))
 
-(defun navi2ch-gnus-like-y-or-n-p (prompt &optional quit-symbol)
-  (let* ((prompt (concat prompt " (type "
-			 (single-key-description last-command-char) ")"))
-	 (c (navi2ch-read-char prompt)))
-    (if (equal c last-command-char)
-	t
-      (push (navi2ch-ifxemacs (character-to-event c) c)
-	    unread-command-events)
-      nil)))
-
 (defsubst navi2ch-boundp (symbol)
   "SYMBOL がバインドされていない時は nil を返す。
 boundp と違い、SYMBOL がバインドされている時は t ではなくシンボルを返す。"

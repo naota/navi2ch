@@ -1193,6 +1193,37 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
      (funcall navi2ch-article-through-previous-function)))
   (force-mode-line-update t))
 
+(defun navi2ch-article-through-ask-y-or-n-p (num title)
+  "次のスレに移動するときに \"y or n\" で確認する。"
+  (navi2ch-y-or-n-p
+   (concat title " --- Through " (if (< num 0) "previous" "next")
+	   " article or quit?")
+   'quit))
+
+(defun navi2ch-article-through-ask-n-or-p-p (num title)
+  "次のスレに移動するときに \"n\" か \"p\" で確認する。"
+  (let* ((accept-key (if (< num 0) '(?p ?P ?\177) '(?n ?N ?\ )))
+	 (c (navi2ch-read-char
+	     (format "%s --- Through %s article or quit? (%c or q) "
+		     title (if (< num 0) "previous" "next")
+		     (car accept-key)))))
+    (if (memq c accept-key)
+	t
+      (push (navi2ch-ifxemacs (character-to-event c) c)
+	    unread-command-events)
+      nil)))
+
+(defun navi2ch-article-through-ask-last-command-p (num title)
+  "次のスレに移動するときに、直前のコマンドと同じかで確認する。"
+  (let ((c (navi2ch-read-char
+	    (format "Type %s for %s"
+		    (single-key-description last-command-char) title))))
+    (if (equal c last-command-char)
+	t
+      (push (navi2ch-ifxemacs (character-to-event c) c)
+	    unread-command-events)
+      nil)))
+
 (defun navi2ch-article-through-ask (no-ask num)
   "次のスレに移動するか聞く。
 次のスレに移動するなら t を返す。
@@ -1202,18 +1233,15 @@ article buffer から抜けるなら 'quit を返す。"
 	  (and (not no-ask)
 	       (eq navi2ch-article-enable-through 'ask)))
       (funcall navi2ch-article-through-ask-function
-	       (concat (save-excursion
-			 (set-buffer navi2ch-board-buffer-name)
-			 (save-excursion
-			   (forward-line num)
-			   (cdr (assq 'subject
-				      (navi2ch-bm-get-article-internal
-				       (navi2ch-bm-get-property-internal
-					(point)))))))
-		       " --- Through "
-		       (if (< num 0) "previous" "next")
-		       " article or quit?")
-	       'quit)
+	       num
+	       (save-excursion
+		 (set-buffer navi2ch-board-buffer-name)
+		 (save-excursion
+		   (forward-line num)
+		   (cdr (assq 'subject
+			      (navi2ch-bm-get-article-internal
+			       (navi2ch-bm-get-property-internal
+				(point))))))))
     (or no-ask
 	navi2ch-article-enable-through)))
 

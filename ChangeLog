@@ -1,5 +1,22 @@
 2002-10-17  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-article.el (navi2ch-article-through-ask-n-or-p-p):
+	accept-key 以外が押されたらそのキーのコマンドを実行するように。
+
+2002-10-17  ARISAWA Akihiro  <ari@mbf.sphere.ne.jp>
+
+	* navi2ch-article.el (navi2ch-article-through-ask-y-or-n-p): 新関数。
+	(navi2ch-article-through-ask-n-or-p-p): 同上。
+	(navi2ch-article-through-ask-last-command-p): 同上。
+	(navi2ch-article-through-ask): `navi2ch-article-through-ask-function'
+	を呼ぶ時の引数を変更。
+
+	* navi2ch-util.el (navi2ch-gnus-like-y-or-n-p): 削除。
+
+	* navi2ch-vars.el (navi2ch-article-through-ask-function): 候補を変更。
+
+2002-10-17  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* navi2ch-oyster.el (navi2ch-oyster-article-update): kako を付ける
 	ときの条件を変える。
 	(navi2ch-oyster-update-file-with-offlaw): 作りを今の

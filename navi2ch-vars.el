@@ -459,11 +459,15 @@ ask なら明示的に移動する時以外なら質問する
 		 (const :tag "移動しない" nil))
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-through-ask-function #'navi2ch-y-or-n-p
+(defcustom navi2ch-article-through-ask-function
+  #'navi2ch-article-through-ask-y-or-n-p
   "*次のスレッドに移動するときの確認に使用する関数。"
-  :type '(choice (const :tag "y or n で確認" navi2ch-y-or-n-p)
+  :type '(choice (const :tag "y or n で確認"
+			navi2ch-article-through-ask-y-or-n-p)
+		 (const :tag "n または p で確認"
+			navi2ch-article-through-ask-n-or-p-p)
 		 (const :tag "直前のコマンドと同じかで確認"
-			navi2ch-gnus-like-y-or-n-p))
+			navi2ch-article-through-ask-last-command-p))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-parse-field-list '(data name mail)
