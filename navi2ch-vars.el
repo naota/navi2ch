@@ -1138,9 +1138,11 @@ important	レスをブックマークに登録する
 '(-1000 . \"あぼぼーん\")"
   :type '(choice (const :tag "off"
 			:value nil)
-		 (cons (number :tag "しきい値")
+		 (cons :tag "設定する"
+		       (number :tag "しきい値"
+			       :value 0)
 		       (string :tag "置換後"
-			       :value"あぼぼーん")))
+			       :value "あぼぼーん")))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-hide-below nil
@@ -1148,7 +1150,8 @@ important	レスをブックマークに登録する
 得点がこの値より小さいとレスが隠される。"
   :type '(choice (const :tag "off"
 			:value nil)
-		 (number :tag "しきい値"))
+		 (number :tag "しきい値"
+			 :value 0))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-add-important-above nil
@@ -1156,7 +1159,8 @@ important	レスをブックマークに登録する
 得点がこの値より大きいとレスがブックマークに登録される。"
   :type '(choice (const :tag "off"
 			:value nil)
-		 (number :tag "しきい値"))
+		 (number :tag "しきい値"
+			 :value 0))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-save-info-wrapper-func nil
