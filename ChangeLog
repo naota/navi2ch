@@ -1,4 +1,8 @@
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el: コンパイルできなくなってたので provide ->
+	require の位置を変更。
+
 	これで navi2ch.el 中の他に依存しない関数は navi2ch-util.el への移
 	動が完了したかな。
 

@@ -23,15 +23,16 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+
+(eval-when-compile
+  (provide 'navi2ch-article)
+  (require 'navi2ch))
+
 (require 'navi2ch-net)
 (require 'browse-url)
 (require 'navi2ch-vars)
 (require 'navi2ch-face)
 (require 'navi2ch-popup-article)
-
-(eval-when-compile
-  (provide 'navi2ch-article)
-  (require 'navi2ch))
 
 (defvar navi2ch-article-mode-map nil)
 (unless navi2ch-article-mode-map
