@@ -491,7 +491,8 @@ START, END, NOFIRST で範囲を指定する"
 			      url-func)))))
 	 match rep literal)
     (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
-      (setq rep (cdr match))
+      (setq rep (cdr match)
+	    literal nil)
       (when (functionp rep)
 	(save-match-data
 	  (setq rep (funcall rep (navi2ch-match-string-no-properties 0))
