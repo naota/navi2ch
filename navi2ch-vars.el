@@ -124,6 +124,12 @@ non-nil なら read.cgi を使う"
   :type 'integer
   :group 'navi2ch)
 
+(defcustom navi2ch-2ch-host-list
+  '("cocoa.2ch.net")
+  "*2ch とみなす host のリスト。"
+  :type '(repeat (string :tag "ホスト"))
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*list window の幅"

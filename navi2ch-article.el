@@ -152,10 +152,20 @@ last が最後からいくつ表示するか。
 (add-hook 'navi2ch-save-status-hook 'navi2ch-article-save-all-info)
 
 (defun navi2ch-article-get-url (board article)
-  (concat (navi2ch-board-get-uri board)
-          (if (cdr (assq 'kako board)) "" "dat/")
-          (cdr (assq 'artid article))
-          ".dat"))
+  (let ((artid (cdr (assq 'artid article)))
+	(url (navi2ch-board-get-uri board)))
+    (if (assq 'kako article)
+	(navi2ch-article-get-kako-url board article)
+      (concat url "dat/" artid ".dat"))))
+
+(defun navi2ch-article-get-kako-url (board article)
+  (let ((artid (cdr (assq 'artid article)))
+	(url (navi2ch-board-get-uri board)))
+    (concat url "kako/"
+	    (if (= (length artid) 9)
+		(substring artid 0 3)
+	      (concat (substring artid 0 4) "/" (substring artid 0 5)))
+	    "/" artid ".dat.gz")))
 
 (defun navi2ch-article-get-file-name (board article)
   (navi2ch-board-get-file-name board
@@ -209,10 +219,15 @@ LEN は RANGE で範囲を指定される list の長さ"
                               list))))
 	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
            (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match "http://.+/test/read\\.cgi/.+/[ni.]?\\([0-9]+\\)[^/]*$" url)
+           (when (string-match
+		  "http://.+/test/read\\.cgi/.+/[ni.]?\\([0-9]+\\)[^/]*$" url)
              (setq list (cons (cons 'number
                                     (string-to-number (match-string 1 url)))
                               list))))
+	  ((string-match
+	    "http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+	   (setq list (list (cons 'artid (match-string 1 url))
+			    (cons 'kako t))))
           ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
            (setq list (list (cons 'artid (match-string 1 url))))))
     list))
@@ -564,10 +579,12 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
            state)
       (when first
         (setq article (navi2ch-article-load-info)))
-      (let ((ret (navi2ch-article-update-file board article force)))
-        (setq article (nth 0 ret)
-              navi2ch-article-current-article article
-              state (nth 1 ret)))
+      (unless (and (cdr (assq 'kako article))
+		   (not (y-or-n-p "re-sync kako article?")))
+	(let ((ret (navi2ch-article-update-file board article force)))
+	  (setq article (nth 0 ret)
+		navi2ch-article-current-article article
+		state (nth 1 ret))))
       (prog1
 	  ;; 更新できたら
 	  (when (or (and first (file-exists-p file))
@@ -637,28 +654,42 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
     (unless navi2ch-offline
       (let ((file (navi2ch-article-get-file-name board article))
 	    (time (cdr (assq 'time article)))
-	    full-size url)
+	    full-size url kako)
         (setq state
 	      (if (and (navi2ch-enable-readcgi-p
-			(navi2ch-board-get-host board)) (file-exists-p file))
+			(navi2ch-board-get-host board)))
 		  (progn
-		    (setq url (navi2ch-article-get-readcgi-raw-url board article))
-		    (navi2ch-net-update-file-with-readcgi url file time
-							  (file-exists-p file)))
+		    (setq url (navi2ch-article-get-readcgi-raw-url
+			       board article))
+		    (let ((ret (navi2ch-net-update-file-with-readcgi
+				url file time (file-exists-p file))))
+		      (if (eq ret 'kako)
+			  (progn
+			    (setq kako t)
+			    (setq url (navi2ch-article-get-kako-url
+				       board article))
+			    (navi2ch-net-update-file url file))
+			ret)))
 		(setq url (navi2ch-article-get-url board article))
-		(if (and (file-exists-p file) navi2ch-article-enable-diff)
-		    (navi2ch-net-update-file-diff
-		     url file (cdr (assq 'time article)))
-		  (let ((st (navi2ch-net-update-file
-			     url file (cdr (assq 'time article)) nil)))
-		    (when st (list st nil))))))
+		(let ((ret
+		       (if (and (file-exists-p file)
+				navi2ch-article-enable-diff)
+			   (navi2ch-net-update-file-diff url file time)
+			 (navi2ch-net-update-file url file time))))
+		  (if ret
+		      ret
+		    (setq kako t)
+		    (setq url (navi2ch-article-get-kako-url board article))
+		    (navi2ch-net-update-file url file)))))
+	(unless (listp (caar state))
+	  (setq state (list state nil)))
         (when state
 	  (setq article (navi2ch-put-alist 'time
 					   (cdr (assoc "Last-Modified"
 						       (nth 0 state)))
-					   article)))))
+					   article))
+	  (setq article (navi2ch-put-alist 'kako kako article)))))
     (list article state)))
-
 
 (defun navi2ch-article-sync-from-file (file)
   "スレを FILE から更新する。"
@@ -788,7 +819,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
                   (assq 'hide article)
                   (assq 'important article)
 		  (assq 'mail article)
-		  (assq 'access-time article))))
+		  (assq 'kako article))))
       (navi2ch-save-info
        (navi2ch-article-get-info-file-name board article)
        alist))))

@@ -1,5 +1,37 @@
 2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch.el
+	(navi2ch-2ch-url-p): navi2ch-2ch-host-list と navi2ch-url-to-host
+	を使うように。
+
+	* navi2ch-vars.el 
+	(navi2ch-2ch-host-list): 新変数。
+
+	* navi2ch-util.el
+	(navi2ch-url-to-host): 新関数。
+
+	* navi2ch-net.el
+	(navi2ch-net-update-file-with-readcgi): 正規表現修正。kako に対応。
+
+	* navi2ch-board.el
+	(navi2ch-board-get-uri): 以前の kako 対応コードを消す。
+	(navi2ch-board-get-file-name): 同上。
+	(navi2ch-board-url-to-board): 今の kako に対応に合わせる。
+	(navi2ch-board-get-host): navi2ch-url-to-host を使うように。
+	(navi2ch-board-set-mode-line): 同上。
+
+	* navi2ch-article.el
+	(navi2ch-article-get-kako-url): 新関数。
+	(navi2ch-article-get-url): kako に対応。上を使うように。
+	(navi2ch-article-url-to-article): kako に対応。
+	(navi2ch-article-sync): kako に対応。すでに読み込み済みの過去ログ
+	ならばもう一度読み込むか聞くように。
+	(navi2ch-article-update-file): kako に対応。読めなかった場合は過去
+	ログを探しに行くように。
+	(navi2ch-article-save-info): kako に対応。
+
+2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* navi2ch-util.el
 	(navi2ch-alist-list-to-alist): defsubst から defunに変更。
 

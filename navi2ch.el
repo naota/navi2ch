@@ -192,19 +192,16 @@ SUSPEND が non-nil なら buffer を消さない"
 
 (defun navi2ch-2ch-url-p (url)
   "URL が 2ch 内の url かを返す。"
-  (let (list)
-    (setq list
-          (mapcar
-           (lambda (x)
-             (let ((str (cdr (assq 'uri x))))
-               (and str
-                    (string-match "http://\\([^/]+\\)" str)
-                    (match-string 1 str))))
-           (navi2ch-list-get-board-name-list
-            navi2ch-list-category-list)))
-    (when (string-match "http://\\([^/]+\\)" url)
-      (setq url (match-string 1 url))
-      (member url list))))
+  (let ((host (navi2ch-url-to-host url)))
+    (or (member host navi2ch-2ch-host-list)
+	(let (list)
+	  (setq list
+		(mapcar
+		 (lambda (x)
+		   (navi2ch-url-to-host (cdr (assq 'uri x))))
+		 (navi2ch-list-get-board-name-list
+		  navi2ch-list-category-list)))
+	  (member host list)))))
                       
 (provide 'navi2ch)
 

@@ -502,5 +502,9 @@ base64デコードすべき内容がない場合はエラーになる。"
              "online"))
   (navi2ch-set-mode-line-identification))
 
+(defun navi2ch-url-to-host (url)
+  (when (and url (string-match "http://\\([^/]+\\)" url))
+    (match-string 1 url)))
+
 (provide 'navi2ch-util)
 ;;; navi2ch-util.el ends here

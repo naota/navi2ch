@@ -354,7 +354,7 @@ DIFF が non-nil ならば差分を取得する。
 		   (signal 'navi2ch-update-failed nil))
 	  (message "%sdone" (current-message))
 	  (let (state data cont-size)
-	    (when (string-match "^\\(.+\\) \\(.+\\)\n" cont)
+	    (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
 	      (setq state (match-string 1 cont))
 	      (setq data (match-string 2 cont))
 	      (setq cont (replace-match "" t nil cont)))
@@ -377,8 +377,11 @@ DIFF が non-nil ならば差分を取得する。
 		(insert (substring cont 0 cont-size))
 		(list header 'aborn)))
 	     ((string= "-ERR" state)
-	      (message "error! %s" (decode-coding-string data navi2ch-coding-system))
-	      nil))))))))
+	      (let ((err-msg (decode-coding-string
+			      data navi2ch-coding-system)))
+		(message "error! %s" err-msg)
+		(when (string-match "過去ログ倉庫で発見" err-msg)
+		  'kako))))))))))
 
 ;; from Emacs/W3
 (defconst navi2ch-net-url-unreserved-chars

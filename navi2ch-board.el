@@ -125,18 +125,15 @@
 
 ;;; navi2ch-board functions
 (defun navi2ch-board-get-uri (board)
-  "後ろの / が付いた uri を返す。
-kako ならばそれに対応した uri にする"
+  "後ろの / が付いた uri を返す。"
   (let ((uri (cdr (assq 'uri board))))
     (when uri
       (when (string-match "[^/]$" uri)
 	(setq uri (concat uri "/")))
-      (concat uri (cdr (assq 'kako board))))))
+      uri)))
 
 (defun navi2ch-board-get-host (board)
-  (let ((uri (cdr (assq 'uri board))))
-    (when (string-match "http://\\([^/]+\\)" uri)
-      (match-string 1 uri))))
+  (navi2ch-url-to-host (cdr (assq 'uri board))))
 
 (defun navi2ch-board-get-url (board &optional file-name)
   (if (and file-name (string-match "^/" file-name))
@@ -166,8 +163,6 @@ kako ならばそれに対応した uri にする"
   (let ((uri (navi2ch-board-get-uri board)))
      (when (and uri (string-match "http://\\(.+\\)" uri))
        (setq uri (match-string 1 uri))
-       (when (string-match ".+kako/" uri)
-	 (setq uri (match-string 0 uri)))
        (navi2ch-expand-file-name
 	(concat uri (or file-name navi2ch-board-subject-file-name))))))
 
@@ -196,10 +191,9 @@ kako ならばそれに対応した uri にする"
            (setq id (match-string 2 url)
                  uri (format "http://%s/%s/" (match-string 1 url) id)))
           ((string-match
-            "http://\\(.+\\)/\\([^/]+\\)/\\(kako/[0-9]+/\\)" url)
+            "http://\\(.+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
            (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)
-                 kako (match-string 3 url)))
+                 uri (format "http://%s/%s/" (match-string 1 url) id)))
           ((string-match "http://\\(.+\\)/\\([^/]+\\)" url)
            (setq id (match-string 2 url)
                  uri (format "http://%s/%s/" (match-string 1 url) id))))
@@ -213,8 +207,7 @@ kako ならばそれに対応した uri にする"
           (setq board (list (cons 'uri uri)
                             (cons 'id id)
                             (cons 'name "No Name"))))
-        (cons (cons 'kako kako)
-              board)))))
+	board))))
 
 (defun navi2ch-board-to-url (board)
   "BOARD から url に変換"
@@ -393,9 +386,7 @@ kako ならばそれに対応した uri にする"
 
 (defun navi2ch-board-set-mode-line ()
   (let* ((board navi2ch-board-current-board)
-	 (host (cdr (assq 'uri board))))
-    (string-match "http://\\([^/]+\\)" host)
-    (setq host (match-string 1 host))
+	 (host (navi2ch-url-to-host (cdr (assq 'uri board)))))
     (setq navi2ch-mode-line-identification
 	  (format "%s (%s)" (cdr (assq 'name board)) host))
     (navi2ch-set-mode-line-identification)))
