@@ -1,4 +1,9 @@
-2003-11-15  mami  <mami@users.sourceforge.net>
+2003-11-23  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board):
+	http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
+	などの形式の URL に対応。ちょっと書き直し。
+	(navi2ch-js-url-to-article): 同上。
 
 	* navi2ch-multibbs.el (navi2ch-2ch-url-to-article): ケータイ用 URL
 	に対応。ちょっと書き直し。

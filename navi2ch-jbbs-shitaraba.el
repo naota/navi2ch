@@ -83,35 +83,56 @@ START が non-nil ならばレス番号 START からの差分を取得する。
     (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-js-url-to-board (url)
-  (let (uri id)
-    (cond ((string-match
-	    "\\(http://[^/]+/[^/]+/\\([0-9]+\\)/\\)" url)
-	   (setq uri (match-string 1 url)
-		 id  (match-string 2 url)))
-	  ((string-match
-	    "\\(http://[^/]+/[^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
-	   (setq uri (format "%s/%s/"
-			     (match-string 1 url)
-			     (match-string 2 url))
-		 id  (match-string 2 url))))
-    (if id (list (cons 'uri uri) (cons 'id id)))))
+  (let (host category id)
+    (when (or
+	   ;; http://jbbs.shitaraba.com/computer/351/
+	   (string-match
+	    "http://\\([^/]+\\)/\\([^/]+\\)/\\([0-9]+\\)/" url)
+	   ;; http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452814&START=1&END=5
+	   (string-match
+	    "http://\\([^/]+\\)/\\([^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
+	   ;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
+	   (string-match
+	    "http://\\([^/]+\\)/bbs/read\\.cgi/\\([^/]+\\)/\\([0-9]+\\)" url))
+      (setq host (match-string 1 url)
+	    category (match-string 2 url)
+	    id (match-string 3 url)))
+    (if id (list (cons 'uri (format "http://%s/%s/%s/" host category id))
+		 (cons 'id id)))))
 
 (defun navi2ch-js-url-to-article (url)
   "URL から article に変換。"
-  (let (list)
-    (cond ((string-match
-	    "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))))
-	   (when (string-match "&START=\\([0-9]+\\)" url)
-	     (setq list (cons (cons 'number
-				    (string-to-number (match-string 1 url)))
-			      list))))
-	  ;; "http://jbbs.shitaraba.com/computer/351/storage/1022028671.html" とか。
-	  ((string-match
-	    "http://.+/storage/\\([0-9]+\\)\\.html" url)
-	   (setq list (list (cons 'artid (match-string 1 url))
-			    (cons 'kako t)))))
-    list))
+  (let (artid number kako)
+    (cond
+     ;; http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452814&START=1&END=5
+     ((string-match
+       "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+      (setq artid (match-string 1 url))
+      (when (string-match "&START=\\([0-9]+\\)" url)
+	(setq number (string-to-number (match-string 1 url)))))
+     ;; http://jbbs.shitaraba.com/computer/351/storage/1014729216.html
+     ((string-match
+       "http://.+/storage/\\([0-9]+\\)\\.html" url)
+      (setq artid (match-string 1 url)
+	    kako t))
+     ;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
+     ((string-match
+       "http://.+/bbs/read\\.cgi/[^/]+/[^/]+/\\([^/]+\\)" url)
+      (setq artid (match-string 1 url))
+      (when (string-match
+	     (format
+	      "http://.+/bbs/read\\.cgi/[^/]+/[^/]+/%s/[ni.]?\\([0-9]+\\)[^/]*$"
+	      artid)
+	     url)
+	(setq number (string-to-number (match-string 1 url))))))
+    (let (list)
+      (when artid
+	(setq list (cons (cons 'artid artid) list))
+	(when number
+	  (setq list (cons (cons 'number number) list)))
+	(when kako
+	  (setq list (cons (cons 'kako kako) list)))
+	list))))
 
 (defun navi2ch-js-send-message
   (from mail message subject bbs key time board article)
