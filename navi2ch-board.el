@@ -177,9 +177,10 @@ kako ならばそれに対応した uri にする"
 	    ;;		   (navi2ch-board-get-file-name
 	    ;;		    navi2ch-board-current-board "") nil "\\.dat$"))
 	    list)
-	(while (re-search-forward regexp nil t)
-	  (setq list (cons (navi2ch-board-get-matched-article) list)))
-	(nreverse list)))))
+	(if (null regexp) nil
+	  (while (re-search-forward regexp nil t)
+	    (setq list (cons (navi2ch-board-get-matched-article) list)))
+	  (nreverse list))))))
 
 (defsubst navi2ch-board-updated-article-p (article seen)
   (let ((artid (cdr (assq 'artid article))))
