@@ -580,7 +580,7 @@
 				  (directory-files dir nil "\\.dat$")))
 	    (summary (navi2ch-article-load-article-summary board))
 	    (key-time (navi2ch-add-days-to-time (current-time)
-						navi2ch-board-expire-date))
+						(- navi2ch-board-expire-date)))
 	    (remove-list nil))
 	(message "Expiring %s..." (cdr (assq 'name board)))
 	(dolist (article article-list)

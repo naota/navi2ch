@@ -1,3 +1,9 @@
+2004-12-13  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-expire):
+	navi2ch-board-expire-date を引くべきところを足していたのを修正。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/845
+
 2004-12-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
