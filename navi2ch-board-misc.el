@@ -224,37 +224,36 @@
 		      ((navi2ch-bm-fetched-article-p board article)
 		       'update)
 		      (t
-		       (navi2ch-article-check-cached board article)))))
+		       (navi2ch-article-check-cached board article))))
+	 string)
     (unless subject (setq subject navi2ch-bm-empty-subject))
+    (setq string (format (concat "%" (number-to-string navi2ch-bm-number-width)
+				 "d %s%s %s%s%s\n")
+			 number
+			 (cdr (assq updated navi2ch-bm-updated-mark-alist))
+			 (cadr (assq state navi2ch-bm-state-alist))
+			 subject
+			 (make-string (max (- navi2ch-bm-subject-width
+					      (string-width subject))
+					   1)
+				      ? )
+			 other))
     ;; for contrib/izonmoji-mode.el
     (navi2ch-ifxemacs
-	(insert (format (concat "%" (number-to-string navi2ch-bm-number-width)
-				"d %s%s %s%s%s\n")
-			number
-			(cdr (assq updated navi2ch-bm-updated-mark-alist))
-			(cadr (assq state navi2ch-bm-state-alist))
-			subject
-			(make-string (max (- navi2ch-bm-subject-width
-					     (string-width subject))
-					  1)
-				     ? )
-			other))
+	(insert string)
       (let ((buffer-display-table (if (and (boundp 'izonmoji-mode)
 					   izonmoji-mode)
 				      nil
 				    buffer-display-table)))
-	(insert (format (concat "%" (number-to-string navi2ch-bm-number-width)
-				"d %s%s %s%s%s\n")
-			number
-			(cdr (assq updated navi2ch-bm-updated-mark-alist))
-			(cadr (assq state navi2ch-bm-state-alist))
-			subject
-			(make-string (max (- navi2ch-bm-subject-width
-					     (string-width subject))
-					  1)
-				     ? )
-			other))))
-    (navi2ch-bm-set-property point (1- (point)) item state updated)))
+	(insert string)))
+    (save-excursion
+      (goto-char point)
+      (set-text-properties (navi2ch-line-beginning-position)
+			   (1+ (navi2ch-line-end-position))
+			   nil)
+      (navi2ch-bm-set-property (navi2ch-line-beginning-position)
+			       (navi2ch-line-end-position)
+			       item state updated))))
 
 (defun navi2ch-bm-exit ()
   (interactive)
@@ -630,18 +629,20 @@ ARG が non-nil なら移動方向を逆にする。"
 		  (cons (cadr x) (car x)))
 		navi2ch-bm-state-alist)))
     (when item
-      (save-excursion
-        (let ((buffer-read-only nil))
-	  (when (string= mark " ")
+      (let ((buffer-read-only nil))
+	(when (string= mark " ")
+	  (save-excursion
 	    (navi2ch-bm-goto-state-column)
 	    (setq state (cdr (assoc (char-to-string (char-after (point)))
-				    alist))))
-          (navi2ch-bm-goto-mark-column)
-          (delete-char 1)
-          (insert mark)
-          (navi2ch-bm-set-property (progn (beginning-of-line) (point))
-				   (progn (end-of-line) (point))
-				   item state))))
+				    alist)))))
+	(let ((point (point)))
+	  (navi2ch-bm-goto-mark-column)
+	  (delete-char 1)
+	  (insert mark)
+	  (navi2ch-bm-set-property (navi2ch-line-beginning-position)
+				   (navi2ch-line-end-position)
+				   item state)
+	  (goto-char point))))
     (when (and navi2ch-bm-mark-and-move interactive)
       (let (downward)
 	(cond ((eq navi2ch-bm-mark-and-move 'follow)

@@ -1,3 +1,16 @@
+2003-10-06  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-mark-subr):
+	navi2ch-bm-mark-and-move が nil のときにカーソル位置が移動すること
+	があったのを修正。
+	navi2ch-line-beginning-position, navi2ch-line-end-position を使う
+	ように。
+	(navi2ch-bm-insert-subject): mouse-face が次の行とつながってたので
+	いったん set-text-properties でプロパティを nil にするように。
+	navi2ch-line-beginning-position, navi2ch-line-end-position を使う
+	ように。
+	冗長な部分をまとめた。
+
 2003-10-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-auto-modify.el (navi2ch-auto-modify-subr): 新関数。
