@@ -1,4 +1,8 @@
 2002-03-24    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-enable-readcgi): デフォルトを nil に。
+
+2002-03-24    mami  <mami@users.sourceforge.net>
 	SPID Cookie に対応。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/312
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/318

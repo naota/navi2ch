@@ -100,7 +100,7 @@
   :type 'file
   :group 'navi2ch)
 
-(defcustom navi2ch-enable-readcgi t
+(defcustom navi2ch-enable-readcgi nil
   "*non-nil なら、ファイル取得に read.cgi の raw mode を利用する。"
   :type 'boolean
   :group 'navi2ch)
