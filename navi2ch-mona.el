@@ -64,16 +64,19 @@
     (set-face-font 'navi2ch-mona-face navi2ch-mona-font)))
 
 ;; face が特に指定されていない部分を mona-face にする
+;; navi2ch-article-face の部分も mona-face にする
 (defun navi2ch-mona-put-face ()
   (save-excursion
     (goto-char (point-min))
-    (let (p)
+    (let (p face)
       (while (not (eobp))
         (setq p (next-single-property-change (point)
                                              'face nil (point-max)))
-        (unless (get-text-property (point) 'face)
-          (put-text-property (point) (1- p)
-                             'face 'navi2ch-mona-face))
+	(setq face (get-text-property (point) 'face))
+	(if (or (null face)
+		(eq face 'navi2ch-article-face))
+	    (put-text-property (point) (1- p)
+			       'face 'navi2ch-mona-face))
         (goto-char p)))))
 
 (defun navi2ch-mona-pack-space ()

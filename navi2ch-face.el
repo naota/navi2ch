@@ -164,5 +164,10 @@
   "引用の face"
   :group 'navi2ch-face)
 
+(defface navi2ch-article-face
+  nil
+  "スレの face"
+  :group 'navi2ch-face)
+
 (run-hooks 'navi2ch-face-load-hook)
 ;;; navi2ch-face.el ends here

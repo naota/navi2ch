@@ -235,27 +235,59 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	      start (and (or start end) "-") end
 	      (and nofirst "n")))))
 
+(defsubst navi2ch-article-cleanup-message ()
+  (let ((re "<br>"))
+    (when navi2ch-article-cleanup-white-space-after-old-br
+      (goto-char (point-min))
+      (if (not (re-search-forward "<br>[^ ]" nil t))
+	  (setq re "<br> ")))
+    (when navi2ch-article-cleanup-trailing-whitespace
+      (setq re (concat " *" re)))
+    (unless (string= re "<br>")
+      (goto-char (point-min))
+      (while (re-search-forward re nil t)
+	(replace-match "<br>")))))	; "\n" $B$G$b$$$$$+$b!#(B
+
 (defsubst navi2ch-article-parse-message (str &optional sep)
   (or sep (setq sep navi2ch-article-separator))
   (unless (string= str "")
-    (let ((strs (split-string str sep))
-	  (syms '(name mail date data subject))
-	  s)
-      (mapcar (lambda (sym)
-		(setq s (or (car strs) "")
-		      strs (cdr strs))
-		(cons sym
-		      (if (eq sym 'data)
-			  (navi2ch-replace-html-tag-with-temp-buffer s)
-			(navi2ch-replace-html-tag s))))
-	      syms))))
+;;;     (let ((strs (split-string str sep))
+;;; 	  (syms '(name mail date data subject))
+;;; 	  s)
+;;;       (mapcar (lambda (sym)
+;;; 		(setq s (or (car strs) "")
+;;; 		      strs (cdr strs))
+;;; 		(cons sym
+;;; 		      (if (eq sym 'data)
+;;; 			  (navi2ch-replace-html-tag-with-temp-buffer s)
+;;; 			(navi2ch-replace-html-tag s))))
+;;; 	      syms))))
+    (with-temp-buffer
+      (let ((syms '(name mail date data subject))
+	    alist max)
+	(insert str)
+	(navi2ch-article-cleanup-message)
+	(setq max (point-max-marker))
+	(goto-char (point-min))
+	(setq alist (mapcar
+		     (lambda (sym)
+		       (cons sym
+			     (cons (point-marker)
+				   (if (re-search-forward sep nil t)
+				       (copy-marker (match-beginning 0))
+				     max))))
+		     syms))
+	(navi2ch-replace-html-tag-with-buffer)
+	(dolist (x alist)
+	  (setcdr x (buffer-substring (cadr x) (cddr x))))
+	alist))))
 
 (defun navi2ch-article-get-separator ()
   (save-excursion
     (beginning-of-line)
     (if (looking-at "[^\n]+<>[^\n]*<>")
-        "<> *"
-      ", *")))
+        " *<> *"
+      " *, *")))
 
 (defun navi2ch-article-apply-filters (board)
   (dolist (filter navi2ch-article-filter-list)
@@ -313,6 +345,48 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
   (insert (make-string (eval navi2ch-article-message-separator-width)
 		       navi2ch-article-message-separator) "\n"))
 
+(defsubst navi2ch-article-set-link-property ()
+  ">>1 $B$H$+(B http:// $B$K(B property $B$rIU$1$k(B"
+  (goto-char (point-min))
+  (while (re-search-forward
+	  navi2ch-article-number-regexp nil t)
+    (add-text-properties
+     (match-beginning 0)
+     (match-end 0)
+     (list 'face 'navi2ch-article-link-face
+	   'link t
+	   'mouse-face 'highlight
+	   'number (match-string 1))))
+  (goto-char (point-min))
+  (while (re-search-forward
+	  navi2ch-article-url-regexp nil t)
+    (add-text-properties
+     (match-beginning 0)
+     (match-end 0)
+     (list 'face 'navi2ch-article-url-face
+	   'link t
+	   'mouse-face 'highlight
+	   'url (concat "http://" (match-string 1))))))
+  
+(defsubst navi2ch-article-put-cite-face ()
+  (goto-char (point-min))
+  (while (re-search-forward navi2ch-article-citation-regexp nil t)
+    (put-text-property (match-beginning 0)
+		       (match-end 0)
+		       'face 'navi2ch-article-citation-face)))
+
+(defsubst navi2ch-article-arrange-message ()
+  (goto-char (point-min))
+  (let ((id (cdr (assq 'id navi2ch-article-current-board))))
+    (when (or (member id navi2ch-article-enable-fill-list)
+	      (and (not (member id navi2ch-article-disable-fill-list))
+		   navi2ch-article-enable-fill))
+      (set-hard-newline-properties (point-min) (point-max))
+      (let ((fill-column (- (window-width) 5))
+	    (use-hard-newlines t))
+	(fill-region (point-min) (point-max)))))
+  (run-hooks 'navi2ch-article-arrange-message-hook))
+
 (defsubst navi2ch-article-insert-message (num alist)
   (let ((p (point)))
     (insert (funcall navi2ch-article-header-format-function
@@ -320,13 +394,15 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
                      (cdr (assq 'name alist))
                      (cdr (assq 'mail alist))
                      (cdr (assq 'date alist))))
-    (put-text-property p (1+ p) 'current-number num))
-  (let ((p (point)))
+    (put-text-property p (1+ p) 'current-number num)
+    (setq p (point))
     (insert (cdr (assq 'data alist)) "\n")
     (save-excursion
       (save-restriction
 	(narrow-to-region p (point))
-	(navi2ch-article-cleanup-message)
+	;; (navi2ch-article-cleanup-message) ; $B$d$C$QCY$$(B
+	(put-text-property (point-min) (point-max) 'face
+			   'navi2ch-article-face)
 	(navi2ch-article-set-link-property)
 	(navi2ch-article-put-cite-face)
 	(navi2ch-article-arrange-message))))
@@ -352,7 +428,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 			       (not (memq num hide))))))
           (when (stringp alist)
             (setq alist (navi2ch-article-parse-message alist)))
-          (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
+          ;; (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
+          (setcdr x (navi2ch-put-alist 'point (point) alist))
           (navi2ch-article-insert-message num alist))))
     (garbage-collect) ; navi2ch-parse-message $B$OBgNL$K%4%_$r;D$9(B
     (message "inserting current messages...done")))
@@ -376,66 +453,6 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
     (put-text-property p (setq p (+ p (length date)))
 		       'face 'navi2ch-article-header-contents-face str)
     str))
-
-(defun navi2ch-article-cleanup-message ()
-  (when navi2ch-article-cleanup-white-space-after-old-br
-    (goto-char (point-min))
-    (if (not (re-search-forward "\n[^ ]" nil t))
-	(while (re-search-forward "^ " nil t)
-	  (replace-match ""))))
-  (when navi2ch-article-cleanup-trailing-whitespace
-    (goto-char (point-min))
-    (while (re-search-forward "[ \t]+$" nil t)
-      (replace-match "")))
-  (when navi2ch-article-cleanup-trailing-blankline
-    (goto-char (point-max))
-    (while (and (looking-at "^[ \t]*$")
-		(= (forward-line -1) 0))
-      nil)
-    (if (re-search-forward "\n[ \t\n]*" nil t)
-	(replace-match "\n"))))
-
-(defun navi2ch-article-arrange-message ()
-  (goto-char (point-min))
-  (let ((id (cdr (assq 'id navi2ch-article-current-board))))
-    (when (or (member id navi2ch-article-enable-fill-list)
-	      (and (not (member id navi2ch-article-disable-fill-list))
-		   navi2ch-article-enable-fill))
-      (set-hard-newline-properties (point-min) (point-max))
-      (let ((fill-column (- (window-width) 5))
-	    (use-hard-newlines t))
-	(fill-region (point-min) (point-max)))))
-  (run-hooks 'navi2ch-article-arrange-message-hook))
-
-(defun navi2ch-article-set-link-property ()
-  ">>1 $B$H$+(B http:// $B$K(B property $B$rIU$1$k(B"
-  (goto-char (point-min))
-  (while (re-search-forward
-	  navi2ch-article-number-regexp nil t)
-    (add-text-properties
-     (match-beginning 0)
-     (match-end 0)
-     (list 'face 'navi2ch-article-link-face
-	   'link t
-	   'mouse-face 'highlight
-	   'number (match-string 1))))
-  (goto-char (point-min))
-  (while (re-search-forward
-	  navi2ch-article-url-regexp nil t)
-    (add-text-properties
-     (match-beginning 0)
-     (match-end 0)
-     (list 'face 'navi2ch-article-url-face
-	   'link t
-	   'mouse-face 'highlight
-	   'url (concat "http://" (match-string 1))))))
-  
-(defun navi2ch-article-put-cite-face ()
-  (goto-char (point-min))
-  (while (re-search-forward navi2ch-article-citation-regexp nil t)
-    (put-text-property (match-beginning 0)
-		       (match-end 0)
-		       'face 'navi2ch-article-citation-face)))
 
 (defun navi2ch-article-expunge-buffers (&optional num)
   "$B%9%l$N%P%C%U%!$N?t$r(B NUM $B$K@)8B$9$k!#(B
@@ -1283,12 +1300,11 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
 		     num))
 	   (begin (or (cdr (assq 'point (navi2ch-article-get-message
 					 (min num num2))))
-		      (point-min-marker)))
+		      (point-min)))
 	   (end (or (cdr (assq 'point (navi2ch-article-get-message
 				       (1+ (max num num2)))))
-		    (point-max-marker))))
-      (navi2ch-base64-write-region (marker-position begin)
-				   (marker-position end) filename))))
+		    (point-max))))
+      (navi2ch-base64-write-region begin end filename))))
 
 (defun navi2ch-article-decode-message ()
   "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B

@@ -1,4 +1,41 @@
 2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
+	ELP しまくりで細かいチューン。俺の環境だと 1000 レスのスレを
+	navi2ch-article-auto-range nil で開くのが 10% くらい速くなった。
+
+	* navi2ch-util.el (navi2ch-replace-html-tag-with-buffer): 新関数。
+	(navi2ch-replace-html-tag-with-temp-buffer): 上記関数を使うように。
+	(navi2ch-put-alist): defsubst にした。
+
+	* navi2ch-face.el (navi2ch-article-face): 新 face。
+
+	* navi2ch-article.el (navi2ch-article-parse-message):
+	navi2ch-replace-html-tag-with-temp-buffer を使用して HTML タグの展
+	開を一度に行うようにした。navi2ch-cleanup-message を呼ぶようにした。
+	(navi2ch-article-set-link-property): defsubst にして位置を変更。
+	(navi2ch-article-put-cite-face): 同上。
+	(navi2ch-article-arrange-message): 同上。
+	(navi2ch-article-cleanup-message): 同上。呼び出し位置の変更にとも
+	ない変換方法を変更。
+	(navi2ch-article-insert-message): スレのデフォルト face として
+	navi2ch-article-face を使うようにした。ちょいスピードダウン。
+	でも (set-face-font 'navi2ch-article-face navi2ch-mona-font) と
+	navi2ch-mona-arrange-message を add-hook するのとを比べるとスピー
+	ドアップ。
+	ここで navi2ch-cleanup-message を呼ぶとやたらと遅いのでやめ。
+	(navi2ch-article-insert-messages): alist に入れる 'point を
+	point-marker から point に変更。これで (特にレスが多い時は) かなり
+	スピードがあがる。navi2ch-article-insert-messages を呼ぶ前には常に
+	erase-buffer してるから大丈夫だと思うんだけど。。。
+	(navi2ch-article-base64-decode-message): marker 使うのは無駄なので
+	point を使うように。
+
+	* navi2ch-mona.el (navi2ch-mona-put-face): navi2ch-article-face の
+	部分も navi2ch-mona-face にするようにした。
+
+	* navi2ch-vars.el (navi2ch-article-cleanup-trailing-blankline):
+	廃止。
+
+2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-get-category): すでに open してい
 	るカテゴリは open したままにすることにした。

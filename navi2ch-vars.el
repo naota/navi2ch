@@ -472,11 +472,6 @@ window の幅と同じにしたいなら
   :type 'integer
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-cleanup-trailing-blankline t
-  "*`non-nil' の場合、各レスの末尾の空行を取り除く。"
-  :type 'interger
-  :group 'navi2ch-article)
-
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (if (featurep 'xemacs)

@@ -210,12 +210,15 @@
 	(setq start (+ start (length new))))))
   str)
 
+(defsubst navi2ch-replace-html-tag-with-buffer ()
+  (goto-char (point-min))
+  (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
+    (replace-match (navi2ch-replace-html-tag-to-string (match-string 0)))))
+
 (defsubst navi2ch-replace-html-tag-with-temp-buffer (str)
   (with-temp-buffer
     (insert str)
-    (goto-char (point-min))
-    (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
-      (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))))
+    (navi2ch-replace-html-tag-with-buffer)
     (buffer-string)))
       
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
@@ -270,7 +273,7 @@ don't offer a form of remote control."
          (append navi2ch-browse-url-image-args (list url))))
 
 ;; from apel
-(defun navi2ch-put-alist (item value alist)
+(defsubst navi2ch-put-alist (item value alist)
   "Modify ALIST to set VALUE to ITEM.
 If there is a pair whose car is ITEM, replace its cdr by VALUE.
 If there is not such pair, create new pair (ITEM . VALUE) and
