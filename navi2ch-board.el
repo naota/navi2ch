@@ -168,20 +168,10 @@
 	   (cdr (assq 'uri board2))))
 
 (defun navi2ch-board-get-file-name (board &optional file-name)
-  (let ((uri (navi2ch-board-get-uri board)))
-    (when uri
-      (cond ((string-match "http://\\(.+\\)" uri)
-	     (navi2ch-expand-file-name
-	      (concat (match-string 1 uri)
-		      (or file-name navi2ch-board-subject-file-name))))
-	    ((string-match "file://\\(.+\\)" uri)
-	     (expand-file-name (or file-name
-				   navi2ch-board-subject-file-name)
-			       (match-string 1 uri)))))))
+  (navi2ch-multibbs-board-get-file-name board file-name))
 
 (defsubst navi2ch-board-from-file-p (board)
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
-
 
 (defsubst navi2ch-board-get-matched-article ()
   "match した結果から article を得る"
@@ -347,16 +337,7 @@
 
 (defun navi2ch-board-update-file (board)
   (unless navi2ch-offline
-    (let ((file (navi2ch-board-get-file-name board))
-	  (time (cdr (assq 'time board))))
-      (if navi2ch-board-enable-readcgi
-	  (car (navi2ch-net-update-file-with-readcgi
-		(navi2ch-board-get-readcgi-raw-url board) file time))
-	(let ((url (navi2ch-board-get-url
-		    board (if navi2ch-board-use-subback-html
-			      navi2ch-board-subback-file-name)))
-	      (func (navi2ch-multibbs-subject-callback board)))
-	  (navi2ch-net-update-file url file time func))))))
+    (navi2ch-multibbs-board-update board)))
 
 (defun navi2ch-board-sync (&optional force first)
   (interactive "P")

@@ -41,9 +41,16 @@
 
 (eval-when-compile (require 'cl))
 
+(require 'navi2ch-http-date)
 (require 'navi2ch-multibbs)
 
-(defvar navi2ch-localfile-regexp "^x-localbbs://")
+(defcustom navi2ch-localfile-cache-name "localfile"
+  "*ローカル BBS の情報を保存するディレクトリの名前。
+`navi2ch-directory' からの相対パスを指定する。"
+  :type 'string
+  :group 'navi2ch-localfile)
+
+(defvar navi2ch-localfile-regexp "\\`x-localbbs://")
 (defvar navi2ch-localfile-use-lock t)
 (defvar navi2ch-localfile-lock-name "lockdir_localfile")
 
@@ -53,6 +60,7 @@
     (send-message   	. navi2ch-localfile-send-message)
     (send-success-p 	. navi2ch-localfile-send-message-success-p)
     (error-string   	. navi2ch-localfile-navi2ch-net-get-content)
+    (board-update	. navi2ch-localfile-board-update)
     (board-get-file-name . navi2ch-localfile-board-get-file-name)))
 
 (defvar navi2ch-localfile-variable-alist
@@ -64,7 +72,15 @@
 
 ;;-------------
 
+;; internal functions like bbs.cgi
 (defconst navi2ch-localfile-coding-system 'shift_jis-unix)
+
+(defvar navi2ch-localfile-encode-html-tag-alist
+  '(("<" . "&gt;")
+    (">" . "&lt;")
+    ("\n" . "<br>")))
+
+(defvar navi2ch-localfile-subject-file-name "subject.txt")
 
 (defun navi2ch-localfile-lock (dir)
   "`navi2ch-directory' をロックする。"
@@ -89,36 +105,12 @@
   (when navi2ch-localfile-use-lock
     (navi2ch-unlock-directory dir navi2ch-localfile-lock-name)))
 
-(defun navi2ch-localfile-p (uri)
-  "URI が localfile なら non-nilを返す。"
-  (string-match navi2ch-localfile-regexp uri))
-
-(defun navi2ch-localfile-article-update (board article)
-  "BOARD ARTICLEの記事を更新する。"
-  (list article '(dummy)))
-
-(defvar navi2ch-localfile-encode-html-tag-alist
-  '(("<" . "&gt;")
-    (">" . "&lt;")
-    ("\n" . "<br>")))
-
 (defun navi2ch-localfile-encode-string (string)
-  (let ((regexp (regexp-opt
-		 (mapcar 'car navi2ch-localfile-encode-html-tag-alist)))
-	(start 0)
-	result rest mb me)
-    (while (string-match regexp string start)
-      (setq mb (match-beginning 0)
-	    me (match-end 0))
-      (setq result (cons (cdr (assoc (match-string 0 string)
-				     navi2ch-localfile-encode-html-tag-alist))
-			 (cons (substring string start mb)
-			       result)))
-      (if (= start me)
-	  (setq start (1+ start)
-		result (cons (substring string me start) result))
-	(setq start me)))
-    (apply 'concat (nreverse (cons (substring string start) result)))))
+  (let* ((alist navi2ch-localfile-encode-html-tag-alist)
+	 (regexp (regexp-opt (mapcar 'car alist))))
+    (navi2ch-replace-string regexp (lambda (key)
+				     (cdr (assoc key alist)))
+			    string t)))
 
 (defun navi2ch-localfile-encode-message (from mail time message
 					      &optional subject)
@@ -129,22 +121,22 @@
 	  (navi2ch-localfile-encode-string message)
 	  (navi2ch-localfile-encode-string (or subject ""))))
 
-(defvar navi2ch-localfile-subject-file-name "subject.txt")
-
-(defun navi2ch-localfile-update-subject-file
-  (directory &optional article-id sage-flag)
+(defun navi2ch-localfile-update-subject-file (directory
+					      &optional article-id sage-flag)
   "DIRECTORY 以下の `navi2ch-localfile-subject-file-name' を更新する。
 ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 `navi2ch-localfile-subject-file-name' に指定されたアーティクルが無い場
 合は SUBJECT を使用する。DIRECTORY は呼び出し元でロックしておくこと。"
   (if (not article-id)
-      (dolist (file (directory-files directory nil "[0-9]+\\.dat\\'"))
+      (dolist (file (directory-files (expand-file-name "dat" directory)
+				     nil "\\`[0-9]+\\.dat\\'"))
 	(navi2ch-localfile-update-subject-file
 	 directory (file-name-sans-extension file)))
     (let* ((coding-system-for-read navi2ch-localfile-coding-system)
 	   (coding-system-for-write navi2ch-localfile-coding-system)
+	   (dat-directory (expand-file-name "dat" directory))
 	   (article-file (expand-file-name (concat article-id ".dat")
-					   directory))
+					   dat-directory))
 	   (subject-file (expand-file-name navi2ch-localfile-subject-file-name
 					   directory))
 	   (temp-file (navi2ch-make-temp-file subject-file))
@@ -167,7 +159,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	      (if (file-exists-p subject-file)
 		  (insert-file-contents subject-file))
 	      (goto-char (point-min))
-	      (if (re-search-forward (format "^%s.dat<>[^\n]+$\n"
+	      (if (re-search-forward (format "^%s\\.dat<>[^\n]+\n"
 					     article-id) nil t)
 		  (replace-match "")
 		(goto-char (point-max))
@@ -188,12 +180,15 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
       (let ((coding-system-for-read navi2ch-localfile-coding-system)
 	    (coding-system-for-write navi2ch-localfile-coding-system)
 	    (redo t)
+	    (dat-directory (expand-file-name "dat" directory))
 	    now article-id file)
+	(unless (file-exists-p dat-directory)
+	  (make-directory dat-directory t))
 	(while (progn
 		 (setq now (current-time)
 		       article-id (format-time-string "%s" now)
 		       file (expand-file-name (concat article-id ".dat")
-					      directory))
+					      dat-directory))
 		 ;; ここでファイルをアトミックに作りたいとこだけど、
 		 ;; write-region に mustbenew 引数の無い XEmacs でどう
 		 ;; やればいいんだろう。。。
@@ -213,8 +208,9 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   (unwind-protect
       (let* ((coding-system-for-read navi2ch-localfile-coding-system)
 	     (coding-system-for-write navi2ch-localfile-coding-system)
+	     (dat-directory (expand-file-name "dat" directory))
 	     (file (expand-file-name (concat article-id ".dat")
-				     directory))
+				     dat-directory))
 	     (temp-file (navi2ch-make-temp-file file)))
 	(unwind-protect
 	    (when (file-readable-p file)
@@ -232,6 +228,17 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 					       (string-match "sage" mail)))
     (navi2ch-localfile-unlock directory)))
 
+;; interface functions for multibbs
+(defun navi2ch-localfile-p (uri)
+  "URI が localfile なら non-nilを返す。"
+  (string-match navi2ch-localfile-regexp uri))
+
+(defun navi2ch-localfile-article-update (board article)
+  "BOARD ARTICLEの記事を更新する。"
+  (let ((url (navi2ch-article-get-url board article))
+	(file (navi2ch-article-get-file-name board article)))
+    (list (navi2ch-localfile-update-file url file) nil)))
+
 (defun navi2ch-localfile-send-message
   (from mail message subject bbs key time board article)
 
@@ -241,31 +248,59 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	     (= (length subject) 0))
     (error "Subject が書かれていません。"))
 
-  (let* ((dat-file-name (navi2ch-article-get-file-name board article))
-	 (directory (file-name-directory dat-file-name)))
-    (if subject
-	;; スレ立て
-	(navi2ch-localfile-create-thread directory from mail message subject)
-      ;; レス書き
-      (navi2ch-localfile-append-message directory key
-					from mail message))))
+  (save-match-data
+    (let* ((url (navi2ch-board-get-url board))
+	   directory)
+      (if (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
+			url)
+	  (setq directory (file-name-directory (match-string 1 url)))
+	(error "何か変です。"))
+      (if subject
+	  ;; スレ立て
+	  (navi2ch-localfile-create-thread directory from mail message subject)
+	;; レス書き
+	(navi2ch-localfile-append-message directory key
+					  from mail message)))))
 
 (defun navi2ch-localfile-send-message-success-p (proc)
 ;  (string-match "302 Found" (navi2ch-net-get-content proc)))
   t)
 
+(defun navi2ch-localfile-board-update (board)
+  (let ((file (navi2ch-board-get-file-name board))
+	(url (navi2ch-board-get-url board)))
+    (navi2ch-localfile-update-file url file)))
+
 (defun navi2ch-localfile-board-get-file-name (board &optional file-name)
-  (let ((uri (navi2ch-board-get-uri board)))
+  (let ((uri (navi2ch-board-get-uri board))
+	(cache-dir (navi2ch-expand-file-name navi2ch-localfile-cache-name)))
     (when (and uri
-	       (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
+	       (string-match (concat navi2ch-localfile-regexp "/*\\(.+\\)")
 			     uri))
       (expand-file-name (or file-name
 			    navi2ch-board-subject-file-name)
-			(match-string 1 uri)))))
+			(expand-file-name (match-string 1 uri)
+					  cache-dir)))))
 
-(defun navi2ch-localfile-update-file (&rest args)
-  '(("Date" . "dummy")
-    ("Server" . "localfile")
-    ("Last-Modified" . "dummy")))
+(defun navi2ch-localfile-update-file (url file &rest args)
+  (let ((directory (file-name-directory file)))
+    (unless (file-exists-p directory)
+      (make-directory directory t)))
+  (let (source-file)
+    (save-match-data
+      (if (string-match (concat navi2ch-localfile-regexp "\\(.+\\)")
+			url)
+	  (setq source-file (match-string 1 url))))
+    (if (and source-file
+	     (file-readable-p source-file))
+	(let* ((coding-system-for-write 'binary)
+	       (coding-system-for-read 'binary)
+	       (time (nth 5 (file-attributes source-file)))
+	       (time-string (navi2ch-http-date-encode time)))
+	  (with-temp-file file
+	    (insert-file-contents source-file))
+	  (list (cons "Date" time-string)
+		(cons "Server" "localfile")
+		(cons "Last-Modified" time-string))))))
 
 ;;; navi2ch-localfile.el ends here

@@ -37,12 +37,12 @@
 (defvar navi2ch-multibbs-func-alist nil
   "BBS の種類と関数群の alist。
 各要素は
-(BBSTYPE . FUNC-ALIST)
+\(BBSTYPE . FUNC-ALIST)
 BBSTYPE: BBS の種類を表すシンボル。
 FUNC-ALIST: その BBS での動作を指定する関数群。
 
 FUNC-ALIST は以下の通り
-((bbs-p			. BBS-P-FUNC)
+\((bbs-p			. BBS-P-FUNC)
  (subject-callback	. SUBJECT-CALLBACK-FUNC)
  (article-update	. ARTICLE-UPDATE-FUNC)
  (article-to-url	. ARTICLE-TO-URL-FUNC)
@@ -50,7 +50,9 @@ FUNC-ALIST は以下の通り
  (url-to-article	. URL-TO-ARTICLE-FUNC)
  (send-message		. SEND-MESSAGE-FUNC)
  (send-success-p	. SEND-MESSAGE-SUCCESS-P-FUNC)
- (error-string		. ERROR-STRING-FUNC))
+ (error-string		. ERROR-STRING-FUNC)
+ (board-update		. BOARD-UPDATE-FUNC)
+ (board-get-file-name	. BOARD-GET-FILE-NAME-FUNC))
 
 BBS-P-FUNC(URI):
     URI がその BBS のものならば non-nil を返す。
@@ -81,17 +83,24 @@ SEND-MESSAGE-SUCCESS-P-FUNC(PROC):
 
 ERROR-STRING-FUNC(PROC):
     PROC の送信セッションが失敗したときのエラーメッセージを返す。
+
+BOARD-UPDATE-FUNC(BOARD):
+    BOARD で表されるファイルを更新する。
+
+BOARD-GET-FILE-NAME-FUNC(BOARD &optional FILE-NAME)
+    BOARD の情報を保存するディレクトリを基準として、FILE-NAME の
+    絶対パスを返す。
 ")
 
 (defvar navi2ch-multibbs-variable-alist nil
   "BBS の種類と変数群の alist。
 各要素は
-(BBSTYPE . FUNC-ALIST)
+\(BBSTYPE . FUNC-ALIST)
 BBSTYPE: BBS の種類を表すシンボル。
 VARIABLE-ALIST: その BBS の設定を指定する変数群。
 
 VARIABLE-ALIST は以下の通り
-((coding-system		. CODING-SYSTEM-VAR))
+\((coding-system		. CODING-SYSTEM-VAR))
 
 CODING-SYSTEM-VAR:
     その BBS のファイルの文字コード
@@ -248,6 +257,16 @@ START, END, NOFIRST で範囲を指定する"
 	  (message "send message...failed")))
       nil)))
 
+(defun navi2ch-multibbs-board-update (board)
+  (let ((func (navi2ch-multibbs-get-func-from-board
+	       board 'board-update 'navi2ch-2ch-board-update)))
+    (funcall func board)))
+
+(defun navi2ch-multibbs-board-get-file-name (board &optional file-name)
+  (let ((func (navi2ch-multibbs-get-func-from-board
+	       board 'board-get-file-name 'navi2ch-2ch-board-get-file-name)))
+    (funcall func board file-name)))
+
 ;;;-----------------------------------------------
 
 (defun navi2ch-2ch-subject-callback ()
@@ -373,4 +392,29 @@ START, END, NOFIRST で範囲を指定する"
   'navi2ch-net-send-message-success-p)
 (defalias 'navi2ch-2ch-send-message-error-string
   'navi2ch-net-send-message-error-string)
+
+(defun navi2ch-2ch-board-update (board)
+  (let ((file (navi2ch-board-get-file-name board))
+	(time (cdr (assq 'time board))))
+    (if navi2ch-board-enable-readcgi
+	(car (navi2ch-net-update-file-with-readcgi
+	      (navi2ch-board-get-readcgi-raw-url board) file time))
+      (let ((url (navi2ch-board-get-url
+		  board (if navi2ch-board-use-subback-html
+			    navi2ch-board-subback-file-name)))
+	    (func (navi2ch-multibbs-subject-callback board)))
+	(navi2ch-net-update-file url file time func)))))
+
+(defun navi2ch-2ch-board-get-file-name (board &optional file-name)
+  (let ((uri (navi2ch-board-get-uri board)))
+    (when uri
+      (cond ((string-match "http://\\(.+\\)" uri)
+	     (navi2ch-expand-file-name
+	      (concat (match-string 1 uri)
+		      (or file-name navi2ch-board-subject-file-name))))
+	    ((string-match "file://\\(.+\\)" uri)
+	     (expand-file-name (or file-name
+				   navi2ch-board-subject-file-name)
+			       (match-string 1 uri)))))))
+
 ;;; navi2ch-multibbs.el ends here

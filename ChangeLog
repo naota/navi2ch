@@ -1,3 +1,34 @@
+2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	navi2ch-localfile がなんとなく動くようになりますた。
+	まだ navi2ch.el からはロードしてません。
+
+	* navi2ch-util.el (navi2ch-replace-string): 置換先に関数を使えるよ
+	うにした。Emacs 21 の replace-regexp-in-string と同等なインプリメ
+	ントにして置換後の文字が空でも安全にした。(遅くなったかも)
+	(navi2ch-replace-html-tag): 上記関数を使うように。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-func-alist): board-update
+	と board-get-file-name を追加。
+	(navi2ch-multibbs-board-update): 新関数。
+	(navi2ch-multibbs-board-get-file-name): 新関数。
+	(navi2ch-2ch-board-update): 新関数。いまのところ、他の BBS もこれ
+	を使うようになってるけど、readcgi とか使わない版に置き換えた方がい
+	いかも。
+	(navi2ch-2ch-board-get-file-name): 新関数。
+
+	* navi2ch-localfile.el: 新ファイル。
+
+	* navi2ch-http-date.el: 新ファイル。
+
+	* navi2ch-board.el (navi2ch-board-get-file-name): 中身を multibbs
+	に移動。
+	(navi2ch-board-update-file): 中身を multibbs に移動。
+
+	* Makefile.am (lisp_LISP): navi2ch-http-date.el
+	navi2ch-localfile.el を追加。
+	(update): cvs update の後で config.status を再作成 & 実行。
+
 2002-07-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-multibbs.el (navi2ch-2ch-url-to-board): 昨日の変更は間違っ

@@ -164,23 +164,46 @@ See also the function `defalias'."
 
 
 ;;;; other misc stuff
-(defsubst navi2ch-replace-string (regexp to-string string &optional all)
-  "STRING に含まれる REGEXP を TO-STRING で置換する。
-TO-STRING の `\\1' などは `replace-regexp' と同じように展開される。
+(defsubst navi2ch-replace-string (regexp rep string
+					 &optional all fixedcase literal)
+  "STRING に含まれる REGEXP を REP で置換する。
+REP が関数の場合は、マッチした文字列を引数にしてその関数を呼び出す。
+
+FIXEDCASE、LITERAL は `replace-match' にそのまま渡される。
 
 ALL が non-nil ならば、マッチしたテキストをすべて置換する。nil なら
 最初の1つだけを置換する。
 
 REGEXP が見つからない場合、STRING をそのまま返す。"
-  (if all
-      (let (start len)
-        (while (setq start (string-match regexp string start))
-          (setq len (length string)
-                string (replace-match to-string nil nil string)
-                start (+ (match-end 0) (- (length string) len)))))
-    (when (string-match regexp string)
-      (setq string (replace-match to-string nil nil string))))
-  string)
+  (save-match-data
+    (if all
+	;; Emacs 21 の replace-regexp-in-string のパクり。
+	(let ((start 0)
+	      (l (length string))
+	      mb me str matches)
+	  (while (and (< start l)
+		      (string-match regexp string start))
+	    (setq mb (match-beginning 0)
+		  me (match-end 0))
+	    (if (= mb me)
+		(setq me (min l (1+ mb))))
+	    (string-match regexp (setq str (substring string mb me)))
+	    (setq matches
+		  (cons (replace-match (if (stringp rep)
+					   rep
+					 (funcall rep (match-string 0 str)))
+				       fixedcase literal str)
+			(cons (substring string start mb)
+			      matches)))
+	    (setq start me))
+	  (apply #'concat (nreverse (cons (substring string start l)
+					  matches))))
+      (when (string-match regexp string)
+	(setq string (replace-match (if (stringp rep)
+					rep
+				      (funcall rep (match-string 0 string)))
+				    fixedcase literal string)))
+      string)))
 
 (defun navi2ch-bigint-int-to-list (i)
   (if (listp i)
@@ -284,12 +307,9 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 
 (defsubst navi2ch-replace-html-tag (str)
   (unless (string= str "")
-    (let (start new)
-      (while (setq start (string-match navi2ch-replace-html-tag-regexp
-				       str start))
-	(setq new (navi2ch-replace-html-tag-to-string (match-string 0 str)))
-	(setq str (replace-match new nil nil str))
-	(setq start (+ start (length new))))))
+    (navi2ch-replace-string navi2ch-replace-html-tag-regexp
+			    'navi2ch-replace-html-tag-to-string
+			    str t))
   str)
 
 (defsubst navi2ch-replace-html-tag-with-buffer ()
