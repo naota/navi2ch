@@ -218,7 +218,11 @@ LEN は RANGE で範囲を指定される list の長さ"
 START, END, NOFIRST で範囲を指定する"
   (let ((url (navi2ch-board-get-readcgi-url board)))
     (setq url (concat url (cdr (assq 'artid article)) "/"))
-    (if (eq start end)
+    (if (numberp start)
+	(setq start (number-to-string start)))
+    (if (numberp end)
+	(setq end (number-to-string end)))
+    (if (equal start end)
 	(concat url start)
       (concat url
 	      start (and (or start end) "-") end
@@ -1110,13 +1114,14 @@ article buffer から抜けるなら 'quit を返す。"
 		   ((eq char ?c) (list (navi2ch-article-get-current-number)
 				       (navi2ch-article-get-current-number)
 				       t))
-		   ((eq char ?r) (list (save-excursion
-					 (goto-char (region-beginning))
-					 (navi2ch-article-get-current-number))
-				       (save-excursion
-					 (goto-char (region-end))
-					 (navi2ch-article-get-current-number)
-					 t))))))))
+		   ((eq char ?r)
+		    (let ((rb (region-beginning)) (re (region-end)))
+		      (save-excursion
+			(list (progn (goto-char rb)
+				     (navi2ch-article-get-current-number))
+			      (progn (goto-char re)
+				     (navi2ch-article-get-current-number))
+			      t)))))))))
 
 (defun navi2ch-article-copy-title ()
   "メニューを表示して、タイトルを得る"
