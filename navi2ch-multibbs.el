@@ -3,7 +3,7 @@
 ;; Copyright (C) 2002 by Navi2ch Project
 
 ;; Author:
-;; Part5 ¥¹¥ì¤Î 509 ¤ÎÌ¾Ìµ¤·¤µ¤ó
+;; Part5 $B%9%l$N(B 509 $B$NL>L5$7$5$s(B
 ;; <http://pc.2ch.net/test/read.cgi/unix/1013457056/509>
 
 ;; Keywords: 2ch, network
@@ -33,13 +33,13 @@
 (require 'navi2ch)
 
 (defvar navi2ch-multibbs-func-alist nil
-  "BBS ¤Î¼ïÎà¤È´Ø¿ô·²¤Î alist¡£
-³ÆÍ×ÁÇ¤Ï
+  "BBS $B$N<oN`$H4X?t72$N(B alist$B!#(B
+$B3FMWAG$O(B
 (BBSTYPE . FUNC-ALIST)
-BBSTYPE: BBS ¤Î¼ïÎà¤òÉ½¤¹¥·¥ó¥Ü¥ë¡£
-FUNC-ALIST: ¤½¤Î BBS ¤Ç¤ÎÆ°ºî¤ò»ØÄê¤¹¤ë´Ø¿ô·²¡£
+BBSTYPE: BBS $B$N<oN`$rI=$9%7%s%\%k!#(B
+FUNC-ALIST: $B$=$N(B BBS $B$G$NF0:n$r;XDj$9$k4X?t72!#(B
 
-FUNC-ALIST ¤Ï°Ê²¼¤ÎÄÌ¤ê
+FUNC-ALIST $B$O0J2<$NDL$j(B
 ((bbs-p			. BBS-P-FUNC)
  (subject-callback	. SUBJECT-CALLBACK-FUNC)
  (article-update	. ARTICLE-UPDATE-FUNC)
@@ -51,34 +51,34 @@ FUNC-ALIST ¤Ï°Ê²¼¤ÎÄÌ¤ê
  (error-string		. ERROR-STRING-FUNC)
 
 BBS-P-FUNC(URI): 
-    URI ¤¬¤½¤Î BBS ¤Î¤â¤Î¤Ê¤é¤Ð non-nil ¤òÊÖ¤¹¡£
+    URI $B$,$=$N(B BBS $B$N$b$N$J$i$P(B non-nil $B$rJV$9!#(B
 
 SUBJECT-CALLBACK-FUNC(): 
-    subject.txt ¤ò¼èÆÀ¤¹¤ë¤È¤­¤Ënavi2ch-net-update-file ¤Ç»È¤ï¤ì¤ë¥³¡¼
-    ¥ë¥Ð¥Ã¥¯´Ø¿ô
+    subject.txt $B$r<hF@$9$k$H$-$K(Bnavi2ch-net-update-file $B$G;H$o$l$k%3!<(B
+    $B%k%P%C%/4X?t(B
 
 ARTICLE-UPDATE-FUNC(BOARD ARTICLE):
-    BOARD ARTICLE ¤ÇÉ½¤µ¤ì¤ë¥Õ¥¡¥¤¥ë¤ò¹¹¿·¤¹¤ë¡£
+    BOARD ARTICLE $B$GI=$5$l$k%U%!%$%k$r99?7$9$k!#(B
     
 ARTICLE-TO-URL-FUNC(BOARD ARTICLE
 		    &OPTIONAL START END NOFIRST):
-    BOARD, ARTICLE ¤«¤é url ¤ËÊÑ´¹¤¹¤ë¡£
+    BOARD, ARTICLE $B$+$i(B url $B$KJQ49$9$k!#(B
 
 URL-TO-BOARD-FUNC(URL):
-URL ¤«¤é board ¤ËÊÑ´¹¤¹¤ë¡£
+URL $B$+$i(B board $B$KJQ49$9$k!#(B
 
 URL-TO-ARTICLE-FUNC(URL):
-URL ¤«¤é article ¤ËÊÑ´¹¤¹¤ë¡£
+URL $B$+$i(B article $B$KJQ49$9$k!#(B
 
 SEND-MESSAGE-FUNC(FROM MAIL MESSAGE 
 		  SUBJECT BBS KEY TIME BOARD ARTICLE):
-    MESSAGE ¤òÁ÷¿®¤¹¤ë¡£
+    MESSAGE $B$rAw?.$9$k!#(B
 
 SEND-MESSAGE-SUCCESS-P-FUNC(PROC):
-    PROC ¤ÎÁ÷¿®¥»¥Ã¥·¥ç¥ó¤¬À®¸ù¤·¤Æ¤¤¤ì¤Ð non-nil ¤òÊÖ¤¹¡£
+    PROC $B$NAw?.%;%C%7%g%s$,@.8y$7$F$$$l$P(B non-nil $B$rJV$9!#(B
 
 ERROR-STRING-FUNC(PROC):
-    PROC ¤ÎÁ÷¿®¥»¥Ã¥·¥ç¥ó¤¬¼ºÇÔ¤·¤¿¤È¤­¤Î¥¨¥é¡¼¥á¥Ã¥»¡¼¥¸¤òÊÖ¤¹¡£
+    PROC $B$NAw?.%;%C%7%g%s$,<:GT$7$?$H$-$N%(%i!<%a%C%;!<%8$rJV$9!#(B
 
 ")
 
@@ -149,8 +149,8 @@ ERROR-STRING-FUNC(PROC):
 
 (defun navi2ch-multibbs-article-to-url 
   (board article &optional start end nofirst)
-  "BOARD, ARTICLE ¤«¤é url ¤ËÊÑ´¹¡£
-START, END, NOFIRST ¤ÇÈÏ°Ï¤ò»ØÄê¤¹¤ë"
+  "BOARD, ARTICLE $B$+$i(B url $B$KJQ49!#(B
+START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
   (let ((func (navi2ch-multibbs-get-func-from-board 
 	       board 'article-to-url 'navi2ch-2ch-article-to-url)))
     (funcall func board article start end nofirst)))
@@ -197,10 +197,10 @@ START, END, NOFIRST ¤ÇÈÏ°Ï¤ò»ØÄê¤¹¤ë"
     (navi2ch-board-make-subject-txt)))
 
 (defun navi2ch-2ch-article-update (board article)
-  "BOARD, ARTICLE ¤ËÂÐ±þ¤¹¤ë¥Õ¥¡¥¤¥ë¤ò¹¹¿·¤¹¤ë¡£
-ÊÖ¤êÃÍ¤Ï (header state) ¤Î¥ê¥¹¥È¡£
-state ¤Ï¤¢¤Ü¡¼¤ó¤µ¤ì¤Æ¤ì¤Ð aborn ¤È¤¤¤¦¥·¥ó¥Ü¥ë¡£
-²áµî¥í¥°¤ò¼èÆÀ¤·¤Æ¤¤¤ì¤Ð kako ¤È¤¤¤¦¥·¥ó¥Ü¥ë¡£"
+  "BOARD, ARTICLE $B$KBP1~$9$k%U%!%$%k$r99?7$9$k!#(B
+$BJV$jCM$O(B (header state) $B$N%j%9%H!#(B
+state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
+$B2a5n%m%0$r<hF@$7$F$$$l$P(B kako $B$H$$$&%7%s%\%k!#(B"
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	url)
@@ -251,7 +251,7 @@ state ¤Ï¤¢¤Ü¡¼¤ó¤µ¤ì¤Æ¤ì¤Ð aborn ¤È¤¤¤¦¥·¥ó¥Ü¥ë¡£
     (if id (list (cons 'uri uri) (cons 'id id)))))
 
 (defun navi2ch-2ch-url-to-article (url)
-  "URL ¤«¤é article ¤ËÊÑ´¹¡£"
+  "URL $B$+$i(B article $B$KJQ49!#(B"
   (let (list)
     (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
            (setq list (list (cons 'artid (match-string 1 url))))
@@ -280,7 +280,7 @@ state ¤Ï¤¢¤Ü¡¼¤ó¤µ¤ì¤Æ¤ì¤Ð aborn ¤È¤¤¤¦¥·¥ó¥Ü¥ë¡£
 	(referer     (navi2ch-board-get-uri board))
 	(spid        (navi2ch-board-load-spid board))
 	(param-alist (list
-		      (cons "submit" "½ñ¤­¹þ¤à")
+		      (cons "submit" "$B=q$-9~$`(B")
 		      (cons "FROM"   (or from ""))
 		      (cons "mail"   (or mail ""))
 		      (cons "bbs"    bbs)
@@ -303,8 +303,8 @@ state ¤Ï¤¢¤Ü¡¼¤ó¤µ¤ì¤Æ¤ì¤Ð aborn ¤È¤¤¤¦¥·¥ó¥Ü¥ë¡£
 
 (defun navi2ch-2ch-article-to-url
   (board article &optional start end nofirst)
-  "BOARD, ARTICLE ¤«¤é url ¤ËÊÑ´¹¡£
-START, END, NOFIRST ¤ÇÈÏ°Ï¤ò»ØÄê¤¹¤ë"
+  "BOARD, ARTICLE $B$+$i(B url $B$KJQ49!#(B
+START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
   (let ((url (navi2ch-board-get-readcgi-url board)))
     (setq url (concat url (cdr (assq 'artid article)) "/"))
     (if (numberp start)

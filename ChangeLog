@@ -1,5 +1,7 @@
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-multibbs.el: 	ファイルの文字コードを iso-2022-jp に変更。
+
 	* navi2ch-vars.el (navi2ch-list-valid-host-regexp): .machibbs.com
 	を追加。
 	(navi2ch-message-aa-alist): AA 追加。
