@@ -493,7 +493,7 @@ START, END, NOFIRST で範囲を指定する"
     (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
       (setq rep (cdr match))
       (cond ((functionp rep)
-	     (funcall rep pref-depth sep-depth))
+	     (funcall rep))
 	    ((stringp rep)
 	     (let ((start (match-beginning 0))
 		   (end (match-end 0))
