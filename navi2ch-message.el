@@ -396,5 +396,25 @@
 	(insert aa)
       (ding))))
 
+(defun navi2ch-message-jump-to-message-buffer ()
+  (interactive)
+  (if (not (get-buffer navi2ch-message-buffer-name))
+      (message "No message buffer.")
+    (delete-other-windows)
+    (if navi2ch-message-current-article-buffer
+	(if (buffer-live-p navi2ch-message-current-article-buffer)
+	    (switch-to-buffer navi2ch-message-current-article-buffer)
+	  (navi2ch-article-view-article navi2ch-message-current-board
+					navi2ch-message-current-article)
+	  (setq navi2ch-message-current-article-buffer (current-buffer)))
+      (switch-to-buffer (get-buffer navi2ch-board-buffer-name))
+      (or (and (eq navi2ch-board-current-board
+		   navi2ch-message-current-board)
+	       (eq major-mode 'navi2ch-board-mode))
+	  (navi2ch-bm-select-board navi2ch-message-current-board)))
+    (split-window-vertically)
+    (other-window 1)
+    (switch-to-buffer (get-buffer navi2ch-message-buffer-name))))
+
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

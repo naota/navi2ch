@@ -964,6 +964,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
     ;; (define-key map "\C-c1" 'navi2ch-one-pane)
     ;; (define-key map "\C-c2" 'navi2ch-two-pane)
     ;; (define-key map "\C-c3" 'navi2ch-three-pane)
+    (define-key map "\C-c\C-o" 'navi2ch-message-jump-to-message-buffer)
     (setq navi2ch-global-map map)))
 
 (defvar navi2ch-global-view-map nil

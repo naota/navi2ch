@@ -713,6 +713,10 @@ List}) したりして、思う存分煽り文句を書いたら、@kbd{C-c C-c} で書き込
 
 書き込みをキャンセルするには、@kbd{C-c C-k} と入力する。
 
+書き込み中に他のスレを見るなどで別な (Navi2ch の)
+バッファに移動したときは、@kbd{C-c C-o}
+で元の「上のバッファが書き込むスレ、下のバッファでレスを書く」の状態に戻せる。
+
 @node Customize
 @chapter カスタマイズ
 
@@ -881,6 +885,10 @@ non-nil であっても、指定した板でしかモナーフォントが使われないというこ
 
 @item C-c C-v
 @code{navi2ch-version} Navi2ch のバージョンをミニバッファに表示
+
+@item C-c C-o
+@code{navi2ch-message-jump-to-message-buffer} レスを書いてる途中なら、
+レスを書くバッファと書き込むスレ/板のバッファに切り替え
 @end table
 
 Message モード以外では以下のキーバインドも使える。ただし、モードで上書

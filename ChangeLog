@@ -1,3 +1,11 @@
+2002-07-22  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-jump-to-message-buffer):
+	新関数。
+
+	* navi2ch-vars.el (navi2ch-global-map):
+	navi2ch-message-jump-to-message-buffer を C-c C-o にバインド。
+
 2002-07-22  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-replace-html-tag):
