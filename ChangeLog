@@ -1,3 +1,10 @@
+2003-12-28  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-mona.el (navi2ch-mona-arrange-message):
+	navi2ch-mona-enable-article-list のみを指定した際にデフォルトがお
+	かしかったのを修正。論理式だと深くなりすぎるので cond に変更。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/538
+
 2003-12-09  mami  <mami@users.sourceforge.net>
 
 	* NEWS: 更新。
