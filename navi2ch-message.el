@@ -295,7 +295,7 @@
   (let (same msg board article)
     (save-excursion
       (set-buffer (navi2ch-article-current-buffer))
-      (setq msg (cdr (assq 'data (navi2ch-article-get-message num))))
+      (setq msg (navi2ch-article-get-message-string num))
       (setq article navi2ch-article-current-article)
       (setq board navi2ch-article-current-board)
       (setq same (and (string-equal (cdr (assq 'id board))
