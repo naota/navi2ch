@@ -1,3 +1,10 @@
+2002-03-18    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-show-url):
+	ミニバッファに URL を表示するように変更 (修正?) 。
+	* navi2ch-board-misc.el (navi2ch-bm-show-url): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/198
+
 2002-03-17    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-make-subject-txt): 
