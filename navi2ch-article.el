@@ -701,7 +701,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	  ;; 更新できたら
 	  (when (or (and first (file-exists-p file))
 		    (and header
-			 (not (navi2ch-net-get-state 'not-updated header))))
+			 (not (navi2ch-net-get-state 'not-updated header))
+			 (not (navi2ch-net-get-state 'error header))))
 	    (setq list
 		  (if (or first
 			  (navi2ch-net-get-state 'aborn header)
@@ -750,7 +751,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	      article (nth 0 ret)
 	      header (nth 1 ret))
 	(when (and header
-		   (not (navi2ch-net-get-state 'not-updated header)))
+		   (not (navi2ch-net-get-state 'not-updated header))
+		   (not (navi2ch-net-get-state 'error header)))
 	  (navi2ch-article-save-info board article)
 	  (navi2ch-article-set-summary-element board article t)
 	  t)))))
@@ -779,7 +781,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	  (setq start (1+ (navi2ch-count-lines-file file))))
 	(setq header (navi2ch-multibbs-article-update board article start))
 	(when header
-	  (unless (navi2ch-net-get-state 'not-updated header)
+	  (unless (or (navi2ch-net-get-state 'not-updated header)
+		      (navi2ch-net-get-state 'error header))
 	    (setq article (navi2ch-put-alist 'time
 					     (or (cdr (assoc "Last-Modified"
 							     header))

@@ -353,6 +353,7 @@
 	(navi2ch-board-save-old-subject-file board)
 	(setq header (navi2ch-board-update-file board))
 	(setq time (and (not (navi2ch-net-get-state 'not-updated header))
+			(not (navi2ch-net-get-state 'error header))
 			(or (cdr (assoc "Last-Modified" header))
 			    (cdr (assoc "Date" header)))))
 	(when time

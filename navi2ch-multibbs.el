@@ -294,19 +294,20 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	      (navi2ch-board-get-host board)))
 	(progn
 	  (setq url (navi2ch-article-get-readcgi-raw-url board article start))
-	  (setq header (navi2ch-net-update-file-with-readcgi url file time start))
-	  (setq kako-p (or (not header)
-			   (navi2ch-net-get-state 'kako header))))
+	  (setq header (navi2ch-net-update-file-with-readcgi url file
+							     time start))
+	  ;; read.cgi を使っててエラーになるのはホントにエラーのとき
+	  (setq kako-p (navi2ch-net-get-state 'kako header)))
       (setq url (navi2ch-article-get-url board article))
       (setq header (if start
 		       (navi2ch-net-update-file-diff url file time)
 		     (navi2ch-net-update-file url file time)))
-      (setq kako-p (or (not header)
-		       (navi2ch-net-get-state 'kako header))))
+      (setq kako-p (navi2ch-net-get-state 'error header)))
     (when kako-p
       (setq url (navi2ch-article-get-kako-url board article))
-      (setq header (navi2ch-net-add-state
-		    'kako (navi2ch-net-update-file url file))))
+      (setq header (navi2ch-net-update-file url file))
+      (unless (navi2ch-net-get-state 'error header)
+	(setq header (navi2ch-net-add-state 'kako header))))
     header))
 
 (defun navi2ch-2ch-url-to-board (url)

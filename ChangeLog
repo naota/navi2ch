@@ -1,3 +1,30 @@
+2002-10-17  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-oyster.el (navi2ch-oyster-article-update): kako を付ける
+	ときの条件を変える。
+	(navi2ch-oyster-update-file-with-offlaw): 作りを今の
+	navi2ch-net-update-file-with-readcgi に合わせる。
+	kako を返していたところで error を返すように。
+
+	* navi2ch-net.el (navi2ch-net-state-header-alist): error を追加。
+	(navi2ch-net-update-file): 今まで kako を返していたところで error
+	を返すように。
+	(navi2ch-net-update-file-diff): 同上。
+	(navi2ch-net-update-file-with-readcgi): 同上。ただし、過去ログ倉庫
+	で発見のときは kako を返す。
+	
+
+	* navi2ch-multibbs.el (navi2ch-2ch-article-update): kako を付ける
+	ときの条件を変える。
+
+	* navi2ch-board.el (navi2ch-board-sync): not-updated だけではなく
+	error も見るように。
+
+	* navi2ch-article.el (navi2ch-article-sync): not-updated だけでは
+	なく error も見るように。
+	(navi2ch-article-fetch-article): 同上。
+	(navi2ch-article-update-file): 同上。
+
 2002-10-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-with-default-file-modes): XEmacs のとき

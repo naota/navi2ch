@@ -83,30 +83,30 @@ START からじゃないかもしれないけど・・・。
     (setq header (if start
 		     (navi2ch-net-update-file-diff url file time)
 		   (navi2ch-net-update-file url file time)))
-    (unless (or (not header)
-		(navi2ch-net-get-state 'kako header))
+    ;; エラーだったら過去ログを取得
+    (when (navi2ch-net-get-state 'error header)
       (setq url (navi2ch-article-get-kako-url board article))
-      (setq kako-p t)
-      (setq header (navi2ch-net-update-file url file)))
-    (unless (or (not header)
-		(navi2ch-net-get-state 'kako header))
-      (and (not navi2ch-oyster-session-id)
-	   (navi2ch-oyster-login))
-      (setq url (navi2ch-oyster-get-offlaw-url
-		 board article navi2ch-oyster-session-id file))
-      (setq kako-p t)
-      (message "offlaw url %s" url)
-      (setq header
-	    (if start
-		(progn
-		  (message "article %s" article)
-		  (navi2ch-oyster-update-file-with-offlaw url file time t))
-	      (prog1
-		  (navi2ch-oyster-update-file-with-offlaw url file time nil)
-		(message "getting from 0 offlaw.cgi")))))
-    (if kako-p
-	(navi2ch-net-add-state 'kako header)
-      header)))
+      (setq header (navi2ch-net-update-file url file))
+
+      ;; やっぱりダメだったら ID を使って過去ログを取得
+      (if (not (navi2ch-net-get-state 'error header))
+	  (setq header (navi2ch-net-add-state 'kako header))
+	(unless navi2ch-oyster-session-id
+	  (navi2ch-oyster-login))
+	(setq url (navi2ch-oyster-get-offlaw-url
+		   board article navi2ch-oyster-session-id file))
+	(message "offlaw url %s" url)
+	(setq header
+	      (if start
+		  (progn
+		    (message "article %s" article)
+		    (navi2ch-oyster-update-file-with-offlaw url file time t))
+		(prog1
+		    (navi2ch-oyster-update-file-with-offlaw url file time nil)
+		  (message "getting from 0 offlaw.cgi"))))
+	(unless (navi2ch-net-get-state 'error header)
+	  (setq header (navi2ch-net-add-state 'kako header)))))
+    header))
 
 (defun navi2ch-oyster-send-message
   (from mail message subject bbs key time board article)
@@ -160,52 +160,62 @@ TIME が non-nil ならば TIME より新しい時だけ更新する。
 DIFF が non-nil ならば差分を取得する。
 更新できれば HEADER を返す。"
   (let ((dir (file-name-directory file))
-	proc header cont)
+	proc header status)
     (unless (file-exists-p dir)
       (make-directory dir t))
     (setq proc (navi2ch-net-download-file url time))
-    (when (and proc
-	       (string= (navi2ch-net-get-status proc) "304"))
-      (setq proc nil))
-    (when proc
-      (let ((coding-system-for-write 'binary)
-	    (coding-system-for-read 'binary))
-	(message "%s: getting file with offlaw.cgi..." (current-message))
-	(setq header (navi2ch-net-get-header proc))
-	(setq cont (navi2ch-net-get-content proc))
-	(if (or (string= cont "")
-		(not cont))
-	    (progn (message "%sfailed" (current-message))
-		   (signal 'navi2ch-update-failed nil))
-	  (message "%sdone" (current-message))
-	  (let (state data cont-size)
-	    (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
-	      (setq state (match-string 1 cont))
-	      (setq data (match-string 2 cont))
-	      (setq cont (replace-match "" t nil cont)))
-	    (when (and (string-match "\\(OK\\|INCR\\)" state)
-		       (string-match "\\(.+\\)/\\(.+\\)K" data))
-	      (setq cont-size (string-to-number (match-string 1 data))))
-	    (setq cont (navi2ch-string-as-unibyte cont))
-	    (cond
-	     ((string= "+OK" state)
-	      (with-temp-file file
-		(navi2ch-set-buffer-multibyte nil)
-		(when (and (file-exists-p file) diff)
-		  (insert-file-contents file)
-		  (goto-char (point-max)))
-		(insert (substring cont 0 cont-size)))
-	      header)
-	     ((string= "-INCR" state);; あぼーん
-	      (with-temp-file file
-		(navi2ch-set-buffer-multibyte nil)
-		(insert (substring cont 0 cont-size)))
-	      (navi2ch-net-add-state 'aborn header))
-	     ((string= "-ERR" state)
-	      (let ((err-msg (decode-coding-string
-			      data navi2ch-coding-system)))
-		(message "error! %s" err-msg))
-	      nil))))))))
+    (setq header (and proc
+		      (navi2ch-net-get-header proc)))
+    (setq status (and proc
+		      (navi2ch-net-get-status proc)))
+    (cond ((or (not proc)
+	       (not header)
+	       (not status))
+	   (setq header (navi2ch-net-add-state 'error header)))
+	  ((string= status "304")
+	   (setq header (navi2ch-net-add-state 'not-updated header)))
+	  ((string= status "200")
+	   (let ((coding-system-for-write 'binary)
+		 (coding-system-for-read 'binary)
+		 cont)
+	     (message "%s: getting file with offlaw.cgi..." (current-message))
+	     (setq cont (navi2ch-net-get-content proc))
+	     (if (or (string= cont "")
+		     (not cont))
+		 (progn (message "%sfailed" (current-message))
+			(signal 'navi2ch-update-failed nil))
+	       (message "%sdone" (current-message))
+	       (let (state data cont-size)
+		 (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
+		   (setq state (match-string 1 cont))
+		   (setq data (match-string 2 cont))
+		   (setq cont (replace-match "" t nil cont)))
+		 (when (and (string-match "\\(OK\\|INCR\\)" state)
+			    (string-match "\\(.+\\)/\\(.+\\)K" data))
+		   (setq cont-size (string-to-number (match-string 1 data))))
+		 (setq cont (navi2ch-string-as-unibyte cont))
+		 (cond
+		  ((string= "+OK" state)
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (when (and (file-exists-p file) diff)
+		       (insert-file-contents file)
+		       (goto-char (point-max)))
+		     (insert (substring cont 0 cont-size))))
+		  ((string= "-INCR" state);; あぼーん
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (insert (substring cont 0 cont-size)))
+		   (setq header (navi2ch-net-add-state 'aborn header)))
+		  (t
+		   (when (string= "-ERR" state)
+		     (let ((err-msg (decode-coding-string
+				     data navi2ch-coding-system)))
+		       (message "error! %s" err-msg)))
+		   (setq header (navi2ch-net-add-state 'error header))))))))
+	  (t
+	   (setq header (navi2ch-net-add-state 'error header))))
+    header))
 
 (defun navi2ch-oyster-get-status (proc)
   "オイスターサーバの接続のステータス部を返す。"
