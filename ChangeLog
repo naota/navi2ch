@@ -1,3 +1,11 @@
+2002-08-01  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-content):
+	accept-process-output へ proc を渡すように。(引数を省略した場合は
+	ブロックせずに戻るため、CPU 負荷がすごいことになってた。)
+	HTTP/1.1 が有効な時も HTTP/1.0 形式のループにフォールバックするよ
+	うに。
+
 2002-07-31  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* acinclude.m4 (AC_EMACS_LISP): 与えられた elisp-code を一つの関数

@@ -327,9 +327,9 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		      (while (and (eq (process-status proc) 'open)
 				  (goto-char (+ p size))
 				  (not (= (point) (+ p size))))
-			(accept-process-output))
+			(accept-process-output proc))
 		      (goto-char (+ p size))))
-		   ((not navi2ch-net-enable-http11)
+		   (t
 		    (while (eq (process-status proc) 'open)
 		      (accept-process-output proc))
 		    (goto-char (point-max))))
