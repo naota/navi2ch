@@ -1,5 +1,18 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
+	navi2ch-board-misc.el と同様。
+	(navi2ch-bookmark-fetch-mark-article): 同上。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 引数max-line 
+	が使われてなかったので、代わりに force として
+	navi2ch-article-fetch-article に渡すように。
+	(navi2ch-bm-fetch-mark-article): 引数を取るように。(うーん、これっ
+	てまずいかな。)
+
+	* navi2ch-article.el (navi2ch-article-update-file): 引数 force が
+	使用されてなかったので使うように。
+
 	* navi2ch-net.el (navi2ch-net-ignore-errors): エラー表示が見えない
 	のでウェイトをいれた。
 	(navi2ch-net-send-request): 大バグ突っ込んでた。修正。

@@ -209,7 +209,7 @@
     (insert (format "%3d %s%s %s%s%s\n"
                     number
 		    (cdr (assq updated navi2ch-bm-updated-mark-alist))
-                    (cadr (assq state navi2ch-bm-state-alist))
+		    (cadr (assq state navi2ch-bm-state-alist))
                     subject
                     (make-string (max (- navi2ch-bm-subject-width
                                          (string-width subject))
@@ -361,7 +361,7 @@
 	(setq navi2ch-bm-fetched-article-list
 	      (delq list navi2ch-bm-fetched-article-list))))))
 
-(defun navi2ch-bm-fetch-article (&optional max-line)
+(defun navi2ch-bm-fetch-article (&optional force)
   (interactive "P")
   (let* ((item (navi2ch-bm-get-property-internal (point)))
          (board (navi2ch-bm-get-board-internal item))
@@ -370,7 +370,7 @@
     (if (and article
 	     (not (navi2ch-board-from-file-p board)))
 	(progn
-	  (setq state (navi2ch-article-fetch-article board article))
+	  (setq state (navi2ch-article-fetch-article board article force))
 	  (when state
 	    (navi2ch-bm-remember-fetched-article board article)
 	    (let ((buffer-read-only nil))
@@ -591,9 +591,9 @@ ARG が non-nil なら移動方向を逆にする。"
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bm-display-article))
 
-(defun navi2ch-bm-fetch-mark-article ()
-  (interactive)
-  (navi2ch-bm-exec-subr 'navi2ch-bm-fetch-article))
+(defun navi2ch-bm-fetch-mark-article (&optional force)
+  (interactive "P")
+  (navi2ch-bm-exec-subr 'navi2ch-bm-fetch-article force))
 
 (defun navi2ch-bm-textize-mark-article (directory &optional file)
   (interactive "Ddirectory: \nFlist file: ")

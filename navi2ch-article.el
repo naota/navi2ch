@@ -736,6 +736,8 @@ state はあぼーんされてれば aborn というシンボル。
     (unless navi2ch-offline
       (let ((file (navi2ch-article-get-file-name board article))
 	    (time (cdr (assq 'time article)))
+	    (navi2ch-net-force-update (or navi2ch-net-force-update
+					  force))
 	    url kako)
         (setq state
 	      (if (and (navi2ch-enable-readcgi-p

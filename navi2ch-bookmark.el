@@ -373,7 +373,7 @@ KEY は (concat URI ARTID) ")
   (setq navi2ch-bookmark-list
 	(navi2ch-load-info navi2ch-bookmark-file)))
 
-(defun navi2ch-bookmark-fetch-article (&optional max-line)
+(defun navi2ch-bookmark-fetch-article (&optional force)
 ;; navi2ch-bm-fetch-article の wrapper として働き、subject が nil なら
 ;; ファイルから subject を見つけて更新する。
   (interactive "P")
@@ -381,7 +381,7 @@ KEY は (concat URI ARTID) ")
          (board (navi2ch-bookmark-get-board item))
          (article (navi2ch-bookmark-get-article item))
          state)
-    (setq state (navi2ch-bm-fetch-article max-line))
+    (setq state (navi2ch-bm-fetch-article force))
     (unless (assq 'subject article)
       (let ((newsubject
 	     (let ((file (navi2ch-article-get-file-name board article)))
@@ -397,9 +397,9 @@ KEY は (concat URI ARTID) ")
 	   navi2ch-bookmark-current-bookmark-id board article))))
     state))
 
-(defun navi2ch-bookmark-fetch-mark-article ()
-  (interactive)
-  (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article))
+(defun navi2ch-bookmark-fetch-mark-article (&optional force)
+  (interactive "P")
+  (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article force))
 
 (defun navi2ch-bookmark-change (changed-list)
   "変更された板の bookmark を修正する。
