@@ -1,10 +1,39 @@
 AC_INIT(navi2ch.el)
 AM_INIT_AUTOMAKE(navi2ch, 1.4)
 
-AM_PATH_LISPDIR
+AC_CANONICAL_BUILD
 
-AC_ARG_WITH(xemacs,           --with-xemacs             Use XEmacs to build, [ if test "${withval}" = "yes"; then EMACS=xemacs; else EMACS=${withval}; fi ]; AC_MSG_RESULT(EMACS=$EMACS))
-AC_ARG_WITH(emacs,            --with-emacs              Use Emacs to build, [ if test "${withval}" = "yes"; then EMACS=emacs; else EMACS=${withval}; fi; EMACS=$EMACS ]; AC_MSG_RESULT(EMACS=$EMACS))
-AC_ARG_WITH(lispdir,          --with-lispdir            Where to install lisp files, lispdir=${withval}; AC_MSG_RESULT(lispdir=$lispdir))
+case $build_os in
+*cygwin*) with_bash=yes ;;
+esac
+
+AC_ARG_WITH(bash, AC_HELP_STRING([--with-bash], [Use Bash to build]),
+[case $withval in
+yes) SHELL=bash ;;
+no)  ;;
+*)   SHELL="$withval" ;;
+esac])
+
+emacsen="emacs xemacs"
+
+AC_ARG_WITH(xemacs, AC_HELP_STRING([--with-xemacs], [Use XEmacs to build]),
+[case $withval in
+yes) emacsen="xemacs" ;;
+no)  emacsen="emacs" ;;
+*)   emacsen="$withval" ;;
+esac])
+
+AC_ARG_WITH(emacs, AC_HELP_STRING([--with-emacs], [Use Emacs to build]),
+[case $withval in
+yes) emacsen="emacs" ;;
+no)  emacsen="xemacs" ;;
+*)   emacsen="$withval" ;;
+esac])
+
+if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
+  AC_MSG_ERROR(specify one of --with-xemacs or --with-emacs)
+fi
+
+AM_PATH_LISPDIR
 
 AC_OUTPUT([Makefile doc/Makefile])
