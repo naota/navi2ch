@@ -1,3 +1,19 @@
+2003-10-03  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-ifemacsce): 新マクロ。
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/140
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/147
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/193
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/195
+	
+	* navi2ch-net.el (navi2ch-net-get-content-subr): 上記マクロを使う
+	ように。
+
+	* navi2ch.el (navi2ch-load-info): 上記マクロを使って EmacsCE のバ
+	グに対処。
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/248
+	http://pc3.2ch.net/test/read.cgi/mobile/1000484549/265
+	
 2003-09-29  mami  <mami@users.sourceforge.net>
 
 	* configure.in: 1.7.1-DEV にアップデート。

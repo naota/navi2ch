@@ -210,6 +210,14 @@ GNU Emacs's one, this macro is very useful."
 ;; Navi2chのコードをハクする人は↓を~/.emacsにも入れときましょう。
 (put 'navi2ch-ifxemacs 'lisp-indent-function 1)
 
+(defmacro navi2ch-ifemacsce (then &rest else)
+  "If on EmacsCE, do THEN, else do ELSE.
+Expanded at compilation time."
+  (if (string-match "windowsce" system-configuration)
+      then
+    (cons 'progn else)))
+(put 'navi2ch-ifemacsce 'lisp-indent-function 1)
+
 (defmacro navi2ch-define-mouse-key (map num command)
   (if (featurep 'xemacs)
       `(define-key ,map ',(intern (format "button%d" num)) ,command)

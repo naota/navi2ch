@@ -318,10 +318,17 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
       (setq file backup-file)))
   (when (file-regular-p file)
     (let ((coding-system-for-read navi2ch-coding-system))
-      (with-temp-buffer
-	(insert-file-contents file)
-	(let ((standard-input (current-buffer)))
-	  (read))))))
+      (navi2ch-ifemacsce
+	  (with-temp-buffer
+	    (insert-file-contents file)
+	    (goto-char (point-min))
+	    (while (search-forward "..." nil t)
+	      (replace-match ""))
+	    (car (read-from-string (buffer-string))))
+	(with-temp-buffer
+	  (insert-file-contents file)
+	  (let ((standard-input (current-buffer)))
+	    (read)))))))
 
 (defun navi2ch-split-window (display)
   "window を分割する。

@@ -283,7 +283,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 	     navi2ch-net-gunzip-args)))
 
 (defalias 'navi2ch-net-get-content-subr
-  (if (string-match "windowsce" system-configuration)
+  (navi2ch-ifemacsce
       'navi2ch-net-get-content-subr-with-temp-file
     'navi2ch-net-get-content-subr-region))
 
