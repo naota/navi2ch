@@ -1073,5 +1073,11 @@ This function is a cutdown version of cl-seq's one."
                        filter))
       (funcall filter))))
 
+(defsubst navi2ch-no-logging-message (fmt &rest args)
+  (navi2ch-ifxemacs
+      (apply #'lmessage 'no-log fmt args)
+    (let ((message-log-max nil))
+      (apply #'message fmt args))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

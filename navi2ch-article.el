@@ -490,14 +490,6 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-article-insert-messages (list range)
   "LIST を整形して挿入する"
-  (when (and navi2ch-article-auto-activate-message-filter
-	     (not (or navi2ch-article-message-filter-mode
-		      (eq major-mode 'navi2ch-article-mode)
-		      (eq major-mode 'navi2ch-popup-article-mode))))
-    (setq navi2ch-article-message-filter-mode t)
-    (when navi2ch-article-use-message-filter-cache
-      (setq navi2ch-article-message-filter-cache
-	    (navi2ch-article-load-message-filter-cache))))
   (let ((msg (if navi2ch-article-message-filter-mode
 		 "filtering and inserting current messages..."
 	       "inserting current messages..."))
@@ -650,7 +642,7 @@ START, END, NOFIRST で範囲を指定する"
 	;; 進捗表示
 	(and (> (setq progress (+ progress 100)) 10000)
 	     (/= (/ progress len) percent)
-	     (message "%s%d%%" msg (setq percent (/ progress len))))))
+	     (navi2ch-no-logging-message "%s%d%%" msg (setq percent (/ progress len))))))
     (garbage-collect);; navi2ch-parse-message は大量にゴミを残す
     (message "%sdone" msg)))
 
@@ -767,8 +759,12 @@ START, END, NOFIRST で範囲を指定する"
     (if slot
 	(cdr slot)
       (let ((subject (or (cdr (assq 'subject navi2ch-article-current-article))
-			 (and (eq (cdr (assq 'number alist)) 1)
-			      (cdr (assq 'subject alist))))))
+			 (if (eq (cdr (assq 'number alist)) 1)
+			     (cdr (assq 'subject alist))
+			   (let ((msg (navi2ch-article-get-message 1)))
+			     (when (stringp msg)
+			       (setq msg (navi2ch-article-parse-message msg)))
+			     (cdr (assq 'subject msg)))))))
 	(when subject
 	  (let ((result (when navi2ch-article-message-filter-by-subject-alist
 			  (navi2ch-article-message-filter-subr
@@ -896,6 +892,11 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 		  navi2ch-article-exist-message-range)
           (setq navi2ch-article-view-range
 		navi2ch-article-new-message-range)))
+      (when navi2ch-article-auto-activate-message-filter
+	(setq navi2ch-article-message-filter-mode t)
+	(when navi2ch-article-use-message-filter-cache
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-article-load-message-filter-cache))))
       (setq list (navi2ch-article-sync force 'first))
       (navi2ch-article-mode))
     (when (and number
@@ -928,6 +929,11 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
       (when navi2ch-article-auto-range
         (setq navi2ch-article-view-range
               navi2ch-article-new-message-range))
+      (when navi2ch-article-auto-activate-message-filter
+	(setq navi2ch-article-message-filter-mode t)
+	(when navi2ch-article-use-message-filter-cache
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-article-load-message-filter-cache))))
       (prog1
 	  (navi2ch-article-sync-from-file)
 	(navi2ch-article-set-mode-line)
