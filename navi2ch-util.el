@@ -517,5 +517,9 @@ base64デコードすべき内容がない場合はエラーになる。"
   (when (and url (string-match "http://\\([^/]+\\)" url))
     (match-string 1 url)))
 
+(defun navi2ch-read-string (prompt &optional initial-input history)
+  (let ((minibuffer-allow-text-properties nil))
+    (read-string prompt initial-input history)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

@@ -92,8 +92,8 @@
   (interactive)
   (unless navi2ch-bookmark-list
     (navi2ch-bookmark-load-info))
-  (let ((id (read-string "input bookmark id: " "bmark"))
-	(name (read-string "input bookmark name: " "ブックマーク"))
+  (let ((id (navi2ch-read-string "input bookmark id: " "bmark"))
+	(name (navi2ch-read-string "input bookmark name: " "ブックマーク"))
 	(list navi2ch-bookmark-list))
     (setq navi2ch-bookmark-list
 	  (list (append (list id name)
@@ -127,7 +127,7 @@
 			  (navi2ch-list-get-board-name-list
 			   navi2ch-list-category-list)))
       (error "Can't create this id's bookmark!"))
-    (let ((name (read-string (concat "Input bookmark name for [" bookmark-id "]: ")
+    (let ((name (navi2ch-read-string (concat "Input bookmark name for [" bookmark-id "]: ")
 			     bookmark-id)))
       (push (list bookmark-id name)
 	    navi2ch-bookmark-list)
@@ -146,8 +146,8 @@
   
 (defun navi2ch-bookmark-change-bookmark (bookmark-id)
   (let* ((bookmark (assoc bookmark-id navi2ch-bookmark-list))
-	 (id (read-string "new bookmark ID: " (car bookmark)))
-	 (name (read-string "new bookmark name: " (cadr bookmark))))
+	 (id (navi2ch-read-string "new bookmark ID: " (car bookmark)))
+	 (name (navi2ch-read-string "new bookmark name: " (cadr bookmark))))
     (setcar bookmark id)
     (setcar (cdr bookmark) name)
     (save-excursion
@@ -342,7 +342,7 @@
 		   (goto-char (point-min))
 		   (setq sep (navi2ch-article-get-separator))
 		   (cdr (assq 'subject (navi2ch-article-parse-message
-					(buffer-substring (point)
+					(buffer-substring-no-properties (point)
 							  (progn (end-of-line) (point)))
 					sep))))))))
 	(when newsubject 

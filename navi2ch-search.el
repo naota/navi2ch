@@ -138,7 +138,7 @@
               (let ((subject
                      (cdr (assq 'subject
                                 (navi2ch-article-parse-message
-                                 (buffer-substring (point)
+                                 (buffer-substring-no-properties (point)
                                                    (progn (forward-line 1)
                                                           (1- (point))))
                                  (navi2ch-article-get-separator))))))
@@ -189,7 +189,7 @@
 (defun navi2ch-search-subject-subr (board-list)
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-board-subject-regexp
-         board-list (read-string "Subject regexp: " nil
+         board-list (navi2ch-read-string "Subject regexp: " nil
 				 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
@@ -203,7 +203,7 @@
 (defun navi2ch-search-article-subr (board-list)
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-article-regexp
-         board-list (read-string "Search regexp: " nil
+         board-list (navi2ch-read-string "Search regexp: " nil
 				 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 

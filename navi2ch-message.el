@@ -134,7 +134,7 @@
 	(when (not navi2ch-message-new-message-p)
 	  (navi2ch-message-set-mail mail))
         (forward-line 2)
-        (setq message (buffer-substring (point) (point-max)))
+        (setq message (buffer-substring-no-properties (point) (point-max)))
         (let ((str (buffer-substring-no-properties
                     (point-min) (point-max))))
           (save-excursion

@@ -307,7 +307,7 @@
   (let (str)
     (end-of-line)
     (re-search-backward "^\\[[+-]\\]" nil t)
-    (setq str (buffer-substring
+    (setq str (buffer-substring-no-properties
 	       (save-excursion (beginning-of-line)
 			       (+ navi2ch-list-indent-width (point)))
 	       (save-excursion (end-of-line) (point))))

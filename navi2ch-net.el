@@ -290,7 +290,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		 (funcall navi2ch-net-get-content-subr-function
 			  gzip
 			  (navi2ch-string-as-multibyte
-			   (buffer-substring p (point)))))))))
+			   (buffer-substring-no-properties p (point)))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)

@@ -1,3 +1,24 @@
+2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-parse-message):
+	buffer-substring -> buffer-substring-no-properties
+	(navi2ch-article-get-message-list): 同上。
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article): 同上。
+	* navi2ch-list.el (navi2ch-list-close-all-category): 同上。
+	* navi2ch-message.el (navi2ch-message-send-message): 同上。
+	* navi2ch-net.el (navi2ch-net-get-content): 同上。
+	* navi2ch-search.el (navi2ch-search-article-regexp): 同上。
+	* navi2ch-util.el (navi2ch-read-string): 新関数。
+	* navi2ch-bookmark.el (navi2ch-bookmark-convert): 上記関数を使う。
+	(navi2ch-bookmark-create-bookmark): 同上。
+	* navi2ch-search.el (navi2ch-search-subject-subr): 同上。
+	(navi2ch-search-article-subr): 同上。
+	何も考えず buffer-substring -> buffer-substring-no-properties して
+	みる。read-string もあやしそうだったので navi2ch-read-string をでっ
+	ちあげて対応。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/545
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/553
+
 2002-01-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-string-as-multibyte): タイプミス修正

@@ -279,7 +279,7 @@ START, END, NOFIRST で範囲を指定する"
 		     syms))
 	(navi2ch-replace-html-tag-with-buffer)
 	(dolist (x alist)
-	  (setcdr x (buffer-substring (cadr x) (cddr x))))
+	  (setcdr x (buffer-substring-no-properties (cadr x) (cddr x))))
 	alist))))
 
 (defun navi2ch-article-get-separator ()
@@ -316,7 +316,7 @@ START, END, NOFIRST で範囲を指定する"
           (while (not (eobp))
             (setq message-list
                   (cons (cons i
-			      (let ((str (buffer-substring
+			      (let ((str (buffer-substring-no-properties
 					  (point)
 					  (progn (forward-line 1)
 						 (1- (point))))))
