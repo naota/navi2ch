@@ -1,5 +1,9 @@
 2002-07-30  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-kill-buffer-hook): 
+	navi2ch-article-backward-buffer を呼ばないようにした。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/674
+
 	* navi2ch-message.el (navi2ch-message-kill-message):
 	一回余分に y-or-n-p で聞かれることがあった。
 	括弧の対応を間違ってたので、修正。

@@ -578,9 +578,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (run-hooks 'navi2ch-article-mode-hook))
 
 (defun navi2ch-article-kill-buffer-hook ()
-  (navi2ch-article-save-info)
-  (if (eq (window-buffer) (current-buffer))
-      (navi2ch-article-backward-buffer)))
+  (navi2ch-article-save-info))
 
 (defun navi2ch-article-exit ()
   (interactive)
