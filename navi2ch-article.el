@@ -1299,8 +1299,9 @@ article buffer から抜けるなら 'quit を返す。"
 		   "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
 	(setq msg (navi2ch-replace-string "\n+" " " msg t))
 	(message
-	 "%s" (truncate-string (format "[%d]: %s" num msg)
-			       (eval navi2ch-article-display-link-width)))))))
+	 "%s" (truncate-string-to-width
+	       (format "[%d]: %s" num msg)
+	       (eval navi2ch-article-display-link-width)))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
