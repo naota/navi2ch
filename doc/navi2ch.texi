@@ -27,9 +27,11 @@
 @c infoファイルに変換するには、
 @c % makeinfo navi2ch.texi
 @c とするか、Emacs でこのファイルを開き、@kbd{M-x texi2info} とする。
-@c Emacs 20 だとフォーマットできないみたい。。。
 
 @ifinfo
+@html
+<hr>
+@end html
 @value{REVISION}
 
 Copyright (C) 2002 by ２ちゃんねる
@@ -56,6 +58,9 @@ Permission is granted to copy and distribute translations of this
 manual into another language, under the above conditions for modified
 versions, except that this permission notice may be stated in a
 translation approved by the Free Software Foundation.
+@html
+<hr>
+@end html
 @end ifinfo
 
 @titlepage
@@ -86,7 +91,7 @@ translation approved by the Free Software Foundation.
 
 @contents
 
-@ifnottex
+@ifinfo
 @node Top
 @top Navi2ch
 
@@ -160,7 +165,7 @@ Bookmark モード
 @end detailmenu
 @end menu
 
-@end ifnottex
+@end ifinfo
 
 @node Install
 @chapter インストール
@@ -520,26 +525,6 @@ Board モード等で @kbd{m a m i} するなどして検索対象としたいスレの内容
 Board モード (@ref{Board Mode}) や Article モード(@ref{Article Mode}) 
 で @kbd{A} を押すことで、そのスレをグローバルブックマークに追加するこ
 とができる。
-
-
-@ifnottex
-注: 2001/11/28 バージョンの navi2ch では Board モードでの @kbd{A} はうまく
-動作しない。下記のように変更して navi2ch をインストールしなおすこと。
-
-@example
---- navi2ch-board.el.orig
-+++ navi2ch-board.el
-@@@@ -40,7 +40,7 @@@@
-   (define-key navi2ch-board-mode-map "b" 'navi2ch-board-toggle-bookmark)
-   (define-key navi2ch-board-mode-map "w" 'navi2ch-board-write-message)
-   (define-key navi2ch-board-mode-map "2" 'navi2ch-board-two-pain)
--  (define-key navi2ch-board-mode-map "A" 'navi2ch-board-add-global-bookmark)
-+  ;; (define-key navi2ch-board-mode-map "A" 'navi2ch-board-add-global-bookmark)
-   (define-key navi2ch-board-mode-map "\C-c\C-f" 'navi2ch-article-find-file)
-   (define-key navi2ch-board-mode-map "\M-e" 'navi2ch-board-expire))
-@end example
-@end ifnottex
-
 
 Board モードでは、@kbd{m A} を使用することでマークを付けたスレをまとめ
 て追加することもできる。@xref{Mark}.

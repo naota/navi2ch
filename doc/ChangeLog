@@ -1,8 +1,13 @@
 2002-01-07  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.texi (About This Document): 削除。
+	* batch-texi2info.el (batch-texi2info): Emacs 21 のチェックをやめる。
+
+	* navi2ch.texi: Emacs 20 でもフォーマットできるよう、
+	@ifnottex -> @ifinfo
+	(About This Document): 削除。
 	(Getting): 入手方法を SourceForge に変更。
 	(Getting Develop Version): 新規ノード。
+	(Adding Bookmark): navi2ch 1.4 で修正されたので patch を削除。
 
 2002-01-05  Nanashi San  <nanashi@users.sourceforge.net>
 
