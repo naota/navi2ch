@@ -1,3 +1,9 @@
+2003-02-22  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-content): 壊れた proxy でも動く
+	ように。
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/901
+
 2003-02-22  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map):

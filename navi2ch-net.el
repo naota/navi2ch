@@ -353,6 +353,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		      (goto-char (+ p size))))
 		   ((or (string= (navi2ch-net-get-protocol proc)
 				 "HTTP/1.0")
+			(not navi2ch-net-enable-http11)
 			(and (stringp (cdr (assoc "Connection" header)))
 			     (string= (cdr (assoc "Connection" header))
 				      "close")))
