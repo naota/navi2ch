@@ -70,6 +70,14 @@
 
 (defun navi2ch-history-exit ())
 
+;; regist board
+(navi2ch-bm-regist-board 'history 'navi2ch-history
+			 navi2ch-history-board)
+
+;; add hook
+(add-hook 'navi2ch-save-status-hook 'navi2ch-history-save-info)
+(add-hook 'navi2ch-load-status-hook 'navi2ch-history-load-info)
+
 ;;; navi2ch-history functions
 (defun navi2ch-history-get-key (board article)
   (concat (cdr (assq 'uri board))
@@ -109,7 +117,7 @@
       (navi2ch-history-insert-subject i (car x))
       (setq i (1+ i)))))
 
-(defun navi2ch-history ()
+(defun navi2ch-history (&rest args)
   "history を表示する"
   (navi2ch-history-mode)
   (navi2ch-bm-setup 'navi2ch-history)

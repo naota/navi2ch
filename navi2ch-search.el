@@ -44,6 +44,9 @@
 (eval-when-compile (require 'cl))
 (require 'navi2ch-board-misc)
 (require 'navi2ch-board)
+(eval-when-compile
+  (provide 'navi2ch-search)
+  (require 'navi2ch-list))
 
 (defvar navi2ch-search-mode-map nil)
 (unless navi2ch-search-mode-map
@@ -81,6 +84,10 @@
   (cdr item))
 
 (defun navi2ch-search-exit ())
+
+;; regist board
+(navi2ch-bm-regist-board 'search 'navi2ch-search
+			 navi2ch-search-board)
 
 ;;; navi2ch-search functions
 (defun navi2ch-search-insert-subjects ()
@@ -121,7 +128,8 @@
       (message "searching article in %s..." (cdr (assq 'name board)))
       (let ((default-directory (navi2ch-board-get-file-name board "")))
         (dolist (file (and (file-directory-p default-directory)
-                           (directory-files default-directory nil "[0-9]+\\.dat")))
+                           (directory-files default-directory
+					    nil "[0-9]+\\.dat")))
           (with-temp-buffer
             (navi2ch-insert-file-contents file)
             (goto-char (point-min))
@@ -161,7 +169,7 @@
   (navi2ch-search-setup-menu)
   (run-hooks 'navi2ch-search-mode-hook))
 
-(defun navi2ch-search ()
+(defun navi2ch-search (&rest args)
   (navi2ch-search-mode)
   (navi2ch-bm-setup 'navi2ch-search)
   (let ((buffer-read-only nil))
@@ -181,7 +189,8 @@
 (defun navi2ch-search-subject-subr (board-list)
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-board-subject-regexp
-         board-list (read-string "Subject regexp: " nil 'navi2ch-search-history)))
+         board-list (read-string "Subject regexp: " nil
+				 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-subject ()
@@ -194,7 +203,8 @@
 (defun navi2ch-search-article-subr (board-list)
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-article-regexp
-         board-list (read-string "Search regexp: " nil 'navi2ch-search-history)))
+         board-list (read-string "Search regexp: " nil
+				 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-article ()

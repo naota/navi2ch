@@ -1,3 +1,72 @@
+2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+	今度は navi2ch-board-misc 関連の整理。おかしくなっていたら御免なさ
+	い。
+	
+	* navi2ch-vars.el (navi2ch-save-status-hook): 新変数。
+	(navi2ch-load-status-hook): 同上。
+
+	* navi2ch.el
+	(navi2ch): navi2ch-load-status-hook を呼ぶように。
+	(navi2ch-save-status): navi2ch-save-status-hook を呼ぶように。
+
+	* navi2ch-list.el 
+	(navi2ch-list-navi2ch-category-alist): 初期値を nil に。こいつは
+	navi2ch-bm-regist-board で設定される(navi2ch-list な関数で設定され
+	る方がよかったか？)。
+	navi2ch-save-status-hook に登録するように。
+	(navi2ch-list-get-category-list-subr): board の要素に type も追加。
+	navi2ch-bm-select-board の変更に合わせた。
+	(navi2ch-list-bookmark-node): type が board か bookmark かで判定す
+	るように。
+	(navi2ch-list-expire-all): type が board かで判定するように。
+
+	* navi2ch-search.el
+	(toplevel): navi2ch-list を require するように。
+	navi2ch-bm-regist-board を呼ぶように。
+	navi2ch-(save|load)-status-hook に登録するように。
+
+	* navi2ch-history.el 
+	(toplevel): navi2ch-bm-regist-board を呼ぶように。
+	navi2ch-(save|load)-status-hook に登録するように。
+	(navi2ch-history): 引数に args を取るように。
+
+	* navi2ch-bookmark.el 
+	(toplevel): navi2ch-bm-regist-board を呼ぶように。
+	navi2ch-(save|load)-status-hook に登録するように。
+	(navi2ch-bookmark-board): 削除。
+
+	* navi2ch-board.el
+	(toplevel): navi2ch-bm-regist-board を呼ぶように。
+	navi2ch-save-status-hook に登録するように。
+
+	* navi2ch-board-misc.el
+	(toplevel): navi2ch-(save|load)-hook に登録するように。
+	(navi2ch-bm-regist-board): 新関数
+	
+
+2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board-misc.el 
+	navi2ch-bm-*-function の funcall がうっとおしかったのでで fset し
+	て navi2ch-bm-*internal を funcall しないでも呼べるようにした。
+	
+	(navi2ch-bm-set-func): fset もするようにした。
+	(navi2ch-bm-*): 上の変更に合わせる。
+	(navi2ch-bm-get-property-internal): 関数名定義。
+	(navi2ch-bm-set-property-internal): 同上。
+	(navi2ch-bm-get-board-internal): 同上。
+	(navi2ch-bm-get-article-internal): 同上。
+	(navi2ch-bm-exit-internal): 同上。
+	(色々): 上の変更に合わせる。
+	
+	* navi2ch-article.el 
+	(navi2ch-article-show-url): ソースをちょっと整えてみた。
+	(navi2ch-article-copy-title): 同上。
+
+	* navi2ch-message.el
+	(navi2ch-message-send-message): From: とかの後に空白がなくてもいい
+	ようにしてみた。
+
 2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-to-url): start や end が数字

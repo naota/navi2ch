@@ -53,10 +53,7 @@
       (load-file navi2ch-init-file))
     (add-hook 'kill-emacs-hook 'navi2ch-save-status)
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
-    ;; それぞれの module で add-hook した方がいいんじゃ？
-    (navi2ch-bookmark-load-info)
-    (navi2ch-history-load-info)
-    (navi2ch-bm-load-info)
+    (run-hooks 'navi2ch-load-status-hook)
     (setq navi2ch-init t)
     (run-hooks 'navi2ch-hook))
   (navi2ch-list)
@@ -69,18 +66,8 @@
 (defun navi2ch-save-status ()
   "list, board, article の状態を保存する"
   (interactive)
-  ;; それぞれの module で add-hook した方がいいんじゃ？
   (message "save status...")
-  (dolist (x (navi2ch-article-buffer-list))
-    (save-excursion
-      (set-buffer x)
-      (navi2ch-article-save-number)
-      (navi2ch-article-save-info)))
-  (navi2ch-board-save-info)
-  (navi2ch-list-save-info)
-  (navi2ch-bookmark-save-info)
-  (navi2ch-history-save-info)
-  (navi2ch-bm-save-info)
+  (run-hooks 'navi2ch-save-status-hook)
   (message "save status...done"))
   
 (defun navi2ch-exit (&optional suspend)

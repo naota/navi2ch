@@ -147,6 +147,9 @@ last が最後からいくつ表示するか。
   (define-key navi2ch-article-hide-mode-map "d" 'navi2ch-article-cancel-hide-message)
   (define-key navi2ch-article-hide-mode-map "a" 'undefined))
 
+;; add hook
+(add-hook 'navi2ch-load-status-hook 'navi2ch-article-save-all-info)
+
 (defsubst navi2ch-article-inside-range-p (num range len)
   "NUM が RANGE で示す範囲に入ってるか
 LEN は RANGE で範囲を指定される list の長さ"
@@ -797,6 +800,13 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
 
+(defun navi2ch-article-save-all-info ()
+  (dolist (x (navi2ch-article-buffer-list))
+    (save-excursion
+      (set-buffer x)
+      (navi2ch-article-save-number)
+      (navi2ch-article-save-info))))
+
 (defun navi2ch-article-write-message (&optional sage)
   (interactive)
   (when (not navi2ch-article-from-file-p)
@@ -1097,9 +1107,12 @@ article buffer から抜けるなら 'quit を返す。"
 				     navi2ch-article-current-article)))
     (message "c)opy v)iew t)itle? URL: %s" url)
     (let ((char (read-char)))
-      (if (eq char ?t) (navi2ch-article-copy-title)
-	(funcall (cond ((eq char ?c) '(lambda (x) (message "copy: %s" (kill-new x))))
-		       ((eq char ?v) 'navi2ch-browse-url))
+      (if (eq char ?t)
+	  (navi2ch-article-copy-title)
+	(funcall (cond ((eq char ?c)
+			'(lambda (x) (message "copy: %s" (kill-new x))))
+		       ((eq char ?v)
+			'navi2ch-browse-url))
 		 (navi2ch-article-show-url-subr))))))
 
 (defun navi2ch-article-show-url-subr ()
@@ -1129,8 +1142,12 @@ article buffer から抜けるなら 'quit を返す。"
   (let ((char (read-char)))
     (message "copy: %s"
 	     (kill-new
-	      (cond ((eq char ?b) (cdr (assq 'name navi2ch-article-current-board)))
-		    ((eq char ?a) (cdr (assq 'subject navi2ch-article-current-article))))))))
+	      (cond ((eq char ?b)
+		     (cdr (assq 'name
+				navi2ch-article-current-board)))
+		    ((eq char ?a)
+		     (cdr (assq 'subject
+				navi2ch-article-current-article))))))))
 
 (defun navi2ch-article-redisplay-current-message ()
   "今いるレスを画面の中心(上？)に"

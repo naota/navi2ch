@@ -48,13 +48,7 @@
    nil))
 
 (defvar navi2ch-bookmark-list nil "bookmark を表すリスト")
-
 (defvar navi2ch-bookmark-cut-stack nil)
-(defvar navi2ch-bookmark-board
-  '((name . "ブックマーク")
-    (type . bookmark)
-    (id . "bmark")))
-
 (defvar navi2ch-bookmark-current-bookmark-id nil)
 
 ;;; navi2ch-bm callbacks
@@ -62,22 +56,32 @@
   (put-text-property begin end 'item item))
 
 (defun navi2ch-bookmark-get-property (point)
-  (get-text-property (save-excursion (goto-char point)
-				     (beginning-of-line)
-				     (point))
-		     'item))
+  (get-text-property
+   (save-excursion (goto-char point)
+		   (beginning-of-line)
+		   (point))
+   'item))
 
 (defun navi2ch-bookmark-get-article (item)
-  (cdr (assq 'article (cdr (assoc item
-				  (cddr (assoc navi2ch-bookmark-current-bookmark-id
-					       navi2ch-bookmark-list)))))))
+  (cdr (assq 'article
+	     (cdr (assoc item
+			 (cddr (assoc navi2ch-bookmark-current-bookmark-id
+				      navi2ch-bookmark-list)))))))
 
 (defun navi2ch-bookmark-get-board (item)
-  (cdr (assq 'board (cdr (assoc item
-				(cddr (assoc navi2ch-bookmark-current-bookmark-id
-					     navi2ch-bookmark-list)))))))
+  (cdr (assq 'board
+	     (cdr (assoc item
+			 (cddr (assoc navi2ch-bookmark-current-bookmark-id
+				      navi2ch-bookmark-list)))))))
 
 (defun navi2ch-bookmark-exit ())
+
+;; regist board
+(navi2ch-bm-regist-board 'bookmark 'navi2ch-bookmark)
+
+;; add hook
+(add-hook 'navi2ch-save-status-hook 'navi2ch-bookmark-save-info)
+(add-hook 'navi2ch-load-status-hook 'navi2ch-bookmark-load-info)
 
 ;;; navi2ch-bookmark functions
 (defun navi2ch-bookmark-convert ()
@@ -257,15 +261,16 @@
 	   (cons 'name (cadr bookmark))
 	   (cons 'type 'bookmark)))))
   
-(defun navi2ch-bookmark (bookmark-id)
+(defun navi2ch-bookmark (board &rest args)
   "bookmark を表示する"
-  (navi2ch-bookmark-mode)
-  (setq navi2ch-bookmark-current-bookmark-id bookmark-id)
-  (navi2ch-bm-setup 'navi2ch-bookmark)
-  (let ((buffer-read-only nil))
-    (erase-buffer)
-    (save-excursion
-      (navi2ch-bookmark-insert-subjects))))
+  (let ((bookmark-id (cdr (assq 'id board))))
+    (navi2ch-bookmark-mode)
+    (setq navi2ch-bookmark-current-bookmark-id bookmark-id)
+    (navi2ch-bm-setup 'navi2ch-bookmark)
+    (let ((buffer-read-only nil))
+      (erase-buffer)
+      (save-excursion
+	(navi2ch-bookmark-insert-subjects)))))
 
 (defun navi2ch-bookmark-setup-menu ()
   (easy-menu-define navi2ch-bookmark-mode-menu

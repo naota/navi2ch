@@ -88,14 +88,37 @@
 (defvar navi2ch-bm-get-article-function nil
   "スレを得る関数。引数は ITEM")
 (defvar navi2ch-bm-exit-function nil)
+
+(fset 'navi2ch-bm-get-property-internal nil)
+(fset 'navi2ch-bm-set-property-internal nil)
+(fset 'navi2ch-bm-get-board-internal nil)
+(fset 'navi2ch-bm-get-article-internal nil)
+(fset 'navi2ch-bm-exit-internal nil)
+
 (defvar navi2ch-bm-fetched-article-list nil)
+(defvar navi2ch-bm-board-type-alist nil)
 
 (defvar navi2ch-bm-state-alist
-  '((view "V" navi2ch-bm-view-face navi2ch-bm-updated-view-face navi2ch-bm-seen-view-face)
-    (cache "C" navi2ch-bm-cache-face navi2ch-bm-updated-cache-face navi2ch-bm-seen-cache-face)
-    (update "U" navi2ch-bm-update-face navi2ch-bm-updated-update-face navi2ch-bm-seen-update-face)
-    (nil " " navi2ch-bm-unread-face navi2ch-bm-updated-unread-face navi2ch-bm-seen-unread-face)
-    (mark " " navi2ch-bm-mark-face navi2ch-bm-updated-mark-face navi2ch-bm-seen-mark-face)))
+  '((view "V"
+	  navi2ch-bm-view-face
+	  navi2ch-bm-updated-view-face
+	  navi2ch-bm-seen-view-face)
+    (cache "C"
+	   navi2ch-bm-cache-face
+	   navi2ch-bm-updated-cache-face
+	   navi2ch-bm-seen-cache-face)
+    (update "U"
+	    navi2ch-bm-update-face
+	    navi2ch-bm-updated-update-face
+	    navi2ch-bm-seen-update-face)
+    (nil " "
+	 navi2ch-bm-unread-face
+	 navi2ch-bm-updated-unread-face
+	 navi2ch-bm-seen-unread-face)
+    (mark " "
+	  navi2ch-bm-mark-face
+	  navi2ch-bm-updated-mark-face
+	  navi2ch-bm-seen-mark-face)))
 
 (defvar navi2ch-bm-updated-mark-alist
   '((updated . "+")
@@ -104,48 +127,59 @@
 
 (defvar navi2ch-bm-move-downward t)
 
+;; add hook
+(add-hook 'navi2ch-save-status-hook 'navi2ch-bm-save-info)
+(add-hook 'navi2ch-load-status-hook 'navi2ch-bm-load-info)
+
 (defmacro navi2ch-bm-set-func (sym val)
   `(let ((val-str (symbol-name ',val))
          (sym-str (symbol-name ,sym))
          func-str)
-     (when (string-match "navi2ch-bm-\\(.+\\)-function" val-str)
-       (setq func-str (format "%s-%s" sym-str (match-string 1 val-str)))
-       (setq ,val (intern func-str)))))
-  
+     (when (string-match "navi2ch-bm-\\(.+\\)" val-str)
+       (setq func-str (format "%s-%s"
+			      sym-str (match-string 1 val-str)))
+       (set (intern (concat val-str "-function")) (intern func-str))
+       (fset (intern (concat val-str "-internal")) (intern func-str)))))
+
 (defun navi2ch-bm-setup (prefix)
-  (navi2ch-bm-set-func prefix navi2ch-bm-get-property-function)
-  (navi2ch-bm-set-func prefix navi2ch-bm-set-property-function)
-  (navi2ch-bm-set-func prefix navi2ch-bm-get-board-function)
-  (navi2ch-bm-set-func prefix navi2ch-bm-get-article-function)
-  ;; (navi2ch-bm-set-func prefix navi2ch-bm-get-subject-function)
-  (navi2ch-bm-set-func prefix navi2ch-bm-exit-function)
+  (navi2ch-bm-set-func prefix navi2ch-bm-get-property)
+  (navi2ch-bm-set-func prefix navi2ch-bm-set-property)
+  (navi2ch-bm-set-func prefix navi2ch-bm-get-board)
+  (navi2ch-bm-set-func prefix navi2ch-bm-get-article)
+  ;; (navi2ch-bm-set-func prefix navi2ch-bm-get-subject)
+  (navi2ch-bm-set-func prefix navi2ch-bm-exit)
   (setq navi2ch-bm-move-downward t))
 
 (defun navi2ch-bm-make-menu-spec (title menu-spec)
-  "タイトルが TITLE で 内容が `navi2ch-bm-mode-menu-spec' と MENU-SPEC を繋げ
-たメニューを作る。"
+  "タイトルが TITLE で 内容が `navi2ch-bm-mode-menu-spec' と MENU-SPEC
+を繋げたメニューを作る。"
   (append (list title)
 	  navi2ch-bm-mode-menu-spec
 	  '("----")
 	  menu-spec))
 
+(defvar navi2ch-list-navi2ch-category-alist nil) ; コンパイルを通す為
+  
+(defun navi2ch-bm-regist-board (type open-func &optional board)
+  "TYPE な板を開く関数 OPEN-FUNC を `navi2ch-bm-board-type-alist' に登
+録する。また、同時に BOARD を `navi2ch-list-navi2ch-category-alist' に
+登録する。"
+  (setq navi2ch-bm-board-type-alist
+	(navi2ch-put-alist type open-func
+			   navi2ch-bm-board-type-alist))
+  (when board
+    (setq navi2ch-list-navi2ch-category-alist
+	  (cons board navi2ch-list-navi2ch-category-alist))))
+
 (defun navi2ch-bm-select-board (board &optional force)
   (switch-to-buffer (get-buffer-create navi2ch-board-buffer-name))
   (let ((type (cdr (assq 'type board))))
-    (cond ((eq type 'articles)
-           (navi2ch-articles))
- 	  ((eq type 'bookmark)
-	   (navi2ch-bookmark (cdr (assq 'id board))))
-          ((eq type 'search)
-           (navi2ch-search))
-	  ((eq type 'history)
-	   (navi2ch-history))
-          (t
-           (navi2ch-board-select-board board force))))
+    (funcall (cdr (assq type navi2ch-bm-board-type-alist))
+	     board force))
   (navi2ch-set-mode-line-identification))
 
 (defsubst navi2ch-bm-set-property (begin end item state &optional updated)
-  (funcall navi2ch-bm-set-property-function begin end item)
+  (navi2ch-bm-set-property-internal begin end item)
   (setq updated (or updated (get-text-property (1+ begin) 'updated)))
   (put-text-property begin end 'updated updated)
   (put-text-property begin end 'mouse-face 'highlight)
@@ -155,9 +189,10 @@
 					  (assq state
 						navi2ch-bm-state-alist))))
 
-(defsubst navi2ch-bm-insert-subject (item number subject other &optional updated)
-  (let* ((article (funcall navi2ch-bm-get-article-function item))
-	 (board (funcall navi2ch-bm-get-board-function item))
+(defsubst navi2ch-bm-insert-subject (item number subject other
+					  &optional updated)
+  (let* ((article (navi2ch-bm-get-article-internal item))
+	 (board (navi2ch-bm-get-board-internal item))
 	 (point (point))
 	 (state (if (navi2ch-bm-fetched-article-p board article)
 		    'update
@@ -180,7 +215,7 @@
   (dolist (x (navi2ch-article-buffer-list))
     (when x
       (delete-windows-on x)))
-  (funcall navi2ch-bm-exit-function)
+  (navi2ch-bm-exit-internal)
   (when (get-buffer navi2ch-board-buffer-name)
     (delete-windows-on navi2ch-board-buffer-name)
     (bury-buffer navi2ch-board-buffer-name))
@@ -217,9 +252,9 @@
 
 (defun navi2ch-bm-select-article (&optional max-line)
   (interactive "P")
-  (let* ((item (funcall navi2ch-bm-get-property-function (point)))
-         (article (funcall navi2ch-bm-get-article-function item))
-         (board (funcall navi2ch-bm-get-board-function item))
+  (let* ((item (navi2ch-bm-get-property-internal (point)))
+         (article (navi2ch-bm-get-article-internal item))
+         (board (navi2ch-bm-get-board-internal item))
          (buf (current-buffer)))
     (if article
         (progn
@@ -247,14 +282,16 @@
 (defun navi2ch-bm-show-url ()
   "板のurl を表示して、その url を見るか kill ring にコピーする"
   (interactive)
-  (let* ((board (funcall navi2ch-bm-get-board-function
-			 (funcall navi2ch-bm-get-property-function (point))))
+  (let* ((board (navi2ch-bm-get-board-internal
+		 (navi2ch-bm-get-property-internal (point))))
 	 (url (navi2ch-board-to-url board)))
     (message "c)opy v)iew t)itle? URL: %s" url)
     (let ((char (read-char)))
       (if (eq char ?t) (navi2ch-bm-copy-title board)
-	(funcall (cond ((eq char ?c) '(lambda (x) (message "copy: %s" (kill-new x))))
-		       ((eq char ?v) 'navi2ch-browse-url))
+	(funcall (cond ((eq char ?c)
+			'(lambda (x) (message "copy: %s" (kill-new x))))
+		       ((eq char ?v)
+			'navi2ch-browse-url))
 		 (navi2ch-bm-show-url-subr board))))))
 
 (defun navi2ch-bm-show-url-subr (board)
@@ -265,9 +302,8 @@
 	  ((eq char ?a)
 	   (navi2ch-article-to-url
 	    board
-	    (funcall navi2ch-bm-get-article-function
-		     (funcall navi2ch-bm-get-property-function
-			      (point))))))))
+	    (navi2ch-bm-get-article-internal
+	     (navi2ch-bm-get-property-internal (point))))))))
 
 (defun navi2ch-bm-copy-title (board)
   "メニューを表示して、タイトルを得る"
@@ -278,9 +314,9 @@
 	      (cond ((eq char ?b) (cdr (assq 'name board)))
 		    ((eq char ?a)
 		     (cdr (assq 'subject
-				(funcall navi2ch-bm-get-article-function
-					 (funcall navi2ch-bm-get-property-function
-						  (point)))))))))))
+				(navi2ch-bm-get-article-internal
+				 (navi2ch-bm-get-property-internal
+				  (point)))))))))))
 
 (defun navi2ch-bm-display-article (&optional max-line)
   (interactive "P")
@@ -315,9 +351,9 @@
       
 (defun navi2ch-bm-fetch-article (&optional max-line)
   (interactive "P")
-  (let* ((item (funcall navi2ch-bm-get-property-function (point)))
-         (board (funcall navi2ch-bm-get-board-function item))
-         (article (funcall navi2ch-bm-get-article-function item))
+  (let* ((item (navi2ch-bm-get-property-internal (point)))
+         (board (navi2ch-bm-get-board-internal item))
+         (article (navi2ch-bm-get-article-internal item))
          state)
     (if article
 	(progn
@@ -357,9 +393,8 @@
 
 
 (defun navi2ch-bm-select-article-or-scroll (way &optional max-line)
-  (let ((article (funcall navi2ch-bm-get-article-function
-                          (funcall navi2ch-bm-get-property-function
-                                   (point)))))
+  (let ((article (navi2ch-bm-get-article-internal
+		  (navi2ch-bm-get-property-internal (point)))))
     (if (and (navi2ch-article-current-buffer)
              (string= (cdr (assq 'artid article))
                       (save-excursion
@@ -397,9 +432,8 @@
 (defun navi2ch-bm-goto-board ()
   (interactive)
   (navi2ch-list-goto-board
-   (funcall navi2ch-bm-get-board-function
-            (funcall navi2ch-bm-get-property-function
-                     (point)))))
+   (navi2ch-bm-get-board-internal
+    (navi2ch-bm-get-property-internal (point)))))
 
 (defun navi2ch-bm-renumber ()
   (save-excursion
@@ -417,8 +451,8 @@
 (defun navi2ch-bm-view-logo ()
   "その板のロゴを見る"
   (interactive)
-  (let ((board (funcall navi2ch-bm-get-board-function
-			(funcall navi2ch-bm-get-property-function (point))))
+  (let ((board (navi2ch-bm-get-board-internal
+		(navi2ch-bm-get-property-internal (point))))
 	(board-mode-p (eq major-mode 'navi2ch-board-mode))
 	file old-file)
     (unless board-mode-p
@@ -443,9 +477,9 @@
 
 (defun navi2ch-bm-add-global-bookmark (&optional bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
-  (let* ((item (funcall navi2ch-bm-get-property-function (point)))
-	 (board (funcall navi2ch-bm-get-board-function item))
-	 (article (funcall navi2ch-bm-get-article-function item)))
+  (let* ((item (navi2ch-bm-get-property-internal (point)))
+	 (board (navi2ch-bm-get-board-internal item))
+	 (article (navi2ch-bm-get-article-internal item)))
     (if item
 	(navi2ch-bookmark-add
 	 bookmark-id
@@ -473,7 +507,7 @@
   "mark する。
 INTERACTIVE が non-nil なら mark したあと移動する。
 ARG が non-nil なら移動方向を逆にする。"
-  (let ((item (funcall navi2ch-bm-get-property-function (point)))
+  (let ((item (navi2ch-bm-get-property-internal (point)))
 	(state 'mark)
 	(alist (mapcar
 		(lambda (x)
@@ -609,9 +643,8 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-goto-other-column ()
   (let ((sbj (cdr
               (assq 'subject
-                    (funcall
-                     navi2ch-bm-get-article-function
-                     (funcall navi2ch-bm-get-property-function (point)))))))
+		    (navi2ch-bm-get-article-internal
+                     (navi2ch-bm-get-property-internal (point)))))))
     (navi2ch-bm-goto-mark-column)
     (forward-char 1)
     (when (and (not (string= sbj ""))
@@ -652,14 +685,14 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-search-current-board-subject ()
   (interactive)
   (navi2ch-search-subject-subr
-   (list (funcall navi2ch-bm-get-board-function
-                  (funcall navi2ch-bm-get-property-function (point))))))
+   (list (navi2ch-bm-get-board-internal
+	  (navi2ch-bm-get-property-internal (point))))))
 
 (defun navi2ch-bm-search-current-board-article ()
   (interactive)
   (navi2ch-search-article-subr
-   (list (funcall navi2ch-bm-get-board-function
-                  (funcall navi2ch-bm-get-property-function (point))))))
+   (list (navi2ch-bm-get-board-internal
+	  (navi2ch-bm-get-property-internal (point))))))
 
 (defun navi2ch-bm-search ()
   (interactive)

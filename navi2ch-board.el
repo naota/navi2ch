@@ -117,6 +117,12 @@
 (defun navi2ch-board-exit ()
   (navi2ch-board-save-info))
  
+;; regist board
+(navi2ch-bm-regist-board 'board 'navi2ch-board-select-board)
+
+;; add hook
+(add-hook 'navi2ch-save-status-hook 'navi2ch-board-save-info)
+
 ;;; navi2ch-board functions
 (defsubst navi2ch-board-get-uri (board)
   "後ろの / が付いた uri を返す。

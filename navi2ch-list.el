@@ -92,11 +92,10 @@
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
 
-(defvar navi2ch-list-navi2ch-category-alist
-  (list navi2ch-articles-board
-	  navi2ch-search-board
-	  navi2ch-bookmark-board
-	  navi2ch-history-board))
+(defvar navi2ch-list-navi2ch-category-alist nil)
+
+;; add hook
+(add-hook 'navi2ch-save-status-hook 'navi2ch-list-save-info)
 
 (defsubst navi2ch-list-get-file-name (&optional name)
   (navi2ch-expand-file-name
@@ -109,6 +108,7 @@
 		  (list (cons 'name (match-string 1))
 			(cons 'uri (match-string 2))
 			(cons 'id (match-string 3))
+			(cons 'type 'board)
 			(cons 'seen nil))
 		  list)))
     (nreverse list)))
@@ -233,13 +233,13 @@
 
 (defun navi2ch-list-bookmark-node (board)
   "BOARD から bookmark に格納する node を取得する。"
-  (let ((uri (assq 'uri board))
-	(type (assq 'type board))
-	(id (assq 'id board)))
-    (cond (uri
-	   (cdr uri))
-	  ((and type id)
-	   (cons (cdr type) (cdr id))))))
+  (let ((uri (cdr (assq 'uri board)))
+	(type (cdr (assq 'type board)))
+	(id (cdr (assq 'id board))))
+    (cond ((eq type 'board)
+	   uri)
+	  ((and (eq type 'bookmark) id)
+	   (cons type id)))))
 	    
 (defun navi2ch-list-insert-bookmarks (list)
   (let ((bookmark (cdr (assq 'bookmark navi2ch-list-current-list)))
@@ -632,7 +632,7 @@
 	    (y-or-n-p "Expire all boards?"))
     (dolist (board (navi2ch-list-get-board-name-list
 		    navi2ch-list-category-list))
-      (unless (cdr (assq 'type board))
+      (when (eq (cdr (assq 'type board)) 'board)
 	(navi2ch-board-expire board)))
     (message "expiring all board is done")))
 

@@ -67,6 +67,10 @@
 
 (defun navi2ch-articles-exit ())
 
+;; regist board
+(navi2ch-bm-regist-board 'articles 'navi2ch-articles
+			 navi2ch-articles-board)
+
 ;;; navi2ch-articles functions
 (defun navi2ch-articles-insert-subjects ()
   (let ((i 1))
@@ -95,7 +99,7 @@
         (message "Can't select this line!")))))
   
 
-(defun navi2ch-articles ()
+(defun navi2ch-articles (&rest args)
   "articles を表示する"
   (navi2ch-articles-mode)
   (navi2ch-bm-setup 'navi2ch-articles)

@@ -618,6 +618,8 @@ non-nil なら付加する。"
 
 ;;; hooks
 (defvar navi2ch-hook nil)
+(defvar navi2ch-save-status-hook nil)
+(defvar navi2ch-load-status-hook nil)
 (defvar navi2ch-before-startup-hook nil)
 (defvar navi2ch-after-startup-hook nil)
 (defvar navi2ch-list-mode-hook nil)

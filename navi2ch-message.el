@@ -120,19 +120,19 @@
       (let (subject from mail message)
         (goto-char (point-min))
         (when navi2ch-message-new-message-p
-	  (re-search-forward "Subject: \\([^\n]*\\)\n" nil t)
+	  (re-search-forward "^Subject: ?\\(.*\\)" nil t)
           (setq subject (match-string 1)))
-        (re-search-forward "From: \\([^\n]*\\)\n")
+        (re-search-forward "^From: ?\\(.*\\)")
         (setq from (match-string 1))
         (when navi2ch-message-remember-user-name
           (setq navi2ch-message-user-name from))
         (when (not navi2ch-message-new-message-p)
           (navi2ch-message-set-name from))
-        (re-search-forward "Mail: \\([^\n]*\\)\n")
+        (re-search-forward "^Mail: ?\\(.*\\)")
         (setq mail (match-string 1))
 	(when (not navi2ch-message-new-message-p)
 	  (navi2ch-message-set-mail mail))
-        (forward-line 1)
+        (forward-line 2)
         (setq message (buffer-substring (point) (point-max)))
         (let ((str (buffer-substring-no-properties
                     (point-min) (point-max))))
