@@ -226,19 +226,20 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
              (message "file is not found")
              (delete-process proc)
              nil)
-	    ((or (string= status "304")
-		 (and accept-status
-		      (not (member status accept-status))))
+	    ((string= status "304")
 	     (message "file is not updated")
-	     (delete-process proc)
-	     nil)
+	     (if (and accept-status
+		      (member status accept-status))
+		 proc
+	       (delete-process proc)
+	       nil))
 	    (t
 	     (message "file is updated")
 	     proc)))))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range $B%X%C%@$r;H$C$F%U%!%$%k$r%@%&%s%m!<%I$9$k!#(B"
-  (navi2ch-net-download-file url time '("206" "200") ;; 200 $B$b$"$C$F$b$$$$$N$+$J!)(B
+  (navi2ch-net-download-file url time '("206" "200" "304") ;; 200 $B$b$"$C$F$b$$$$$N$+$J!)(B
 			     (append
 			      (list (cons "Range" (concat "bytes=" range)))
 			      other-header)))
@@ -253,25 +254,34 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
-  (let ((proc (navi2ch-net-download-file url time (list "200" (and location "302")))))
+  (let ((proc (navi2ch-net-download-file url time
+					 (list "200" "304"
+					       (and location "302")))))
     (if proc
         (let ((coding-system-for-write 'binary)
 	      (coding-system-for-read 'binary)
-	      header cont)
-          (message "%s getting new file..." (current-message))
-	  (setq header (navi2ch-net-get-header proc))
-	  (if (assoc "Location" header)
-	      (navi2ch-net-update-file (cdr (assoc "Location" header)) file time func location)
-	    (setq cont (navi2ch-net-get-content proc))
-	    (with-temp-file file 
-              (insert (funcall (if func (progn (message "translating...")
-                                               func)
-                                 'eval)
-                               cont)))
-            (message "%sdone" (current-message))
-            ;; $B$I$&$9$l$P@dBP$K(B Last-Modified $B$rLc$($k$+$J!)(B
-	    (delete-process proc)
-	    header))
+	      (status (navi2ch-net-get-status proc))
+	      (header (navi2ch-net-get-header proc))
+	      cont)
+	  (cond ((string= status "200")
+		 (message "%s getting new file..." (current-message))
+		 (setq cont (navi2ch-net-get-content proc))
+		 (with-temp-file file 
+		   (insert (funcall (if func (progn (message "translating...")
+						    func)
+				      'eval)
+				    cont)))
+		 (message "%sdone" (current-message))
+		 (delete-process proc)
+		 header)
+		((and (string= status "302")
+		      (assoc "Location" header))
+		 (delete-process proc)
+		 (navi2ch-net-update-file (cdr (assoc "Location" header))
+					  file time func location))
+		((string= status "304")
+		 (delete-process proc)
+		 header)))
       nil)))
 
 (defun navi2ch-net-file-start (file)
@@ -305,31 +315,45 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
   (let* ((size (max 0 (1- (nth 7 (file-attributes file)))))
          (proc (navi2ch-net-download-file-range url (format "%d-" size) time)))
     (if proc
-        (progn
-          (message "%s getting file diff..." (current-message))
-          (let* ((coding-system-for-write 'binary)
-                 (coding-system-for-read 'binary))
-            (if (navi2ch-net-check-aborn (nth 7 (file-attributes file))
-					 (navi2ch-net-get-header proc))
-                (progn
-                  (with-temp-file file
-		    (if (string= (navi2ch-net-get-status proc) "206")
-			(insert-file-contents file nil nil size)
-		      (message "%s getting whole file..." (current-message)))
-                    (goto-char (point-max))
-                    (insert (navi2ch-net-get-content proc)))
-                  (message "%sdone" (current-message))
-                  (let ((header (navi2ch-net-get-header proc)))
-                    (delete-process proc)
-                    (list header nil)))
-              (delete-process proc)
-              (message "$B$"$\!<$s(B!!!")
-              (when (and navi2ch-net-save-old-file-when-aborn
-			 (or (not (eq navi2ch-net-save-old-file-when-aborn
-				      'ask))
-			     (y-or-n-p "$B$"$\!<$s(B!!! backup old file? ")))
-                (copy-file file (read-file-name "file name: ")))
-              (list (navi2ch-net-update-file url file nil nil) t))))
+	(let ((coding-system-for-write 'binary)
+	      (coding-system-for-read 'binary)
+	      (status (navi2ch-net-get-status proc))
+	      (header (navi2ch-net-get-header proc))
+	      cont ret aborn-flag)
+	  (cond ((string= status "206")
+		 (if (not (navi2ch-net-check-aborn size header))
+		     (setq aborn-flag t)
+		   (message "%s getting file diff..." (current-message))
+		   (with-temp-file file
+		     (insert-file-contents file nil nil size)
+		     (goto-char (point-max))
+		     (insert (navi2ch-net-get-content proc)))
+		   (message "%sdone" (current-message))
+		   (delete-process proc)
+		   (setq ret (list header nil))))
+		((string= status "200")
+		 (if (not (navi2ch-net-check-aborn size header))
+		     (setq aborn-flag t)
+		   (message "%s getting whole file..." (current-message))
+		   (with-temp-file file
+		     (insert (navi2ch-net-get-content proc)))
+		   (message "%sdone" (current-message))
+		   (delete-process proc)
+		   (setq ret (list header nil))))
+		((string= status "304")
+		 (delete-process proc)
+		 (setq ret (list header nil))))
+	  (if (not aborn-flag)
+	      ret
+	    (if (processp proc)
+		(delete-process proc))
+	    (message "$B$"$\!<$s(B!!!")
+	    (when (and navi2ch-net-save-old-file-when-aborn
+		       (or (not (eq navi2ch-net-save-old-file-when-aborn
+				    'ask))
+			   (y-or-n-p "$B$"$\!<$s(B!!! backup old file? ")))
+	      (copy-file file (read-file-name "file name: ")))
+	    (list (navi2ch-net-update-file url file nil nil) t)))
       nil)))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)

@@ -1,3 +1,15 @@
+2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
+	いでみる。navi2ch-board-misc.elc への依存関係追加。
+	
+	* navi2ch-net.el (navi2ch-net-download-file): http status が "304"
+	の時、accept-status であれば delete-process しないようにした。
+	(navi2ch-net-download-file-range): http status "304" も OK にした。
+	(navi2ch-net-update-file): http status "304" の時も nil ではなく
+	header を返すようにした。
+	(navi2ch-net-update-file-diff): 同上。
+
 2002-01-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el

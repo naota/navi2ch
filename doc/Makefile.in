@@ -285,8 +285,8 @@ uninstall-am: uninstall-info-am
 
 
 .texi.info:
-	rm -f $@
-	${EMACS} -q -batch -l ./batch-texi2info.el -f batch-texi2info $<
+	rm -f $@; \
+	  ${EMACS} -q -batch -l ./batch-texi2info.el -f batch-texi2info $<
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

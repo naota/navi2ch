@@ -1,3 +1,8 @@
+2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am: automake が作る Makefile.in のように各行を \ でつな
+	いでみる。
+
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): navi2ch-article.el の変更に対応。

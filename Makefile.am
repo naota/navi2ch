@@ -9,14 +9,15 @@ BUILT_SOURCES = navi2ch-version.el
 SUBDIRS = doc
 
 navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
-	rm -f $@.tmp
-	sed -e 's/@\(VERSION\)@/$(VERSION)/' $(srcdir)/navi2ch-version.el.in > $@.tmp
-	mv $@.tmp $@
+	rm -f $@.tmp; \
+	  sed -e 's/@\(VERSION\)@/$(VERSION)/' \
+	  $(srcdir)/navi2ch-version.el.in > $@.tmp; \
+	  mv $@.tmp $@
 
 snap:
-	rm -f navi2ch-version.el
-	make VERSION=@VERSION@-`date +%y%m%d` dist
-	rm -f navi2ch-version.el
+	rm -f navi2ch-version.el; \
+	  make VERSION=@VERSION@-`date +%y%m%d` dist; \
+	  rm -f navi2ch-version.el
 
 # defmacro / defsubst dependencies
 # should be fixed: thre are many defsubst cross references between files.
@@ -27,3 +28,9 @@ navi2ch-board.elc: navi2ch-article.elc navi2ch-util.elc
 navi2ch-bookmark.elc: navi2ch-article.elc
 navi2ch-search.elc: navi2ch-article.elc
 navi2ch-popup-article.elc: navi2ch-article.elc
+# board-misc delivered modes
+navi2ch-articles.elc: navi2ch-board-misc.elc
+navi2ch-board.elc: navi2ch-board-misc.elc
+navi2ch-bookmark.elc: navi2ch-board-misc.elc
+navi2ch-history.elc: navi2ch-board-misc.elc
+navi2ch-search.elc: navi2ch-board-misc.elc
