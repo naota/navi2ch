@@ -648,9 +648,7 @@ base64デコードすべき内容がない場合はエラーになる。"
     (read-string prompt initial-input history)))
 
 (defun navi2ch-temp-directory ()
-  (let ((dir (concat
-	      (file-name-as-directory navi2ch-directory)
-	      "tmp")))
+  (let ((dir (expand-file-name "tmp" navi2ch-directory)))
     (or (file-directory-p dir)
 	(make-directory dir))
     dir))

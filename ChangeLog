@@ -1,5 +1,9 @@
 2002-07-20  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-temp-directory): expand-file-name され
+	た値を返すようにした。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/542
+
 	* navi2ch-mona.el
 	(navi2ch-mona-create-face-from-family-name): 新関数。
 	(navi2ch-mona-set-font-family-name): 上記関数を使うように。
