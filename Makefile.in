@@ -435,11 +435,15 @@ navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 
 snap:
 	rm -f navi2ch-version.el; \
-	  make VERSION=@VERSION@-`date +%y%m%d` dist; \
+	  $(MAKE) $(AM_MAKEFLAGS) VERSION=@VERSION@-`date +%y%m%d` dist elcdist; \
 	  rm -f navi2ch-version.el
 
-recompile:
+recompile: $(lisp_LISP)
 	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
+
+elcdist: $(ELCFILES)
+	$(MAKE) $(AM_MAKEFLAGS) recompile; \
+	$(AMTAR) chof - $(ELCFILES) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz
 
 # defmacro / defsubst / toplevel dependencies
 # # should be fixed: thre are some defsubst cross references between files.

@@ -1,3 +1,10 @@
+2002-01-16  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (lisp_LISP): navi2ch-version.el を先頭に持って来た。
+	(snap): elcdist も作る。
+	(recompile): $(lisp_LISP) に依存させた。
+	(elcdist): 新ターゲット。elc ファイルの tar 玉を作る。
+
 2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
 	require / provide の方法を変更した。
 	provide をファイルの先頭に移動。(こういうのも OK みたい)

@@ -1,9 +1,10 @@
-lisp_LISP = navi2ch-vars.el navi2ch-face.el navi2ch-util.el \
+lisp_LISP = navi2ch-version.el \
+	navi2ch-vars.el navi2ch-face.el navi2ch-util.el \
 	navi2ch-net.el navi2ch-list.el navi2ch-article.el \
 	navi2ch-popup-article.el navi2ch-board-misc.el \
 	navi2ch-board.el navi2ch-articles.el navi2ch-bookmark.el \
 	navi2ch-history.el navi2ch-search.el navi2ch-message.el \
-	navi2ch-version.el navi2ch.el \
+	navi2ch.el \
 	navi2ch-head.el navi2ch-mona.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) navi2ch-version.el.in
@@ -18,11 +19,15 @@ navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 
 snap:
 	rm -f navi2ch-version.el; \
-	  make VERSION=@VERSION@-`date +%y%m%d` dist; \
+	  $(MAKE) $(AM_MAKEFLAGS) VERSION=@VERSION@-`date +%y%m%d` dist elcdist; \
 	  rm -f navi2ch-version.el
 
-recompile:
+recompile: $(lisp_LISP)
 	EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $(lisp_LISP)
+
+elcdist: $(ELCFILES)
+	$(MAKE) $(AM_MAKEFLAGS) recompile; \
+	$(AMTAR) chof - $(ELCFILES) | GZIP=$(GZIP_ENV) gzip -c >$(distdir)-elc.tar.gz
 
 # defmacro / defsubst / toplevel dependencies
 # # should be fixed: thre are some defsubst cross references between files.
