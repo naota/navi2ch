@@ -1,3 +1,15 @@
+2002-10-13  mami  <mami@users.sourceforge.net>
+
+	名前欄で「あぼぼーん機能」を実装。
+
+	* navi2ch-article.el
+	(navi2ch-article-get-separator-string): 新関数。
+	(navi2ch-article-filter-by-name): 新関数。
+	(navi2ch-article-apply-filters): navi2ch-article-filter-by-name を
+	呼ぶように。
+
+	* navi2ch-vars.el (navi2ch-article-filter-by-name-alist): 新変数。
+
 2002-10-13  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-goto-number):

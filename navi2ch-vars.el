@@ -626,6 +626,18 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-filter-by-name-alist nil
+  "*レスをフィルタする名前と、置き換える文字列の alist。
+例えば下記の値を設定すると、
+名前欄に「ふが」が含まれているとレスが「あぼぼーん」に置き換わり、
+名前欄に「ホゲ」が含まれているとレスが「アボボーン」に置き換わる。
+
+'((\"ふが\" . \"あぼぼーん\")
+  (\"ホゲ\" . \"アボボーン\"))"
+  :type '(repeat (cons (string :tag "名前欄")
+		       (string :tag "置換後")))
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")
