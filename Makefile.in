@@ -69,41 +69,20 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 lispdir = @lispdir@
 
-el_files = \
-	navi2ch.el									\
-	navi2ch-net.el								\
-	navi2ch-board-misc.el						\
-	navi2ch-util.el								\
-	navi2ch-list.el								\
-	navi2ch-board.el							\
-	navi2ch-article.el							\
-	navi2ch-message.el							\
-	navi2ch-bookmark.el							\
-	navi2ch-search.el							\
-	navi2ch-articles.el							\
-	navi2ch-mona.el								\
-	navi2ch-face.el								\
-	navi2ch-history.el							\
-	navi2ch-vars.el								\
-	navi2ch-popup-article.el					\
-	navi2ch-head.el
+lisp_LISP = navi2ch-article.el navi2ch-articles.el \
+	navi2ch-board-misc.el navi2ch-board.el navi2ch-bookmark.el \
+	navi2ch-face.el navi2ch-head.el navi2ch-history.el \
+	navi2ch-list.el navi2ch-message.el navi2ch-mona.el \
+	navi2ch-net.el navi2ch-popup-article.el navi2ch-search.el \
+	navi2ch-util.el navi2ch-vars.el navi2ch.el
 
-
-etc_files = \
-	README										\
-	ChangeLog									\
-	bcomp.el									\
-	Makefile.old
-
-
-lisp_LISP = $(el_files)
-EXTRA_DIST = $(el_files) $(etc_files)
+DIST_SOURCES = $(lisp_LISP)
+EXTRA_DIST = Makefile.old bcomp.el
 SUBDIRS = doc
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
-DIST_SOURCES =
 LISP = $(lisp_LISP)
 
 ELCFILES = navi2ch-article.elc navi2ch-articles.elc \
@@ -118,8 +97,9 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	install-exec-recursive installdirs-recursive install-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-	Makefile.in NEWS TODO aclocal.m4 configure configure.in \
-	elisp-comp install-sh missing mkinstalldirs
+	Makefile.in NEWS TODO acinclude.m4 aclocal.m4 config.guess \
+	config.sub configure configure.in elisp-comp install-sh missing \
+	mkinstalldirs
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
@@ -138,7 +118,7 @@ $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 $(srcdir)/configure:  $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4):  configure.in 
+$(ACLOCAL_M4):  configure.in acinclude.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 uninstall-info-am:
 
@@ -437,6 +417,16 @@ uninstall-info: uninstall-info-recursive
 	uninstall-am uninstall-info-am uninstall-info-recursive \
 	uninstall-lispLISP uninstall-recursive
 
+
+# defmacro / defsubst dependencies
+# should be fixed: thre are many defsubst cross references between files.
+navi2ch-article.elc: navi2ch-util.elc
+navi2ch-board-misc.elc: navi2ch-article.elc navi2ch-util.elc
+navi2ch-list.elc: navi2ch-util.elc
+navi2ch-board.elc: navi2ch-article.elc navi2ch-util.elc
+navi2ch-bookmark.elc: navi2ch-article.elc
+navi2ch-search.elc: navi2ch-article.elc
+navi2ch-popup-article.elc: navi2ch-article.elc
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
