@@ -1,5 +1,12 @@
 2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-message.el (navi2ch-message-mode-map): C-c C-a ? に
+	navi2ch-message-insert-aa をバインド。
+	(navi2ch-message-popup-aa-list): 新関数。
+	(navi2ch-message-insert-aa): 新関数。
+	これで忘れっぽい漏れも AA 入力しまくり。
+	FR#572686
+
 	* navi2ch-mona.el (navi2ch-mona-on-message-mode): 新変数。
 	(navi2ch-mona-message-mode-hook): 新関数。
 	レスを書くバッファをモナーフォントにする。

@@ -36,6 +36,8 @@
     (define-key map "\C-c\C-i" 'navi2ch-message-insert-backup)
     (define-key map "\C-c\C-b" 'navi2ch-base64-insert-file)
     (define-key map "\et" 'navi2ch-toggle-offline)
+    (define-key map (concat navi2ch-message-aa-prefix-key "?")
+      'navi2ch-message-insert-aa)
     (setq navi2ch-message-mode-map map)))
 
 (defvar navi2ch-message-mode-menu-spec
@@ -289,7 +291,38 @@
       navi2ch-message-mode-map
       (concat navi2ch-message-aa-prefix-key (car pair))
       `(lambda () (interactive) (insert ,(cdr pair))))))
-      
+
+(defun navi2ch-message-popup-aa-list ()
+  "aa のリストを表示する。"
+  (interactive)
+  (save-window-excursion
+    (with-temp-buffer
+      (let ((alist navi2ch-message-aa-alist)
+	    (nl nil))
+	(while alist
+	  (let ((key (caar alist))
+		(val (cdar alist)))
+	    (when (and (stringp key) (stringp val))
+	      (insert (format "%s: %-30s " key val)
+		      (if nl "\n" ""))
+	      (setq nl (not nl))))
+	  (setq alist (cdr alist)))
+	(pop-to-buffer (current-buffer))
+	(fit-window-to-buffer)
+	(let ((cursor-in-echo-area t)
+	      (message-log-max nil))
+	  (message "Type key for AA: ")
+	  (read-char))))))
+
+(defun navi2ch-message-insert-aa ()
+  "aa を入力する。"
+  (interactive)
+  (let* ((char (navi2ch-message-popup-aa-list))
+	 (aa (cdr (assoc (char-to-string char) navi2ch-message-aa-alist))))
+    (if (stringp aa)
+	(insert aa)
+      (ding))))
+
 ;; ロードした時に呼ばれる
 (navi2ch-message-add-aa navi2ch-message-aa-alist)
 				    
