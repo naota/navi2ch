@@ -17,7 +17,9 @@ $Id$
   configure.in の AM_INIT_AUTOMAKE を x.y.z-BETA に変えて
   % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
   する。tar 玉を http://navi2ch.sf.net/beta/ に置いて 2ch のスレで案内。
-  .elc の tar 玉には作成したホスト名・ユーザ名が埋め込まれるので注意。
+  (.elc の tar 玉には作成したホスト名・ユーザ名が埋め込まれるので注意。
+  気になるなら compile farm で作業するとよい。
+  https://sourceforge.net/docman/display_doc.php?docid=762&group_id=1 )
 
 * リリース版作成
   configure.in の AM_INIT_AUTOMAKE を x.y.z に変えて ChangeLog を記載、
@@ -26,9 +28,7 @@ $Id$
   % cvs commit -m 'bump version to x.y.z'
   % cvs tag navi2ch-x_y_z
   でリリース元の準備をする。
-  commit 忘れ等の確認のため、別ディレクトリで
-  % cvs -d:pserver:anonymous@cvs.navi2ch.sourceforge.net:/cvsroot/navi2ch export -r navi2ch-x_y_z -d navi2ch-x.y.z navi2ch
-  して
+  commit 忘れ等の確認のため、別ディレクトリで cvs export して
   % cd navi2ch-x.y.z && ./configure && make dist elcdist
   で tar 玉を作る。またまたよそのディレクトリに展開して配布物を確認、
   よさげなら SourceForge の File Release に置く。
