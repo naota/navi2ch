@@ -870,6 +870,7 @@ X11 上で見るために作られたフリーのフォントです。
 (defvar navi2ch-load-status-hook nil)
 (defvar navi2ch-before-startup-hook nil)
 (defvar navi2ch-after-startup-hook nil)
+(defvar navi2ch-kill-emacs-hook nil)
 (defvar navi2ch-list-mode-hook nil)
 (defvar navi2ch-list-exit-hook nil)
 (defvar navi2ch-list-after-sync-hook nil)

@@ -58,34 +58,38 @@
 
 (defvar navi2ch-init nil)
 
+;; hook 用関数。
+(defun navi2ch-kill-emacs-hook ()
+  (run-hooks 'navi2ch-kill-emacs-hook)
+  (navi2ch-save-status)
+  (if navi2ch-use-lock
+      (navi2ch-unlock))
+  (remove-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook))
+
+;;;###autoload
 (defun navi2ch (&optional arg)
   "Navigator for 2ch for Emacs"
   (interactive "P")
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
+    (if arg (setq navi2ch-offline (not navi2ch-offline)))
+    (when (file-exists-p navi2ch-update-file)
+      (load-file navi2ch-update-file))
+    (load navi2ch-init-file t)
+    (if navi2ch-use-lock
+	(navi2ch-lock))
+    (if navi2ch-auto-update
+	(navi2ch-update))
+    (add-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook)
+    (run-hooks 'navi2ch-load-status-hook)
+    (run-hooks 'navi2ch-hook)
     (let ((splash-buffer (and navi2ch-display-splash-screen
-                              (navi2ch-splash))))
-      (condition-case err
-          (progn
-            (if arg (setq navi2ch-offline (not navi2ch-offline)))
-            (when (file-exists-p navi2ch-update-file)
-              (load-file navi2ch-update-file))
-            (load navi2ch-init-file t)
-            (if navi2ch-auto-update
-                (navi2ch-update))
-            (add-hook 'kill-emacs-hook 'navi2ch-save-status)
-            (run-hooks 'navi2ch-load-status-hook)
-            (setq navi2ch-init t)
-            (run-hooks 'navi2ch-hook)
-            (navi2ch-list))
-        (error
-         (when (buffer-live-p splash-buffer)
-           (kill-buffer splash-buffer))
-         (setq navi2ch-init nil)
-         (signal (car err) (cdr err)))
-        (quit))
-      (when (buffer-live-p splash-buffer)
-        (kill-buffer splash-buffer))))
+			      (navi2ch-splash))))
+      (unwind-protect
+	  (navi2ch-list)
+	(when (buffer-live-p splash-buffer)
+	  (kill-buffer splash-buffer))))
+    (setq navi2ch-init t))
   (when navi2ch-mona-enable
     (require 'navi2ch-mona))
   (navi2ch-list)
@@ -127,7 +131,9 @@ SUSPEND が non-nil なら buffer を消さない"
           (kill-buffer x))))
     (unless suspend
       (setq navi2ch-init nil)
-      (remove-hook 'kill-emacs-hook 'navi2ch-save-status))))
+      (if navi2ch-use-lock
+	  (navi2ch-unlock))
+      (remove-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook))))
 
 (defun navi2ch-suspend ()
   "navi2ch を一時的に終了する"
@@ -275,7 +281,7 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 		(prin1 info)))
 	    (if (and backup (file-exists-p file))
 		(rename-file file backup-file t))
-	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info 
+	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info
 	    ;; がバックアップファイルから読んでくれる。
 	    (rename-file temp-file file t))
 	(if (and temp-file (file-exists-p temp-file))
@@ -441,6 +447,66 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 					   (symbol-name feature)))
 	    (equal feature 'navi2ch))
 	(unload-feature feature 'force))))
+
+;;; ロック
+;; 最も汎用的な mkdir ロックを実装してみた。
+;; ~/.navi2ch/lockdir というディレクトリがある場合はそのディレクトリは
+;; ロックされているということになる。
+;; シェルスクリプトで同じ手法を使い、cron で wget でも動かせば、
+;; ~/.navi2ch/ 以下を常に新鮮に保てるかも。(w
+
+;; とりあえず、デフォルトでは nil
+(defvar navi2ch-use-lock nil
+  "non-nil なら、Navi2ch が起動する際に `navi2ch-directory' をロックする。")
+
+(defvar navi2ch-lock-directory
+  (expand-file-name "lockdir" navi2ch-directory)
+  "ロックディレクトリの絶対パス")
+
+(defun navi2ch-lock ()
+  "`navi2ch-directory' をロックする。"
+  (let* ((lockdir (navi2ch-chop-/ (expand-file-name navi2ch-lock-directory)))
+	 (basedir (file-name-directory navi2ch-lock-directory))
+	 ;; make-directory-internal は mkdir(2) を呼び出すので、アトミッ
+	 ;; クなロックが期待できる。
+	 (make-directory-function (if (fboundp 'make-directory-internal)
+				      'make-directory-internal
+				    'make-directory))
+	 (redo t)
+	 error-message)
+    ;; まず、下でエラーが起きないよう、親ディレクトリを作っておく
+    (unless (file-exists-p basedir)
+      (ignore-errors
+	(make-directory basedir t)))
+    (while redo
+      (setq redo nil)
+      (if (file-exists-p lockdir)	; lockdir がすでにあると失敗
+	  (setq error-message "ロックディレクトリがすでにあります。")
+	;; file-name-handler-alist があると mkdir が直接呼ばれな
+	;; い可能性がある。
+	(condition-case error
+	    (let ((file-name-handler-alist nil))
+	      (funcall make-directory-function lockdir))
+	  (error
+	   (message "%s" (error-message-string error))
+	   (sit-for 3)
+	   (discard-input)
+	   (setq error-message "ロックディレクトリの作成に失敗しました。"))))
+      (unless (file-exists-p lockdir)	; 念のため、確認しておく
+	(setq error-message "ロックディレクトリを作成できませんでした。"))
+      (if (and error-message
+	       (y-or-n-p (format "%sもう一度試しますか? "
+				 error-message)))
+	  (setq redo t)))
+    (if (and error-message
+	     (not (yes-or-no-p (format "%s危険を承知で続けますか? "
+				       error-message))))
+	(error "lock failed: %s" lockdir))))
+
+(defun navi2ch-unlock ()
+  "`navi2ch-directory' のロックを解除する。"
+  (ignore-errors
+    (delete-directory navi2ch-lock-directory)))
 
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

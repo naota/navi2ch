@@ -1,3 +1,26 @@
+2002-07-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	よく Navi2ch を複数起動してマズーなことになるので、ロックを実装。
+	スクリプトでも実装しやすいロックなんで、cron とかで色々やるのにも
+	いいと思われ。
+
+	* navi2ch.el (navi2ch-kill-emacs-hook): 新関数。
+	(navi2ch): navi2ch-use-lock の場合は navi2ch-lock を呼ぶように。
+	スプラッシュスクリーンの表示は ~/.navi2ch/init.el を呼んだ後に。
+	kill-emacs-hook に入れるのを navi2ch-kill-emacs-hook に。
+	(navi2ch-exit): navi2ch-unlock を呼ぶように。
+	kill-emacs-hook から取り除くのを navi2ch-kill-emacs-hook に。
+	(navi2ch-use-lock): 新変数。non-nil で lock するように。
+	(navi2ch-lock): 新関数。navi2ch-directory をロックする。
+	(navi2ch-unlock): 新関数。ロック解除。
+
+	* navi2ch-article.el (toplevel): add-hook を kill-emacs-hook から
+	navi2ch-kill-emacs-hook に変更。
+	(navi2ch-article-unload): 削除。
+	(navi2ch-article-unload-hook): 削除。
+
+	* navi2ch-vars.el (navi2ch-kill-emacs-hook): 新変数。
+
 2002-07-07  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (toplevel): バイトコンパイル時にも require する

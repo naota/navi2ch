@@ -150,12 +150,7 @@ last が最後からいくつ表示するか。
 (defun navi2ch-article-kill-emacs-hook ()
   (navi2ch-article-expunge-buffers 0))
 
-(add-hook 'kill-emacs-hook 'navi2ch-article-kill-emacs-hook)
-
-(defun navi2ch-article-unload ()
-  (remove-hook 'kill-emacs-hook 'navi2ch-article-kill-emacs-hook))
-
-(defvar navi2ch-article-unload-hook '(navi2ch-article-unload))
+(add-hook 'navi2ch-kill-emacs-hook 'navi2ch-article-kill-emacs-hook)
 
 ;;; navi2ch-article functions
 (defun navi2ch-article-get-url (board article &optional no-kako)
