@@ -535,7 +535,8 @@
 	(limit navi2ch-message-sendlog-response-limit)
 	larticle lsbj-list)
     (when (and lsubject lboard)
-      (setq message (format "Subject: %s\nURL: %s\n\n%s" sbj url message)
+      (setq message (funcall navi2ch-message-sendlog-message-format-function
+			     message sbj url board article)
 	    lsbj-list (navi2ch-board-get-updated-subject-list lboard)
 	    lsubject (navi2ch-message-sendlog-subject-with-volume
 		      lsubject fmt limit lsbj-list))
@@ -546,6 +547,16 @@
       (when larticle (setq lsubject nil))
       (navi2ch-multibbs-send-message from mail message
 				     lsubject lboard larticle))))
+
+(defun navi2ch-message-sendlog-simple-message-format
+  (message subject url board article)
+  "送信控えのレスのシンプルなフォーマット。"
+  (format "Subject: %s\nURL: %s\n\n%s" subject url message))
+
+(defun navi2ch-message-sendlog-message-format-with-board-name
+  (message subject url board article)
+  "送信控えのレスの板名付きのフォーマット。"
+  (format "[%s]: %s\nURL: %s\n\n%s" (cdr (assq 'name board)) subject url message))
 
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

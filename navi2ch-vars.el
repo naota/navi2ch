@@ -1542,6 +1542,22 @@ Navi2chカテゴリに「送信控え」板が自動的に追加されます。
   :type 'string
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-sendlog-message-format-function
+  'navi2ch-message-sendlog-simple-message-format
+  "*送信控えのレスをフォーマットする関数を指定する。
+引数は以下:
+\(MESSAGE SUBJECT URL BOARD ARTICLE)"
+  :type '(choice
+	  (const
+	   :tag "シンプルなフォーマット"
+	   :value navi2ch-message-sendlog-simple-message-format
+	   :doc "Subject: スレッドタイトル\nURL: http://")
+	  (const
+	   :tag "板名付きのフォーマット"
+	   :value navi2ch-message-sendlog-message-format-with-board-name
+	   :doc "[板名]: スレッドタイトル\nURL: http://")
+	  (function :tag "関数を指定")))
+
 ;; net variables
 (defcustom navi2ch-net-http-proxy
   (if (string= (getenv "HTTP_PROXY") "")

@@ -455,11 +455,14 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 (defun navi2ch-article-insert-message-separator (number)
   "レス区切を挿入する。"
   (let ((p (point)))
-    (funcall navi2ch-article-insert-message-separator-function number)
+    (funcall navi2ch-article-insert-message-separator-function)
+    (when (navi2ch-article-insert-hide-number-following number)
+      (funcall navi2ch-article-insert-message-separator-function))
     (put-text-property p (point) 'message-separator number)))
 
 (defun navi2ch-article-insert-hide-number-following (number)
-  "レス番号 NUMBER の後に続く hide されたレス数を挿入する。 "
+  "レス番号 NUMBER の後に続く hide されたレス数を挿入する。
+挿入した場合は non-nil を返す。"
   (unless (or navi2ch-article-hide-mode navi2ch-article-important-mode)
     (let (hide beg end cnt)
       ;; hide 情報は filter mode かどうかで変わってくる
@@ -479,21 +482,20 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	(let ((number-str (if (= cnt 1)
 			      (format "%d" beg)
 			    (format "%d-%d" beg end))))
-	  (insert (format "__[%d hidden message(s) (" cnt))
+	  (insert (format "[%d hidden message(s) (" cnt))
 	  (let ((pos (point)))
 	    (insert ">>" number-str)
 	    (navi2ch-article-set-link-property-subr pos (point)
 						    'number number-str)
-	    (insert ")]")))))))
+	    (insert ")]")))
+	'found))))
 
-(defun navi2ch-article-insert-message-separator-by-face (number)
+(defun navi2ch-article-insert-message-separator-by-face ()
   (let ((p (point)))
-    (navi2ch-article-insert-hide-number-following number)
     (insert "\n")
     (put-text-property p (point) 'face 'underline)))
 
-(defun navi2ch-article-insert-message-separator-by-char (number)
-  (navi2ch-article-insert-hide-number-following number)
+(defun navi2ch-article-insert-message-separator-by-char ()
   (insert (make-string (max 0
 			    (- (eval navi2ch-article-message-separator-width)
 			       (current-column)))
@@ -2918,6 +2920,10 @@ NO-SYNC が non-nil のときは sync しない。"
        (navi2ch-article-sync)))
 
 (defun navi2ch-article-delete-message (sym func msg &optional perm)
+  "該当位置のレスを buffer から削除する。
+`navi2ch-article-current-article' の SYM で指定される list に対して、FUNC を呼びだす。
+PERM が non-nil の場合は、そのレスを unfilter として記録する。
+FUNC は (NUMBER, LIST) を引数に取る関数である事。"
   (let* ((article navi2ch-article-current-article)
          (list (cdr (assq sym article)))
          (num (navi2ch-article-get-current-number)))
