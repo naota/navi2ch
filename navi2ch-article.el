@@ -1987,6 +1987,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-next-message ()
   "次のメッセージへ"
   (interactive)
+  (run-hooks 'navi2ch-article-next-message-hook)
   (condition-case nil
       (progn
         (goto-char (navi2ch-next-property (point) 'current-number))
@@ -1998,6 +1999,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-previous-message ()
   "前のメッセージへ"
   (interactive)
+  (run-hooks 'navi2ch-article-previous-message-hook)
   (condition-case nil
       (progn
         (goto-char (navi2ch-previous-property (point) 'current-number))
