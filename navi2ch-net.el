@@ -123,7 +123,9 @@ BODY の評価中にエラーが起こると nil を返す。"
 		(delete-process proc))
 	    (setq proc nil))
 	(error (setq proc nil)))
-      (unless proc
+      (when (or (not proc)
+		(not (processp proc))
+		(not (eq (process-status proc) 'open)))
 	(message "now connecting...")
 	(setq proc (open-network-stream navi2ch-net-connection-name
 					buf host port)))
@@ -133,6 +135,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 	(erase-buffer))
       (setq navi2ch-net-last-host host)
       (setq navi2ch-net-last-port port)
+      (message "%ssending request..." (current-message))
       (set-process-coding-system proc 'binary 'binary)
       (set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
       (process-send-string
@@ -161,7 +164,7 @@ BODY の評価中にエラーが起こると nil を返す。"
                    (format "Content-length: %d\r\n\r\n%s"
                            (length content) content)
                  "")))
-      (message "%sconnected" (current-message))
+      (message "%sdone" (current-message))
       (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
 
@@ -213,6 +216,13 @@ BODY の評価中にエラーが起こると nil を返す。"
 	 (goto-char (point-min))
 	 (if (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")
 	     (setq navi2ch-net-status (match-string 1)))))))
+
+(defun navi2ch-net-get-protocol (proc)
+  (when (navi2ch-net-get-status proc)
+    (with-current-buffer (process-buffer proc)
+      (goto-char (point-min))
+      (if (looking-at "\\(HTTP/1\\.[01]\\) [0-9]+")
+	  (match-string 1)))))
 
 (defun navi2ch-net-get-header (proc)
   "PROC の接続のヘッダ部を返す"
@@ -329,7 +339,8 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 				  (not (= (point) (+ p size))))
 			(accept-process-output proc))
 		      (goto-char (+ p size))))
-		   (t
+		   ((string= (navi2ch-net-get-protocol proc)
+			     "HTTP/1.0")
 		    (while (eq (process-status proc) 'open)
 		      (accept-process-output proc))
 		    (goto-char (point-max))))
@@ -361,11 +372,11 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 		     (and navi2ch-net-user-agent
 			  (cons "User-Agent" navi2ch-net-user-agent)))
 	       other-header)))
+       (message "checking file...")
        (setq status (navi2ch-net-get-status proc))
        (unless status
 	 (message "retrying...")
 	 (sit-for 3)))			; リトライする前にちょっと待つ
-     (message "checking file...")
      (cond ((not (stringp status))
 	    (message "%serror" (current-message))
 	    (setq proc nil))
@@ -641,7 +652,7 @@ internet drafts directory for a copy.")
     (if (string-equal "Set-Cookie" (car pair))
 	(let ((str (cdr pair)))
 	  (if (string-match "^SPID=\\([^;]+\\);" str)
-	      (return (match-string 1 str)))))))
+				       (return (match-string 1 str)))))))
 
 (defun navi2ch-net-send-message (from mail message subject url referer bbs key spid)
   "メッセージを送る。
