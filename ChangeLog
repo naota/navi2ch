@@ -1,5 +1,12 @@
 2002-01-15  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-sync): やっぱ条件変更。
+	force を指定しない場合は「re-sync kako article?」と聞かず、過去ロ
+	グの re-sync は行わない。
+	(navi2ch-article-fetch-article): バッファがない時は過去ログを無条
+	件で取得していたので、`navi2ch-article-sync' と同じ条件の場合のみ
+	過去ログを取得する。
+
 	* navi2ch-article.el (navi2ch-article-sync): オフラインの時やファ
 	イルが存在しない場合は「re-sync kako article?」と聞いて来なくした。
 
