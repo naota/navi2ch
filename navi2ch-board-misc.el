@@ -568,8 +568,9 @@
     (setq old-file (cdr (assq 'logo board)))
     (if navi2ch-offline
 	(setq file old-file)
-      (setq file (file-name-nondirectory (navi2ch-net-download-logo board)))
+      (setq file (navi2ch-net-download-logo board))
       (when file
+	(setq file (file-name-nondirectory (navi2ch-net-download-logo board)))
 	(when (and old-file navi2ch-board-delete-old-logo
 		   (not (string-equal file old-file)))
 	  (delete-file (navi2ch-board-get-file-name board old-file)))

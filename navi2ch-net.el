@@ -747,17 +747,17 @@ internet drafts directory for a copy.")
 	 src)
     (when (string-match
 	   "BBS_\\(TITLE_PICTURE\\|FIGUREHEAD\\)=\\(.+\\)" content)
-      (setq src (match-string 2 content)))
-    (let (url file)
-      (setq url (if (string-match "http://" src)
-		    src
-		  (navi2ch-board-get-url board src)))
-      (string-match "/\\([^/]+\\)$" url)
-      (setq file (match-string 1 url))
-      (when file
-	(setq file (navi2ch-board-get-file-name board file))
-	(when (navi2ch-net-update-file url file nil nil t)
-	  file)))))
+      (setq src (match-string 2 content))
+      (let (url file)
+	(setq url (if (string-match "http://" src)
+		      src
+		    (navi2ch-board-get-url board src)))
+	(string-match "/\\([^/]+\\)$" url)
+	(setq file (match-string 1 url))
+	(when file
+	  (setq file (navi2ch-board-get-file-name board file))
+	  (when (navi2ch-net-update-file url file nil nil t)
+	    file))))))
 
 (defun navi2ch-net-add-state (state header)
   "HEADER に STATE を追加する。"
