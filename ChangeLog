@@ -1,3 +1,8 @@
+2003-05-15  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): article-summary に
+	既読情報がセーブされない場合があったのを修正。
+
 2003-05-13  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-auto-modify.el: 新ファイル。

@@ -438,9 +438,9 @@
          state)
     (if (and article
 	     (not (navi2ch-board-from-file-p board)))
-	(let* ((artid (cdr (assq 'artid article)))
-	       (element (cdr (assoc artid (navi2ch-article-load-article-summary
-					   board))))
+	(let* ((summary (navi2ch-article-load-article-summary board))
+	       (artid (cdr (assq 'artid article)))
+	       (element (cdr (assoc artid summary)))
 	       (seen (navi2ch-article-summary-element-seen element)))
 	  (setq state (navi2ch-article-fetch-article board article force))
 	  (when state
@@ -454,6 +454,7 @@
 		  (progn
 		    (navi2ch-article-summary-element-set-seen element
 							      suppressed)
+		    (navi2ch-article-save-article-summary board summary)
 		    (setq state-mark (navi2ch-bm-get-state)
 			  updated-mark 'seen)
 		    (message "No updates need seeing"))
