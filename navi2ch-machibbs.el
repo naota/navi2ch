@@ -85,8 +85,12 @@
   (let ((uri   (cdr (assq 'uri board)))
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri) ; \\/ --> / ?
-    (format "%s/bbs/read.pl?BBS=%s&KEY=%s"
-	    (match-string 1 uri) (match-string 2 uri) artid)))
+    (concat
+     (format "%s/bbs/read.pl?BBS=%s&KEY=%s"
+	     (match-string 1 uri) (match-string 2 uri) artid)
+     (and start (format "&START=%d" start))
+     (and end (format "&END=%d" end))
+     (and nofirst "&NOFIRST=TRUE"))))
 
 (defun navi2ch-machibbs-url-to-board (url)
   "urlから BOARDに変換。"

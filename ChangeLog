@@ -1,3 +1,8 @@
+2002-07-02  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): 引数の
+	start, end, nofirst をサポート。
+
 2002-07-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* Merge: navi2ch-multibbs-1-5-2 枝をマージ。
