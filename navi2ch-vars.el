@@ -184,6 +184,8 @@ nil の場合は browse-url-browser-function を使う。
   :type 'boolean
   :group 'navi2ch-list)
 
+;; ２ちゃんねるは "http://www.ff.iij4u.or.jp/~ch2/bbsmenu.html" を使っ
+;; てるけど、まだ古いみたい。
 (defcustom navi2ch-list-bbstable-url "http://www6.ocn.ne.jp/~mirv/2chmenu.html"
   "*bbstable の URL。"
   :type 'string
@@ -858,38 +860,25 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
   :group 'navi2ch)
 
 ;; Mona fonts.
-(eval-when-compile		     ; バイトコンパイル時のwarning対策
-  (autoload 'navi2ch-mona-setup "navi2ch-mona")
-  (autoload 'navi2ch-mona-undo-setup "navi2ch-mona"))
 (defgroup navi2ch-mona nil
   "*Navi2ch, モナーフォント
 
-Mona fonts (モナーフォント) は 2ちゃんねるのアスキーアート (以下 AA) を
-X11 上で見るために作られたフリーのフォントです。
+モナーフォントは 2ちゃんねるのアスキーアート (以下 AA) を見るために作
+られたフリーのフォントです。
 
-2ちゃんねるのアスキーアートはその多くが MS P ゴシック 12pt を
-想定してつくられており、 X の固定幅フォントを使った Netscape 等で見ると
-ずれてしまいます。 モナーフォントはフリーで配布されている
-東雲 (しののめ) フォントの文字幅を MS P ゴシックに合わせたもので、
-これを使うと Windows ユーザ向けに作られた AA を正しく見ることができます。
+2ちゃんねるのアスキーアートはその多くがプロポーショナルフォントである
+\「MS P ゴシック 12pt」を想定してつくられており、 UNIX や Mac の固定幅
+フォントで見るとずれてしまいます。モナーフォントはフリーで配布されてい
+る東雲 (しののめ) フォントの文字幅を MS P ゴシックに合わせたもので、こ
+れを使うと Windows ユーザ向けに作られた AA をズレなしで見ることができ
+ます。
 
-                   (http://members.tripod.co.jp/s42335/mona/ より)"
+                              (http://monafont.sourceforge.net/ より)"
   :prefix "navi2ch-"
   :link '(url-link :tag "モナーフォント ホームページ"
-		   "http://members.tripod.co.jp/s42335/mona/")
+		   "http://monafont.sourceforge.net/")
   :group 'navi2ch
   :load 'navi2ch-mona)
-
-(defcustom navi2ch-mona-enable nil
-  "*non-nil なら、モナーフォントを使ってスレを表示する。"
-  :set (lambda (symbol value)
-	 (if value
-	     (navi2ch-mona-setup)
-	   (navi2ch-mona-undo-setup))
-	 (set-default symbol value))
-  :initialize 'custom-initialize-default
-  :type 'boolean
-  :group 'navi2ch-mona)
 
 ;; folder icons. filename relative to navi2ch-icon-directory
 (defvar navi2ch-online-icon "plugged.xpm"

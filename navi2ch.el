@@ -51,6 +51,7 @@
 (require 'navi2ch-jbbs-shitaraba)
 (require 'navi2ch-machibbs)
 (require 'navi2ch-multibbs)
+(require 'navi2ch-mona)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
@@ -92,7 +93,7 @@
 	  (kill-buffer splash-buffer))))
     (setq navi2ch-init t))
   (when navi2ch-mona-enable
-    (require 'navi2ch-mona))
+    (navi2ch-mona-setup))
   (navi2ch-list)
   (run-hooks 'navi2ch-after-startup-hook))
 

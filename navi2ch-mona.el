@@ -52,6 +52,11 @@
 (make-face 'navi2ch-mona14-face)
 (make-face 'navi2ch-mona16-face)
 
+(defvar navi2ch-mona-create-fontset nil)
+(eval-when-compile
+  (navi2ch-defalias-maybe 'query-fontset 'ignore)
+  (navi2ch-defalias-maybe 'new-fontset 'ignore))
+
 ;; カスタマイズ変数の defcustom に必要な関数
 (defun navi2ch-mona-create-fontset-from-family-name (family-name height)
   "navi2ch が必要とするフォントセットを作り、その名前を返す。
@@ -64,7 +69,8 @@ XEmacs では明示的にフォントセットを作る必要がないので、
 を返すだけ。"
   (let ((fontset-name (format "-%s-medium-r-*--%d-*-*-*-p-*-*-*"
                               family-name height)))
-    (navi2ch-ifxemacs
+    (if (or navi2ch-on-xemacs
+	    (not navi2ch-mona-create-fontset))
 	fontset-name
       (let* ((fields (x-decompose-font-name fontset-name))
 	     (foundry (aref fields 0))
@@ -112,6 +118,17 @@ XEmacs では明示的にフォントセットを作る必要がないので、
     (error nil)))
 
 ;; Customizable variables.
+(defcustom navi2ch-mona-enable nil
+  "*non-nil なら、モナーフォントを使ってスレを表示する。"
+  :set (lambda (symbol value)
+	 (if value
+	     (navi2ch-mona-setup)
+	   (navi2ch-mona-undo-setup))
+	 (set-default symbol value))
+  :initialize 'custom-initialize-default
+  :type 'boolean
+  :group 'navi2ch-mona)
+
 (defcustom navi2ch-mona-enable-board-list nil
   "*モナーフォントで表示する板のリスト。"
   :type '(repeat (string :tag "板"))
@@ -154,11 +171,11 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
 -*-*-*-{iso8859-1,jisx0201.1976-0,jisx0208.(1983|1990)-0}
 
 があるかどうか確かめてね。"
-  :type '(choice (string :tag "family name")
-		 (string :tag "Mona fonts"
+  :type '(choice (string :tag "Mona Font"
 			 :value "mona-gothic")
-		 (string :tag "MS P Gothic"
-			 :value "microsoft-pgothic"))
+		 (const :tag "MS P Gothic"
+			:value "microsoft-pgothic")
+		 (string :tag "family name"))
   :set 'navi2ch-mona-set-font-family-name
   :initialize 'custom-initialize-reset
   :group 'navi2ch-mona)
@@ -263,7 +280,7 @@ nil is returned.  Otherwise the associated face object is returned."
     (while (re-search-forward "^ +" nil t)
       (replace-match ""))
     (goto-char (point-min))
-    (while (re-search-forward"  +" nil t)
+    (while (re-search-forward "  +" nil t)
       (replace-match " "))))
 
 (defun navi2ch-mona-arrange-message ()
@@ -288,20 +305,19 @@ nil is returned.  Otherwise the associated face object is returned."
 
 (defun navi2ch-mona-setup ()
   "*モナーフォントを使うためのフックを追加する。"
-  (add-hook 'navi2ch-article-arrange-message-hook
-	    'navi2ch-mona-arrange-message)
-  (add-hook 'navi2ch-message-mode-hook
-	    'navi2ch-mona-message-mode-hook))
+  (when (and (eq window-system 'x)	; NT Emacs でも動くのかな?
+	     (or navi2ch-on-emacs21 navi2ch-on-xemacs))
+    (navi2ch-mona-set-mona-face)	; 何回呼んでも大丈夫
+    (add-hook 'navi2ch-article-arrange-message-hook
+	      'navi2ch-mona-arrange-message)
+    (add-hook 'navi2ch-message-mode-hook
+	      'navi2ch-mona-message-mode-hook)))
 
 (defun navi2ch-mona-undo-setup ()
   (remove-hook 'navi2ch-article-arrange-message-hook
 	       'navi2ch-mona-arrange-message)
   (remove-hook 'navi2ch-message-mode-hook
 	       'navi2ch-mona-message-mode-hook))
-
-(when (or navi2ch-on-emacs21 navi2ch-on-xemacs)
-  (navi2ch-mona-set-mona-face)
-  (navi2ch-mona-setup))
 
 (run-hooks 'navi2ch-mona-load-hook)
 ;;; navi2ch-mona.el ends here

@@ -1,3 +1,25 @@
+2002-07-17  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (toplevel): 常に navi2ch-mona を require するように。
+	(navi2ch): navi2ch-mona-enable に応じて navi2ch-mona-setup を呼ぶ
+	ように。
+
+	* navi2ch-vars.el (navi2ch-mona): コメント、URL を更新。
+	(navi2ch-mona-enable): navi2ch-mona に移動。
+
+	* navi2ch-mona.el (navi2ch-mona-create-fontset): 新変数。
+	(toplevel): XEmacs の warning 消しの defalias 追加。
+	(navi2ch-mona-create-fontset-from-family-name):
+	navi2ch-mona-create-fontset が nil の場合は、Emacs 21 でもフォント
+	セット名のみで処理する。こそーりデフォルト nil でテストして、苦情
+	が出たら t にしよう。
+	(navi2ch-mona-enable): navi2ch-vars.el から移動。
+	(navi2ch-mona-font-family-name): customize でタグが出るよう、順番
+	を変更。
+	(navi2ch-mona-pack-space): fix typo
+	(navi2ch-mona-setup): 対応してない環境では呼んでも無害にした。
+	(toplevel): require しただけでは setup しないように。
+
 2002-07-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map):
