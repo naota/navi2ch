@@ -245,7 +245,7 @@
       (let ((node (navi2ch-list-bookmark-node x)))
 	(when (member node bookmark)
 	  (setq list2 (cons x list2)))))
-    (navi2ch-list-insert-board-names-subr list2)))
+    (navi2ch-list-insert-board-names-subr (nreverse list2))))
 
 (defun navi2ch-list-toggle-open ()
   "カテゴリを開いたり閉じたりする。"
@@ -548,7 +548,7 @@ changed-list は '((board-id old-board new-board) ...) な alist。
   (let (alist name-list)
     (dolist (x list)
       (unless (string= (car x) navi2ch-list-changed-category-name)
-	(setq alist (append (cdr (assq 'child x)) alist))))
+	(setq alist (append alist (cdr (assq 'child x))))))
     alist))
 
 (defun navi2ch-list-save-info ()

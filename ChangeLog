@@ -1,5 +1,17 @@
 2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-list.el (navi2ch-list-insert-bookmarks): insert する際、
+	リストの順番を反対にするように。
+	(navi2ch-list-get-board-name-list): append する順番を逆に。
+	list-mode のブックマークの順番が変だったので変えてみた。よそには影
+	響ないと思うんだが、ちと心配。
+
+	* navi2ch-mona.el (navi2ch-mona-set-font-family-name): 新関数。
+	(navi2ch-mona-font-family-name): 上記関数を使用するように。
+	バイトコンパイル時にdolistマクロが展開されるよう、setter を分離。
+	ところで、Emacs 21.2 だと customize-group navi2ch-mona でこの変数
+	をうまく編集できないみたい。customize に詳しい人の降臨キボンヌ。
+
 	* navi2ch-net.el (navi2ch-net-update-file-diff): ちゃんと
 	Last-Modified -> If-Modified-Since が動くようになったので、更新内
 	容が \n のみの場合分けをコメントアウト。昨日の navi2ch-article.el

@@ -97,6 +97,17 @@ XEmacs では明示的にフォントセットを作る必要がないので、
                                             (format font "jisx0208.1990-0"))))))))
            fontset-name))))
 
+(defun navi2ch-mona-set-font-family-name (symbol value)
+  "VALUEで指定されるフォントセットに応じてフェイスを作成する。"
+  (condition-case nil
+      (progn
+	(dolist (height '(12 14 16))
+	  (let ((fontset (navi2ch-mona-create-fontset-from-family-name
+			  value height))
+		(face (intern (format "navi2ch-mona%d-face" height))))
+	    (set-face-font face fontset)))
+	(set-default symbol value))
+    (error nil)))
 
 ;; Customizable variables.
 (defcustom navi2ch-mona-enable-board-list nil
@@ -146,16 +157,7 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
 			 :value "mona-gothic")
 		 (string :tag "MS P Gothic"
 			 :value "microsoft-pgothic"))
-  :set (function (lambda (symbol value)
-		   (condition-case nil
-		       (progn
-			 (dolist (height '(12 14 16))
-			   (let ((fontset (navi2ch-mona-create-fontset-from-family-name
-					   value height))
-				 (face (intern (format "navi2ch-mona%d-face" height))))
-			     (set-face-font face fontset)))
-			 (set-default symbol value))
-		     (error nil))))
+  :set 'navi2ch-mona-set-font-family-name
   :initialize 'custom-initialize-reset
   :group 'navi2ch-mona)
 
