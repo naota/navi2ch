@@ -1,3 +1,9 @@
+2002-07-02  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-directory.el (navi2ch-directory-set-subject-list): 
+	.dat ファイル名を数値として降順で sort するように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/165
+
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message-force-sync): 新変数。

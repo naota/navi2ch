@@ -92,10 +92,12 @@
 	      (cons 'id "navi2ch"))))
 
 (defun navi2ch-directory-set-subject-list (directory)
-  (setq directory (expand-file-name directory))
+  (setq directory (file-name-as-directory
+		   (expand-file-name directory)))
   (setq navi2ch-directory-subject-list
 	(mapcar
 	 (lambda (file)
+	   (setq file (concat directory file))
 	   (list
 	    (cons 'subject
 		  (cdr (assq 'subject
@@ -103,7 +105,9 @@
 			      file))))
 	    (cons 'artid
 		  (file-name-nondirectory (file-name-sans-extension file)))))
-	 (directory-files directory t "\\.dat$"))))
+	 (sort (directory-files directory nil "\\.dat$" t)
+	       (lambda (x y)
+		 (> (string-to-number x) (string-to-number y)))))))
 
 (defun navi2ch-directory-find-directory (directory)
   (interactive "Ddirectory: ")
