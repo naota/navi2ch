@@ -888,6 +888,42 @@ List}) したりして、思う存分煽り文句を書いたら、@kbd{C-c C-c} で書き込
 このようにすると、「Navi2ch」カテゴリに「送信控え」板が追加される。
 @xref{List Mode}.
 
+@subsection 送信控えのレスの表示
+
+送信控えのレスの表示はデフォルトでは以下のようになっている。
+
+@example
+@group
+Subject: Navi2ch for Emacs (Part 14)
+URL: http://pc5.2ch.net/test/read.cgi/unix/1106152504/
+
+hide されたやつの表示をちょっと変えてみました。
+不満があったらどうぞ。
+____________________________________________________________
+@end group
+@end example
+
+板名も表示したいと思うなら以下のように設定すればいい。
+
+@lisp
+(setq navi2ch-message-sendlog-message-format-function
+      'navi2ch-message-sendlog-message-format-with-board-name)
+@end lisp
+
+すると、送信控えのレスが以下のようになる。
+
+@example
+@group
+[UNIX]: Navi2ch for Emacs (Part 14)
+URL: http://pc5.2ch.net/test/read.cgi/unix/1106152504/
+
+hide されたやつの表示をちょっと変えてみました。
+不満があったらどうぞ。
+____________________________________________________________
+@end group
+@end example
+
+
 @node Customize
 @chapter カスタマイズ
 
