@@ -233,6 +233,7 @@
     (with-temp-buffer
       (navi2ch-insert-file-contents file)
       (run-hooks 'navi2ch-board-get-subject-list-hook)
+      (navi2ch-apply-filters navi2ch-board-current-board navi2ch-board-filter-list)
       (navi2ch-replace-html-tag-with-buffer)
       (goto-char (point-min))
       (let ((regexp (navi2ch-board-regexp-test))

@@ -1,3 +1,29 @@
+2003-02-28  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-list-filter-list): 新変数。
+	(navi2ch-board-filter-list): 新変数。
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/874-875n
+
+	* navi2ch-util.el (navi2ch-apply-filters): 新関数。
+
+	* navi2ch-list.el (navi2ch-list-get-category-list): 
+	上記関数を使うように。
+
+	* navi2ch-board.el (navi2ch-board-get-subject-list): 同上。
+
+	* navi2ch-article.el (navi2ch-article-get-message-list): 同上。
+	(navi2ch-article-apply-filters): 廃止。
+	(navi2ch-article-get-message-filter-cache-file-name): 
+	optional だった引き数を必須に。
+	(navi2ch-article-save-message-filter-cache): 上記変更に追随。
+	また、optional な引き数を追加。
+	(navi2ch-article-save-info): 上記変更に追随。
+	(navi2ch-article-load-message-filter-cache): 
+	navi2ch-article-save-message-filter-cache と同様。
+	また、navi2ch-article-message-filter-cache を直接変更しないように。
+	(navi2ch-article-insert-messages): 上記変更に追随。
+	また、進捗表示を修正・変更。
+
 2003-02-27  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-insert-board-names): テキスト属性

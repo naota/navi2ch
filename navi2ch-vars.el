@@ -256,6 +256,21 @@ nil ならば手動で更新しないかぎり取りにいかない。"
 		 (const :tag "フェイスを使用しない" nil))
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-filter-list nil
+  "*スレッドの分類一覧をいじるフィルターのリスト。
+それぞれのフィルターは elisp の関数ならば その symbol、
+外部プログラムを呼ぶなら
+'(\"perl\" \"2ch.pl\")
+といった感じの list を設定する。
+例えばこんな感じ。
+\(setq navi2ch-list-filter-list
+      '(navi2ch-filter
+        (\"perl\" \"2ch.pl\")
+        (\"perl\" \"filter-with-board.pl\" \"-b\" board)
+        ))"
+  :type '(repeat sexp)
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。nil なら全部ダウンロードする。"
@@ -418,6 +433,21 @@ non-nil ならば expire する。"
 	       (cons (const :tag "状態 =C" "=C") (number :tag "順番"))
 	       (cons (const :tag "状態 = " "= ") (number :tag "順番"))
 	       (cons (const :tag "状態   " "  ") (number :tag "順番")))
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-board-filter-list nil
+  "*スレッドの一覧をいじるフィルターのリスト。
+それぞれのフィルターは elisp の関数ならば その symbol、
+外部プログラムを呼ぶなら
+'(\"perl\" \"2ch.pl\")
+といった感じの list を設定する。
+例えばこんな感じ。
+\(setq navi2ch-board-filter-list
+      '(navi2ch-filter
+        (\"perl\" \"2ch.pl\")
+        (\"perl\" \"filter-with-board.pl\" \"-b\" board)
+        ))"
+  :type '(repeat sexp)
   :group 'navi2ch-board)
 
 ;;; article variables

@@ -1062,5 +1062,16 @@ This function is a cutdown version of cl-seq's one."
 	     (and (< (match-end 0) (length original))
 		  (- (match-end 0) (length original)))))
 
+(defun navi2ch-apply-filters (board filter-list)
+  (dolist (filter filter-list)
+    (if (stringp (car-safe filter))
+        (apply 'navi2ch-call-process-buffer
+               (mapcar (lambda (x)
+                         (if (eq x 'board)
+                             (cdr (assq 'id board))
+                           x))
+                       filter))
+      (funcall filter))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

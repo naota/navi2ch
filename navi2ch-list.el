@@ -166,6 +166,7 @@
     (with-temp-buffer
       (navi2ch-insert-file-contents file)
       (run-hooks 'navi2ch-list-get-category-list-hook)
+      (navi2ch-apply-filters navi2ch-list-current-list navi2ch-list-filter-list)
       (goto-char (point-min))
       (let (list)
 	(while (re-search-forward "\\(.+\\)\n\n\n" nil t)
