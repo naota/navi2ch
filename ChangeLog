@@ -2,6 +2,8 @@
 
 	* navi2ch-popup-article.el (navi2ch-popup-article): parse が済んで
 	ないメッセージは parse するように。
+	(navi2ch-popup-article): 上記変更を修正。parse が済んでないメッセー
+	ジは insert-messages にまかせて string のまま放置。
 
 	* navi2ch-article.el (navi2ch-article-str-to-num): >>2-1 みたいな
 	逆順になってるのにも対応。

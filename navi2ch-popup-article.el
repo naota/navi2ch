@@ -92,7 +92,7 @@
 	  (mapcar (lambda (x)
 		    (let ((msg (navi2ch-article-get-message x)))
 		      (cons x (if (stringp msg)
-				  (navi2ch-article-parse-message msg)
+				  msg
 				(copy-alist msg)))))
 		  num-list))
     (setq navi2ch-article-separator sep)
