@@ -690,7 +690,8 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-fetch-mark-article (&optional force)
   (interactive "P")
-  (navi2ch-bm-exec-subr 'navi2ch-bm-fetch-article force))
+  (unless navi2ch-offline
+    (navi2ch-bm-exec-subr 'navi2ch-bm-fetch-article force)))
 
 (defun navi2ch-bm-textize-mark-article (directory &optional file)
   (interactive "DDirectory: \nFList file: ")
@@ -735,9 +736,10 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-fetch-maybe-new-articles ()
   "更新されている可能性のあるスレを fetch する。"
   (interactive)
-  (navi2ch-bm-mark-states "[^=]")
-  (sit-for 0)
-  (navi2ch-bookmark-fetch-mark-article))
+  (unless navi2ch-offline
+    (navi2ch-bm-mark-states "[^=]")
+    (sit-for 0)
+    (navi2ch-bookmark-fetch-mark-article)))
 
 (defun navi2ch-bm-mark-all (&optional arg)
   (interactive "P")

@@ -1,3 +1,11 @@
+2005-02-19  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): offline
+	のときはすぐ終了するように。
+	(navi2ch-bm-fetch-maybe-new-articles): 同上。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。	
+
 2005-02-18  mami  <mami@users.sourceforge.net>
 
 	* NEWS: 更新。

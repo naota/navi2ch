@@ -423,7 +423,8 @@ KEY は (concat URI ARTID)")
 
 (defun navi2ch-bookmark-fetch-mark-article (&optional force)
   (interactive "P")
-  (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article force))
+  (unless navi2ch-offline
+    (navi2ch-bm-exec-subr 'navi2ch-bookmark-fetch-article force)))
 
 (defun navi2ch-bookmark-change (changed-list)
   "変更された板の bookmark を修正する。
