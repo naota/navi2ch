@@ -1,3 +1,10 @@
+2004-12-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-expire): 
+	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
+	を修正。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/748
+
 2004-11-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-get-etc-category):

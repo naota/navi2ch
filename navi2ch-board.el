@@ -590,8 +590,8 @@
 			   (not (or (member artid (cdr (assq 'bookmark board)))
 				    (navi2ch-bookmark-exist-all board
 								article))))
-		       (and navi2ch-board-expire-orphan-only
-			    (navi2ch-article-orphan-p board article))
+		       (or (not navi2ch-board-expire-orphan-only)
+			   (navi2ch-article-orphan-p board article))
 		       (navi2ch-board-expire-date-p
 			key-time file
 			(navi2ch-article-summary-element-access-time
