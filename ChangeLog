@@ -1,8 +1,16 @@
 2002-01-18  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch.el (navi2ch-three-pane): バッファがそろって無い時は
+	navi2ch-two-pne を使うようにした。window-start を保存しておくこと
+	で article モードで 3 を押しても表示がバタバタしないようにした。
+	(navi2ch-one-pane): navi2ch-two-pane と相性が悪かったので修正。
+	(navi2ch-two-pane): カレントバッファが list、board、article のいず
+	れでもない場合に対処。
+
 	* navi2ch.el (navi2ch-two-pane-horizontally): 新関数。
 	(navi2ch-two-pane-vertically): 新関数。
 	(navi2ch-two-pane): 新関数。どこでも2ペインを使えるように。
+
 	* navi2ch-vars.el (navi2ch-global-view-map): 上記関数をバインド。
 	* navi2ch-article.el (navi2ch-article-mode-map): モード依存の2ペイ
 	ン関数のバインドをはずした。
