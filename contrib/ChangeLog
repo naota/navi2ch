@@ -1,3 +1,9 @@
+2003-11-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-spamfilter.el (navi2ch-article-bayesian-tokenizer): 現在
+	のレス番号がわかる時だけ num: を付けるように。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/264
+
 2003-11-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-spamfilter.el (navi2ch-article-before-save-corpus-hook):

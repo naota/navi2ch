@@ -117,10 +117,11 @@ navi2ch-article-message-filter-by-bayesian で自動登録する場合は 2 以上
 	   (split-string (cdr (assq 'date alist)) "[ $B　]+"))
    (if (string-match "◆[^ ]+" (cdr (assq 'name alist)))
        (list (concat "trip:" (match-string 0 (cdr (assq 'name alist))))))
+   (let ((number (or (cdr (assq 'number alist))
+		     (navi2ch-article-get-current-number))))
+     (when (numberp number)
+       (list (concat "num:"  (number-to-string number)))))
    (list
-    (concat "num:"  (number-to-string
-		     (or (cdr (assq 'number alist))
-			 (navi2ch-article-get-current-number))))
     (concat "mail:" (cdr (assq 'mail alist)))
     (concat "name:" (cdr (assq 'name alist))))))
 
