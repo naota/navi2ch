@@ -851,17 +851,17 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
   (let ((summary (navi2ch-article-load-article-summary board)))
     (setq articles
 	  (cond ((cdr (assq 'artid articles)) ; $B%9%l(B alist
-		 (setq articles (list articles)))
+		 (list articles))
 		((cdr (assq 'artid (car articles))) ; $B%9%l(B alist $B$N(B list
-		 articles)
-		(t nil)))
+		 articles)))
     (dolist (article articles)
-      (let ((artid (cdr (assq 'artid article))))
-	(let ((buffer (get-buffer (navi2ch-article-get-buffer-name board
-								   article))))
-	  (when buffer
-	    (delete-windows-on buffer)
-	    (kill-buffer buffer)))
+      (let ((artid (cdr (assq 'artid article)))
+	    (buffer (get-buffer (navi2ch-article-get-buffer-name board
+								 article)))
+	    elt)
+	(when buffer
+	  (delete-windows-on buffer)
+	  (kill-buffer buffer))
 	(dolist (file (list (navi2ch-article-get-info-file-name board article)
 			    (navi2ch-article-get-file-name board article)
 			    (navi2ch-article-get-message-filter-cache-file-name
@@ -871,12 +871,9 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 		  (delete-file file))
 	    (error nil)))
 	(navi2ch-bm-remove-fetched-article board article)
-	(when summary
-	  (let (elt)
-	    (while (setq elt (assoc artid summary)) ; $B%/%I$$(B?
-	      (setq summary (delq elt summary)))))))
-    (when summary
-      (navi2ch-article-save-article-summary board summary))))
+	(while (setq elt (assoc artid summary)) ; $B%/%I$$(B?
+	  (setq summary (delq elt summary)))))
+    (navi2ch-article-save-article-summary board summary)))
 
 (defun navi2ch-bm-remove-article ()
   (interactive)

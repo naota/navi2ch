@@ -1,3 +1,9 @@
+2003-04-01  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): 削除の結
+	果 article-summary が空になった場合に保存してなかったのを修正。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/328
+
 2003-03-30  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-popup-article.el
@@ -23,7 +29,7 @@
 
 2003-03-27  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch-save-info): 
+	* navi2ch.el (navi2ch-save-info):
 	http://pc.2ch.net/test/read.cgi/unix/********** のようなリンクを踏んで、
 	ワイルドカード等を名前に含むファイルを作れずエラーになる場合に対応。
 
