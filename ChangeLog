@@ -1,5 +1,10 @@
 2002-01-11  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-view-article):
+	navi2ch-article-expunge-buffers の位置を変更。
+	(navi2ch-article-view-article-from-file): expunge するようにしてみ
+	る。
+
 	* navi2ch-net.el (navi2ch-net-update-file-diff): range にファイル
 	サイズと等しい値を指定するとファイルの内容を全部送ってくるようになっ
 	てたので 1- する。

@@ -403,8 +403,8 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
           (switch-to-buffer buf-name)
           (navi2ch-article-sync force nil number))
       (switch-to-buffer (get-buffer-create buf-name))
-      (navi2ch-article-expunge-buffers)
       (navi2ch-article-mode)
+      (navi2ch-article-expunge-buffers)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p nil)
@@ -430,6 +430,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
           (navi2ch-article-sync))
       (switch-to-buffer (get-buffer-create buf-name))
       (navi2ch-article-mode)
+      (navi2ch-article-expunge-buffers)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p t)
