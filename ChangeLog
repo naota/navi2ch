@@ -1,3 +1,11 @@
+2002-09-23  miz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-article.e: YY/MM/DD形式の日付をYYYY/MM/DD(曜日)形式
+	でも表示できるようにした(たぶん8.26以前の形式)．
+
+	* navi2ch-vars.el: 曜日の表示，非表示のフラグnavi2ch-article-dispweekを
+	defcustumする．
+
 2002-09-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-exit): 引数追加。C-u 付きで
