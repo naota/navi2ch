@@ -1,5 +1,14 @@
 2002-11-01  SAITO Takuya  <tabmore@users.sourceforge.net>
 
+	* navi2ch-board.el (navi2ch-board-get-matched-article): 
+	subject の最初と最後の空白をけずる。
+	(navi2ch-board-get-subject-list): subject 途中の空白を圧縮しない。
+
+	* navi2ch-search.el (navi2ch-search-board-subject-regexp):
+	subject 途中の空白を圧縮しない。 subject のみを検索対象に。
+
+2002-11-01  SAITO Takuya  <tabmore@users.sourceforge.net>
+
 	* navi2ch-message.el (navi2ch-message-send-message): 送信控えを取る
 	位置を変更。
 
