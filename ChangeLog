@@ -1,3 +1,12 @@
+2002-01-20  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-update-file): Last-Modified
+	が無い場合は Date を最終更新時間として保存。
+	* navi2ch-board.el (navi2ch-board-sync): 同上。
+	なんか mod_gzip が効いてると Last-Modified が送られて来ないので上
+	記のような変更を加えてみた。If-Modified-Since で送っても無視される
+	みたいだけど、、、
+
 2002-01-20  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-list.el

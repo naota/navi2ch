@@ -726,8 +726,10 @@ state はあぼーんされてれば aborn というシンボル。
 	  (when (cdr (assoc "Not-Updated" (nth 0 state)))
 	    (setq state nil))
 	  (setq article (navi2ch-put-alist 'time
-					     (cdr (assoc "Last-Modified"
-							 (nth 0 state)))
+					   (or (cdr (assoc "Last-Modified"
+							   (nth 0 state)))
+					       (cdr (assoc "Date"
+							   (nth 0 state))))
 					   article))
 	  (when kako 
 	    (setq article (navi2ch-put-alist 'kako t article))))))
