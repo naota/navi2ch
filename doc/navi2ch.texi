@@ -769,7 +769,7 @@ newsplus
 @node Mona Fonts
 @section モナーフォントを使う
 
-FSF Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
+GNU Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
 (藁) なモナーフォントというフォントを使うことができる。
 
 @menu
@@ -788,7 +788,7 @@ Mona fonts (モナーフォント) とは、２ちゃんねるのアスキーアートを X11
 @node How to Use Mona Fonts
 @subsection んで、どうやって使うの?
 
-FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
+GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @file{~/.navi2ch/init.el} に以下のように書いておく。@xref{Init File}.
 
 @lisp
@@ -806,7 +806,7 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
   (setq navi2ch-mona-enable t))
 @end lisp
 
-残念ながら、FSF Emacs 20 では可変幅フォントを使用することができないの
+残念ながら、GNU Emacs 20 では可変幅フォントを使用することができないの
 でモナーフォントは使用できない。
 
 @node Key Bindings
