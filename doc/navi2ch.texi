@@ -135,12 +135,12 @@ Bookmark モード
                                    を利用する
 * Init File::                   初期化ファイル
 * Other Boards File::           その他のカテゴリに入れる板を追加する
-* Mona Fonts::                  モナーフォントを使う
+* Mona Font::                   モナーフォントを使う
 
 モナーフォントを使う
 
-* What is Mona Fonts::          モナーフォントって何よ?
-* How to Use Mona Fonts::       んで、どうやって使うの?
+* What is Mona Font::           モナーフォントって何よ?
+* How to Use Mona Font::        んで、どうやって使うの?
 
 キーバインド
 
@@ -715,7 +715,7 @@ List}) したりして、思う存分煽り文句を書いたら、@kbd{C-c C-c} で書き込
                                    を利用する
 * Init File::                   初期化ファイル
 * Other Boards File::           その他のカテゴリに入れる板を追加する
-* Mona Fonts::                  モナーフォントを使う
+* Mona Font::                   モナーフォントを使う
 @end menu
 
 @node Emacs Customization Interface
@@ -771,26 +771,26 @@ newsplus
 その板を一意に識別できる単語 (大抵は @var{ディレクトリ} でおっけー) を
 使用する。
 
-@node Mona Fonts
+@node Mona Font
 @section モナーフォントを使う
 
 GNU Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
 (藁) なモナーフォントというフォントを使うことができる。
 
 @menu
-* What is Mona Fonts::          モナーフォントって何よ?
-* How to Use Mona Fonts::       んで、どうやって使うの?
+* What is Mona Font::           モナーフォントって何よ?
+* How to Use Mona Font::        んで、どうやって使うの?
 @end menu
 
-@node What is Mona Fonts
+@node What is Mona Font
 @subsection モナーフォントって何よ?
 
-Mona fonts (モナーフォント) とは、２ちゃんねるのアスキーアートを X11
-で見るために作られたフリーのフォントです。
+モナーフォントは２ちゃんねるのアスキーアートを見るために作られたフリー
+のフォントです。
 
 詳しくは @uref{http://monafont.sourceforge.net/} を参照のこと。
 
-@node How to Use Mona Fonts
+@node How to Use Mona Font
 @subsection んで、どうやって使うの?
 
 GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
