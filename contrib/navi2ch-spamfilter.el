@@ -233,8 +233,8 @@ important $B%^!<%/$N%l%9$r(B good $B$K!"(Bhide $B%^!<%/$N%l%9$r(B bad $B$
 $BM-8z$K$J$k!#(B"
   (interactive)
   (dolist (advice navi2ch-spamf-advice-list)
-    (ad-enable-advice (nth 0 advice) (nth 1 advice) (nth 2 advice))
-    (ad-activate (nth 0 advice)))
+    (apply #'ad-enable-advice advice)
+    (ad-activate (car advice)))
   (add-to-list 'navi2ch-article-message-filter-list
 	       #'navi2ch-article-message-filter-by-bayesian))
 
@@ -244,8 +244,8 @@ important $B%^!<%/$N%l%9$r(B good $B$K!"(Bhide $B%^!<%/$N%l%9$r(B bad $B$
 $BL58z$K$J$k!#(B"
   (interactive)
   (dolist (advice navi2ch-spamf-advice-list)
-    (ad-disable-advice (nth 0 advice) (nth 1 advice) (nth 2 advice))
-    (ad-activate (nth 0 advice)))
+    (apply #'ad-disable-advice advice)
+    (ad-activate (car advice)))
   (setq navi2ch-article-message-filter-list
 	(delq #'navi2ch-article-message-filter-by-bayesian
 	      navi2ch-article-message-filter-list)))
