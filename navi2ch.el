@@ -63,8 +63,7 @@
   (run-hooks 'navi2ch-kill-emacs-hook)
   (navi2ch-save-status)
   (if navi2ch-use-lock
-      (navi2ch-unlock))
-  (remove-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook))
+      (navi2ch-unlock)))
 
 ;;;###autoload
 (defun navi2ch (&optional arg)

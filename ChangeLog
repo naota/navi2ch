@@ -1,3 +1,22 @@
+2002-07-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-kill-emacs-hook):
+	不要な remove-hook をはずした。
+
+	* navi2ch-util.el: defmacro を上の方に移動。
+	(navi2ch-ifxemacs): 新マクロ。
+	warning を避けるためだけに navi2ch-hogehoge を defmacro してたのが
+	結構あるので。。。
+
+	* navi2ch-article.el (navi2ch-article-set-link-property):
+	GNU Emacs 21 や XEmacs には help-echo という便利なプロパティがある
+	のでそれを使うようにした。
+	(navi2ch-article-get-link-text): 新関数。
+	旧 navi2ch-article-display-link-minibuffer の内容をほぼコピペ。
+	(navi2ch-article-display-link-minibuffer): 上記関数を使うように。
+	(navi2ch-article-help-echo): help-echo プロパティで使われる
+	call-back 関数。
+
 2002-07-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	よく Navi2ch を複数起動してマズーなことになるので、ロックを実装。
@@ -99,7 +118,7 @@
 	を U にバインド。
 	(navi2ch-list-show-url): 新関数。
 
-	* navi2ch-vars.el (navi2ch-list-board-id-alist): 
+	* navi2ch-vars.el (navi2ch-list-board-id-alist):
 	ぐへ、まただぶってるし。
 
 2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
@@ -111,7 +130,7 @@
 	% ./configure --with-xemacs --with-packagedir=$HOME/.xemacs
 	とすれば、ホームディレクトリ以下にインストールできる。
 	単に --with-packagedir とした場合はパッケージディレクトリを検出する。
-	ただし、まだ auto-autoloads.el、custom-load.el、MANIFEST.navi2ch 
+	ただし、まだ auto-autoloads.el、custom-load.el、MANIFEST.navi2ch
 	などのパッケージ用ファイルは作成できてない。
 
 	* navi2ch-article.el (navi2ch-article-select-view-range-subr):
@@ -202,7 +221,7 @@
 2002-07-03  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	callback を定義する為の仕組みを作ってみました。
-	
+
 	* navi2ch-jbbs-net.el (navi2ch-jbbs-variable-alist): 新変数。
 	(navi2ch-jbbs-subject-callback): navi2ch-multibbs-defcallback で定
 	義するように。
@@ -241,14 +260,14 @@
 
 2002-07-02  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-directory.el (navi2ch-directory-set-subject-list): 
+	* navi2ch-directory.el (navi2ch-directory-set-subject-list):
 	.dat ファイル名を数値として降順で sort するように。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/165
 
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message-force-sync): 新変数。
-	
+
 	* navi2ch-message.el (navi2ch-message-send-message): 上記変数を
 	navi2ch-article-sync の引数に。
 	でも、send 後に not updated になるなぁ。wait 増やすしかないか?
@@ -261,7 +280,7 @@
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	Navi2ch を unload できるようにしてみました。M-x navi2ch-unload です。
-	.emacs や ~/.navi2ch/init.el で色々やってる人は navi2ch-unload-hook 
+	.emacs や ~/.navi2ch/init.el で色々やってる人は navi2ch-unload-hook
 	で掃除するようにしてちょ。
 
 	* navi2ch.el (navi2ch-unload): 新関数。
@@ -271,11 +290,11 @@
 	(navi2ch-article-unload): 新関数。
 	(navi2ch-article-unload-hook): 新変数。
 	(navi2ch-article-mode-menu): toplevel に。
-	
+
 	* navi2ch-articles.el (navi2ch-articles-mode-menu): toplevel に。
 
-	* navi2ch-board-misc.el (navi2ch-bm-get-property-internal) 
-	(navi2ch-bm-set-property-internal, navi2ch-bm-get-board-internal) 
+	* navi2ch-board-misc.el (navi2ch-bm-get-property-internal)
+	(navi2ch-bm-set-property-internal, navi2ch-bm-get-board-internal)
 	(navi2ch-bm-get-article-internal, navi2ch-bm-exit-internal): nil
 	に fset してたのを空の関数に。
 
@@ -313,7 +332,7 @@
 
 	multibbs patch を最初に当てたときの変更点があんまし書いてなかった
 	のでここに書いときます。
-	
+
 	もともとの 2ch 由来のコードの一部は navi2ch-multibbs.el の
 	navi2ch-2ch-* に移ってます。navi2ch-2ch.el を作った方がいいのかも。
 
@@ -325,17 +344,17 @@
 	で、関数を navi2ch-multibbs-func-alist に登録して利用すると。
 
 	マージした結果どっかおかしくなってたらごめんなさいです。
-	
+
 	* navi2ch-message.el (navi2ch-message-send-message):
 	navi2ch-multibbs-send-message を使うように。
 	spid は navi2ch-2ch-send-message で処理する。
-	
+
 
 	* navi2ch-board.el (navi2ch-board-url-to-board):
 	navi2ch-multibbs-url-to-board を使うように。
 	(navi2ch-board-update-file): navi2ch-multibbs-subject-callback を
 	使うように。
-	(navi2ch-board-make-subject-txt): 
+	(navi2ch-board-make-subject-txt):
 
 	* navi2ch-article.el (navi2ch-article-url-to-article):
 	navi2ch-multibbs-url-to-article を使うように。
@@ -347,11 +366,11 @@
 	* navi2ch-jbbs-net.el, navi2ch-jbbs-shitaraba.el,
 	navi2ch-machibbs.el, navi2ch-multibbs.el: ファイル追加。
 
-	
+
 ================ multibbs branch の ChangeLog はじまり ================
 2002-07-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	etc.txt に書くときに好きな id が使えるようにしてみる(多分)。
-	
+
 	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): bbs の取得
 	に id を使わないようにした。
 
@@ -375,24 +394,24 @@
 	multibbs 関連の *-cb という関数を *-callback に変更。
 	navi2ch-net-update-file の引数に取る関数を buffer に対して操作する
 	関数に変更。それ伴なう修正。
-	
+
 	* navi2ch-machibbs.el (toplevel): とりあえずヘッダを付ける。
 	ファイルの文字コードを iso-2022-jp に変更。
 	(navi2ch-machibbs-func-alist):
 	navi2ch-multibbs-func-alist の変更に合わせる。
-	(navi2ch-machibbs-subject-callback): 
+	(navi2ch-machibbs-subject-callback):
 	navi2ch-net-update-file の変更に合わせる。
 	(navi2ch-machibbs-article-callback): 同上。
 
-	* navi2ch-jbbs-shitaraba.el (toplevel): とりあえずヘッダを付ける。 
+	* navi2ch-jbbs-shitaraba.el (toplevel): とりあえずヘッダを付ける。
 	ファイルの文字コードを iso-2022-jp に変更。
 	(navi2ch-js-func-alist):
 	navi2ch-multibbs-func-alist の変更に合わせる。
-	(navi2ch-js-subject-callback): 
+	(navi2ch-js-subject-callback):
 	navi2ch-net-update-file の変更に合わせる。
 	(navi2ch-js-article-callback): 同上
-	
-	* navi2ch-jbbs-net.el (toplevel): とりあえずヘッダを付ける。 
+
+	* navi2ch-jbbs-net.el (toplevel): とりあえずヘッダを付ける。
 	ファイルの文字コードを iso-2022-jp に変更。
 	(navi2ch-jbbs-func-alist):
 	navi2ch-multibbs-func-alist の変更に合わせる。
@@ -405,10 +424,10 @@
 	subject-cb -> subject-callback
 	(navi2ch-multibbs-get-bbstype-subr):
 	navi2ch-multibbs-func-alist の変更に合わせる。
-	(navi2ch-multibbs-subject-callback): 
+	(navi2ch-multibbs-subject-callback):
 	navi2ch-net-update-file の変更に合わせる。
 	(navi2ch-2ch-subject-callback): 同上。
-	
+
 	* navi2ch-board.el (navi2ch-board-make-subject-txt):
 	navi2ch-net-update-file の変更に合わせる。
 
@@ -451,10 +470,10 @@
 	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section):
 	propertize -> navi2ch-propertize
 
-	* navi2ch-splash.el (navi2ch-splash-insert-image): 
+	* navi2ch-splash.el (navi2ch-splash-insert-image):
 	propertize -> navi2ch-propertize
 
-	* navi2ch-splash.el (navi2ch-splash-insert-text): 
+	* navi2ch-splash.el (navi2ch-splash-insert-text):
 	propertize -> navi2ch-propertize
 
 	* navi2ch-board-misc.el (navi2ch-bm-select-article):

@@ -359,6 +359,7 @@ START, END, NOFIRST で範囲を指定する"
     (add-text-properties (match-beginning 0)
 			 (match-end 0)
 			 (list 'face 'navi2ch-article-link-face
+			       'help-echo (function navi2ch-article-help-echo)
 			       'link t
 			       'mouse-face 'highlight
 			       'number (navi2ch-match-string-no-properties 1)))
@@ -371,6 +372,7 @@ START, END, NOFIRST で範囲を指定する"
     (add-text-properties (match-beginning 0)
 			 (match-end 0)
 			 (list 'face 'navi2ch-article-url-face
+			       'help-echo (function navi2ch-article-help-echo)
 			       'link t
 			       'mouse-face 'highlight
 			       'url (concat "http://" (navi2ch-match-string-no-properties 1))))
@@ -1351,42 +1353,64 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
     subject))
 
-(defun navi2ch-article-display-link-minibuffer (&optional point)
-  "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示"
+(defun navi2ch-article-get-link-text (&optional point)
+  "POINT (省略時はカレントポイント) のリンク先を得る。"
   (setq point (or point (point)))
-  (when (eq major-mode 'navi2ch-article-mode)
-    (let ((num-prop (get-text-property (point) 'number))
-	  (url-prop (get-text-property (point) 'url))
-	num-list num)
-      (cond
-       (num-prop
-	(setq num-list (navi2ch-article-str-to-num (japanese-hankaku num-prop)))
-	(cond ((numberp num-list)
-	       (setq num num-list))
-	      (t
-	       (setq num (car num-list))))
-	(let ((msg (navi2ch-article-get-message-string num)))
-	  (when msg
-	    (setq msg (navi2ch-replace-string
-		       navi2ch-article-citation-regexp "" msg t))
-	    (setq msg (navi2ch-replace-string
-		       "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
-	    (setq msg (navi2ch-replace-string "\n+" " " msg t))
-	    (message "%s" (truncate-string-to-width
-			   (format "[%d]: %s" num msg)
-			   (eval navi2ch-article-display-link-width))))))
-       (url-prop
-	(if (navi2ch-2ch-url-p url-prop)
-	    (let ((board (navi2ch-board-url-to-board url-prop))
-		  (article (navi2ch-article-url-to-article url-prop)))
-	      (message "%s"
-		       (truncate-string-to-width
-			(if article
-			    (format "[%s]: %s"
-				    (cdr (assq 'name board))
-				    (navi2ch-article-cached-subject board article))
-			  (format "[%s]" (cdr (assq 'name board))))
-			(eval navi2ch-article-display-link-width))))))))))
+  (catch 'ret
+    (when (eq major-mode 'navi2ch-article-mode)
+      (let ((num-prop (get-text-property point 'number))
+	    (url-prop (get-text-property point 'url))
+	    num-list num)
+	(cond
+	 (num-prop
+	  (setq num-list (navi2ch-article-str-to-num
+			  (japanese-hankaku num-prop)))
+	  (cond ((numberp num-list)
+		 (setq num num-list))
+		(t
+		 (setq num (car num-list))))
+	  (let ((msg (navi2ch-article-get-message-string num)))
+	    (when msg
+	      (setq msg (navi2ch-replace-string
+			 navi2ch-article-citation-regexp "" msg t))
+	      (setq msg (navi2ch-replace-string
+			 "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
+	      (setq msg (navi2ch-replace-string "\n+" " " msg t))
+	      (throw
+	       'ret
+	       (format "%s" (truncate-string-to-width
+			     (format "[%d]: %s" num msg)
+			     (eval navi2ch-article-display-link-width)))))))
+	 (url-prop
+	  (if (navi2ch-2ch-url-p url-prop)
+	      (let ((board (navi2ch-board-url-to-board url-prop))
+		    (article (navi2ch-article-url-to-article url-prop)))
+		(throw
+		 'ret
+		 (format "%s"
+			 (truncate-string-to-width
+			  (if article
+			      (format "[%s]: %s"
+				      (cdr (assq 'name board))
+				      (navi2ch-article-cached-subject board article))
+			    (format "[%s]" (cdr (assq 'name board))))
+			  (eval navi2ch-article-display-link-width))))))))))
+    nil))
+
+(defun navi2ch-article-display-link-minibuffer (&optional point)
+  "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
+  (let ((text (navi2ch-article-get-link-text point)))
+    (if text
+	(message "%s" text))))
+
+(defun navi2ch-article-help-echo (window-or-extent &optional object position)
+  (navi2ch-ifxemacs
+      (when (extentp window-or-extent)
+	(setq object (extent-object window-or-extent))
+	(setq position (extent-start-position window-or-extent))))
+  (when (buffer-live-p object)
+    (with-current-buffer object
+      (navi2ch-article-get-link-text position))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"

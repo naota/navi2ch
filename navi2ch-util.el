@@ -98,6 +98,70 @@
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
 (defvar navi2ch-modeline-offline navi2ch-offline-indicator)
 
+
+;;;; macros
+(defmacro navi2ch-ifxemacs (then &rest else)
+  "If on XEmacs, do THEN, else do ELSE.
+Like \"(if (featurep 'xemacs) THEN ELSE)\", but expanded at
+compilation time.  Because byte-code of XEmacs is not compatible with
+GNU Emacs's one, this macro is very useful."
+  (if (featurep 'xemacs)
+      then
+    (cons 'progn else)))
+;; Navi2chのコードをハクする人は↓を~/.emacsにも入れときましょう。
+(put 'navi2ch-ifxemacs 'lisp-indent-function 1)
+
+(defmacro navi2ch-define-mouse-key (map num command)
+  (if (featurep 'xemacs)
+      `(define-key ,map ',(intern (format "button%d" num)) ,command)
+    `(define-key ,map ,(vector (intern (format "mouse-%d" num))) ,command)))
+
+;; from apel
+(defmacro navi2ch-defalias-maybe (symbol definition)
+  "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
+See also the function `defalias'."
+  (setq symbol (eval symbol))
+  (or (and (fboundp symbol)
+           (not (get symbol 'defalias-maybe)))
+      (` (or (fboundp (quote (, symbol)))
+             (prog1
+                 (defalias (quote (, symbol)) (, definition))
+               ;; `defalias' updates `load-history' internally.
+               (put (quote (, symbol)) 'defalias-maybe t))))))
+
+;; from apel
+(defmacro navi2ch-set-buffer-multibyte (flag)
+  (if (featurep 'xemacs)
+      flag
+    `(set-buffer-multibyte ,flag)))
+
+;; from apel
+(defmacro navi2ch-string-as-unibyte (string)
+  (if (featurep 'xemacs)
+      string
+    `(string-as-unibyte ,string)))
+
+(defmacro navi2ch-string-as-multibyte (string)
+  (if (featurep 'xemacs)
+      string
+    `(string-as-multibyte ,string)))
+
+;;; from Wanderlust (elmo-date.el)
+(defmacro navi2ch-make-sortable-date (datevec)
+  "Make a sortable string from DATEVEC."
+  (` (timezone-make-sortable-date
+      (aref (, datevec) 0)
+      (aref (, datevec) 1)
+      (aref (, datevec) 2)
+      (aref (, datevec) 3))))
+
+(defmacro navi2ch-match-string-no-properties (num &optional string)
+  (if (featurep 'xemacs)
+      `(match-string ,num ,string)
+    `(match-string-no-properties ,num ,string)))
+
+
+;;;; other misc stuff
 (defsubst navi2ch-replace-string (regexp to-string string &optional all)
   "STRING に含まれる REGEXP を TO-STRING で置換する。
 TO-STRING の `\\1' などは `replace-regexp' と同じように展開される。
@@ -115,11 +179,6 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (when (string-match regexp string)
       (setq string (replace-match to-string nil nil string))))
   string)
-
-(defmacro navi2ch-define-mouse-key (map num command)
-  (if (featurep 'xemacs)
-      `(define-key ,map ',(intern (format "button%d" num)) ,command)
-    `(define-key ,map ,(vector (intern (format "mouse-%d" num))) ,command)))
 
 (defun navi2ch-bigint-int-to-list (i)
   (if (listp i)
@@ -311,19 +370,6 @@ don't offer a form of remote control."
          (append navi2ch-browse-url-image-args (list url))))
 
 ;; from apel
-(defmacro navi2ch-defalias-maybe (symbol definition)
-  "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
-See also the function `defalias'."
-  (setq symbol (eval symbol))
-  (or (and (fboundp symbol)
-           (not (get symbol 'defalias-maybe)))
-      (` (or (fboundp (quote (, symbol)))
-             (prog1
-                 (defalias (quote (, symbol)) (, definition))
-               ;; `defalias' updates `load-history' internally.
-               (put (quote (, symbol)) 'defalias-maybe t))))))
-
-;; from apel
 (defsubst navi2ch-put-alist (item value alist)
   "Modify ALIST to set VALUE to ITEM.
 If there is a pair whose car is ITEM, replace its cdr by VALUE.
@@ -386,23 +432,6 @@ return new alist whose car is the new pair and cdr is ALIST.
     (member host
 	    navi2ch-enable-readcgi-host-list)))
 
-;; from apel
-(defmacro navi2ch-set-buffer-multibyte (flag)
-  (if (featurep 'xemacs)
-      flag
-    `(set-buffer-multibyte ,flag)))
-
-;; from apel
-(defmacro navi2ch-string-as-unibyte (string)
-  (if (featurep 'xemacs)
-      string
-    `(string-as-unibyte ,string)))
-
-(defmacro navi2ch-string-as-multibyte (string)
-  (if (featurep 'xemacs)
-      string
-    `(string-as-multibyte ,string)))
-
 (defun navi2ch-get-major-mode (buffer)
   (when (get-buffer buffer)
     (save-excursion
@@ -459,15 +488,6 @@ return new alist whose car is the new pair and cdr is ALIST.
                  (format "%d:%d:%d" hour minute second)
                "0:00")
              (cadr timezone)) nil nil)))
-
-;;; from Wanderlust (elmo-date.el)
-(defmacro navi2ch-make-sortable-date (datevec)
-  "Make a sortable string from DATEVEC."
-  (` (timezone-make-sortable-date
-      (aref (, datevec) 0)
-      (aref (, datevec) 1)
-      (aref (, datevec) 2)
-      (aref (, datevec) 3))))
 
 (defun navi2ch-end-of-buffer ()
   (interactive)
@@ -586,11 +606,6 @@ base64デコードすべき内容がない場合はエラーになる。"
 	(make-directory dir))
     dir))
 
-(defmacro navi2ch-match-string-no-properties (num &optional string)
-  (if (featurep 'xemacs)
-      `(match-string ,num ,string)
-    `(match-string-no-properties ,num ,string)))
-
 (defun navi2ch-strip-properties (obj)
   "OBJ 中の文字列を再帰的に探し、テキスト属性を外したオブジェクトを返す。
 元の OBJ は変更しない。"
@@ -676,9 +691,9 @@ properties to add to the result"
 
 (defun navi2ch-char-valid-p (obj)
   "オブジェクトがキャラクタかどうか調べる。"
-  (funcall (if (featurep 'xemacs)
-	       'characterp
-	     'char-valid-p) obj))
+  (navi2ch-ifxemacs
+      (characterp obj)
+    (char-valid-p obj)))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
