@@ -1,0 +1,53 @@
+# pmake 用
+# 俺の環境以外で動作させることは考えてない。あくまでも参考ね。
+
+EMACS = emacs
+TEX = ptex
+TEXINDEX = jtexindex
+MAKEINFO = jmakeinfo
+MAKEINFOOPTIONS = --no-split -p 0
+MAKEINFOHTMLOPTIONS = --html ${MAKEINFOOPTIONS} --number-sections --no-headers
+CLEAN_FILES =*.tar.gz navi2ch.info navi2ch.html navi2ch.pdf navi2ch.dvi	\
+	navi2ch.aux navi2ch.log navi2ch.toc				\
+	navi2ch.cp navi2ch.fn navi2ch.ky navi2ch.pg navi2ch.tp navi2ch.vr \
+	navi2ch.cps navi2ch.fns navi2ch.kys navi2ch.pgs navi2ch.tps navi2ch.vrs
+VERSION != date +%Y%m%d
+DISTNAME = navi2ch-doc-${VERSION}
+TARBALL = ${DISTNAME}.tar.gz
+TARFILES = ChangeLog Makefile navi2ch.info navi2ch.texi
+
+all: info
+everything: info pdf html
+
+info: navi2ch.info
+html: navi2ch.html
+pdf: navi2ch.pdf
+
+tar: ${TARBALL}
+
+.PHONY: ${TARBALL}
+
+${TARBALL}: ${TARFILES}
+	rm -rf $@ ${DISTNAME}
+	mkdir ${DISTNAME}
+	cp ${TARFILES} ${DISTNAME}
+	tar -co -f - ${TARFILES:S/^/${DISTNAME}\//g}| gzip -9 > $@
+	rm -rf ${DISTNAME}
+
+clean:
+	rm -f ${CLEAN_FILES}
+
+.SUFFIXES: .texi .info .html .dvi .pdf
+.texi.info:
+	rm -f $@
+	${EMACS} -q -batch -l ./batch-texi2info.el -f batch-texi2info $<
+
+.texi.html:
+	${MAKEINFO} ${MAKEINFOHTMLOPTIONS} -o $@ $<
+
+.texi.dvi:
+	MAKEINFO=${MAKEINFO} TEXINDEX=${TEXINDEX} TEX=${TEX} texi2dvi $<
+
+.dvi.pdf:
+	rm -f $@
+	dvipdfm $<

@@ -1,0 +1,64 @@
+2002-01-05  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* batch-texi2info.el: 念のため、(set-language-environment) する。
+	(batch-texi2info): Emacs 21 以上を要求するようにした。
+	Info ファイルを書き出す際の coding system を JIS に。
+
+	* navi2ch.texi: @documentほにゃらら は HTML の時だけ有効にする。
+	(List Mode): Naci2ch カテゴリの板について追記。
+	(Search Thread): 新規ノード。スレの検索について追記。
+	(Other Boards File): etc.txt について若干追記。
+	そろそろセクション構成見直すべきか?
+
+	* batch-texi2info.el (batch-texi2info): 新ファイル (新関数)
+	なんで texi2info には batch モード用関数がないのよ、ってことで
+	texinfmt.el の batch-texinfo-format からコピペ。
+
+	* Makefile: やっぱ makeinfo の fill は変なので texinfo -> info に
+	は上記の関数を使って emacs で処理することにした。
+	TeX のテンポラリファイルをちゃんとリストアップ。
+
+2002-01-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi: SourceForge について追記。
+
+	* Makefile: .dvi を作成後に .log を消さないようにした。
+
+	* navi2ch.texi: 「このドキュメントについて」章を追加。
+	「Bookmark モード」セクションを追加。
+	キーバインドの node 名を「〜 Key Bindings」に統一。
+	2ストロークキーは間にスペースを入れた。\C-? は C-? に変更。
+	クロスリファレンスをちょっと見直し。
+
+	* Makefile: tar 玉に ChangeLog を入れるようにした。
+
+	* ChangeLog: 新ファイル。
+
+	* navi2ch.texi: 56さんの書いてくれたマークとFAQをマージ。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/56
+
+	HTMLまわりを若干手直し。
+
+2002-01-03  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* .cvsignore: navi2ch.html も無視することに。
+
+	* navi2ch.texi: 若干クリーンナップ
+	makeinfoを使用することにしたので、@nodeでのクロスリファレンスを取
+	り除いた。
+	2chの表記を「２ちゃんねる」に統一。
+	HTMLも作ることにしたのでちょっと変更。(なんかmakeinfo --htmlって虫
+	がいるような気がする。)
+
+	* Makefile: HTMLも作成するようにした。(mamiさんのリクエスト)
+	infoを作成するのにmakeinfoを使用することにした。
+
+2002-01-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi: Board モードの説明を若干充実
+
+	* Makefile: tar玉の作り方を若干変えた。
+	cleanで*.gzも消すようにした。
+
+	* Makefile: tar玉を作るとき、ディレクトリも含むようにした。
+	dviを作った後にディレクトリをきれいにする。
