@@ -1,4 +1,5 @@
 *.tar.gz
+Makefile
 navi2ch.info
 navi2ch.html
 navi2ch.pdf
