@@ -388,8 +388,9 @@ START, END, NOFIRST で範囲を指定する"
       (replace-match "")))
   (when navi2ch-article-cleanup-trailing-blankline
     (goto-char (point-max))
-    (while (looking-at "^[ \t]*$")
-      (forward-line -1))
+    (while (and (looking-at "^[ \t]*$")
+		(= (forward-line -1) 0))
+      nil)
     (if (re-search-forward "\n[ \t\n]*" nil t)
 	(replace-match "\n"))))
 
