@@ -461,43 +461,37 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
   (run-hooks 'navi2ch-list-after-sync-hook))
 
-(defun navi2ch-list-make-board-txt (str)
+(defun navi2ch-list-make-board-txt ()
   "bbstable.html $Bから (navi2ch 用の) board.txt を作る
 `navi2ch-net-update-file' のハンドラ。"
   (let ((coding-system-for-read 'binary)
-	(coding-system-for-write 'binary))
-    (with-temp-buffer
-      (insert str)
-      (let ((case-fold-search t)
-	    str2 start ignore)
-	(goto-char (point-min))
-	(while (re-search-forward
-		"<\\([ab]\\)\\([^>]*\\)>\\([^<]+\\)</\\1>" nil t)
-	  (let ((tag (match-string 1))
-		(href (match-string 2))
-		(cont (match-string 3)))
-	    (setq str2
-		  (concat str2
-			  (if (or (string= tag "A") (string= tag "a"))
-			      (when (and start
-					 (not ignore))
-				(when (and (string-match
-					    "href=\\(.+/\\([^/]+\\)/\\)"
-					    href)
-					   (navi2ch-list-valid-board
-					    (match-string 1 href)))
-				  (concat cont "\n"
-					  (match-string 1 href) "\n"
-					  (match-string 2 href) "\n")))
-			    (unless start
-			      (setq start t))
-			    (setq ignore
-				  (member (decode-coding-string
-					   cont navi2ch-coding-system)
-					  navi2ch-list-ignore-category-list))
-			    (when (not ignore)
-			      (concat cont "\n\n\n")))))))
-	str2))))
+	(coding-system-for-write 'binary)
+	(case-fold-search t)
+	(beg (point))
+	ignore)
+    (when (re-search-forward "<b>[^>]+</b>" nil t)
+      (goto-char (match-beginning 0))
+      (while (re-search-forward
+	      "<\\([ab]\\)\\([^>]*\\)>\\([^<]+\\)</\\1>" nil t)
+	(let ((tag (match-string 1))
+	      (attr (match-string 2))
+	      (cont (match-string 3)))
+	  (delete-region beg (point))
+	  (if (string-match "a" tag)
+	      (when (and (not ignore)
+			 (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
+			 (navi2ch-list-valid-board (match-string 1 attr)))
+		(insert cont "\n"
+			(match-string 1 attr) "\n"
+			(match-string 2 attr) "\n"))
+	    (setq ignore
+		  (member (decode-coding-string
+			   cont navi2ch-coding-system)
+			  navi2ch-list-ignore-category-list))
+	    (when (not ignore)
+	      (insert cont "\n\n\n"))))
+	(setq beg (point))))
+    (delete-region beg (point-max))))
 
 (defun navi2ch-list-valid-board (uri)
   (save-match-data

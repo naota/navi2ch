@@ -209,42 +209,12 @@ LEN は RANGE で範囲を指定される list の長さ"
 
 (defun navi2ch-article-url-to-article (url)
   "URL から article に変換。"
-  (let (list)
-    (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match "&st=\\([0-9]+\\)" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
-	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))
-           (when (string-match
-		  "http://.+/test/read\\.cgi/[^/]+/[^/]+/[ni.]?\\([0-9]+\\)[^/]*$" url)
-             (setq list (cons (cons 'number
-                                    (string-to-number (match-string 1 url)))
-                              list))))
-	  ((string-match
-	    "http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))
-			    (cons 'kako t))))
-          ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-           (setq list (list (cons 'artid (match-string 1 url))))))
-    list))
+  (navi2ch-multibbs-url-to-article url))
 
 (defun navi2ch-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
 START, END, NOFIRST で範囲を指定する"
-  (let ((url (navi2ch-board-get-readcgi-url board)))
-    (setq url (concat url (cdr (assq 'artid article)) "/"))
-    (if (numberp start)
-	(setq start (number-to-string start)))
-    (if (numberp end)
-	(setq end (number-to-string end)))
-    (if (equal start end)
-	(concat url start)
-      (concat url
-	      start (and (or start end) "-") end
-	      (and nofirst "n")))))
+  (navi2ch-multibbs-article-to-url board article start end nofirst))
 
 (defsubst navi2ch-article-cleanup-message ()
   (let (re str)
@@ -732,53 +702,25 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 返り値は (article (header state)) のリスト。
 state はあぼーんされてれば aborn というシンボル。
 過去ログを取得していれば kako というシンボル。"
-  (let (state)
+  (let (header-state)
     (unless navi2ch-offline
-      (let ((file (navi2ch-article-get-file-name board article))
-	    (time (cdr (assq 'time article)))
-	    (navi2ch-net-force-update (or navi2ch-net-force-update
-					  force))
-	    url kako)
-        (setq state
-	      (if (and (navi2ch-enable-readcgi-p
-			(navi2ch-board-get-host board)))
-		  (progn
-		    (setq url (navi2ch-article-get-readcgi-raw-url
-			       board article))
-		    (let ((ret (navi2ch-net-update-file-with-readcgi
-				url file time (file-exists-p file))))
-		      (if (eq ret 'kako)
-			  (progn
-			    (setq kako t)
-			    (setq url (navi2ch-article-get-kako-url
-				       board article))
-			    (navi2ch-net-update-file url file))
-			ret)))
-		(setq url (navi2ch-article-get-url board article))
-		(let ((ret
-		       (if (and (file-exists-p file)
-				navi2ch-article-enable-diff)
-			   (navi2ch-net-update-file-diff url file time)
-			 (navi2ch-net-update-file url file time))))
-		  (if ret
-		      ret
-		    (setq kako t)
-		    (setq url (navi2ch-article-get-kako-url board article))
-		    (navi2ch-net-update-file url file)))))
-	(when state
-	  (unless (listp (caar state))
-	    (setq state (list state (and kako 'kako))))
-	  (if (cdr (assoc "Not-Updated" (nth 0 state)))
-	      (setq state nil)
+      (let* ((navi2ch-net-force-update (or navi2ch-net-force-update
+					   force))
+	     (ret      (navi2ch-multibbs-article-update board article))
+	     (header   (car ret))
+	     (state    (cadr ret)))
+	(when header
+	  (unless (cdr (assoc "Not-Updated" header))
 	    (setq article (navi2ch-put-alist 'time
 					     (or (cdr (assoc "Last-Modified"
-							     (nth 0 state)))
+							     header))
 						 (cdr (assoc "Date"
-							     (nth 0 state))))
-					     article)))
-	  (when kako
+							     header)))
+					     article))
+	    (setq header-state ret))
+	  (when (eq state 'kako)
 	    (setq article (navi2ch-put-alist 'kako t article))))))
-    (list article state)))
+    (list article header-state)))
 
 (defun navi2ch-article-sync-from-file ()
   "from-file なスレを更新する。"

@@ -164,26 +164,21 @@
 	(let ((board navi2ch-message-current-board)
 	      (article navi2ch-message-current-article)
 	      result)
-	  (setq result (navi2ch-net-send-message ; result: (sent-p . spid)
-			from mail message subject
-			(navi2ch-board-get-bbscgi-url board)
-			(navi2ch-board-get-uri board)
-			(cdr (assq 'id board))
-			(cdr (assq 'artid article))
-			(navi2ch-board-load-spid board)))
-	  (let ((spid (cdr result)))
-	    (if spid (navi2ch-board-save-spid board spid))
-	    (when (car result)
-	      (message "waiting new message...")
-	      (sleep-for navi2ch-message-wait-time)
-	      (message "%s%s" (current-message) "done")
-	      (save-excursion
-		(if navi2ch-message-new-message-p
-		    (progn
-		      (set-buffer navi2ch-board-buffer-name)
-		      (navi2ch-board-sync))
-		  (set-buffer (navi2ch-article-current-buffer))
-		  (navi2ch-article-sync))))))))
+	  ; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
+	  ; ↓   navi2ch-2ch-send-message で処理する。
+	  (setq result (navi2ch-multibbs-send-message	
+			from mail message subject board article))
+	  (when result
+	    (message "waiting new message...")
+	    (sleep-for navi2ch-message-wait-time)
+	    (message "%s%s" (current-message) "done")
+	    (save-excursion
+	      (if navi2ch-message-new-message-p
+		  (progn
+		    (set-buffer navi2ch-board-buffer-name)
+		    (navi2ch-board-sync))
+		(set-buffer (navi2ch-article-current-buffer))
+		(navi2ch-article-sync)))))))
     (run-hooks 'navi2ch-message-after-send-hook)
     (navi2ch-message-exit 'after-send)))
 

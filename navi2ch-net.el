@@ -390,6 +390,7 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
   "FILE $B$r99?7$9$k!#(B
 TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 FUNC $B$,(B non-nil $B$J$i$P99?78e(B FUNC $B$r;H$C$F%U%!%$%k$rJQ49$9$k!#(B
+FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$k$h$&$K$9$k!#(B
 $B99?7$G$-$l$P(B header $B$rJV$9(B"
   (let ((dir (file-name-directory file)))
@@ -417,7 +418,11 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 	     (setq cont (navi2ch-net-get-content proc))
 	     (when (and cont func)
 	       (message "%stranslating..." (current-message))
-	       (setq cont (funcall func cont)))
+	       (setq cont (with-temp-buffer
+			    (insert cont)
+			    (goto-char (point-min))
+			    (funcall func)
+			    (buffer-string))))
 	     (if cont
 		 (with-temp-file file
 		   (insert cont)

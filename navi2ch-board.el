@@ -150,17 +150,16 @@
 
 (defun navi2ch-board-get-readcgi-url (board)
   "read.cgi の板名までの url を返す。"
-  (let ((uri (navi2ch-board-get-uri board))
-	(id (cdr (assq 'id board))))
-    (setq uri (navi2ch-replace-string (concat id "/") "" uri))
-    (format "%stest/read.cgi/%s/" uri id)))
+  (let ((uri (navi2ch-board-get-uri board)))
+    (string-match "\\(.+\\)/\\([^/]+\\)/$" uri)
+    (format "%s/test/read.cgi/%s/"
+	    (match-string 1 uri) (match-string 2 uri))))
 
 (defun navi2ch-board-get-bbscgi-url (board)
   "bbs.cgi の url を返す"
-  (let ((uri (navi2ch-board-get-uri board))
-	(id (cdr (assq 'id board))))
-    (setq uri (navi2ch-replace-string (concat id "/") "" uri))
-    (format "%stest/bbs.cgi" uri)))
+  (let ((uri (navi2ch-board-get-uri board)))
+    (string-match "\\(.+\\)/[^/]+/$" uri)
+    (format "%s/test/bbs.cgi" (match-string 1 uri))))
 	  
 (defun navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))
@@ -197,22 +196,10 @@
 
 (defun navi2ch-board-url-to-board (url)
   "URL から board を得る"
-  (let (uri id board kako)
-    (cond ((string-match
-            "http://\\(.+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)))
-	  ((string-match
-            "http://\\(.+\\)/test/read\\.cgi/\\([^/]+\\)/" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)))
-          ((string-match
-            "http://\\(.+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id)))
-          ((string-match "http://\\(.+\\)/\\([^/]+\\)" url)
-           (setq id (match-string 2 url)
-                 uri (format "http://%s/%s/" (match-string 1 url) id))))
+  (let* ((alist (navi2ch-multibbs-url-to-board url))
+	 (uri  (cdr (assq 'uri alist)))
+	 (id   (cdr (assq 'id alist)))
+	 board kako)
     (when id
       (let (name)
         (dolist (x (navi2ch-list-get-board-name-list
@@ -365,8 +352,7 @@
 	(let ((url (navi2ch-board-get-url
 		    board (if navi2ch-board-use-subback-html
 			      navi2ch-board-subback-file-name)))
-	      (func (if navi2ch-board-use-subback-html
-			'navi2ch-board-make-subject-txt)))
+	      (func (navi2ch-multibbs-subject-callback board)))
 	  (navi2ch-net-update-file url file time func))))))
 
 (defun navi2ch-board-sync (&optional force first)
@@ -410,26 +396,23 @@
 	(navi2ch-board-set-mode-line))))
   (run-hooks 'navi2ch-board-after-sync-hook))
 
-(defun navi2ch-board-make-subject-txt (str)
+(defun navi2ch-board-make-subject-txt ()
   "subback.html から (navi2ch 用の) subject.txt を作る
 `navi2ch-net-update-file' のハンドラ。"
   (let ((coding-system-for-read 'binary)
-	(coding-system-for-write 'binary))
-    (with-temp-buffer
-      (insert str)
-      (let ((case-fold-search t)
-	    str2)
-	(goto-char (point-min))
-	(while (re-search-forward
-		;; この正規表現も仕様変更でだめになるのかも。
-		;;   ……なりました。
-		"<a +href=\"\\([0-9]+\\)[^>]*\">[0-9]+[^0-9].\\(.*\\)</a>" nil t)
-	  (let ((dat (match-string 1))
-		(title (match-string 2)))
-	    (setq str2
-		  (concat str2
-			  (format "%s.dat<>%s\n" dat title)))))
-	str2))))
+	(coding-system-for-write 'binary)
+	(case-fold-search t)
+	(beg (point)))
+    (while (re-search-forward
+	    ;; この正規表現も仕様変更でだめになるのかも。
+	    ;;   ……なりました。
+	    "<a +href=\"\\([0-9]+\\)[^>]*\">[0-9]+[^0-9].\\(.*\\)</a>" nil t)
+      (let ((dat (match-string 1))
+	    (title (match-string 2)))
+	(delete-region beg (point))
+	(insert (format "%s.dat<>%s\n" dat title))
+	(setq beg (point))))
+    (delete-region beg (point-max))))
 
 (defun navi2ch-board-set-mode-line ()
   (let* ((board navi2ch-board-current-board)

@@ -1,3 +1,139 @@
+2002-07-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* Merge: navi2ch-multibbs-1-5-2 枝をマージ。
+
+	multibbs patch を最初に当てたときの変更点があんまし書いてなかった
+	のでここに書いときます。
+	
+	もともとの 2ch 由来のコードの一部は navi2ch-multibbs.el の
+	navi2ch-2ch-* に移ってます。navi2ch-2ch.el を作った方がいいのかも。
+
+	multibbs patch がやっている事は
+	・ファイルを取得したら、2ch のファイルと同じフォーマットに変える。
+	・url でどこの掲示板かを判断する。
+	・送信部分をそれぞれの掲示板に合わせる。
+	主にこの3点だと思います。
+	で、関数を navi2ch-multibbs-func-alist に登録して利用すると。
+
+	マージした結果どっかおかしくなってたらごめんなさいです。
+	
+	* navi2ch-message.el (navi2ch-message-send-message):
+	navi2ch-multibbs-send-message を使うように。
+	spid は navi2ch-2ch-send-message で処理する。
+	
+
+	* navi2ch-board.el (navi2ch-board-url-to-board):
+	navi2ch-multibbs-url-to-board を使うように。
+	(navi2ch-board-update-file): navi2ch-multibbs-subject-callback を
+	使うように。
+	(navi2ch-board-make-subject-txt): 
+
+	* navi2ch-article.el (navi2ch-article-url-to-article):
+	navi2ch-multibbs-url-to-article を使うように。
+	(navi2ch-article-to-url): navi2ch-multibbs-article-to-url を使うよ
+	うに。
+	(navi2ch-article-update-file): navi2ch-multibbs-article-update を
+	使うように。
+
+	* navi2ch-jbbs-net.el, navi2ch-jbbs-shitaraba.el,
+	navi2ch-machibbs.el, navi2ch-multibbs.el: ファイル追加。
+
+	
+================ multibbs branch の ChangeLog はじまり ================
+2002-07-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+	etc.txt に書くときに好きな id が使えるようにしてみる(多分)。
+	
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): bbs の取得
+	に id を使わないようにした。
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-get-writecgi-url): url の
+	取得に id を使わないようにした。
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-get-writecgi-url): url の
+	取得に id を使わないようにした。
+
+	* navi2ch-board.el (navi2ch-board-get-readcgi-url): url の取得に
+	id を使わないようにした。
+	(navi2ch-board-get-bbscgi-url): 同上。
+
+2002-06-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-board): regexp を修
+	正。
+
+2002-06-30  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	multibbs 関連の *-cb という関数を *-callback に変更。
+	navi2ch-net-update-file の引数に取る関数を buffer に対して操作する
+	関数に変更。それ伴なう修正。
+	
+	* navi2ch-machibbs.el (toplevel): とりあえずヘッダを付ける。
+	ファイルの文字コードを iso-2022-jp に変更。
+	(navi2ch-machibbs-func-alist):
+	navi2ch-multibbs-func-alist の変更に合わせる。
+	(navi2ch-machibbs-subject-callback): 
+	navi2ch-net-update-file の変更に合わせる。
+	(navi2ch-machibbs-article-callback): 同上。
+
+	* navi2ch-jbbs-shitaraba.el (toplevel): とりあえずヘッダを付ける。 
+	ファイルの文字コードを iso-2022-jp に変更。
+	(navi2ch-js-func-alist):
+	navi2ch-multibbs-func-alist の変更に合わせる。
+	(navi2ch-js-subject-callback): 
+	navi2ch-net-update-file の変更に合わせる。
+	(navi2ch-js-article-callback): 同上
+	
+	* navi2ch-jbbs-net.el (toplevel): とりあえずヘッダを付ける。 
+	ファイルの文字コードを iso-2022-jp に変更。
+	(navi2ch-jbbs-func-alist):
+	navi2ch-multibbs-func-alist の変更に合わせる。
+	(navi2ch-jbbs-subject-callback):
+	navi2ch-net-update-file の変更に合わせる。
+
+	* navi2ch-multibbs.el (toplevel): とりあえずヘッダを付ける。
+	(navi2ch-multibbs-func-alist): docstring を少し増やしてみる。
+	p -> bbs-p
+	subject-cb -> subject-callback
+	(navi2ch-multibbs-get-bbstype-subr):
+	navi2ch-multibbs-func-alist の変更に合わせる。
+	(navi2ch-multibbs-subject-callback): 
+	navi2ch-net-update-file の変更に合わせる。
+	(navi2ch-2ch-subject-callback): 同上。
+	
+	* navi2ch-board.el (navi2ch-board-make-subject-txt):
+	navi2ch-net-update-file の変更に合わせる。
+
+	* navi2ch-list.el (navi2ch-list-make-board-txt):
+	navi2ch-net-update-file の変更に合わせる。
+
+	* navi2ch-net.el (navi2ch-net-update-file): 引数 func の関数を
+	buffer に対して操作する関数に変更。当社比1.5倍くらい速度増？
+
+2002-06-29  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+	multibbs branch がとりあえず動くようになりましたです。
+
+	* navi2ch-multibbs.el (toplevel): navi2ch を require するように。
+
+	* Makefile.am (lisp_LISP): navi2ch-jbbs-net.el,
+	navi2ch-jbbs-shitaraba.el, navi2ch-machibbs.el, navi2ch-multibbs
+	を追加
+
+	* navi2ch.el (toplevel): navi2ch-jbbs-net, navi2ch-jbbs-shitaraba,
+	navi2ch-machibbs, navi2ch-multibbs を require するように。
+
+2002-06-27  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* multibbs-support-1-5-2 branch 作成
+
+	* navi2ch-multibbs.el: 追加
+	* navi2ch-jbbs-shitataraba.el: 同上
+	* navi2ch-jbbs-net.el: 同上
+	* navi2ch-machibbs.el: 同上
+	part 5 の 435 さんによるパッチを当てた。できるだけ
+	HEAD に追従させる予定。
+
+================ multibbs branch の ChangeLog おわり ================
+
 2002-07-01  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-propertize): 新関数。Emacs 21 の

@@ -45,6 +45,10 @@
      (require 'navi2ch-e21))
 (require 'navi2ch-splash)
 (require 'navi2ch-version)
+(require 'navi2ch-jbbs-net)
+(require 'navi2ch-jbbs-shitaraba)
+(require 'navi2ch-machibbs)
+(require 'navi2ch-multibbs)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
