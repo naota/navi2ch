@@ -512,7 +512,7 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-article-appendweek (d)
   "YY/MM/DD形式の日付に曜日を足す。"
   (let ((youbi '("日" "月" "火" "水" "木" "金" "土"))
-	year month day et dt time youbi date)
+	year month day et dt time date)
     ;; "あぼーん"とかIDとか旧形式の日付にも対応しているはず．
     ;; 正規表現に工夫が必要かも…
     (if (string-match "^\\([0-9][0-9]/[0-9][0-9]/[0-9][0-9]\\) \\([A-Za-z0-9: +/?]+\\)$" d)

@@ -936,25 +936,12 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
     (delete-directory lockname))
   (not (file-exists-p lockname)))
 
-(defun navi2ch-line-beginning-position (&optional n)
-  "N - 1 $B9T@h$N9TF,$N>l=j$rJV$9!#(B"
-  (save-excursion
-    (beginning-of-line n)
-    (point)))
-
-;; line-beginning-position $B$,;H$($k$J$i$=$C$A$r;H$&(B
-(if (fboundp 'line-beginning-position)
-    (defalias 'navi2ch-line-beginning-position 'line-beginning-position))
-
-(defun navi2ch-line-end-position (&optional n)
-  "N - 1 $B9T@h$N9TKv$N>l=j$rJV$9!#(B"
-  (save-excursion
-    (end-of-line n)
-    (point)))
-
-;; line-end-position $B$,;H$($k$J$i$=$C$A$r;H$&(B
-(if (fboundp 'line-end-position)
-    (defalias 'navi2ch-line-end-position 'line-end-position))
+(navi2ch-ifxemacs
+    (progn
+      (defalias 'navi2ch-line-beginning-position 'point-at-bol)
+      (defalias 'navi2ch-line-end-position 'point-at-eol))
+  (defalias 'navi2ch-line-beginning-position 'line-beginning-position)
+  (defalias 'navi2ch-line-end-position 'line-end-position))
 
 (defun navi2ch-count-lines-file (file)
   "$B$=$N%U%!%$%k$N9T?t$r?t$($k(B"
