@@ -1,5 +1,12 @@
 2004-02-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-mona.el (navi2ch-mona-enable-list): 新変数。
+	(navi2ch-mona-disable-list): 新変数。
+	(navi2ch-mona-match-p): 新関数。
+	(navi2ch-mona-arrange-message): 上記を使用し、
+	navi2ch-mona-{enable,disable}-{board,article}-list より一般化した
+	条件でモナーフォントを有効にするかどうかを判断。
+
 	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
 	isearch 中はリンク先を表示しない。
 

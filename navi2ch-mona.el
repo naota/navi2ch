@@ -301,6 +301,39 @@ nil is returned.  Otherwise the associated face object is returned."
     (while (re-search-forward "  +" nil t)
       (replace-match " "))))
 
+(defvar navi2ch-mona-enable-list nil
+  "モナーフォントを有効にするリスト。
+nil の場合はデフォルトで有効になる。
+エレメントが関数: 呼び出した結果が non-nil なら有効
+エレメントが文字列: その板で有効
+エレメントが cons ペア: car を板、cdr をスレもしくはスレのリストとし、
+その板のそのスレで有効
+
+各エレメントは順に評価され、有効とみなされた時点で評価を終了する。")
+
+(defvar navi2ch-mona-disable-list nil
+  "モナーフォントを無効にするリスト。
+`navi2ch-mona-enable-list' よりも優先される。
+エレメントが関数: 呼び出した結果が non-nil なら無効
+エレメントが文字列: その板で無効
+エレメントが cons ペア: car を板、cdr をスレもしくはスレのリストとし、
+その板のそのスレで無効
+
+各エレメントは順に評価され、有効とみなされた時点で評価を終了する。")
+
+(defun navi2ch-mona-match-p (list board-id article-id)
+  (dolist (elt list)
+    (when (cond ((functionp elt)
+		 (funcall elt))
+		((stringp elt)
+		 (string= elt board-id))
+		((and (consp elt)
+		      (string= (car elt) board-id))
+		 (if (stringp (cdr elt))
+		     (string= (cdr elt) article-id)
+		   (member article-id (cdr elt)))))
+      (return t))))
+
 (defun navi2ch-mona-arrange-message ()
   "モナーフォントを使う板ならそのための関数を呼ぶ。"
   (let ((id (cdr (assq 'id (if (eq major-mode 'navi2ch-popup-article-mode)
@@ -309,7 +342,13 @@ nil is returned.  Otherwise the associated face object is returned."
 	(artid (cdr (assq 'artid (if (eq major-mode 'navi2ch-popup-article-mode)
 				     navi2ch-popup-article-current-article
 				   navi2ch-article-current-article)))))
-    (when (cond ((member (cons id artid) navi2ch-mona-disable-article-list)
+    (when (cond ((navi2ch-mona-match-p navi2ch-mona-disable-list
+				       id artid)
+		 nil)
+		((navi2ch-mona-match-p navi2ch-mona-enable-list
+				       id artid)
+		 t)
+		((member (cons id artid) navi2ch-mona-disable-article-list)
 		 nil)
 		((member (cons id artid) navi2ch-mona-enable-article-list)
 		 t)
@@ -318,7 +357,8 @@ nil is returned.  Otherwise the associated face object is returned."
 		((member id navi2ch-mona-enable-board-list)
 		 t)
 		((or navi2ch-mona-enable-article-list
-		     navi2ch-mona-enable-board-list)
+		     navi2ch-mona-enable-board-list
+		     navi2ch-mona-enable-list)
 		 nil)
 		(t t))
       (navi2ch-mona-put-face))
