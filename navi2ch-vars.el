@@ -959,6 +959,9 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
 (defvar navi2ch-head-exit-hook nil)
 (defvar navi2ch-mona-setup-hook nil)
 (defvar navi2ch-mona-undo-setup-hook nil)
+(defvar navi2ch-directory-mode-hook nil)
+(defvar navi2ch-directory-exit-hook nil)
+
 ;; load hooks
 (defvar navi2ch-article-load-hook nil)
 (defvar navi2ch-articles-load-hook nil)
@@ -977,6 +980,7 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
 (defvar navi2ch-util-load-hook nil)
 (defvar navi2ch-vars-load-hook nil)
 (defvar navi2ch-load-hook nil)
+(defvar navi2ch-directory-load-hook nil)
 
 ;;; errors symbols
 (put 'navi2ch-update-failed 'error-conditions '(error navi2ch-errors navi2ch-update-failed))

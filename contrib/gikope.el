@@ -7,6 +7,8 @@
 ;; related resources
 ;;; gikope http://go.to/gikope
 
+(eval-when-compile (require 'cl))
+
 ;;; Variables
 ;; customizable variables
 (defvar gikope-aa-file "~/.navi2ch/mojidata.txt"

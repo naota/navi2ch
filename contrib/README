@@ -10,6 +10,7 @@ Copyright (C) 2000-2002 Navi2ch Project
 
 * gikope.el
   AA をキルリングにコピー。
+  プレビューとかもできるようになりました。
 
 * navi2ch-migemo.el
   migemo を使ってレスを検索。
@@ -17,5 +18,9 @@ Copyright (C) 2000-2002 Navi2ch Project
 * navi2ch-track-mouse.el
   Emacs 20 でも help-echo プロパティを echo area に表示。
   ~/.emacs とかで (require 'navi2ch-track-mouse) する。
+
+* navi2ch-jisx0213.el
+  Windowsの機種依存文字を表示しよう & ついでにハートとかも。
+  Emacs20 では Mule-UCS の jisx0213.el が必要です。
 
 $Id$
