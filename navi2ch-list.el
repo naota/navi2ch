@@ -261,28 +261,28 @@
 (defun navi2ch-list-toggle-open ()
   "カテゴリを開いたり閉じたりする。"
   (interactive)
-  (save-excursion
-    (let (category props)
-      (end-of-line)
-      (when (re-search-backward "^\\[[+-]\\]" nil t)
-	(setq category (get-text-property (point) 'category))
-	(setq props (text-properties-at (point)))
-	(let* ((pair (assoc category navi2ch-list-category-list))
-	       (alist (cdr pair))
-	       (open (cdr (assq 'open alist)))
-	       (buffer-read-only nil))
-	  (delete-region (point) (+ 3 (point)))
-	  (insert "[" (if (not open) "-" "+") "]")
-	  (set-text-properties (- (point) 3) (point) props)
-	  (forward-line 1)
-	  (if open
-	      (let ((begin (point))
-		    (end (point-max)))
-		(when (re-search-forward "^\\[[+-]\\]" nil t)
-		  (setq end (match-beginning 0)))
-		(delete-region begin end))
-	    (navi2ch-list-insert-board-names-subr (cdr (assq 'child alist))))
-	  (setcdr pair (navi2ch-put-alist 'open (not open) alist)))))))
+  (when (save-excursion
+	  (end-of-line)
+	  (re-search-backward "^\\[[+-]\\]" nil t))
+    (goto-char (match-beginning 0))
+    (let* ((category (get-text-property (point) 'category))
+	   (props (text-properties-at (point)))
+	   (pair (assoc category navi2ch-list-category-list))
+	   (alist (cdr pair))
+	   (open (cdr (assq 'open alist)))
+	   (buffer-read-only nil))
+      (delete-region (point) (+ 3 (point)))
+      (insert "[" (if open "+" "-") "]")
+      (set-text-properties (- (point) 3) (point) props)
+      (save-excursion
+	(forward-line 1)
+	(if open
+	    (delete-region (point)
+			   (if (re-search-forward "^\\[[+-]\\]" nil t)
+			       (match-beginning 0)
+			     (point-max)))
+	  (navi2ch-list-insert-board-names-subr (cdr (assq 'child alist)))))
+      (setcdr pair (navi2ch-put-alist 'open (not open) alist)))))
 
 (defun navi2ch-list-select-current-board (&optional force)
   "板を選ぶ。またはカテゴリの開閉をする"
@@ -297,40 +297,54 @@
 
 (defun navi2ch-list-open-all-category ()
   (interactive)
-  (let ((str (buffer-substring-no-properties
-	      (save-excursion (beginning-of-line)
-			      (+ navi2ch-list-indent-width (point)))
-	      (save-excursion (end-of-line) (point)))))
-    (setq navi2ch-list-category-list
-	  (mapcar (lambda (x)
-		    (navi2ch-put-alist 'open t x))
-		  navi2ch-list-category-list))
-    (let ((buffer-read-only nil))
-      (erase-buffer)
-      (navi2ch-list-insert-board-names
-       navi2ch-list-category-list))
-    (goto-char (point-min))
-    (search-forward str nil t)))
+  (when (save-excursion
+	  (end-of-line)
+	  (re-search-backward "^\\[[+-]\\]" nil t))
+    (let ((str (buffer-substring-no-properties
+		(save-excursion (beginning-of-line) (point))
+		(save-excursion (end-of-line) (point)))))
+      (setq navi2ch-list-category-list
+	    (mapcar (lambda (x)
+		      (navi2ch-put-alist 'open t x))
+		    navi2ch-list-category-list))
+      (let ((buffer-read-only nil))
+	(erase-buffer)
+	(navi2ch-list-insert-board-names
+	 navi2ch-list-category-list))
+      (goto-char (point-min))
+      (re-search-forward (concat "^"
+				 (regexp-quote
+				  (replace-in-string str "^\\[\\+\\]" "[-]"))
+				 "$")
+			 nil t)
+      (beginning-of-line)
+      (if (looking-at "\\[-\\]")
+	  (goto-char (match-end 0))
+	(forward-char navi2ch-list-indent-width)))))
 
 (defun navi2ch-list-close-all-category ()
   (interactive)
-  (let (str)
-    (end-of-line)
-    (re-search-backward "^\\[[+-]\\]" nil t)
-    (setq str (buffer-substring-no-properties
-	       (save-excursion (beginning-of-line)
-			       (+ navi2ch-list-indent-width (point)))
-	       (save-excursion (end-of-line) (point))))
-    (setq navi2ch-list-category-list
-	  (mapcar (lambda (x)
-		    (navi2ch-put-alist 'open nil x))
-		  navi2ch-list-category-list))
-    (let ((buffer-read-only nil))
-      (erase-buffer)
-      (navi2ch-list-insert-board-names
-       navi2ch-list-category-list))
-    (goto-char (point-min))
-    (search-forward str nil t)))
+  (when (save-excursion
+	  (end-of-line)
+	  (re-search-backward "^\\[[+-]\\]" nil t))
+    (goto-char (match-end 0))
+    (let ((str (buffer-substring-no-properties
+		(point)
+		(save-excursion (end-of-line) (point)))))
+      (setq navi2ch-list-category-list
+	    (mapcar (lambda (x)
+		      (navi2ch-put-alist 'open nil x))
+		    navi2ch-list-category-list))
+      (let ((buffer-read-only nil))
+	(erase-buffer)
+	(navi2ch-list-insert-board-names
+	 navi2ch-list-category-list))
+      (goto-char (point-min))
+      (re-search-forward (concat "^\\(\\[[+-]\\]\\)"
+				 (regexp-quote str)
+				 "$")
+			 nil t)
+      (goto-char (match-end 1)))))
 
 (defun navi2ch-list-select-board (board &optional force)
   (let ((flag (eq (current-buffer)
