@@ -1,5 +1,10 @@
 2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-article.el (navi2ch-article-sync): 更新されたかどうかの
+	チェックを not-updated も使ってチェックするように。
+
+2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	navi2ch-net(upload|download)-* が header を返すのと 
 	'(header state) を返すのの2種類あるのが前からちょっと嫌だったので、
 	あぼーんとか過去ログの状態をヘッダに突っこむようにした。

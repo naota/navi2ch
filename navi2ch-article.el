@@ -668,7 +668,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
       (prog1
 	  ;; 更新できたら
 	  (when (or (and first (file-exists-p file))
-		    header)
+		    (and header
+			 (not (navi2ch-net-get-state 'not-updated header))))
 	    (setq list
 		  (if (or first
 			  (navi2ch-net-get-state 'aborn header)
