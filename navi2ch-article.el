@@ -116,7 +116,7 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
       'navi2ch-article-insert-message-separator-by-face
     'navi2ch-article-insert-message-separator-by-char)
   "$B%;%Q%l!<%?$rA^F~$9$k4X?t(B")
-  
+
 (defvar navi2ch-article-summary-file-name "article-summary")
 
 ;; important mode
@@ -183,7 +183,7 @@ LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5(B"
           (cdr (assq 'id board))
           "/"
           (cdr (assq 'artid article))))
-                    
+
 (defsubst navi2ch-article-check-cached (board article)
   "BOARD $B$H(B ARTICLE $B$G;XDj$5$l$k%9%l%C%I$,%-%c%C%7%e$5$l$F$k$+!#(B"
   (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
@@ -383,7 +383,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	   'link t
 	   'mouse-face 'highlight
 	   'url (concat "http://" (navi2ch-match-string-no-properties 1))))))
-  
+
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))
   (while (re-search-forward navi2ch-article-citation-regexp nil t)
@@ -421,6 +421,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 			   'navi2ch-article-face)
 	(navi2ch-article-set-link-property)
 	(navi2ch-article-put-cite-face)
+        (if navi2ch-article-auto-decode-base64-p
+            (navi2ch-article-auto-decode-base64-section))
 	(navi2ch-article-arrange-message))))
   (funcall navi2ch-article-insert-message-separator-function)
   (insert "\n"))
@@ -458,7 +460,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
         (date-header "Date: ")
         str p)
     (setq str (concat from-header from date-header date "\n\n"))
- 
+
     (setq p (length from-header))
     (put-text-property 0 p
 		       'face 'navi2ch-article-header-face str)
@@ -537,7 +539,7 @@ NUM $B$r;XDj$7$J$$>l9g$O(B `navi2ch-article-max-buffers' $B$r;HMQ!#(B"
 	      (navi2ch-article-sync-from-file file))
 	(navi2ch-article-set-mode-line))
       (navi2ch-article-mode))))
-  
+
 (defun navi2ch-article-setup-menu ()
   (easy-menu-define navi2ch-article-mode-menu
 		    navi2ch-article-mode-map
@@ -686,7 +688,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 				  (count-lines (point-min) (point-max))))
       (setq size (nth 7 (file-attributes file))))
     (format "%s?raw=%s.%s" url raw size)))
-    
+
 (defun navi2ch-article-update-file (board article &optional force)
   "BOARD, ARTICLE $B$KBP1~$9$k%U%!%$%k$r99?7$9$k!#(B
 $BJV$jCM$O(B (article (header state)) $B$N%j%9%H!#(B
@@ -734,7 +736,7 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
 						 (cdr (assoc "Date"
 							     (nth 0 state))))
 					     article)))
-	  (when kako 
+	  (when kako
 	    (setq article (navi2ch-put-alist 'kako t article))))))
     (list article state)))
 
@@ -913,22 +915,48 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
 
 (defun navi2ch-article-select-current-link (&optional browse-p)
   (interactive "P")
-  (let ((prop (get-text-property (point) 'number)))
-    (if prop
-	(progn
-	  (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
-	  (if (numberp prop)
-	      (navi2ch-article-goto-number prop t t)
-	    (navi2ch-popup-article prop)))
-      (setq prop (get-text-property (point) 'url))
-      (when prop
-	(let ((2ch-url-p (navi2ch-2ch-url-p prop)))
-	  (if (and 2ch-url-p
-		   (or (navi2ch-board-url-to-board prop)
-		       (navi2ch-article-url-to-article prop))
-		   (not browse-p))
-	      (navi2ch-goto-url prop)
-	    (navi2ch-browse-url prop)))))))
+  (let (prop)
+    (cond ((setq prop (get-text-property (point) 'number))
+           (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
+           (if (numberp prop)
+               (navi2ch-article-goto-number prop t t)
+             (navi2ch-popup-article prop)))
+          ((setq prop (get-text-property (point) 'url))
+           (let ((2ch-url-p (navi2ch-2ch-url-p prop)))
+             (if (and 2ch-url-p
+                      (or (navi2ch-board-url-to-board prop)
+                          (navi2ch-article-url-to-article prop))
+                      (not browse-p))
+                 (navi2ch-goto-url prop)
+               (navi2ch-browse-url prop))))
+          ((setq prop (get-text-property (point) 'content))
+           (let ((default-filename (file-name-nondirectory
+                                    (get-text-property (point) 'file-name)))
+                 filename)
+             (setq filename (read-file-name
+                             (if default-filename
+                                 (format "Save file (default `%s'): "
+                                         default-filename)
+                               "Save file: ")
+                             nil default-filename))
+             (when (and default-filename (file-directory-p filename))
+               (setq filename (expand-file-name default-filename filename)))
+             (if (not (file-writable-p filename))
+                 (error "File not writable: %s" filename)
+             (with-temp-buffer
+               (let ((buffer-file-coding-system 'binary)
+                     (file-coding-system 'binary)
+                     (coding-system-for-write 'binary)
+                     ;; auto-compress-mode $B$r(B disable $B$K$9$k(B
+                     (inhibit-file-name-operation 'write-region)
+                     (inhibit-file-name-handlers (cons 'jka-compr-handler
+                                                       inhibit-file-name-handlers)))
+                 (insert prop)
+                 (if (or (not (file-exists-p filename))
+                         (y-or-n-p (format "File `%s' exists; overwrite? "
+                                           filename)))
+                     (write-region (point-min) (point-max) filename))))))))))
+
 
 (defun navi2ch-article-mouse-select (e)
   (interactive "e")
@@ -946,9 +974,9 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
 $BL>A0$,?t;z$J$i$P%G%U%)%k%H$O$=$NL>A0$N?t;z!#(B"
   (interactive)
   (let (default alist ret)
-    (setq default 
-	  (let ((from (cdr (assq 'name 
-				 (navi2ch-article-get-message 
+    (setq default
+	  (let ((from (cdr (assq 'name
+				 (navi2ch-article-get-message
 				  (navi2ch-article-get-current-number))))))
 	    (or (and (string-match "[0-9$B#0(B-$B#9(B]+" from)
 		     (japanese-hankaku (match-string 0 from)))
@@ -982,7 +1010,7 @@ state $B$O$"$\!<$s$5$l$F$l$P(B aborn $B$H$$$&%7%s%\%k!#(B
 		    (navi2ch-bm-select-board board))
 		(error "don't move")))))
       (error "don't move"))))
-  
+
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM $BHVL\$N%l%9$K0\F0(B"
   (interactive "ninput number: ")
@@ -1098,7 +1126,7 @@ article buffer $B$+$iH4$1$k$J$i(B 'quit $B$rJV$9!#(B"
       (navi2ch-y-or-n-p "Through next article or quit?" 'quit)
     (or no-ask
 	navi2ch-article-enable-through)))
-  
+
 (defun navi2ch-article-through-next ()
   (interactive)
   (let ((mode (navi2ch-get-major-mode navi2ch-board-buffer-name)))
@@ -1356,6 +1384,78 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
 	(setq prompt "Please answer u, or b.  (u)udecode or (b)ase64")))
     (call-interactively decoder)))
 
+(defun navi2ch-article-auto-decode-base64-section ()
+  "$B%+%l%s%H%P%C%U%!$N(B BASE64 $B%;%/%7%g%s$r%G%3!<%I$7$?$b$N$KCV$-49$($k!#(B
+
+BASE64 $B%;%/%7%g%s$H$_$J$5$l$k$N$O!"(B`navi2ch-base64-begin-delimiter-regexp'
+$B$K%^%C%A$9$k9T$H(B `navi2ch-base64-end-delimiter-regexp' $B$K%^%C%A$9$k9T$N(B
+$B$^$G$N%F%-%9%H!#%;%/%7%g%sFb$N9T$O$9$Y$F(B `navi2ch-base64-line-regexp' $B$K(B
+$B%^%C%A$7$J$1$l$P$J$i$J$$!#(B
+
+$B%G%3!<%I$7$?%F%-%9%H$O!"$=$NJ8;z%3!<%I$r(B Emacs $B$,?dB,$G$-$?>l9g$K8B$j(B
+$BK\J8$KA^F~$9$k!#?dB,$G$-$J$+$C$?$H$-$O%P%$%J%j%U%!%$%k$H8+$J$7$F%"%s%+!<(B
+$B$@$1$rA^F~$9$k!#(B
+
+BASE64 $B%;%/%7%g%s$N%X%C%@$G;XDj$5$l$?%U%!%$%kL>$,(B *.gz $B$J$i$P!"$$$C$?$s(B
+gunzip $B$KDL$7$F$+$iJ8;z%3!<%I$N?dB,$r;n$_$k!#(B"
+  (goto-char (point-min))
+  (catch 'loop
+    (while (re-search-forward navi2ch-base64-begin-delimiter-regexp nil t)
+      (let* ((begin (match-beginning 0))
+             (filename (match-string-no-properties 2))
+             (end (and (re-search-forward navi2ch-base64-end-delimiter-regexp nil t)
+                       (match-end 0)))
+             encoded decoded)
+        (unless end (throw 'loop nil))
+        (setq encoded (buffer-substring-no-properties
+                       (progn (goto-char begin) (line-beginning-position 2))
+                       (progn (goto-char end) (line-end-position 0))))
+        (with-temp-buffer
+          (insert encoded)
+          (goto-char (point-min))
+          (while (looking-at navi2ch-base64-line-regexp)
+            (forward-line))
+          (when (eobp)
+            (base64-decode-region (point-min) (point-max))
+            (setq decoded (let ((buffer-file-coding-system 'binary)
+                                (coding-system-for-read 'binary)
+                                (coding-system-for-write 'binary)
+                                (str (buffer-string))
+                                exit-status)
+                            (when (and filename (string-match "\\.gz$" filename))
+                              (setq exit-status
+                                    (apply 'call-process-region (point-min) (point-max)
+                                           navi2ch-net-gunzip-program t t nil
+                                           navi2ch-net-gunzip-args))
+                              (unless (= exit-status 0)
+                                (erase-buffer)
+                                (insert str)))
+                            (let ((charset (coding-system-get
+                                            (detect-coding-region (point-min) (point-max) t)
+                                            'mime-charset)))
+                              (if charset
+                                  (cons str (decode-coding-string (buffer-string) charset t))
+                                (cons str nil)))))))
+        (when decoded
+          (let ((noconv (car decoded))
+                (text (cdr decoded))
+                (fname (unless (or (null filename) (equal filename "")) filename))
+                part-begin)
+            (delete-region begin end)
+            (goto-char begin)
+            (insert (propertize "> " 'face 'navi2ch-article-base64-face)
+                    (propertize (format "%s" (or fname "$BL>L5$7%U%!%$%k$5$s(B"))
+                                'face '(navi2ch-article-url-face navi2ch-article-base64-face)
+                                'link t
+                                'mouse-face 'highlight
+                                'file-name fname
+                                'content noconv))
+            (setq part-begin (point))
+            (insert (format " (%.1fKB)\n" (/ (length noconv) 1024.0)))
+            (if text (insert text))
+            (add-text-properties part-begin (point)
+                                 '(hard t face navi2ch-article-base64-face))))))))
+
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
 	 (file (make-temp-name (concat temporary-file-directory "navi2ch"))))
@@ -1445,7 +1545,7 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
               (eq major-mode 'navi2ch-article-mode))
         (setq buf x)))
     (switch-to-buffer buf)))
-  
+
 (defun navi2ch-article-backward-buffer ()
   "$BA0$N(B article buffer $B$X(B"
   (interactive)
@@ -1491,7 +1591,7 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
                                   "Cansel hide message"))
 
 
-  
+
 (defun navi2ch-article-toggle-hide ()
   (interactive)
   (setq navi2ch-article-hide-mode
@@ -1530,7 +1630,7 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
   (interactive)
   (navi2ch-article-delete-message 'important 'delq
                                   "Delete important message"))
-  
+
 (defun navi2ch-article-toggle-important ()
   (interactive)
   (setq navi2ch-article-important-mode

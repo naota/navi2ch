@@ -497,6 +497,11 @@ window の幅いっぱいにしたいなら
 		 (sexp :tag "関数とか"))
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-auto-decode-base64-p nil
+  "*non-nil なら、スレの BASE64 でエンコードされたテキストを自動展開する。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")

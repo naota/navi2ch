@@ -181,5 +181,11 @@
   "スレの face"
   :group 'navi2ch-face)
 
+(defface navi2ch-article-base64-face
+  '((((class color) (background light)) (:background "gray90"))
+    (((class color) (background dark)) (:foreground "gray10")))
+  "スレの BASE64 セクションの face"
+  :group 'navi2ch-face)
+
 (run-hooks 'navi2ch-face-load-hook)
 ;;; navi2ch-face.el ends here

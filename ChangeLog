@@ -1,5 +1,24 @@
 2002-02-05  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
+	* navi2ch-article (navi2ch-article-auto-decode-base64-section): 
+	新関数。レスの BASE64 でエンコードされたテキストをデコードして
+	インライン展開する。さらには (BASE64しただけの)	もとのファイル
+	へのアンカーとして link を挿入し、contents プロパティにもとの
+	ファイルを保存する。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/743
+
+	(navi2ch-article-select-current-link): 上の変更に対応。
+	contents プロパティがセットされていれば、それをファイルに
+	保存できるように。
+
+	(navi2ch-article-auto-decode-base64-p): 新変数。
+	(navi2ch-article-insert-message): 上の変数が non-nil なら
+	BASE64 のインライン展開を有効にする。
+
+	(navi2ch-article-base64-face): 展開されたテキストの face。
+
+2002-02-05  UEYAMA Rui  <rui314159@users.sourceforge.net>
+
 	* contrib/navi2ch-logo.el: 全面的に書き換え。前のコードは
 	われながら厨すぎた。
 	(navi2ch-bm-get-logo): 削除。
