@@ -69,8 +69,7 @@
 (defun navi2ch-kill-emacs-hook ()
   (run-hooks 'navi2ch-kill-emacs-hook)
   (navi2ch-save-status)
-  (if navi2ch-use-lock
-      (navi2ch-unlock)))
+  (navi2ch-unlock))
 
 ;;;###autoload
 (defun navi2ch (&optional arg)
@@ -82,10 +81,13 @@
     (when (file-exists-p navi2ch-update-file)
       (load-file navi2ch-update-file))
     (load navi2ch-init-file t)
-    (if navi2ch-use-lock
-	(navi2ch-lock))
+    (navi2ch-lock)
     (if navi2ch-auto-update
-	(navi2ch-update))
+	(condition-case err
+	    (navi2ch-update)
+	  ((error quit)
+	   (navi2ch-unlock)
+	   (signal (car err) (cdr err)))))
     (add-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook)
     (run-hooks 'navi2ch-load-status-hook)
     (run-hooks 'navi2ch-hook)
@@ -137,8 +139,7 @@ SUSPEND が non-nil なら buffer を消さない"
           (kill-buffer x))))
     (unless suspend
       (setq navi2ch-init nil)
-      (if navi2ch-use-lock
-	  (navi2ch-unlock))
+      (navi2ch-unlock)
       (remove-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook))))
 
 (defun navi2ch-suspend ()
@@ -449,21 +450,15 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 
 (defun navi2ch-lock ()
   "`navi2ch-directory' をロックする。"
-  (let ((redo t)
-	error-message)
-    (while redo
-      (setq redo nil)
-      (unless (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name)
-	(setq error-message "ディレクトリのロックに失敗しました。")
-	(cond ((yes-or-no-p (format "%s危険を承知で続けますか? "
-				    error-message))
-	       nil)
-	      (t
-	       (error "lock failed")))))))
+  (if (and navi2ch-use-lock
+	   (not (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name))
+	   (not (yes-or-no-p "ディレクトリのロックに失敗しました。危険を承知で続けますか?")))
+      (error "lock failed")))
 
 (defun navi2ch-unlock ()
   "`navi2ch-directory' のロックを解除する。"
-  (navi2ch-unlock-directory navi2ch-directory navi2ch-lock-name))
+  (if navi2ch-use-lock
+      (navi2ch-unlock-directory navi2ch-directory navi2ch-lock-name)))
 
 (defun navi2ch-ident-list ()
   "ロードしている Navi2ch の各モジュールの Id を表示する。"

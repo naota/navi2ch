@@ -1,3 +1,13 @@
+2003-03-26  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-lock): ここで navi2ch-use-lock を見るように。
+	(navi2ch-unlock): 同上。
+	(navi2ch-kill-emacs-hook): 上記変更に対応。
+	(navi2ch): 同上。
+	(navi2ch-exit): 同上。
+	(navi2ch-lock): 編集の結果、意味不明なコードになっていたので掃除。
+	(navi2ch): navi2ch-update() に失敗した場合はロックを解除するように。
+
 2003-03-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-send-message-error-string):
