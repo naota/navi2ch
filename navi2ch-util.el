@@ -321,7 +321,6 @@ START, END, NOFIRST で範囲を指定する"
 	       (other-window 1))))
       (if article
 	  (progn
-	    (navi2ch-history-add board article)
 	    (navi2ch-article-view-article board
 					  article
 					  force

@@ -224,7 +224,6 @@
          (buf (current-buffer)))
     (if article
         (progn
-	  (navi2ch-history-add board article)
           (dolist (x (navi2ch-article-buffer-list))
             (when x
               (delete-windows-on x)))

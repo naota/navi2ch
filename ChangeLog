@@ -1,3 +1,14 @@
+2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el 
+	(navi2ch-article-view-article): navi2ch-add-history を使うように。
+
+	* navi2ch-util.el 
+	(navi2ch-goto-url): navi2ch-add-history を使わないように。
+
+	* navi2ch-board-misc.el
+	(navi2ch-bm-select-article): navi2ch-add-history を使わないように。
+
 2002-01-10  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am: 依存関係追加。
