@@ -436,17 +436,20 @@ START, END, NOFIRST で範囲を指定する"
   (insert (make-string (eval navi2ch-article-message-separator-width)
 		       navi2ch-article-message-separator) "\n"))
 
-(defsubst navi2ch-article-set-link-property-subr (start end type value)
+(defsubst navi2ch-article-set-link-property-subr (start end type value
+							&optional object)
   (let ((face (cond ((eq type 'number) 'navi2ch-article-link-face)
 		    ((eq type 'url) 'navi2ch-article-url-face))))
     (add-text-properties start end
 			 (list 'face face
-			       'help-echo (function navi2ch-article-help-echo)
+			       'help-echo #'navi2ch-article-help-echo
 			       'link t
 			       'mouse-face navi2ch-article-mouse-face
-			       type value))
+			       type value)
+			 object)
     (add-text-properties start (1+ start)
-			 (list 'link-head t))))
+			 (list 'link-head t)
+			 object)))
 
 (defsubst navi2ch-article-set-link-property ()
   ">>1 とか http:// に property を付ける"
@@ -854,6 +857,14 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-article-default-header-format-function (number name mail date)
   "デフォルトのヘッダをフォーマットする関数
   ヘッダのface を付けるのもここで。"
+  (let ((start 0))
+    (while (string-match "[0-9]+" name start)
+      (navi2ch-article-set-link-property-subr (match-beginning 0)
+					      (match-end 0)
+					      'number
+					      (match-string 0 name)
+					      name)
+      (setq start (match-end 0))))
   (let ((from-header "From: ")
         (from (format "[%d] %s <%s>\n" number name mail))
         (date-header "Date: ")
@@ -865,8 +876,8 @@ START, END, NOFIRST で範囲を指定する"
     (setq p (length from-header))
     (put-text-property 0 p
 		       'face 'navi2ch-article-header-face str)
-    (put-text-property p (1- (setq p (+ p (length from))))
- 		       'face 'navi2ch-article-header-contents-face str)
+    (add-text-properties p (1- (setq p (+ p (length from))))
+			 '(face navi2ch-article-header-contents-face) str)
     (put-text-property p (setq p (+ p (length date-header)))
 		       'face 'navi2ch-article-header-face str)
     (put-text-property p (setq p (+ p (length date)))

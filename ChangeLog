@@ -1,3 +1,11 @@
+2003-12-05  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property-subr):
+	カレントバッファ以外にもプロパティを設定できるように。
+	(navi2ch-article-default-header-format-function): 名前の数字部分に
+	プロパティを設定。(ちと ad-hoc)
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/395
+
 2003-12-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-localfile): 新規 custom グループ。
