@@ -1,5 +1,11 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-popup-aa-width): 新変数。
+
+	* navi2ch-message.el (navi2ch-message-insert-aa-list): 新関数。
+	(navi2ch-message-popup-aa-list): insert する部分のネストが深くなっ
+	たので分離。fit-window-to-buffer するのをやめた。
+
 	* navi2ch-article.el (navi2ch-article-url-to-article):
 	http://pc.2ch.net/test/read.cgi/unix/1023884490 のような形式の URL
 	を変換すると '(number . 1023884490.0) となってしまっていたのを修正。
@@ -8,7 +14,7 @@
 	navi2ch-board-misc.el と同様。
 	(navi2ch-bookmark-fetch-mark-article): 同上。
 
-	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 引数max-line 
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-article): 引数max-line
 	が使われてなかったので、代わりに force として
 	navi2ch-article-fetch-article に渡すように。
 	(navi2ch-bm-fetch-mark-article): 引数を取るように。(うーん、これっ

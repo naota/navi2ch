@@ -638,6 +638,11 @@ message mode $B$G(B prefix-key key $B$HF~NO$9$k;v$G(B AA $B$rF~NO$G$-$k!#(
   :type 'boolean
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-popup-aa-width 36
+  "*aa $B$N%j%9%H$rI=<($9$k:]$NI}(B"
+  :type 'number
+  :group 'navi2ch-message)
+
 ;; net variables
 (defcustom navi2ch-net-http-proxy
   (if (string= (getenv "HTTP_PROXY") "")

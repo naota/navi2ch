@@ -109,11 +109,11 @@
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-user-name-alist))
 	      navi2ch-message-user-name "") "\n"
-	      "Mail: "
-	      (or sage
+	  "Mail: "
+	  (or sage
 	      (cdr (assq 'mail navi2ch-message-current-article))
 	      navi2ch-message-mail-address "") "\n"
-	      navi2ch-message-header-separator))
+	  navi2ch-message-header-separator))
 
 (defun navi2ch-message-cleanup-message ()
   (save-excursion
@@ -164,7 +164,7 @@
 	(let ((board navi2ch-message-current-board)
 	      (article navi2ch-message-current-article)
 	      result)
-	  (setq result (navi2ch-net-send-message	; result: (sent-p . spid)
+	  (setq result (navi2ch-net-send-message ; result: (sent-p . spid)
 			from mail message subject
 			(navi2ch-board-get-bbscgi-url board)
 			(navi2ch-board-get-uri board)
@@ -255,9 +255,9 @@
 
 (defun navi2ch-message-setup-menu ()
   (easy-menu-define navi2ch-message-mode-menu
-		    navi2ch-message-mode-map
-		    "Menu used in navi2ch-message"
-		    navi2ch-message-mode-menu-spec)
+    navi2ch-message-mode-map
+    "Menu used in navi2ch-message"
+    navi2ch-message-mode-menu-spec)
   (easy-menu-add navi2ch-message-mode-menu))
 
 (defun navi2ch-message-fill-paragraph (arg)
@@ -294,27 +294,34 @@
       (concat navi2ch-message-aa-prefix-key (car pair))
       `(lambda () (interactive) (insert ,(cdr pair))))))
 
+(defun navi2ch-message-insert-aa-list ()
+  (let ((aa-width navi2ch-message-popup-aa-width)
+	(nl nil))
+    (dolist (elt navi2ch-message-aa-alist)
+      (let* ((key (car elt))
+	     (val (cdr elt))
+	     (width (string-width val)))
+	(when (and (stringp key) (stringp val))
+	  (if (> width aa-width)
+	      (setq val
+		    (concat (truncate-string-to-width val (- aa-width 3))
+			    "...")))
+	  (insert (format (format "%%s: %%-%ds"
+				  navi2ch-message-popup-aa-width) key val)
+		  (if nl "\n" " "))
+	  (setq nl (not nl)))))))
+
 (defun navi2ch-message-popup-aa-list ()
   "aa のリストを表示する。"
   (interactive)
   (save-window-excursion
     (with-temp-buffer
-      (let ((alist navi2ch-message-aa-alist)
-	    (nl nil))
-	(while alist
-	  (let ((key (caar alist))
-		(val (cdar alist)))
-	    (when (and (stringp key) (stringp val))
-	      (insert (format "%s: %-30s " key val)
-		      (if nl "\n" ""))
-	      (setq nl (not nl))))
-	  (setq alist (cdr alist)))
-	(pop-to-buffer (current-buffer))
-	(fit-window-to-buffer)
-	(let ((cursor-in-echo-area t)
-	      (message-log-max nil))
-	  (message "Type key for AA: ")
-	  (read-char))))))
+      (navi2ch-message-insert-aa-list)
+      (pop-to-buffer (current-buffer))
+      (let ((cursor-in-echo-area t)
+	    (message-log-max nil))
+	(message "Type key for AA: ")
+	(read-char)))))
 
 (defun navi2ch-message-insert-aa ()
   "aa を入力する。"
