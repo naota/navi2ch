@@ -1,5 +1,7 @@
 2002-07-01  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-aa-alist): AA 追加。
+
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map): `mR' に
 	navi2ch-bm-remove-mark-article をバインド。
 	(navi2ch-bm-remove-article-subr): 2 番目の引数に複数のスレを指定で

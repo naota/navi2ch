@@ -1322,6 +1322,9 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @item i
 @samp{(・∀・)イイ!!}
 
+@item I
+@samp{(・Ａ・)イクナイ!!}
+
 @item j
 @samp{(・∀・)ジサクジエンデシタ}
 
@@ -1345,6 +1348,9 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 
 @item s
 @samp{Σ(゜д゜lll)ガーン}
+
+@item S
+@samp{(´・ω・`)ショボーン")}
 
 @item u
 @samp{(゜д゜)ウマー}
