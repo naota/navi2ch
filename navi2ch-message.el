@@ -1,6 +1,6 @@
 ;;; navi2ch-message.el --- write message module for navi2ch
 
-;; Copyright (C) 2000-2003 by Navi2ch Project
+;; Copyright (C) 2000-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -233,10 +233,12 @@
 	  (let ((board navi2ch-message-current-board)
 		(article navi2ch-message-current-article)
 		result)
+	    (navi2ch-net-cleanup)
 	    ;; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
 	    ;; ↓   navi2ch-2ch-send-message で処理する。
 	    (setq result (navi2ch-multibbs-send-message
 			  from mail message subject board article))
+	    (navi2ch-net-cleanup)
 	    (when result
 	      (when navi2ch-message-save-sendlog
 		(navi2ch-message-add-sendlog from mail message subject
