@@ -1352,35 +1352,37 @@ article buffer から抜けるなら 'quit を返す。"
 
 (defun navi2ch-article-display-link-minibuffer (point)
   "point のリンク先を minibuffer に表示"
-  (let ((num-prop (get-text-property (point) 'number))
-	(url-prop (get-text-property (point) 'url))
+  (when (eq major-mode 'navi2ch-article-mode)
+    (let ((num-prop (get-text-property (point) 'number))
+	  (url-prop (get-text-property (point) 'url))
 	num-list num)
-    (cond
-     (num-prop
-      (setq num-list (navi2ch-article-str-to-num (japanese-hankaku num-prop)))
-      (cond ((numberp num-list)
-	     (setq num num-list))
-	    (t
-	     (setq num (car num-list))))
-      (let ((msg (navi2ch-article-get-message-string num)))
-        (when msg
-          (setq msg (navi2ch-replace-string
-                     navi2ch-article-citation-regexp "" msg t))
-          (setq msg (navi2ch-replace-string
-                     "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
-          (setq msg (navi2ch-replace-string "\n+" " " msg t))
-          (message (truncate-string-to-width
-		    (format "[%d]: %s" num msg)
-		    (eval navi2ch-article-display-link-width))))))
-     (url-prop
-      (if (navi2ch-2ch-url-p url-prop)
-	  (let ((board (navi2ch-board-url-to-board url-prop))
-		(article (navi2ch-article-url-to-article url-prop)))
-	    (if (navi2ch-article-check-cached board article)
-		(message (truncate-string-to-width
-			  (format "[%s]: %s"
-				  (cdr (assq 'name board))
-				  (navi2ch-article-cached-subject board article)))))))))))
+      (cond
+       (num-prop
+	(setq num-list (navi2ch-article-str-to-num (japanese-hankaku num-prop)))
+	(cond ((numberp num-list)
+	       (setq num num-list))
+	      (t
+	       (setq num (car num-list))))
+	(let ((msg (navi2ch-article-get-message-string num)))
+	  (when msg
+	    (setq msg (navi2ch-replace-string
+		       navi2ch-article-citation-regexp "" msg t))
+	    (setq msg (navi2ch-replace-string
+		       "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
+	    (setq msg (navi2ch-replace-string "\n+" " " msg t))
+	    (message (truncate-string-to-width
+		      (format "[%d]: %s" num msg)
+		      (eval navi2ch-article-display-link-width))))))
+       (url-prop
+	(if (navi2ch-2ch-url-p url-prop)
+	    (let ((board (navi2ch-board-url-to-board url-prop))
+		  (article (navi2ch-article-url-to-article url-prop)))
+	      (if (navi2ch-article-check-cached board article)
+		  (message (truncate-string-to-width
+			    (format "[%s]: %s"
+				    (cdr (assq 'name board))
+				    (navi2ch-article-cached-subject board article))
+			    (eval navi2ch-article-display-link-width)))))))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
