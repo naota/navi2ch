@@ -22,7 +22,8 @@
 
 ;;; Code:
 (provide 'navi2ch-message)
-(defvar navi2ch-message-ident "$Id$")
+(defvar navi2ch-message-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

@@ -29,7 +29,8 @@
 
 ;;; Code:
 (provide 'navi2ch-jbbs-shitaraba)
-(defvar navi2ch-jbbs-shitaraba-ident "$Id$")
+(defvar navi2ch-jbbs-shitaraba-ident
+  "$Id$")
 
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)

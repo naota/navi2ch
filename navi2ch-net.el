@@ -22,7 +22,8 @@
 
 ;;; Code:
 (provide 'navi2ch-net)
-(defvar navi2ch-net-ident "$Id$")
+(defvar navi2ch-net-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 (require 'timezone)

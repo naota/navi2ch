@@ -26,7 +26,8 @@
 
 ;;; Code:
 (provide 'navi2ch-history)
-(defvar navi2ch-history-ident "$Id$")
+(defvar navi2ch-history-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

@@ -22,7 +22,8 @@
 
 ;;; Code:
 (provide 'navi2ch)
-(defvar navi2ch-ident "$Id$")
+(defvar navi2ch-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -475,7 +476,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   (let (ident-list)
     (mapatoms (lambda (symbol)
 		(if (and (boundp symbol)
-			 (string-match "\\`navi2ch-.+-ident\\'"
+			 (string-match "\\`navi2ch\\(-.+\\)?-ident\\'"
 				       (symbol-name symbol)))
 		    (setq ident-list (cons symbol ident-list)))))
     (when ident-list

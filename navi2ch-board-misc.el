@@ -22,7 +22,8 @@
 
 ;;; Code:
 (provide 'navi2ch-board-misc)
-(defvar navi2ch-board-misc-ident "$Id$")
+(defvar navi2ch-board-misc-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

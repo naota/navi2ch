@@ -26,7 +26,8 @@
 
 ;;; Code:
 (provide 'navi2ch-directory)
-(defvar navi2ch-directory-ident "$Id$")
+(defvar navi2ch-directory-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

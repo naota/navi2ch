@@ -34,7 +34,8 @@
 
 ;;; Code:
 (provide 'navi2ch-splash)
-(defvar navi2ch-splash-ident "$Id$")
+(defvar navi2ch-splash-ident
+  "$Id$")
 
 (eval-when-compile
   (require 'cl))

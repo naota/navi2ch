@@ -41,7 +41,8 @@
 
 ;;; Code:
 (provide 'navi2ch-search)
-(defvar navi2ch-search-ident "$Id$")
+(defvar navi2ch-search-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

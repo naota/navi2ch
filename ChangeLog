@@ -2,6 +2,7 @@
 
 	* navi2ch.el (navi2ch-lock): navi2ch-lock-directory を使用するように。
 	(navi2ch-unlock): navi2ch-unlock-directory を使用するように。
+	(navi2ch-ident-list): navi2ch-ident が含まれるように。
 
 	* navi2ch-vars.el (navi2ch-lock-name): navi2ch-lock-directory から
 	名称変更。絶対パスから相対パスへ。

@@ -26,7 +26,8 @@
 
 ;;; Code:
 (provide 'navi2ch-articles)
-(defvar navi2ch-articles-ident "$Id$")
+(defvar navi2ch-articles-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

@@ -29,7 +29,8 @@
 
 ;;; Code:
 (provide 'navi2ch-multibbs)
-(defvar navi2ch-multibbs-ident "$Id$")
+(defvar navi2ch-multibbs-ident
+  "$Id$")
 
 (require 'navi2ch)
 

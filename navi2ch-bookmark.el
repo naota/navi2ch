@@ -26,7 +26,8 @@
 
 ;;; Code:
 (provide 'navi2ch-bookmark)
-(defvar navi2ch-bookmark-ident "$Id$")
+(defvar navi2ch-bookmark-ident
+  "$Id$")
 
 (eval-when-compile (require 'cl))
 

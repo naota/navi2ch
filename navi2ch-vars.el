@@ -26,7 +26,8 @@
 
 ;;; Code:
 (provide 'navi2ch-vars)
-(defvar navi2ch-vars-ident "$Id$")
+(defvar navi2ch-vars-ident
+  "$Id$")
 
 (defconst navi2ch-on-xemacs (featurep 'xemacs))
 (defconst navi2ch-on-emacs21 (and (not navi2ch-on-xemacs)
