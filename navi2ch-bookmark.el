@@ -162,7 +162,7 @@ KEY は (concat URI ARTID) ")
     (when (y-or-n-p (concat "delete global bookmark "
 			    (cadr bookmark) "? "))
       (setq navi2ch-bookmark-list (delete bookmark navi2ch-bookmark-list))
-      (save-excursion
+      (save-current-buffer
 	(set-buffer navi2ch-list-buffer-name)
 	(navi2ch-list-sync-global-bookmark-category))
       (navi2ch-bookmark-save-info))))
