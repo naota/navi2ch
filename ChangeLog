@@ -1,3 +1,7 @@
+2005-03-16  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-update-previous-message-separator): スレの1レス目がhideされたときにエラーにならないように。
+
 2005-02-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): offline

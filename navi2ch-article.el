@@ -457,7 +457,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	    (setq end (point))
 	  (setq end (previous-single-property-change (point) 'message-separator)))
 	(when end
-	  (if (get-text-property (1- end) 'message-separator)
+	  (if (get-text-property (max (1- end) (point-min)) 'message-separator)
 	      (setq beg (previous-single-property-change end 'message-separator))
 	    (setq beg end)
 	    (setq end (next-single-property-change beg 'message-separator))))
