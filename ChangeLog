@@ -1,3 +1,8 @@
+2002-04-18    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-make-board-txt): 
+	板一覧 html 中の <a href="..."> の a が小文字でも動くように。
+
 2002-04-09  タカノ  <504@unix.2ch.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 

@@ -481,7 +481,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 		(cont (match-string 3)))
 	    (setq str2
 		  (concat str2
-			  (if (string= tag "A")
+			  (if (or (string= tag "A") (string= tag "a"))
 			      (when (and start
 					 (not ignore))
 				(when (string-match
