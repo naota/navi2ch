@@ -1,3 +1,9 @@
+2003-02-16  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-insert-board-names-subr):
+	mouse-face が insert する次の行とつながっていたのを修正。
+	板名だけに property をつけるように。
+
 2003-02-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-func-alist): 不要かつ存在
@@ -10,7 +16,6 @@
 	(navi2ch-bm-mark-marks): 上記を使うように。
 	(navi2ch-bm-fetch-maybe-new-articles): 新関数。
 	(navi2ch-bm-mode-map): 上記をバインド。順番をちょっと変更。
-
 
 2003-02-12  Nanashi San  <nanashi@users.sourceforge.net>
 

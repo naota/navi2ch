@@ -208,8 +208,12 @@
 	(insert (car state)
 		indent
 		(cdr (assq 'name board)) "\n")
+	(set-text-properties prev (point) nil)
 	(set-text-properties
-	 prev (1- (point))
+	 (+ prev
+	    (length (car state))
+	    (length indent))
+	 (1- (point))
 	 (list 'mouse-face navi2ch-list-mouse-face
 	       'face (cadr state))))
       (put-text-property prev (point) 'board board)
