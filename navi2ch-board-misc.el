@@ -265,28 +265,33 @@
   (let* ((item (navi2ch-bm-get-property-internal (point)))
          (article (navi2ch-bm-get-article-internal item))
          (board (navi2ch-bm-get-board-internal item))
-         (buf (current-buffer)))
-    (if article
-	(progn
-	  (navi2ch-split-window 'article)
-	  (let (state)
-	    (setq state
-		  (if (navi2ch-board-from-file-p board)
-		      (navi2ch-article-view-article-from-file
-		       (navi2ch-article-get-file-name board article))
-		    (navi2ch-article-view-article
-		     board article nil nil max-line)))
-	    (save-excursion
-	      (set-buffer buf)
-	      (let ((buffer-read-only nil))
-		(when (or state
-			  (navi2ch-bm-fetched-article-p board article)
-			  (eq (navi2ch-bm-get-state) 'view))
-		  (navi2ch-bm-remove-fetched-article board article)
-		  (if (eq major-mode 'navi2ch-board-mode)
-		      (navi2ch-bm-insert-state item 'view 'seen)
-		    (navi2ch-bm-insert-state item 'view)))))))
-      (message "Can't select this line!"))))
+         (buf (current-buffer))
+	 (window-configuration (current-window-configuration)))
+    (condition-case err
+	(if article
+	    (progn
+	      (navi2ch-split-window 'article)
+	      (let (state)
+		(setq state
+		      (if (navi2ch-board-from-file-p board)
+			  (navi2ch-article-view-article-from-file
+			   (navi2ch-article-get-file-name board article))
+			(navi2ch-article-view-article
+			 board article nil nil max-line)))
+		(save-excursion
+		  (set-buffer buf)
+		  (let ((buffer-read-only nil))
+		    (when (or state
+			      (navi2ch-bm-fetched-article-p board article)
+			      (eq (navi2ch-bm-get-state) 'view))
+		      (navi2ch-bm-remove-fetched-article board article)
+		      (if (eq major-mode 'navi2ch-board-mode)
+			  (navi2ch-bm-insert-state item 'view 'seen)
+			(navi2ch-bm-insert-state item 'view)))))))
+	  (message "Can't select this line!"))
+      ((error quit)
+       (set-window-configuration window-configuration)
+       (signal (car err) (cdr err))))))
 
 (defun navi2ch-bm-show-url ()
   "$BHD$N(Burl $B$rI=<($7$F!"$=$N(B url $B$r8+$k$+(B kill ring $B$K%3%T!<$9$k(B"
@@ -770,17 +775,13 @@ ARG $B$,(B non-nil $B$J$i0\F0J}8~$r5U$K$9$k!#(B"
   "BOARD $B$H(B ARTICLES $B$G;XDj$5$l$k%9%l$N>pJs$r>C$9!#(B
 ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>l9g$O;XDj$5(B
 $B$l$k$9$Y$F$N%9%l$rBP>]$K$9$k!#(B"
-  (let ((summary (navi2ch-article-load-article-summary board))
-	(same-board nil))
+  (let ((summary (navi2ch-article-load-article-summary board)))
     (setq articles
 	  (cond ((cdr (assq 'artid articles)) ; $B%9%l(B alist
 		 (setq articles (list articles)))
 		((cdr (assq 'artid (car articles))) ; $B%9%l(B alist $B$N(B list
 		 articles)
 		(t nil)))
-    (if (eq board navi2ch-board-current-board)
-	(setq same-board t)
-      (setq board (navi2ch-board-load-info board)))
     (dolist (article articles)
       (let ((artid (cdr (assq 'artid article))))
 	(let ((buffer (get-buffer (navi2ch-article-get-buffer-name board
@@ -798,16 +799,9 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 	(when summary
 	  (let (elt)
 	    (while (setq elt (assoc artid summary)) ; $B%/%I$$(B?
-	      (setq summary (delq elt summary)))))
-	(dolist (elt board)
-	  (if (listp (cdr elt))
-	      (while (member artid (cdr elt))
-		(setcdr elt (delete artid (cdr elt))))))))
+	      (setq summary (delq elt summary)))))))
     (when summary
-      (navi2ch-article-save-article-summary board summary))
-    (if same-board
-	(setq navi2ch-board-current-board board))
-    (navi2ch-board-save-info board)))
+      (navi2ch-article-save-article-summary board summary))))
 
 (defun navi2ch-bm-remove-article ()
   (interactive)

@@ -1564,13 +1564,13 @@ gunzip に通してから文字コードの推測を試みる。"
                 part-begin)
             (delete-region begin end)
             (goto-char begin)
-            (insert (propertize "> " 'face 'navi2ch-article-base64-face)
-                    (propertize (format "%s" (or fname "名無しファイルさん"))
-                                'face '(navi2ch-article-url-face navi2ch-article-base64-face)
-                                'link t
-                                'mouse-face 'highlight
-                                'file-name fname
-                                'content noconv))
+            (insert (navi2ch-propertize "> " 'face 'navi2ch-article-base64-face)
+                    (navi2ch-propertize (format "%s" (or fname "名無しファイルさん"))
+					'face '(navi2ch-article-url-face navi2ch-article-base64-face)
+					'link t
+					'mouse-face 'highlight
+					'file-name fname
+					'content noconv))
             (setq part-begin (point))
             (insert (format " (%.1fKB)\n" (/ (length noconv) 1024.0)))
             (if text (insert text))

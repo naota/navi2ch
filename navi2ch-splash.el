@@ -88,7 +88,6 @@
   (navi2ch-defalias-maybe 'glyph-width 'ignore)
   (navi2ch-defalias-maybe 'image-size 'ignore)
   (navi2ch-defalias-maybe 'make-extent 'ignore)
-  (navi2ch-defalias-maybe 'propertize 'ignore)
   (navi2ch-defalias-maybe 'set-extent-end-glyph 'ignore)
   (navi2ch-defalias-maybe 'window-pixel-height 'ignore)
   (navi2ch-defalias-maybe 'window-pixel-width 'ignore))
@@ -194,11 +193,11 @@ Return a number of lines that an image occupies in the buffer."
 		       (plist-put (cdr image) ':background bg))
 		     (when (stringp fg)
 		       (plist-put (cdr image) ':foreground fg))))
-		 (insert (propertize " " 'display
-				     (list 'space ':align-to
-					   (max 0 (round (- (window-width)
-							    width)
-							 2)))))
+		 (insert (navi2ch-propertize " " 'display
+					     (list 'space ':align-to
+						   (max 0 (round (- (window-width)
+								    width)
+								 2)))))
 		 (insert-image image)
 		 (insert "\n")
 		 (round height))
@@ -286,12 +285,12 @@ should be a number of lines that an image occupies in the buffer."
     (if navi2ch-on-emacs21
 	(let ((bg (face-background 'navi2ch-splash-screen-face))
 	      (fg (face-foreground 'navi2ch-splash-screen-face)))
-	  (insert (propertize text
-			      'face (nconc '(variable-pitch :slant oblique)
-					   (when (stringp bg)
-					     (list ':background bg))
-					   (when (stringp fg)
-					     (list ':foreground fg))))))
+	  (insert (navi2ch-propertize text
+				      'face (nconc '(variable-pitch :slant oblique)
+						   (when (stringp bg)
+						     (list ':background bg))
+						   (when (stringp fg)
+						     (list ':foreground fg))))))
       (insert text)
       (put-text-property start (point) 'face 'navi2ch-splash-screen-face))
     (let ((fill-column (window-width)))

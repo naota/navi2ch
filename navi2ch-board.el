@@ -530,7 +530,8 @@
 	    (summary (navi2ch-article-load-article-summary board))
 	    (key-datevec (navi2ch-get-offset-datevec
 			  (navi2ch-make-datevec (current-time))
-			  navi2ch-board-expire-date)))
+			  navi2ch-board-expire-date))
+	    (remove-list nil))
 	(message "expiring %s..." (cdr (assq 'name board)))
 	(dolist (article article-list)
 	  (let ((artid (cdr (assq 'artid article)))
@@ -543,21 +544,17 @@
 			key-datevec file
 			(navi2ch-article-summary-element-access-time
 			 (cdr (assoc artid summary)))))
-	      (let ((info (navi2ch-article-get-info-file-name board article)))
-		(when (file-exists-p info) (delete-file info))
-		(delete-file file)
-		(when (assq 'hide board)
-		  (setcdr (assq 'hide board)
-			  (delq artid (cdr (assq 'hide board)))))
-		(when navi2ch-board-expire-bookmark-p
-		  (when (assq 'bookmark board)
-		    (setcdr (assq 'bookmark board)
-			    (delq artid (cdr (assq 'bookmark board)))))
-		  (navi2ch-bookmark-delete-article-all board article))
-		(when (assoc artid summary)
-		  (setq summary (delete (assoc artid summary) summary)))))))
+	      (push article remove-list)
+	      (when (assq 'hide board)
+		(setcdr (assq 'hide board)
+			(delq artid (cdr (assq 'hide board)))))
+	      (when navi2ch-board-expire-bookmark-p
+		(when (assq 'bookmark board)
+		  (setcdr (assq 'bookmark board)
+			  (delq artid (cdr (assq 'bookmark board)))))
+		(navi2ch-bookmark-delete-article-all board article)))))
+	(navi2ch-bm-remove-article-subr board remove-list)
 	(navi2ch-board-save-info board)
-	(navi2ch-article-save-article-summary board summary)
 	(message "expiring %s...done" (cdr (assq 'name board)))))))
   
 (defun navi2ch-board-toggle-minor-mode (mode)

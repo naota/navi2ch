@@ -1,5 +1,30 @@
 2002-07-01  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-propertize): 新関数。Emacs 21 の
+	propertize 関数便利なので。
+
+	* navi2ch-article.el (navi2ch-article-auto-decode-base64-section):
+	propertize -> navi2ch-propertize
+
+	* navi2ch-splash.el (navi2ch-splash-insert-image): 
+	propertize -> navi2ch-propertize
+
+	* navi2ch-splash.el (navi2ch-splash-insert-text): 
+	propertize -> navi2ch-propertize
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-article):
+	window-configuration を保存しておき、エラーが起きた時は元に戻すよ
+	うにしてみた。
+
+	* navi2ch-board.el (navi2ch-board-expire): ファイルの消去は
+	navi2ch-bm-remove-article-subr にまかせるようにした。
+	ところで、navi2ch-bookmark-expire-bookmark-p の説明と動作が食い違っ
+	てるみたいですが、、、
+
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): board の
+	更新は上位層にまかせて、ここではいじらないようにした。
+	d したクソスレを hide モードで m a m R できるように。
+
 	* navi2ch-vars.el (navi2ch-message-aa-alist): AA 追加。
 
 	* navi2ch-board-misc.el (navi2ch-bm-mode-map): `mR' に

@@ -653,5 +653,15 @@ TAG は正規表現。"
   (rename-file (navi2ch-chop-/ file)
 	       (navi2ch-chop-/ newname) ok-if-already-exists))
 
+(defsubst navi2ch-propertize (string &rest properties)
+  "Return a copy of STRING with text properties added.
+First argument is the string to copy.
+Remaining arguments form a sequence of PROPERTY VALUE pairs for text
+properties to add to the result"
+  ;; ドキュメントは Emacs 21 からコピペ
+  (prog1
+      (setq string (copy-sequence string))
+    (add-text-properties 0 (length string) properties string)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
