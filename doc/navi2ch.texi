@@ -1704,6 +1704,28 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 すれば軽くなるかも。(navi2ch-article.el:1.126 以降)
 
 @item Q.
+bookmark モードで sort しても、次にブックマークを開くと元の並び順に戻っ
+てる。
+なんとかならん?
+
+@item A.
+sort 後に @kbd{X} で現在の並び順を記憶する。
+それもめんどうなら、
+@lisp
+(setq navi2ch-bookmark-remember-order-after-sort t)
+@end lisp
+しておくと sort 後の並び順をいつでも記憶するようになる。
+
+@item Q.
+板のローカルルールって見れない?
+
+@item A.
+@lisp
+(require 'navi2ch-head)
+@end lisp
+しといて @kbd{H} でどうよ。
+
+@item Q.
 何々しようとしたらほにゃららってエラーが出るんだけど。
 
 @item A.
@@ -1716,19 +1738,6 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 るの Navi2ch スレで報告してね。その際、使ってる Emacs の種類やバージョ
 ン、Navi2ch のバージョン (CVS 版を使ってる時は ChangeLog の一番最後に
 あるリビジョン) も教えてくれると対応が早いかも。
-
-@item Q.
-bookmark モードで sort しても、次にブックマークを開くと元の並び順に戻っ
-てる。
-なんとかならん?
-
-@item A.
-sort 後に @kbd{X} で現在の並び順を記憶する。
-それもめんどうなら、
-@lisp
-(setq navi2ch-bookmark-remember-order-after-sort t)
-@end lisp
-しておくと sort 後の並び順をいつでも記憶するようになる。
 
 @ignore
 @item Q.
