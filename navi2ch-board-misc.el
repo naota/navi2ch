@@ -759,13 +759,15 @@ ARG が non-nil なら移動方向を逆にする。"
   (let ((ch (navi2ch-read-char-with-retry
 	     "Sort by n)umber s)tate t)itle o)ther d)ate? "
 	     nil '(?n ?s ?t ?o ?d))))
+    (message "Sorting...")
     (funcall
      (cond ((eq ch ?n) 'navi2ch-bm-sort-by-number)
            ((eq ch ?s) 'navi2ch-bm-sort-by-state)
            ((eq ch ?t) 'navi2ch-bm-sort-by-subject)
            ((eq ch ?o) 'navi2ch-bm-sort-by-other)
 	   ((eq ch ?d) 'navi2ch-bm-sort-by-date))
-     arg)))
+     arg)
+    (message "Sorting...done")))
 
 ;;; search
 (defun navi2ch-bm-search-current-board-subject ()

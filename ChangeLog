@@ -1,3 +1,8 @@
+2002-12-19  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort): "Sorting...done" のメッ
+	セージを出すように。
+
 2002-12-18  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-exit): 1ペインのとき、リンク
