@@ -1,5 +1,11 @@
 2002-01-08  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-list.el (navi2ch-list-bookmark-node): 新関数。
+	(navi2ch-list-insert-bookmarks): 上記関数を使うように。
+	(navi2ch-list-add-bookmark): 上記関数を使うように。
+	(navi2ch-list-delete-bookmark): 上記関数を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/146
+
 	* navi2ch-board-misc.el (navi2ch-bm-exec-subr): appy を
 	save-excursion で囲んでみる。
 	Bug ID #500300。

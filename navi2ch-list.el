@@ -224,12 +224,22 @@
 	    (navi2ch-list-insert-board-names-subr (cdr (assq 'child alist))))
 	  (setq prev (point)))))))
 
+(defun navi2ch-list-bookmark-node (board)
+  "BOARD から bookmark に格納する node を取得する。"
+  (let ((uri (assq 'uri board))
+	(type (assq 'type board))
+	(id (assq 'id board)))
+    (cond (uri
+	   (cdr uri))
+	  ((and type id)
+	   (cons (cdr type) (cdr id))))))
+	    
 (defun navi2ch-list-insert-bookmarks (list)
   (let ((bookmark (cdr (assq 'bookmark navi2ch-list-current-list)))
 	list2)
     (dolist (x (navi2ch-list-get-board-name-list list))
-      (let ((uri (cdr (assq 'uri x))))
-	(when (member uri bookmark)
+      (let ((node (navi2ch-list-bookmark-node x)))
+	(when (member node bookmark)
 	  (setq list2 (cons x list2)))))
     (navi2ch-list-insert-board-names-subr list2)))
 
@@ -519,11 +529,12 @@
 
 (defun navi2ch-list-add-bookmark ()
   (interactive)
-  (let ((uri (cdr (assq 'uri (get-text-property (point) 'board))))
+  (let ((node (navi2ch-list-bookmark-node (get-text-property (point)
+							     'board)))
 	(list (cdr (assq 'bookmark navi2ch-list-current-list))))
-    (if uri
-	(unless (member uri list)
-	  (setq list (cons uri list))
+    (if node
+	(unless (member node list)
+	  (setq list (cons node list))
 	  (setq navi2ch-list-current-list
 		(navi2ch-put-alist 'bookmark list
 				   navi2ch-list-current-list))
@@ -532,11 +543,12 @@
 
 (defun navi2ch-list-delete-bookmark ()
   (interactive)
-  (let ((uri (cdr (assq 'uri (get-text-property (point) 'board))))
+  (let ((node (navi2ch-list-bookmark-node (get-text-property (point)
+							     'board)))
 	(list (cdr (assq 'bookmark navi2ch-list-current-list))))
-    (if uri
+    (if node
 	(progn
-	  (setq list (delete uri list))
+	  (setq list (delete node list))
 	  (setq navi2ch-list-current-list
 		(navi2ch-put-alist 'bookmark list
 				   navi2ch-board-current-board))
