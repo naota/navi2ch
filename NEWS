@@ -3,6 +3,9 @@
 
 * navi2ch 1.7 -> 1.7.1
 まちBBSのドメイン名変更に対応
+ふたばちゃんねる (http://www.2chan.net/) に対応。
+navi2ch-auto-modify-file の様々な変更。デフォルト以外の使い方をしてい
+る場合は ChangeLog を参照。
 
 * navi2ch 1.6.1 -> 1.7
 ロック関連変更
