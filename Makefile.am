@@ -5,12 +5,12 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-board.el navi2ch-articles.el navi2ch-bookmark.el \
 	navi2ch-history.el navi2ch-search.el navi2ch-message.el \
 	navi2ch.el \
-	navi2ch-head.el navi2ch-mona.el
+	navi2ch-head.el navi2ch-mona.el navi2ch-e21.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in
 BUILT_SOURCES = navi2ch-version.el bcomp.el
-SUBDIRS = doc
+SUBDIRS = doc icons
 
 navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \

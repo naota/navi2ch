@@ -416,7 +416,9 @@
   (let* ((board navi2ch-board-current-board)
 	 (host (navi2ch-url-to-host (cdr (assq 'uri board)))))
     (setq navi2ch-mode-line-identification
-	  (format "%s (%s)" (cdr (assq 'name board)) host))
+	  (format "%s (%s) [%s]" (cdr (assq 'name board))
+                  (cdr (assq 'id board))
+                  host))
     (navi2ch-set-mode-line-identification)))
 
 (defun navi2ch-board-write-message ()

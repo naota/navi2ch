@@ -40,6 +40,7 @@
 (require 'navi2ch-history)
 (require 'navi2ch-search)
 (require 'navi2ch-message)
+(and navi2ch-on-emacs21 (require 'navi2ch-e21))
 (require 'navi2ch-version)
 
 (defgroup navi2ch nil

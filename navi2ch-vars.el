@@ -27,6 +27,9 @@
 ;;; Code:
 (provide 'navi2ch-vars)
 
+(defconst navi2ch-on-emacs21 (and (not (featurep 'xemacs))
+                                  (>= emacs-major-version 21)))
+
 (defgroup navi2ch nil
   "*Navigator for 2ch."
   :prefix "navi2ch-"
@@ -702,6 +705,22 @@ non-nil なら付加する。"
   "*起動時に`navi2ch-update-file'を更新するか。"
   :type 'boolean
   :group 'navi2ch)
+
+(defcustom navi2ch-icon-directory (if (fboundp 'locate-data-directory)
+                                      (locate-data-directory "navi2ch")
+                                    (let ((icons (expand-file-name "navi2ch/icons/"
+                                                                   data-directory)))
+                                      (if (file-directory-p icons)
+                                          icons)))
+  "* アイコンファイルが置かれたディレクトリ。nil ならアイコンを使わない。"
+  :type '(choice (directory :tag "directory") (const :tag "nil" nil))
+  :group 'navi2ch)
+
+;; folder icons. filename relative to wl-icon-directory
+(defvar navi2ch-online-icon "plugged.xpm"
+  "*Icon file for online state.")
+(defvar navi2ch-offline-icon "unplugged.xpm"
+  "*Icon file for offline state.")
 
 ;;; hooks
 (defvar navi2ch-hook nil)

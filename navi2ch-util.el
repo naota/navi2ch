@@ -83,8 +83,10 @@
 (defvar navi2ch-coding-system 'shift_jis)
 
 (defvar navi2ch-offline nil "オフラインモードかどうか")
-(defvar navi2ch-offline-on "[ON] ")
-(defvar navi2ch-offline-off "[--] ")
+(defvar navi2ch-online-indicator  "[ON] ")
+(defvar navi2ch-offline-indicator "[--] ")
+(defvar navi2ch-modeline-online navi2ch-online-indicator)
+(defvar navi2ch-modeline-offline navi2ch-offline-indicator)
 
 (defsubst navi2ch-replace-string (rep new str &optional all)
   (if all
@@ -359,12 +361,11 @@ return new alist whose car is the new pair and cdr is ALIST.
       major-mode)))
 
 (defun navi2ch-set-mode-line-identification ()
-  (let ((offline '(navi2ch-offline navi2ch-offline-off navi2ch-offline-on)))
+  (let ((offline '(navi2ch-offline navi2ch-modeline-offline navi2ch-modeline-online)))
     (unless navi2ch-mode-line-identification
       (setq navi2ch-mode-line-identification "%12b"))
     (setq mode-line-buffer-identification
-          (list ""
-                offline
+          (list offline
                 navi2ch-mode-line-identification)))
   (force-mode-line-update t))
 
