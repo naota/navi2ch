@@ -1,3 +1,8 @@
+2003-06-13  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): 未読レス数は
+	"Δ数字" で表記するように。
+
 2003-06-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map): XEmacs じゃないと
