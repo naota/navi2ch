@@ -1,3 +1,9 @@
+2004-10-09  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-2ch-url-p): ホスト名がないときは nil に。
+	http:///〜 などの URL 対策。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/555
+	
 2004-10-08  mami  <mami@users.sourceforge.net>
 
 	* NEWS: 更新。

@@ -393,7 +393,8 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 (defun navi2ch-2ch-url-p (url)
   "URL が 2ch 内の url であれば non-nil を返す。"
   (let ((host (navi2ch-url-to-host url)))
-    (and (or (member host navi2ch-2ch-host-list)
+    (and host
+	 (or (member host navi2ch-2ch-host-list)
 	     (let (list)
 	       (setq list
 		     (mapcar (lambda (x)
