@@ -1,3 +1,9 @@
+2003-11-15  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-multibbs.el (navi2ch-2ch-url-to-article): ケータイ用 URL
+	に対応。ちょっと書き直し。
+	(navi2ch-2ch-url-to-board): 同上。
+
 2003-11-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): htp: を

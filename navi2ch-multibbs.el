@@ -327,47 +327,59 @@ START が non-nil ならばレス番号 START からの差分を取得する。
     header))
 
 (defun navi2ch-2ch-url-to-board (url)
-  (let (id uri)
-    (if (or (string-match
-	     "http://\\(.+\\)/test/read\\.cgi.*bbs=\\([^&]+\\)" url)
-	    (string-match
-	     "http://\\(.+\\)/test/read\\.cgi/\\([^/]+\\)/" url)
-	    (string-match
-	     "http://\\(.+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
-	    (string-match "http://\\(.+\\)/\\([^/]+\\)" url))
-	(setq id (match-string 2 url)
-	      uri (format "http://%s/%s/" (match-string 1 url) id)))
-    (if id (list (cons 'uri uri) (cons 'id id)))))
+  (let (host id)
+    (cond ((or (string-match
+		"http://\\(.+\\)/test/\\(read\\.cgi\\|r\\.i\\).*bbs=\\([^&]+\\)" url)
+	       (string-match
+		"http://\\(.+\\)/test/\\(read\\.cgi\\|r\\.i\\)/\\([^/]+\\)/" url))
+	   (setq host (match-string 1 url)
+		 id (match-string 3 url)))
+	  ((or (string-match
+		"http://\\(.+\\)/\\([^/]+\\)/kako/[0-9]+/" url)
+	       (string-match
+		"http://\\(.+\\)/\\([^/]+\\)/i/" url)
+	       (string-match
+		"http://\\(.+\\)/\\([^/]+\\)" url))
+	   (setq host (match-string 1 url)
+		 id (match-string 2 url))))
+    (when id
+      (list (cons 'uri (format "http://%s/%s/" host id))
+	    (cons 'id id)))))
 
 (defun navi2ch-2ch-url-to-article (url)
   "URL から article に変換。"
-  (let (list)
-    (cond ((string-match "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))))
+  (let (artid number kako)
+    (cond ((string-match
+	    "http://.+/test/read\\.cgi.*&key=\\([0-9]+\\)" url)
+	   (setq artid (match-string 1 url))
 	   (when (string-match "&st=\\([0-9]+\\)" url)
-	     (setq list (cons (cons 'number
-				    (string-to-number (match-string 1 url)))
-			      list))))
-	  ((string-match "http://.+/test/read\\.cgi/[^/]+/\\([^/]+\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))))
+	     (setq number (string-to-number (match-string 1 url)))))
+	  ;; http://pc.2ch.net/test/read.cgi/unix/1065246418/ とか。
+	  ((string-match
+	    "http://.+/test/\\(read\\.cgi\\|r\\.i\\)/[^/]+/\\([^/]+\\)" url)
+	   (setq artid (match-string 2 url))
 	   (when (string-match
-		  "http://.+/test/read\\.cgi/[^/]+/[^/]+/[ni.]?\\([0-9]+\\)[^/]*$" url)
-	     (setq list (cons (cons 'number
-				    (string-to-number (match-string 1 url)))
-			      list))))
+		  "http://.+/test/\\(read\\.cgi\\|r\\.i\\)/[^/]+/[^/]+/[ni.]?\\([0-9]+\\)[^/]*$" url)
+	     (setq number (string-to-number (match-string 2 url)))))
 	  ;; "http://pc.2ch.net/unix/kako/999/999166513.html" とか。
-	  ((string-match
-	    "http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))
-			    (cons 'kako t))))
 	  ;; "http://pc.2ch.net/unix/kako/1009/10093/1009340234.html" とか。
+	  ((or (string-match
+		"http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+	       (string-match
+		"http://.+/kako/[0-9]+/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url))
+	   (setq artid (match-string 1 url))
+	   (setq kako t))
 	  ((string-match
-	    "http://.+/kako/[0-9]+/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))
-			    (cons 'kako t))))
-	  ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
-	   (setq list (list (cons 'artid (match-string 1 url))))))
-    list))
+	    "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+	   (setq artid (match-string 1 url))))
+    (let (list)
+      (when artid
+	(setq list (cons (cons 'artid artid) list))
+	(when number
+	  (setq list (cons (cons 'number number) list)))
+	(when kako
+	  (setq list (cons (cons 'kako kako) list)))
+	list))))
 
 (defun navi2ch-2ch-send-message
   (from mail message subject bbs key time board article)
