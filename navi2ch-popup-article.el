@@ -184,7 +184,7 @@ stack が空なら、PopUp Article モードを抜ける。"
 	(navi2ch-popup-article-exit)
 	(navi2ch-article-select-current-link-number prop browse-p)))
      ((setq prop (get-text-property (point) 'url))
-      (navi2ch-article-select-current-link-url prop browse-p t)))
+      (navi2ch-article-select-current-link-url prop browse-p t))
      ((setq prop (get-text-property (point) 'content))
       (navi2ch-article-save-content)))))
 
