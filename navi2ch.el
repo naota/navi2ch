@@ -150,6 +150,62 @@ SUSPEND が non-nil なら buffer を消さない"
              (t
               (or list-buf board-buf art-buf (current-buffer))))))))
 
+(defun navi2ch-two-pane-horizontally (buf-left buf-right)
+  "画面を左右に分割して BUF-LEFT、BUF-RIGHT を割り当てる。
+\(win-left win-right) のリストを返す"
+  (delete-other-windows)
+  (let ((win-left (selected-window))
+	(win-right (split-window-horizontally navi2ch-list-window-width)))
+    (set-window-buffer win-left buf-left)
+    (set-window-buffer win-right buf-right)
+    (list win-left win-right)))
+
+(defun navi2ch-two-pane-vertically (buf-top buf-bottom)
+  "画面を上下に分割して BUF-TOP、BUF-BOTTOM を割り当てる。
+\(win-top win-bottom) のリストを返す"
+  (delete-other-windows)
+  (let ((win-top (selected-window))
+	(win-bottom (split-window-vertically navi2ch-board-window-height)))
+    (set-window-buffer win-top buf-top)
+    (set-window-buffer win-bottom buf-bottom)
+    (list win-top win-bottom)))
+
+(defun navi2ch-two-pane ()
+  (interactive)
+  (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
+	 (board-buf (get-buffer navi2ch-board-buffer-name))
+	 (art-buf (navi2ch-article-current-buffer))
+	 (list-win (get-buffer-window (or list-buf "")))
+	 (board-win (get-buffer-window (or board-buf "")))
+	 (art-win (get-buffer-window (or art-buf "")))
+	 (buf (current-buffer))
+	 (win (selected-window))
+	 (start (window-start)))
+    (cond ((and (eq buf list-buf)
+		(or board-buf art-buf))
+	   (navi2ch-two-pane-horizontally buf
+					  (if art-win
+					      (or board-buf art-buf)
+					    (or art-buf board-buf))))
+	  ((and (eq buf board-buf)
+		list-buf
+		(or art-win
+		    (null art-buf)))
+	   (navi2ch-two-pane-horizontally list-buf buf))
+	  ((and (eq buf board-buf)
+		art-buf)
+	   (navi2ch-two-pane-vertically buf art-buf))
+	  ((and (eq buf art-buf)
+		list-buf
+		(or board-win
+		    (null board-buf)))
+	   (navi2ch-two-pane-horizontally list-buf buf))
+	  ((and (eq buf art-buf)
+		board-buf)
+	   (navi2ch-two-pane-vertically board-buf buf)))
+    (select-window (get-buffer-window buf))
+    (set-window-start (selected-window) start)))
+
 (defun navi2ch-save-info (file info)
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)

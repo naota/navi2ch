@@ -73,7 +73,7 @@
     (define-key map "a" 'navi2ch-article-add-important-message)
     (define-key map "h" 'navi2ch-article-toggle-hide)
     (define-key map "$" 'navi2ch-article-toggle-important)
-    (define-key map "2" 'navi2ch-article-two-pane)
+    ;; (define-key map "2" 'navi2ch-article-two-pane)
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "\C-xk" 'navi2ch-article-kill-buffer)

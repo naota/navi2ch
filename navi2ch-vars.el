@@ -729,7 +729,7 @@ non-nil なら付加する。"
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-map)
     (define-key map "1" 'navi2ch-one-pane)
-    ;; (define-key map "2" 'navi2ch-two-pane)
+    (define-key map "2" 'navi2ch-two-pane)
     (define-key map "3" 'navi2ch-three-pane)
     (define-key map "<" 'beginning-of-buffer)
     (define-key map ">" 'navi2ch-end-of-buffer)

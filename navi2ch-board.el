@@ -40,7 +40,7 @@
     (define-key map "+" 'navi2ch-board-toggle-updated)
     (define-key map "b" 'navi2ch-board-toggle-bookmark)
     (define-key map "w" 'navi2ch-board-write-message)
-    (define-key map "2" 'navi2ch-board-two-pane)
+    ;; (define-key map "2" 'navi2ch-board-two-pane)
     (define-key map "\M-e" 'navi2ch-board-expire)
     (setq navi2ch-board-mode-map map)))
 

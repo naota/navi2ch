@@ -48,7 +48,7 @@
     (define-key map "/" 'navi2ch-list-toggle-open)
     (define-key map "[" 'navi2ch-list-open-all-category)
     (define-key map "]" 'navi2ch-list-close-all-category)
-    (define-key map "2" 'navi2ch-list-two-pane)
+    ;; (define-key map "2" 'navi2ch-list-two-pane)
     (define-key map "D" 'navi2ch-list-delete-global-bookmark)
     (define-key map "C" 'navi2ch-list-change-global-bookmark)
     (define-key map "?" 'navi2ch-list-search)
