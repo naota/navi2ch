@@ -20,10 +20,17 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;; izonmoji-mode() and the way to apply izonmoji-{win,mac}-face on GNU Emacs
+;; are derived from
+
+;; blank-mode.el
+;; Author: Vinicius Jose Latorre <vinicius@cpqd.com.br>
+;; Version: 4.0
+;; X-URL: http://www.cpqd.com.br/~vinicius/emacs/
+
 ;;; Commentary:
 
-;; $BA4$F$N5!<o0MB8J8;z$rI=<($G$-$k$o$1$G$O$"$j$^$;$s$,!"(B
-;; $B:GDc8BI,MW$J$b$N$OB7$($?$D$b$j$G$9!#(B
+;; $BA4$F$N5!<o0MB8J8;z$rI=<($G$-$k$o$1$G$O$"$j$^$;$s$N$GCm0U!#(B
 
 ;; commands:
 ;;   izonmoji-mode	$B5!<o0MB8J8;zI=<($r%H%0%k(B
@@ -79,8 +86,6 @@
 ;;  C-u M-x izonmoji-mode-off $B$7$F(Bdisplay-table$B$X$NA4$F$NJQ99$r<h$j>C$9(B
 ;;  $B$3$H$O$G$-$^$9!#(B
 
-;; XEmacs
-;;  izonmoji-win-face, izonmoji-mac-face $B$NE,MQJ}K!$rCN$i$J$$!#(B
 
 ;;; Code:
 
@@ -93,19 +98,67 @@
 '(win mac) $B$J$i!"(BWindows$B$N5!<o0MB8J8;z$rM%@h$7$D$D!"(BMac$B$NJ8;z$bI=<(!#(B
 '(win) $B$J$i!"(BWindows$B$N5!<o0MB8J8;z$N$_I=<(!#(B")
 
-(defvar izonmoji-win-replace-list
+(defvar izonmoji-win-face 'izonmoji-win-face
+  "*Windows$B$N5!<o0MB8J8;z$NI=<($K;H$&%U%'%$%9L>!#(B
+'default $B$K$9$k$H%U%'%$%9$r$D$1$^$;$s!#(B")
+
+(defvar izonmoji-mac-face 'izonmoji-mac-face
+  "*Mac$B$N5!<o0MB8J8;z$NI=<($K;H$&%U%'%$%9L>!#(B
+'default $B$K$9$k$H%U%'%$%9$r$D$1$^$;$s!#(B")
+
+(defface izonmoji-win-face
+  '((((class color) (type tty)) (:foreground "cyan"))
+    (((class color) (background light)) (:foreground "Aquamarine4"))
+    (((class color) (background dark))  (:foreground "Aquamarine3"))
+    (t (:underline t)))
+  "Windows$B$N5!<o0MB8J8;z$N%U%'%$%9!#(B")
+
+(defface izonmoji-mac-face
+  '((((class color) (type tty)) (:foreground "magenta"))
+    (((class color) (background light)) (:foreground "pink4"))
+    (((class color) (background dark))  (:foreground "pink3"))
+    (t (:underline t)))
+  "Mac$B$N5!<o0MB8J8;z$N%U%'%$%9!#(B")
+
+(defvar izonmoji-win-display-list
   '("$(O-!(B" "$(O-"(B" "$(O-#(B" "$(O-$(B" "$(O-%(B" "$(O-&(B" "$(O-'(B" "$(O-((B" "$(O-)(B" "$(O-*(B"
     "$(O-+(B" "$(O-,(B" "$(O--(B" "$(O-.(B" "$(O-/(B" "$(O-0(B" "$(O-1(B" "$(O-2(B" "$(O-3(B" "$(O-4(B"
     "$(O-5(B" "$(O-6(B" "$(O-7(B" "$(O-8(B" "$(O-9(B" "$(O-:(B" "$(O-;(B" "$(O-<(B" "$(O-=(B" "$(O->(B"
-    "$(O,5(B" "$(O,6(B" "$(O,7(B" "$(O,8(B" "$(O,9(B" "$(O,:(B" "$(O,;(B" "$(O,<(B" "$(O,=(B" "$(O,>(B"
     "$(O-@(B" "$(O-A(B" "$(O-B(B" "$(O-C(B" "$(O-D(B" "$(O-E(B" "$(O-F(B" "$(O-G(B" "$(O-H(B" "$(O-I(B" "$(O-J(B" "$(O-K(B"
     "$(O-L(B" "$(O-M(B" "$(O-N(B" "$(O-O(B" "$(O-P(B" "$(O-Q(B" "$(O-R(B" "$(O-S(B" "$(O-T(B" "$(O-U(B" "$(O-V(B"
     "$(O-_(B" "$(O-`(B" "$(O-a(B" "$(O-b(B" "$(O-c(B" "$(O-d(B" "$(O-e(B" "$(O-f(B" "$(O-g(B" "$(O-h(B" "$(O-i(B"
     "$(O-j(B" "$(O-k(B" "$(O-l(B" "$(O-m(B" "$(O-n(B" "$(O-o(B"
-    "$B"b(B" "$B"a(B" "$B"i(B" "$(O-s(B" "$B&2(B" "$B"e(B" "$B"](B" "$B"\(B" "$(O-x(B" "$(O-y(B" "$B"h(B" "$B"A(B" "$B"@(B")
-  "*Strings used to visualize Windows izonmoji.")
+    "$B"b(B" "$B"a(B" "$B"i(B" "$(O-s(B" "$B&2(B" "$B"e(B" "$B"](B" "$B"\(B" "$(O-x(B" "$(O-y(B" "$B"h(B" "$B"A(B" "$B"@(B"
+    "$(Oz7(B" "$(O{n(B" "$(O}9(B" "$(O}.(B" "$(PvU(B" "$(O.9(B" "$(Po`(B" "$(Ou5(B" "$(Oui(B" "$(P{#(B" "$(Ou7(B" "$(Ot:(B" "$(O.$(B" "$(O.((B"
+    "$(I"n(B" "$(P!?(B" "$(O.+(B" "$(D0c(B" "$(O.0(B" "$(P!M(B" "$(O.5(B" "$(P!N(B" "$(O.6(B" "$(D1>(B" "$(O.A(B" "$(P!](B" "$(D1H(B" "$(P!\(B"
+    "$(P!`(B" "$(P!g(B" "$(P!_(B" "$(O.D(B" "$(IEt(B" "$(D2;(B" "$(O.O(B" "$(D2m(B" "$(O.T(B" "$(D2|(B" "$(I$[(B" "$(O.](B" "$(D3X(B" "$(P#C(B"
+    "$(D3e(B" "$(O.g(B" "$(O.k(B" "$(O.l(B" "$(P#N(B" "$(D4@(B" "$(O.r(B" "$(O.t(B" "$(D4^(B" "$B".(B" "$(O.x(B" "$(P#l(B" "$(O/!(B" "$(O/#(B"
+    "$(O/*(B" "$(J#a(B" "$(D7B(B" "$(P$l(B" "$(O/O(B" "$(O/N(B" "$(O/K(B" "$(O/W(B" "$(O/](B" "$(D8N(B" "$(P%:(B" "$(D8u(B" "$(P%E(B" "$(O/i(B"
+    "$(D8|(B" "$(O/m(B" "$(D97(B" "$(OOV(B" "$(P($(B" "$(OxI(B" "$(OOY(B" "$(OOZ(B" "$(OO\(B" "$(P(C(B" "$(OOi(B" "$(I0b(B" "$(OOq(B" "$(OOu(B"
+    "$(OOr(B" "$(P(U(B" "$(OOw(B" "$(OO|(B" "$(P(g(B" "$(D;y(B" "$(D<d(B" "$(Ot6(B" "$(Ot>(B" "$(OtE(B" "$(OtG(B" "$(D=g(B" "$(GUP(B" "$(P,M(B"
+    "$(D>0(B" "$(OtU(B" "$Ac3(B" "$(P,X(B" "$(D>=(B" "$(Ot[(B" "$(OtZ(B" "$(P,i(B" "$(D?((B" "$(P-"(B" "$(Ott(B" "$(Otz(B" "$(P-P(B" "$(Ot|(B"
+    "$(I66(B" "$(Ou,(B" "$(Ou.(B" "$(I-"(B" "$(Ou-(B" "$(DB+(B" "$(Ou/(B" "$(Ou2(B" "$(Ou>(B" "$(P-~(B" "$(Ou;(B" "$B".(B" "$(Ou?(B" "$(P.-(B"
+    "$(OuD(B" "$(OuE(B" "$(P.3(B" "$(OuL(B" "$(DBp(B" "$(OuN(B" "$(OuP(B" "$(OuX(B" "$(Ou^(B" "$(OuZ(B" "$(Ou](B" "$(P._(B" "$(P.}(B" "$(P.y(B"
+    "$(Oux(B" "$(Ouz(B" "$(P/6(B" "$(Ov"(B" "$(P/A(B" "$(Ov0(B" "$(P/S(B" "$(Ov1(B" "$(P/Z(B" "$(IZH(B" "$(Ov8(B" "$(OvK(B" "$(Pn5(B" "$(OvR(B"
+    "$(OvW(B" "$(DFc(B" "$(PnD(B" "$(Ova(B" "$(Ovk(B" "$(DGC(B" "$(DGK(B" "$(Ovo(B" "$(Pnh(B" "$(I6|(B" "$(H6d(B" "$(Ovv(B" "$(DGn(B" "$(Ovz(B"
+    "$(Pnp(B" "$(Pns(B" "$(Po$(B" "$(Ow/(B" "$(PoA(B" "$(Ow;(B" "$(Ow<(B" "$(PoJ(B" "$(Ow>(B" "$(OwE(B" "$(OwG(B" "$(OwL(B" "$(Pok(B" "$(OwW(B"
+    "$(OwR(B" "$(OwS(B" "$(OwZ(B" "$(Ow^(B" "$(Owa(B" "$(Pp=(B" "$(Owi(B" "$(DK.(B" "$(Owo(B" "$(PpW(B" "$(DKf(B" "$(Owy(B" "$(Ow{(B" "$(Ow}(B"
+    "$(DKn(B" "$(Ox!(B" "$(DKy(B" "$(Ox&(B" "$(Ox((B" "$(DL-(B" "$(Ox+(B" "$(Ox3(B" "$(Ox8(B" "$(Ox;(B" "$(OxG(B" "$(OxJ(B" "$ATm(B" "$(Pqo(B"
+    "$(Oxc(B" "$(Oxa(B" "$(Oxd(B" "$B".(B" "$(Oxr(B" "$(P#D(B" "$(PrC(B" "$(Oy"(B" "$(PrF(B" "$(DOm(B" "$(Pr^(B" "$B".(B" "$(Oy<(B" "$(Oy=(B"
+    "$(Prg(B" "$(OyA(B" "$(Prj(B" "$(Ps9(B" "$(Ps:(B" "$B".(B" "$(OyX(B" "$(Oyc(B" "$B".(B" "$(Oz"(B" "$(Oz$(B" "$(PtG(B" "$(Oz((B" "$(Oz,(B"
+    "$(Oz5(B" "$(Oz9(B" "$(DU.(B" "$B".(B" "$(Ozl(B" "$(Ozm(B" "$(Pv3(B" "$(Oz}(B" "$(DXA(B" "$(O{((B" "$(O{/(B" "$(Pvq(B" "$(O{8(B" "$(DYQ(B"
+    "$(O{:(B" "$(O{@(B" "$(Pw8(B" "$(PwE(B" "$(I[)(B" "$(O{m(B" "$(O{}(B" "$(O|"(B" "$(O|((B" "$(O|)(B" "$(Px`(B" "$(O|+(B" "$(O|.(B" "$(O|-(B"
+    "$(D^K(B" "$(Pxo(B" "$(Py0(B" "$(O|:(B" "$(O|>(B" "$A8O(B" "$B".(B" "$(D`Y(B" "$(Pyn(B" "$B".(B" "$(Dab(B" "$(O|g(B" "$(O|j(B" "$(O|l(B"
+    "$(O|p(B" "$(PzN(B" "$(O||(B" "$(Dc)(B" "$(O}"(B" "$(PzR(B" "$(O|~(B" "$(O}!(B" "$(Dc<(B" "$(O}%(B" "$(PzT(B" "$(O}((B" "$(O}*(B" "$(O})(B"
+    "$(Pz\(B" "$(Pz_(B" "$(Pz](B" "$(O}'(B" "$(Pzc(B" "$(Pzo(B" "$(Dcq(B" "$(O}-(B" "$(Pz|(B" "$(Pzy(B" "$(Pzz(B" "$(Pzx(B" "$B".(B" "$(Dd@(B"
+    "$(O}3(B" "$(O}2(B" "$(O}8(B" "$(O}7(B" "$(P{$(B" "$B".(B" "$(P{)(B" "$(O}4(B" "$(P{((B" "$(P{%(B" "$(O}?(B" "$(P{0(B" "$(De3(B" "$(O}C(B"
+    "$(O}D(B" "$(DeP(B" "$(Deb(B" "$(P{M(B" "$(Dek(B" "$(Gbg(B" "$(O}](B" "$B".(B" "$(O}^(B" "$(P{l(B" "$(O}f(B" "$(O}g(B" "$(Dg.(B" "$(O}h(B"
+    "$(O}j(B" "$(I*~(B" "$(P{|(B" "$(O~!(B" "$(O~%(B" "$B".(B" "$B".(B" "$(Dh](B" "$B".(B" "$(O~+(B" "$(O~3(B" "$(J6-(B" "$(P}2(B" "$(O~D(B"
+    "$(O~C(B" "$(O~G(B" "$(P}J(B" "$(Djj(B" "$(O~O(B" "$(O~^(B" "$(P~4(B" "$B".(B" "$(P~O(B" "$(O~r(B"
+    "$(O,5(B" "$(O,6(B" "$(O,7(B" "$(O,8(B" "$(O,9(B" "$(O,:(B" "$(O,;(B" "$(O,<(B" "$(O,=(B" "$(O,>(B" "$B"L(B" "$(O)%(B" "$(O"/(B" "$(O"0(B")
+  "*Windows$B$N5!<o0MB8J8;z$NI=<($K;H$&J8;zNs$N%j%9%H!#(B")
 
-(defvar izonmoji-mac-replace-list
+(defvar izonmoji-mac-display-list
   '("$(O-!(B" "$(O-"(B" "$(O-#(B" "$(O-$(B" "$(O-%(B" "$(O-&(B" "$(O-'(B" "$(O-((B" "$(O-)(B" "$(O-*(B"
     "$(O-+(B" "$(O-,(B" "$(O--(B" "$(O-.(B" "$(O-/(B" "$(O-0(B" "$(O-1(B" "$(O-2(B" "$(O-3(B" "$(O-4(B"
     "(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)"
@@ -141,27 +194,7 @@
     "$(O-s(B" "$(O-x(B" "$(O-y(B"
     "$(O-`(B" "$(O-a(B"
     "$(O$t(B" "$(O'r(B" "$(O's(B" "$(O't(B" "$(O'u(B")
-  "*Strings used to visualize Macintosh izonmoji.")
-
-(defvar izonmoji-win-face 'izonmoji-win-face
-  "*Symbol face used to visualize Windows izonmoji.")
-
-(defvar izonmoji-mac-face 'izonmoji-mac-face
-  "*Symbol face used to visualize Macintosh izonmoji.")
-
-(defface izonmoji-win-face
-  '((((class color) (type tty)) (:foreground "cyan"))
-    (((class color) (background light)) (:foreground "Aquamarine4"))
-    (((class color) (background dark))  (:foreground "Aquamarine3"))
-    (t (:underline t)))
-  "Face used to visualize Windows izonmoji.")
-
-(defface izonmoji-mac-face
-  '((((class color) (type tty)) (:foreground "magenta"))
-    (((class color) (background light)) (:foreground "pink4"))
-    (((class color) (background dark))  (:foreground "pink3"))
-    (t (:underline t)))
-  "Face used to visualize Macintosh izonmoji.")
+  "*Mac$B$N5!<o0MB8J8;z$NI=<($K;H$&J8;zNs$N%j%9%H!#(B")
 
 (defun izonmoji-make-char-list (i js je)
   (let ((j js) list)
@@ -174,14 +207,16 @@
 ;; (split-char (decode-sjis-char (hexl-hex-string-to-integer "8740")))
 (defvar izonmoji-win-chars-list
   (append
-   (izonmoji-make-char-list  45  33  52) ;$B4]IU$-?t;z(B
-   (izonmoji-make-char-list  45  53  62) ;$B%m!<%^?t;z(B($BBgJ8;z(B)
-   (izonmoji-make-char-list 124 113 122) ;$B%m!<%^?t;z(B($B>.J8;z(B)
+   (izonmoji-make-char-list  45  33  62) ;$B4]IU$-?t;z(B + $B%m!<%^?t;z(B($BBgJ8;z(B)
    (izonmoji-make-char-list  45  64  86) ;$BC10L(B
-   (izonmoji-make-char-list  45  95 111) ;$B859f$J$I(B
-   (izonmoji-make-char-list  45 112 124) ;$B?t3X5-9f(B
+   (izonmoji-make-char-list  45  95 124) ;$B859f!"?t3X5-9f$J$I(B
+   (izonmoji-make-char-list 121  33 126) ;$B4A;z(B
+   (izonmoji-make-char-list 122  33 126)
+   (izonmoji-make-char-list 123  33 126)
+   (izonmoji-make-char-list 124  33 110)
+   (izonmoji-make-char-list 124 113 126) ;$B%m!<%^?t;z(B($B>.J8;z(B)
    )
-  "*Windows izonmoji.")
+  "*Windows$B$N5!<o0MB8J8;z%j%9%H!#(B")
 
 (defvar izonmoji-mac-chars-list
   (append
@@ -208,10 +243,9 @@
    (izonmoji-make-char-list  47  73  73) ;$B$&!+(B
    (izonmoji-make-char-list  47  75  78) ;$B%o!+(B
    )
-  "*Macintosh izonmoji.")
+  "*Mac$B$N5!<o0MB8J8;z%j%9%H!#(B")
 
-(defvar izonmoji-mode-hook nil
-  "*Hook run after izonmoji visualization.")
+(defvar izonmoji-mode-hook nil "*$B5!<o0MB8J8;z$rI=<($7$?8e$K8F$P$l$k%U%C%/!#(B")
 
 ;; Internal variables
 
@@ -222,10 +256,9 @@
 (make-variable-buffer-local 'izonmoji-backuped-display-table)
 
 (defun izonmoji-mode (&optional arg)
-  "Toggle izonmoji visualization.
-If ARG is nil, toggle izonmoji visualization.
-If ARG is a number and is greater than zero, turn on visualization; otherwise,
-turn off visualization."
+  "$B5!<o0MB8J8;zI=<($r%H%0%k!#(B
+ARG $B$,(B non-nil $B$N>l9g!"(B1$B0J>e$N?t$J$i5!<o0MB8J8;z$rI=<(!#(B
+$B$=$l0J30$J$i5!<o0MB8J8;zI=<($r$d$a$k!#(B"
   (interactive "P")
   (if (if arg
 	  (> (prefix-numeric-value arg) 0)
@@ -234,10 +267,10 @@ turn off visualization."
     (izonmoji-mode-off)))
 
 (defun izonmoji-mode-on (&optional reverse win-face mac-face)
-  "Turn on visualization."
+  "$B5!<o0MB8J8;z$rI=<((B"
   (interactive "P")
   (let ((priority (reverse izonmoji-priority-list))
-	from to table face-bits)
+	from to table)
     (when reverse
       (setq priority (nreverse priority)))
     (unless izonmoji-mode
@@ -246,53 +279,64 @@ turn off visualization."
 	(let* ((ctable (specifier-instance current-display-table))
 	       (len (- (1+ (apply 'max (append izonmoji-win-chars-list
 					       izonmoji-mac-chars-list)))
-		       (length ctable))))
+		       (length ctable)))
+	       face glyph)
 	  (setq izonmoji-backuped-display-table (copy-sequence ctable))
 	  (if (> len 0)
 	      (setq table (vconcat ctable (make-vector len nil)))
-	    (setq table ctable)))
-	(while priority
-	  (cond
-	   ((eq (car priority) 'win)
-	    (setq from izonmoji-win-chars-list
-		  to   izonmoji-win-replace-list))
-	   ((eq (car priority) 'mac)
-	    (setq from izonmoji-mac-chars-list
-		  to   izonmoji-mac-replace-list)))
-	  (setq priority (cdr priority))
-	  (while (and from to)
-	    (aset table (car from) (car to))
-	    (setq from (cdr from) to (cdr to))))
-	(set-specifier current-display-table table (current-buffer)))
+	    (setq table ctable))
+	  (while priority
+	    (cond
+	     ((eq (car priority) 'win)
+	      (setq from izonmoji-win-chars-list
+		    to   izonmoji-win-display-list
+		    face (or win-face izonmoji-win-face 'default)))
+	     ((eq (car priority) 'mac)
+	      (setq from izonmoji-mac-chars-list
+		    to   izonmoji-mac-display-list
+		    face (or mac-face izonmoji-mac-face 'default))))
+	    (setq priority (cdr priority))
+	    (while (and from to)
+	      (if (eq face 'default)
+		  ;; face $B$,(B 'default $B$N$H$-$O!"$=$N>l=j$G$N(B face $B$K$J$k$h$&$K(B
+		  (aset table (car from) (car to))
+		(setq glyph (make-glyph (car to)))
+		(set-glyph-face glyph face)
+		(aset table (car from) glyph))
+	      (setq from (cdr from) to (cdr to))))
+	  (set-specifier current-display-table table (current-buffer))))
        (t				;GNU Emacs
-	(setq izonmoji-backuped-display-table
-	      (copy-sequence buffer-display-table)
-	      table (or buffer-display-table (make-display-table)))
-	(while priority
-	  (cond
-	   ((eq (car priority) 'win)
-	    (setq from izonmoji-win-chars-list
-		  to   izonmoji-win-replace-list
-		  face-bits (ash (face-id (or win-face izonmoji-win-face))
-				 19)))
-	   ((eq (car priority) 'mac)
-	    (setq from izonmoji-mac-chars-list
-		  to   izonmoji-mac-replace-list
-		  face-bits (ash (face-id (or mac-face izonmoji-mac-face))
-				 19))))
-	  (setq priority (cdr priority))
-	  (while (and from to)
-	    (aset table (car from)
-		  (apply 'vector (mapcar
-				  (lambda (ch) (logior ch face-bits))
-				  (car to))))
-	    (setq from (cdr from) to (cdr to))))
-	(setq buffer-display-table table))))
+	(let (face-bits)
+	  (setq izonmoji-backuped-display-table
+		(copy-sequence buffer-display-table)
+		table (or buffer-display-table (make-display-table)))
+	  (while priority
+	    (cond
+	     ((eq (car priority) 'win)
+	      (setq from izonmoji-win-chars-list
+		    to   izonmoji-win-display-list
+		    face-bits (ash (face-id
+				    (or win-face izonmoji-win-face 'default))
+				   19)))
+	     ((eq (car priority) 'mac)
+	      (setq from izonmoji-mac-chars-list
+		    to   izonmoji-mac-display-list
+		    face-bits (ash (face-id
+				    (or mac-face izonmoji-mac-face 'default))
+				   19))))
+	    (setq priority (cdr priority))
+	    (while (and from to)
+	      (aset table (car from)
+		    (apply 'vector (mapcar
+				    (lambda (ch) (logior ch face-bits))
+				    (car to))))
+	      (setq from (cdr from) to (cdr to))))
+	  (setq buffer-display-table table)))))
     (setq izonmoji-mode t)
     (run-hooks 'izonmoji-mode-hook)))
 
 (defun izonmoji-mode-off (&optional initialize)
-  "Turn on visualization."
+  "$B5!<o0MB8J8;zI=<($r$d$a$k(B"
   (interactive "P")
   (when initialize
     (setq izonmoji-mode t

@@ -1,3 +1,10 @@
+2002-11-11  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (izonmoji-mode-on): XEmacs でも
+	izonmoji-{win,mac}-face を使うように。
+
+	* navi2ch-migemo.el (toplevel): euc-jp から iso-2022-jp に。
+
 2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* izonmoji-mode.el (toplevel): 設定例に

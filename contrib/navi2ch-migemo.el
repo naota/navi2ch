@@ -28,23 +28,23 @@
 ;;; Code:
 (provide 'navi2ch-migemo)
 
-;; migemo ¤¬¤Ê¤¯¤Æ¤â¥³¥ó¥Ñ¥¤¥ë¤Ç¤­¤ë¤è¤¦¤Ë¡£
+;; migemo $B$,$J$/$F$b%3%s%Q%$%k$G$-$k$h$&$K!#(B
 (eval '(require 'migemo))
 
 (require 'navi2ch-search)
 
 (defvar navi2ch-migemo-enable t
-  "*¸¡º÷¥Ñ¥¿¡¼¥ó¤Ëmigemo¤òÅ¬ÍÑ¤¹¤ë¤«¤É¤¦¤«¡£")
+  "*$B8!:w%Q%?!<%s$K(Bmigemo$B$rE,MQ$9$k$+$I$&$+!#(B")
 
 (defadvice navi2ch-search-board-subject-regexp
   (before navi2ch-migemo-search-board-subject-regexp activate)
-  "¸¡º÷¥Ñ¥¿¡¼¥ó¤Ëmigemo¤òÅ¬ÍÑ¤¹¤ë¡£"
+  "$B8!:w%Q%?!<%s$K(Bmigemo$B$rE,MQ$9$k!#(B"
   (if navi2ch-migemo-enable
       (ad-set-arg 1 (migemo-get-pattern (ad-get-arg 1)))))
 
 (defadvice navi2ch-search-article-regexp
   (before navi2ch-migemo-search-article-regexp activate)
-  "¸¡º÷¥Ñ¥¿¡¼¥ó¤Ëmigemo¤òÅ¬ÍÑ¤¹¤ë¡£"
+  "$B8!:w%Q%?!<%s$K(Bmigemo$B$rE,MQ$9$k!#(B"
   (if navi2ch-migemo-enable
       (ad-set-arg 1 (migemo-get-pattern (ad-get-arg 1)))))
 
