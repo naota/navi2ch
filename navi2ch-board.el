@@ -317,21 +317,30 @@
 	     (concat "("
 		     (format "%4s" res)
 		     (and navi2ch-board-insert-subject-with-diff
-			  (concat "/"
-				  (if last
-				      (substring
-				       (format "   +%d"
-					       (- (string-to-number res) last))
-				       -5)
-				    "    -")))
+			  (concat
+			   "/"
+			   (if last
+			       (navi2ch-ifxemacs
+				   (format "%+5d"
+					   (- (string-to-number res) last))
+				 (if (>= (string-to-number res) last)
+				     (substring
+				      (format "   +%d"
+					      (- (string-to-number res) last))
+				      -5)
+				   (format "%5d"
+					   (- (string-to-number res) last))))
+			     "    -")))
 		     (and navi2ch-board-insert-subject-with-unread
-			  (concat "/"
-				  (if read
-				      (substring
-				       (format "   Δ%d"
-					       (- (string-to-number res) read))
-				       -5)
-				    "     -")))
+			  (concat
+			   "/"
+			   (if read
+			       (substring
+				(format "   Δ%d"
+					(max 0
+					     (- (string-to-number res) read)))
+				-5)
+			     "     -")))
 		     ")"))
 	   (cond ((and navi2ch-board-check-updated-article-p
 		       (setq updated

@@ -1,3 +1,8 @@
+2003-06-14  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): スレのレス数が
+	減った場合の増分・未読レス数表示に対応。
+
 2003-06-13  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-insert-subjects): 未読レス数は
