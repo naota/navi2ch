@@ -17,7 +17,7 @@
 ;;
 (defvar gikope-aa-location-alist '()
   "ギコペ用データファイルの名称と位置を保存する alist")
-(defvar gikope-aa-buffer nil
+(defvar gikope-aa-buffer "*gikope*"
   "ギコペ用データファイルを読みこんだバッファ")
 (defvar gikope-aa-history nil
   "gikope-copy-to-killring-aa 用ヒストリ")
@@ -63,8 +63,10 @@
        start
        end)
     (save-excursion
-      (setq gikope-aa-buffer (find-file-noselect-as-coding-system gikope-aa-file-coding gikope-aa-file))
-      (set-buffer gikope-aa-buffer)
+      (set-buffer (get-buffer-create gikope-aa-buffer))
+      (erase-buffer)
+      (let ((coding-system-for-read gikope-aa-file-coding))
+	(insert-file-contents gikope-aa-file))
       (beginning-of-buffer)
       (setq buffer-read-only t)
       (while (re-search-forward gikope-aa-begin-regex nil t)

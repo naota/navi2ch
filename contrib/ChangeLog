@@ -1,3 +1,10 @@
+2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* gikope.el (gikope-aa-buffer): バッファ名に変更。
+	(gikope-parse-aa): find-file-noselect-as-coding-system を使わない
+	ように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/285 を当てた。
+
 2002-06-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-migemo.el (toplevel): バイトコンパイル時に migemo が必要
