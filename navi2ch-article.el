@@ -766,16 +766,20 @@ START, END, NOFIRST で範囲を指定する"
   (let ((slot (assq 'subject navi2ch-article-message-filter-cache)))
     (if slot
 	(cdr slot)
-      (let ((result (when navi2ch-article-message-filter-by-subject-alist
-		      (navi2ch-article-message-filter-subr
-		       navi2ch-article-message-filter-by-subject-alist
-		       (cdr (assq 'subject navi2ch-article-current-article))))))
-	(when navi2ch-article-use-message-filter-cache
-	  (setq navi2ch-article-message-filter-cache
-		(navi2ch-put-alist 'subject
-				   result
-				   navi2ch-article-message-filter-cache)))
-	result))))
+      (let ((subject (or (cdr (assq 'subject navi2ch-article-current-article))
+			 (and (= (cdr (assq 'number alist)) 1)
+			      (cdr (assq 'subject alist))))))
+	(when subject
+	  (let ((result (when navi2ch-article-message-filter-by-subject-alist
+			  (navi2ch-article-message-filter-subr
+			   navi2ch-article-message-filter-by-subject-alist
+			   subject))))
+	    (when navi2ch-article-use-message-filter-cache
+	      (setq navi2ch-article-message-filter-cache
+		    (navi2ch-put-alist 'subject
+				       result
+				       navi2ch-article-message-filter-cache)))
+	    result))))))
 
 (defun navi2ch-article-message-filter-subr (rules string)
   (catch 'loop

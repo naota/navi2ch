@@ -1,3 +1,11 @@
+2003-03-01  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-by-subject): 
+	navi2ch-article-current-article にスレタイが入っていない場合を
+	考えてなかったバグを修正。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/17
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/20
+
 2003-02-28  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode): buffer-disable-undo.
