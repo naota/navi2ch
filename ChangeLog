@@ -1,5 +1,12 @@
 2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
+	マークの挙動が不審だそうなので、save-excursion してみた。ついでに
+	save-match-data もしとくか。
+	(navi2ch-article-help-echo): 同上。
+
+2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
+
 	別ディレクトリで configure した時の挙動を変更。
 
 	make 中にシンボリックリンクを張ると、ポータブルに依存関係を解決で

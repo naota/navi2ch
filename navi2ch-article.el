@@ -1404,18 +1404,22 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
-  (let ((text (navi2ch-article-get-link-text point)))
-    (if (stringp text)
-	(message "%s" text))))
+  (save-match-data
+    (save-excursion
+      (let ((text (navi2ch-article-get-link-text point)))
+	(if (stringp text)
+	    (message "%s" text))))))
 
 (defun navi2ch-article-help-echo (window-or-extent &optional object position)
-  (navi2ch-ifxemacs
-      (when (extentp window-or-extent)
-	(setq object (extent-object window-or-extent))
-	(setq position (extent-start-position window-or-extent))))
-  (when (buffer-live-p object)
-    (with-current-buffer object
-      (navi2ch-article-get-link-text position))))
+  (save-match-data
+    (save-excursion
+      (navi2ch-ifxemacs
+	  (when (extentp window-or-extent)
+	    (setq object (extent-object window-or-extent))
+	    (setq position (extent-start-position window-or-extent))))
+      (when (buffer-live-p object)
+	(with-current-buffer object
+	  (navi2ch-article-get-link-text position))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
