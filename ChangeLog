@@ -1,3 +1,11 @@
+2002-09-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-select-current-link):
+	help-echo プロパティが存在しないときは
+	navi2ch-change-text-property を呼ばないように。
+	(navi2ch-article-fetch-link): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/858
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/860
 
 2002-09-03  mami  <mami@users.sourceforge.net>
 

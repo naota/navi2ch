@@ -913,10 +913,11 @@ state はあぼーんされてれば aborn というシンボル。
                           (navi2ch-article-url-to-article prop))
                       (not browse-p))
 		 (progn
-		   (let ((buffer-read-only nil))
-		     (navi2ch-change-text-property (point)
-						   'help-echo
-						   (function navi2ch-article-help-echo)))
+		   (and (get-text-property (point) 'help-echo)
+			(let ((buffer-read-only nil))
+			  (navi2ch-change-text-property (point)
+							'help-echo
+							(function navi2ch-article-help-echo))))
 		   (navi2ch-goto-url prop))
                (navi2ch-browse-url-internal prop))))
           ((setq prop (get-text-property (point) 'content))
@@ -1464,10 +1465,11 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	 (let ((article (navi2ch-article-url-to-article url))
 	       (board (navi2ch-board-url-to-board url)))
 	   (when article
-	     (let ((buffer-read-only nil))
-	       (navi2ch-change-text-property (point)
-					     'help-echo
-					     (function navi2ch-article-help-echo)))
+	     (and (get-text-property (point) 'help-echo)
+		  (let ((buffer-read-only nil))
+		    (navi2ch-change-text-property (point)
+						  'help-echo
+						  (function navi2ch-article-help-echo))))
 	     (and (navi2ch-article-fetch-article board article force)
 		  (navi2ch-bm-remember-fetched-article board article)))))))
 
