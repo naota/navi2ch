@@ -1,5 +1,7 @@
 2003-03-01  SAITO Takuya  <tabmore@users.sourceforge.net>
 
+	XEmacsでもモードラインにオン/オフライン状態を表す画像を表示。
+
 	* navi2ch-xmas.el: 新規ファイル。
 
 	* Makefile.am (lisp_LISP): navi2ch-xmas.el 追加。
