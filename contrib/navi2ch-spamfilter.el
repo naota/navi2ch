@@ -5,7 +5,7 @@
 ;; Author: http://pc.2ch.net/test/read.cgi/unix/1065246418/38
 ;; Keywords: 2ch, network, spam
 
-;; (LICENCE TERMS TO BE FILLED)
+;; (LICENSE TERMS TO BE FILLED)
 
 ;;; Commentary:
 
@@ -30,6 +30,21 @@
 
 (require 'cl)
 (require 'spamfilter)
+(require 'navi2ch)
+
+(defconst navi2ch-spamf-preferred-major 1)
+(defconst navi2ch-spamf-preferred-minor 9)
+
+(unless (and (boundp 'spamf-cvs-id)
+	     (string-match "\\([0-9]+\\)\\.\\([0-9]+\\)" spamf-cvs-id)
+	     (let ((major (string-to-number (match-string 1 spamf-cvs-id)))
+		   (minor (string-to-number (match-string 2 spamf-cvs-id))))
+	       (or (> major navi2ch-spamf-preferred-major)
+		   (and (= major navi2ch-spamf-preferred-major)
+			(>= minor navi2ch-spamf-preferred-minor)))))
+  (error "Use spamfilter.el revision %d.%d or later."
+	 navi2ch-spamf-preferred-major
+	 navi2ch-spamf-preferred-minor))
 
 (defvar navi2ch-article-bayesian-save-file-name
   (expand-file-name "spamfilter" navi2ch-directory))
@@ -51,10 +66,14 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 `navi2ch-article-register-to-corpus' $B$b;2>H!#(B")
 
 (defvar navi2ch-spamf-good-corpus
-  (make-spamf-corpus :table (make-hash-table :test #'eq) :message-count 0))
+  (make-spamf-corpus :name "navi2ch-spamf-good-corpus"
+		     :table (make-hash-table :test #'eq)
+		     :message-count 0))
 
 (defvar navi2ch-spamf-bad-corpus
-  (make-spamf-corpus :table (make-hash-table :test #'eq) :message-count 0))
+  (make-spamf-corpus :name "navi2ch-spamf-bad-corpus"
+		     :table (make-hash-table :test #'eq)
+		     :message-count 0))
 
 (dolist (map (list navi2ch-article-mode-map navi2ch-popup-article-mode-map))
   (define-key map "\C-c\C-g"
@@ -121,22 +140,24 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
      (navi2ch-article-tokenize-current-message))))
 
 (defsubst navi2ch-article-spam-probability (token)
-  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
-	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
-    (spamf-sum-spam-probability
-     (mapcar #'cdr (spamf-cutoff-words token spamf-cutoff-words-limit)))))
+  (spamf-sum-spam-probability
+   (mapcar #'cdr (spamf-cutoff-words token
+				     spamf-cutoff-words-limit
+				     navi2ch-spamf-good-corpus
+				     navi2ch-spamf-bad-corpus))))
 
 (defun navi2ch-article-show-spam-probability (&optional prefix)
   "$B%l%9$N(B spam $B$C$]$5$rI=<($9$k!#(B"
   (interactive "P")
   (let* ((token (navi2ch-article-tokenize-current-message))
-	 (prob (navi2ch-article-spam-probability token))
-	 (spamf-good-corpus navi2ch-spamf-good-corpus)
-	 (spamf-bad-corpus navi2ch-spamf-bad-corpus))
+	 (prob (navi2ch-article-spam-probability token)))
     (if prefix
 	(with-output-to-temp-buffer "*spam probability*"
 	  (princ (format "Spam probability: %f\n\n" prob))
-	  (dolist (pair (spamf-cutoff-words token spamf-cutoff-words-limit))
+	  (dolist (pair (spamf-cutoff-words token
+					    spamf-cutoff-words-limit
+					    navi2ch-spamf-good-corpus
+					    navi2ch-spamf-bad-corpus))
 	    (prin1 (cons (symbol-name (car pair)) (cdr pair)))
 	    (princ "\n")))
       (message "Spam probability: %f" prob))))
@@ -149,18 +170,14 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 
 (defun navi2ch-article-save-corpus ()
   (message "Saving corpus file...")
-  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
-	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
-    (spamf-save-corpus navi2ch-article-bayesian-save-file-name))
+  (spamf-save-corpus navi2ch-article-bayesian-save-file-name
+		     navi2ch-spamf-good-corpus
+		     navi2ch-spamf-bad-corpus)
   (message "Saving corpus file...done"))
 
 (defun navi2ch-article-load-corpus ()
   (message "Loading corpus file...")
-  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
-	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
-    (spamf-load-corpus navi2ch-article-bayesian-save-file-name)
-    (setq navi2ch-spamf-good-corpus spamf-good-corpus
-	  navi2ch-spamf-bad-corpus spamf-bad-corpus))
+  (spamf-load-corpus navi2ch-article-bayesian-save-file-name)
   (message "Loading corpus file...done"))
 
 (defun navi2ch-article-register-to-corpus ()

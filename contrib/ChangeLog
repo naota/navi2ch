@@ -1,3 +1,18 @@
+2003-10-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	spamfilter.el 0.10 に対応。コーパスファイルのフォーマットが
+	変更になってますので各自変換してください。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/95
+	* navi2ch-spamfilter.el (navi2ch-spamf-preferred-major): 新変数。
+	(navi2ch-spamf-preferred-minor): 新変数。
+	(toplevel): 上記変数に応じて spamf-cvs-id をチェック。
+	(navi2ch-spamf-good-corpus): spamfilter 0.10 に対応。
+	(navi2ch-spamf-bad-corpus): 同上。
+	(navi2ch-article-spam-probability): 同上。
+	(navi2ch-article-show-spam-probability): 同上。
+	(navi2ch-article-save-corpus): 同上。
+	(navi2ch-article-load-corpus): 同上。
+
 2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-spamfilter.el (navi2ch-spamf-good-corpus): 新変数。
