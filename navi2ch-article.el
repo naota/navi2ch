@@ -804,37 +804,47 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
     (goto-char (cdr (assq 'point (navi2ch-article-get-message num))))
     (recenter 0)))
 
-(defun navi2ch-article-goto-number-or-board (arg)
-  "arg の位置に移動するか arg な板に移動する"
-  (interactive
-   (let (alist)
-     (setq alist (mapcar
-		  (lambda (x) (cons (cdr (assq 'id x)) x))
-		  (navi2ch-list-get-board-name-list
-		   navi2ch-list-category-list)))
-     (list (completing-read
-	    (concat "input number or board"
-		    (format "(%s)" (cdr (assq 'id navi2ch-article-current-board)))
-		    ": ")
-	    alist nil nil))))
-  (let ((num (string-to-number arg)))
-    (if (> num 0)
-	(navi2ch-article-goto-number num t t)
-      (let (alist board str)
-	(setq alist (mapcar
-		     (lambda (x) (cons (cdr (assq 'id x)) x))
-		     (navi2ch-list-get-board-name-list
-		      navi2ch-list-category-list)))
-	(setq str (try-completion arg alist))
-	(when (eq str t) (setq str arg))
-	(setq board
-	      (or (cdr (assoc str alist))
-		  navi2ch-article-current-board))
-	(when (eq (navi2ch-get-major-mode navi2ch-board-buffer-name)
-		  'navi2ch-board-mode)
-	  (navi2ch-board-save-info navi2ch-board-current-board))
-	(navi2ch-article-exit)
- 	(navi2ch-board-select-board board)))))
+(defun navi2ch-article-goto-number-or-board ()
+  "入力された数字の位置に移動するか、入力された板を表示する。
+名前が数字ならばデフォルトはその名前の数字。"
+  (interactive)
+  (let (default alist ret)
+    (setq default 
+	  (let ((from (cdr (assq 'name 
+				 (navi2ch-article-get-message 
+				  (navi2ch-article-get-current-number))))))
+	    (or (and (string-match "[0-9０-９]+" from)
+		     (japanese-hankaku (match-string 0 from)))
+		nil)))
+    (setq alist (mapcar
+		 (lambda (x) (cons (cdr (assq 'id x)) x))
+		 (navi2ch-list-get-board-name-list
+		  navi2ch-list-category-list)))
+    (setq ret (completing-read
+	       (concat "input number or board"
+		       (and default (format "(%s)" default))
+		       ": ")
+	       alist nil nil))
+    (setq ret (if (string= ret "") default ret))
+
+    (if ret
+	(let ((num (string-to-number ret)))
+	  (if (> num 0)
+	      (navi2ch-article-goto-number num t t)
+	    (let (board board-id)
+	      (setq board-id (try-completion ret alist))
+	      (and (eq board-id t) (setq board-id ret))
+	      (setq board (cdr (assoc board-id alist)))
+	      (if board
+		  (progn
+		    (when (eq (navi2ch-get-major-mode
+			       navi2ch-board-buffer-name)
+			      'navi2ch-board-mode)
+		      (navi2ch-board-save-info navi2ch-board-current-board))
+		    (navi2ch-article-exit)
+		    (navi2ch-bm-select-board board))
+		(error "don't move")))))
+      (error "don't move"))))
   
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM 番目のレスに移動"
