@@ -1635,11 +1635,12 @@ Meadow + Cygwin でうまく動かないことがあるんだけど。
 @item A.
 それは多分２ちゃんねる側の問題。板の移転があったのかも。
 @file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
-最新の板一覧
-@uref{http://isweb36.infoseek.co.jp/computer/hima2908/bbsmenu.html}
-とか
-@uref{http://www.onpuch.jp/board/bdleft.html}
-を @code{navi2ch-list-bbstable-url} に設定するといいかも。
+最新の板一覧 (◆AzLuckyc さんの
+@uref{http://azlucky.hp.infoseek.co.jp/2chboard/bbsmenu.html}
+とか、
+@uref{http://azlucky.hp.infoseek.co.jp/}
+の【 他のボード一覧配布先 】にあるものとか) を
+@code{navi2ch-list-bbstable-url} に設定するといいかも。
 
 @item Q.
 article を開くときに一画面で開いて欲しいんだけど。
