@@ -81,6 +81,7 @@
     (define-key map "A" 'navi2ch-article-add-global-bookmark)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "G" 'navi2ch-article-goto-board)
+    (define-key map "e" 'navi2ch-article-textize-article)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1591,6 +1592,36 @@ gunzip に通してから文字コードの推測を試みる。"
             (add-text-properties part-begin (point)
                                  '(hard t face navi2ch-article-base64-face))))))))
 
+(defun navi2ch-article-textize-article (&optional dir-or-file buffer)
+  (interactive)
+  (let* ((article navi2ch-article-current-article)
+	 (board navi2ch-article-current-board)
+	 (id (cdr (assq 'id board)))
+	 (subject (cdr (assq 'subject article)))
+	 (basename (format "%s_%s.txt" id (cdr (assq 'artid article))))
+	 dir file)
+    (and dir-or-file
+	 (file-directory-p dir-or-file)
+	 (setq dir dir-or-file))
+    (setq file
+	  (if (or (not dir-or-file)
+		  (and dir (interactive-p)))
+	      (expand-file-name
+	       (read-file-name "Write thread to file: " dir nil nil basename))
+	    (expand-file-name basename dir)))
+    (and buffer
+	 (save-excursion
+	   (set-buffer buffer)
+	   (goto-char (point-max))
+	   (insert (format "<a href=\"%s\">%s</a><br>\n" file subject))))
+    (when navi2ch-article-view-range
+      (setq navi2ch-article-view-range nil)
+      (navi2ch-article-redraw))
+    (let ((coding-system-for-write navi2ch-coding-system))
+      (navi2ch-write-region (point-min) (point-max)
+			    file))
+    (message "Wrote %s" file)))
+
 ;; shut up XEmacs warnings
 (eval-when-compile
   (defvar w32-start-process-show-window))
@@ -1736,8 +1767,6 @@ gunzip に通してから文字コードの推測を試みる。"
   (interactive)
   (navi2ch-article-delete-message 'hide 'delq
                                   "Cansel hide message"))
-
-
 
 (defun navi2ch-article-toggle-hide ()
   (interactive)

@@ -1,5 +1,13 @@
 2002-08-28  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-textize-article): 新関数。
+	navi2ch-bm-textize-article から分離。
+	(navi2ch-article-mode-map): navi2ch-article-textize-article を "e"
+	にバインド。
+
+	* navi2ch-board-misc.el (navi2ch-bm-textize-article):
+	上記 navi2ch-article-textize-article を使うように。
+
 	* navi2ch-head.el (navi2ch-head-get-head-txt): 
 	navi2ch-offline が t のときはファイルを取ってこないように。
 	insert-string を行ごとに分割。

@@ -415,32 +415,8 @@
     (when navi2ch-article-view-range
       (setq navi2ch-article-view-range nil)
       (navi2ch-article-redraw))
-    (let* ((article navi2ch-article-current-article)
-	   (board navi2ch-article-current-board)
-	   (id (cdr (assq 'id board)))
-	   (subject (cdr (assq 'subject article)))
-	   (basename (format "%s_%s.txt" id (cdr (assq 'artid article))))
-	   (dir nil) file)
-      (and dir-or-file
-	   (file-directory-p dir-or-file)
-	   (setq dir dir-or-file))
-      (setq file
-	    (if (or (not dir-or-file)
-		    (and dir (interactive-p)))
-		(expand-file-name
-		 (read-file-name "Write thread to file: " dir nil nil basename))
-	      (expand-file-name basename dir)))
-      (and buffer
-	   (save-excursion
-	     (set-buffer buffer)
-	     (goto-char (point-max))
-	     (insert (format "<a href=\"%s\">%s</a><br>\n" file subject))))
-      (let ((coding-system-for-write navi2ch-coding-system))
-	(navi2ch-write-region (point-min) (point-max)
-			      file))
-      (message "Wrote %s" file))
+    (navi2ch-article-textize-article dir-or-file buffer)
     (select-window window)))
-
 
 (defun navi2ch-bm-select-article-or-scroll (way &optional max-line)
   (let ((article (navi2ch-bm-get-article-internal
