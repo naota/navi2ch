@@ -1,3 +1,15 @@
+2002-07-24  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-splash-display-logo): image を読んでな
+	い場合は ascii が表示されてたので、emacs21 か xemacs の場合は t に
+	するように。
+
+	* navi2ch-splash.el (navi2ch-splash-logo-ascii): モナーの顔に。
+
+	* icons/navi2ch-logo.xpm, icons/navi2ch-logo.xbm
+	変えてみますた。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/590
+
 2002-07-24  mami  <mami@users.sourceforge.net>
 
 	書き込み失敗時のメッセージが化けてた。

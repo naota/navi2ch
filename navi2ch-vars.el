@@ -847,10 +847,10 @@ ask なら保存する前に質問する
 
 
 ;; Splash screen.
-(defcustom navi2ch-splash-display-logo (when (or (featurep 'xemacs)
-                                                 (featurep 'image)
-                                                 (featurep 'bitmap))
-                                         t)
+(defcustom navi2ch-splash-display-logo (and window-system
+					    (or navi2ch-on-emacs21
+						navi2ch-on-xemacs)
+					    t)
   "If it is T, show graphic logo in the startup screen.  You can set it to
 a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
   :type '(radio (const :tag "Off" nil)
