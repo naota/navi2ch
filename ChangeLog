@@ -1,5 +1,10 @@
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-util.el (navi2ch-read-only-string): まずってた。。
+
+2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	header field の read-only 化。
 	* navi2ch-message.el (navi2ch-message-insert-header): Subject とか
 	を read-only にしてみる。
 	header が終わる箇所に navi2ch-message-header-separator という
