@@ -660,14 +660,17 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
-;; '(("\\[FreeBSD-users-jp \\([0-9]+\\)\\]" .
-;;    "http://home.jp.freebsd.org/cgi-bin/showmail/FreeBSD-users-jp/\\1"))
+;; '(("\\[\\(FreeBSD-[a-z]+-jp\\) \\([0-9]+\\)\\]" .
+;;    "http://home.jp.freebsd.org/cgi-bin/showmail/\\1/\\2"))
 ;; とかすれば、URL じゃない物にもリンクを貼れる。
 (defcustom navi2ch-article-link-regexp-alist
   '(("<\\(UR[IL]:\\)?\\([^:>]+\\)>" . nil)
     ("<\\(UR[IL]:\\)?\\([a-z][-+.0-9a-z]*:[^>]*\\)>" . "\\2"))
   "*各要素の car を正規表現とし、マッチしたテキストに cdr へのリンクを張る。
+置換先に使える特殊文字については `replace-match' 等を参照。
 cdr が nil の場合はリンクを貼らない。
+cdr が関数の場合はマッチした文字列を引数として呼び出し、返却値が文字列
+の場合、それをリンクとする。
 リストの先頭を優先し、同じ文字列には一度だけマッチする。
 navi2ch-article-url-regexp より優先される。"
   :type '(repeat (cons (regexp :tag "マッチする正規表現")

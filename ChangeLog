@@ -1,3 +1,12 @@
+2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): cdr が関
+	数だった場合はその返却値を利用するように。
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): 上記変更に
+	ついて docstring 変更。
+	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/740>
+
 2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	ネットワーク接続に外部コマンドや自前関数を使えるようにしてみた。

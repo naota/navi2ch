@@ -461,7 +461,7 @@ START, END, NOFIRST で範囲を指定する"
   (let* ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
 	 (sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp))
 	 (number-func
-	  (lambda ()
+	  (lambda (match)
 	    (navi2ch-article-set-link-property-subr
 	     (match-beginning 0) (match-end 0)
 	     'number (navi2ch-match-string-no-properties (1+ pref-depth)))
@@ -472,14 +472,9 @@ START, END, NOFIRST で範囲を指定する"
 	       'number (navi2ch-match-string-no-properties (1+ sep-depth)))
 	      (goto-char (max (1+ (match-beginning 0)) (match-end 0))))))
 	 (url-func
-	  (lambda ()
-	    (let ((start (match-beginning 0))
-		  (end (match-end 0))
-		  (url (navi2ch-match-string-no-properties 0)))
-	      (when (string-match "^\\(h?t?tp\\)\\(s?:\\)" url)
-		(setq url (replace-match "http\\2" nil nil url)))
-	      (navi2ch-article-set-link-property-subr start end 'url url)
-	      (goto-char (max (1+ start) end)))))
+	  (lambda (url)
+	    (when (string-match "\\`\\(h?t?tp\\)\\(s?:\\)" url)
+	      (replace-match "http\\2" nil nil url))))
 	 (alist (navi2ch-regexp-alist-to-number-alist
 		 (append
 		  navi2ch-article-link-regexp-alist
@@ -491,17 +486,18 @@ START, END, NOFIRST で範囲を指定する"
 	 match rep)
     (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
       (setq rep (cdr match))
-      (cond ((functionp rep)
-	     (funcall rep))
-	    ((stringp rep)
-	     (let ((start (match-beginning 0))
-		   (end (match-end 0))
-		   (url (navi2ch-match-string-no-properties 0)))
-	       (when (string-match (concat "\\`" (car match) "\\'") url)
-		 (setq url (replace-match rep nil nil url))
-		 (navi2ch-article-set-link-property-subr
-		  start end 'url url))
-	       (goto-char (max (1+ start) end))))))))
+      (when (functionp rep)
+	(save-match-data
+	  (setq rep (funcall rep (navi2ch-match-string-no-properties 0)))))
+      (when (stringp rep)
+	(let ((start (match-beginning 0))
+	      (end (match-end 0))
+	      (url (navi2ch-match-string-no-properties 0)))
+	  (when (string-match (concat "\\`" (car match) "\\'") url)
+	    (setq url (replace-match rep nil nil url))
+	    (navi2ch-article-set-link-property-subr
+	     start end 'url url))
+	  (goto-char (max (1+ start) end)))))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))
