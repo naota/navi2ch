@@ -308,7 +308,10 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (when (and navi2ch-update-url
 	       (not (string= navi2ch-update-url ""))
 	       (not navi2ch-offline)
-	       (navi2ch-net-update-file navi2ch-update-url new)
+	       (condition-case ERR
+		   (navi2ch-net-update-file navi2ch-update-url new)
+		 (error (message "Auto-update failed: %s" ERR)
+			nil))
 	       (file-exists-p new)
 	       (or (not (file-exists-p navi2ch-update-file))
 		   (not (= (nth 7 (file-attributes navi2ch-update-file))
