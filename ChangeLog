@@ -1,3 +1,9 @@
+2002-02-01  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-ignore-errors): エラーメッセージを表
+	示できる場合は表示する。
+	(navi2ch-net-send-request): 念の為、delete-process を追加。
+
 2002-01-31  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el

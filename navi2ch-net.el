@@ -43,11 +43,13 @@
 (defmacro navi2ch-net-ignore-errors (&rest body)
   "BODY を評価し、その値を返す。
 BODY の評価中にエラー、quit が起こると nil を返す。"
-  `(condition-case nil
+  `(condition-case err
        ,(cons 'progn body)
      (error
       (ding)
-      (message "Error")
+      (if err
+	  (message "Error: %s" (error-message-string err))
+	(message "Error"))
       nil)
      (quit
       (ding)
@@ -92,6 +94,8 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
 	  (progn
 	    (message "reusing connection...")
 	    (navi2ch-net-get-content proc)) ; 前回のゴミを読み飛ばしておく
+	(if (processp proc)
+	    (delete-process proc))
 	(message "now connecting...")
 	(setq proc (open-network-stream navi2ch-net-connection-name
 					buf host port)))
