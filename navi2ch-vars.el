@@ -659,6 +659,11 @@ non-nil なら付加する。"
   :type 'string
   :group 'navi2ch)
 
+(defcustom navi2ch-auto-update t
+  "*起動時に`navi2ch-update-file'を更新するか。"
+  :type 'boolean
+  :group 'navi2ch)
+
 ;;; hooks
 (defvar navi2ch-hook nil)
 (defvar navi2ch-exit-hook nil)

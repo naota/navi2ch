@@ -1,3 +1,11 @@
+2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-auto-update): 新変数。
+
+	* navi2ch.el (navi2ch-update): 新関数。ユーザの確認なしでダウンロー
+	ドしたファイルを実行するのはさすがにアレなので、確認するようにした。
+	(navi2ch):上記関数を使うように。
+
 2002-01-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message-user-name):

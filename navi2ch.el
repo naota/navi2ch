@@ -56,14 +56,12 @@
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
-    (if (and navi2ch-update-url
-	     (not (string= navi2ch-update-url ""))
-	     (not navi2ch-offline))
-	(navi2ch-net-update-file navi2ch-update-url navi2ch-update-file))
     (when (file-exists-p navi2ch-update-file)
       (load-file navi2ch-update-file))
     (when (file-exists-p navi2ch-init-file)
       (load-file navi2ch-init-file))
+    (if navi2ch-auto-update
+	(navi2ch-update))
     (add-hook 'kill-emacs-hook 'navi2ch-save-status)
     (run-hooks 'navi2ch-load-status-hook)
     (setq navi2ch-init t)
@@ -283,6 +281,32 @@ SUSPEND が non-nil なら buffer を消さない"
 		 (navi2ch-list-get-board-name-list
 		  navi2ch-list-category-list)))
 	  (member host list)))))
-                      
+
+(defun navi2ch-update ()
+  "navi2ch-update.el をダウンロードして実行する。"
+  (interactive)
+  (let ((new (concat navi2ch-update-file ".new")))
+    (when (and navi2ch-update-url
+	       (not (string= navi2ch-update-url ""))
+	       (not navi2ch-offline)
+	       (navi2ch-net-update-file navi2ch-update-url new)
+	       (file-exists-p new)
+	       (or (not (file-exists-p navi2ch-update-file))
+		   (not (= (nth 7 (file-attributes navi2ch-update-file))
+			   (nth 7 (file-attributes new))))
+		   (not (string=
+			 (with-temp-buffer
+			   (insert-file-contents-literally navi2ch-update-file)
+			   (buffer-string))
+			 (with-temp-buffer
+			   (insert-file-contents-literally new)
+			   (buffer-string)))))
+	       (yes-or-no-p
+		"navi2ch-update.elが更新されました。保存して実行しますか? "))
+      (rename-file new navi2ch-update-file t)
+      (load navi2ch-update-file))
+    (if (file-exists-p new)
+	(delete-file new))))
+
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here
