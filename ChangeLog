@@ -10,6 +10,7 @@
 
 	* navi2ch-article.el (navi2ch-article-display-link-minibuffer): 
 	message を調整。
+	major-mode が navi2ch-article-mode のときだけ処理するように。
 
 2002-05-11    mami  <mami@users.sourceforge.net>
 
