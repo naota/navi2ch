@@ -1,5 +1,16 @@
 2002-01-26  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (toplevel): バッファローカルな変数を
+	make-variable-buffer-local した。
+	(navi2ch-article-view-article): navi2ch-article-mode にするのを
+	navi2ch-article-sync の後にした。(sync が失敗した場合に対処)
+	(navi2ch-article-view-article-from-file): 同上。(意味無いかも)
+	(navi2ch-article-mode): toplevel の変更に伴い make-local-variable
+	の多くを削除。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
+	navi2ch-article-mode と同様。
+
 	* navi2ch-net.el (navi2ch-net-update-file): func が nil を返した場
 	合もエラーメッセージを表示するだけにした。
 

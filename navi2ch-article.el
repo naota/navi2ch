@@ -139,6 +139,18 @@ last が最後からいくつ表示するか。
 ;; add hook
 (add-hook 'navi2ch-save-status-hook 'navi2ch-article-save-all-info)
 
+;; local variables
+(make-variable-buffer-local 'navi2ch-article-current-article)
+(make-variable-buffer-local 'navi2ch-article-current-board)
+(make-variable-buffer-local 'navi2ch-article-message-list)
+(make-variable-buffer-local 'navi2ch-article-point-stack)
+(make-variable-buffer-local 'navi2ch-article-poped-point-stack)
+(make-variable-buffer-local 'navi2ch-article-view-range)
+(make-variable-buffer-local 'navi2ch-article-from-file-p)
+(make-variable-buffer-local 'navi2ch-article-separator)
+(make-variable-buffer-local 'navi2ch-article-through-next-function)
+(make-variable-buffer-local 'navi2ch-article-through-previous-function)
+
 (defun navi2ch-article-get-url (board article)
   (let ((artid (cdr (assq 'artid article)))
 	(url (navi2ch-board-get-uri board)))
@@ -483,7 +495,6 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
 	       (> navi2ch-article-max-buffers 0))
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
-      (navi2ch-article-mode)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p nil)
@@ -494,6 +505,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
           (setq navi2ch-article-view-range
                 navi2ch-article-new-message-range)))
       (prog1 (navi2ch-article-sync force 'first number)
+	(navi2ch-article-mode)
 	(navi2ch-history-add navi2ch-article-current-board
 			     navi2ch-article-current-article)))))
 
@@ -511,7 +523,6 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
 	       (> navi2ch-article-max-buffers 0))
 	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
-      (navi2ch-article-mode)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p t)
@@ -521,7 +532,8 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
       (save-excursion
 	(setq navi2ch-article-message-list
 	      (navi2ch-article-sync-from-file file))
-	(navi2ch-article-set-mode-line)))))
+	(navi2ch-article-set-mode-line))
+      (navi2ch-article-mode))))
   
 (defun navi2ch-article-setup-menu ()
   (easy-menu-define navi2ch-article-mode-menu
@@ -536,15 +548,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (setq major-mode 'navi2ch-article-mode)
   (setq mode-name "Navi2ch Article")
   (setq buffer-read-only t)
-  (make-local-variable 'navi2ch-article-current-article)
-  (make-local-variable 'navi2ch-article-current-board)
-  (make-local-variable 'navi2ch-article-message-list)
-  (make-local-variable 'navi2ch-article-point-stack)
-  (make-local-variable 'navi2ch-article-poped-point-stack)
   (make-local-variable 'truncate-partial-width-windows)
-  (make-local-variable 'navi2ch-article-view-range)
-  (make-local-variable 'navi2ch-article-from-file-p)
-  (make-local-variable 'navi2ch-article-separator)
   (setq truncate-partial-width-windows nil)
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
