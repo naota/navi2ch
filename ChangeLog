@@ -1,3 +1,10 @@
+2002-12-18  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-exit): 1ペインのとき、リンク
+	をたどった後に exit したとき (buffer-list) 内の article buffer の
+	順序が変わってしまっていた。
+	変わらないように。
+
 2002-12-18  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-head.el (navi2ch-head-file-name): 新変数。

@@ -688,7 +688,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
         (progn
           (delete-windows-on buf)
           (kill-buffer buf))
-      (delete-windows-on buf))
+      (unless (eq (selected-window)
+		  (next-window (selected-window) 'never))
+	(delete-windows-on buf)))
     ;;  (bury-buffer navi2ch-article-buffer-name)
     (let ((board-win (get-buffer-window navi2ch-board-buffer-name))
 	  (board-buf (get-buffer navi2ch-board-buffer-name)))
