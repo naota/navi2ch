@@ -1,3 +1,10 @@
+2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-sync): first のとき old-list に設
+	定するリストを後の方にある navi2ch-list-category-list への設定方法
+	と同じにしてみた。(navi2ch-list-sync-update-on-boot が t だと既存
+	の板も常に A になってたため。)
+
 2002-01-19  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-list.el 
