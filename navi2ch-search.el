@@ -113,6 +113,8 @@
           (let (rep)
             (with-temp-buffer
               (navi2ch-insert-file-contents file)
+              (while (re-search-forward "  +" nil t) (replace-match " "))
+              (navi2ch-replace-html-tag-with-buffer)
               (goto-char (point-min))
               (setq rep (navi2ch-board-regexp-test))
               (while (re-search-forward regexp nil t)

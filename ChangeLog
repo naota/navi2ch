@@ -1,3 +1,17 @@
+2002-11-01  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-send-message): 送信控えを取る
+	位置を変更。
+
+	* navi2ch-board.el (navi2ch-board-regexp-list): 正規表現を分割。
+	(navi2ch-board-get-subject-list): 連続した空白とHTMLのタグの処理を
+	一括で行う。
+	(navi2ch-board-get-matched-article): 上記によって不要になったものを
+	削除。
+
+	* navi2ch-search.el (navi2ch-search-board-subject-regexp):
+	連続した空白とHTMLのタグの処理を一括で行う。
+
 2002-10-28  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-scroll-up): article-through-next

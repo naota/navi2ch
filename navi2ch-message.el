@@ -218,6 +218,9 @@
 	    (setq result (navi2ch-multibbs-send-message
 			  from mail message subject board article))
 	    (when result
+	      (when navi2ch-message-save-sendlog
+		(navi2ch-message-add-sendlog from mail message subject
+					     board article))
 	      (message "waiting new message...")
 	      (sleep-for navi2ch-message-wait-time)
 	      (message "%s%s" (current-message) "done")
@@ -228,10 +231,7 @@
 		      (navi2ch-board-sync))
 		  (when (buffer-live-p navi2ch-message-current-article-buffer)
 		    (set-buffer navi2ch-message-current-article-buffer)
-		    (navi2ch-article-sync navi2ch-message-force-sync))))
-	      (when navi2ch-message-save-sendlog
-		(navi2ch-message-add-sendlog from mail message subject
-					     board article)))
+		    (navi2ch-article-sync navi2ch-message-force-sync)))))
 	    (when (get-buffer navi2ch-message-backup-buffer-name)
 	      (bury-buffer navi2ch-message-backup-buffer-name)))))
       (run-hooks 'navi2ch-message-after-send-hook)

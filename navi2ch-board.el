@@ -56,7 +56,8 @@
 
 (defvar navi2ch-board-regexp-list
   '("^\\([0-9]+\\)\\.dat,\\(.*\\)(\\([0-9]+\\))\n"
-    "^\\([0-9]+\\)\\.dat<>\\(.*\\)[(<]\\([0-9]+\\)[>)]\n"
+    "^\\([0-9]+\\)\\.dat<>\\(.*\\)<\\([0-9]+\\)>\n"
+    "^\\([0-9]+\\)\\.dat<>\\(.*\\)(\\([0-9]+\\))\n"
     "^\\([0-9]+\\)\\.dat,\\(.*\\)（\\([0-9]+\\)）\n"))
 
 (defvar navi2ch-board-current-board nil)
@@ -178,9 +179,11 @@
   (let ((id (match-string 1))
 	(str (match-string 2))
 	(num (match-string 3)))
-    (setq str (navi2ch-replace-string "^ +" "" str)
-	  str (navi2ch-replace-string " +$" "" str)
-	  str (navi2ch-replace-html-tag str))
+    (if (or (string= str "") (string= str " "))
+	(setq str "")
+      (let ((start (if (string= (substring str 0 1) " ") 1 0))
+	    (end (if (string= (substring str -1) " ") -1 nil)))
+	(setq str (substring str start end))))
     (list (cons 'subject str)
 	  (cons 'response num)
 	  (cons 'artid id))))
@@ -211,6 +214,8 @@
   (when (file-exists-p file)
     (with-temp-buffer
       (navi2ch-insert-file-contents file)
+      (while (re-search-forward "  +" nil t) (replace-match " "))
+      (navi2ch-replace-html-tag-with-buffer)
       (goto-char (point-min))
       (let ((regexp (navi2ch-board-regexp-test))
 	    ;; (file-list (directory-files
