@@ -866,7 +866,9 @@ START, END, NOFIRST で範囲を指定する"
 					    (match-string 0 name)
 					    name))
   (let ((from-header "From: ")
-        (from (format "[%d] %s <%s>\n" number name mail))
+        (from (concat (format "[%d] " number)
+		      name
+		      (format " <%s>\n" mail)))
         (date-header "Date: ")
         str p)
     ;;曜日表示する？
@@ -874,14 +876,14 @@ START, END, NOFIRST で範囲を指定する"
 	(setq date (navi2ch-article-appendweek date)))
     (setq str (concat from-header from date-header date "\n\n"))
     (setq p (length from-header))
-    (put-text-property 0 p
-		       'face 'navi2ch-article-header-face str)
+    (add-text-properties 0 p
+			 '(face navi2ch-article-header-face) str)
     (add-text-properties p (1- (setq p (+ p (length from))))
 			 '(face navi2ch-article-header-contents-face) str)
-    (put-text-property p (setq p (+ p (length date-header)))
-		       'face 'navi2ch-article-header-face str)
-    (put-text-property p (setq p (+ p (length date)))
-		       'face 'navi2ch-article-header-contents-face str)
+    (add-text-properties p (setq p (+ p (length date-header)))
+			 '(face navi2ch-article-header-face) str)
+    (add-text-properties p (setq p (+ p (length date)))
+			 '(face navi2ch-article-header-contents-face) str)
     str))
 
 (defun navi2ch-article-appendweek (d)
