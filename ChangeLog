@@ -1,5 +1,8 @@
 2002-06-29  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-article.el (navi2ch-article-view-article-from-file): 引
+	数を渡したままでした・・・
+
 	* navi2ch-directory.el (navi2ch-directory-set-current-board): 
 	navi2ch-bm-board-name-from-file -> navi2ch-board-name-from-file
 

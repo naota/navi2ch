@@ -562,7 +562,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
         (setq navi2ch-article-view-range
               navi2ch-article-new-message-range))
       (prog1
-	  (navi2ch-article-sync-from-file board article)
+	  (navi2ch-article-sync-from-file)
 	(navi2ch-article-set-mode-line)
 	(navi2ch-article-mode)))))
 
