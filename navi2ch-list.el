@@ -73,7 +73,6 @@
 (defvar navi2ch-list-buffer-name "*navi2ch list*")
 (defvar navi2ch-list-current-list nil)
 (defvar navi2ch-list-category-list nil)
-(defvar navi2ch-list-old-category-list nil)
 
 (defvar navi2ch-list-navi2ch-category-name "Navi2ch")
 (defvar navi2ch-list-changed-category-name "$BJQ$o$C$?HD(B")
@@ -378,28 +377,39 @@
 $B$N(B alist $B$K$7$FJV$9!#(B
 added-list $B$O(B '(board-id ...) $B$J(B list$B!#(B
 changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#(B"
-  (let (;; $B8=:_$NHD0lMw$N(B id $B$N(B alist
+  (let ( ;; $B8=:_$NHD0lMw$N(B uri $B$N(B alist
 	(list (navi2ch-alist-list-to-alist
 	       (navi2ch-list-get-board-name-list category-list)
-	       'id))
-	;; $B0JA0$NHD0lMw$N(B id $B$N(B alist
+	       'uri))
+	;; $B0JA0$NHD0lMw$N(B uri $B$N(B alist
 	(old-list (navi2ch-alist-list-to-alist
  		   (navi2ch-list-get-board-name-list old-category-list)
-		   'id))
+		   'uri))
 	added-list changed-list)
     (dolist (new list)
-      (let ((old (assoc (car new) old-list)))
-	;; $B8=:_$NHD0lMw$N(B id $B$,0JA0$NHD0lMw$+$i8+$D$+$C$?$i(B
-	(if old
-	    (let ((old-uri (cdr (assq 'uri (cdr old))))
-		  (new-uri (cdr (assq 'uri (cdr new)))))
-	      ;; id $B$,F1$8$G$b(B uri $B$,0c$C$F$$$?$i(B changed-list $B$KDI2C$9$k(B
-	      (unless (string= old-uri new-uri)
-		(push (list (car new) (cdr old) (cdr new))
-		      changed-list)))
-	  ;; $B8=:_$NHD0lMw$N(B id $B$,0JA0$NHD0lMw$+$i8+$D$+$i$J$+$C$?$iDI(B
-	  ;; $B2C$5$l$?;v$K$9$k(B
-	  (push (car new) added-list))))
+      (when (car new)			; uri $B$,$"$k$H$-$N$_=hM}$9$k!#(B
+	(let ((old (assoc (car new) old-list)))
+	  ;; $B8=:_$NHD0lMw$N(B uri $B$,0JA0$NHD0lMw$+$i8+$D$+$i$J$+$C$?$i(B
+	  (unless old
+	    (let ((new-name (cdr (assq 'name (cdr new))))
+		  (new-pure-id (navi2ch-replace-string
+				":.*" "" (cdr (assq 'id (cdr new)))))
+		  old-name old-pure-id)
+	      (catch 'break
+		(dolist (x old-list)
+		  (setq old-name (cdr (assq 'name (cdr x)))
+			old-pure-id (navi2ch-replace-string
+				     ":.*" "" (cdr (assq 'id (cdr new)))))
+		  ;; $BL>A0$H(B id $B$N(B : $B0JA0$,F1$8$@$C$?$iJQ$o$C$?HD$KDI2C$9$k(B
+		  (when (and (string= new-name old-name)
+			     (string= new-pure-id old-pure-id))
+		    (push (list (cdr (assq 'id (cdr new)))
+				(cdr x) (cdr new))
+			  changed-list)
+		    (throw 'break nil)))
+		;; $B8=:_$NHD0lMw$N(B id $B$,0JA0$NHD0lMw$+$i8+$D$+$i$J$+$C$?$i(B
+		;; $BDI2C$5$l$?;v$K$9$k(B
+		(push (cdr (assq 'id (cdr new))) added-list)))))))
     (list (cons 'add added-list)
  	  (cons 'change changed-list))))
 
@@ -440,8 +450,8 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  (navi2ch-net-force-update (or navi2ch-net-force-update
 					force))
 	  (file (navi2ch-list-get-file-name))
-	  updated)
-      (setq navi2ch-list-old-category-list
+	  updated old-category-list)
+      (setq old-category-list
 	    (if first
 		(progn
 		  (navi2ch-list-load-info)
@@ -461,7 +471,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  (when updated
 	    (navi2ch-list-apply-changed-status
 	     (navi2ch-list-get-changed-status
-	      navi2ch-list-old-category-list category-list)))
+	      old-category-list category-list)))
 	  (setq navi2ch-list-category-list
 		(append
 		 (delq nil
@@ -487,25 +497,13 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 
 (defun navi2ch-list-make-board-txt ()
   "bbstable.html $B$+$i(B (navi2ch $BMQ$N(B) board.txt $B$r:n$k(B
-`navi2ch-net-update-file' $B$N%O%s%I%i!#(B
-`navi2ch-list-old-category-list' $B$,$"$k>l9g$O!"$=$l$rM%@h$7$F(B id $B$rF@$k!#(B"
+`navi2ch-net-update-file' $B$N%O%s%I%i!#(B"
   (let ((coding-system-for-read 'binary)
 	(coding-system-for-write 'binary)
 	(case-fold-search t)
 	(beg (point))
 	id-to-url-alist
 	ignore)
-    ;; id-to-url-alist $B$r:n$k!#(B
-    ;; rassoc $B$b;H$&$?$a!"F1$8(B id $B$GJ#?t$N(B url $B$,EPO?$5$l$J$$$h$&!"(B
-    ;; mapcar $B$G$O$J$/(B dolist $B$G>e=q$-$7$F$$$/!#(B
-    (when navi2ch-list-old-category-list
-      (dolist (x (navi2ch-list-get-board-name-list
-		  navi2ch-list-old-category-list))
-	(let ((id (cdr (assq 'id x)))
-	      (url (cdr (assq 'uri x))))
-	  (when (and id url)
-	    (setq id-to-url-alist
-		  (navi2ch-put-alist id url id-to-url-alist))))))
     (when (re-search-forward "<b>[^>]+</b>" nil t)
       (goto-char (match-beginning 0))
       (while (re-search-forward
@@ -519,9 +517,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 		(when (and (not ignore)
 			   (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
 			   (setq url (match-string 1 attr))
-			   ;; $B0JA0IU$1$?(B ID $B$rM%@h$9$k(B
-			   (setq id (or (car (rassoc url id-to-url-alist))
-					(navi2ch-list-board-id-from-url url)))
+			   (setq id (navi2ch-list-board-id-from-url url))
 			   (navi2ch-list-valid-board url))
 		  (when (and (setq u (cdr (assoc id id-to-url-alist)))
 			     (not (string= u url)))
@@ -591,11 +587,15 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (setq list (delq (assoc navi2ch-list-global-bookmark-category-name list) list))))
 
 (defun navi2ch-list-get-board-name-list (list)
-  (let (alist)
+  (let (alist id)
     (dolist (x list)
       (unless (string= (car x) navi2ch-list-changed-category-name)
-	(setq alist (append alist (cdr (assq 'child x))))))
-    alist))
+	(dolist (y (cdr (assq 'child x)))
+	  (setq id (cdr (assq 'id y)))
+	  ;; $BF1$8(B id $B$KBP$7$F$O0l$D$N$_JV$9!#(B
+	  (setq alist (cons (cons id y)
+			    (delq (assoc id alist) alist))))))
+    (mapcar #'cdr (nreverse alist))))
 
 (defun navi2ch-list-save-info ()
   (when navi2ch-list-category-list
