@@ -271,7 +271,7 @@ nil ならば手動で更新しないかぎり取りにいかない。"
 	  (regexp-opt '("find.2ch.net" "info.2ch.net"))
 	  "\\)\\'")
   "*２ちゃんねるの板とみなさないホストの正規表現。
-`navi2ch-list-invalid-host-regexp' より優先される。"
+`navi2ch-list-valid-host-regexp' より優先される。"
   :type 'regexp
   :group 'navi2ch-list)
 
@@ -308,6 +308,17 @@ http://pc.2ch.net/unix/ が http://pc3.2ch.net/unix/ に移転した場合、
 のように指定する。"
   :type '(alist :key-type (string :tag "移転前の URL")
 		:value-type (string :tag "移転後の URL"))
+  :group 'navi2ch-list)
+
+(defcustom navi2ch-list-display-board-id-p t
+  "*板一覧に板IDを表示するかどうか。
+non-nil ならば板IDを表示する。"
+  :type 'boolean
+  :group 'navi2ch-list)
+
+(defcustom navi2ch-list-board-id-column 20
+  "*板IDを表示する位置。"
+  :type 'integer
   :group 'navi2ch-list)
 
 ;;; board variables

@@ -207,12 +207,17 @@
 	(indent (make-string (1- navi2ch-list-indent-width) ?\ ))
 	(change (cdr (assq 'change navi2ch-list-current-list))))
     (dolist (board list)
-      (let ((state (cdr (assq (cdr (assoc (cdr (assq 'id board))
-					  change))
-			      navi2ch-list-state-alist))))
+      (let* ((board-id (cdr (assq 'id board)))
+	     (state (cdr (assq (cdr (assoc board-id change))
+			       navi2ch-list-state-alist))))
 	(insert (car state)
 		indent
-		(cdr (assq 'name board)) "\n")
+		(cdr (assq 'name board)))
+	(when navi2ch-list-display-board-id-p
+	  (insert " ")
+	  (indent-to-column navi2ch-list-board-id-column)
+	  (insert "(" board-id ")"))
+	(insert "\n")
 	(set-text-properties prev (point) nil)
 	(set-text-properties
 	 (+ prev
