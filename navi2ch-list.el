@@ -770,21 +770,23 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (let* ((board (get-text-property (point) 'board))
 	 (uri (cdr (assq 'uri board)))
 	 (name (cdr (assq 'name board))))
-    (let ((char (navi2ch-read-char-with-retry
-		 (format "c)opy v)iew t)itle u)rl&title? URL: %s: " uri)
-		 nil '(?c ?v ?t ?u))))
-      (if (eq char ?v)
-	  (navi2ch-browse-url-internal uri)
-	(let ((str (cond ((eq char ?c)
-			  uri)
-			 ((eq char ?t)
-			  name)
-			 ((eq char ?u)
-			  (format "%s\n%s" name uri)))))
-	  (if (not str)
-	      (ding)
-	    (kill-new str)
-	    (message "copy: %s" str)))))))
+    (if (not uri)
+	(message "Can't select this line!")
+      (let ((char (navi2ch-read-char-with-retry
+		   (format "c)opy v)iew t)itle u)rl&title? URL: %s: " uri)
+		   nil '(?c ?v ?t ?u))))
+	(if (eq char ?v)
+	    (navi2ch-browse-url-internal uri)
+	  (let ((str (cond ((eq char ?c)
+			    uri)
+			   ((eq char ?t)
+			    name)
+			   ((eq char ?u)
+			    (format "%s\n%s" name uri)))))
+	    (if (not str)
+		(ding)
+	      (kill-new str)
+	      (message "copy: %s" str))))))))
 
 (run-hooks 'navi2ch-list-load-hook)
 ;;; navi2ch-list.el ends here
