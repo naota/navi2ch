@@ -90,15 +90,17 @@
 (defun navi2ch-articles-delete ()
   "その行を articles から削除して、その article buffer も消す"
   (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (let ((buf (navi2ch-articles-get-property (point))))
-      (if buf
-          (let ((buffer-read-only nil))
-            (kill-buffer buf)
-            (delete-region (point)
-                           (save-excursion (forward-line) (point))))
-        (message "Can't select this line!")))))  
+  (let ((buf (save-excursion (beginning-of-line)
+			     (navi2ch-articles-get-property (point)))))
+    (if buf
+	(let ((buffer-read-only nil))
+	  (kill-buffer buf)
+	  (delete-region (save-excursion (beginning-of-line) (point))
+			 (save-excursion (forward-line) (point)))
+	  (and (eobp) (not (bobp))
+	       (forward-line -1)))
+      (message "Can't select this line!"))))
+ 
 
 (defun navi2ch-articles (&rest args)
   "articles を表示する"

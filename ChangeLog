@@ -1,3 +1,20 @@
+2002-05-07    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-yank): yank 後のカーソル位
+	置が元の行のままになるように。
+
+	一番下から連続で d するのに便利なように。
+	* navi2ch-articles.el (navi2ch-articles-delete): 
+	save-excursion する位置を変更。
+	一番下のレスで実行したときは一行上に移動。
+	* navi2ch-board.el (navi2ch-board-delete-line): 
+	一番下のレスで実行したときは一行上に移動。
+	* navi2ch-bookmark.el (navi2ch-bookmark-delete-subr): 
+	save-excursion する位置を変更。
+	一番下のレスで実行したときは一行上に移動。
+	(navi2ch-bookmark-cut): 
+	save-excursion する位置を変更。
+
 2002-05-06    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-temp-directory): 

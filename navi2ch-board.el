@@ -508,8 +508,11 @@
 	  (let ((buffer-read-only nil))
 	    (delete-region (save-excursion (beginning-of-line) (point))
 			   (save-excursion (forward-line) (point))))
+	  (and (eobp) (not (bobp))
+	       (forward-line -1))
 	  (message msg))
-      (message "can't select this line!"))))
+      (message "Can't select this line!"))))
+
 
 ;;; from Wanderlust(wl-expire.el)
 (defsubst navi2ch-board-expire-date-p (key-datevec file access-time)

@@ -227,17 +227,18 @@ KEY は (concat URI ARTID) ")
 
 (defun navi2ch-bookmark-delete-subr ()
   "その行を bookmark から削除する。(確認なし)"
-  (save-excursion
-    (beginning-of-line)
-    (let ((item (navi2ch-bookmark-get-property (point)))
-	  (buffer-read-only nil))
-      (if item
-	  (when (navi2ch-bookmark-delete-key
-		 navi2ch-bookmark-current-bookmark-id item)
-	    (delete-region (point)
-			   (save-excursion (forward-line) (point)))
-	    (navi2ch-bm-renumber))
-	(message "Can't select this line!")))))
+  (let ((item (save-excursion (beginning-of-line)
+			      (navi2ch-bookmark-get-property (point))))
+	(buffer-read-only nil))
+    (if item
+	(when (navi2ch-bookmark-delete-key
+	       navi2ch-bookmark-current-bookmark-id item)
+	  (delete-region (save-excursion (beginning-of-line) (point))
+			 (save-excursion (forward-line) (point)))
+	  (navi2ch-bm-renumber)
+	  (and (eobp) (not (bobp))
+	       (forward-line -1)))
+      (message "Can't select this line!"))))
 
 (defun navi2ch-bookmark-delete ()
   "その行を bookmark から削除する。"
@@ -262,17 +263,16 @@ KEY は (concat URI ARTID) ")
   
 (defun navi2ch-bookmark-cut ()
   (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (let ((item (navi2ch-bookmark-get-property (point)))
-	  (bookmark (assoc navi2ch-bookmark-current-bookmark-id
-			   navi2ch-bookmark-list)))
-      (if item
-	  (progn
-	    (push (assoc item (cddr bookmark))
-		  navi2ch-bookmark-cut-stack)
-	    (navi2ch-bookmark-delete-subr))
-	(message "Can't select this line!")))))
+  (let ((item (save-excursion (beginning-of-line)
+			      (navi2ch-bookmark-get-property (point))))
+	(bookmark (assoc navi2ch-bookmark-current-bookmark-id
+			 navi2ch-bookmark-list)))
+    (if item
+	(progn
+	  (push (assoc item (cddr bookmark))
+		navi2ch-bookmark-cut-stack)
+	  (navi2ch-bookmark-delete-subr))
+      (message "Can't select this line!"))))
 
 (defun navi2ch-bookmark-yank ()
   (interactive)
@@ -291,7 +291,8 @@ KEY は (concat URI ARTID) ")
 	      (setcar list pair)))
 	  (let ((buffer-read-only nil))
 	    (navi2ch-bookmark-insert-subject 0 (car pair)))
-	  (navi2ch-bm-renumber))
+	  (navi2ch-bm-renumber)
+	  (forward-line -1))
       (message "stack is empty"))))
 
 ;; (defun navi2ch-bookmark-exit ()
