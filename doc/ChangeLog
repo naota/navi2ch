@@ -1,3 +1,14 @@
+2002-07-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Message Mode AA List): 最新版に同期。
+	(最後尾): AA List のアップデートが面倒になったので自動的に編集する
+	関数を書いてみた。うまくすればキーバインドの編集も自動化できる?
+
+	* Makefile.am (AUTOMAKE_OPTIONS): texinfo.tex を追加したので削除。
+	(CLEANFILES): make clean で消すファイルを追加。
+	(.texi.info): navi2ch.info~ が残ることがあったのでワイルドカード追加。
+	(pdf, .texi.dvi, .dvi.pdf, html, .texi.html): 新ターゲット。
+
 2002-07-03  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Article Mode Key Bindings): 最新版に同期。

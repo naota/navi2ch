@@ -1294,11 +1294,15 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 るのでここでは全角ね。)
 
 @table @kbd
+@comment START-OF-AA-LIST
 @item a
 @samp{(´Д｀)}
 
 @item b
 @samp{ヽ(`Д´)ノ}
+
+@item B
+@samp{(((；゜Д゜))ガクガクブルブル}
 
 @item f
 @samp{( ´_ゝ`)フーン}
@@ -1349,16 +1353,18 @@ Message モードで、@kbd{C-c C-a} に続いて下記のキーを押すことで２ちゃん
 @samp{（　゜д゜）ポカーン}
 
 @item s
-@samp{Σ(゜д゜lll)ガーン}
+@samp{Σ（゜д゜lll）ガーン}
 
 @item S
-@samp{(´・ω・`)ショボーン")}
+@samp{(´・ω・`)ショボーン}
 
 @item u
 @samp{(゜д゜)ウマー}
 
 @item U
 @samp{(-＿-)ウツダ}
+
+@comment END-OF-AA-LIST
 @end table
 
 @node FAQ
@@ -1630,3 +1636,23 @@ Navi2ch を作ってくれた (not 1) さん、どうもありがとう。
 @end quotation
 
 @bye
+カーソルを以下の関数の上に置いて
+M-x eval-defun RET M-x navi2ch-doc-update-aa-list RET
+すると、AA リストのアップデートが楽になるよ。
+(defun navi2ch-doc-update-aa-list ()
+  (interactive)
+  (load (expand-file-name "../navi2ch-vars.el" default-directory))
+  (let (start end)
+    (goto-char (point-min))
+    (re-search-forward "^@comment START-OF-AA-LIST")
+    (forward-line)
+    (setq start (point))
+    (re-search-forward "^@comment END-OF-AA-LIST")
+    (setq end (match-beginning 0))
+    (delete-region start end)
+    (goto-char start)
+    (dolist (elt navi2ch-message-aa-alist)
+      (let ((item (car elt))
+	    (aa (cdr elt)))
+	(insert (format "@item %s\n@samp{%s}\n\n" item aa))))
+    (japanese-zenkaku-region start (point) t)))
