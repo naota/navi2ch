@@ -1,4 +1,10 @@
-2002-01-07    <taiki@CRAYON>
+2002-01-08  Taiki SUGAWARA <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board.el ~giko なところにある板に対処。
+	(navi2ch-board-get-home-uri): 新関数。
+	(navi2ch-board-get-readcgi-url): 上記関数を使うように。
+	
+2002-01-07  Taiki SUGAWARA <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
 	(navi2ch-article-goto-number-or-board): ブックマーク等に移動すると
