@@ -85,6 +85,9 @@
     (change "C" navi2ch-list-change-board-name-face)
     (nil " " navi2ch-list-board-name-face)))
 
+(defconst navi2ch-list-bbstable-default-url
+  "http://www.ff.iij4u.or.jp/~ch2/bbsmenu.html")
+
 ;; add hook
 (add-hook 'navi2ch-save-status-hook 'navi2ch-list-save-info)
 
@@ -507,7 +510,7 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 		       (file-exists-p file)))
 	(setq updated (navi2ch-net-update-file
 		       (or navi2ch-list-bbstable-url
-			   "http://www.ff.iij4u.or.jp/~ch2/bbsmenu.html")
+			   navi2ch-list-bbstable-default-url)
 		       file nil
 		       'navi2ch-list-make-board-txt)))
       (when t				;(or first updated)

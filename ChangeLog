@@ -1,7 +1,8 @@
 2003-05-09  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-list.el (navi2ch-list-sync): navi2ch-list-bbstable-url
-	が nil のときは公式 bbsmenu を取りに行くように。
+	* navi2ch-list.el (navi2ch-list-bbstable-default-url): 新定数。
+	(navi2ch-list-sync): navi2ch-list-bbstable-url
+	が nil のときは上記定数の値の bbsmenu を取りに行くように。
 	update が off のときにエラーとなっていた。
 
 2003-04-28  extra  <ekisutora@users.sourceforge.net>
