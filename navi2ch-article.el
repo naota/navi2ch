@@ -783,27 +783,31 @@ state はあぼーんされてれば aborn というシンボル。
   "表示する範囲をキーボードメニューで選択する"
   (save-window-excursion
     (delete-other-windows)
-    (let ((buf (get-buffer-create "*select view range*"))
+    (let (buf
           (range navi2ch-article-view-range))
-      (save-excursion
-        (set-buffer buf)
-        (erase-buffer)
-        (insert (format "   %8s %8s\n" "first" "last"))
-        (insert (format "0: %17s\n" "all range"))
-        (let ((i 1))
-          (dolist (x navi2ch-article-view-range-list)
-            (insert (format "%d: %8d %8d\n" i (car x) (cdr x)))
-            (setq i (1+ i)))))
-      (display-buffer buf)
-      (let (n)
-	(setq n (navi2ch-read-char "input: "))
-        (when (or (< n ?0) (> n ?9))
-          (error "%c is bad key" n))
-        (setq n (- n ?0))
-        (setq range
-              (if (eq n 0) nil
-                (nth (1- n) navi2ch-article-view-range-list))))
-      (kill-buffer buf)
+      (unwind-protect
+	  (progn
+	    (setq buf (get-buffer-create "*select view range*"))
+	    (save-excursion
+	      (set-buffer buf)
+	      (erase-buffer)
+	      (insert (format "   %8s %8s\n" "first" "last"))
+	      (insert (format "0: %17s\n" "all range"))
+	      (let ((i 1))
+		(dolist (x navi2ch-article-view-range-list)
+		  (insert (format "%d: %8d %8d\n" i (car x) (cdr x)))
+		  (setq i (1+ i)))))
+	    (display-buffer buf)
+	    (let (n)
+	      (setq n (navi2ch-read-char "input: "))
+	      (when (or (< n ?0) (> n ?9))
+		(error "%c is bad key" n))
+	      (setq n (- n ?0))
+	      (setq range
+		    (if (eq n 0) nil
+		      (nth (1- n) navi2ch-article-view-range-list)))))
+	(if (bufferp buf)
+	    (kill-buffer buf)))
       range)))
 
 (defun navi2ch-article-redraw-range ()

@@ -785,8 +785,11 @@ Optional Packages:
   --with-bash             Use Bash to build
   --with-xemacs           Use XEmacs to build
   --with-emacs            Use Emacs to build
+  --with-packagedir[=DIR] Use package directory
+                          (With XEmacs, this option also sets
+                           icondir, lispdir, infodir, etc...)
   --with-lispdir          Override the default lisp directory
-  --with-icondir=DIR      Override default icons directory
+  --with-icondir=DIR      Override the default icons directory
 
 _ACEOF
 fi
@@ -1495,7 +1498,7 @@ fi
 
 
 # Emacs set environment variable EMACS as t
-test "x$EMACS" = xt && EMACS=
+test "x$EMACS" = xt && unset EMACS
 
 emacsen="emacs xemacs"
 
@@ -1554,7 +1557,7 @@ host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 
 
 
-case $host_os in
+case "$host_os" in
 *cygwin*)
   with_bash=yes
   emacsen="$emacsen MeadowNT.exe Meadow95.exe"
@@ -1565,7 +1568,7 @@ esac
 # Check whether --with-bash or --without-bash was given.
 if test "${with_bash+set}" = set; then
   withval="$with_bash"
-  case $withval in
+  case "$withval" in
 yes) SHELL=bash ;;
 no)  ;;
 *)   SHELL="$withval" ;;
@@ -1576,7 +1579,7 @@ fi;
 # Check whether --with-xemacs or --without-xemacs was given.
 if test "${with_xemacs+set}" = set; then
   withval="$with_xemacs"
-  case $withval in
+  case "$withval" in
 yes) emacsen="xemacs" ;;
 no)  emacsen="emacs" ;;
 *)   EMACS="$withval" ;;
@@ -1587,7 +1590,7 @@ fi;
 # Check whether --with-emacs or --without-emacs was given.
 if test "${with_emacs+set}" = set; then
   withval="$with_emacs"
-  case $withval in
+  case "$withval" in
 yes) emacsen="emacs" ;;
 no)  emacsen="xemacs" ;;
 *)   EMACS="$withval" ;;
@@ -1641,10 +1644,49 @@ fi
 done
 test -n "$EMACS" || EMACS="no"
 
-if test $EMACS = "no"; then
+if test "$EMACS" = "no"; then
   { { echo "$as_me:$LINENO: error: cannot find emacs" >&5
 echo "$as_me: error: cannot find emacs" >&2;}
    { (exit 1); exit 1; }; }
+fi
+
+echo "$as_me:$LINENO: checking detecting your emacs type" >&5
+echo $ECHO_N "checking detecting your emacs type... $ECHO_C" >&6
+emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))"`
+echo "$as_me:$LINENO: result: $emacstype" >&5
+echo "${ECHO_T}$emacstype" >&6
+
+if test -z "$emacstype" || test "$emacstype" = UNKNOWN; then
+  { { echo "$as_me:$LINENO: error: this package does not work on your emacs" >&5
+echo "$as_me: error: this package does not work on your emacs" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+# detect packagedir
+
+# Check whether --with-packagedir or --without-packagedir was given.
+if test "${with_packagedir+set}" = set; then
+  withval="$with_packagedir"
+   echo "$as_me:$LINENO: checking where package files should go" >&5
+echo $ECHO_N "checking where package files should go... $ECHO_C" >&6
+test "$emacstype" != xemacs && { { echo "$as_me:$LINENO: error: packagedir only works with XEmacs" >&5
+echo "$as_me: error: packagedir only works with XEmacs" >&2;}
+   { (exit 1); exit 1; }; }
+case "$withval" in
+yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))'` ;;
+no)  unset packagedir ;;
+*)   packagedir="$withval" ;;
+esac
+echo "$as_me:$LINENO: result: $packagedir" >&5
+echo "${ECHO_T}$packagedir" >&6
+fi;
+
+
+
+if test "$emacstype" = xemacs && test -n "$packagedir"; then
+  icondir='${packagedir}/etc/navi2ch'
+  lispdir='${packagedir}/lisp/navi2ch'
+  infodir='${packagedir}/info'
 fi
 
 
@@ -2326,6 +2368,7 @@ s,@host_cpu@,$host_cpu,;t t
 s,@host_vendor@,$host_vendor,;t t
 s,@host_os@,$host_os,;t t
 s,@EMACS@,$EMACS,;t t
+s,@packagedir@,$packagedir,;t t
 s,@lispdir@,$lispdir,;t t
 s,@icondir@,$icondir,;t t
 CEOF

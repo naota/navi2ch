@@ -411,7 +411,8 @@ return new alist whose car is the new pair and cdr is ALIST.
 (defun navi2ch-set-mode-line-identification ()
   (let ((offline '(navi2ch-offline navi2ch-modeline-offline navi2ch-modeline-online)))
     (unless navi2ch-mode-line-identification
-      (setq navi2ch-mode-line-identification "%12b"))
+      (setq navi2ch-mode-line-identification
+	    (default-value 'mode-line-buffer-identification)))
     (setq mode-line-buffer-identification
           (list offline
                 navi2ch-mode-line-identification)))

@@ -1,5 +1,23 @@
 2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* configure.in: 変数を参照する際はできるだけ "" で囲むように。
+	(emacstype): configure で使う Emacs の種類を検出。
+	(packagedir): XEmacs を使用する際、インストールするパッケージディ
+	レクトリを指定できるようにした。たとえば、
+	% ./configure --with-xemacs --with-packagedir=$HOME/.xemacs
+	とすれば、ホームディレクトリ以下にインストールできる。
+	単に --with-packagedir とした場合はパッケージディレクトリを検出する。
+	ただし、まだ auto-autoloads.el、custom-load.el、MANIFEST.navi2ch 
+	などのパッケージ用ファイルは作成できてない。
+
+	* navi2ch-article.el (navi2ch-article-select-view-range-subr):
+	*select view range* バッファを確実に消すように。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/314
+
+	* navi2ch-util.el (navi2ch-set-mode-line-identification): 固定文字
+	列じゃなくて、mode-line-buffer-identification の default-value を
+	使うようにした。
+
 	* navi2ch.el (navi2ch-make-backup-file-name): 新関数。
 	(navi2ch-make-temp-file): 新関数。
 	(navi2ch-save-info): バックアップファイルを作れるようにした。

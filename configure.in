@@ -3,13 +3,13 @@ AM_INIT_AUTOMAKE(navi2ch, 1.5.2-DEV)
 AM_MAINTAINER_MODE
 
 # Emacs set environment variable EMACS as t
-test "x$EMACS" = xt && EMACS=
+test "x$EMACS" = xt && unset EMACS
 
 emacsen="emacs xemacs"
 
 AC_CANONICAL_HOST
 
-case $host_os in
+case "$host_os" in
 *cygwin*)
   with_bash=yes
   emacsen="$emacsen MeadowNT.exe Meadow95.exe"
@@ -18,7 +18,7 @@ esac
 
 AC_ARG_WITH(bash,
 [  --with-bash             Use Bash to build],
-[case $withval in
+[case "$withval" in
 yes) SHELL=bash ;;
 no)  ;;
 *)   SHELL="$withval" ;;
@@ -26,7 +26,7 @@ esac])
 
 AC_ARG_WITH(xemacs,
 [  --with-xemacs           Use XEmacs to build],
-[case $withval in
+[case "$withval" in
 yes) emacsen="xemacs" ;;
 no)  emacsen="emacs" ;;
 *)   EMACS="$withval" ;;
@@ -34,7 +34,7 @@ esac])
 
 AC_ARG_WITH(emacs,
 [  --with-emacs            Use Emacs to build],
-[case $withval in
+[case "$withval" in
 yes) emacsen="emacs" ;;
 no)  emacsen="xemacs" ;;
 *)   EMACS="$withval" ;;
@@ -45,14 +45,44 @@ if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
 fi
 
 AC_CHECK_PROGS(EMACS, ${emacsen}, no)
-if test $EMACS = "no"; then
+if test "$EMACS" = "no"; then
   AC_MSG_ERROR(cannot find emacs)
+fi
+
+AC_MSG_CHECKING([detecting your emacs type])
+emacstype=`$EMACS -batch -q -eval "(princ (cond ((featurep 'xemacs) 'xemacs) ((>= emacs-major-version 21) 'emacs21) ((= emacs-major-version 20) 'emacs20) (t 'UNKNOWN)))"`
+AC_MSG_RESULT([$emacstype])
+
+if test -z "$emacstype" || test "$emacstype" = UNKNOWN; then
+  AC_MSG_ERROR(this package does not work on your emacs)
+fi
+
+# detect packagedir
+AC_ARG_WITH(packagedir,
+[  --with-packagedir[[=DIR]] Use package directory
+                          (With XEmacs, this option also sets
+                           icondir, lispdir, infodir, etc...)],
+[ AC_MSG_CHECKING([where package files should go])
+test "$emacstype" != xemacs && AC_MSG_ERROR(packagedir only works with XEmacs)
+case "$withval" in
+yes) packagedir=`$EMACS -batch -q -eval '(princ (expand-file-name "../site-packages" data-directory))'` ;;
+no)  unset packagedir ;;
+*)   packagedir="$withval" ;;
+esac
+AC_MSG_RESULT([$packagedir])])
+
+AC_SUBST(packagedir)
+
+if test "$emacstype" = xemacs && test -n "$packagedir"; then
+  icondir='${packagedir}/etc/navi2ch'
+  lispdir='${packagedir}/lisp/navi2ch'
+  infodir='${packagedir}/info'
 fi
 
 AM_PATH_LISPDIR
 
 AC_ARG_WITH(icondir,
-[  --with-icondir=DIR      Override default icons directory],
+[  --with-icondir=DIR      Override the default icons directory],
 [ icondir="$withval"
 AC_MSG_CHECKING([where icon files should go])
 AC_MSG_RESULT([$icondir])],

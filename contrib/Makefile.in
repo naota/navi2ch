@@ -72,6 +72,7 @@ am__quote = @am__quote@
 icondir = @icondir@
 install_sh = @install_sh@
 lispdir = @lispdir@
+packagedir = @packagedir@
 
 EXTRA_DIST = navi2ch-logo.el gikope.el navi2ch-migemo.el
 subdir = contrib

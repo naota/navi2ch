@@ -5,7 +5,6 @@
 @set REVISION $Revision$
 @ifhtml
 @documentlanguage ja
-@documentencoding EUC-JP
 @end ifhtml
 @paragraphindent 0
 @c @setchapternewpage off
@@ -113,9 +112,6 @@ Navi2ch は、Emacs、XEmacs、Meadow などの Emacsen で動作する、２ちゃん
 
 * Getting::                     入手方法
 * Compile::                     コンパイル方法
-
-入手方法
-
 * Getting Develop Version::     開発版の入手
 
 使い方
@@ -176,6 +172,7 @@ Bookmark モード
 @menu
 * Getting::                     入手方法
 * Compile::                     コンパイル方法
+* Getting Develop Version::     開発版の入手
 @end menu
 
 @node Getting
@@ -196,12 +193,53 @@ Navi2ch Project Summary Page
 
 ２ちゃんねる UNIX 板、Navi2ch スレも参照のこと。
 
-@menu
-* Getting Develop Version::     開発版の入手
-@end menu
+@node Compile
+@section コンパイル方法
+
+@example
+@group
+% ./configure; make
+# make install
+@end group
+@end example
+
+
+お終い@dots{} だけじゃあれなんで一応重要な configure のオプションを。
+
+@table @option
+@item --with-emacs
+Emacs の種類を指定
+
+@item --with-xemacs
+XEmacs の種類を指定
+
+@item --with-lispdir
+Navi2ch をインストールするディレクトリを指定。
+
+@item --with-packagedir
+Navi2ch をインストールパッケージディレクトリを指定。(XEmacs のみ)
+@end table
+
+例えば Meadow だったら以下のとおり。
+
+@example
+@group
+./configure --with-emacs=meadow95.exe
+            --with-lispdir=/app/meadow/site-lisp/navi2ch
+@end group
+@end example
+
+XEmacs を使っていて、ホームディレクトリにインストールしたい場合は以下
+のようにするといいかも。
+
+@example
+@group
+./configure --with-xemacs --with-packagedir=$HOME/.xemacs
+@end group
+@end example
 
 @node Getting Develop Version
-@subsection 開発版の入手
+@section 開発版の入手
 
 Navi2ch の開発版は CVS を使って入手することができる。
 @code{CVS password:} と聞いてきたら何も入力せず @kbd{@key{RET}} を押すこと。
@@ -235,41 +273,6 @@ CVS についての詳しい説明は
 から「プロジェクト管理者」にコンタクトを取って、ぜひ Navi2ch の開発に
 参加してほしい。
 
-@node Compile
-@section コンパイル方法
-
-@example
-@group
-% ./configure; make
-# make install
-@end group
-@end example
-
-
-お終い@dots{} だけじゃあれなんで一応重要な configure のオプションを。
-
-@table @option
-@item --with-emacs
-Emacs の種類を指定
-
-@item --with-xemacs
-XEmacs の種類を指定
-
-@item --with-lispdir
-Navi2ch をインストールするディレクトリを指定。
-@end table
-
-例えば Meadow だったら
-
-@example
-@group
-./configure --with-emacs=meadow95.exe
-            --with-lispdir=/app/meadow/site-lisp/navi2ch
-@end group
-@end example
-
-ってなる。
-
 @node Usage
 @chapter 使い方
 
@@ -288,7 +291,7 @@ Navi2ch をインストールするディレクトリを指定。
 @file{~/.emacs} に
 
 @lisp
-(require 'navi2ch)
+(autoload 'navi2ch "navi2ch" "Navigator for 2ch for Emacs" t)
 @end lisp
 
 と書く。
@@ -782,7 +785,7 @@ GNU Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
 Mona fonts (モナーフォント) とは、２ちゃんねるのアスキーアートを X11
 で見るために作られたフリーのフォントです。
 
-詳しくは @uref{http://members.tripod.co.jp/s42335/mona/} を参照のこと。
+詳しくは @uref{http://monafont.sourceforge.net/} を参照のこと。
 
 @node How to Use Mona Fonts
 @subsection んで、どうやって使うの?
@@ -1624,16 +1627,12 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 @node Thanks
 @appendix 謝辞
 
+@c Author が Navi2ch Project になったからこれはいらないよね。
+@ignore
 Navi2ch を作ってくれた (not 1) さん、どうもありがとう。
+@end ignore
 
-以下 README より引用
-
-@quotation
-@format
-謝辞::
- 最初に perl 版を作った hc2ivan さんに感謝です。
-@end format
-@end quotation
+最初に perl 版を作った hc2ivan さんに感謝です。
 
 @bye
 カーソルを以下の関数の上に置いて

@@ -1,3 +1,9 @@
+2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Start Navi2ch): require -> autoload に変更。
+	(What is Mona Fonts): 最新の URL に更新。
+	(Getting Develop Version): section に格上げ。Compile の後に移動。
+
 2002-07-04  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Message Mode AA List): 最新版に同期。
