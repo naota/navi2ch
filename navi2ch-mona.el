@@ -276,8 +276,13 @@ nil is returned.  Otherwise the associated face object is returned."
 
 (defun navi2ch-mona-message-mode-hook ()
   (if navi2ch-mona-on-message-mode
-      (set (make-local-variable 'default-text-properties)
-	   (plist-put default-text-properties 'face 'navi2ch-mona-face))))
+      (navi2ch-ifxemacs
+	  (let ((extent (make-extent (point-min) (point-max))))
+	    (set-extent-properties extent
+				   '(face navi2ch-mona-face
+					  start-closed t end-closed t)))
+	(let ((overlay (make-overlay (point-min) (point-max) nil nil t)))
+	  (overlay-put overlay 'face 'navi2ch-mona-face)))))
 
 (defun navi2ch-mona-setup ()
   "*モナーフォントを使うためのフックを追加する。"

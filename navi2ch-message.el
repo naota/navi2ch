@@ -65,6 +65,16 @@
 (defvar navi2ch-message-window-configuration nil)
 (defvar navi2ch-message-header-separator "----------------\n")
 
+(defvar navi2ch-message-paragraph-separate
+  (concat (regexp-quote navi2ch-message-header-separator) "\\|"
+	  ">\\|"			; 引用
+	  "[ \t]*$")			; 空行
+  "*`navi2ch-message-mode' で使用される `paragraph-separate'。")
+
+(defvar navi2ch-message-paragraph-start
+  navi2ch-message-paragraph-separate
+  "*`navi2ch-message-mode' で使用される `paragraph-start'。")
+
 (defun navi2ch-message-write-message (board article &optional new sage)
   (if (and (get-buffer navi2ch-message-buffer-name)
 	   (or navi2ch-message-always-pop-message
@@ -121,8 +131,11 @@
 	  "Mail: "
 	  (or sage
 	      (cdr (assq 'mail navi2ch-message-current-article))
-	      navi2ch-message-mail-address "") "\n"
-	  navi2ch-message-header-separator))
+	      navi2ch-message-mail-address "")
+	  "\n"
+	  (navi2ch-propertize navi2ch-message-header-separator
+			      'read-only t 
+			      'front-sticky t 'rear-nonsticky t)))
 
 (defun navi2ch-message-cleanup-message ()
   (save-excursion
@@ -295,9 +308,17 @@
 (defun navi2ch-message-mode ()
   "\\{navi2ch-message-mode-map}"
   (interactive)
+  (kill-all-local-variables)
   (setq major-mode 'navi2ch-message-mode)
   (setq mode-name "Navi2ch Message")
-  (set (make-local-variable 'fill-paragraph-function) 'navi2ch-message-fill-paragraph)
+  (set (make-local-variable 'fill-paragraph-function)
+       'navi2ch-message-fill-paragraph)
+  (set (make-local-variable 'paragraph-separate)
+       navi2ch-message-paragraph-separate)
+  (set (make-local-variable 'paragraph-start)
+       navi2ch-message-paragraph-start)
+  (set (make-local-variable 'auto-fill-inhibit-regexp)
+       "^[A-Z][^: \n\t]+:")		; ヘッダ
   (use-local-map navi2ch-message-mode-map)
   (navi2ch-message-setup-menu)
   (run-hooks 'navi2ch-message-mode-hook)

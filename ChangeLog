@@ -1,5 +1,24 @@
 2002-07-09  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-mail-address):
+	タイプが違ったので変更。
+	(navi2ch-message-remember-user-name):
+	ドキュメントが間違ってたので修正。
+	(navi2ch-net-check-margin, navi2ch-net-turn-back-step) 
+	(navi2ch-net-turn-back-when-aborn): 使ってなかったので削除。
+
+	* navi2ch-net.el (navi2ch-net-file-start): 使ってなかったので削除。
+
+	* navi2ch-mona.el (navi2ch-mona-message-mode-hook): XEmacs だとう
+	まく動いてなかったみたいなんで、default-text-properties じゃなくて
+	extent を使うようにした。
+
+	* navi2ch-message.el (navi2ch-message-paragraph-separate)
+	(navi2ch-message-paragraph-start): 新変数。
+	(navi2ch-message-insert-header): セパレータをread-onlyにしてみた。
+	(navi2ch-message-mode):
+	fill-paragraph で引用部まで fill しないように。
+
 	* navi2ch.el (navi2ch-kill-emacs-hook):
 	不要な remove-hook をはずした。
 

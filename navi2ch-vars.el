@@ -564,7 +564,7 @@ window $B$NI}$$$C$Q$$$K$7$?$$$J$i(B
   :type '(repeat (cons (string :tag "$BHD(B  ") (string :tag "$BL>A0(B")))
   :group 'navi2ch-message)
 
-(defcustom navi2ch-message-mail-address nil
+(defcustom navi2ch-message-mail-address ""
   "*$B%G%U%)%k%H$N%a!<%k%"%I%l%9!#(B"
   :type 'string
   :group 'navi2ch-message)
@@ -592,8 +592,8 @@ nil $B$J$i!"=q$-$+$1$rGK4~$7$F$$$$$+Ld$$9g$o$;$k!#(B
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-remember-user-name t
-  "*non-nil$B$J$i!"Aw$C$?%l%9$N%a!<%k%"%I%l%9Mw$r3P$($F$*$/!#(B
-$BF1$8%9%l$G<!$K%l%9$9$k$H$-$O!"$=$l$,%G%U%)%k%H$N%a!<%k%"%I%l%9$K$J$k!#(B"
+  "*non-nil$B$J$i!"Aw$C$?%l%9$NL>A0Mw$r3P$($F$*$/!#(B
+$BF1$8%9%l$G<!$K%l%9$9$k$H$-$O!"$=$l$,%G%U%)%k%H$NL>A0$K$J$k!#(B"
   :type 'boolean
   :group 'navi2ch-message)
 
@@ -701,21 +701,6 @@ SPC$B!"(BC-l$B!"(BC-g$B!"(BC-v$B$O%j%9%HI=<($N:]$K;HMQ$5$l$k$N$G%-!<$K$O;
 (defcustom navi2ch-net-force-update nil
   "*non-nil $B$J$i!"%U%!%$%k$r<hF@$9$k$^$($K99?7$NM-L5$r3NG'$7$J$/$J$k!#(B
 nil $B$J$i!"99?7$5$l$F$$$J$$%U%!%$%k$NITI,MW$JE>Aw$O$7$J$$!#(B"
-  :type 'boolean
-  :group 'navi2ch-net)
-
-(defcustom navi2ch-net-check-margin 100
-  "*$B$"$\!<$s$,$"$C$?$+3NG'$9$k0Y$N%P%$%H?t!#(B"
-  :type 'integer
-  :group 'navi2ch-net)
-
-(defcustom navi2ch-net-turn-back-step 1000
-  "*$B$"$\!<$s$,$"$C$?$H$-$KESCf$+$iFI$_D>$90Y$N%P%$%H?t!#F|K\8lJQ$@$J(B($B4@(B)$B!#(B"
-  :type 'integer
-  :group 'navi2ch-net)
-
-(defcustom navi2ch-net-turn-back-when-aborn t
-  "*non-nil $B$J$i!"$"$\!<$s$,$"$C$?$H$-%9%l$rESCf$+$iFI$_D>$9!#(B"
   :type 'boolean
   :group 'navi2ch-net)
 

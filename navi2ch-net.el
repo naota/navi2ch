@@ -441,11 +441,6 @@ LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$
 	     (setq header nil))))	; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
     header))
 
-(defun navi2ch-net-file-start (file)
-  (max (- (nth 7 (file-attributes file))
-          navi2ch-net-check-margin)
-       0))
-
 (defun navi2ch-net-get-length-from-header (header)
   "header $B$+$i(B contents $BA4BN$ND9$5$rF@$k!#(B
 header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
