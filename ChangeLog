@@ -5,6 +5,11 @@
 	削除系板対策。
 	http://pc.2ch.net/test/read.cgi/unix/1039935998/936
 
+	* navi2ch-article.el (navi2ch-article-sync): sync 前にも
+	navi2ch-article-set-mode-line するように。
+	(navi2ch-article-set-mode-line): レス数が 0 のときは "-" と表示す
+	るように。
+
 2003-02-26  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-message-filter-list): 
