@@ -330,7 +330,8 @@ header に長さが含まれていない場合は nil を返す。"
 (defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE を差分で更新する。
 TIME が `non-nil' ならば TIME より新しい時だけ更新する。
-更新できれば (header aborn-p) な list を返す"
+更新できれば (header state) な list を返す。
+state はあぼーんされてれば aborn というシンボル。"
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
@@ -379,14 +380,15 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 				    'ask))
 			   (y-or-n-p "あぼーん!!! backup old file? ")))
 	      (copy-file file (read-file-name "file name: ")))
-	    (list (navi2ch-net-update-file url file nil nil) t)))
+	    (list (navi2ch-net-update-file url file nil nil) 'aborn)))
       nil)))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
   "FILE を URL から read.cgi を使って更新する。
 TIME が non-nil ならば TIME より新しい時だけ更新する。
 DIFF が non-nil ならば差分を取得する。
-更新できれば (header aborn-p) な list を返す"
+更新できれば (header state) な list を返す。
+state はあぼーんされてれば aborn というシンボル。"
   (let ((dir (file-name-directory file))
 	proc header cont)
     (unless (file-exists-p dir)

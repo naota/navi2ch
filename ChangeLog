@@ -1,3 +1,16 @@
+2002-01-15  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-article.el
+	(navi2ch-article-sync): kako のときと、'C-u S' のときも
+	navi2ch-article-message-list を新しく作りなおすようにした。
+	(navi2ch-article-update-file): kako のときは (header 'kako)、あぼー
+	んのときは (header 'aborn) が返るように変えた。
+
+	* navi2ch-net.el
+	(navi2ch-net-update-file-diff): あぼーんのときは (header 'aborn)
+	を返すようにした。
+	(navi2ch-net-update-file-with-readcgi): 同上。
+
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): 

@@ -593,7 +593,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	  (when (or (and first (file-exists-p file))
 		    state)
 	    (setq list
-		  (if (or first (nth 1 state)) ; first or あぼーん
+		  (if (or first
+			  (memq (nth 1 state) '(aborn kako))
+			  (not navi2ch-article-enable-diff))
 		      (navi2ch-article-get-message-list file)
 		    (navi2ch-article-append-message-list
 		     list (navi2ch-article-get-message-list
@@ -652,7 +654,9 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
     
 (defun navi2ch-article-update-file (board article &optional force)
   "BOARD, ARTICLE に対応するファイルを更新する。
-返り値は (article (header aborn-p)) のリスト"
+返り値は (article (header state)) のリスト。
+state はあぼーんされてれば aborn というシンボル。
+過去ログを取得していれば kako というシンボル。"
   (let (state)
     (unless navi2ch-offline
       (let ((file (navi2ch-article-get-file-name board article))
@@ -684,17 +688,17 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		    (setq kako t)
 		    (setq url (navi2ch-article-get-kako-url board article))
 		    (navi2ch-net-update-file url file)))))
-	(unless (listp (caar state))
-	  (setq state (list state nil)))
-	(if (and state
-		 (cdr (assoc "Not-Updated" (nth 0 state))))
+	(when state
+	  (unless (listp (caar state))
+	    (setq state (list state (and kako 'kako))))
+	  (when (cdr (assoc "Not-Updated" (nth 0 state)))
 	    (setq state nil))
-        (when state
 	  (setq article (navi2ch-put-alist 'time
-					   (cdr (assoc "Last-Modified"
-						       (nth 0 state)))
+					     (cdr (assoc "Last-Modified"
+							 (nth 0 state)))
 					   article))
-	  (setq article (navi2ch-put-alist 'kako kako article)))))
+	  (when kako 
+	    (setq article (navi2ch-put-alist 'kako t article))))))
     (list article state)))
 
 (defun navi2ch-article-sync-from-file (file)
