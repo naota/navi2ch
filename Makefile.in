@@ -55,6 +55,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
 AMTAR = @AMTAR@
 AWK = @AWK@
 DEPDIR = @DEPDIR@
@@ -76,13 +78,13 @@ lisp_LISP = navi2ch-article.el navi2ch-articles.el \
 	navi2ch-net.el navi2ch-popup-article.el navi2ch-search.el \
 	navi2ch-util.el navi2ch-vars.el navi2ch.el
 
-DIST_SOURCES = $(lisp_LISP)
-EXTRA_DIST = Makefile.old bcomp.el
+EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP)
 SUBDIRS = doc
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
+DIST_SOURCES =
 LISP = $(lisp_LISP)
 
 ELCFILES = navi2ch-article.elc navi2ch-articles.elc \

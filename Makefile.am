@@ -4,8 +4,7 @@ lisp_LISP = navi2ch-article.el navi2ch-articles.el \
 	navi2ch-list.el navi2ch-message.el navi2ch-mona.el \
 	navi2ch-net.el navi2ch-popup-article.el navi2ch-search.el \
 	navi2ch-util.el navi2ch-vars.el navi2ch.el
-DIST_SOURCES = $(lisp_LISP)
-EXTRA_DIST = Makefile.old bcomp.el
+EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP)
 SUBDIRS = doc
 
 # defmacro / defsubst dependencies
