@@ -1,25 +1,12 @@
-navi2ch-article-max-line, navi2ch-board-max-line をなんとかする
+順番は適当 
 
-> みんながうれしいように、適当なところにフックを
-> バンバン定義してよ。
-
-board 系の全部 keymap に反映させる関数があると便利かもですね。
-
-> (setq-navi2ch-list-起動時に板一覧を取りに行かない t)
-
-ディレクトリにあるスレ一覧が見れるモード
-
-expire をもっとまともに実装する
-
-・新しい read.cgi にちゃんと対応する(パス仕様とか subject.txt の read.cgi での
-  取得とか)。
+・navi2ch-article-max-line, navi2ch-board-max-line をなんとかする
 ・expire をちゃんと実装する。
 ・過去ログをちゃんと見れるようにする(read.cgi でなんとかなる？)
 ・ディレクトリにあるスレ一覧を表示できるようにする。
 ・フィルタをちゃんと実装する。
-・etc.txt に read.cgi を使うかを書けるようにする
 ・ツールチップでレスを表示
 ・navi2ch2 の作成 :-)
-
 ・navi2ch-logo.el を Emacs20 に対応させる。
-convert で xbm に変換して bitmap-mule でいける？
+  convert で xbm に変換して bitmap-mule でいける？
+・板一覧に変更があったときになんとかする。

@@ -1,3 +1,9 @@
+2002-01-18  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* TODO: 整理。
+
+	* NEWS: 1.4 から 1.5 のめだった変更点をとりあえず追加。
+
 2002-01-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (EXTRA_DIST): bcomp.el.in を追加。
