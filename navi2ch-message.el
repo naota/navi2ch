@@ -141,7 +141,8 @@
 	  (or (cdr (assq 'name navi2ch-message-current-article))
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-user-name-alist))
-	      navi2ch-message-user-name "") "\n"
+	      navi2ch-message-user-name "")
+	  "\n"
 	  "Mail: "
 	  (or sage
 	      (cdr (assq 'mail navi2ch-message-current-article))
@@ -149,7 +150,9 @@
 	  "\n"
 	  (navi2ch-propertize navi2ch-message-header-separator
 			      'read-only t
-			      'front-sticky t 'rear-nonsticky t)))
+			      'front-sticky t 'rear-nonsticky t))
+  (setq buffer-undo-list nil)
+  (set-buffer-modified-p nil))
 
 (defun navi2ch-message-cleanup-message ()
   (save-excursion

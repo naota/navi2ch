@@ -1,5 +1,9 @@
 2002-09-19  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-message.el (navi2ch-message-insert-header): undo 情報を
+	クリアし、バッファを未変更状態に。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/953
+
 	* navi2ch-board-misc.el (navi2ch-bm-sort-by-state): 2002-09-18 の
 	変更を取り消し。
 	state (U/V/C) のみで sort するように、また、rev から (not rev) に、
