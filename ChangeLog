@@ -1,5 +1,8 @@
 2003-06-07  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-update-file-diff):
+	navi2ch-net-update-file と同様に func を指定できるように。
+
 	* navi2ch-article.el (navi2ch-article-get-kako-url): article ID が
 	9桁でも10桁でもないときにエラーとならず nil を返すように。
 	別なとこでエラーになるけど。

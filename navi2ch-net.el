@@ -511,9 +511,11 @@ header に長さが含まれていない場合は nil を返す。"
 	(>= len (or size 0))
       t)))				; ホントにこれでいいかな?
 
-(defun navi2ch-net-update-file-diff (url file &optional time)
+(defun navi2ch-net-update-file-diff (url file &optional time func)
   "FILE を差分で更新する。
 TIME が `non-nil' ならば TIME より新しい時だけ更新する。
+FUNC が non-nil ならば更新後 FUNC を使ってファイルを変換する。
+FUNC は current-buffer を操作する関数である事。
 更新できれば HEADER を返す。"
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
@@ -552,14 +554,29 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 			(with-temp-file file
 			  (insert-file-contents file nil nil size)
 			  (goto-char (point-max))
+			  (when (and cont func)
+			    (message "%stranslating..." (current-message))
+			    (setq cont (with-temp-buffer
+					 (insert cont)
+					 (goto-char (point-min))
+					 (funcall func)
+					 (buffer-string))))
 			  (insert cont))
 			(message "%sdone" (current-message)))))))
 	  ((string= status "200")
 	   (if (not (navi2ch-net-check-aborn size header))
 	       (setq aborn-p t)
 	     (message "%s: getting whole file..." (current-message))
-	     (with-temp-file file
-	       (insert (navi2ch-net-get-content proc)))
+	     (let ((cont (navi2ch-net-get-content proc)))
+	       (when (and cont func)
+		 (message "%stranslating..." (current-message))
+		 (setq cont (with-temp-buffer
+			      (insert cont)
+			      (goto-char (point-min))
+			      (funcall func)
+			      (buffer-string))))
+	       (with-temp-file file
+		 (insert cont)))
 	     (message "%sdone" (current-message))))
 	  ((string= status "304")
 	   (setq header (navi2ch-net-add-state 'not-updated header)))
@@ -575,7 +592,7 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 	(copy-file file (read-file-name "file name: ")))
       (navi2ch-net-add-state
        'aborn
-       (navi2ch-net-update-file url file nil nil)))))
+       (navi2ch-net-update-file url file nil func)))))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
   "FILE を URL から read.cgi を使って更新する。
