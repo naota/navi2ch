@@ -1,3 +1,7 @@
+2003-04-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): navi2ch-message-user-name の変更に対応。
+
 2003-04-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Getting Develop Version): CVS HEAD について誤解し
