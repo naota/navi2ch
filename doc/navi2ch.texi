@@ -1157,6 +1157,9 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @code{navi2ch-bm-remove-mark-article} マークしたスレの情報
 (取得した .dat ファイルや既読情報など) を消す
 
+@item C-o
+@code{navi2ch-bm-save-dat-file} .dat ファイルを保存
+
 @end table
 
 @node Board Mode Key Bindings
@@ -1379,6 +1382,9 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item ?
 @code{navi2ch-article-search} レスを検索
+
+@item C-o
+@code{navi2ch-article-save-dat-file} .dat ファイルを保存
 
 @end table
 
@@ -1604,7 +1610,7 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @item A.
 たぶんスレのバッファがどんどん増えているのが原因。
 @kbd{M-x navi2ch-article-expunge-buffers @key{RET}} とすると、
-スレのバッファの数が変数 @code{navi2ch-article-max-buffers} 
+スレのバッファの数が変数 @code{navi2ch-article-max-buffers}
 の値を越えていたときにバッファが削除される。
 また、変数 @code{navi2ch-article-auto-expunge} を
 @code{nil} 以外 (@code{t} とか) に設定すると

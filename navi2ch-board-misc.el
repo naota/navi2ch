@@ -69,6 +69,7 @@
     (define-key map "m?" 'navi2ch-bm-mark-by-query)
     (define-key map "mb" 'navi2ch-bm-add-bookmark-mark-article)
     (define-key map "mR" 'navi2ch-bm-remove-mark-article)
+    (define-key map "\C-o" 'navi2ch-bm-save-dat-file)
     (setq navi2ch-bm-mode-map map)))
 
 (defvar navi2ch-bm-mode-menu-spec
@@ -868,6 +869,14 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 (defun navi2ch-bm-remove-mark-article ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bm-remove-article))
+
+(defun navi2ch-bm-save-dat-file ()
+  (interactive)
+  (let* ((item (navi2ch-bm-get-property-internal (point)))
+	 (article (navi2ch-bm-get-article-internal item))
+	 (board (navi2ch-bm-get-board-internal item)))
+    (when (and board article)
+      (navi2ch-article-save-dat-file board article))))
 
 (run-hooks 'navi2ch-board-misc-load-hook)
 ;;; navi2ch-board-misc.el ends here

@@ -85,6 +85,7 @@
     (define-key map "G" 'navi2ch-article-goto-board)
     (define-key map "e" 'navi2ch-article-textize-article)
     (define-key map "?" 'navi2ch-article-search)
+    (define-key map "\C-o" 'navi2ch-article-save-dat-file)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1008,7 +1009,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
     (cond ((setq prop (get-text-property (point) 'number))
            (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
 	   (if browse-p
-               (navi2ch-browse-url-internal 
+               (navi2ch-browse-url-internal
 		(navi2ch-article-to-url navi2ch-article-current-board
 					navi2ch-article-current-article
 					(if (numberp prop) prop (apply 'min prop))
@@ -1234,7 +1235,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
   "$B<!$N%9%l$K0\F0$9$k$H$-$K(B \"n\" $B$+(B \"p\" $B$G3NG'$9$k!#(B"
   (let* ((accept-key (if (< num 0) '(?p ?P ?\177) '(?n ?N ?\ )))
 	 (accept-value (if title t 'quit))
-	 (prompt (if title 
+	 (prompt (if title
 		     (format "%s --- Through %s article or quit? (%c or q) "
 			     title (if (< num 0) "previous" "next")
 			     (car accept-key))
@@ -1251,7 +1252,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 (defun navi2ch-article-through-ask-last-command-p (num title)
   "$B<!$N%9%l$K0\F0$9$k$H$-$K!"D>A0$N%3%^%s%I$HF1$8$+$G3NG'$9$k!#(B"
   (let* ((accept-value (if title t 'quit))
-	 (prompt (if title 
+	 (prompt (if title
 		     (format "Type %s for %s "
 			     (single-key-description last-command-event)
 			     title)
@@ -2195,6 +2196,30 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 		 (string-match regexp (or (cdr (assq field (cdr msg))) "")))
 	(setq num-list (cons (car msg) num-list))))
     (nreverse num-list)))
+
+(defun navi2ch-article-save-dat-file (board article)
+  (interactive (list navi2ch-article-current-board
+		     navi2ch-article-current-article))
+  (let ((file (navi2ch-article-get-file-name board article)))
+    (cond ((not (file-exists-p file))
+	   (message ".dat $B%U%!%$%k$,$"$j$^$;$s!#$^$:%9%l$r<hF@$7$F$/$@$5$$!#(B")
+	   (ding))
+	  ((not (file-readable-p file))
+	   (message ".dat $B%U%!%$%k$rFI$a$^$;$s!#(B")
+	   (ding))
+	  (t
+	   (let ((newname (read-file-name
+			   (format "Save .dat file to (default `%s'): "
+				   (file-name-nondirectory file))
+			   nil
+			   (file-name-nondirectory file))))
+	     (if (file-directory-p newname)
+		 (setq newname (expand-file-name (file-name-nondirectory file)
+						 newname)))
+	     (when (or (not (file-exists-p newname))
+		       (y-or-n-p "$B$9$G$KB8:_$7$^$9!#>e=q$-$7$^$9$+(B? "))
+	       (copy-file file newname t)
+	       (message "`%s' $B$KJ]B8$7$^$7$?!#(B" newname)))))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

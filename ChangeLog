@@ -1,3 +1,15 @@
+2003-02-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-save-dat-file): 新関数。
+	.dat ファイルを指定のファイルにコピー。
+	(navi2ch-article-mode-map): "\C-o" に
+	navi2ch-article-save-dat-file をバインド。
+
+	* navi2ch-board-misc.el (navi2ch-bm-save-dat-file): 新関数。
+	.dat ファイルを指定のファイルにコピー。
+	(navi2ch-bm-mode-map): "\C-o" に
+	navi2ch-bm-save-dat-file をバインド。
+
 2003-02-05  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
