@@ -4,6 +4,13 @@
 	ときに終了できなかったのを修正。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/
 
+	* navi2ch-article.el
+	「>>1>>2」で「>>1」から「>>2」に TAB で飛べなかったので。
+	(navi2ch-article-set-link-property): リンク個所の先頭に link-head
+	をつけるように。
+	(navi2ch-article-next-link): link-head に飛ぶように。
+	(navi2ch-article-previous-link): 同上。
+
 2002-02-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-list-bbstable-url): bbstable の位置変更

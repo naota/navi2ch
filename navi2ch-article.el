@@ -372,23 +372,27 @@ START, END, NOFIRST で範囲を指定する"
   (goto-char (point-min))
   (while (re-search-forward
 	  navi2ch-article-number-regexp nil t)
-    (add-text-properties
-     (match-beginning 0)
-     (match-end 0)
-     (list 'face 'navi2ch-article-link-face
-	   'link t
-	   'mouse-face 'highlight
-	   'number (navi2ch-match-string-no-properties 1))))
+    (add-text-properties (match-beginning 0)
+			 (match-end 0)
+			 (list 'face 'navi2ch-article-link-face
+			       'link t
+			       'mouse-face 'highlight
+			       'number (navi2ch-match-string-no-properties 1)))
+    (add-text-properties (match-beginning 0)
+			 (+ 1 (match-beginning 0))
+			 (list 'link-head t)))
   (goto-char (point-min))
   (while (re-search-forward
 	  navi2ch-article-url-regexp nil t)
-    (add-text-properties
-     (match-beginning 0)
-     (match-end 0)
-     (list 'face 'navi2ch-article-url-face
-	   'link t
-	   'mouse-face 'highlight
-	   'url (concat "http://" (navi2ch-match-string-no-properties 1))))))
+    (add-text-properties (match-beginning 0)
+			 (match-end 0)
+			 (list 'face 'navi2ch-article-url-face
+			       'link t
+			       'mouse-face 'highlight
+			       'url (concat "http://" (navi2ch-match-string-no-properties 1))))
+    (add-text-properties (match-beginning 0)
+			 (+ 1 (match-beginning 0))
+			 (list 'link-head t))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))
@@ -1329,7 +1333,7 @@ article buffer から抜けるなら 'quit を返す。"
 (defun navi2ch-article-next-link ()
   "次のリンクへ"
   (interactive)
-  (let ((point (navi2ch-next-property (point) 'link)))
+  (let ((point (navi2ch-next-property (point) 'link-head)))
     (when point
       (goto-char point)
       (navi2ch-article-display-link-minibuffer point))))
@@ -1337,7 +1341,7 @@ article buffer から抜けるなら 'quit を返す。"
 (defun navi2ch-article-previous-link ()
   "前のリンクへ"
   (interactive)
-  (let ((point (navi2ch-previous-property (point) 'link)))
+  (let ((point (navi2ch-previous-property (point) 'link-head)))
     (when point
       (goto-char point)
       (navi2ch-article-display-link-minibuffer point))))
