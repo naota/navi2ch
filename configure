@@ -1298,7 +1298,7 @@ if test "${with_xemacs+set}" = set; then
   case $withval in
 yes) emacsen="xemacs" ;;
 no)  emacsen="emacs" ;;
-*)   emacsen="$withval" ;;
+*)   EMACS="$withval" ;;
 esac
 fi;
 
@@ -1308,7 +1308,7 @@ if test "${with_emacs+set}" = set; then
   case $withval in
 yes) emacsen="emacs" ;;
 no)  emacsen="xemacs" ;;
-*)   emacsen="$withval" ;;
+*)   EMACS="$withval" ;;
 esac
 fi;
 

@@ -1,5 +1,9 @@
 2002-01-10  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* configure.in: --with-x?emacs に明示的にパスを指定した場合は
+	EMACS に直接代入する。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/239-240n
+
 	* navi2ch-article.el (navi2ch-article-summary-element-set-seen): 
 	マクロ引数の element が展開されてなかったので修正。
 	(navi2ch-article-summary-element-set-access-time): 同上

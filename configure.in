@@ -22,7 +22,7 @@ AC_ARG_WITH(xemacs,
 [case $withval in
 yes) emacsen="xemacs" ;;
 no)  emacsen="emacs" ;;
-*)   emacsen="$withval" ;;
+*)   EMACS="$withval" ;;
 esac])
 
 AC_ARG_WITH(emacs,
@@ -30,7 +30,7 @@ AC_ARG_WITH(emacs,
 [case $withval in
 yes) emacsen="emacs" ;;
 no)  emacsen="xemacs" ;;
-*)   emacsen="$withval" ;;
+*)   EMACS="$withval" ;;
 esac])
 
 if test -n "${with_xemacs+set}" && test -n "${with_emacs+set}"; then
