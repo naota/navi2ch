@@ -1,3 +1,9 @@
+2003-08-04  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-chunk): すでに PROC が閉じられて
+	いると looking-at が実行されなかった。
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/640
+
 2003-07-23  extra  <ekisutora@users.sourceforge.net>
 
 	今回の変更により

@@ -293,8 +293,8 @@ chunk のサイズを返す。point は chunk の直後に移動。"
   (catch 'ret
     (let ((p (point))
 	  size end)
-      (while (and (eq (process-status proc) 'open)
-		  (not (looking-at "\\([0-9a-fA-F]+\\)[^\r\n]*\r\n")))
+      (while (and (not (looking-at "\\([0-9a-fA-F]+\\)[^\r\n]*\r\n"))
+		  (eq (process-status proc) 'open))
 	(accept-process-output proc)
 	(goto-char p))
       (when (not (match-string 1))
