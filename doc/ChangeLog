@@ -1,3 +1,8 @@
+2003-04-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Getting Develop Version): CVS HEAD について誤解し
+	ている人がいるようなので若干追記。
+
 2003-03-17  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (How to Use Mona Font):
