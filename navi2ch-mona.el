@@ -6,6 +6,13 @@
 ;; 431 の名無しさん
 ;; 874 の名無しさん
 ;; UEYAMA Rui <rui314159@users.sourceforge.net>
+;; part5 スレの 26 さん
+
+;; The part of find-face is originated form apel (poe.el).
+;; You can get the original apel from <ftp://ftp.m17n.org/pub/mule/apel>.
+;; poe.el's Authors:  MORIOKA Tomohiko <tomo@m17n.org>
+;;      Shuhei KOBAYASHI <shuhei@aqua.ocn.ne.jp>
+;; apel is also licened under GPL.
 
 ;; Keywords: 2ch, network
 
@@ -184,6 +191,16 @@ gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
   :initialize 'custom-initialize-default
   :group 'navi2ch-mona)
 
+;; defun find-face for GNU Emacs
+;; the code is originated from apel.
+(if (not navi2ch-on-xemacs)
+    (defun-maybe find-face (face-or-name)
+      "Retrieve the face of the given name.
+If FACE-OR-NAME is a face object, it is simply returned.
+Otherwise, FACE-OR-NAME should be a symbol.  If there is no such face,
+nil is returned.  Otherwise the associated face object is returned."
+      (car (memq face-or-name (face-list)))))
+
 ;; functions
 (defun navi2ch-mona-set-mona-face ()
 (let ((parent navi2ch-mona-face-variable))
@@ -196,7 +213,7 @@ gdwogUyB3Ds7CoFAgUCBQIFAgUCBQL3eu9673rCwsLCwryK93rveCg==")
                           (format "navi2ch-mona%d-face" height)
                         "navi2ch-mona16-face")))
       (setq parent (intern face-name))))
-  (when (facep parent)
+  (when (find-face parent)
     (cond (navi2ch-on-xemacs
            (set-face-parent 'navi2ch-mona-face parent))
           (navi2ch-on-emacs21

@@ -1,3 +1,9 @@
+2002-02-15  NOKUBI Takatsugu  <knok@users.sourceforge.net>
+
+	* navi2ch-mona.el (find-face): apel からコードを拝借
+	(naviech-mona-set-mona-face): 以下のパッチを適用
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/26
+
 2002-02-14    mami  <mami@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-exit): navi2ch-ask-when-exit の評価方法を修正。
