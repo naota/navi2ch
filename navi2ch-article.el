@@ -704,24 +704,24 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	(navi2ch-article-set-summary-element board article nil)))))
 
 (defun navi2ch-article-fetch-article (board article &optional force)
-  (if (get-buffer (navi2ch-article-get-buffer-name
-                   board article))
+  (if (get-buffer (navi2ch-article-get-buffer-name board article))
       (save-excursion
-	(navi2ch-article-view-article board article force nil nil t))
+        (navi2ch-article-view-article board article force nil nil t))
     (let (ret header file)
       (setq article (navi2ch-article-load-info board article)
-	    file (navi2ch-article-get-file-name board article))
+            file (navi2ch-article-get-file-name board article))
       (unless (and (cdr (assq 'kako article))
-		   (file-exists-p file)
-		   (not (and force ; force が指定されない限りsyncしない
-			     (y-or-n-p "re-sync kako article?"))))
-	(setq ret (navi2ch-article-update-file board article force)
-	      article (nth 0 ret)
-	      header (nth 1 ret))
-	(when header
-	  (navi2ch-article-save-info board article)
-	  (navi2ch-article-set-summary-element board article t)
-	  t)))))
+                   (file-exists-p file)
+                   (not (and force      ; force が指定されない限り sync しない
+                             (y-or-n-p "re-sync kako article?"))))
+        (setq ret (navi2ch-article-update-file board article force)
+              article (nth 0 ret)
+              header (nth 1 ret))
+        (when (and header
+                   (not (navi2ch-net-get-state 'not-updated header)))
+          (navi2ch-article-save-info board article)
+          (navi2ch-article-set-summary-element board article t)
+          t)))))
 
 (defun navi2ch-article-get-readcgi-raw-url (board article)
   (let ((url (navi2ch-article-to-url board article))

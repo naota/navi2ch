@@ -1,5 +1,14 @@
 2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-multibbs.el (navi2ch-2ch-board-update):
+	navi2ch-net-update-file-with-readcgi() の返り値を直接使うように。
+	今までは car してた。
+
+	* navi2ch-article.el (navi2ch-article-fetch-article): update のチェッ
+	クに navi2ch-net-get-state() を使うように。
+
+2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* navi2ch-article.el (navi2ch-article-sync): 更新されたかどうかの
 	チェックを not-updated も使ってチェックするように。
 

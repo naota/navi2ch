@@ -404,8 +404,8 @@ START, END, NOFIRST で範囲を指定する"
   (let ((file (navi2ch-board-get-file-name board))
 	(time (cdr (assq 'time board))))
     (if navi2ch-board-enable-readcgi
-	(car (navi2ch-net-update-file-with-readcgi
-	      (navi2ch-board-get-readcgi-raw-url board) file time))
+        (navi2ch-net-update-file-with-readcgi
+         (navi2ch-board-get-readcgi-raw-url board) file time)
       (let ((url (navi2ch-board-get-url
 		  board (if navi2ch-board-use-subback-html
 			    navi2ch-board-subback-file-name)))
