@@ -10,7 +10,7 @@ lisp_LISP = navi2ch-version.el \
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in
 BUILT_SOURCES = navi2ch-version.el bcomp.el
-SUBDIRS = doc icons
+SUBDIRS = contrib doc icons
 
 navi2ch-version.el: $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \

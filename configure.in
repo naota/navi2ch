@@ -70,4 +70,4 @@ fi
 
 AC_SUBST(icondir)
 
-AC_OUTPUT([Makefile doc/Makefile icons/Makefile])
+AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile])

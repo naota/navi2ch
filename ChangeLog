@@ -1,3 +1,10 @@
+2002-02-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* Makefile.am (SUBDIRS): contrib を追加。
+
+	* configure.in: contirb/Makefile を追加。
+	
+
 2002-02-04  UEYAMA Rui  <rui314159@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode): 

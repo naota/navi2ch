@@ -87,7 +87,7 @@ EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in
 
 BUILT_SOURCES = navi2ch-version.el bcomp.el
-SUBDIRS = doc icons
+SUBDIRS = contrib doc icons
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
