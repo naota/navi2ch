@@ -199,6 +199,7 @@
       (unless board
 	(setq board (list (cons 'uri uri)
 			  (cons 'id id)
+			  (cons 'type 'board)
 			  (cons 'name "No Name"))))
       board)))
 
