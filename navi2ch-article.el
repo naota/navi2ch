@@ -426,21 +426,28 @@ START, END, NOFIRST で範囲を指定する"
 			       'mouse-face navi2ch-article-mouse-face
 			       'number (navi2ch-match-string-no-properties 1)))
     (add-text-properties (match-beginning 0)
-			 (+ 1 (match-beginning 0))
+			 (1+ (match-beginning 0))
 			 (list 'link-head t)))
   (goto-char (point-min))
   (while (re-search-forward
 	  navi2ch-article-url-regexp nil t)
-    (add-text-properties (match-beginning 0)
-			 (match-end 0)
-			 (list 'face 'navi2ch-article-url-face
-			       'help-echo (function navi2ch-article-help-echo)
-			       'link t
-			       'mouse-face navi2ch-article-mouse-face
-			       'url (concat "http://" (navi2ch-match-string-no-properties 1))))
-    (add-text-properties (match-beginning 0)
-			 (+ 1 (match-beginning 0))
-			 (list 'link-head t))))
+    (let* ((start (match-beginning 0))
+	   (end (match-end 0))
+	   (scheme (navi2ch-match-string-no-properties 1))
+	   (path (navi2ch-match-string-no-properties 2))
+	   (url (if (string-match "h?ttps?" scheme)
+		    (concat "http" path)
+		  (concat scheme path))))
+      (add-text-properties start
+			   end
+			   (list 'face 'navi2ch-article-url-face
+				 'help-echo (function navi2ch-article-help-echo)
+				 'link t
+				 'mouse-face navi2ch-article-mouse-face
+				 'url url))
+      (add-text-properties start
+			   (1+ end)
+			   (list 'link-head t)))))
 
 (defsubst navi2ch-article-put-cite-face ()
   (goto-char (point-min))

@@ -530,7 +530,7 @@ ask $B$J$iL@<(E*$K0\F0$9$k;~0J30$J$i<ALd$9$k(B
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-url-regexp
-  "h?ttps?://\\([-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:]+\\)"
+  "\\(h?ttps?\\|x-localbbs\\)\\(://[-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:]+\\)"
   "*$B%l%9$N%F%-%9%H$N$&$A(B URL $B$H$_$J$9ItJ,$N@55,I=8=!#(B"
   :type 'regexp
   :group 'navi2ch-article)
@@ -821,6 +821,16 @@ SPC$B!"(BC-l$B!"(BC-g$B!"(BC-v$B$O%j%9%HI=<($N:]$K;HMQ$5$l$k$N$G%-!<$K$O;
 (defcustom navi2ch-message-force-sync nil
   "*non-nil $B$J$i!"%l%9$rAw?.$7$?$"$H6/@)E*$K(B sync $B$9$k!#(B"
   :type 'boolean
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-save-sendlog nil
+  "*non-nil $B$J$i!"Aw?.$7$?%l%9$r(Blocalbbs$B$KJ]B8$9$k!#(B"
+  :type 'boolean
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-sendlog-subject "$BAw?.MzNr(B"
+  "*$BAw?.$7$?%l%9$rJ]B8$9$k%9%l$N%?%$%H%k!#(B"
+  :type 'string
   :group 'navi2ch-message)
 
 ;; net variables

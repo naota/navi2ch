@@ -282,23 +282,38 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   (board article &optional start end nofirst)
   (let* ((uri (cdr (assq 'uri board)))
 	 (artid (cdr (assq 'artid article)))
-	 (url (concat uri "/dat/" artid ".dat/")))
-    (when (numberp start)
-      (setq start (number-to-string start)))
-    (when (numberp end)
-      (setq end (number-to-string end)))
-    (if (equal start end)
-	(concat url start)
-      (concat url
-	      start (and (or start end) "-") end
-	      (and nofirst "n")))))
+	 url)
+    (unless (string= (substring uri -1) "/")
+      (setq uri (concat uri "/")))
+    (if (null artid)
+	uri
+      (setq url (concat uri "dat/" artid ".dat/"))
+      (when (numberp start)
+	(setq start (number-to-string start)))
+      (when (numberp end)
+	(setq end (number-to-string end)))
+      (if (equal start end)
+	  (concat url start)
+	(concat url
+		start (and (or start end) "-") end
+		(and nofirst "n"))))))
 
 (defun navi2ch-localfile-url-to-board (url)
-  (let (list)
-    (when (string-match
-	   "\\`\\(x-localbbs://.*/\\([^/]+\\)\\)/dat/[0-9]+\\.dat" url)
-      (setq list (list (cons 'uri (match-string 1 url))
-		       (cons 'id (match-string 2 url)))))
+  (let (list uri id)
+    (cond
+     ((string-match
+       "\\`\\(x-localbbs://.*/\\([^/]+\\)\\)/dat/[0-9]+\\.dat" url)
+      (setq uri (match-string 1 url)
+	    id  (match-string 2 url)))
+     ((string-match
+       "\\`\\(x-localbbs://.*/\\([^/]+\\)\\)/?$" url)
+      (setq uri (match-string 1 url)
+	    id  (match-string 2 url))))
+    (when uri
+      (setq uri (concat uri "/"))
+      (setq list (cons (cons 'uri uri) list)))
+    (when id
+      (setq list (cons (cons 'id id) list)))
     list))
 
 (defun navi2ch-localfile-url-to-article (url)

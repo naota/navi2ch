@@ -1,3 +1,29 @@
+2002-10-19  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	送信履歴保存機能を実装。
+
+	* navi2ch-article.el (navi2ch-article-set-link-property): 
+	navi2ch-article-url-regexpの変更に追従。
+
+	* navi2ch-localfile.el (navi2ch-localfile-article-to-url):
+	articleがnilのときに対応。
+	(navi2ch-localfile-url-to-board): board url に対応。
+
+	* navi2ch-message.el (navi2ch-message-sendlog-board-id): 新変数。
+	(navi2ch-message-send-message): 送信履歴保存。
+	(navi2ch-message-sendlog-subject): 新関数。
+	(navi2ch-message-sendlog-board): 新関数。
+	(navi2ch-message-sendlog-article): 新関数。
+	(navi2ch-message-add-sendlog): 新関数。
+
+	* navi2ch-util.el (navi2ch-url-to-host): "^" 追加
+
+	* navi2ch-vars.el (navi2ch-article-url-regexp): localbbs対応。
+	(navi2ch-message-save-sendlog): 新変数。
+	(navi2ch-message-sendlog-subject): 新変数。
+
+	* navi2ch.el (toplevel): (require 'navi2ch-localfile)
+
 2002-10-18  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-insert-state): 自前で

@@ -77,6 +77,9 @@
   navi2ch-message-paragraph-separate
   "*`navi2ch-message-mode' で使用される `paragraph-start'。")
 
+(defvar navi2ch-message-sendlog-board-id "sendlog"
+  "*投稿履歴を保存する板のID")
+
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
 	    (if (functionp navi2ch-message-ask-before-write)
@@ -221,7 +224,10 @@
 		      (navi2ch-board-sync))
 		  (when (buffer-live-p navi2ch-message-current-article-buffer)
 		    (set-buffer navi2ch-message-current-article-buffer)
-		    (navi2ch-article-sync navi2ch-message-force-sync)))))
+		    (navi2ch-article-sync navi2ch-message-force-sync))))
+	      (when navi2ch-message-save-sendlog
+		(navi2ch-message-add-sendlog from mail message subject
+					     board article)))
 	    (when (get-buffer navi2ch-message-backup-buffer-name)
 	      (bury-buffer navi2ch-message-backup-buffer-name)))))
       (run-hooks 'navi2ch-message-after-send-hook)
@@ -442,6 +448,46 @@
     (split-window-vertically)
     (other-window 1)
     (switch-to-buffer (get-buffer navi2ch-message-buffer-name))))
+
+;; sendlog機能
+(defun navi2ch-message-sendlog-subject (board article)
+  ;; 送信したレスを保存するスレのタイトルを返す。
+  ;; タイトルを細かく指定したいときはこの関数を上書きしてね。
+  ;; nil を返すと、履歴は保存されません。
+  navi2ch-message-sendlog-subject)
+
+(defun navi2ch-message-sendlog-board ()
+  (let ((boards (cdr (assq 'child (navi2ch-list-get-etc-category)))))
+    (catch 'loop
+      (while boards
+	(when (string= (cdr (assq 'id (car boards)))
+		       navi2ch-message-sendlog-board-id)
+	  (throw 'loop nil))
+	(setq boards (cdr boards))))
+    (car boards)))
+
+(defun navi2ch-message-sendlog-article (board subject)
+  (when board
+    (let* ((file (navi2ch-board-get-file-name board))
+	   (sbjs (navi2ch-board-get-subject-list file)))
+      (catch 'loop
+	(while sbjs
+	  (when (string= (cdr (assq 'subject (car sbjs))) subject)
+	    (throw 'loop nil))
+	  (setq sbjs (cdr sbjs))))
+      (car sbjs))))
+
+(defun navi2ch-message-add-sendlog (from mail message subject board article)
+  (let* ((url (navi2ch-article-to-url board article))
+	 (sbj (or subject (cdr (assq 'subject article))))
+	 (lsubject (navi2ch-message-sendlog-subject board article))
+	 (lboard (navi2ch-message-sendlog-board))
+	 (larticle (navi2ch-message-sendlog-article lboard lsubject)))
+    (when (and lsubject lboard)
+      (setq message (format "Subject: %s\nURL: %s\n\n%s" sbj url message))
+      (when larticle (setq lsubject nil))
+      (navi2ch-multibbs-send-message from mail message
+				     lsubject lboard larticle))))
 
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

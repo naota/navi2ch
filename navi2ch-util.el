@@ -787,9 +787,9 @@ base64デコードすべき内容がない場合はエラーになる。"
 (defun navi2ch-url-to-host (url)
   (when url
     (cond
-     ((string-match "http://\\([^/]+\\)" url)
+     ((string-match "^http://\\([^/]+\\)" url)
       (match-string 1 url))
-     ((string-match "x-localbbs://" url)
+     ((string-match "^x-localbbs://" url)
       "localhost"))))
 
 (defun navi2ch-read-string (prompt &optional initial-input history)
