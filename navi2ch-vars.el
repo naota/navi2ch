@@ -196,7 +196,9 @@ nil ならば手動で更新しないかぎり取りにいかない。"
   :group 'navi2ch-list)
 
 (defcustom navi2ch-list-valid-host-regexp
-  "\\(\\.2ch\\.net\\|\\.bbspink\\.com\\)$"
+  (concat "\\("
+	  (regexp-opt '(".2ch.net" ".bbspink.com" ".machibbs.com"))
+	  "\\)\\'")
   "*２ちゃんねるの板とみなすホストの正規表現。"
   :type 'regexp
   :group 'navi2ch-list)
@@ -623,6 +625,7 @@ nil なら、書きかけを破棄していいか問い合わせる。
     ("I" . "(･Ａ･)ｲｸﾅｲ!!")
     ("j" . "(･∀･)ｼﾞｻｸｼﾞｴﾝﾃﾞｼﾀ")
     ("k" . "ｷﾀ━━━━━━(ﾟ∀ﾟ)━━━━━━ !!!!!")
+    ("K" . "ｷﾀ━(ﾟ∀ﾟ)━( ﾟ∀)━( 　ﾟ)━(　　)━(ﾟ 　)━(∀ﾟ )━(ﾟ∀ﾟ)━!!!!")
     ("m" . "(´∀｀)")
     ("M" . "ヽ(´▽｀)ﾉ")
     ("n" . "(￣ー￣)ニヤリッ")

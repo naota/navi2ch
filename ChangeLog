@@ -1,3 +1,12 @@
+2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-list-valid-host-regexp): .machibbs.com
+	を追加。
+	(navi2ch-message-aa-alist): AA 追加。
+
+	* navi2ch-list.el (navi2ch-list-ignore-category-list): まちＢＢＳ
+	を削除。
+
 2002-07-02  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-directory.el (navi2ch-directory-set-subject-list): 
