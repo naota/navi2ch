@@ -199,7 +199,8 @@
 		 (buffer-substring (point-min)
 				   (point-max)))))))
 
-(defun navi2ch-net-download-file (url &optional time accept-status other-header)
+(defun navi2ch-net-download-file (url
+				  &optional time accept-status other-header)
   "URL からダウンロードを開始する。
 TIME が `non-nil' ならば TIME より新しい時だけダウンロードする。
 リスト `accept-status' が `non-nil' ならばステータスが `accept-status' に含まれ
@@ -420,7 +421,7 @@ internet drafts directory for a copy.")
     (when (string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
       (match-string 1 str))))
 		   
-(defun navi2ch-net-send-message (from mail message subject board article)
+(defun navi2ch-net-send-message (from mail message subject url referer bbs key)
   "メッセージを送る。
 送信成功なら t を返す"
   (let ((param-alist
@@ -428,7 +429,7 @@ internet drafts directory for a copy.")
           (cons "submit" "書き込む")
           (cons "FROM" (or from ""))
           (cons "mail" (or mail ""))
-          (cons "bbs" (cdr (assq 'id board)))
+          (cons "bbs" bbs)
           (cons "time"
                 (mapconcat 'int-to-string
                            (let ((time (current-time)))
@@ -439,20 +440,16 @@ internet drafts directory for a copy.")
           (cons "MESSAGE" message)
           (if subject
               (cons "subject" subject)
-            (cons "key" (cdr (assq 'artid article)))))))
-    (let ((uri (cdr (assq 'uri board)))
-          proc)
-      (string-match "\\(http://.+\\)/[^/]+" uri)
-      (setq uri (match-string 1 uri))
+            (cons "key" key)))))
+    (let (proc)
       (setq proc (navi2ch-net-send-request
-                  (concat uri "/test/bbs.cgi")
-                  "POST"
+		  url "POST"
                   (list (cons "Content-Type"
                               "application/x-www-form-urlencoded")
                         (cons "Cookie"
                               (concat "NAME=" from
                                       "; MAIL=" mail))
-                        (cons "Referer" (navi2ch-board-get-uri board)))
+                        (cons "Referer" referer))
                   (navi2ch-net-get-param-string param-alist)))
       (message "send message...")
       (if (navi2ch-net-send-message-success-p proc)

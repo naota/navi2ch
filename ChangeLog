@@ -1,3 +1,20 @@
+2002-01-12  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board.el
+	(navi2ch-board-get-bbscgi-url): 新関数。defsubst にする必要って全
+	然ないかも。
+
+	* navi2ch-message.el
+	(navi2ch-message-send-message): navi2ch-net-send-message の変更に
+	合わせる。navi2ch-board-get-bbscgi-url を使うように。
+
+	* navi2ch-net.el
+	(navi2ch-net-send-message): 引数から board, article をはずした。変
+	わりに url, referer, bbs, key を追加。
+
+	* navi2ch.el
+	(toplevel): navi2ch-version を require するようにした。
+
 2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: version を 1.4-DEV に変えた。

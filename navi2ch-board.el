@@ -140,6 +140,13 @@ kako ならばそれに対応した uri にする"
 	(id (cdr (assq 'id board))))
     (setq uri (navi2ch-replace-string (concat id "/") "" uri))
     (format "%stest/read.cgi/%s/" uri id)))
+
+(defsubst navi2ch-board-get-bbscgi-url (board)
+  "bbs.cgi の url を返す"
+  (let ((uri (navi2ch-board-get-uri board))
+	(id (cdr (assq 'id board))))
+    (setq uri (navi2ch-replace-string (concat id "/") "" uri))
+    (format "%stest/bbs.cgi" uri)))
 	  
 (defsubst navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))

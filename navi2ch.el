@@ -34,6 +34,7 @@
 (require 'navi2ch-list)
 (require 'navi2ch-article)
 (require 'navi2ch-message)
+(require 'navi2ch-version)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
@@ -44,8 +45,6 @@
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-offline-on "[ON] ")
 (defvar navi2ch-offline-off "[--] ")
-
-(defconst navi2ch-version "1.4")
 
 (defvar navi2ch-init nil)
 

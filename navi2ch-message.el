@@ -144,18 +144,22 @@
             (bury-buffer)))
 	(when navi2ch-message-trip
 	  (setq from (concat from "#" navi2ch-message-trip)))
-        (when (navi2ch-net-send-message
-               from mail message subject
-               navi2ch-message-current-board
-               navi2ch-message-current-article)
-          (sleep-for navi2ch-message-wait-time)
-          (save-excursion
-            (if navi2ch-message-new-message-p
-                (progn
-		  (set-buffer navi2ch-board-buffer-name)
-		  (navi2ch-board-sync))
-              (set-buffer (navi2ch-article-current-buffer))
-              (navi2ch-article-sync))))))
+	(let ((board navi2ch-message-current-board)
+	      (article navi2ch-message-current-article))
+	  (when (navi2ch-net-send-message
+		 from mail message subject
+		 (navi2ch-board-get-bbscgi-url board)
+		 (navi2ch-board-get-uri board)
+		 (cdr (assq 'id board))
+		 (cdr (assq 'artid article)))
+	    (sleep-for navi2ch-message-wait-time)
+	    (save-excursion
+	      (if navi2ch-message-new-message-p
+		  (progn
+		    (set-buffer navi2ch-board-buffer-name)
+		    (navi2ch-board-sync))
+		(set-buffer (navi2ch-article-current-buffer))
+		(navi2ch-article-sync)))))))
     (run-hooks 'navi2ch-message-after-send-hook)
     (navi2ch-message-exit 'after-send)))
 
