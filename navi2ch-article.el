@@ -429,8 +429,8 @@ START, END, NOFIRST で範囲を指定する"
 	;; (navi2ch-article-cleanup-message) ; やっぱ遅い
 	(put-text-property (point-min) (point-max) 'face
 			   'navi2ch-article-face)
-	(navi2ch-article-set-link-property)
 	(navi2ch-article-put-cite-face)
+	(navi2ch-article-set-link-property)
         (if navi2ch-article-auto-decode-base64-p
             (navi2ch-article-auto-decode-base64-section))
 	(navi2ch-article-arrange-message))))

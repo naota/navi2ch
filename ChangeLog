@@ -11,6 +11,13 @@
 	(navi2ch-article-next-link): link-head に飛ぶように。
 	(navi2ch-article-previous-link): 同上。
 
+	(navi2ch-article-insert-message): (navi2ch-article-put-cite-face)
+	と (navi2ch-article-set-link-property) の順序を逆に。
+	引用中でも「>>1」はリンクに見えた方がいいっしょ。
+
+	* navi2ch-vars.el (navi2ch-article-number-regexp): 
+	「>>> 1」や「<<1」もリンクとなるように。
+
 2002-02-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-list-bbstable-url): bbstable の位置変更
