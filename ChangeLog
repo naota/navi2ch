@@ -1,3 +1,8 @@
+2003-03-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-send-message-error-string):
+	「サーバの負荷が高いので書きこめません。」に対応。
+
 2003-03-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-insert-messages):
@@ -5,7 +10,7 @@
 
 2003-03-21  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-message-filter-subr): 
+	* navi2ch-article.el (navi2ch-article-message-filter-subr):
 	フィルタ条件のマッチ確認方法を修正。点数が正しく加算されるように。
 
 2003-03-20  mami  <mami@users.sourceforge.net>
