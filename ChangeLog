@@ -1,3 +1,8 @@
+2002-10-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-with-default-file-modes): XEmacs のとき
+	(必要なら) char-to-int するように。
+
 2002-10-16  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-appendweek): youbiがnilに

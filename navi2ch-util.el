@@ -253,7 +253,12 @@ See also the function `defalias'."
     `(let ((,temp (default-file-modes)))
        (unwind-protect
 	   (progn
-	     (set-default-file-modes ,mode)
+	     (set-default-file-modes
+	      (navi2ch-ifxemacs
+		  (if (integerp ,mode)
+		      ,mode
+		    (char-to-int ,mode))
+		,mode))
 	     ,@body)
 	 (set-default-file-modes ,temp)))))
 
