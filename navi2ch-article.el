@@ -65,6 +65,7 @@
     (define-key map "<" 'navi2ch-article-goto-first-message)
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
     (define-key map "\eb" 'navi2ch-article-base64-decode-message)
+    (define-key map "\ed" 'navi2ch-article-decode-message)
     (define-key map "v" 'navi2ch-article-view-aa)
     (define-key map "f" 'navi2ch-article-forward-buffer)
     (define-key map "b" 'navi2ch-article-backward-buffer)
@@ -1288,6 +1289,24 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
 		    (point-max-marker))))
       (navi2ch-base64-write-region (marker-position begin)
 				   (marker-position end) filename))))
+
+(defun navi2ch-article-decode-message ()
+  "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B
+$B$=$N$&$A%G%U%)%k%H$N%G%3!<%@$r?dB,$9$k$h$&$K$7$?$$!#(B"
+  (interactive)
+  (unless decoder
+    (let ((prompt "(u)udecode or (b)ase64")
+	  (cursor-in-echo-area t)
+	  c)
+      (while (not decoder)
+	(message "%s: " prompt)
+	(message "%s: %c" prompt (setq c (read-char)))
+	(setq decoder (cond ((memq c '(?u ?U))
+			     'navi2ch-article-uudecode-message)
+			    ((memq c '(?b ?B))
+			     'navi2ch-article-base64-decode-message)))
+	(setq prompt "Please answer u, or b.  (u)udecode or (b)ase64"))))
+  (call-interactively decoder))
 
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
