@@ -385,6 +385,11 @@ internet drafts directory for a copy.")
   (string-match "書きこみました。"
 		(decode-coding-string (navi2ch-net-get-content proc)
 				      navi2ch-net-coding-system)))
+(defun navi2ch-net-send-message-error-string (proc)
+  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				   navi2ch-net-coding-system)))
+    (when (string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
+      (match-string 1 str))))
 		   
 (defun navi2ch-net-send-message (from mail message subject board article)
   "メッセージを送る。
@@ -425,7 +430,10 @@ internet drafts directory for a copy.")
           (progn
             (message "send message...succeed")
             (delete-process proc) t)
-        (message "send message...failed")
+	(let ((err (navi2ch-net-send-message-error-string proc)))
+	  (if (stringp err)
+	      (message "send message...failed: %s" err)
+	    (message "send message...failed")))
         (delete-process proc) nil))))
 
 (defun navi2ch-net-download-logo (board)
