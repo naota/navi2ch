@@ -1,3 +1,7 @@
+2005-02-18  mami  <mami@users.sourceforge.net>
+
+	* NEWS: 更新。
+
 2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-message.el (navi2ch-message-mode-map):
@@ -18,7 +22,6 @@
 	一時的に insertion-type を t にするのをやめる。
 
 2005-02-11  mami  <mami@users.sourceforge.net>
-
 
 	XEmacs の forward-comment はバッファの最後で t を返す模様。
 	http://list-archive.xemacs.org/xemacs-beta/200210/msg00522.html
@@ -65,7 +68,7 @@
 	navi2ch-article-file-name-to-artid を**わざと**使うようにしてない。
 	理由は下のパッチがそうなっていなかった為。なんでそうしてなかったか
 	を聞いとく事。
-	
+
 	* navi2ch-util.el (navi2ch-file-mtime, navi2ch-file-size): 新関数。
 
 	* navi2ch-article.el (navi2ch-article-local-dat-regexp): 新変数。
@@ -216,7 +219,7 @@
 	coding-system の判別に navi2ch-2ch-send-message-last-board を使っ
 	てる。
 	これらの関数に board を渡すようにしたほうがいいのかな？
-	
+
 	* Makefile.am (lisp_LISP): navi2ch-be2ch.el を追加。
 
 	* navi2ch.el (toplevel): navi2ch-be2ch を rquire するように。
@@ -255,7 +258,7 @@
 
 	* config.guess, config.sub, elisp-comp, install-sh, missing,
 	* mkinstalldirs: automake 1.9.2, autoconf 2.59 に付属のものに更新
-	
+
 2005-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-multibbs.el (toplevel): cl を require。
@@ -277,7 +280,7 @@
 	倒なので、開くときに指定できるようにする。
 	ただ、現状 navi2ch-multibbs-defcallback されている BBS を
 	navi2ch-board-coding-system-alist に登録すると文字化けしちゃうはず。
-	
+
 	* navi2ch-search.el (navi2ch-search-article-regexp):
 	navi2ch-board-insert-file-contents を使うように。
 	(navi2ch-search-cache):
@@ -408,7 +411,7 @@
 	* navi2ch.el (navi2ch-2ch-url-p): ホスト名がないときは nil に。
 	http:///〜 などの URL 対策。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/555
-	
+
 2004-10-08  mami  <mami@users.sourceforge.net>
 
 	* NEWS: 更新。
