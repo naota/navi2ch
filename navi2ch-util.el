@@ -348,7 +348,7 @@ return new alist whose car is the new pair and cdr is ALIST.
     `(string-as-unibyte ,string)))
 
 (defmacro navi2ch-string-as-multibyte (string)
-  (if (featurep 'xeamcs)
+  (if (featurep 'xemacs)
       string
     `(string-as-multibyte ,string)))
 
