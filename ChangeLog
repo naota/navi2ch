@@ -1,3 +1,15 @@
+2003-04-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-list): docstring
+	中の行頭の `(' をエスケープ。
+	(navi2ch-article-message-filter-by-name-alist): 同上。
+	(navi2ch-article-message-filter-by-message-alist): 同上。
+	(navi2ch-article-message-filter-by-id-alist): 同上。
+	(navi2ch-article-message-filter-by-mail-alist): 同上。
+	(navi2ch-article-message-filter-by-subject-alist): 同上。
+	(navi2ch-auto-update): デフォルト値変更。
+	(navi2ch-message-user-name): 同上。
+
 2003-04-06  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-save-info):

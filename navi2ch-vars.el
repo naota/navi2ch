@@ -747,9 +747,9 @@ nil の場合は同じスレの内容のみを得る。"
 フィルタ後の文字列もしくは 'hide か 'important を返すものを指定する。
 
 下記は名前欄が「ほげ」のときに「あぼぼーん」に置換するための
-(ちょっと冗長な) 関数の例。
+\(ちょっと冗長な) 関数の例。
 
-(defun my-navi2ch-article-message-filter-hoge (alist)
+\(defun my-navi2ch-article-message-filter-hoge (alist)
   (let ((number (cdr (assq 'number alist)))
 	(name (cdr (assq 'name alist)))
 	(mail (cdr (assq 'mail alist)))
@@ -765,7 +765,7 @@ nil の場合は同じスレの内容のみを得る。"
   "*レスをフィルタする名前と、フィルタ処理の alist。
 
 名前には文字列か、
-(文字列 シンボル)のリスト(拡張形式)を指定する。
+\(文字列 シンボル)のリスト(拡張形式)を指定する。
 
 拡張形式を指定すると、
 シンボルに合わせて下記の方法でレスを検査する。
@@ -844,7 +844,7 @@ important	レスをブックマークに登録する
   "*レスをフィルタするためのレス本文の内容と、フィルタ処理の alist。
 
 レス本文の内容には文字列か、
-(文字列 シンボル)のリスト(拡張形式)を指定する。
+\(文字列 シンボル)のリスト(拡張形式)を指定する。
 
 拡張形式を指定すると、
 シンボルに合わせて下記の方法でレスを検査する。
@@ -923,7 +923,7 @@ important	レスをブックマークに登録する
   "*レスをフィルタする ID と、フィルタ処理の alist。
 
 ID には文字列か、
-(文字列 シンボル)のリスト(拡張形式)を指定する。
+\(文字列 シンボル)のリスト(拡張形式)を指定する。
 
 拡張形式を指定すると、
 シンボルに合わせて下記の方法でレスを検査する。
@@ -1002,7 +1002,7 @@ ID が「hoGE0987」だとレスが隠される。
   "*レスをフィルタするためのメール欄の内容と、フィルタ処理の alist。
 
 メール欄の内容には文字列か、
-(文字列 シンボル)のリスト(拡張形式)を指定する。
+\(文字列 シンボル)のリスト(拡張形式)を指定する。
 
 拡張形式を指定すると、
 シンボルに合わせて下記の方法でレスを検査する。
@@ -1081,7 +1081,7 @@ important	レスをブックマークに登録する
   "*レスをフィルタするためのスレのタイトルと、フィルタ処理の alist。
 
 スレのタイトルには文字列か、
-(文字列 シンボル)のリスト(拡張形式)を指定する。
+\(文字列 シンボル)のリスト(拡張形式)を指定する。
 
 拡張形式を指定すると、
 シンボルに合わせて下記の方法でレスを検査する。
@@ -1209,10 +1209,7 @@ important	レスをブックマークに登録する
   :group 'navi2ch-article)
 
 ;;; message variables
-(defcustom navi2ch-message-user-name
-  (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")
-	((featurep 'meadow) "名無しさん＠Ｍｅａｄｏｗ")
-	(t "名無しさん＠Ｅｍａｃｓ"))
+(defcustom navi2ch-message-user-name ""
   "*デフォルトの名前。"
   :type 'string
   :group 'navi2ch-message)
@@ -1499,7 +1496,7 @@ ask なら保存する前に質問する
   :type 'string
   :group 'navi2ch)
 
-(defcustom navi2ch-auto-update t
+(defcustom navi2ch-auto-update nil
   "*non-nil なら、起動時に `navi2ch-update-file' を更新して実行する。
 ファイルが実行されるのは、
  - `navi2ch-update-file' が更新されていて、
