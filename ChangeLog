@@ -1,5 +1,12 @@
 2004-11-21  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-list.el (navi2ch-list-get-etc-category):
+	navi2ch-list-etc-file-name に navi2ch-directory の外のファイルを指
+	定したときに正しく動作するように。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/744-746n
+
+2004-11-21  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
 	プロンプトの文頭を大文字に。
 

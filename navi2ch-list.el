@@ -192,7 +192,8 @@
 	  (nreverse list2))))))
 
 (defun navi2ch-list-get-etc-category ()
-  (let ((file (navi2ch-list-get-file-name navi2ch-list-etc-file-name)))
+  (let ((file (expand-file-name navi2ch-list-etc-file-name
+				navi2ch-directory)))
     (when (file-exists-p file)
       (with-temp-buffer
 	(insert-file-contents file)
