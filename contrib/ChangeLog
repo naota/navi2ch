@@ -1,3 +1,11 @@
+2003-01-21  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (toplevel): Wanderlust の設定例を追加
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/314
+	(izonmoji-mac-display-list): 縦書き用の文字を追加
+	(izonmoji-mac-chars-list): 同上。
+	(toplevel): izonmoji-shift_jis を定義。
+
 2002-12-16  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* Makefile.am (EXTRA_DIST): izonmoji-mode.el、

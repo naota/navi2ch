@@ -69,9 +69,18 @@
 ;;  (add-hook 'navi2ch-bm-mode-hook      'izonmoji-mode-on)
 ;;  (add-hook 'navi2ch-article-mode-hook 'izonmoji-mode-on)
 ;;  (add-hook 'navi2ch-popup-article-mode-hook 'izonmoji-mode-on)
+;;  ;; IBM$B3HD%J8;z$rI=<((B (XEmacs-21.1 $B$OL$BP1~(B)
+;;  (when (memq 'izonmoji-shift_jis (coding-system-list))
+;;    (defadvice navi2ch-insert-file-contents
+;;      (around izonmoji-ibm-ext activate)
+;;      (let ((navi2ch-coding-system 'izonmoji-shift_jis))
+;;        ad-do-it)))
 
 ;; [Mew] ~/.mew.el $B$X(B
 ;;  (add-hook 'mew-message-mode-hook 'izonmoji-mode-on)
+
+;; [Wanderlust] ~/.wl $B$X(B
+;;  (add-hook 'wl-message-redisplay-hook 'izonmoji-mode-on)
 
 ;; [emacs-w3m] ~/.emacs-w3m.el $B$X(B
 ;;  (add-hook 'w3m-mode-hook 'izonmoji-mode-on)
@@ -92,6 +101,8 @@
 (eval-when-compile
   (defvar buffer-display-table)
   (defvar current-display-table))
+
+(require 'ccl)
 
 (defvar izonmoji-priority-list '(win mac)
   "*$BI=<($NM%@h=g0L!#(B
@@ -170,7 +181,7 @@ XEmacs-21.1 $B$G$O!"5!<o0MB8J8;z$K%U%'%$%9$rIU$1$k$H(B XEmacs $B$,Mn$A$k$h$&$
     "(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)"
     "(11)" "(12)" "(13)" "(14)" "(15)" "(16)" "(17)" "(18)" "(19)" "(20)"
     "$(O,!(B" "$(O,"(B" "$(O,#(B" "$(O,$(B" "$(O,%(B" "$(O,&(B" "$(O,'(B" "$(O,((B" "$(O,)(B"
-    "1." "2." "3." "4." "5." "6." "7." "8." "9." "0."
+    "0." "1." "2." "3." "4." "5." "6." "7." "8." "9." "0." ;0. $B$O$I$3!)(B
     "$(O-5(B" "$(O-6(B" "$(O-7(B" "$(O-8(B" "$(O-9(B" "$(O-:(B" "$(O-;(B" "$(O-<(B" "$(O-=(B" "$(O->(B"
     "$(O-?(B" "$(O-W(B" "X$(O-7(B" "X$(O-8(B" "XV"
     "$(O,5(B" "$(O,6(B" "$(O,7(B" "$(O,8(B" "$(O,9(B" "$(O,:(B" "$(O,;(B" "$(O,<(B" "$(O,=(B" "$(O,>(B"
@@ -180,12 +191,12 @@ XEmacs-21.1 $B$G$O!"5!<o0MB8J8;z$K%U%'%$%9$rIU$1$k$H(B XEmacs $B$,Mn$A$k$h$&$
     "(w)" "(x)" "(y)" "(z)"
     "$(O-P(B" "mm$(O),(B" "$(O-Q(B" "$(O-Q),(B" "$(O-Q)-(B" "m" "$(O-V(B" "m$(O)-(B" "$(O-R(B" "k$(O-V(B"
     "$(O-S(B" "g" "$(O-T(B" "$(O-U(B" "m$(O#_(B" "d$(O#_(B" "$(O#_(B" "k$(O#_(B"
-    "ms" "$B&L(Bs" "ns" "ps" "$(O!k(BF" "mb" "HP" "Hz" "KB" "MB" "GB" "TB"
+    "ms" "$B&L(Bs" "ns" "ps" "$(O!k(BF" "mb" "$(O#^(B" "Hz" "KB" "MB" "GB" "TB"
     "$(O-b(B" "$(O-c(B" "$(O-d(B" "FAX"
     "$(O&9(B" "$(O&?(B" "$(O&=(B" "$(O&;(B" "$(O&:(B" "$(O&@(B" "$(O&>(B" "$(O&<(B"
     "$(O&f(B" "$(O&g(B" "JIS"			;JIS$B%^!<%/(B
-    "$B"*(B" "$B"+(B" "$B",(B" "$B"-(B"			;$BA4A30c$&(B
-    "$(O#)(B" "$(O#)(B" "$B","-(B" "$B"-",(B"		;$B$A$g$C$H0c$&(B
+    "$B"*(B" "$B"+(B" "$B",(B" "$B"-(B"			;$B;X:9$7Lp0u(B
+    "$(O#)(B" "$(O#)(B" "$B","-(B" "$B"-",(B"		;$B6v?tHVL\$O!">e2<!":81&$N8~$-$,5U(B
     "$(O#*(B" "$(O#+(B" "$(O#,(B" "$(O#-(B" "$(O#*(B" "$(O#+(B" "$(O#,(B" "$(O#-(B" ;$B8eH>$OEI$jDY$7(B
     "($BF|(B)" "($B7n(B)" "($B2P(B)" "($B?e(B)" "($BLZ(B)" "($B6b(B)" "($BEZ(B)"
     "($B:W(B)" "($B=K(B)" "($B<+(B)" "($B;j(B)" "$(O-l(B" "($B8F(B)" "$(O-j(B" "($B;q(B)" "($BL>(B)" 
@@ -199,14 +210,22 @@ XEmacs-21.1 $B$G$O!"5!<o0MB8J8;z$K%U%'%$%9$rIU$1$k$H(B XEmacs $B$,Mn$A$k$h$&$
     "$B3t<02q<R(B" "$BM-8B2q<R(B" "$B:bCDK!?M(B"	;"$(O-j(B" "$(O-k(B"
     "$(O-s(B" "$(O-x(B" "$(O-y(B"
     "$(O-`(B" "$(O-a(B"
-    "$(O$t(B" "$(O'r(B" "$(O's(B" "$(O't(B" "$(O'u(B")
+    "$(O$t(B" "$(O'r(B" "$(O's(B" "$(O't(B" "$(O'u(B"
+    ;; $B=D=q$-(B
+    "$B!"(B" "$B!#(B" "$B!1(B" "$B!2(B" "$B!<(B" "$B(!(B" "$B!>(B" "$B!A(B"
+    "$B!a(B" "$B(!(B"				;$B2#D>@~(B
+    "$B!D(B" "$B!E(B" "$B!J(B" "$B!K(B" "$B!L(B" "$B!M(B" "$B!N(B" "$B!O(B" "$B!P(B" "$B!Q(B" "$B!R(B" "$B!S(B" "$B!T(B" "$B!U(B"
+    "$B!V(B" "$B!W(B" "$B!X(B" "$B!Y(B" "$B!Z(B" "$B![(B" "$B!a(B"
+    "$B$!(B" "$B$#(B" "$B$%(B" "$B$'(B" "$B$)(B" "$B$C(B" "$B$c(B" "$B$e(B" "$B$g(B" "$B$n(B"
+    "$B%!(B" "$B%#(B" "$B%%(B" "$B%'(B" "$B%)(B" "$B%C(B" "$B%c(B" "$B%e(B" "$B%g(B" "$B%n(B" "$B%u(B" "$B%v(B")
   "*Mac$B$N5!<o0MB8J8;z$NI=<($K;H$&J8;zNs$N%j%9%H!#(B")
 
-(defun izonmoji-make-char-list (i js je)
+(defun izonmoji-make-char-list (i js je &optional k)
+  (unless k (setq k 1))
   (let ((j js) list)
     (while (<= j je)
       (setq list (cons (make-char 'japanese-jisx0208 i j) list))
-      (setq j (1+ j)))
+      (setq j (+ j k)))
     (nreverse list)))
 
 ;; Windows$B$N4]IU$-(B1$B$O!"(B
@@ -229,7 +248,7 @@ XEmacs-21.1 $B$G$O!"5!<o0MB8J8;z$K%U%'%$%9$rIU$1$k$H(B XEmacs $B$,Mn$A$k$h$&$
    (izonmoji-make-char-list  41  33  52) ;$B4]IU$-?t;z(B
    (izonmoji-make-char-list  41  63  82) ;$B3g8LIU$-?t;z(B
    (izonmoji-make-char-list  41  93 101) ;$B9u4]IU$-?t;z(B
-   (izonmoji-make-char-list  41 114 123) ;$BE@IU$-?t;z(B
+   (izonmoji-make-char-list  41 113 123) ;$BE@IU$-?t;z(B
    (izonmoji-make-char-list  42  33  47) ;$B%m!<%^?t;z(B($BBgJ8;z(B)
    (izonmoji-make-char-list  42  53  67) ;$B%m!<%^?t;z(B($B>.J8;z(B)
    (izonmoji-make-char-list  42  93 118) ;$B3g8LIU$-%"%k%U%!%Y%C%H(B
@@ -248,7 +267,23 @@ XEmacs-21.1 $B$G$O!"5!<o0MB8J8;z$K%U%'%$%9$rIU$1$k$H(B XEmacs $B$,Mn$A$k$h$&$
    (izonmoji-make-char-list  47  53  54) ;""
    (izonmoji-make-char-list  47  73  73) ;$B$&!+(B
    (izonmoji-make-char-list  47  75  78) ;$B%o!+(B
-   )
+   (izonmoji-make-char-list 117  34  35) ;$B=D=q$-(B
+   (izonmoji-make-char-list 117  49  50)
+   (izonmoji-make-char-list 117  60  62)
+   (izonmoji-make-char-list 117  65  69)
+   (izonmoji-make-char-list 117  74  91)
+   (izonmoji-make-char-list 117  97  97)
+   (izonmoji-make-char-list 120  33  41 2)
+   (izonmoji-make-char-list 120  67  67)
+   (izonmoji-make-char-list 120  99  99)
+   (izonmoji-make-char-list 120 101 103 2)
+   (izonmoji-make-char-list 120 110 110)
+   (izonmoji-make-char-list 121  33  41 2)
+   (izonmoji-make-char-list 121  67  67)
+   (izonmoji-make-char-list 121  99  99)
+   (izonmoji-make-char-list 121 101 103 2)
+   (izonmoji-make-char-list 121 110 110)
+   (izonmoji-make-char-list 121 117 118))
   "*Mac$B$N5!<o0MB8J8;z%j%9%H!#(B")
 
 (defvar izonmoji-mode-hook nil "*$B5!<o0MB8J8;z$rI=<($7$?8e$K8F$P$l$k%U%C%/!#(B")
@@ -304,7 +339,7 @@ ARG $B$,(B non-nil $B$N>l9g!"(B1$B0J>e$N?t$J$i5!<o0MB8J8;z$rI=<(!#(B
 	    (setq priority (cdr priority))
 	    (while (and from to)
 	      (if (or (eq face 'default)
-		      ;; XEmacs 21.1 $B$G(B face $B$rIU$1$k$HMn$k$N$G!#(B
+		      ;; XEmacs 21.1 $B$G(B face $B$rIU$1$k$HMn$A$k$N$G!#(B
 		      (and (= emacs-major-version 21)
 			   (= emacs-minor-version 1)))
 		  ;; face $B$r;XDj$7$J$$!#(B
@@ -356,6 +391,121 @@ ARG $B$,(B non-nil $B$N>l9g!"(B1$B0J>e$N?t$J$i5!<o0MB8J8;z$rI=<(!#(B
 		       izonmoji-backuped-display-table (current-buffer))
       (setq buffer-display-table izonmoji-backuped-display-table))
     (setq izonmoji-mode nil)))
+
+;; IBM$B3HD%J8;z$r!"BP1~$9$k(BNEC$BA*Dj(BIBM$B3HD%J8;z$KCV49$9$k!#(B
+;; XEmacs-21.1 $B$O(B write-multibyte-character $B$,$J$$$s$GL$BP1~$G$9!#(B
+(when (and (fboundp 'ccl-compile-write-multibyte-character)
+	   (not (memq 'izonmoji-shift_jis (coding-system-list))))
+  (eval-and-compile
+    (defun izonmoji-ccl-write-sjis ()
+      `((r1 = (r0 de-sjis r1))
+	(r0 = (r1 << 7))
+	(r0 += r7)
+	(r1 = ,(charset-id 'japanese-jisx0208))
+	(write-multibyte-character r1 r0)
+	(repeat)))
+
+    (defun izonmoji-ccl-ibm-ext (offset)
+      `((r0 <8= r1)
+	(r0 -= ,offset)
+	(r0 >8= r1)
+	(r1 = r7)
+	,@(izonmoji-ccl-write-sjis))))
+
+  (define-ccl-program izonmoji-shift_jis-decode
+    `(2
+      (loop
+       (read r0)
+       (if (r0 < ?\x80)
+	   (write-repeat r0))
+       ;; if (r0 == 0x80 || r0 == 0xA0 || 0xEF < r0 < 0xFA || r0 > 0xFC)
+       (r1 = (r0 == ?\x80))
+       (r1 |= (r0 == ?\xA0))
+       (r2 = (r0 > ?\xEF))
+       (r2 &= (r0 < ?\xFA))
+       (r1 |= r2)
+       (r1 |= (r0 > ?\xFC))
+       (if r1
+	   (write-repeat r0))
+       (r1 = (r0 <= ?\x9F))
+       (r1 |= (r0 >= ?\xE0))
+       (if r1
+	   ((read r1)
+	    (r2 = (r1 < ?\x40))
+	    (r2 |= (r1 == ?\x7F))
+	    (r2 |= (r1 > ?\xFC))
+	    (if r2
+		((write r0)
+		 (write-repeat r1)))
+	    (if (r0 >= ?\xFA)
+		((if (r0 == ?\xFA)
+		     ((if (r1 <= ?\x49)
+			  (,@(izonmoji-ccl-ibm-ext 2897)))
+		      (if (r1 <= ?\x53)
+			  (,@(izonmoji-ccl-ibm-ext 29430)))
+		      (if (r1 <= ?\x57)
+			  (,@(izonmoji-ccl-ibm-ext 2907)))
+		      (if (r1 == ?\x58)
+			  (,@(izonmoji-ccl-ibm-ext 29390)))
+		      (if (r1 == ?\x59)
+			  (,@(izonmoji-ccl-ibm-ext 29399)))
+		      (if (r1 == ?\x5A)
+			  (,@(izonmoji-ccl-ibm-ext 29398)))
+		      (if (r1 == ?\x5B)
+			  (,@(izonmoji-ccl-ibm-ext 29377)))
+		      (if (r1 <= ?\x7E)
+			  (,@(izonmoji-ccl-ibm-ext 3356)))
+		      (if (r1 <= ?\x9B)
+			  (,@(izonmoji-ccl-ibm-ext 3357)))
+		      (if (r1 <= ?\xFC)
+			  (,@(izonmoji-ccl-ibm-ext 3356)))))
+		 (if (r0 == ?\xFB)
+		     ((if (r1 <= ?\x5B)
+			  (,@(izonmoji-ccl-ibm-ext 3423)))
+		      (if (r1 <= ?\x7E)
+			  (,@(izonmoji-ccl-ibm-ext 3356)))
+		      (if (r1 <= ?\x9B)
+			  (,@(izonmoji-ccl-ibm-ext 3357)))
+		      (if (r1 <= ?\xFC)
+			  (,@(izonmoji-ccl-ibm-ext 3356)))))
+		 (if (r0 == ?\xFC)
+		     ((if (r1 <= ?\x4B)
+			  (,@(izonmoji-ccl-ibm-ext 3423)))))
+		 (write r0)
+		 (write-repeat r1)))
+	    ,@(izonmoji-ccl-write-sjis))
+	 ((r0 &= ?\x7F)
+	  (r1 = ,(charset-id 'katakana-jisx0201))
+	  (write-multibyte-character r1 r0)
+	  (repeat))))))
+
+  (define-ccl-program izonmoji-shift_jis-encode
+    `(1
+      (loop
+       (read r0)
+       (if (r0 == ,(charset-id 'japanese-jisx0208))
+	   ((read r0)
+	    (read r1)
+	    (r0 &= ?\x7F)
+	    (r1 &= ?\x7F)
+	    (r1 = (r0 en-sjis r1))
+	    (write r1 r7)
+	    (repeat))
+	 ((if (r0 == ,(charset-id 'katakana-jisx0201))
+	      (read r0))
+	  (write-repeat r0))))))
+
+  (if (featurep 'xemacs)
+      (make-coding-system 'izonmoji-shift_jis 'ccl
+			  "Shift-JIS for displaying IBM ext characters"
+			  (list 'mnemonic "S"
+				'decode 'izonmoji-shift_jis-decode
+				'encode 'izonmoji-shift_jis-encode))
+    (make-coding-system 'izonmoji-shift_jis 4 ?S
+			"Shift-JIS for displaying IBM ext characters"
+			(cons 'izonmoji-shift_jis-decode
+			      'izonmoji-shift_jis-encode))))
+
 
 (add-to-list 'minor-mode-alist '(izonmoji-mode " Iz"))
 
