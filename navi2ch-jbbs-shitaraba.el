@@ -66,7 +66,8 @@
   "URI がJBBS＠したらばなら non-nilを返す。"
   (or (string-match "http://jbbs.shitaraba.com/" uri)
       (string-match "http://jbbs.shitaraba.net/" uri)
-      (string-match "http://jbbs.livedoor.com/" uri)))
+      (string-match "http://jbbs.livedoor.com/" uri)
+      (string-match "http://jbbs.livedoor.jp/" uri)))
 
 (navi2ch-multibbs-defcallback navi2ch-js-subject-callback (jbbs-shitaraba)
   "subject.txt を取得するとき navi2ch-net-update-file
