@@ -19,12 +19,16 @@ $Id$
   する。tar 玉を http://navi2ch.sf.net/beta/ に置いて 2ch のスレで案内。
   (.elc の tar 玉には作成したホスト名・ユーザ名が埋め込まれるので注意。
   気になるなら compile farm で作業するとよい。
-  https://sourceforge.net/docman/display_doc.php?docid=762&group_id=1 )
+  https://sourceforge.net/docman/display_doc.php?docid=762&group_id=1
+  shell server 上での作業はなるべく避ける。
+  shell server 上で tar 玉を作ると中のファイルの UID が 65536 を超えてしまい、
+  環境によっては展開時に警告が出てしまうため。)
 
 * リリース版作成
   configure.in の AM_INIT_AUTOMAKE を x.y.z に変えて ChangeLog を記載、
   % aclocal && autoconf && automake && ./configure && make Makefiles && make dist && make elcdist
-  する。うまくいったら
+  する。(これで configure や navi2ch-version.el などが更新される。)
+  うまくいったら
   % cvs commit -m 'bump version to x.y.z'
   % cvs tag navi2ch-x_y_z
   でリリース元の準備をする。
@@ -41,7 +45,7 @@ $Id$
 
 * バージョンを開発版に変更
   configure.in の AM_INIT_AUTOMAKE を x.y.z-DEV に変えて ChangeLog を記載、
-  % aclocal && autoconf && automake
+  % aclocal && autoconf && automake && ./configure && make navi2ch-version.el
   して
   % cvs commit -m 'bump version to x.y.z-DEV'
   で commit する。
