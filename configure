@@ -1407,7 +1407,7 @@ echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6
 if test "${am_cv_lispdir+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-        am_cv_lispdir=`$EMACS -batch -q -eval '(princ (concat (car load-path) "\n"))' | sed -e 's,/$,,'`
+        am_cv_lispdir=`$EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) "\n")) (setq load-path (cdr load-path)))' | sed -n -e 's,/$,,' -e '/site-lisp$/ { p; q; }'`
       if test -z "$am_cv_lispdir"; then
 	am_cv_lispdir='${datadir}/emacs/site-lisp'
       fi

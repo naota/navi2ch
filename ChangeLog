@@ -1,5 +1,8 @@
 2002-01-18  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* acinclude.m4 (AM_PATH_LISPDIR): .../site-lisp/navi2ch になるよう
+	修正。
+
 	* navi2ch-util.el (navi2ch-replace-html-tag-alist): 改行として認識
 	するのは "<br>" のみとした。前後の空白は navi2ch-article で掃除。
 
