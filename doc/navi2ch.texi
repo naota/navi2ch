@@ -34,7 +34,7 @@
 @end html
 @value{REVISION}
 
-Copyright (C) 2002 by ２ちゃんねる
+Copyright (C) 2002 by navi2ch Project
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -72,7 +72,7 @@ translation approved by the Free Software Foundation.
 @page
 @vskip 0pt plus 1filll
 
-Copyright @copyright{} 2002 by ２ちゃんねる
+Copyright @copyright{} 2002 by navi2ch Project
 
 Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are

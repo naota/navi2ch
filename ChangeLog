@@ -1,3 +1,8 @@
+2002-01-24  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* contrib/navi2ch-logo.el: Copyright 変更
+	* doc/navi2ch.texi: 同上
+
 2002-01-24  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch: 1.5.1 リリース

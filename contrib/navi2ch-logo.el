@@ -1,6 +1,6 @@
 ;;; navi2ch-logo.el --- Inline logo module for navi2ch
 
-;; Copyright (C) 2002 by 2ちゃんねる
+;; Copyright (C) 2002 by navi2ch Project
 
 ;; Author:
 ;;   (not 1)
