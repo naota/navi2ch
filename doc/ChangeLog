@@ -8,6 +8,12 @@
 	M-x に @key{RET} を追加。
 	順番変更、ざっと分類。
 
+2002-12-16  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): たまには先手を打って、時計が合ってない場合の
+	対処方法を記述。
+	ディレクトリロックについて記述。
+
 2002-11-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): bbsmenu について更新。
