@@ -36,6 +36,7 @@
     (define-key map "r" 'navi2ch-board-select-view-range)
     (define-key map "a" 'navi2ch-board-add-bookmark)
     (define-key map "d" 'navi2ch-board-hide-article)
+    (define-key map "md" 'navi2ch-board-hide-mark-article)
     (define-key map "h" 'navi2ch-board-toggle-hide)
     (define-key map "+" 'navi2ch-board-toggle-updated)
     (define-key map "b" 'navi2ch-board-toggle-bookmark)
@@ -79,18 +80,24 @@
 (defvar navi2ch-board-bookmark-mode-map nil)
 (unless navi2ch-board-bookmark-mode-map
   (setq navi2ch-board-bookmark-mode-map (make-sparse-keymap))
-  (define-key navi2ch-board-bookmark-mode-map "d"
-    'navi2ch-board-delete-bookmark)
-  (define-key navi2ch-board-bookmark-mode-map "a" 'undefined))
+  (define-key navi2ch-board-bookmark-mode-map
+    "d" 'navi2ch-board-delete-bookmark)
+  (define-key navi2ch-board-bookmark-mode-map
+    "md" 'navi2ch-board-delete-bookmark-mark-article)
+  (define-key navi2ch-board-bookmark-mode-map
+    "a" 'undefined))
 
 ;; hide mode
 (defvar navi2ch-board-hide-mode nil)
 (defvar navi2ch-board-hide-mode-map nil)
 (unless navi2ch-board-hide-mode-map
   (setq navi2ch-board-hide-mode-map (make-sparse-keymap))
-  (define-key navi2ch-board-hide-mode-map "d"
-    'navi2ch-board-cancel-hide)
-  (define-key navi2ch-board-hide-mode-map "a" 'undefined))
+  (define-key navi2ch-board-hide-mode-map
+    "d" 'navi2ch-board-cancel-hide)
+  (define-key navi2ch-board-hide-mode-map
+    "md" 'navi2ch-board-cancel-hide-mark-article)
+  (define-key navi2ch-board-hide-mode-map
+    "a" 'undefined))
 
 ;; updated mode
 (defvar navi2ch-board-updated-mode nil)
@@ -612,6 +619,10 @@
   (navi2ch-board-delete-line 'bookmark 'delete
 			     "Delete bookmark"))
 
+(defun navi2ch-board-delete-bookmark-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-board-delete-bookmark))
+
 (defun navi2ch-board-toggle-bookmark ()
   (interactive)
   (navi2ch-board-toggle-minor-mode 'navi2ch-board-bookmark-mode))
@@ -630,10 +641,18 @@
 				 (cons artid list)))
 			     "Hide article"))
 
+(defun navi2ch-board-hide-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-board-hide-article))
+
 (defun navi2ch-board-cancel-hide ()
   (interactive)
   (navi2ch-board-delete-line 'hide 'delete
 			     "Cancel hide article"))
+
+(defun navi2ch-board-cancel-hide-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-board-cancel-hide))
 
 (defun navi2ch-board-toggle-hide ()
   (interactive)

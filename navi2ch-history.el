@@ -39,6 +39,7 @@
     (define-key map "\C-k" 'navi2ch-history-cut)
     (define-key map "\C-y" 'navi2ch-history-yank)
     (define-key map "d" 'navi2ch-history-delete)
+    (define-key map "md" 'navi2ch-history-delete-mark-article)
     (setq navi2ch-history-mode-map map)))
   
 (defvar navi2ch-history-mode-menu-spec
@@ -187,6 +188,10 @@ key は (concat uri artid)。
 	    (delete-region (point) (save-excursion (forward-line) (point)))
 	    (navi2ch-bm-renumber))
 	(message "Can't select this line!")))))
+
+(defun navi2ch-history-delete-mark-articlle ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-history-delete))
 
 (defun navi2ch-history-cut ()
   (interactive)

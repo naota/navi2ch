@@ -40,6 +40,7 @@
     (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
     (define-key map "D" 'navi2ch-bookmark-delete)
     (define-key map "d" 'navi2ch-bookmark-cut)
+    (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
     (define-key map "\C-k" 'navi2ch-bookmark-cut)
     (define-key map "\C-y" 'navi2ch-bookmark-yank)
     (define-key map "o" 'navi2ch-bookmark-move)
@@ -273,6 +274,10 @@ KEY は (concat URI ARTID) ")
 		navi2ch-bookmark-cut-stack)
 	  (navi2ch-bookmark-delete-subr))
       (message "Can't select this line!"))))
+
+(defun 'navi2ch-bookmark-cut-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-bookmark-cut))
 
 (defun navi2ch-bookmark-yank ()
   (interactive)

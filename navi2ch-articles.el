@@ -37,6 +37,7 @@
     (set-keymap-parent map navi2ch-bm-mode-map)
     ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
     (define-key map "d" 'navi2ch-articles-delete)
+    (define-key map "md" 'navi2ch-articles-delete-mark-aritcle)
     (setq navi2ch-articles-mode-map map)))
 
 (defvar navi2ch-articles-mode-menu-spec
@@ -101,6 +102,9 @@
 	       (forward-line -1)))
       (message "Can't select this line!"))))
  
+(defun navi2ch-articles-delete-mark-aritcle ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-articles-delete))
 
 (defun navi2ch-articles (&rest args)
   "articles を表示する"

@@ -7,6 +7,24 @@
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/919
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/955-956n
 
+	* navi2ch-articles.el
+	(navi2ch-articles-delete-mark-aritcle): 新関数。
+	(navi2ch-articles-mode-map): 上記関数を "md" にバインド。
+	* navi2ch-board.el
+	(navi2ch-board-hide-mark-article): 新関数。
+	(navi2ch-board-mode-map): 上記関数を "md" にバインド。
+	(navi2ch-board-delete-bookmark-mark-article): 新関数。
+	(navi2ch-board-bookmark-mode-map): 上記関数を "md" にバインド。
+	(navi2ch-board-cancel-hide-mark-article): 新関数。
+	(navi2ch-board-hide-mode-map): 上記関数を "md" にバインド。
+	* navi2ch-bookmark.el
+	(navi2ch-bookmark-cut-mark-article): 新関数。
+	(navi2ch-bookmark-mode-map): 上記関数を "md" にバインド。
+	* navi2ch-history.el
+	(navi2ch-history-delete-mark-articlle): 新関数。
+	(navi2ch-history-mode-map): 上記関数を "md" にバインド。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/887
+	
 2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	久々の commit。mami さんすんません。
