@@ -934,6 +934,8 @@ a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
 (defvar navi2ch-popup-article-exit-hook nil)
 (defvar navi2ch-head-mode-hook nil)
 (defvar navi2ch-head-exit-hook nil)
+(defvar navi2ch-mona-setup-hook nil)
+(defvar navi2ch-mona-undo-setup-hook nil)
 ;; load hooks
 (defvar navi2ch-article-load-hook nil)
 (defvar navi2ch-articles-load-hook nil)

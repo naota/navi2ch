@@ -1,5 +1,12 @@
 2002-07-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-mona-setup-hook): 新変数。
+	(navi2ch-mona-undo-setup-hook): 同上。
+
+	* navi2ch-mona.el (navi2ch-mona-setup): モナーフォントに依存した処
+	理ができるよう、hook を追加。
+	(navi2ch-mona-undo-setup): 後始末ができるよう、hook を追加。
+
 	* configure.in: 1.6.0-DEV にアップデート。
 
 2002-07-28  Nanashi San  <nanashi@users.sourceforge.net>

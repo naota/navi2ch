@@ -316,9 +316,11 @@ nil is returned.  Otherwise the associated face object is returned."
     (add-hook 'navi2ch-article-arrange-message-hook
 	      'navi2ch-mona-arrange-message)
     (add-hook 'navi2ch-message-mode-hook
-	      'navi2ch-mona-message-mode-hook)))
+	      'navi2ch-mona-message-mode-hook)
+    (run-hooks 'navi2ch-mona-setup-hook)))
 
 (defun navi2ch-mona-undo-setup ()
+  (run-hooks 'navi2ch-mona-undo-setup-hook)
   (remove-hook 'navi2ch-article-arrange-message-hook
 	       'navi2ch-mona-arrange-message)
   (remove-hook 'navi2ch-message-mode-hook
