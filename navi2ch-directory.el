@@ -122,7 +122,7 @@
     (navi2ch-bm-select-board navi2ch-directory-board)))
 
 (defun navi2ch-directory (&rest args)
-  "directory を表示する"
+  "directory を表示する。"
   (navi2ch-directory-mode)
   (navi2ch-bm-setup 'navi2ch-directory)
   (navi2ch-directory-sync))

@@ -80,7 +80,7 @@
     (replace-match "\\1dat\\2")))
 
 (defun navi2ch-machibbs-article-update (board article start)
-  "BOARD ARTICLE$B$N5-;v$r99?7$9$k!#(B
+  "BOARD ARTICLE $B$N5-;v$r99?7$9$k!#(B
 START $B$,(B non-nil $B$J$i$P%l%9HV9f(B START $B$+$i$N:9J,$r<hF@$9$k!#(B
 $BJV$jCM$O(B HEADER$B!#(B"
   (let ((file (navi2ch-article-get-file-name board article))
@@ -110,7 +110,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B" ; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 	  "&NOFIRST=TRUE"))))
 
 (defun navi2ch-machibbs-url-to-board (url)
-  "url$B$+$i(B BOARD$B$KJQ49!#(B"
+  "url $B$+$i(B BOARD $B$KJQ49!#(B"
   (cond
    ;; http://www.machi.to/bbs/read.pl?BBS=tawara&KEY=1059722839
    ;; http://tohoku.machi.to/bbs/read.pl?BBS=touhoku&KEY=1062265542

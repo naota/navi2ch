@@ -1,3 +1,11 @@
+2004-10-17  mami  <mami@users.sourceforge.net>
+
+	* navi2ch*.el: checkdoc と目視でメッセージ調整、docstring 調整、コ
+	メント調整。
+
+	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): 引き数の変数
+	名を変更。
+
 2004-10-12  mami  <mami@users.sourceforge.net>
 
 	* configure.in: 1.7.5-DEV にアップデート。

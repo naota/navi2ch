@@ -53,10 +53,9 @@
    nil))
 
 (defvar navi2ch-history-alist nil
-  "history を表す連想リスト
+  "history を表す連想リスト。
 '((key board article) ...) という形をしている。
-key は (concat uri artid)。
-")
+key は (concat uri artid)。")
 (defvar navi2ch-history-buffer-name "*navi2ch history*")
 
 (defvar navi2ch-history-board
@@ -98,7 +97,7 @@ key は (concat uri artid)。
 	  (cdr (assq 'artid article))))
 
 (defun navi2ch-history-add (board article)
-  "BOARD と ARTICLE で表される スレッドを追加"
+  "BOARD と ARTICLE で表される スレッドを追加。"
   (let* ((key (navi2ch-history-get-key board article))
 	 (old-node (assoc key navi2ch-history-alist))
 	 (old-subject (cdr (assq 'subject (nth 2 old-node))))
@@ -132,7 +131,7 @@ key は (concat uri artid)。
       (setq i (1+ i)))))
 
 (defun navi2ch-history (&rest args)
-  "history を表示する"
+  "history を表示する。"
   (navi2ch-history-mode)
   (navi2ch-bm-setup 'navi2ch-history)
   (navi2ch-history-sync))
@@ -187,7 +186,7 @@ key は (concat uri artid)。
 	 (navi2ch-load-info navi2ch-history-file))))
 
 (defun navi2ch-history-delete ()
-  "その行を history から削除する"
+  "その行を history から削除する。"
   (interactive)
   (save-excursion
     (beginning-of-line)
@@ -235,7 +234,7 @@ key は (concat uri artid)。
 	  (let ((buffer-read-only nil))
 	    (navi2ch-history-insert-subject 0 (car pair)))
 	  (navi2ch-bm-renumber))
-      (message "stack is empty"))))
+      (message "Stack is empty"))))
 
 (defun navi2ch-history-change (changed-list)
   "変更された板の履歴を修正する。

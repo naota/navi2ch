@@ -122,7 +122,7 @@
 				      error-message))
 		 nil)
 		(t
-		 (error "lock failed"))))))))
+		 (error "Lock failed"))))))))
 
 (defun navi2ch-localfile-unlock (dir)
   "DIR のロックを解除する。"
@@ -275,7 +275,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   (string-match navi2ch-localfile-regexp uri))
 
 (defun navi2ch-localfile-article-update (board article start)
-  "BOARD ARTICLEの記事を更新する。"
+  "BOARD ARTICLE の記事を更新する。"
   (let ((url (navi2ch-article-get-url board article))
 	(file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article))))
@@ -389,7 +389,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
       (when (string-match (concat navi2ch-localfile-regexp "\\(.+\\)") url)
 	(setq source-file (match-string 1 url))))
     (when (and source-file (file-readable-p source-file))
-      (message "checking file...")
+      (message "Checking file...")
       (let* ((mtime (nth 5 (file-attributes source-file)))
 	     (mtime-string (navi2ch-http-date-encode mtime))
 	     header)

@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-board-misc)
 (defconst navi2ch-board-misc-ident
@@ -311,7 +315,7 @@
 			       item state updated))))
 
 (defun navi2ch-bm-get-state (&optional point)
-  "その位置の state を調べる"
+  "その位置の state を調べる。"
   (save-excursion
     (and point (goto-char point))
     (navi2ch-bm-goto-state-column)
@@ -321,7 +325,7 @@
 			navi2ch-bm-state-alist)))))
 
 (defun navi2ch-bm-get-updated-mark (&optional point)
-  "その位置の updated-mark を調べる"
+  "その位置の updated-mark を調べる。"
   (save-excursion
     (and point (goto-char point))
     (when (navi2ch-bm-goto-updated-mark-column)
@@ -360,7 +364,7 @@
       (set-window-configuration window-configuration))))
 
 (defun navi2ch-bm-show-url ()
-  "板の url を表示して、その url を見るか kill ring にコピーする"
+  "板の url を表示して、その url を見るか kill ring にコピーする。"
   (interactive)
   (let* ((board (navi2ch-bm-get-board-internal
 		 (navi2ch-bm-get-property-internal (point))))
@@ -377,13 +381,13 @@
 		 (message "Can't select this line!"))
 		((eq char ?c)
 		 (kill-new url)
-		 (message "copy: %s" url))
+		 (message "Copy: %s" url))
 		((eq char ?v)
 		 (navi2ch-browse-url-internal url)
-		 (message "view: %s" url))))))))
+		 (message "View: %s" url))))))))
 
 (defun navi2ch-bm-show-url-subr (board)
-  "メニューを表示して、url を得る"
+  "メニューを表示して、url を得る。"
   (let ((char (navi2ch-read-char-with-retry
 	       (format "b)oard a)rticle l)ast%d: "
 		       navi2ch-article-show-url-number)
@@ -398,7 +402,7 @@
 			    (navi2ch-article-to-url board article l l)))))))
 
 (defun navi2ch-bm-copy-title (board)
-  "メニューを表示して、タイトルを得る"
+  "メニューを表示して、タイトルを得る。"
   (navi2ch-article-copy-title board
 			      (navi2ch-bm-get-article-internal
 			       (navi2ch-bm-get-property-internal
@@ -559,7 +563,7 @@
           (setq i (1+ i)))))))
 
 (defun navi2ch-bm-view-logo ()
-  "その板のロゴを見る"
+  "その板のロゴを見る。"
   (interactive)
   (let ((board (navi2ch-bm-get-board-internal
 		(navi2ch-bm-get-property-internal (point))))
@@ -587,7 +591,7 @@
       (message "Can't find logo file"))))
 
 (defun navi2ch-bm-add-global-bookmark (&optional bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Bookmark ID: ")))
   (let* ((item (navi2ch-bm-get-property-internal (point)))
 	 (board (navi2ch-bm-get-board-internal item))
 	 (article (navi2ch-bm-get-article-internal item)))
@@ -699,7 +703,7 @@ ARG が non-nil なら移動方向を逆にする。"
     (kill-buffer buffer)))
 
 (defun navi2ch-bm-add-global-bookmark-mark-article (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Bookmark ID: ")))
   (navi2ch-bm-exec-subr 'navi2ch-bm-add-global-bookmark bookmark-id))
 
 

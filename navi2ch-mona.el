@@ -106,7 +106,7 @@ XEmacs では明示的にフォントセットを作る必要がないので、
       fontset-name)))
 
 (defun navi2ch-mona-create-face-from-family-name (family-name)
-  "VALUEで指定されるフォントセットに応じてフェイスを作成する。"
+  "VALUE で指定されるフォントセットに応じてフェイスを作成する。"
   (dolist (height '(12 14 16))
     (ignore-errors
       (let ((fontset (navi2ch-mona-create-fontset-from-family-name

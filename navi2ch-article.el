@@ -137,7 +137,7 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 	   (not (featurep 'xemacs)))
       'navi2ch-article-insert-message-separator-by-face
     'navi2ch-article-insert-message-separator-by-char)
-  "$B%;%Q%l!<%?$rA^F~$9$k4X?t(B")
+  "$B%;%Q%l!<%?$rA^F~$9$k4X?t!#(B")
 
 (defvar navi2ch-article-summary-file-name "article-summary")
 
@@ -231,8 +231,8 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
                                (concat "info/" (cdr (assq 'artid article)))))
 
 (defsubst navi2ch-article-inside-range-p (num range len)
-  "NUM $B$,(B RANGE $B$G<($9HO0O$KF~$C$F$k$+(B
-LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5(B"
+  "NUM $B$,(B RANGE $B$G<($9HO0O$KF~$C$F$k$+!#(B
+LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5!#(B"
   (or (not range)
       (<= num (car range))
       (> num (- len (cdr range)))))
@@ -401,8 +401,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
     (navi2ch-article-get-first-message)))
 
 (defun navi2ch-article-get-message-list (file &optional begin end)
-  "FILE $B$N(B BEGIN $B$+$i(B END $B$^$G$NHO0O$+$i%9%l$N(B list $B$r:n$k(B
-$B6u9T$O(B nil"
+  "FILE $B$N(B BEGIN $B$+$i(B END $B$^$G$NHO0O$+$i%9%l$N(B list $B$r:n$k!#(B
+$B6u9T$O(B nil$B!#(B"
   (when (file-exists-p file)
     (let ((board navi2ch-article-current-board)
 	  sep message-list)
@@ -411,7 +411,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	(run-hooks 'navi2ch-article-get-message-list-hook)
         (let ((i 1))
 	  (navi2ch-apply-filters board navi2ch-article-filter-list)
-          (message "splitting current messages...")
+          (message "Splitting current messages...")
           (goto-char (point-min))
           (setq sep (navi2ch-article-get-separator))
           (while (not (eobp))
@@ -424,7 +424,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 				(unless (string= str "") str)))
                         message-list))
             (setq i (1+ i)))
-          (message "splitting current messages...done")))
+          (message "Splitting current messages...done")))
       (setq navi2ch-article-separator sep) ; it's a buffer local variable...
       (nreverse message-list))))
 
@@ -462,7 +462,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 			 object)))
 
 (defsubst navi2ch-article-set-link-property ()
-  ">>1 $B$H$+(B http:// $B$K(B property $B$rIU$1$k(B"
+  ">>1 $B$H$+(B http:// $B$K(B property $B$rIU$1$k!#(B"
   (goto-char (point-min))
   (let* ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
 	 (sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp))
@@ -552,10 +552,10 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
   (insert "\n"))
 
 (defun navi2ch-article-insert-messages (list range)
-  "LIST $B$r@07A$7$FA^F~$9$k(B"
+  "LIST $B$r@07A$7$FA^F~$9$k!#(B"
   (let ((msg (if navi2ch-article-message-filter-mode
-		 "filtering and inserting current messages..."
-	       "inserting current messages..."))
+		 "Filtering and inserting current messages..."
+	       "Inserting current messages..."))
 	(len (length list))
 	(hide (cdr (assq 'hide navi2ch-article-current-article)))
 	(imp (cdr (assq 'important navi2ch-article-current-article)))
@@ -891,8 +891,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
       score)))
 
 (defun navi2ch-article-default-header-format-function (number name mail date)
-  "$B%G%U%)%k%H$N%X%C%@$r%U%)!<%^%C%H$9$k4X?t(B
-  $B%X%C%@$N(Bface $B$rIU$1$k$N$b$3$3$G!#(B"
+  "$B%G%U%)%k%H$N%X%C%@$r%U%)!<%^%C%H$9$k4X?t!#(B
+$B%X%C%@$N(B face $B$rIU$1$k$N$b$3$3$G!#(B"
   (when (string-match (concat "\\`" navi2ch-article-number-number-regexp
 			      "\\'")
 		      name)
@@ -1112,14 +1112,14 @@ DONT-DISPLAY $B$,(B non-nil $B$N$H$-$O%9%l%P%C%U%!$rI=<($;$:$K<B9T!#(B"
 	    (t (navi2ch-list))))))
 
 (defun navi2ch-article-goto-current-board (&optional kill)
-  "$B%9%l%C%I$HF1$8HD$X0\F0(B"
+  "$B%9%l%C%I$HF1$8HD$X0\F0$9$k!#(B"
   (interactive "P")
   (let ((board navi2ch-article-current-board))
     (navi2ch-article-exit kill)
     (navi2ch-board-select-board board)))
 
 (defun navi2ch-article-fix-range (num)
-  "navi2ch-article-view-range $B$r(B num $B$,4^$^$l$kHO0O$KJQ99(B"
+  "navi2ch-article-view-range $B$r(B NUM $B$,4^$^$l$kHO0O$KJQ99!#(B"
   (let ((len (length navi2ch-article-message-list))
 	(range navi2ch-article-view-range))
     (unless (navi2ch-article-inside-range-p num range len)
@@ -1128,8 +1128,8 @@ DONT-DISPLAY $B$,(B non-nil $B$N$H$-$O%9%l%P%C%U%!$rI=<($;$:$K<B9T!#(B"
 	(setq navi2ch-article-view-range (cons first last))))))
 
 (defun navi2ch-article-sync (&optional force first number)
-  "$B%9%l$r99?7$9$k!#(Bforce $B$J$i6/@)!#(B
-first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
+  "$B%9%l$r99?7$9$k!#(BFORCE $B$,(B non-nil $B$J$i6/@)!#(B
+FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
   (interactive "P")
   (when (not (navi2ch-board-from-file-p navi2ch-article-current-board))
     (run-hooks 'navi2ch-article-before-sync-hook)
@@ -1147,7 +1147,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
       (if (and (cdr (assq 'kako article))
 	       (file-exists-p file)
 	       (not (and force	  ; force $B$,;XDj$5$l$J$$8B$j(Bsync$B$7$J$$(B
-			 (y-or-n-p "re-sync kako article?"))))
+			 (y-or-n-p "Re-sync kako article? "))))
 	  (setq navi2ch-article-current-article article)
 	(let ((ret (navi2ch-article-update-file board article force)))
 	  (setq article (nth 0 ret)
@@ -1217,7 +1217,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
       (unless (and (cdr (assq 'kako article))
 		   (file-exists-p file)
 		   (not (and force ; force $B$,;XDj$5$l$J$$8B$j(B sync $B$7$J$$(B
-			     (y-or-n-p "re-sync kako article?"))))
+			     (y-or-n-p "Re-sync kako article? "))))
 	(setq ret (navi2ch-article-update-file board article force)
 	      article (nth 0 ret)
 	      header (nth 1 ret))
@@ -1253,7 +1253,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		 (navi2ch-article-get-file-name
 		  navi2ch-article-current-board
 		  article)))
-	  (message "filtering current messages...")
+	  (message "Filtering current messages...")
 	  (let ((res (length navi2ch-article-message-list)))
 	    (when (and (>= res start)
 		       (or (null end)
@@ -1302,7 +1302,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 	      (message "Garbage collecting...")
 	      (garbage-collect)	; `navi2ch-article-parse-message' $B$N%4%_A]=|(B
 	      (message "Garbage collecting...done")))
-	  (message "filtering current messages...done"))))
+	  (message "Filtering current messages...done"))))
     suppressed))
 
 (defun navi2ch-article-get-last-read-number (board article)
@@ -1403,7 +1403,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
     (navi2ch-article-sync force)))
 
 (defun navi2ch-article-redraw ()
-  "$B8=:_I=<($7$F$k%9%l$rI=<($7$J$*$9(B"
+  "$B8=:_I=<($7$F$k%9%l$rI=<($7$J$*$9!#(B"
   (let ((buffer-read-only nil))
     (navi2ch-article-save-number)
     (erase-buffer)
@@ -1412,7 +1412,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
     (navi2ch-article-load-number)))
 
 (defun navi2ch-article-select-view-range-subr ()
-  "$BI=<($9$kHO0O$r%-!<%\!<%I%a%K%e!<$GA*Br$9$k(B"
+  "$BI=<($9$kHO0O$r%-!<%\!<%I%a%K%e!<$GA*Br$9$k!#(B"
   (save-window-excursion
     (delete-other-windows)
     (let (buf
@@ -1443,7 +1443,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
       range)))
 
 (defun navi2ch-article-redraw-range ()
-  "$BI=<($9$kHO0O$r;XDj$7$?8e(B redraw"
+  "$BI=<($9$kHO0O$r;XDj$7$?8e(B redraw $B$9$k!#(B"
   (interactive)
   (setq navi2ch-article-view-range
         (navi2ch-article-select-view-range-subr))
@@ -1513,7 +1513,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
   (navi2ch-article-write-message 'sage))
 
 (defun navi2ch-article-str-to-num (str)
-  "$B%l%9;2>H$NJ8;zNs$r?t;z$+?t;z$N(B list $B$KJQ49(B"
+  "$B%l%9;2>H$NJ8;zNs$r?t;z$+?t;z$N(B list $B$KJQ49!#(B"
   (cond ((string-match "\\([0-9]+\\)-\\([0-9]+\\)" str)
 	 (let* ((n1 (string-to-number (match-string 1 str)))
 		(n2 (string-to-number (match-string 2 str)))
@@ -1642,7 +1642,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
   (navi2ch-article-select-current-link))
 
 (defun navi2ch-article-recenter (num)
-  "NUM $BHVL\$N%l%9$r2hLL$N0lHV>e$K(B"
+  "NUM $BHVL\$N%l%9$r2hLL$N0lHV>e$K!#(B"
   (let ((win (if (eq (window-buffer) (current-buffer))
 		 (selected-window)
 	       (get-buffer-window (current-buffer)))))
@@ -1670,7 +1670,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
     (setq alist (mapcar (lambda (x) (cons (cdr (assq 'id x)) x))
 			navi2ch-list-board-name-list))
     (setq ret (completing-read
-	       (concat "input number or board"
+	       (concat "Input number or board"
 		       (and default (format "(%s)" default))
 		       ": ")
 	       alist nil nil))
@@ -1695,7 +1695,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		(error "No such board"))))))))
 
 (defun navi2ch-article-goto-number (num &optional save pop)
-  "NUM $BHVL\$N%l%9$K0\F0(B"
+  "NUM $BHVL\$N%l%9$K0\F0!#(B"
   (interactive "ninput number: ")
   (when (and num (> num 0)
 	     navi2ch-article-message-list)
@@ -1739,7 +1739,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 	(cons num (- point (point)))))))
 
 (defun navi2ch-article-pop-point ()
-  "stack $B$+$i(B pop $B$7$?0LCV$K0\F0$9$k(B"
+  "stack $B$+$i(B pop $B$7$?0LCV$K0\F0$9$k!#(B"
   (interactive)
   (let ((point (pop navi2ch-article-point-stack)))
     (if point
@@ -1747,14 +1747,14 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
           (push (navi2ch-article-get-point (point)) navi2ch-article-poped-point-stack)
           (navi2ch-article-goto-number (car point))
 	  (forward-char (cdr point)))
-      (message "stack is empty"))))
+      (message "Stack is empty"))))
 
 (defun navi2ch-article-push-point (&optional point)
-  "$B8=:_0LCV$+(B POINT $B$r(B stack $B$K(B push $B$9$k(B"
+  "$B8=:_0LCV$+(B POINT $B$r(B stack $B$K(B push $B$9$k!#(B"
   (interactive)
   (setq navi2ch-article-poped-point-stack nil)
   (push (navi2ch-article-get-point point) navi2ch-article-point-stack)
-  (message "push current point"))
+  (message "Push current point"))
 
 (defun navi2ch-article-pop-poped-point () ; $BL>A0$@$;$'!"$C$F$+2?$+0c$&!#(B
   (interactive)
@@ -1764,7 +1764,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
           (push (navi2ch-article-get-point (point)) navi2ch-article-point-stack)
 	  (navi2ch-article-goto-number (car point))
 	  (forward-char (cdr point)))
-      (message "stack is empty"))))
+      (message "Stack is empty"))))
 
 (defun navi2ch-article-rotate-point ()
   "stack $B$X(B push $B$7$?0LCV$r=d2s$9$k!#(B"
@@ -1777,10 +1777,10 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
 		(append navi2ch-article-point-stack (list cur))) ; $B:G8eHx$XJ]B8(B
           (navi2ch-article-goto-number (car top)) ; $B%H%C%W$N(B
           (forward-char (cdr top)))	; $B0JA0$$$?J8;z$X(B
-      (message "stack is empty"))))
+      (message "Stack is empty"))))
 
 (defun navi2ch-article-goto-last-message ()
-  "$B:G8e$N%l%9$X(B"
+  "$B:G8e$N%l%9$X0\F0!#(B"
   (interactive)
   (navi2ch-article-goto-number
    (save-excursion
@@ -1788,7 +1788,7 @@ first $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$(B"
      (navi2ch-article-get-current-number)) t))
 
 (defun navi2ch-article-goto-first-message ()
-  "$B:G=i$N%l%9$X(B"
+  "$B:G=i$N%l%9$X0\F0!#(B"
   (interactive)
   (navi2ch-article-goto-number
    (save-excursion
@@ -1892,12 +1892,12 @@ article buffer $B$+$iH4$1$k$J$i(B 'quit $B$rJV$9!#(B"
 (defun navi2ch-article-through-subr (interactive-flag num)
   "$BA08e$N%9%l$K0\F0$9$k!#(B
 NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
-$B8F$S=P$9:]$O(BINTERACTIVE-FLAG$B$K(B(interactive-p)$B$rF~$l$k!#(B"
+$B8F$S=P$9:]$O(B INTERACTIVE-FLAG $B$K(B (interactive-p) $B$rF~$l$k!#(B"
   (interactive)
   (or num (setq num 1))
   (if (and (not (eq num 1))
 	   (not (eq num -1)))
-      (error "arg error"))
+      (error "Arg error"))
   (let ((mode (navi2ch-get-major-mode navi2ch-board-buffer-name)))
     (if (and mode
 	     (or (not (eq mode 'navi2ch-board-mode))
@@ -1938,11 +1938,11 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (navi2ch-article-through-subr (interactive-p) -1))
 
 (defun navi2ch-article-get-message (num)
-  "NUM $BHVL\$N%l%9$rF@$k(B"
+  "NUM $BHVL\$N%l%9$rF@$k!#(B"
   (cdr (assq num navi2ch-article-message-list)))
 
 (defun navi2ch-article-get-current-number ()
-  "$B:#$N0LCV$N%l%9$NHV9f$rF@$k(B"
+  "$B:#$N0LCV$N%l%9$NHV9f$rF@$k!#(B"
   (condition-case nil
       (or (get-text-property (point) 'current-number)
           (get-text-property
@@ -2007,7 +2007,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
     list))
 
 (defun navi2ch-article-show-url ()
-  "url $B$rI=<($7$F!"$=$N(B url $B$r8+$k$+(B kill ring $B$K%3%T!<$9$k(B"
+  "url $B$rI=<($7$F!"$=$N(B url $B$r8+$k$+(B kill ring $B$K%3%T!<$9$k!#(B"
   (interactive)
   (let ((url (navi2ch-article-to-url navi2ch-article-current-board
 				     navi2ch-article-current-article)))
@@ -2020,15 +2020,15 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 	(funcall (cond ((eq char ?c)
 			(lambda (x)
 			  (kill-new x)
-			  (message "copy: %s" x)))
+			  (message "Copy: %s" x)))
 		       ((eq char ?v)
 			(lambda (x)
 			  (navi2ch-browse-url-internal x)
-			  (message "view: %s" x))))
+			  (message "View: %s" x))))
 		 (navi2ch-article-show-url-subr))))))
 
 (defun navi2ch-article-show-url-subr ()
-  "$B%a%K%e!<$rI=<($7$F!"(Burl $B$rF@$k(B"
+  "$B%a%K%e!<$rI=<($7$F!"(Burl $B$rF@$k!#(B"
   (let* ((prompt (format "a)ll c)urrent r)egion b)oard l)ast%d: "
 			 navi2ch-article-show-url-number))
 	 (char (navi2ch-read-char-with-retry prompt
@@ -2055,7 +2055,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 			      t)))))))))
 
 (defun navi2ch-article-copy-title (board article)
-  "$B%a%K%e!<$rI=<($7$F!"%?%$%H%k$rF@$k(B"
+  "$B%a%K%e!<$rI=<($7$F!"%?%$%H%k$rF@$k!#(B"
   (let* ((char (navi2ch-read-char-with-retry
 		"b)oard a)rticle B)oard&url A)rtile&url: "
 		nil '(?b ?a ?B ?A)))
@@ -2076,16 +2076,16 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
     (if (not title)
 	(message "Can't select this line!")
       (kill-new title)
-      (message "copy: %s" title))))
+      (message "Copy: %s" title))))
 
 (defun navi2ch-article-redisplay-current-message ()
-  "$B:#$$$k%l%9$r2hLL$NCf?4(B($B>e!)(B)$B$K(B"
+  "$B:#$$$k%l%9$r2hLL$NCf?4(B ($B>e(B?) $B$K!#(B"
   (interactive)
   (navi2ch-article-recenter
    (navi2ch-article-get-current-number)))
 
 (defun navi2ch-article-next-message ()
-  "$B<!$N%a%C%;!<%8$X(B"
+  "$B<!$N%a%C%;!<%8$X0\F0!#(B"
   (interactive)
   (run-hooks 'navi2ch-article-next-message-hook)
   (condition-case nil
@@ -2097,7 +2097,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
      (funcall navi2ch-article-through-next-function))))
 
 (defun navi2ch-article-previous-message ()
-  "$BA0$N%a%C%;!<%8$X(B"
+  "$BA0$N%a%C%;!<%8$X0\F0!#(B"
   (interactive)
   (run-hooks 'navi2ch-article-previous-message-hook)
   (condition-case nil
@@ -2109,7 +2109,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
      (funcall navi2ch-article-through-previous-function))))
 
 (defun navi2ch-article-get-message-string (num)
-  "num $BHVL\$N%l%9$NJ8>O$rF@$k!#(B"
+  "NUM $BHVL\$N%l%9$NJ8>O$rF@$k!#(B"
   (let ((msg (navi2ch-article-get-message num)))
     (when (stringp msg)
       (setq msg (navi2ch-article-parse-message msg)))
@@ -2272,14 +2272,14 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 	  (navi2ch-article-get-link-text position))))))
 
 (defun navi2ch-article-next-link ()
-  "$B<!$N%j%s%/$X(B"
+  "$B<!$N%j%s%/$X0\F0!#(B"
   (interactive)
   (let ((point (navi2ch-next-property (point) 'link-head)))
     (if point
 	(goto-char point))))
 
 (defun navi2ch-article-previous-link ()
-  "$BA0$N%j%s%/$X(B"
+  "$BA0$N%j%s%/$X0\F0!#(B"
   (interactive)
   (let ((point (navi2ch-previous-property (point) 'link-head)))
     (if point
@@ -2321,7 +2321,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-detect-encoded-regions (&optional sort)
   "$B%P%C%U%!$+$i(B uuencode $B$^$?$O(B base64 $B%(%s%3!<%I$5$l$?NN0h$rC5$9!#(B
- (list (list type fname start end)) $B$rJV$9!#(B
+(list (list type fname start end)) $B$rJV$9!#(B
 SORT $B$,(B non-nil $B$N$H$-$O(B start $B$G%=!<%H$7$?7k2L$rJV$9!#(B
 $B$?$@$7!"(B
  type: 'uuencode $B$+(B 'base64
@@ -2364,10 +2364,10 @@ end $B$,(B nil $B$N>l9gKvHx$N%G%j%_%?$,L5$/@hF,$N%G%j%_%?$N$_$"$k$3$H$r0UL#$9
 
 (defun navi2ch-article-decode-message (prefix)
   "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B
-PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$k!#(B
+PREFIX $B$r;XDj$7$?>l9g$O!"(Bmark $B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$k!#(B
 
 $BJ#?t%l%9$KJ,3d$5$l$?%(%s%3!<%I%;%/%7%g%s$r%G%3!<%I$7$?$$>l9g$O!"(B
-$B%(%s%3!<%I%;%/%7%g%s$N@hF,$N%l%9$G!"(BPREFIX$B$r;XDj$;$:$K<B9T$9$k$3$H!#(B
+$B%(%s%3!<%I%;%/%7%g%s$N@hF,$N%l%9$G!"(BPREFIX $B$r;XDj$;$:$K<B9T$9$k$3$H!#(B
 $B8=:_$N%l%9Fb$K;O$a$N%G%j%_%?$N$_$,$"$k>l9g!"BP1~$9$kKvHx$N%G%j%_%?$,(B
 $B8=$l$k%l%9$^$G%G%3!<%I$9$kNN0h$r3HD%$9$k!#(B
 
@@ -2740,7 +2740,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 		     summary))
 
 (defun navi2ch-article-set-summary-element (board article remove-seen)
-  "BOARD, ARTICTLE $B$KBP1~$7$?(B $B>pJs$r(B article-summary $B$KJ]B8$9$k(B"
+  "BOARD, ARTICLE $B$KBP1~$7$?>pJs$r(B article-summary $B$KJ]B8$9$k!#(B"
   (let* ((summary (navi2ch-article-load-article-summary board))
 	 (artid (cdr (assq 'artid article)))
 	 (element (cdr (assoc artid summary))))
@@ -2760,14 +2760,14 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 				   navi2ch-article-current-article))
 
 (defun navi2ch-article-add-global-bookmark (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Bookmark ID: ")))
   (navi2ch-bookmark-add
    bookmark-id
    navi2ch-article-current-board
    navi2ch-article-current-article))
 
 (defun navi2ch-article-buffer-list ()
-  "`navi2ch-article-mode' $B$N(B buffer $B$N(B list $B$rJV$9(B"
+  "`navi2ch-article-mode' $B$N(B buffer $B$N(B list $B$rJV$9!#(B"
   (let (list)
     (dolist (x (buffer-list))
       (when (save-excursion
@@ -3052,9 +3052,9 @@ NO-SYNC $B$,(B non-nil $B$N$H$-$O(B sync $B$7$J$$!#(B"
 	(setq num-list (cons (car msg) num-list))))
     (setq len (length num-list))
     (if (= len 0)
-	(message "No message found.")
+	(message "No message found")
       (navi2ch-popup-article (nreverse num-list))
-      (message (format "%d message%s found."
+      (message (format "%d message%s found"
 		       len
 		       (if (= len 1) "" "s"))))))
 

@@ -65,7 +65,7 @@
   (replace-match "\n"))
 
 (defun navi2ch-jbbs-article-update (board article start)
-  "BOARD ARTICLEの記事を更新する。
+  "BOARD ARTICLE の記事を更新する。
 START が non-nil ならばレス番号 START からの差分を取得する。
 返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
@@ -105,7 +105,7 @@ START, END, NOFIRST で範囲を指定する"
   "\\`\\(.+\\)/\\([^/]+\\)/\\([^/]+\\)/\\'")
 
 (defun navi2ch-jbbs-get-writecgi-url (board)
-  "write.cgi の url を返す"
+  "write.cgi の url を返す。"
   (let ((uri (navi2ch-board-get-uri board)))
     (and (string-match navi2ch-jbbs-url-regexp uri)
 	 (format "%s/%s/bbs/write.cgi"

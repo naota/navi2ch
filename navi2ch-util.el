@@ -21,6 +21,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-util)
 (defconst navi2ch-util-ident
@@ -45,7 +49,7 @@
     ("<br>" . "\n")
     ("<hr>" . "\n--\n")
     ("$B!w!.(B" . ","))
-  "$BCV49$9$k(B html $B$N%?%0$NO"A[%j%9%H(B($B@55,I=8=$O;H$($J$$(B)")
+  "$BCV49$9$k(B html $B$N%?%0$NO"A[%j%9%H(B ($B@55,I=8=$O;H$($J$$(B)$B!#(B")
 
 (defvar navi2ch-replace-html-tag-regexp-alist
   '(("</?[?!a-zA-Z][^<>]*>" . "")
@@ -59,7 +63,7 @@
   (concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
 	  "\\|"
 	  (mapconcat 'car navi2ch-replace-html-tag-regexp-alist "\\|"))
-  "$BCV49$9$k(B html $B$N%?%0$N@55,I=8=(B
+  "$BCV49$9$k(B html $B$N%?%0$N@55,I=8=!#(B
 `navi2ch-replace-html-tag-alist' $B$+$i@8@.$5$l$k(B")
 
 (defvar navi2ch-entity-alist
@@ -159,35 +163,35 @@
   "uuencode $B$5$l$?%3!<%I$N$_$,4^$^$l$k9T$K%^%C%A$9$k@55,I=8=!#(B")
 
 (defconst navi2ch-base64-begin-delimiter "----BEGIN BASE64----"
-  "base64$B%3!<%I$NA0$KA^F~$9$k%G%j%_%?!#(B")
+  "base64 $B%3!<%I$NA0$KA^F~$9$k%G%j%_%?!#(B")
 (defconst navi2ch-base64-end-delimiter "----END BASE64----"
-  "base64$B%3!<%I$N8e$KA^F~$9$k%G%j%_%?!#(B")
+  "base64 $B%3!<%I$N8e$KA^F~$9$k%G%j%_%?!#(B")
 
 (defconst navi2ch-base64-begin-delimiter-regexp
   (format "^%s\\((\\([^\)]+\\))\\)?.*$"
           (regexp-quote navi2ch-base64-begin-delimiter))
-  "base64$B%3!<%I$NA0$N%G%j%_%?$K%^%C%A$9$k@55,I=8=!#(B")
+  "base64 $B%3!<%I$NA0$N%G%j%_%?$K%^%C%A$9$k@55,I=8=!#(B")
 (defconst navi2ch-base64-end-delimiter-regexp
   (format "^%s.*$" (regexp-quote navi2ch-base64-end-delimiter))
-  "base64$B%3!<%I$N8e$N%G%j%_%?$K%^%C%A$9$k@55,I=8=!#(B")
+  "base64 $B%3!<%I$N8e$N%G%j%_%?$K%^%C%A$9$k@55,I=8=!#(B")
 (defconst navi2ch-base64-susv3-begin-delimiter-regexp
   "^begin-base64 \\([0-7]+\\) \\([^ \n]+\\)$"
-  "SUSv3$B$N(Buuencode$B$G:n@.$5$l$k(Bbase64$B%3!<%I$NA0$N%G%j%_%?$K%^%C%A$9$k@55,I=8=(B")
+  "SUSv3 $B$N(B uuencode $B$G:n@.$5$l$k(B base64 $B%3!<%I$NA0$N%G%j%_%?$K%^%C%A$9$k@55,I=8=(B")
 (defconst navi2ch-base64-susv3-end-delimiter-regexp
   "^====$"
-  "SUSv3$B$N(Buuencode$B$G:n@.$5$l$k(Bbase64$B%3!<%I$N8e$N%G%j%_%?$K%^%C%A$9$k@55,I=8=(B")
+  "SUSv3 $B$N(B uuencode $B$G:n@.$5$l$k(B base64 $B%3!<%I$N8e$N%G%j%_%?$K%^%C%A$9$k@55,I=8=(B")
 
 (defconst navi2ch-base64-line-regexp
   (concat
    "^\\([+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z]\\)*"
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
-  "base64$B%3!<%I$N$_$,4^$^$l$k9T$K%^%C%A$9$k@55,I=8=!#(B")
+  "base64 $B%3!<%I$N$_$,4^$^$l$k9T$K%^%C%A$9$k@55,I=8=!#(B")
 
 (defvar navi2ch-coding-system
   (or (car (memq 'cp932 (coding-system-list)))
       'shift_jis))
 
-(defvar navi2ch-offline nil "$B%*%U%i%$%s%b!<%I$+$I$&$+(B")
+(defvar navi2ch-offline nil "$B%*%U%i%$%s%b!<%I$+$I$&$+!#(B")
 (defvar navi2ch-online-indicator  "[ON] ")
 (defvar navi2ch-offline-indicator "[--] ")
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
@@ -363,7 +367,7 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 ;;                (throw 'loop 0))
 ;;               ((not (eq (string-to-number elt) 0))
 ;;                (throw 'loop (string-to-int elt)))))
-;;       (message "Please enter a number.")
+;;       (message "Please enter a number")
 ;;       (sit-for 1))))
 
 (defsubst navi2ch-replace-html-tag-to-string (str)
@@ -513,7 +517,7 @@ fboundp $B$H0c$$!"(BSYMBOL $B$,%P%$%s%I$5$l$F$$$k;~$O(B t $B$G$O$J$/%7%s%\%
 					   (navi2ch-boundp
 					    'browse-url-new-window-p)))))
     (if (eq browse-url-browser-function 'navi2ch-browse-url)
-	(error "Set navi2ch-browse-url-browser-function correctly."))
+	(error "Set navi2ch-browse-url-browser-function correctly"))
     (cond ((and navi2ch-browse-url-image-program ; images
 		(file-name-extension url)
 		(member (downcase (file-name-extension url))
@@ -588,7 +592,7 @@ return new alist whose car is the new pair and cdr is ALIST.
           (cons (cons mode map) minor-mode-map-alist))))
 
 (defun navi2ch-call-process-buffer (program &rest args)
-  "$B:#$N(B buffer $B$G(B PROGRAM $B$r8F$s$GJQ99$9$k(B"
+  "$B:#$N(B buffer $B$G(B PROGRAM $B$r8F$s$GJQ99$9$k!#(B"
   (apply 'call-process-region (point-min) (point-max) program t t nil args))
 
 (defun navi2ch-alist-list-to-alist (list key1 &optional key2)
@@ -634,8 +638,8 @@ return new alist whose car is the new pair and cdr is ALIST.
   (when (eobp) (forward-line -1)))
 
 (defun navi2ch-uudecode-region (start end &optional filename)
-  "START$B$H(BEND$B$N4V$N%j!<%8%g%s$r(Buudecode$B$9$k!#(B
-FILENAME$B$,;XDj$5$l$k$H!"(BFILENAME$B$K$b=q$-=P$9!#(B"
+  "START $B$H(B END $B$N4V$N%j!<%8%g%s$r(B uudecode $B$9$k!#(B
+FILENAME $B$,;XDj$5$l$k$H!"(BFILENAME $B$K$b=q$-=P$9!#(B"
   (interactive "r")
   (let* ((coding-system-for-read 'binary)
 	 (coding-system-for-write 'binary)
@@ -679,10 +683,10 @@ FILENAME$B$,;XDj$5$l$k$H!"(BFILENAME$B$K$b=q$-=P$9!#(B"
       (error "uudecode error"))))
 
 (defun navi2ch-uudecode-write-region (start end &optional filename)
-  "START$B$H(BEND$B$N4V$N%j!<%8%g%s$r(Buudecode$B$7!"(BFILENAME$B$K=q$-=P$9!#(B
+  "START $B$H(B END $B$N4V$N%j!<%8%g%s$r(B uudecode $B$7!"(BFILENAME $B$K=q$-=P$9!#(B
 
-$B%j!<%8%g%sFb$K(B`navi2ch-uuencode-begin-delimiter-regexp'$B$K%^%C%A$9$k9T$,$"$k(B
-$B>l9g$O$=$l0JA0$rL5;k$7!"(B`navi2ch-uuencode-end-delimiter-regexp'$B$K%^%C%A$9$k9T(B
+$B%j!<%8%g%sFb$K(B `navi2ch-uuencode-begin-delimiter-regexp' $B$K%^%C%A$9$k9T$,$"$k(B
+$B>l9g$O$=$l0JA0$rL5;k$7!"(B`navi2ch-uuencode-end-delimiter-regexp' $B$K%^%C%A$9$k9T(B
 $B$,$"$k>l9g$O:G8e$N$=$l0J9_$rL5;k$9$k!#(B
 $B$5$i$K!"(Buuencode $B$N%U%)!<%^%C%H$K=>$C$F$$$J$$9T$bL5;k$9$k!#(B"
   (interactive "r")
@@ -733,15 +737,15 @@ FILENAME$B$,;XDj$5$l$k$H!"(BFILENAME$B$K$b=q$-=P$9!#(B"
 	(navi2ch-uudecode-region (point-min) (point-max) filename)))))
 
 (defun navi2ch-base64-write-region (start end &optional filename)
-  "START$B$H(BEND$B$N4V$N%j!<%8%g%s$r(Bbase64$B%G%3!<%I$7!"(BFILENAME$B$K=q$-=P$9!#(B
+  "START $B$H(B END $B$N4V$N%j!<%8%g%s$r(B base64 $B%G%3!<%I$7!"(BFILENAME $B$K=q$-=P$9!#(B
 
-$B%j!<%8%g%sFb$K(B`navi2ch-base64-begin-delimiter-regexp' $B$+(B
+$B%j!<%8%g%sFb$K(B `navi2ch-base64-begin-delimiter-regexp' $B$+(B
 `navi2ch-base64-susv3-begin-delimiter-regexp' $B$K%^%C%A$9$k9T$,$"$k>l9g$O(B
 $B$=$l0JA0$rL5;k$7!"(B
 `navi2ch-base64-end-delimiter-regexp' $B$+(B
 `navi2ch-base64-susv3-end-delimiter-regexp' $B$K%^%C%A$9$k9T(B
 $B$,$"$k>l9g$O:G8e$N$=$l0J9_$rL5;k$9$k!#(B
-$B$5$i$K!"(B`navi2ch-base64-line-regexp'$B$K%^%C%A$7$J$$9T$bL5;k$9$k!#(B
+$B$5$i$K!"(B`navi2ch-base64-line-regexp' $B$K%^%C%A$7$J$$9T$bL5;k$9$k!#(B
 
 base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
   (interactive "r")
@@ -808,7 +812,7 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
 		  (error nil)))))))))
 
 (defun navi2ch-base64-insert-file (filename)
-  "FILENAME$B$r(Bbase64$B%(%s%3!<%I$7!"8=:_$N%]%$%s%H$KA^F~$9$k!#(B"
+  "FILENAME $B$r(B base64 $B%(%s%3!<%I$7!"8=:_$N%]%$%s%H$KA^F~$9$k!#(B"
   (interactive "fEncode and insert file: ")
   (save-excursion
     (let ((str nil))
@@ -986,7 +990,7 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
   (navi2ch-ifxemacs 'point-at-eol 'line-end-position))
 
 (defun navi2ch-count-lines-file (file)
-  "$B$=$N%U%!%$%k$N9T?t$r?t$($k(B"
+  "$B$=$N%U%!%$%k$N9T?t$r?t$($k!#(B"
   (with-temp-buffer
     (insert-file-contents file)
     (count-lines (point-min) (point-max))))
@@ -1213,7 +1217,7 @@ FIXEDCASE$B!"(BLITERAL $B$O(B `replace-match' $B$K$=$N$^$^EO$5$l$k!#(B"
 	     (lookup-key (current-global-map) key))))
 
 (defun navi2ch-caller-p (function-list)
-  "$B8F$S=P$785$N4X?t$,(B function-list $B$K4^$^$l$F$$$l$P(B non-nil $B$rJV$9!#(B"
+  "$B8F$S=P$785$N4X?t$,(B FUNCTION-LIST $B$K4^$^$l$F$$$l$P(B non-nil $B$rJV$9!#(B"
   (let ((n 1)
 	frame function)
     (while (and (not function)

@@ -53,3 +53,7 @@
 (defun navi2ch-futaba-send-message-success-p (proc)
   (string= "302" (navi2ch-net-get-status proc)))
 
+
+(provide 'navi2ch-futaba)
+
+;;; navi2ch-futaba.el ends here

@@ -62,12 +62,12 @@
 (defvar navi2ch-oyster-password "odebuchan"
   "*オイスターのパスワード。")
 (defvar navi2ch-oyster-server "2chv.tora3.net"
-  "*オイスターのID取得サーバ。")
+  "*オイスターの ID 取得サーバ。")
 (defvar navi2ch-oyster-cgi "/futen.cgi"
-  "*オイスターのID取得CGI。")
+  "*オイスターの ID 取得 CGI。")
 
 (defvar navi2ch-oyster-session-id nil
-  "オイスターサーバから取得したセッションID")
+  "オイスターサーバから取得したセッション ID。")
 
 (defun navi2ch-oyster-p (uri)
   "オイスター作戦に対応する URI なら non-nilを返す。"
@@ -107,7 +107,7 @@ START からじゃないかもしれないけど・・・。
 		    (navi2ch-oyster-update-file-with-offlaw url file time t))
 		(prog1
 		    (navi2ch-oyster-update-file-with-offlaw url file time nil)
-		  (message "getting from 0 offlaw.cgi"))))
+		  (message "Getting from 0 offlaw.cgi"))))
 	(unless (navi2ch-net-get-state 'error header)
 	  (setq header (navi2ch-net-add-state 'kako header)))))
     header))
@@ -149,14 +149,14 @@ START からじゃないかもしれないけど・・・。
       (if spid (navi2ch-board-save-spid board spid))
       proc)))
 
-(defun navi2ch-oyster-get-offlaw-url (board article sid file)
-  "BOARD, ARTICLE, SESSION-ID, FILE  から offlaw url に変換。"
+(defun navi2ch-oyster-get-offlaw-url (board article session-id file)
+  "BOARD, ARTICLE, SESSION-ID, FILE から offlaw url に変換。"
   (let ((uri (navi2ch-board-get-uri board))
 	(artid (cdr (assq 'artid article)))
 	(size 0)
 	encoded-s)
-    ;; (setq encoded-s (w3m-url-encode-string sid))
-    (setq encoded-s (navi2ch-net-url-hexify-string sid))
+    ;; (setq encoded-s (w3m-url-encode-string session-id))
+    (setq encoded-s (navi2ch-net-url-hexify-string session-id))
     (when (file-exists-p file)
       (setq size (max 0 (nth 7 (file-attributes file)))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
@@ -219,7 +219,7 @@ DIFF が non-nil ならば差分を取得する。
 		   (when (string= "-ERR" state)
 		     (let ((err-msg (decode-coding-string
 				     data navi2ch-coding-system)))
-		       (message "error! %s" err-msg)))
+		       (message "Error! %s" err-msg)))
 		   (setq header (navi2ch-net-add-state 'error header))))))))
 	  (t
 	   (setq header (navi2ch-net-add-state 'error header))))
@@ -234,7 +234,7 @@ DIFF が non-nil ならば差分を取得する。
                      (goto-char (point-min))
                      (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
            (accept-process-output proc)
-           (message "retrying")
+           (message "Retrying")
            (sit-for 3))
          (let ((i 10))
            (catch 'loop
@@ -256,7 +256,7 @@ DIFF が non-nil ならば差分を取得する。
 ;; 		     (goto-char (point-min))
 ;; 		     (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
 ;; 	   (accept-process-output proc)
-;; 	   (message "retrying")
+;; 	   (message "Retrying")
 ;; 	   (sit-for 3))
 ;; 	 (sit-for 5)		  ; 何だかうまく動かないのでwait入れた
 ;; 	 (goto-char (point-min))

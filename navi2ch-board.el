@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-board)
 (defconst navi2ch-board-ident
@@ -192,7 +196,7 @@
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
 
 (defsubst navi2ch-board-get-matched-article ()
-  "match した結果から article を得る"
+  "match した結果から article を得る。"
   (let ((id (match-string 1))
 	(str (match-string 2))
 	(num (match-string 3)))
@@ -208,7 +212,7 @@
 	  (cons 'artid id))))
 
 (defun navi2ch-board-url-to-board (url)
-  "URL から board を得る"
+  "URL から board を得る。"
   (let* ((alist (navi2ch-multibbs-url-to-board url))
 	 (uri  (cdr (assq 'uri alist)))
 	 (id   (cdr (assq 'id alist)))
@@ -231,11 +235,11 @@
 		  (cons 'name name)))))))
 
 (defun navi2ch-board-to-url (board)
-  "BOARD から url に変換"
+  "BOARD から url に変換。"
   (navi2ch-board-get-uri board))
 
 (defun navi2ch-board-get-subject-list (file)
-  "file からスレの list を作る。"
+  "FILE からスレの list を作る。"
   (when (file-exists-p file)
     (with-temp-buffer
       (navi2ch-insert-file-contents file)
@@ -470,7 +474,7 @@
   (run-hooks 'navi2ch-board-after-sync-hook))
 
 (defun navi2ch-board-make-subject-txt ()
-  "subback.html から (navi2ch 用の) subject.txt を作る
+  "subback.html から (navi2ch 用の) subject.txt を作る。
 `navi2ch-net-update-file' のハンドラ。"
   (let ((coding-system-for-read 'binary)
 	(coding-system-for-write 'binary)
@@ -567,7 +571,7 @@
     (setq board (navi2ch-board-load-info board)))
   (let ((dir (navi2ch-board-get-file-name board "")))
     (when (and (file-exists-p dir)
-	       (or (not ask) (y-or-n-p "Expire current borad?"))
+	       (or (not ask) (y-or-n-p "Expire current borad? "))
 	       navi2ch-board-expire-date)
       (let ((article-list (mapcar (lambda (file)
 				    (when (string-match "[0-9]+" file)
@@ -578,7 +582,7 @@
 	    (key-time (navi2ch-add-days-to-time (current-time)
 						navi2ch-board-expire-date))
 	    (remove-list nil))
-	(message "expiring %s..." (cdr (assq 'name board)))
+	(message "Expiring %s..." (cdr (assq 'name board)))
 	(dolist (article article-list)
 	  (let ((artid (cdr (assq 'artid article)))
 		(file (navi2ch-article-get-file-name board article)))
@@ -603,7 +607,7 @@
 		(navi2ch-bookmark-delete-article-all board article)))))
 	(navi2ch-bm-remove-article-subr board remove-list)
 	(navi2ch-board-save-info board)
-	(message "expiring %s...done" (cdr (assq 'name board)))))))
+	(message "Expiring %s...done" (cdr (assq 'name board)))))))
 
 (defun navi2ch-board-toggle-minor-mode (mode)
   (dolist (m navi2ch-board-minor-mode-list)
@@ -677,7 +681,7 @@
       (if article
 	  (navi2ch-board-add-bookmark-subr navi2ch-board-current-board
 					   article)
-	(message "can't select this line!")))))
+	(message "Can't select this line!")))))
 
 (defun navi2ch-board-delete-bookmark ()
   (interactive)

@@ -107,10 +107,10 @@
 (defun navi2ch-search-for-each-board (board-func board-list)
   (let (alist)
     (dolist (board board-list)
-      (message "searching in %s..." (cdr (assq 'name board)))
+      (message "Searching in %s..." (cdr (assq 'name board)))
       (setq alist (nconc (funcall board-func board)
 			 alist)))
-    (message "searching...%s" (if alist "done" "not found"))
+    (message "Searching...%s" (if alist "done" "not found"))
     (nreverse alist)))
 
 (defun navi2ch-search-for-each-article (article-func board-list)

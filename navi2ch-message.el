@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-message)
 (defconst navi2ch-message-ident
@@ -86,8 +90,8 @@
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
 	    (if (functionp navi2ch-message-ask-before-write)
-		(funcall navi2ch-message-ask-before-write "Write new message?")
-	      (y-or-n-p "Write new message?")))
+		(funcall navi2ch-message-ask-before-write "Write new message? ")
+	      (y-or-n-p "Write new message? ")))
     (if (and (get-buffer navi2ch-message-buffer-name)
 	     (or navi2ch-message-always-pop-message
 		 (not (navi2ch-message-kill-message))))
@@ -188,11 +192,11 @@
 (defun navi2ch-message-send-message ()
   (interactive)
   (if navi2ch-offline
-      (message "Now offline.")
+      (message "Now offline")
     (when (or (not navi2ch-message-ask-before-send)
 	      (if (functionp navi2ch-message-ask-before-send)
-		  (funcall navi2ch-message-ask-before-send "Send message?")
-		(y-or-n-p "Send message?")))
+		  (funcall navi2ch-message-ask-before-send "Send message? ")
+		(y-or-n-p "Send message? ")))
       (widen)
       (run-hooks 'navi2ch-message-before-send-hook)
       (navi2ch-message-cleanup-message)
@@ -243,7 +247,7 @@
 	      (when navi2ch-message-save-sendlog
 		(navi2ch-message-add-sendlog from mail message subject
 					     board article))
-	      (message "waiting new message...")
+	      (message "Waiting new message...")
 	      (sleep-for navi2ch-message-wait-time)
 	      (message "%s%s" (current-message) "done")
 	      (save-excursion
@@ -284,7 +288,7 @@
 				 navi2ch-article-current-article))))))
 
 (defun navi2ch-message-cite-original (&optional arg)
-  "引用する"
+  "引用する。"
   (interactive "P")
   (navi2ch-message-cite-original-from-number
    (save-excursion
@@ -335,8 +339,8 @@
   (when (or no-ask
 	    (not navi2ch-message-ask-before-kill)
 	    (if (functionp navi2ch-message-ask-before-kill)
-		(funcall navi2ch-message-ask-before-kill "Kill current message?")
-	      (y-or-n-p "Kill current message?")))
+		(funcall navi2ch-message-ask-before-kill "Kill current message? ")
+	      (y-or-n-p "Kill current message? ")))
     (kill-buffer navi2ch-message-buffer-name)
     t))
 
@@ -460,7 +464,7 @@
   "message buffer があるとき、書き込み先のスレ/板を表示し message buffer に切り替え。"
   (interactive)
   (if (not (get-buffer navi2ch-message-buffer-name))
-      (message "No message buffer.")
+      (message "No message buffer")
     (delete-other-windows)
     (if navi2ch-message-current-article-buffer
 	;; 既存スレに書き込み → 書き込み先のスレを表示

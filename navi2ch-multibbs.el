@@ -59,7 +59,7 @@ BBS-P-FUNC(URI):
     URI がその BBS のものならば non-nil を返す。
 
 SUBJECT-CALLBACK-FUNC():
-    subject.txt を取得するときに navi2ch-net-update-file で使われるコー
+    subject.txt を取得するときに `navi2ch-net-update-file' で使われるコー
     ルバック関数
 
 ARTICLE-UPDATE-FUNC(BOARD ARTICLE START):
@@ -92,8 +92,7 @@ BOARD-UPDATE-FUNC(BOARD):
 
 BOARD-GET-FILE-NAME-FUNC(BOARD &optional FILE-NAME)
     BOARD の情報を保存するディレクトリを基準として、FILE-NAME の
-    絶対パスを返す。
-")
+    絶対パスを返す。")
 
 (defvar navi2ch-multibbs-variable-alist nil
   "BBS の種類と変数群の alist。
@@ -106,8 +105,7 @@ VARIABLE-ALIST は以下の通り
 \((coding-system		. CODING-SYSTEM-VAR))
 
 CODING-SYSTEM-VAR:
-    その BBS のファイルの文字コード
-")
+    その BBS のファイルの文字コード")
 
 
 (defun navi2ch-multibbs-get-bbstype-subr (uri list)
@@ -137,7 +135,7 @@ CODING-SYSTEM-VAR:
    'subject-callback 'navi2ch-2ch-subject-callback))
 
 (defmacro navi2ch-multibbs-defcallback (name spec &rest body)
-  "navi2ch-net-update-file に渡す callback を定義する。
+  "`navi2ch-net-update-file' に渡す callback を定義する。
 SPEC は (BBSTYPE [ARG]...)。
 実際には、callback を定義するのに必要な BBSTYPE な板の coding-system
 による decode, encode 処理を BODY を評価する前後に行なう、NAME という

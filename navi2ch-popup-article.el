@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-popup-article)
 (defconst navi2ch-popup-article-ident
@@ -195,7 +199,7 @@ stack が空なら、PopUp Article モードを抜ける。"
   (navi2ch-popup-article-select-current-link))
 
 (defun navi2ch-popup-article-show-url ()
-  "url を表示して、その url を見るか kill ring にコピーする"
+  "url を表示して、その url を見るか kill ring にコピーする。"
   (interactive)
   (let ((navi2ch-article-current-board navi2ch-popup-article-current-board)
 	(navi2ch-article-current-article navi2ch-popup-article-current-article))

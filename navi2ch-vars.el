@@ -136,7 +136,7 @@
 
 (defcustom navi2ch-browse-url-browser-function nil
   "*Navi2ch $B$+$i;HMQ$9$k%V%i%&%64X?t!#(B
-nil $B$N>l9g$O(B browse-url-browser-function $B$r;H$&!#(B
+nil $B$N>l9g$O(B `browse-url-browser-function' $B$r;H$&!#(B
 \(autoload 'navi2ch-browse-url \"navi2ch\" nil t)
 \(setq navi2ch-browse-url-browser-function 'w3m-browse-url)
 \(setq browse-url-browser-function 'navi2ch-browse-url)
@@ -191,9 +191,9 @@ nil $B$N>l9g$O(B browse-url-browser-function $B$r;H$&!#(B
   :group 'navi2ch)
 
 (defcustom navi2ch-decode-character-references t
-  "*non-nil$B$J$i!"?tCMJ8;z;2>H!"J8;z<BBN;2>H$NI=<($r;n$_$k!#(B
+  "*non-nil $B$J$i!"?tCMJ8;z;2>H!"J8;z<BBN;2>H$NI=<($r;n$_$k!#(B
 GNU Emacs 21, XEmacs 21.5 $B0J9_$G$"$l$P%G%U%)%k%H$GI=<($G$-$^$9$,!"(B
-$B$=$l0JA0$N(BEmacsen$B$G$O(BMule-UCS$B$,I,MW$G$9!#(B (require 'un-define) $B$7$F$M!#(B"
+$B$=$l0JA0$N(B Emacsen $B$G$O(B Mule-UCS $B$,I,MW$G$9!#(B(require 'un-define) $B$7$F$M!#(B"
   :type 'boolean
   :group 'navi2ch)
 
@@ -531,7 +531,7 @@ nil $B$r;XDj$9$k$H!"?7Ce%l%9$X$N%U%#%k%?!<=hM}$r%A%'%C%/$7$J$$!#(B"
   (if (eq window-system 'w32)
       'shift_jis-dos
     'euc-jp-unix)
-  "*AA $B$rI=<($9$k%W%m%0%i%`$K$o$?$90l;~%U%!%$%k$N(B `coding-system'"
+  "*AA $B$rI=<($9$k%W%m%0%i%`$K$o$?$90l;~%U%!%$%k$N(B `coding-system'$B!#(B"
   :type 'coding-system
   :group 'navi2ch-article)
 
@@ -702,7 +702,7 @@ cdr $B$,(B nil $B$N>l9g$O%j%s%/$rE=$i$J$$!#(B
 cdr $B$,4X?t$N>l9g$O%^%C%A$7$?J8;zNs$r0z?t$H$7$F8F$S=P$7!"JV5QCM$,J8;zNs(B
 $B$N>l9g!"$=$l$r%j%s%/$H$9$k!#$=$N:]!"FC<lJ8;z$O;H$($J$$!#(B
 $B%j%9%H$N@hF,$rM%@h$7!"F1$8J8;zNs$K$O0lEY$@$1%^%C%A$9$k!#(B
-navi2ch-article-url-regexp $B$h$jM%@h$5$l$k!#(B
+`navi2ch-article-url-regexp' $B$h$jM%@h$5$l$k!#(B
 
 URL $B$8$c$J$$J*$K%j%s%/$rE=$k(B:
 '((\"\\\\=\\[\\\\(FreeBSD-[a-z]+-jp\\\\) \\\\([0-9]+\\\\)\\\\]\" .
@@ -817,7 +817,7 @@ window $B$NI}$$$C$Q$$$K$7$?$$$J$i(B
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-show-url-number 50
-  "*url $B$rI=<(!&%3%T!<$9$k:]!":G8e$N%l%9$r$$$/$DI=<($9$k$+!#(B "
+  "*url $B$rI=<(!&%3%T!<$9$k:]!":G8e$N%l%9$r$$$/$DI=<($9$k$+!#(B"
   :type 'number
   :group 'navi2ch-article)
 
@@ -834,7 +834,7 @@ nil $B$N>l9g$OF1$8%9%l$NFbMF$N$_$rF@$k!#(B"
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-dispweek nil
-  "* non-nil$B$J$i$P(BYY/MM/DD$B$NF|IU$KMKF|I=<($7!$G/$r(BYYYY$BI=5-$K$9$k(B"
+  "*non-nil $B$J$i$P(B YY/MM/DD $B$NF|IU$KMKF|$rI=<($7!"G/$r(B YYYY $BI=5-$K$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-article)
 
@@ -1400,7 +1400,7 @@ nil $B$J$i!"=q$-$+$1$rGK4~$7$F$$$$$+Ld$$9g$o$;$k!#(B
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-remember-user-name t
-  "*non-nil$B$J$i!"Aw$C$?%l%9$NL>A0Mw$H%a!<%kMs$r3P$($F$*$/!#(B
+  "*non-nil $B$J$i!"Aw$C$?%l%9$NL>A0Mw$H%a!<%kMs$r3P$($F$*$/!#(B
 $BF1$8%9%l$G<!$K%l%9$9$k$H$-$O!"$=$l$,%G%U%)%k%H$NL>A0$K$J$k!#(B"
   :type 'boolean
   :group 'navi2ch-message)
@@ -1470,7 +1470,7 @@ SPC$B!"(BC-l$B!"(BC-g$B!"(BC-v$B$O%j%9%HI=<($N:]$K;HMQ$5$l$k$N$G%-!<$K$O;
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-popup-aa-width 39
-  "*aa $B$N%j%9%H$rI=<($9$k:]$NI}(B"
+  "*aa $B$N%j%9%H$rI=<($9$k:]$NI}!#(B"
   :type 'number
   :group 'navi2ch-message)
 
@@ -1744,8 +1744,9 @@ nil $B$J$i!"(B`customize'$B$rMxMQ$7$F(B`custom-file'$B$KJ]B8$9$k!#(B
 					    (or navi2ch-on-emacs21
 						navi2ch-on-xemacs)
 					    t)
-  "If it is T, show graphic logo in the startup screen.  You can set it to
-a symbol `bitmap', `xbm' or `xpm' in order to force the image format."
+  "If it is T, show graphic logo in the startup screen.
+You can set it to a symbol `bitmap', `xbm' or `xpm' in order
+to force the image format."
   :type '(radio (const :tag "Off" nil)
                 (const :tag "On (any format)" t)
                 (const xpm)

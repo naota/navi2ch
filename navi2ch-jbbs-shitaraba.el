@@ -87,7 +87,7 @@
   (replace-match "\n"))
 
 (defun navi2ch-js-article-update (board article start)
-  "BOARD ARTICLEの記事を更新する。
+  "BOARD ARTICLE の記事を更新する。
 START が non-nil ならばレス番号 START からの差分を取得する。
 返り値は HEADER。"
   (let ((file (navi2ch-article-get-file-name board article))
@@ -189,7 +189,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 (defun navi2ch-js-article-to-url-subr
   (string board article &optional start end nofirst)
   "BOARD, ARTICLE から  STRING.cgi の url に変換。
-START, END, NOFIRST で範囲を指定する"
+START, END, NOFIRST で範囲を指定する。"
   (let ((url (concat (navi2ch-js-get-cgi-url string board)
 		     (cdr (assq 'artid article))
 		     "/")))
@@ -257,7 +257,7 @@ START, END, NOFIRST で範囲を指定する"
   "\\`\\(.+\\)/\\([^/]+\\)/\\([^/]+\\)/\\'")
 
 (defun navi2ch-js-get-cgi-url (string board)
-  "STRING.cgi の url を返す"
+  "STRING.cgi の url を返す。"
   (let ((uri (navi2ch-board-get-uri board)))
     (and (string-match navi2ch-js-url-regexp uri)
 	 (format "%s/bbs/%s.cgi/%s/%s/"

@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-auto-modify)
 (defconst navi2ch-auto-modify-ident
@@ -53,12 +57,12 @@
 		      (nreverse added)))))))
 
 (defmacro navi2ch-auto-modify (&rest body)
-  "`navi2ch-auto-modify-file'で指定されたファイルに記述すると、
+  "`navi2ch-auto-modify-file' で指定されたファイルに記述すると、
 その中に含まれる変数の設定を自動的に変更して保存する。
 
 例えば下記のように記述すると、
-変数`navi2ch-article-message-filter-by-id-alist'と
-`navi2ch-article-message-filter-by-message-alist'の設定値は、
+変数 `navi2ch-article-message-filter-by-id-alist' と
+`navi2ch-article-message-filter-by-message-alist' の設定値は、
 Navi2ch 終了時に自動的に変更・保存される。
 
 \(navi2ch-auto-modify

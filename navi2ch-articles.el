@@ -92,7 +92,7 @@
         (setq i (1+ i))))))
 
 (defun navi2ch-articles-delete ()
-  "その行を articles から削除して、その article buffer も消す"
+  "その行を articles から削除して、その article buffer も消す。"
   (interactive)
   (let ((buf (save-excursion (beginning-of-line)
 			     (navi2ch-articles-get-property (point)))))
@@ -110,7 +110,7 @@
   (navi2ch-bm-exec-subr 'navi2ch-articles-delete))
 
 (defun navi2ch-articles (&rest args)
-  "articles を表示する"
+  "articles を表示する。"
   (navi2ch-articles-mode)
   (navi2ch-bm-setup 'navi2ch-articles)
   (navi2ch-articles-sync))

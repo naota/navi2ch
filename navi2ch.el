@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch)
 (defconst navi2ch-ident
@@ -75,7 +79,7 @@
 
 ;;;###autoload
 (defun navi2ch (&optional arg)
-  "Navigator for 2ch for Emacs"
+  "Navigator for 2ch for Emacs."
   (interactive "P")
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
@@ -112,21 +116,21 @@
   (message "Navigator for 2ch %s" navi2ch-version))
 
 (defun navi2ch-save-status ()
-  "list, board, article の状態を保存する"
+  "list, board, article の状態を保存する。"
   (interactive)
-  (message "save status...")
+  (message "Save status...")
   (run-hooks 'navi2ch-save-status-hook)
-  (message "save status...done"))
+  (message "Save status...done"))
 
 (defun navi2ch-exit (&optional suspend)
-  "navi2ch を終了する
-SUSPEND が non-nil なら buffer を消さない"
+  "navi2ch を終了する。
+SUSPEND が non-nil なら buffer を消さない。"
   (interactive)
   (when (or suspend
             (not navi2ch-ask-when-exit)
             (if (functionp navi2ch-ask-when-exit)
-		(funcall navi2ch-ask-when-exit "really exit navi2ch?")
-	      (y-or-n-p "really exit navi2ch?")))
+		(funcall navi2ch-ask-when-exit "Really exit navi2ch? ")
+	      (y-or-n-p "Really exit navi2ch? ")))
     (run-hooks 'navi2ch-exit-hook)
     (navi2ch-save-status)
     (dolist (x (append
@@ -147,7 +151,7 @@ SUSPEND が non-nil なら buffer を消さない"
       (remove-hook 'kill-emacs-hook 'navi2ch-kill-emacs-hook))))
 
 (defun navi2ch-suspend ()
-  "navi2ch を一時的に終了する"
+  "navi2ch を一時的に終了する。"
   (interactive)
   (navi2ch-exit 'suspend))
 
@@ -362,7 +366,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 	     (other-window 1))))))
 
 (defun navi2ch-goto-url (url &optional force)
-  "URL からスレまたは板を選ぶ"
+  "URL からスレまたは板を選ぶ。"
   (interactive (list (navi2ch-read-string "URL: "
 					  (get-text-property (point) 'url))
 		     current-prefix-arg))
@@ -379,7 +383,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 	   (navi2ch-list-select-board board force)))))
 
 (defun navi2ch-find-file (file)
-  "FILE からスレまたは板を選ぶ"
+  "FILE からスレまたは板を選ぶ。"
   (interactive "fFind article file or board directory: ")
   (let ((article-p (file-regular-p file))
 	(board-p (file-directory-p file)))
@@ -490,7 +494,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   (if (and navi2ch-use-lock
 	   (not (navi2ch-lock-directory navi2ch-directory navi2ch-lock-name))
 	   (not (yes-or-no-p "ディレクトリのロックに失敗しました。危険を承知で続けますか?")))
-      (error "lock failed")))
+      (error "Lock failed")))
 
 (defun navi2ch-unlock ()
   "`navi2ch-directory' のロックを解除する。"
@@ -527,7 +531,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
       (navi2ch)))
   (if (navi2ch-2ch-url-p url)
       (navi2ch-goto-url url)
-    (message "falling back...")
+    (message "Falling back...")
     (apply 'navi2ch-browse-url-internal url args)))
 
 (defun navi2ch-url-at-point (point)

@@ -20,6 +20,10 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+;;; Commentary:
+
+;;
+
 ;;; Code:
 (provide 'navi2ch-net)
 (defconst navi2ch-net-ident
@@ -48,7 +52,7 @@
     (not-updated . "X-Navi2ch-Not-Updated") ; $B99?7$5$l$F$$$J$$(B
     (error . "X-Navi2ch-Error"))  ; $B%(%i!<(B($B%U%!%$%k$,<hF@$G$-$J$$$H$+(B)
 
-  "STATE $B$N%7%s%\%k$H(B $B<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B alist")
+  "STATE $B$N%7%s%\%k$H<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B alist$B!#(B")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
@@ -153,7 +157,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 		   (processp proc)
 		   (memq (process-status proc) '(open run)))
 	      (progn
-		(message "reusing connection...")
+		(message "Reusing connection...")
 		(process-send-string proc "") ; ping
 		(navi2ch-net-get-content proc))	; $BA02s$N%4%_$rFI$_Ht$P$7$F$*$/(B
 	    (if (processp proc)
@@ -163,7 +167,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
       (when (or (not proc)
 		(not (processp proc))
 		(not (memq (process-status proc) '(open run))))
-	(message "now connecting...")
+	(message "Now connecting...")
 	(setq proc (funcall navi2ch-open-network-stream-function
 			    navi2ch-net-connection-name buf host port)))
       (save-excursion
@@ -226,7 +230,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
        (cons 'host2ch host2ch)))))
 
 (defun navi2ch-net-http-proxy-basic-credentials (user pass)
-  "USER $B$H(B PASS $B$+$i(B Proxy $BG'>Z$N>ZL@=q(B($B!)(B)$BItJ,$rJV$9!#(B"
+  "USER $B$H(B PASS $B$+$i(B Proxy $BG'>Z$N>ZL@=q(B (?) $BItJ,$rJV$9!#(B"
   (when (and user pass)
     (concat "Basic "
 	    (base64-encode-string
@@ -242,7 +246,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
     header))
 
 (defun navi2ch-net-get-status (proc)
-  "PROC $B$N@\B3$N%9%F!<%?%9It$rJV$9(B"
+  "PROC $B$N@\B3$N%9%F!<%?%9It$rJV$9!#(B"
   (navi2ch-net-ignore-errors
    (or navi2ch-net-status
        (save-excursion
@@ -263,7 +267,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 	  (match-string 1)))))
 
 (defun navi2ch-net-get-header (proc)
-  "PROC $B$N@\B3$N%X%C%@It$rJV$9(B"
+  "PROC $B$N@\B3$N%X%C%@It$rJV$9!#(B"
   (when (navi2ch-net-get-status proc)
     (navi2ch-net-ignore-errors
      (or navi2ch-net-header
@@ -300,7 +304,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 				    shell-command-switch
 				    (concat "gzip -d " tempfngz))))
 	  (unless (and (numberp status) (zerop status))
-	    (error "Failed to execute gzip.")))
+	    (error "Failed to execute gzip")))
 	(delete-region start end)
 	(goto-char start)
 	(goto-char (+ start
@@ -314,7 +318,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 			   navi2ch-net-gunzip-program t t nil
 			   navi2ch-net-gunzip-args)))
 	(unless (and (numberp status) (zerop status))
-	  (error "Failed to execute gzip.")))))
+	  (error "Failed to execute gzip")))))
 
 (defalias 'navi2ch-net-get-content-subr
   (navi2ch-ifemacsce
@@ -332,7 +336,7 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 	(accept-process-output proc)
 	(goto-char p))
       (when (not (match-string 1))
-	(message "no chunk-size line")
+	(message "No chunk-size line")
 	(throw 'ret 0))
       (goto-char (match-end 0))
       (setq size (string-to-number (match-string 1) 16)
@@ -346,18 +350,18 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 	(accept-process-output proc))
       (goto-char end)
       (when (not (= (point) end))
-	(message "unable goto chunk end (size: %d, end: %d, point: %d)"
+	(message "Unable goto chunk end (size: %d, end: %d, point: %d)"
 		 size end (point))
 	(throw 'ret 0))
       (when (not (string= (buffer-substring (- (point) 2) (point))
 			  "\r\n"))
-	(message "invalid chunk body")
+	(message "Invalid chunk body")
 	(throw 'ret 0))		   ; chunk-data $B$NKvHx$,(B CRLF $B$8$c$J$$(B
       (delete-region (- (point) 2) (point))
       size)))
 
 (defun navi2ch-net-get-content (proc)
-  "PROC $B$N@\B3$NK\J8$rJV$9(B"
+  "PROC $B$N@\B3$NK\J8$rJV$9!#(B"
   (when (and (navi2ch-net-get-status proc) (navi2ch-net-get-header proc))
     (navi2ch-net-ignore-errors
      (or navi2ch-net-content
@@ -406,7 +410,7 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 				  &optional time accept-status other-header)
   "URL $B$+$i%@%&%s%m!<%I$r3+;O$9$k!#(B
 TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$1%@%&%s%m!<%I$9$k!#(B
-$B%j%9%H(B `accept-status' $B$,(B `non-nil' $B$J$i$P%9%F!<%?%9$,(B `accept-status' $B$K4^$^$l(B
+$B%j%9%H(B ACCEPT-STATUS $B$,(B `non-nil' $B$J$i$P%9%F!<%?%9$,(B ACCEPT-STATUS $B$K4^$^$l(B
 $B$F$$$k;~$@$1%@%&%s%m!<%I$9$k!#(B
 OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 $B%@%&%s%m!<%I$G$-$l$P$=$N@\B3$rJV$9!#(B"
@@ -430,7 +434,7 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 		     (and navi2ch-net-user-agent
 			  (cons "User-Agent" navi2ch-net-user-agent)))
 	       other-header)))
-       (message "checking file...")
+       (message "Checking file...")
        (setq status (navi2ch-net-get-status proc))
        (when (and (string= status "416")
 		  (assoc "Range" other-header))
@@ -438,7 +442,7 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 	   (setq other-header (delq elt other-header)
 		 status nil)))
        (unless status
-	 (message "retrying...")
+	 (message "Retrying...")
 	 (sit-for 3)))			; $B%j%H%i%$$9$kA0$K$A$g$C$HBT$D(B
      (cond ((not (stringp status))
 	    (message "%serror" (current-message))
@@ -503,8 +507,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 	     (setq header (navi2ch-net-add-state 'error header)))
 	    ((string= status "200")
 	     (message (if diff
-			  "%s: getting file diff..."
-			"%s: getting new file...")
+			  "%s: Getting file diff..."
+			"%s: Getting new file...")
 		      (current-message))
 	     (setq cont (navi2ch-net-get-content proc))
 	     (when (and cont func)
@@ -530,7 +534,7 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 		  (assoc "Location" header))
 	     (setq url (cdr (assoc "Location" header))
 		   redo t)
-	     (message "%s: redirecting..." (current-message)))
+	     (message "%s: Redirecting..." (current-message)))
 	    ((string= status "304")
 	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    (t
@@ -550,7 +554,7 @@ header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
 	   (string-to-number length)))))
 
 (defun navi2ch-net-check-aborn (size header)
-  "$B$"$\!<$s$5$l$F$J$1$l$P(B t"
+  "$B$"$\!<$s$5$l$F$J$1$l$P(B t $B$rJV$9!#(B"
   (let ((len (navi2ch-net-get-length-from-header header)))
     (if len
 	(>= len (or size 0))
@@ -592,7 +596,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 	  ((string= status "206")
 	   (if (not (navi2ch-net-check-aborn size header))
 	       (setq aborn-p t)
-	     (message "%s: getting file diff..." (current-message))
+	     (message "%s: Getting file diff..." (current-message))
 	     (let ((cont (navi2ch-net-get-content proc)))
 	       (cond ((and (> size 0) last
 			   (or (> (length last) (length cont))
@@ -613,7 +617,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 	  ((string= status "200")
 	   (if (not (navi2ch-net-check-aborn size header))
 	       (setq aborn-p t)
-	     (message "%s: getting whole file..." (current-message))
+	     (message "%s: Getting whole file..." (current-message))
 	     (let ((cont (navi2ch-net-get-content proc)))
 	       (with-temp-file file
 		 (navi2ch-set-buffer-multibyte nil)
@@ -635,7 +639,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
   (when (and navi2ch-net-save-old-file-when-aborn
 	     (or (not (eq navi2ch-net-save-old-file-when-aborn
 			  'ask))
-		 (y-or-n-p "$B$"$\!<$s(B!!! backup old file? ")))
+		 (y-or-n-p "$B$"$\!<$s(B!!! Backup old file? ")))
     (copy-file file (read-file-name "file name: "))))
 
 (defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
@@ -663,8 +667,8 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
 		 (coding-system-for-read 'binary)
 		 cont)
 	     (message (if diff
-			  "%s: getting file diff with read.cgi..."
-			"%s: getting new file with read.cgi...")
+			  "%s: Getting file diff with read.cgi..."
+			"%s: Getting new file with read.cgi...")
 		      (current-message))
 	     (setq cont (navi2ch-net-get-content proc))
 	     (if (or (not cont)
@@ -696,7 +700,7 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
 		  ((string= "-ERR" state)
 		   (let ((err-msg (decode-coding-string
 				   data navi2ch-coding-system)))
-		     (message "error! %s" err-msg)
+		     (message "Error! %s" err-msg)
 		     (cond
 		      ((string-match "$B2a5n%m%0AR8K$GH/8+(B" err-msg)
 		       (setq header (navi2ch-net-add-state 'kako header)))
@@ -730,7 +734,7 @@ This is taken from RFC 2396.")
 
 ;; from Emacs/W3
 (defun navi2ch-net-url-hexify-string (str)
-  "Escape characters in a string"
+  "Escape characters in a string."
   (mapconcat (lambda (char)
 	       (if (not (memq char navi2ch-net-url-unreserved-chars))
 		   (format "%%%02X" char)

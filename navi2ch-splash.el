@@ -272,8 +272,8 @@ Return a number of lines that an image occupies in the buffer."
       (count-lines (point-min) (goto-char (point-max))))))
 
 (defun navi2ch-splash-insert-text (height)
-  "Insert a version and the copyright message after a logo image.  HEIGHT
-should be a number of lines that an image occupies in the buffer."
+  "Insert a version and the copyright message after a logo image.
+HEIGHT should be a number of lines that an image occupies in the buffer."
   (let* ((height (- (window-height) height 1))
 	 (notice-height (length (split-string navi2ch-splash-copyright-notice
 					      "\n")))
@@ -312,10 +312,10 @@ should be a number of lines that an image occupies in the buffer."
   (defvar default-line-spacing))
 
 (defun navi2ch-splash (&optional image-type)
-  "Demo on the startup screen.  IMAGE-TYPE should be a symbol which
-overrides the variable `navi2ch-splash-display-logo'.  It will prompt user
-for the type of image when it is called interactively with a prefix
-argument."
+  "Demo on the startup screen.
+IMAGE-TYPE should be a symbol which overrides the variable
+`navi2ch-splash-display-logo'.  It will prompt user for the type
+of image when it is called interactively with a prefix argument."
   (interactive "P")
   (let ((selection (navi2ch-splash-image-type-alist))
 	type)

@@ -60,14 +60,14 @@
    nil))
 
 (defvar navi2ch-bookmark-list nil
-  "bookmark を表すリスト
+  "bookmark を表すリスト。
 \((BOOKMARK-ID BOOKMARK-NAME
   (KEY
    (board BOARD)
    (article ARTICLE))...)
  ...)
 という形をしている。
-KEY は (concat URI ARTID) ")
+KEY は (concat URI ARTID)")
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-current-bookmark-id nil)
 
@@ -141,7 +141,7 @@ KEY は (concat URI ARTID) ")
 	(throw 'exist t)))))
 
 (defun navi2ch-bookmark-create-bookmark (bookmark-id)
-  "ブックマーク BOOKMARK-ID を追加する"
+  "ブックマーク BOOKMARK-ID を追加する。"
   (unless (assoc bookmark-id navi2ch-bookmark-list)
     (when (member bookmark-id
 		  (mapcar (lambda (x) (cdr (assq 'id x)))
@@ -158,7 +158,7 @@ KEY は (concat URI ARTID) ")
       (navi2ch-bookmark-save-info))))
 
 (defun navi2ch-bookmark-delete-bookmark (bookmark-id)
-  "ブックマーク BOOKMARK-ID を削除する"
+  "ブックマーク BOOKMARK-ID を削除する。"
   (let ((bookmark (assoc bookmark-id navi2ch-bookmark-list)))
     (when (y-or-n-p (concat "delete global bookmark "
 			    (cadr bookmark) "? "))
@@ -169,7 +169,7 @@ KEY は (concat URI ARTID) ")
       (navi2ch-bookmark-save-info))))
 
 (defun navi2ch-bookmark-change-bookmark (bookmark-id)
-  "ブックマーク BOOKMARK-ID の ID、名称を変更する"
+  "ブックマーク BOOKMARK-ID の ID、名称を変更する。"
   (let* ((bookmark (assoc bookmark-id navi2ch-bookmark-list))
 	 (id (navi2ch-read-string "new bookmark ID: " (car bookmark)))
 	 (name (navi2ch-read-string "new bookmark name: " (cadr bookmark))))
@@ -181,7 +181,7 @@ KEY は (concat URI ARTID) ")
     (navi2ch-bookmark-save-info)))
 
 (defun navi2ch-bookmark-add-subr (bookmark-id board article)
-  "BOARD と ARTICLE で表される スレッドを追加"
+  "BOARD と ARTICLE で表される スレッドを追加。"
   (unless (assoc bookmark-id navi2ch-bookmark-list)
     (navi2ch-bookmark-create-bookmark bookmark-id))
   (let ((bookmark (assoc bookmark-id navi2ch-bookmark-list)))
@@ -195,7 +195,7 @@ KEY は (concat URI ARTID) ")
 
 (defun navi2ch-bookmark-add (bookmark-id board article)
   (navi2ch-bookmark-add-subr bookmark-id board article)
-  (message "Add current article to global bookmark."))
+  (message "Add current article to global bookmark"))
 
 (defun navi2ch-bookmark-insert-subject (num item)
   (navi2ch-bm-insert-subject
@@ -233,7 +233,7 @@ KEY は (concat URI ARTID) ")
     (navi2ch-bookmark-delete-article (car node) board article)))
 
 (defun navi2ch-bookmark-delete-subr ()
-  "その行を bookmark から削除する。(確認なし)"
+  "その行を bookmark から確認なしで削除する。"
   (let ((item (save-excursion (beginning-of-line)
 			      (navi2ch-bookmark-get-property (point))))
 	(buffer-read-only nil))
@@ -250,19 +250,19 @@ KEY は (concat URI ARTID) ")
 (defun navi2ch-bookmark-delete ()
   "その行を bookmark から削除する。"
   (interactive)
-  (if (y-or-n-p "Delete this line?")
+  (if (y-or-n-p "Delete this line? ")
       (navi2ch-bookmark-delete-subr)))
 
 (defun navi2ch-bookmark-delete-mark-article ()
   (interactive)
-  (if (y-or-n-p "Delete these lines?")
+  (if (y-or-n-p "Delete these lines? ")
       (navi2ch-bm-exec-subr 'navi2ch-bookmark-delete-subr)))
 
 (defun navi2ch-bookmark-copy (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "copy to: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Copy to: ")))
   (if (equal bookmark-id
 	     navi2ch-bookmark-current-bookmark-id)
-      (message "Same bookmark.")
+      (message "Same bookmark")
     (save-excursion
       (beginning-of-line)
       (let ((item (navi2ch-bookmark-get-property (point))))
@@ -272,15 +272,15 @@ KEY は (concat URI ARTID) ")
 	(navi2ch-bookmark-save-info)))))
 
 (defun navi2ch-bookmark-move (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "move to: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Move to: ")))
   (if (equal bookmark-id
 	     navi2ch-bookmark-current-bookmark-id)
-      (message "Same bookmark.")
+      (message "Same bookmark")
     (navi2ch-bookmark-copy bookmark-id)
     (navi2ch-bookmark-delete-subr)))
 
 (defun navi2ch-bookmark-move-mark-article (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "move to: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Move to: ")))
   (navi2ch-bm-exec-subr 'navi2ch-bookmark-move bookmark-id))
 
 (defun navi2ch-bookmark-cut ()
@@ -320,7 +320,7 @@ KEY は (concat URI ARTID) ")
 	    (navi2ch-bookmark-insert-subject 0 (car pair)))
 	  (navi2ch-bm-renumber)
 	  (forward-line -1))
-      (message "stack is empty"))))
+      (message "Stack is empty"))))
 
 ;; (defun navi2ch-bookmark-exit ()
 ;;   (interactive)
@@ -328,7 +328,7 @@ KEY は (concat URI ARTID) ")
 ;;   (set-window-configuration navi2ch-bookmark-window-configuration))
 
 (defun navi2ch-bookmark-goto-bookmark (bookmark-id)
-  (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
+  (interactive (list (navi2ch-bookmark-read-id "Bookmark ID: ")))
   (let ((bookmark (assoc bookmark-id
 			 navi2ch-bookmark-list)))
     (navi2ch-list-select-board
@@ -337,7 +337,7 @@ KEY は (concat URI ARTID) ")
 	   (cons 'type 'bookmark)))))
 
 (defun navi2ch-bookmark (board &rest args)
-  "bookmark を表示する"
+  "bookmark を表示する。"
   (let ((bookmark-id (cdr (assq 'id board))))
     (navi2ch-bookmark-mode)
     (setq navi2ch-bookmark-current-bookmark-id bookmark-id)

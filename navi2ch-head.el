@@ -42,7 +42,7 @@
 ;; navi2ch-head-mode
 
 (defvar navi2ch-head-mode-map nil
-  "ローカルルールのビュワーのキーマップ")
+  "ローカルルールのビュワーのキーマップ。")
 (unless navi2ch-head-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-view-map)
@@ -143,8 +143,8 @@
 (define-key navi2ch-list-mode-map "H" 'navi2ch-head-get-head-txt)
 
 (defun navi2ch-head-get-head-txt (&optional force)
-  "ローカルルールを持ってきて表示。head.txtに保存しちゃうよ。
-emacs-w3mがあればw3mで表示しまつ．"
+  "ローカルルールを持ってきて表示。head.txt に保存しちゃうよ。
+emacs-w3m があれば w3m で表示しまつ。"
   (interactive "P")
   (cond ((eq major-mode 'navi2ch-article-mode)
 	 (setq navi2ch-head-current-board navi2ch-article-current-board

@@ -224,7 +224,7 @@
       (setq prev (point)))))
 
 (defun navi2ch-list-insert-board-names (list)
-  "`list' $B$NFbMF$r%P%C%U%!$KA^F~(B"
+  "LIST $B$NFbMF$r%P%C%U%!$KA^F~!#(B"
   (if navi2ch-list-bookmark-mode
       (navi2ch-list-insert-bookmarks list)
     (let ((prev (point)))
@@ -290,7 +290,7 @@
       (setcdr pair (navi2ch-put-alist 'open (not open) alist)))))
 
 (defun navi2ch-list-select-current-board (&optional force)
-  "$BHD$rA*$V!#$^$?$O%+%F%4%j$N3+JD$r$9$k(B"
+  "$BHD$rA*$V!#$^$?$O%+%F%4%j$N3+JD$r$9$k!#(B"
   (interactive "P")
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'board))
@@ -298,7 +298,7 @@
 	  ((get-text-property (point) 'genre)
 	   (navi2ch-list-toggle-open))
 	  (t
-	   (message "can't select this line!")))))
+	   (message "Can't select this line!")))))
 
 (defun navi2ch-list-open-all-category ()
   (interactive)
@@ -439,7 +439,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
  	  (cons 'change changed-list))))
 
 (defun navi2ch-list-change (changed-list)
-  "CHANGED-LIST $B$r$b$H$KHD%V%C%/%^!<%/$r99?7(B"
+  "CHANGED-LIST $B$r$b$H$KHD%V%C%/%^!<%/$r99?7!#(B"
   (let ((changed-alist (mapcar
 			(lambda (elt)
 			  (cons (navi2ch-list-bookmark-node (nth 1 elt))
@@ -456,7 +456,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 
 (defun navi2ch-list-apply-changed-status (changed-status)
   "CHANGED-STATUS $B$r$b$H$KHD$NJQ99$r$$$m$s$J=j$KH?1G$9$k!#(B"
-  (message "applying board changes...")
+  (message "Applying board changes...")
   (let ((added-list (cdr (assq 'add changed-status)))
 	(changed-list (cdr (assq 'change changed-status))))
     (when changed-status
@@ -473,7 +473,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
       (navi2ch-bookmark-change changed-list)
       (navi2ch-history-change changed-list)
       (navi2ch-list-change changed-list)
-      (message "applying board changes...done"))))
+      (message "Applying board changes...done"))))
 
 (defun navi2ch-list-get-changed-category (category-list)
   (let ((alist (navi2ch-alist-list-to-alist
@@ -556,7 +556,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	      (match-string 1 url))))))
 
 (defun navi2ch-list-make-board-txt ()
-  "bbstable.html $B$+$i(B (navi2ch $BMQ$N(B) board.txt $B$r:n$k(B
+  "bbstable.html $B$+$i(B (navi2ch $BMQ$N(B) board.txt $B$r:n$k!#(B
 `navi2ch-net-update-file' $B$N%O%s%I%i!#(B"
   (let ((coding-system-for-read 'binary)
 	(coding-system-for-write 'binary)
@@ -628,9 +628,9 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (save-window-excursion
       (setq board (cdr (assoc
 			(completing-read
-			 (concat "board name"
+			 (concat "Board name"
 				 (when default
-				   (format "(%s)" (cdr (assq 'id default))))
+				   (format " (%s)" (cdr (assq 'id default))))
 				 ": ")
 			 alist nil t)
 			alist))))
@@ -845,20 +845,20 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
   (interactive)
   (and (interactive-p) (setq ask t))
   (when (or (not ask)
-	    (y-or-n-p "Expire current category boards?"))
+	    (y-or-n-p "Expire current category boards? "))
     (dolist (board (navi2ch-list-get-current-category-list))
       (navi2ch-board-expire board))
-    (message "expiring current category is done")))
+    (message "Expiring current category is done")))
 
 (defun navi2ch-list-expire-all (&optional ask)
   (interactive)
   (and (interactive-p) (setq ask t))
   (when (or (not ask)
-	    (y-or-n-p "Expire all boards?"))
+	    (y-or-n-p "Expire all boards? "))
     (dolist (board navi2ch-list-board-name-list)
       (when (eq (cdr (assq 'type board)) 'board)
 	(navi2ch-board-expire board)))
-    (message "expiring all board is done")))
+    (message "Expiring all board is done")))
 
 (defun navi2ch-list-expire ()
   (interactive)
@@ -889,7 +889,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	    (if (not str)
 		(ding)
 	      (kill-new str)
-	      (message "copy: %s" str))))))))
+	      (message "Copy: %s" str))))))))
 
 (defun navi2ch-list-url-at-point (point)
   (let ((board (get-text-property point 'board)))
