@@ -1,3 +1,25 @@
+2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-save-content): 新関数。
+	(navi2ch-article-select-current-link): ↑を使う。
+	(navi2ch-article-get-link-text-subr): navi2ch-popup-article-mode
+	でも処理するように。
+
+	* navi2ch-mona.el (navi2ch-mona-put-face): navi2ch-mona-face にする
+	region を修正。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
+	"\r"       `navi2ch-popup-article-select-current-link'
+	"mouse-2"  `navi2ch-popup-article-mouse-select'
+	"Q"        `navi2ch-popup-article-exit-and-goto-number'
+	をバインド。
+	(navi2ch-popup-article-exit-and-goto-number): 新関数。
+	(navi2ch-popup-article-mode): post-command-hook に 
+	`navi2ch-article-display-link-minibuffer' を add-hook。
+	(navi2ch-popup-article): 存在しない範囲に対する参照に対処。
+	(navi2ch-popup-article-select-current-link): 新関数。
+	(navi2ch-popup-article-mouse-select): 新関数。
+
 2002-10-25  mami  <mami@users.sourceforge.net>
 
 	「あぼぼーん機能」書き直し。

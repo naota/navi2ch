@@ -1063,36 +1063,12 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 		 (progn
 		   (and (get-text-property (point) 'help-echo)
 			(let ((buffer-read-only nil))
-			  (navi2ch-article-change-help-echo-property (point)
-								     (function navi2ch-article-help-echo))))
+			  (navi2ch-article-change-help-echo-property
+			   (point) (function navi2ch-article-help-echo))))
 		   (navi2ch-goto-url prop))
                (navi2ch-browse-url-internal prop))))
           ((setq prop (get-text-property (point) 'content))
-           (let ((default-filename (file-name-nondirectory
-                                    (get-text-property (point) 'file-name)))
-                 filename)
-             (setq filename (read-file-name
-                             (if default-filename
-                                 (format "Save file (default `%s'): "
-                                         default-filename)
-                               "Save file: ")
-                             nil default-filename))
-             (when (and default-filename (file-directory-p filename))
-               (setq filename (expand-file-name default-filename filename)))
-             (if (not (file-writable-p filename))
-                 (error "File not writable: %s" filename)
-	       (with-temp-buffer
-		 (let ((buffer-file-coding-system 'binary)
-		       (coding-system-for-write 'binary)
-		       ;; auto-compress-mode を disable にする
-		       (inhibit-file-name-operation 'write-region)
-		       (inhibit-file-name-handlers (cons 'jka-compr-handler
-							 inhibit-file-name-handlers)))
-		   (insert prop)
-		   (if (or (not (file-exists-p filename))
-			   (y-or-n-p (format "File `%s' exists; overwrite? "
-					     filename)))
-		       (write-region (point-min) (point-max) filename))))))))))
+	   (navi2ch-article-save-content)))))
 
 (defun navi2ch-article-mouse-select (e)
   (interactive "e")
@@ -1163,8 +1139,7 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	    (range navi2ch-article-view-range)
 	    (first (caar navi2ch-article-message-list))
 	    (last (caar (last navi2ch-article-message-list))))
-	(when (< num first) (setq num first))
-	(when (> num last) (setq num last))
+	(setq num (max first (min last num)))
 	(unless (navi2ch-article-inside-range-p num range len)
 	  (if navi2ch-article-redraw-when-goto-number
 	      (progn
@@ -1547,7 +1522,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   (setq point (or point (point)))
   (let (mark-active deactivate-mark)	; transient-mark-mode が切れないよう
     (catch 'ret
-      (when (eq major-mode 'navi2ch-article-mode)
+      (when (or (eq major-mode 'navi2ch-article-mode)
+		(eq major-mode 'navi2ch-popup-article-mode))
 	(let ((num-prop (get-text-property point 'number))
 	      (url-prop (get-text-property point 'url))
 	      num-list num)
@@ -1791,6 +1767,35 @@ gunzip に通してから文字コードの推測を試みる。"
             (if text (insert text))
             (add-text-properties part-begin (point)
                                  '(hard t face navi2ch-article-base64-face))))))))
+
+(defun navi2ch-article-save-content ()
+  (interactive)
+  (let ((prop (get-text-property (point) 'content))
+	(default-filename (file-name-nondirectory
+			   (get-text-property (point) 'file-name)))
+	filename)
+    (setq filename (read-file-name
+		    (if default-filename
+			(format "Save file (default `%s'): "
+				default-filename)
+		      "Save file: ")
+		    nil default-filename))
+    (when (and default-filename (file-directory-p filename))
+      (setq filename (expand-file-name default-filename filename)))
+    (if (not (file-writable-p filename))
+	(error "File not writable: %s" filename)
+      (with-temp-buffer
+	(let ((buffer-file-coding-system 'binary)
+	      (coding-system-for-write 'binary)
+	      ;; auto-compress-mode を disable にする
+	      (inhibit-file-name-operation 'write-region)
+	      (inhibit-file-name-handlers (cons 'jka-compr-handler
+						inhibit-file-name-handlers)))
+	  (insert prop)
+	  (if (or (not (file-exists-p filename))
+		  (y-or-n-p (format "File `%s' exists; overwrite? "
+				    filename)))
+	      (write-region (point-min) (point-max) filename)))))))
 
 (defun navi2ch-article-textize-article (&optional dir-or-file buffer)
   (interactive)

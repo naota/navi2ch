@@ -273,8 +273,7 @@ nil is returned.  Otherwise the associated face object is returned."
 	(setq face (get-text-property (point) 'face))
 	(if (or (null face)
 		(eq face 'navi2ch-article-face))
-	    (put-text-property (point) (1- p)
-			       'face 'navi2ch-mona-face))
+	    (put-text-property (point) p 'face 'navi2ch-mona-face))
 	(goto-char p)))))
 
 (defun navi2ch-mona-pack-space ()

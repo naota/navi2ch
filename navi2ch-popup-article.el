@@ -39,10 +39,11 @@
     (define-key map [del] 'navi2ch-article-scroll-down)
     (define-key map [backspace] 'navi2ch-article-scroll-down)
     (define-key map "\177" 'navi2ch-article-scroll-down)
-    ;; (define-key map "\r" 'navi2ch-popup-article-select-current-link)
-    ;; (navi2ch-define-mouse-key map 2 'navi2ch-popup-article-mouse-select)
+    (define-key map "\r" 'navi2ch-popup-article-select-current-link)
+    (navi2ch-define-mouse-key map 2 'navi2ch-popup-article-mouse-select)
     (define-key map "g" 'navi2ch-article-goto-number)
     (define-key map "q" 'navi2ch-popup-article-exit)
+    (define-key map "Q" 'navi2ch-popup-article-exit-and-goto-number)
     (define-key map "l" 'navi2ch-popup-article-pop-point-or-exit)
     (define-key map "L" 'navi2ch-article-pop-poped-point)
     (define-key map "m" 'navi2ch-article-push-point)
@@ -61,18 +62,32 @@
     (setq navi2ch-popup-article-mode-map map)))
 
 (defun navi2ch-popup-article-exit ()
+  "PopUp Article モードを抜ける。"
   (interactive)
   (run-hooks 'navi2ch-popup-article-exit-hook)
   (bury-buffer)
   (set-window-configuration navi2ch-popup-article-window-configuration))
 
+(defun navi2ch-popup-article-exit-and-goto-number (&optional num)
+  "Article モードに戻ってから今の位置のレスの番号に移動。
+NUM が指定されれば、 NUM 番目のレスに移動。"
+  (interactive)
+  (setq num (or num (navi2ch-article-get-current-number)))
+  (navi2ch-popup-article-exit)
+  (if (integerp num)
+      (navi2ch-article-goto-number num t t)
+    (navi2ch-popup-article num)))
+
 (defun navi2ch-popup-article-pop-point-or-exit ()
+  "stack から pop した位置に移動する。
+stack が空なら、PopUp Article モードを抜ける。"
   (interactive)
   (if navi2ch-article-point-stack
       (navi2ch-article-pop-point)
     (navi2ch-popup-article-exit)))
 
 (defun navi2ch-popup-article-mode ()
+  "\\{navi2ch-popup-article-mode-map}"
   (interactive)
   (setq major-mode 'navi2ch-popup-article-mode)
   (setq mode-name "Navi2ch PopUp Article")
@@ -81,6 +96,8 @@
   (setq truncate-partial-width-windows nil)
   (use-local-map navi2ch-popup-article-mode-map)
   (setq navi2ch-article-point-stack nil)
+  (make-local-hook 'post-command-hook)
+  (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-popup-article-mode-hook))
 
 (defun navi2ch-popup-article (num-list)
@@ -95,31 +112,75 @@
     (setq navi2ch-article-message-list
 	  (mapcar (lambda (x)
 		    (let ((msg (navi2ch-article-get-message x)))
-		      (cons x (if (stringp msg)
-				  msg
-				(copy-alist msg)))))
+		      (cond
+		       ((stringp msg) (cons x msg))
+		       (msg (cons x (copy-alist msg)))
+		       (t nil))))
 		  num-list))
-    (setq navi2ch-article-separator sep)
-    (setq navi2ch-article-point-stack nil)
-    (setq navi2ch-article-poped-point-stack nil)
-    (setq truncate-partial-width-windows nil)
-    (setq navi2ch-article-view-range nil)
-    (setq navi2ch-article-through-next-function 'navi2ch-popup-article-exit)
-    (setq navi2ch-article-through-previous-function 'navi2ch-popup-article-exit)
-    (let ((buffer-read-only nil))
-      (erase-buffer)
-      (navi2ch-article-insert-messages
-       navi2ch-article-message-list
-       nil))
-    (goto-char (point-min))))
+    (setq navi2ch-article-message-list
+	  (delq nil navi2ch-article-message-list))
+    (if (null navi2ch-article-message-list)
+	(progn
+	  (navi2ch-popup-article-exit)
+	  (message "No responses found"))
+      (setq navi2ch-article-separator sep)
+      (setq navi2ch-article-point-stack nil)
+      (setq navi2ch-article-poped-point-stack nil)
+      (setq truncate-partial-width-windows nil)
+      (setq navi2ch-article-view-range nil)
+      (setq navi2ch-article-through-next-function 'navi2ch-popup-article-exit)
+      (setq navi2ch-article-through-previous-function
+	    'navi2ch-popup-article-exit)
+      (let ((buffer-read-only nil))
+	(erase-buffer)
+	(navi2ch-article-insert-messages
+	 navi2ch-article-message-list
+	 nil))
+      (goto-char (point-min)))))
 
 (defun navi2ch-popup-article-scroll-up ()
+  "画面をスクロールする。"
   (interactive)
   (condition-case nil
       (scroll-up)
     (end-of-buffer
      (navi2ch-popup-article-exit)))
   (force-mode-line-update t))
+
+(defun navi2ch-popup-article-select-current-link (&optional browse-p)
+  ;; ほぼ navi2ch-article-select-current-link と同じ。
+  "カーソル位置に応じて、リンク先の表示やファイルへの保存を行う。"
+  (interactive "P")
+  (let (prop)
+    (cond
+     ((setq prop (get-text-property (point) 'number))
+      (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
+      (if (integerp prop)
+	  (progn
+	    (when (or (< prop (caar navi2ch-article-message-list))
+		      (> prop (caar (last navi2ch-article-message-list))))
+	      (navi2ch-popup-article-exit))
+	    (navi2ch-article-goto-number prop t t))
+	(navi2ch-popup-article-exit)
+	(navi2ch-popup-article prop)))
+     ((setq prop (get-text-property (point) 'url))
+      (let ((2ch-url-p (navi2ch-2ch-url-p prop)))
+	(if (and 2ch-url-p
+		 (or (navi2ch-board-url-to-board prop)
+		     (navi2ch-article-url-to-article prop))
+		 (not browse-p))
+	    (progn
+	      (navi2ch-popup-article-exit)
+	      (navi2ch-goto-url prop))
+	  (navi2ch-browse-url-internal prop))))
+     ((setq prop (get-text-property (point) 'content))
+      (navi2ch-article-save-content)))))
+
+(defun navi2ch-popup-article-mouse-select (e)
+  "マウスの位置に応じて、リンク先の表示やファイルへの保存を行う。"
+  (interactive "e")
+  (mouse-set-point e)
+  (navi2ch-popup-article-select-current-link))
 
 (run-hooks 'navi2ch-popup-article-load-hook)
 ;;; navi2ch-popup-article.el ends here
