@@ -6,6 +6,9 @@
 	スレタイトル不明のときもなんか表示するように。
 	(navi2ch-article-display-link-minibuffer): リンク先が板の URL のと
 	きに板名を表示するように。
+	(navi2ch-article-cached-subject-minimum-size): 
+	navi2ch-insert-file-contents で挿入したサイズもチェックするように。
+	リンク先スレにレスが1つのときに無限ループに入っていたので。
 
 2002-05-16    mami  <mami@users.sourceforge.net>
 

@@ -1334,15 +1334,14 @@ NUM が -1 のときは前のスレに移動する。"
     (cdr (assq 'data msg))))
 
 (defun navi2ch-article-cached-subject-minimum-size (file)
-  "スレタイトルを得るに最低限のファイルサイズを求める。"
+  "スレタイトルを得るのに十分なファイルサイズを求める。"
   (with-temp-buffer
-    (let ((beg 0) (end 1024))
-      (navi2ch-insert-file-contents file beg end)
-      (forward-line)
-      (while (= (point) (point-max))
+    (let ((beg 0) (end 0) (n 1))
+      (while (and (= (point) (point-max))
+		  (> n 0))
 	(setq beg end)
 	(setq end (+ end 1024))
-	(navi2ch-insert-file-contents file beg end)
+	(setq n (car (cdr (navi2ch-insert-file-contents file beg end))))
 	(forward-line))
       end)))
 
