@@ -262,7 +262,7 @@ START, END, NOFIRST で範囲を指定する"
 	  (if (eq result 'retry)
 	      (if (= tries 1)
 		  (setq result nil)
-		(1- tries)
+		(setq tries (1- tries))
 		(sit-for navi2ch-message-retry-wait-time)
 		(setq message-str "re-send message..."))))))
       result))

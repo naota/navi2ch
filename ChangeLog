@@ -1,3 +1,8 @@
+2002-08-29  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): 試行回数の
+	上限が効いてなかったので修正。
+
 2002-08-28  mami  <mami@users.sourceforge.net>
 
 	レス送信時に SPID クッキー確認画面が出たら、自動で再試行するように。
