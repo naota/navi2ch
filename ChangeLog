@@ -1,3 +1,12 @@
+2002-12-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	そのうち Set-Cookie: をちゃんと実装しないとね。
+
+	* navi2ch-multibbs.el (navi2ch-2ch-send-message): SPID 他に PON に
+	も対応。
+
+	* navi2ch-net.el (navi2ch-net-send-message-get-spid): 同上。
+
 2002-11-18  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-save-info-keys): スペルミス
@@ -6,7 +15,7 @@
 
 2002-11-17  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-apply-filters): 
+	* navi2ch-article.el (navi2ch-article-apply-filters):
 	navi2ch-article-filter-by-name,	navi2ch-article-filter-by-message
 	を使わないように。
 	(navi2ch-article-filter-by-name): 削除。
@@ -89,7 +98,7 @@
 
 	* navi2ch-mona.el (navi2ch-mona-setup): NTEmacs21 対応。
 	http://pc.2ch.net/test/read.cgi/unix/1031231315/743
-	
+
 2002-11-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-download-file): HTTP status code

@@ -701,8 +701,10 @@ internet drafts directory for a copy.")
   (dolist (pair (navi2ch-net-get-header proc))
     (if (string-equal "Set-Cookie" (car pair))
 	(let ((str (cdr pair)))
-	  (if (string-match "^SPID=\\([^;]+\\);" str)
-				       (return (match-string 1 str)))))))
+	  (cond ((string-match "^SPID=\\([^;]+\\);" str)
+		 (return (match-string 1 str)))
+		((string-match "^PON=\\([^;]+\\);" str)
+		 (return (match-string 1 str))))))))
 
 (defun navi2ch-net-send-message (from mail message subject url referer bbs key spid)
   "メッセージを送る。
