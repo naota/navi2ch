@@ -799,7 +799,7 @@ nil なら、書きかけを破棄していいか問い合わせる。
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-remember-user-name t
-  "*non-nilなら、送ったレスの名前覧を覚えておく。
+  "*non-nilなら、送ったレスの名前覧とメール欄を覚えておく。
 同じスレで次にレスするときは、それがデフォルトの名前になる。"
   :type 'boolean
   :group 'navi2ch-message)

@@ -145,14 +145,16 @@
   (when new
     (insert "Subject: \n"))
   (insert "From: "
-	  (or (cdr (assq 'name navi2ch-message-current-article))
+	  (or (and navi2ch-message-remember-user-name
+		   (cdr (assq 'name navi2ch-message-current-article)))
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-user-name-alist))
 	      navi2ch-message-user-name "")
 	  "\n"
 	  "Mail: "
 	  (or sage
-	      (cdr (assq 'mail navi2ch-message-current-article))
+	      (and navi2ch-message-remember-user-name
+		   (cdr (assq 'mail navi2ch-message-current-article)))
 	      navi2ch-message-mail-address "")
 	  "\n"
 	  (navi2ch-propertize navi2ch-message-header-separator
@@ -191,13 +193,13 @@
 	    (setq subject (match-string 1)))
 	  (re-search-forward "^From: ?\\(.*\\)")
 	  (setq from (match-string 1))
-	  (when navi2ch-message-remember-user-name
-	    (setq navi2ch-message-user-name from))
-	  (when (not navi2ch-message-new-message-p)
+	  (when (and (not navi2ch-message-new-message-p)
+		     navi2ch-message-remember-user-name)
 	    (navi2ch-message-set-name from))
 	  (re-search-forward "^Mail: ?\\(.*\\)")
 	  (setq mail (match-string 1))
-	  (when (not navi2ch-message-new-message-p)
+	  (when (and (not navi2ch-message-new-message-p)
+		     navi2ch-message-remember-user-name)
 	    (navi2ch-message-set-mail mail))
 	  (forward-line 2)
 	  (setq message (buffer-substring-no-properties (point) (point-max)))
