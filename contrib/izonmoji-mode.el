@@ -33,9 +33,18 @@
 ;; 全ての機種依存文字を表示できるわけではありませんので注意。
 
 ;; commands:
-;;   izonmoji-mode	機種依存文字表示をトグル
-;;   izonmoji-mode-on	機種依存文字を表示
-;;   izonmoji-mode-off	機種依存文字表示をやめる
+;;   izonmoji-mode      機種依存文字表示をトグル
+;;   izonmoji-mode-on   機種依存文字を表示
+;;   izonmoji-mode-off  機種依存文字表示をやめる
+
+;; coding-system:
+;;   izonmoji-shift-jis 読み込み時に、IBM拡張文字を対応するNEC特殊文字、
+;;                      NEC選定IBM拡張文字に置換する。
+;;                      shift_jisで読み込んだ時とはbufferの内容が異なります。
+
+;; Emacs のバージョン
+;;  Emacs 20 以降、XEmacs 21.4 以降を使って下さい。
+;;  ただし、XEmacs 21.1 でも一部の機能は使えます。
 
 ;; GNU Emacs 20 では、Mule-UCSが必要です。
 ;; このファイルを読み込む前に (require 'jisx0213) してください。
@@ -69,12 +78,9 @@
 ;;  (add-hook 'navi2ch-bm-mode-hook      'izonmoji-mode-on)
 ;;  (add-hook 'navi2ch-article-mode-hook 'izonmoji-mode-on)
 ;;  (add-hook 'navi2ch-popup-article-mode-hook 'izonmoji-mode-on)
-;;  ;; IBM拡張文字を表示 (XEmacs-21.1 は未対応)
-;;  (when (memq 'izonmoji-shift_jis (coding-system-list))
-;;    (defadvice navi2ch-insert-file-contents
-;;      (around izonmoji-ibm-ext activate)
-;;      (let ((navi2ch-coding-system 'izonmoji-shift_jis))
-;;        ad-do-it)))
+;;  ;; IBM拡張文字を表示 (XEmacs-21.1 は非対応)
+;;  (when (memq 'izonmoji-shift-jis (coding-system-list))
+;;    (setq navi2ch-coding-system 'izonmoji-shift-jis))
 
 ;; [Mew] ~/.mew.el へ
 ;;  (add-hook 'mew-message-mode-hook 'izonmoji-mode-on)
@@ -111,17 +117,11 @@
 
 (defvar izonmoji-win-face 'izonmoji-win-face
   "*Windowsの機種依存文字の表示に使うフェイス名。
-'default にするとフェイスをつけません。
-
-XEmacs-21.1 では、機種依存文字にフェイスを付けると XEmacs が落ちるようなので
-この変数の値に関わらずフェイスを付けません。")
+'default にするとフェイスをつけません。")
 
 (defvar izonmoji-mac-face 'izonmoji-mac-face
   "*Macの機種依存文字の表示に使うフェイス名。
-'default にするとフェイスをつけません。
-
-XEmacs-21.1 では、機種依存文字にフェイスを付けると XEmacs が落ちるようなので
-この変数の値に関わらずフェイスを付けません。")
+'default にするとフェイスをつけません。")
 
 (defface izonmoji-win-face
   '((((class color) (type tty)) (:foreground "cyan"))
@@ -392,10 +392,9 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
       (setq buffer-display-table izonmoji-backuped-display-table))
     (setq izonmoji-mode nil)))
 
-;; IBM拡張文字を、対応するNEC選定IBM拡張文字に置換する。
-;; XEmacs-21.1 は write-multibyte-character がないんで未対応です。
+;; izonmoji-shift-jis
 (when (and (fboundp 'ccl-compile-write-multibyte-character)
-	   (not (memq 'izonmoji-shift_jis (coding-system-list))))
+	   (not (memq 'izonmoji-shift-jis (coding-system-list))))
   (eval-and-compile
     (defun izonmoji-ccl-write-sjis ()
       `((r1 = (r0 de-sjis r1))
@@ -405,14 +404,12 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 	(write-multibyte-character r1 r0)
 	(repeat)))
 
-    (defun izonmoji-ccl-ibm-ext (offset)
-      `((r0 <8= r1)
-	(r0 -= ,offset)
-	(r0 >8= r1)
-	(r1 = r7)
+    (defun izonmoji-ccl-ibm-ext (d0 d1)
+      `((r0 -= ,d0)
+	(r1 -= ,d1)
 	,@(izonmoji-ccl-write-sjis))))
 
-  (define-ccl-program izonmoji-shift_jis-decode
+  (define-ccl-program izonmoji-shift-jis-decode
     `(2
       (loop
        (read r0)
@@ -440,37 +437,37 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 	    (if (r0 >= ?\xFA)
 		((if (r0 == ?\xFA)
 		     ((if (r1 <= ?\x49)
-			  (,@(izonmoji-ccl-ibm-ext 2897)))
+			  ,(izonmoji-ccl-ibm-ext 12 -175))
 		      (if (r1 <= ?\x53)
-			  (,@(izonmoji-ccl-ibm-ext 29430)))
+			  ,(izonmoji-ccl-ibm-ext 115 -10))
 		      (if (r1 <= ?\x57)
-			  (,@(izonmoji-ccl-ibm-ext 2907)))
+			  ,(izonmoji-ccl-ibm-ext 12 -165))
 		      (if (r1 == ?\x58)
-			  (,@(izonmoji-ccl-ibm-ext 29390)))
+			  ,(izonmoji-ccl-ibm-ext 115 -50))
 		      (if (r1 == ?\x59)
-			  (,@(izonmoji-ccl-ibm-ext 29399)))
+			  ,(izonmoji-ccl-ibm-ext 115 -41))
 		      (if (r1 == ?\x5A)
-			  (,@(izonmoji-ccl-ibm-ext 29398)))
+			  ,(izonmoji-ccl-ibm-ext 115 -42))
 		      (if (r1 == ?\x5B)
-			  (,@(izonmoji-ccl-ibm-ext 29377)))
+			  ,(izonmoji-ccl-ibm-ext 115 -63))
 		      (if (r1 <= ?\x7E)
-			  (,@(izonmoji-ccl-ibm-ext 3356)))
+			  ,(izonmoji-ccl-ibm-ext 13 28))
 		      (if (r1 <= ?\x9B)
-			  (,@(izonmoji-ccl-ibm-ext 3357)))
+			  ,(izonmoji-ccl-ibm-ext 13 29))
 		      (if (r1 <= ?\xFC)
-			  (,@(izonmoji-ccl-ibm-ext 3356)))))
+			  ,(izonmoji-ccl-ibm-ext 13 28))))
 		 (if (r0 == ?\xFB)
 		     ((if (r1 <= ?\x5B)
-			  (,@(izonmoji-ccl-ibm-ext 3423)))
+			  ,(izonmoji-ccl-ibm-ext 14 -161))
 		      (if (r1 <= ?\x7E)
-			  (,@(izonmoji-ccl-ibm-ext 3356)))
+			  ,(izonmoji-ccl-ibm-ext 13 28))
 		      (if (r1 <= ?\x9B)
-			  (,@(izonmoji-ccl-ibm-ext 3357)))
+			  ,(izonmoji-ccl-ibm-ext 13 29))
 		      (if (r1 <= ?\xFC)
-			  (,@(izonmoji-ccl-ibm-ext 3356)))))
+			  ,(izonmoji-ccl-ibm-ext 13 28))))
 		 (if (r0 == ?\xFC)
 		     ((if (r1 <= ?\x4B)
-			  (,@(izonmoji-ccl-ibm-ext 3423)))))
+			  ,(izonmoji-ccl-ibm-ext 14 -161))))
 		 (write r0)
 		 (write-repeat r1)))
 	    ,@(izonmoji-ccl-write-sjis))
@@ -479,7 +476,7 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 	  (write-multibyte-character r1 r0)
 	  (repeat))))))
 
-  (define-ccl-program izonmoji-shift_jis-encode
+  (define-ccl-program izonmoji-shift-jis-encode
     `(1
       (loop
        (read r0)
@@ -496,16 +493,18 @@ ARG が non-nil の場合、1以上の数なら機種依存文字を表示。
 	  (write-repeat r0))))))
 
   (if (featurep 'xemacs)
-      (make-coding-system 'izonmoji-shift_jis 'ccl
+      (make-coding-system 'izonmoji-shift-jis 'ccl
 			  "Shift-JIS for displaying IBM ext characters"
 			  (list 'mnemonic "S"
-				'decode 'izonmoji-shift_jis-decode
-				'encode 'izonmoji-shift_jis-encode))
-    (make-coding-system 'izonmoji-shift_jis 4 ?S
+				'decode 'izonmoji-shift-jis-decode
+				'encode 'izonmoji-shift-jis-encode))
+    (make-coding-system 'izonmoji-shift-jis 4 ?S
 			"Shift-JIS for displaying IBM ext characters"
-			(cons 'izonmoji-shift_jis-decode
-			      'izonmoji-shift_jis-encode))))
-
+			(cons 'izonmoji-shift-jis-decode
+			      'izonmoji-shift-jis-encode)
+			(list (cons 'safe-charsets
+				    (coding-system-get 'japanese-shift-jis
+						       'safe-charsets))))))
 
 (add-to-list 'minor-mode-alist '(izonmoji-mode " Iz"))
 

@@ -1,3 +1,8 @@
+2003-02-02  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (toplevel): izonmoji-shift_jis を
+	izonmoji-shift-jis に改名。
+
 2003-01-27  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-pizaunix.el: 新ファイル。
