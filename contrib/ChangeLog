@@ -1,3 +1,9 @@
+2004-01-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-spamfilter.el: License term を記述。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/580
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/638
+
 2003-12-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-spamfilter.el (navi2ch-spamf-additional-token-flag):
