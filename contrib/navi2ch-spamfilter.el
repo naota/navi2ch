@@ -28,12 +28,12 @@
 (defvar navi2ch-spamfilter-ident
   "$Id$")
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 (require 'spamfilter)
 (require 'navi2ch)
 
 (defconst navi2ch-spamf-preferred-major 1)
-(defconst navi2ch-spamf-preferred-minor 9)
+(defconst navi2ch-spamf-preferred-minor 10)
 
 (unless (and (boundp 'spamf-cvs-id)
 	     (string-match "\\([0-9]+\\)\\.\\([0-9]+\\)" spamf-cvs-id)

@@ -1,3 +1,8 @@
+2003-10-20  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-spamfilter.el: spamfilter.el 最新版に同期。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/130
+
 2003-10-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	spamfilter.el 0.10 に対応。コーパスファイルのフォーマットが
