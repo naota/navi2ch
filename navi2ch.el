@@ -57,6 +57,7 @@
 (require 'navi2ch-jbbs-shitaraba)
 (require 'navi2ch-machibbs)
 (require 'navi2ch-futaba)
+(require 'navi2ch-be2ch)
 (require 'navi2ch-multibbs)
 (require 'navi2ch-mona)
 (require 'navi2ch-oyster)

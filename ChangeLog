@@ -1,5 +1,45 @@
 2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	BE のログイン、書き込み対応。
+	multibbs module としては作ってない。
+	他の multibbs module に変更を加えないために、
+	navi2ch-2ch-send-message, navi2ch-2ch-send-message-success-p での
+	coding-system の判別に navi2ch-2ch-send-message-last-board を使っ
+	てる。
+	これらの関数に board を渡すようにしたほうがいいのかな？
+	
+	* Makefile.am (lisp_LISP): navi2ch-be2ch.el を追加。
+
+	* navi2ch.el (toplevel): navi2ch-be2ch を rquire するように。
+
+	* navi2ch-multibbs.el
+	(navi2ch-multibbs-send-message-error-string): 新関数。
+	(navi2ch-multibbs-send-message): navi2ch-coding-system のかわりに
+	navi2ch-board-get-coding-system を使うように。
+	エラー文字列の取得に navi2ch-multibbs-send-message-error-string を
+	使うように。
+	(navi2ch-2ch-send-message-last-board): 新変数。
+	(navi2ch-2ch-send-message): navi2ch-2ch-send-message-last-board に
+	値を設定するように。
+	cookie に navi2ch-be2ch-mdmd, navi2ch-be2ch-dmdm を設定するように。
+	(navi2ch-2ch-send-message-success-p):
+	navi2ch-2ch-send-message-last-board の値を使って、coding-system を
+	特定するように。
+	(navi2ch-2ch-send-message-error-string): 同上。
+
+	* navi2ch-net.el
+	(navi2ch-net-send-message-success-p):
+	引数に coding-system をもらえるように。
+	引数の coding-system で文字列を decode するように。
+	(navi2ch-net-send-message-error-string): 同上。
+	「ログインエラー」をチェックする文字列に追加。
+	http status によるチェックを navi2ch-multibbs-send-message-error-string に移動。
+
+	* navi2ch-be2ch.el:
+	新ファイル。be@2ch のログインまわりを担当する。
+
+2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	* Makefile.am, configure.in:
 	バイトコンパイルを２回やらないように。
 	http://sourceforge.net/tracker/index.php?func=detail&aid=1107635&group_id=39552&atid=435774

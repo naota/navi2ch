@@ -35,6 +35,7 @@
 (eval-when-compile (require 'cl))
 (require 'navi2ch-http-date)
 (require 'navi2ch)
+(require 'navi2ch-be2ch)
 
 (defvar navi2ch-multibbs-func-alist nil
   "BBS の種類と関数群の alist。
@@ -250,6 +251,17 @@ START, END, NOFIRST で範囲を指定する"
 	  result)
       (navi2ch-board-save-spid board spid))))
 
+(defun navi2ch-multibbs-send-message-error-string (board proc)
+  (let* ((func (navi2ch-multibbs-get-func
+		(navi2ch-multibbs-get-bbstype board)
+		'error-string
+		'navi2ch-2ch-send-message-error-string))
+	 (err (funcall func proc)))
+    (or err
+	(let ((status (and proc (navi2ch-net-get-status proc))))
+	  (when status
+	    (concat "HTTP status: " status))))))
+
 (defun navi2ch-multibbs-send-message
   (from mail message subject board article)
   (let* ((bbstype      (navi2ch-multibbs-get-bbstype board))
@@ -258,9 +270,6 @@ START, END, NOFIRST で範囲を指定する"
 	 (success-p    (navi2ch-multibbs-get-func
 			bbstype 'send-success-p
 			'navi2ch-2ch-send-message-success-p))
-	 (error-string (navi2ch-multibbs-get-func
-			bbstype 'error-string
-			'navi2ch-2ch-send-message-error-string))
 	 (bbs          (let ((uri (navi2ch-board-get-uri board)))
 			 (string-match "\\([^/]+\\)/$" uri)
 			 (match-string 1 uri)))
@@ -289,7 +298,7 @@ START, END, NOFIRST で範囲を指定する"
 		 (with-temp-buffer
 		   (insert (decode-coding-string
 			    (navi2ch-net-get-content proc)
-			    navi2ch-coding-system))
+			    (navi2ch-board-get-coding-system board)))
 		   (navi2ch-replace-html-tag-with-buffer)
 		   (goto-char (point-min))
 		   (while (re-search-forward "[ \t]*\n\\([ \t]*\n\\)*" nil t)
@@ -304,7 +313,7 @@ START, END, NOFIRST で範囲を指定する"
 	       (message (concat message-str "succeed"))
 	       (return result))
 	      (t
-	       (let ((err (funcall error-string proc)))
+	       (let ((err (navi2ch-multibbs-send-message-error-string board proc)))
 		 (if (stringp err)
 		     (message (concat message-str "failed: %s") err)
 		   (message (concat message-str "failed"))))
@@ -408,6 +417,8 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	  (setq list (cons (cons 'kako kako) list)))
 	list))))
 
+(defvar navi2ch-2ch-send-message-last-board nil)
+
 (defun navi2ch-2ch-send-message
   (from mail message subject bbs key time board article)
   (let ((url         (navi2ch-board-get-bbscgi-url board))
@@ -423,6 +434,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 		      (if subject
 			  (cons "subject" subject)
 			(cons "key"    key)))))
+    (setq navi2ch-2ch-send-message-last-board board)
     (setq spid
 	  (when (and (consp spid)
 		     (navi2ch-compare-times (cdr spid) (current-time)))
@@ -433,7 +445,10 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	    (list (cons "Content-Type" "application/x-www-form-urlencoded")
 		  (cons "Cookie" (concat "NAME=" from "; MAIL=" mail
 					 (if spid (concat "; SPID=" spid
-							  "; PON=" spid))))
+							  "; PON=" spid))
+					 (if (navi2ch-be2ch-login-p)
+					     (concat "; MDMD=" navi2ch-be2ch-mdmd
+						     "; DMDM=" navi2ch-be2ch-dmdm))))
 		  (cons "Referer" referer))
 	    (navi2ch-net-get-param-string param-alist))))
       (setq spid (navi2ch-net-send-message-get-spid proc))
@@ -456,10 +471,17 @@ START, END, NOFIRST で範囲を指定する"
 	      start (and (or start end) "-") end
 	      (and nofirst "n")))))
 
-(defalias 'navi2ch-2ch-send-message-success-p
-  'navi2ch-net-send-message-success-p)
-(defalias 'navi2ch-2ch-send-message-error-string
-  'navi2ch-net-send-message-error-string)
+(defun navi2ch-2ch-send-message-success-p (proc)
+  (navi2ch-net-send-message-success-p
+   proc
+   (navi2ch-board-get-coding-system
+    navi2ch-2ch-send-message-last-board)))
+
+(defun navi2ch-2ch-send-message-error-string (proc)
+  (navi2ch-net-send-message-error-string
+   proc
+   (navi2ch-board-get-coding-system
+    navi2ch-2ch-send-message-last-board)))
 
 (defun navi2ch-2ch-board-update (board)
   (let ((file (navi2ch-board-get-file-name board))
