@@ -2192,9 +2192,10 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
   (save-match-data
     (save-excursion
-      (let ((text (navi2ch-article-get-link-text point)))
-	(if (stringp text)
-	    (message "%s" text))))))
+      (unless isearch-mode
+	(let ((text (navi2ch-article-get-link-text point)))
+	  (if (stringp text)
+	      (message "%s" text)))))))
 
 (defun navi2ch-article-help-echo (window-or-extent &optional object position)
   (save-match-data

@@ -262,7 +262,7 @@
 						    directory-to-board-alist)
 		 l)))
      navi2ch-directory)
-    l))
+    (nreverse l)))
 
 (defun navi2ch-search-all-subject ()
   (interactive)

@@ -1,3 +1,14 @@
+2004-02-28  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
+	isearch 中はリンク先を表示しない。
+
+	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
+	英字から始まる場合のみ HTML タグとみなす。
+	東アジアnews+ <http://news2.2ch.net/news4plus/> の名無しさんに対応。
+
+	* navi2ch-search.el (navi2ch-search-all-board-list): 結果を逆順に。
+
 2004-02-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-search.el (navi2ch-search-subject-subr): 引数に板リスト
