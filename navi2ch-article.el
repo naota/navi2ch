@@ -684,29 +684,27 @@ START, END, NOFIRST で範囲を指定する"
 	  (let ((slot (assq num navi2ch-article-message-list)))
 	    (when slot
 	      (setq list (cons slot list))))))))
-    (if (null list)
-	(message "Out of view range")
-      (setq visible (navi2ch-article-get-visible-numbers))
-      (while (and visible
-		  (< (car visible) start))
-	(setq visible (cdr visible)))
-      (when visible
-	(setq start-point
-	      (cdr (assq 'point (navi2ch-article-get-message (car visible))))))
-      (while (and visible
-		  (<= (car visible) end))
-	(setq visible (cdr visible)))
-      (when visible
-	(setq end-point
-	      (cdr (assq 'point (navi2ch-article-get-message (car visible)))))
-	(set-marker-insertion-type end-point t))
-      (if (null start-point)
-	  (goto-char (point-max))
-	(goto-char start-point)
-	(delete-region start-point (or end-point (point-max))))
-      (prog1 (navi2ch-article-insert-messages list nil)
-	(when end-point
-	  (set-marker-insertion-type end-point nil))))))
+    (setq visible (navi2ch-article-get-visible-numbers))
+    (while (and visible
+		(< (car visible) start))
+      (setq visible (cdr visible)))
+    (when visible
+      (setq start-point
+	    (cdr (assq 'point (navi2ch-article-get-message (car visible))))))
+    (while (and visible
+		(<= (car visible) end))
+      (setq visible (cdr visible)))
+    (when visible
+      (setq end-point
+	    (cdr (assq 'point (navi2ch-article-get-message (car visible)))))
+      (set-marker-insertion-type end-point t))
+    (if (null start-point)
+	(goto-char (point-max))
+      (goto-char start-point)
+      (delete-region start-point (or end-point (point-max))))
+    (prog1 (navi2ch-article-insert-messages list nil)
+      (when end-point
+	(set-marker-insertion-type end-point nil)))))
 
 (defun navi2ch-article-apply-message-filters (alist)
   (let (score)
@@ -1057,14 +1055,22 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 	      (unless (or (null (cdr list))
 			  navi2ch-article-hide-mode
 			  navi2ch-article-important-mode)
-		(setq start (1+ (length list))))
+		(setq start (- (length list)
+			       (or (cdr navi2ch-article-view-range) 0)
+			       -1)))
 	      (setq list (navi2ch-article-append-message-list
 			  list (navi2ch-article-get-message-list
 				file old-size))))
 	    (setq navi2ch-article-message-list list)
 	    (let ((num (or number (cdr (assq 'number article)))))
 	      (when (and navi2ch-article-fix-range-when-sync num)
-		(navi2ch-article-fix-range num)))
+		(navi2ch-article-fix-range num)
+		(when (and navi2ch-article-view-range
+			   start)
+		  (setq start (min start
+				   (- (length list)
+				      (cdr navi2ch-article-view-range)
+				      -1))))))
 	    (unless first
 	      (navi2ch-article-save-number))
 	    (setq navi2ch-article-hide-mode nil
@@ -1749,21 +1755,12 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-get-visible-numbers ()
   "表示中のレスの番号のリストを得る。"
-  (let* ((navi2ch-article-goto-number-recenter nil)
-	 (loop (make-symbol "loop"))
-	 (navi2ch-article-through-previous-function
-	  `(lambda () (throw ',loop nil)))
-	 list num)
+  (let (list prev)
     (save-excursion
       (goto-char (point-max))
-      (setq num (navi2ch-article-get-current-number))
-      (when num
-	(navi2ch-article-goto-number num)
-	(catch loop
-	  (while num
-	    (setq list (cons num list))
-	    (navi2ch-article-previous-message)
-	    (setq num (navi2ch-article-get-current-number))))))
+      (while (setq prev (navi2ch-previous-property (point) 'current-number))
+	(goto-char prev)
+	(setq list (cons (get-text-property (point) 'current-number) list))))
     list))
 
 (defun navi2ch-article-show-url ()

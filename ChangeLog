@@ -1,3 +1,13 @@
+2003-04-23  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-get-visible-numbers): 
+	navi2ch-article-previous-message() を使わないように。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/536-537n
+	(navi2ch-article-sync): navi2ch-article-view-range を考慮して
+	差分を挿入するように。
+	(navi2ch-article-reinsert-partial-messages): 表示すべきリストが nil
+	でも、"Out of view range" と表示せず処理を続けるように。
+
 2003-04-21  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-sync): 挿入済みのレスを変更する
