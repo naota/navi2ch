@@ -1,5 +1,9 @@
 2002-06-30  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-ignore-errors): エラー表示が見えない
+	のでウェイトをいれた。
+	(navi2ch-net-send-request): 大バグ突っ込んでた。修正。
+
 	* navi2ch-vars.el (navi2ch-message-wait-time): 5秒はあまりにも長す
 	ぎなので3秒に変更。
 

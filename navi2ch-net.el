@@ -54,6 +54,7 @@ BODY の評価中にエラーが起こると nil を返す。"
       (if err
 	  (message "Error: %s" (error-message-string err))
 	(message "Error"))
+      (sleep-for 1)
       nil)
      (quit
       (condition-case nil
@@ -84,8 +85,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
-  (if navi2ch-net-enable-http11
-      (navi2ch-net-cleanup-vars)
+  (unless navi2ch-net-enable-http11
     (navi2ch-net-cleanup-process))
   (let ((buf (get-buffer-create (concat " *" navi2ch-net-connection-name)))
         (process-connection-type nil)
@@ -102,16 +102,21 @@ BODY の評価中にエラーが起こると nil を返す。"
 			 navi2ch-net-http-proxy-userid
 			 navi2ch-net-http-proxy-password)))
     (let ((proc navi2ch-net-process))
-      (if (and navi2ch-net-enable-http11
-	       (equal host navi2ch-net-last-host)
-	       (equal port navi2ch-net-last-port)
-	       (processp proc)
-	       (eq (process-status proc) 'open))
-	  (progn
-	    (message "reusing connection...")
-	    (navi2ch-net-get-content proc)) ; 前回のゴミを読み飛ばしておく
-	(if (processp proc)
-	    (delete-process proc))
+      (condition-case nil
+	  (if (and navi2ch-net-enable-http11
+		   (equal host navi2ch-net-last-host)
+		   (equal port navi2ch-net-last-port)
+		   (processp proc)
+		   (eq (process-status proc) 'open))
+	      (progn
+		(message "reusing connection...")
+		(process-send-string proc "") ; ping
+		(navi2ch-net-get-content proc))	; 前回のゴミを読み飛ばしておく
+	    (if (processp proc)
+		(delete-process proc))
+	    (setq proc nil))
+	(error (setq proc nil)))
+      (unless proc
 	(message "now connecting...")
 	(setq proc (open-network-stream navi2ch-net-connection-name
 					buf host port)))
@@ -150,6 +155,7 @@ BODY の評価中にエラーが起こると nil を返す。"
                            (length content) content)
                  "")))
       (message "%sconnected" (current-message))
+      (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
       
 (defun navi2ch-net-split-url (url &optional proxy)
