@@ -4,6 +4,7 @@
 	navi2ch-bm-textize-article から分離。
 	(navi2ch-article-mode-map): navi2ch-article-textize-article を "e"
 	にバインド。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/843
 
 	* navi2ch-board-misc.el (navi2ch-bm-textize-article):
 	上記 navi2ch-article-textize-article を使うように。

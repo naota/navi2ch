@@ -1333,6 +1333,9 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item G
 @code{navi2ch-article-goto-board} 指定した板に移動
 
+@item e
+@code{navi2ch-article-textize-article} スレをテキストで保存
+
 @end table
 
 @node Message Mode Key Bindings
