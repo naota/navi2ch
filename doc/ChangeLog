@@ -1,5 +1,7 @@
 2002-07-05  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* Makefile.am (.texi.dvi): texi2dvi から -c フラグを削除。
+
 	* navi2ch.texi (Start Navi2ch): require -> autoload に変更。
 	(What is Mona Fonts): 最新の URL に更新。
 	(Getting Develop Version): section に格上げ。Compile の後に移動。

@@ -14,7 +14,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 # create PDF file
 pdf: navi2ch.pdf
 .texi.dvi:
-	TEX=ptex texi2dvi -c $<
+	TEX=ptex texi2dvi $<
 .dvi.pdf:
 	rm -f $@ && dvipdfm $<
 
