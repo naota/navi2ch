@@ -1345,13 +1345,13 @@ Navi2chカテゴリに「送信控え」板が自動的に追加されます。
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-http-proxy-userid nil
-  "プロキシ認証に使うユーザ名。"
+  "*プロキシ認証に使うユーザ名。"
   :type '(choice (string :tag "ユーザ名を指定")
 		 (const :tag "ユーザ名を使わない" nil))
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-http-proxy-password nil
-  "プロキシ認証に使うパスワード。"
+  "*プロキシ認証に使うパスワード。"
   :type '(choice (string :tag "パスワードを指定")
 		 (const :tag "パスワードを使わない" nil))
   :group 'navi2ch-net)
@@ -1361,6 +1361,28 @@ Navi2chカテゴリに「送信控え」板が自動的に追加されます。
 このオプションを有効にするには、`navi2ch-net-http-proxy' を non-nil
 に設定すること。"
   :type 'boolean
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-net-http-proxy-for-send-message nil
+  "*レス書き込みに使う HTTP プロキシの URL。
+nil のときはプロキシとして `navi2ch-net-http-proxy' が使われる。
+`navi2ch-net-send-message-use-http-proxy' が non-nil のときのみ有効。"
+  :type '(choice (string :tag "プロキシを指定")
+		 (const :tag "`navi2ch-net-http-proxy' と同じ" nil))
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-net-http-proxy-userid-for-send-message nil
+  "*レス書き込み時にプロキシ認証に使うユーザ名。
+`navi2ch-net-http-proxy-for-send-message' が non-nil のときのみ有効。"
+  :type '(choice (string :tag "ユーザ名を指定")
+		 (const :tag "ユーザ名を使わない" nil))
+  :group 'navi2ch-net)
+
+(defcustom navi2ch-net-http-proxy-password-for-send-message nil
+  "*レス書き込み時にプロキシ認証に使うパスワード。
+`navi2ch-net-http-proxy-for-send-message' が non-nil のときのみ有効。"
+  :type '(choice (string :tag "パスワードを指定")
+		 (const :tag "パスワードを使わない" nil))
   :group 'navi2ch-net)
 
 (defcustom navi2ch-net-force-update nil

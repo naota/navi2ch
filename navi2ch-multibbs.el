@@ -252,7 +252,14 @@ START, END, NOFIRST で範囲を指定する"
 	 (time         (format-time-string
 			"%s" (navi2ch-multibbs-get-message-time-field)))
 	 (navi2ch-net-http-proxy (and navi2ch-net-send-message-use-http-proxy
-				      navi2ch-net-http-proxy))
+				      (or navi2ch-net-http-proxy-for-send-message
+					  navi2ch-net-http-proxy)))
+	 (navi2ch-net-http-proxy-userid (if navi2ch-net-http-proxy-for-send-message
+					    navi2ch-net-http-proxy-userid-for-send-message
+					  navi2ch-net-http-proxy-userid))
+	 (navi2ch-net-http-proxy-password (if navi2ch-net-http-proxy-for-send-message
+					      navi2ch-net-http-proxy-password-for-send-message
+					    navi2ch-net-http-proxy-password))
 	 (tries 2)	; 送信試行の最大回数
 	 (message-str "send message...")
 	 (result 'retry))
