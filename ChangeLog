@@ -1,6 +1,8 @@
 2002-06-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-move-mark-article): 新関数。
+	(navi2ch-bookmark-add-subr): message を表示しないように。
+	(navi2ch-bookmark-add): こっちで message を表示するように。
 
 	* navi2ch-article.el (navi2ch-article-sync): 
 	必ず navi2ch-article-goto-number するように。

@@ -185,11 +185,11 @@ KEY は (concat URI ARTID) ")
 	     (list (cons 'board board)
 		   (cons 'article article))
 	     (cddr bookmark))))
-  (navi2ch-bookmark-save-info)
-  (message "Add current article to global bookmark."))
+  (navi2ch-bookmark-save-info))
 
 (defun navi2ch-bookmark-add (bookmark-id board article)
-  (navi2ch-bookmark-add-subr bookmark-id board article))
+  (navi2ch-bookmark-add-subr bookmark-id board article)
+  (message "Add current article to global bookmark."))
    
 (defun navi2ch-bookmark-insert-subject (num item)
   (navi2ch-bm-insert-subject
