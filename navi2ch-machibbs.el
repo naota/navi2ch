@@ -32,6 +32,7 @@
 (defvar navi2ch-machibbs-ident
   "$Id$")
 
+(eval-when-compile (require 'cl))
 (require 'navi2ch-multibbs)
 
 (defvar navi2ch-machibbs-func-alist
@@ -185,12 +186,18 @@ START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
 
 (navi2ch-multibbs-defcallback navi2ch-machibbs-article-callback (machibbs)
   (let ((beg (point))
-	subject)
+	(max-num 0)
+	subject alist num)
     (setq subject (navi2ch-machibbs-parse-subject))
     (while (navi2ch-machibbs-parse)
-      (insert (prog1 (navi2ch-machibbs-make-article subject)
-		(delete-region beg (point))))
-      (setq subject nil)
-      (setq beg (point)))
-    (delete-region beg (point-max))))
+      (setq num (string-to-number (match-string 1))
+	    max-num (max max-num num)
+	    alist (cons (cons (string-to-number (match-string 1))
+			      (navi2ch-machibbs-make-article subject))
+			alist)
+	    subject nil))
+    (delete-region beg (point-max))
+    (dotimes (i max-num)
+      (insert (or (cdr (assoc (1+ i) alist))
+		  "$Bあぼーん<>あぼーん<>あぼーん<>あぼーん<>\n")))))
 ;;; navi2ch-machibbs.el ends here

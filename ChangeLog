@@ -1,3 +1,8 @@
+2002-07-26  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-callback):
+	透明あぼーんで番号がずれていたのに対応。
+
 2002-07-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-splash-display-logo): image を読んでな
