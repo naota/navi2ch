@@ -1294,10 +1294,10 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
   "$B8=:_$N%l%9$r%G%3!<%I$9$k!#(B
 $B$=$N$&$A%G%U%)%k%H$N%G%3!<%@$r?dB,$9$k$h$&$K$7$?$$!#(B"
   (interactive)
-  (unless decoder
-    (let ((prompt "(u)udecode or (b)ase64")
-	  (cursor-in-echo-area t)
-	  c)
+  (let ((prompt "(u)udecode or (b)ase64")
+	(cursor-in-echo-area t)
+	decoder c)
+    (unless decoder
       (while (not decoder)
 	(message "%s: " prompt)
 	(message "%s: %c" prompt (setq c (read-char)))
