@@ -1,3 +1,11 @@
+2003-11-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board): parse 時に
+	サーバ名だけでなく prefix のディレクトリ名もマッチさせるように。
+	新形式 URL のときは read.cgi 以外の *.cgi (i.cgi とか rawmode.cgi)
+	も認識するように。
+	(navi2ch-js-url-to-article): 同上。
+
 2003-11-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board):

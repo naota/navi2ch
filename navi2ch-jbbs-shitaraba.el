@@ -83,21 +83,21 @@ START が non-nil ならばレス番号 START からの差分を取得する。
     (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-js-url-to-board (url)
-  (let (host category id)
+  (let (prefix category id)
     (when (or
 	   ;; http://jbbs.shitaraba.com/computer/351/
 	   (string-match
-	    "http://\\([^/]+\\)/\\([^/]+\\)/\\([0-9]+\\)/" url)
+	    "http://\\(.+\\)/\\([^/]+\\)/\\([0-9]+\\)/" url)
 	   ;; http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452814&START=1&END=5
 	   (string-match
-	    "http://\\([^/]+\\)/\\([^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
+	    "http://\\(.+\\)/\\([^/]+\\)/bbs/read\\.cgi.*BBS=\\([0-9]+\\)" url)
 	   ;; http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452814/1-5
 	   (string-match
-	    "http://\\([^/]+\\)/bbs/read\\.cgi/\\([^/]+\\)/\\([0-9]+\\)" url))
-      (setq host (match-string 1 url)
+	    "http://\\(.+\\)/bbs/[^/]\\.cgi/\\([^/]+\\)/\\([0-9]+\\)" url))
+      (setq prefix (match-string 1 url)
 	    category (match-string 2 url)
 	    id (match-string 3 url)))
-    (if id (list (cons 'uri (format "http://%s/%s/%s/" host category id))
+    (if id (list (cons 'uri (format "http://%s/%s/%s/" prefix category id))
 		 (cons 'id id)))))
 
 (defun navi2ch-js-url-to-article (url)
@@ -106,7 +106,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
     (cond
      ;; http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452814&START=1&END=5
      ((string-match
-       "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+       "http://.+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
       (setq artid (match-string 1 url))
       (when (string-match "&START=\\([0-9]+\\)" url)
 	(setq number (string-to-number (match-string 1 url)))))
@@ -121,7 +121,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
       (setq artid (match-string 1 url))
       (when (string-match
 	     (format
-	      "http://.+/bbs/read\\.cgi/[^/]+/[^/]+/%s/[ni.]?\\([0-9]+\\)[^/]*$"
+	      "http://.+/bbs/[^/]\\.cgi/[^/]+/[^/]+/%s/[ni.]?\\([0-9]+\\)[^/]*$"
 	      artid)
 	     url)
 	(setq number (string-to-number (match-string 1 url))))))
