@@ -40,6 +40,8 @@
     ;; (define-key navi2ch-articles-mode-map "q" 'navi2ch-articles-exit)
     (define-key map "d" 'navi2ch-articles-delete)
     (define-key map "md" 'navi2ch-articles-delete-mark-aritcle)
+    (define-key map "R" 'navi2ch-articles-remove-article)
+    (define-key map "mR" 'navi2ch-articles-remove-mark-article)
     (define-key map "s" 'navi2ch-articles-sync)
     (setq navi2ch-articles-mode-map map)))
 
@@ -110,6 +112,15 @@
 (defun navi2ch-articles-delete-mark-aritcle ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-articles-delete))
+
+(defun navi2ch-articles-remove-article ()
+  (interactive)
+  (navi2ch-bm-remove-article)
+  (navi2ch-articles-delete))
+
+(defun navi2ch-articles-remove-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-articles-remove-article))
 
 (defun navi2ch-articles (&rest args)
   "articles を表示する。"
