@@ -1,6 +1,6 @@
 ;;; navi2ch-net.el --- Network module for navi2ch
 
-;; Copyright (C) 2000-2003 by Navi2ch Project
+;; Copyright (C) 2000-2004 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -99,6 +99,22 @@ BODY の評価中にエラーが起こると nil を返す。"
 	navi2ch-net-header nil
 	navi2ch-net-content nil))
 
+(defun navi2ch-open-network-stream (name buffer host service)
+  (let ((retry t) proc)
+    (while retry
+      (condition-case err
+	  (setq proc (open-network-stream name buffer host service)
+		retry nil)
+	(file-error
+	 (save-match-data
+	   (if (string-match "in progress" ; EINPROGRESS or EALREADY
+			     (nth 2 err))
+	       (progn
+		 (setq retry t)
+		 (sleep-for 1))
+	     (signal (car err) (cdr err)))))))
+    proc))
+
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
   (unless navi2ch-net-enable-http11
@@ -136,8 +152,8 @@ BODY の評価中にエラーが起こると nil を返す。"
 		(not (processp proc))
 		(not (eq (process-status proc) 'open)))
 	(message "now connecting...")
-	(setq proc (open-network-stream navi2ch-net-connection-name
-					buf host port)))
+	(setq proc (navi2ch-open-network-stream navi2ch-net-connection-name
+						buf host port)))
       (save-excursion
 	(set-buffer buf)
 	(navi2ch-set-buffer-multibyte nil)

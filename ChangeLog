@@ -1,3 +1,9 @@
+2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-open-network-stream): 新関数。
+	EINPROGRESS、EALREADY の場合は再試行する。
+	(navi2ch-net-send-request): 上記関数を使用。
+
 2004-04-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el
