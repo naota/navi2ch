@@ -1277,5 +1277,11 @@ STRING2 の方が大きい場合は負数を返す。
 (defun navi2ch-read-only-string (string)
   (navi2ch-propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
 
+(defun navi2ch-file-mtime (filename)
+  (nth 5 (file-attributes filename)))
+
+(defun navi2ch-file-size (filename)
+  (nth 7 (file-attributes filename)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

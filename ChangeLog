@@ -1,3 +1,53 @@
+2005-02-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	http://pc5.2ch.net/test/read.cgi/unix/1106152504/68 の要望をかなえ
+	る為の修正。
+	- navi2ch-bm.el のいくつかの defsubst な関数を defun に。
+	- navi2ch-file-mtime, navi2ch-file-size の追加。
+	- navi2ch-article-local-dat-regexp,
+	navi2ch-article-file-name-to-artid の追加。
+
+	navi2ch-localfile では navi2ch-article-local-dat-regexp,
+	navi2ch-article-file-name-to-artid を**わざと**使うようにしてない。
+	理由は下のパッチがそうなっていなかった為。なんでそうしてなかったか
+	を聞いとく事。
+	
+	* navi2ch-util.el (navi2ch-file-mtime, navi2ch-file-size): 新関数。
+
+	* navi2ch-article.el (navi2ch-article-local-dat-regexp): 新変数。
+	(navi2ch-article-file-name-to-artid): 新関数。
+
+	* navi2ch-board-misc.el
+	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article) 
+	(navi2ch-bm-insert-subject): defsubst -> defun.
+
+	* navi2ch.el (navi2ch-update): navi2ch-file-mtime,
+	navi2ch-file-size を使うように。
+
+	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): 同上。
+
+	* navi2ch-net.el (navi2ch-net-update-file)
+	(navi2ch-net-update-file-diff): 同上。
+
+	* navi2ch-localfile.el (navi2ch-localfile-update-file): 同上。
+
+	* navi2ch-article.el (navi2ch-article-sync)
+	(navi2ch-article-get-readcgi-raw-url): 同上。
+
+	* navi2ch-board.el (navi2ch-board-expire-date-p): 同上。
+
+	* navi2ch-search.el (navi2ch-search-for-each-article):
+	navi2ch-article-file-name-to-artid,
+	navi2ch-article-local-dat-regexp を使うように。
+	(navi2ch-search-article-regexp, navi2ch-search-cache)
+	(navi2ch-search-orphan): 同上。
+
+	* navi2ch-directory.el (navi2ch-directory-set-subject-list): 同上。
+
+	* navi2ch-board.el (navi2ch-board-expire): 同上。
+
+	* navi2ch-article.el (navi2ch-article-view-article-from-file): 同上。
+
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-util.el (navi2ch-read-only-string): まずってた。。

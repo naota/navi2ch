@@ -140,6 +140,9 @@ last が最後からいくつ表示するか。
   "セパレータを挿入する関数。")
 
 (defvar navi2ch-article-summary-file-name "article-summary")
+(defvar navi2ch-article-local-dat-regexp "[0-9]+\\.dat\\'"
+  "ローカルにある dat ファイルを表わす正規表現。
+サーバにある dat ファイルにはこの変数を使ってはいけない。")
 
 ;; important mode
 (defvar navi2ch-article-important-mode nil)
@@ -229,6 +232,11 @@ last が最後からいくつ表示するか。
 (defun navi2ch-article-get-info-file-name (board article)
   (navi2ch-board-get-file-name board
                                (concat "info/" (cdr (assq 'artid article)))))
+
+(defun navi2ch-article-file-name-to-artid (filename)
+  "*FILENAME をスレIDに変換する。"
+  (file-name-sans-extension (file-name-nondirectory filename)))
+   
 
 (defsubst navi2ch-article-inside-range-p (num range len)
   "NUM が RANGE で示す範囲に入ってるか。
@@ -1089,8 +1097,8 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 		      (cons 'uri (navi2ch-filename-to-url
 				  (file-name-directory file)))
 		      (cons 'name navi2ch-board-name-from-file)))
-	 (article (list (cons 'artid (file-name-sans-extension
-				      (file-name-nondirectory file)))))
+	 (article (list (cons 'artid
+			      (navi2ch-article-file-name-to-artid file))))
          (buf-name (navi2ch-article-get-buffer-name board article)))
     (if (get-buffer buf-name)
         (progn
@@ -1195,7 +1203,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
            (navi2ch-net-force-update (or navi2ch-net-force-update
                                          force))
            (file (navi2ch-article-get-file-name board article))
-           (old-size (nth 7 (file-attributes file)))
+           (old-size (navi2ch-file-size file))
            header start)
       (when first
         (setq article (navi2ch-article-load-info)))
@@ -1384,7 +1392,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	(file (navi2ch-article-get-file-name board article))
 	size)
     (if start
-	(setq size (nth 7 (file-attributes file)))
+	(setq size (navi2ch-file-size file))
       (setq start 0
 	    size 0))
     (format "%s?raw=%s.%s" url start size)))

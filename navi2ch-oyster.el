@@ -158,7 +158,7 @@ START からじゃないかもしれないけど・・・。
     ;; (setq encoded-s (w3m-url-encode-string session-id))
     (setq encoded-s (navi2ch-net-url-hexify-string session-id))
     (when (file-exists-p file)
-      (setq size (max 0 (nth 7 (file-attributes file)))))
+      (setq size (max 0 (navi2ch-file-size file))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
     (format "%s/test/offlaw.cgi/%s/%s/?raw=.%s&sid=%s"
 	    (match-string 1 uri) (match-string 2 uri) artid size encoded-s)))

@@ -390,7 +390,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	(setq source-file (match-string 1 url))))
     (when (and source-file (file-readable-p source-file))
       (message "Checking file...")
-      (let* ((mtime (nth 5 (file-attributes source-file)))
+      (let* ((mtime (navi2ch-file-mtime source-file))
 	     (mtime-string (navi2ch-http-date-encode mtime))
 	     header)
 	(when time (setq time (navi2ch-http-date-decode time)))

@@ -435,7 +435,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   (interactive)
   (let ((new (concat navi2ch-update-file ".new"))
 	(time (and (file-exists-p navi2ch-update-file)
-		   (nth 5 (file-attributes navi2ch-update-file))))
+		   (navi2ch-file-mtime navi2ch-update-file)))
 	(asc (concat navi2ch-update-file ".asc"))
 	(asc-url (concat navi2ch-update-url ".asc"))
 	verified)
@@ -451,8 +451,8 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 			(setq verified t))
 		 t)
 	       (or (not (file-exists-p navi2ch-update-file))
-		   (not (= (nth 7 (file-attributes navi2ch-update-file))
-			   (nth 7 (file-attributes new))))
+		   (not (= (navi2ch-file-size navi2ch-update-file)
+			   (navi2ch-file-size new)))
 		   (not (string=
 			 (with-temp-buffer
 			   (insert-file-contents-literally navi2ch-update-file)

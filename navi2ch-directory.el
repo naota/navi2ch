@@ -107,8 +107,8 @@
 			     (navi2ch-article-get-first-message-from-file
 			      file))))
 	    (cons 'artid
-		  (file-name-nondirectory (file-name-sans-extension file)))))
-	 (sort (directory-files directory nil "\\.dat$" t)
+		  (navi2ch-article-file-name-to-artid file))))
+	 (sort (directory-files directory nil navi2ch-article-local-dat-regexp t)
 	       (lambda (x y)
 		 (not (navi2ch-right-aligned-string< x y)))))))
 

@@ -483,7 +483,7 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 $B99?7$G$-$l$P(B header $B$rJV$9(B"
   (when (eq time 'file)
     (setq time (and (file-exists-p file)
-		    (nth 5 (file-attributes file)))))
+		    (navi2ch-file-mtime  file))))
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
@@ -574,7 +574,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 	 (coding-system-for-read 'binary)
 	 ;; $B%U%!%$%k%5%$%:$HEy$7$$CM$r(B range $B$K$9$k$H%U%!%$%k$rA4ItAw$C(B
 	 ;; $B$F$/$k$N$G0z$$$F$*$/!#(B
-	 (size (max 0 (- (nth 7 (file-attributes file))
+	 (size (max 0 (- (navi2ch-file-size file)
 			 navi2ch-net-update-file-diff-size)))
 	 (last (and (> size 0)
 		    (with-temp-buffer

@@ -122,7 +122,7 @@
 		       (funcall article-func board file))
 		     (and (file-directory-p default-directory)
 			  (sort (directory-files default-directory
-						 nil "[0-9]+\\.dat$")
+						 nil navi2ch-article-local-dat-regexp)
 				#'navi2ch-right-aligned-string<))))))
    board-list))
 
@@ -152,7 +152,7 @@
 	   (list board
 		 (cons 'subject subject)
 		 (cons 'artid
-		       (file-name-sans-extension file)))))))
+		       (navi2ch-article-file-name-to-artid file)))))))
    board-list))
 
 (defun navi2ch-search-cache (board-list)
@@ -162,13 +162,13 @@
 			  (navi2ch-article-get-first-message-from-file
 			   file board))))
        (list board subject
-	     (cons 'artid (file-name-sans-extension file)))))
+	     (cons 'artid (navi2ch-article-file-name-to-artid file)))))
    board-list))
 
 (defun navi2ch-search-orphan (board-list)
   (navi2ch-search-for-each-article
    (lambda (board file)
-     (let ((article (list (cons 'artid (file-name-sans-extension file)))))
+     (let ((article (list (cons 'artid (navi2ch-article-file-name-to-artid file)))))
        (if (navi2ch-article-orphan-p board article)
 	   (let ((subject (assq 'subject
 				(navi2ch-article-get-first-message-from-file

@@ -559,7 +559,7 @@
 
 (defsubst navi2ch-board-expire-date-p (key-time file access-time)
   (let ((time (ignore-errors (or access-time
-				 (nth 5 (file-attributes file))))))
+				 (navi2ch-file-mtime file)))))
     (and time key-time
 	 (navi2ch-compare-times key-time time))))
 
@@ -574,10 +574,9 @@
 	       (or (not ask) (y-or-n-p "Expire current borad? "))
 	       navi2ch-board-expire-date)
       (let ((article-list (mapcar (lambda (file)
-				    (when (string-match "[0-9]+" file)
-				      (list (cons 'artid
-						  (match-string 0 file)))))
-				  (directory-files dir nil "\\.dat$")))
+				    (list (cons 'artid
+						(navi2ch-article-file-name-to-artid file))))
+				  (directory-files dir nil navi2ch-article-local-dat-regexp)))
 	    (summary (navi2ch-article-load-article-summary board))
 	    (key-time (navi2ch-add-days-to-time (current-time)
 						(- navi2ch-board-expire-date)))

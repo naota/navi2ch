@@ -196,7 +196,7 @@
   (run-hooks 'navi2ch-bm-select-board-hook)
   (navi2ch-set-mode-line-identification))
 
-(defsubst navi2ch-bm-set-property (begin end item state &optional updated)
+(defun navi2ch-bm-set-property (begin end item state &optional updated)
   (navi2ch-bm-set-property-internal begin end item)
   (setq updated (or updated (get-text-property (1+ begin) 'updated)))
   (put-text-property begin end 'updated updated)
@@ -208,7 +208,7 @@
 					  (assq state
 						navi2ch-bm-state-alist))))
 
-(defsubst navi2ch-bm-get-state-from-article (board article)
+(defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)
 	 (cond ((get-buffer (navi2ch-article-get-buffer-name
 			     board article))
@@ -221,7 +221,7 @@
 	(t
 	 (navi2ch-article-check-cached board article))))
 
-(defsubst navi2ch-bm-insert-subject (item number subject other
+(defun navi2ch-bm-insert-subject (item number subject other
 					  &optional updated)
   (let* ((article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item))
