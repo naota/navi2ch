@@ -42,9 +42,9 @@
 (defvar navi2ch-net-header nil)
 (defvar navi2ch-net-content nil)
 (defvar navi2ch-net-state-header-alist
-  '((aborn . "X-Navi2ch-Aborn")
-    (kako . "X-Navi2ch-Kako")
-    (not-updated . "X-Navi2ch-Not-Updated"))
+  '((aborn . "X-Navi2ch-Aborn")		; $B$"$\!<$s$5$l$F$k(B
+    (kako . "X-Navi2ch-Kako")		; $B2a5n%m%0$K$J$C$F$k(B($B$H;W$o$l$k(B)
+    (not-updated . "X-Navi2ch-Not-Updated")) ; $B99?7$5$l$F$$$J$$(B
   "STATE $B$N%7%s%\%k$H(B $B<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B alist")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
@@ -441,6 +441,7 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 		 (not status)
 		 (not header))
 	     ;; $BG0$N$?$a(B
+	     (setq header (navi2ch-net-add-state 'kako header))
 	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    ((string= status "200")
 	     (message (if diff
@@ -474,6 +475,7 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    (t
 	     ;; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
+	     (setq header (navi2ch-net-add-state 'kako header))
 	     (setq header (navi2ch-net-add-state 'not-updated header)))))
     header))
 
@@ -542,6 +544,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 		((string= status "304")
 		 (setq header (navi2ch-net-add-state 'not-updated header)))
 		(t
+		 (setq header (navi2ch-net-add-state 'kako header))
 		 (setq header (navi2ch-net-add-state 'not-updated header))))
 	  (if (not aborn-flag)
 	      header
