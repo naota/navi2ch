@@ -1,5 +1,7 @@
 2002-10-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-directory.el (navi2ch-directory-sync): かっこを付けた。
+
 	* navi2ch-board.el (navi2ch-board-sync): header に "Not-Updated"
 	が含まれていたときは、更新されてないとみなすように。
 

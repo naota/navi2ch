@@ -127,7 +127,8 @@
   (navi2ch-bm-setup 'navi2ch-directory)
   (navi2ch-directory-sync))
 
-(defun navi2ch-directory-sync
+
+(defun navi2ch-directory-sync ()
   (interactive)
   (let ((buffer-read-only nil))
     (erase-buffer)
