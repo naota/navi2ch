@@ -1,3 +1,22 @@
+2003-03-06  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-get-updated-subject-list): 新関数。
+	(navi2ch-board-save-old-subject-file): old ファイルから
+	復元できるように。
+
+	* navi2ch-message.el (navi2ch-message-sendlog-article): 削除。
+	(navi2ch-message-sendlog-subject-with-volume): 新関数。
+	(navi2ch-message-add-sendlog): subject.txt を一時的に update する。
+	送信控えスレを、自動的に Part 2 などに移行できるように。
+
+	* navi2ch-vars.el (navi2ch-message-sendlog-response-limit): 新変数。
+	(navi2ch-message-sendlog-volume-format): 同上。
+	(navi2ch-decode-character-references):
+	navi2ch-article-decode-character-references から改名。
+
+	* navi2ch-util.el (navi2ch-entity-reference-to-str): ↑に追随。
+	(navi2ch-numeric-reference-to-str): 同上。
+
 2003-03-05  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-board-expire-bookmark-p): docstring 修

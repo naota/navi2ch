@@ -390,7 +390,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 (defun navi2ch-entity-reference-to-str (ref)
   "文字実体参照をデコード。"
   (save-match-data
-    (if (and navi2ch-article-decode-character-references
+    (if (and navi2ch-decode-character-references
 	     (string-match "&\\([^;]+\\)" ref))
 	(let ((code (cdr (assoc (match-string 1 ref) navi2ch-entity-alist))))
 	  (or (and code (navi2ch-ucs-to-str code)) ref))
@@ -399,7 +399,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 (defun navi2ch-numeric-reference-to-str (ref)
   "数値文字参照をデコード。"
   (save-match-data
-    (if (and navi2ch-article-decode-character-references
+    (if (and navi2ch-decode-character-references
 	     (string-match "&#\\([^;]+\\)" ref))
 	(or (navi2ch-ucs-to-str (string-to-int (match-string 1 ref))) "〓")
       ref)))

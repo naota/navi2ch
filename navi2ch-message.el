@@ -484,26 +484,53 @@
   ;; nil を返すと、履歴は保存されません。
   navi2ch-message-sendlog-subject)
 
-(defun navi2ch-message-sendlog-article (board subject)
-  (when board
-    (let* ((file (navi2ch-board-get-file-name board))
-	   (sbjs (navi2ch-board-get-subject-list file)))
-      (catch 'loop
-	(while sbjs
-	  (when (string= (cdr (assq 'subject (car sbjs))) subject)
-	    (throw 'loop nil))
-	  (setq sbjs (cdr sbjs))))
-      (car sbjs))))
+(defun navi2ch-message-sendlog-subject-with-volume (base format limit
+							 subject-list)
+  (let ((subject base)
+	(regexp (concat "\\`"
+			(format (regexp-quote format)
+				(regexp-quote base) "\\([0-9]+\\)")
+			"\\'"))
+	(max 0)
+	article)
+    (when limit
+      (dolist (x subject-list)
+	(let ((sbj (cdr (assq 'subject x)))
+	      num)
+	  (when (and (or (and (string= base sbj)
+			      (setq num 1))
+			 (and (string-match regexp sbj)
+			      (setq num
+				    (string-to-number (match-string 1 sbj)))))
+		     (> num max))
+	    (setq max num
+		  article x))))
+      (when article
+	(if (>= (string-to-number (cdr (assq 'response article))) limit)
+	    (setq subject (format format base (number-to-string (1+ max))))
+	  (setq subject (cdr (assq 'subject article))))))
+    subject))
 
 (defun navi2ch-message-add-sendlog (from mail message subject board article)
-  (let* ((navi2ch-localfile-default-file-modes ?\700)
-	 (url (navi2ch-article-to-url board article))
-	 (sbj (or subject (cdr (assq 'subject article))))
-	 (lsubject (navi2ch-message-sendlog-subject board article))
-	 (lboard navi2ch-message-sendlog-board)
-	 (larticle (navi2ch-message-sendlog-article lboard lsubject)))
+  (let ((navi2ch-localfile-default-file-modes ?\700)
+	;; 送信控え のスレタイに &hearts; とかを使えるように。
+	(navi2ch-decode-character-references nil)
+	(url (navi2ch-article-to-url board article))
+	(sbj (or subject (cdr (assq 'subject article))))
+	(lsubject (navi2ch-message-sendlog-subject board article))
+	(lboard navi2ch-message-sendlog-board)
+	(fmt navi2ch-message-sendlog-volume-format)
+	(limit navi2ch-message-sendlog-response-limit)
+	larticle lsbj-list)
     (when (and lsubject lboard)
-      (setq message (format "Subject: %s\nURL: %s\n\n%s" sbj url message))
+      (setq message (format "Subject: %s\nURL: %s\n\n%s" sbj url message)
+	    lsbj-list (navi2ch-board-get-updated-subject-list lboard)
+	    lsubject (navi2ch-message-sendlog-subject-with-volume
+		      lsubject fmt limit lsbj-list))
+      (catch 'loop
+	(dolist (s lsbj-list)
+	  (when (string= (cdr (assq 'subject s)) lsubject)
+	    (throw 'loop (setq larticle s)))))
       (when larticle (setq lsubject nil))
       (navi2ch-multibbs-send-message from mail message
 				     lsubject lboard larticle))))

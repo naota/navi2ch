@@ -185,6 +185,13 @@ nil の場合は browse-url-browser-function を使う。
   :type 'regexp
   :group 'navi2ch)
 
+(defcustom navi2ch-decode-character-references t
+  "*non-nilなら、数値文字参照、文字実体参照の表示を試みる。
+GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
+それ以前のEmacsenではMule-UCSが必要です。 (require 'un-define) してね。"
+  :type 'boolean
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*板一覧ウィンドウの横幅。"
@@ -344,7 +351,7 @@ non-nil なら下に移動する
   :group 'navi2ch-board)
 
 (defcustom navi2ch-history-max-line 100
-  "*ヒストリの行数の制限限。nil ならば制限しない。"
+  "*ヒストリの行数の制限。nil ならば制限しない。"
   :type '(choice (integer :tag "最大の行数を指定")
 		 (const :tag "制限しない" nil))
   :group 'navi2ch-board)
@@ -715,13 +722,6 @@ nil の場合は同じスレの内容のみを得る。"
 
 (defcustom navi2ch-article-dispweek nil
   "* non-nilならばYY/MM/DDの日付に曜日表示し，年をYYYY表記にする"
-  :type 'boolean
-  :group 'navi2ch-article)
-
-(defcustom navi2ch-article-decode-character-references t
-  "*non-nilなら、数値文字参照、文字実体参照の表示を試みる。
-GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
-それ以前のEmacsenではMule-UCSが必要です。 (require 'un-define) してね。"
   :type 'boolean
   :group 'navi2ch-article)
 
@@ -1361,6 +1361,18 @@ Navi2chカテゴリに「送信控え」板が自動的に追加されます。
 
 (defcustom navi2ch-message-sendlog-subject "送信控え"
   "*送信したレスを保存するスレのタイトル。"
+  :type 'string
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-sendlog-response-limit 1000
+  "*送信控え 1スレあたりのレス数の上限。nil ならば制限しない。"
+  :type '(choice (integer :tag "レス数の上限")
+		 (const :tag "無制限" nil))
+  :group 'navi2ch-message)
+
+(defcustom navi2ch-message-sendlog-volume-format "%s (Part %s)"
+  "*送信控えスレを分割するときのフォーマット。
+最初の %s がスレのタイトルで、2番目の %s がスレの番号で置き換えられる。"
   :type 'string
   :group 'navi2ch-message)
 

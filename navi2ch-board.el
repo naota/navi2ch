@@ -246,6 +246,16 @@
 	    (setq list (cons (navi2ch-board-get-matched-article) list)))
 	  (nreverse list))))))
 
+(defun navi2ch-board-get-updated-subject-list (board)
+  "一時的に update してからスレの list を作る。"
+  (let ((file (navi2ch-board-get-file-name board)))
+    (unwind-protect
+	(progn
+	  (navi2ch-board-save-old-subject-file board)
+	  (navi2ch-board-update-file board)
+	  (navi2ch-board-get-subject-list file))
+      (ignore-errors (navi2ch-board-save-old-subject-file board 'restore)))))
+
 (defsubst navi2ch-board-updated-article-p (article seen)
   (let* ((artid (cdr (assq 'artid article)))
 	 (res (cdr (assoc artid navi2ch-board-subject-alist)))
@@ -333,14 +343,17 @@
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-board-mode-hook)
   (force-mode-line-update))
 
-(defun navi2ch-board-save-old-subject-file (board)
-  (let ((file (navi2ch-board-get-file-name board)))
-    (when (file-exists-p file)
+(defun navi2ch-board-save-old-subject-file (board &optional restore)
+  (let ((from (navi2ch-board-get-file-name board))
+	(to (navi2ch-board-get-file-name
+	     board navi2ch-board-old-subject-file-name)))
+    (when restore
+      (setq from (prog1 to
+		   (setq to from))))
+    (when (file-exists-p from)
       (let ((coding-system-for-write navi2ch-coding-system))
-	(with-temp-file (navi2ch-board-get-file-name
-			 board
-			 navi2ch-board-old-subject-file-name)
-	  (navi2ch-insert-file-contents file))))))
+	(with-temp-file to
+	  (navi2ch-insert-file-contents from))))))
 
 (defun navi2ch-board-update-seen-articles ()
   (let ((summary (navi2ch-article-load-article-summary
