@@ -246,7 +246,7 @@ nil ならば手動で更新しないかぎり取りにいかない。"
 
 (defcustom navi2ch-list-valid-host-regexp
   (concat "\\("
-	  (regexp-opt '(".2ch.net" ".bbspink.com" ".machibbs.com"))
+	  (regexp-opt '(".2ch.net" ".bbspink.com" ".machibbs.com" ".machi.to"))
 	  "\\)\\'")
   "*２ちゃんねるの板とみなすホストの正規表現。"
   :type 'regexp

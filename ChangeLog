@@ -1,5 +1,17 @@
 2003-09-05  mami  <mami@users.sourceforge.net>
 
+	*.machibbs.com から *.machi.to への (一時的な?) 移転に対応。
+	http://aa2.2ch.net/test/read.cgi/accuse/1062468676/
+	http://pc.2ch.net/test/read.cgi/unix/1054769287/790
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-p): machi.to を追加。
+	(navi2ch-machibbs-url-to-board): 同上。
+	(navi2ch-machibbs-url-to-article): 同上。
+
+	* navi2ch-vars.el (navi2ch-list-valid-host-regexp): 同上。
+
+2003-09-05  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-get-separator):
 	search-forward を用い、正規表現ではなく固定文字列で検索するように。
 	http://pc.2ch.net/test/read.cgi/unix/1054769287/774

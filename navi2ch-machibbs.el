@@ -61,7 +61,8 @@
 
 (defun navi2ch-machibbs-p (uri)
   "URI $B$,(B machibbs $B$J$i(B non-nil$B$rJV$9!#(B"
-  (string-match "http://[^\\.]+\\.machibbs\\.com/" uri))
+  (or (string-match "http://[^\\.]+\\.machibbs\\.com/" uri)
+      (string-match "http://[^\\.]+\\.machi\\.to/" uri)))
 
 ;; (defun navi2ch-machibbs-subject-callback (string)
 ;;   "subject.txt $B$r<hF@$9$k$H$-(B navi2ch-net-update-file
@@ -114,13 +115,30 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"	; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 				  (match-string 1 url)))
 	       (cons 'id  (match-string 1 url))))
 	((string-match
+	  "http://www\\.machi\\.to/[^/]+/bbs/read\\.cgi.*BBS=\\([^&]+\\)"
+	  url)
+	 (list (cons 'uri (format "http://%s.machi.to/%s/"
+				  (match-string 1 url)
+				  (match-string 1 url)))
+	       (cons 'id  (match-string 1 url))))
+	((string-match
 	  "\\(http://[^\\.]+\\.machibbs\\.com\\)/bbs/read\\.\\(pl\\|cgi\\).*BBS=\\([^&]+\\)"
 	  url)
 	 (list (cons 'uri (format "%s/%s/" (match-string 1 url)
 				  (match-string 3 url)))
 	       (cons 'id  (match-string 3 url))))
 	((string-match
+	  "\\(http://[^\\.]+\\.machi\\.to\\)/bbs/read\\.\\(pl\\|cgi\\).*BBS=\\([^&]+\\)"
+	  url)
+	 (list (cons 'uri (format "%s/%s/" (match-string 1 url)
+				  (match-string 3 url)))
+	       (cons 'id  (match-string 3 url))))
+	((string-match
 	  "\\(http://[^\\.]+\\.machibbs\\.com/\\([^/]+\\)/\\)" url)
+	 (list (cons 'uri (match-string 1 url))
+	       (cons 'id  (match-string 2 url))))
+	((string-match
+	  "\\(http://[^\\.]+\\.machi\\.to/\\([^/]+\\)/\\)" url)
 	 (list (cons 'uri (match-string 1 url))
 	       (cons 'id  (match-string 2 url))))))
 
@@ -129,7 +147,14 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"	; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 	  "http://www.machibbs.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
 	 (list (cons 'artid (match-string 1 url))))
 	((string-match
+	  "http://www.machi.to/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+	 (list (cons 'artid (match-string 1 url))))
+	((string-match
 	  "http://[^\\.]+\\.machibbs\\.com/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)"
+	  url)
+	 (list (cons 'artid (match-string 2 url))))
+	((string-match
+	  "http://[^\\.]+\\.machi\\.to/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)"
 	  url)
 	 (list (cons 'artid (match-string 2 url))))))
 
