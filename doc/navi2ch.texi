@@ -1175,9 +1175,8 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @code{navi2ch-article-uudecode-message} uuencode された記事を uudecode
 する
 
-@item @key{ESC} b
-@code{navi2ch-article-base64-decode-message} 記事を base64 デコードす
-る。
+@item @key{ESC} d
+@code{navi2ch-article-base64-decode-message} 記事をデコードする。
 
 @item v
 @code{navi2ch-article-view-aa} アスキーアートを表示 (要 aadisplay)

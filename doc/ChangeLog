@@ -1,3 +1,7 @@
+2002-01-24  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Article Mode Key Bindings): ESC b を ESC d に。
+
 2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi: メニューをきれいに。
