@@ -574,9 +574,13 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
   (make-local-hook 'kill-buffer-hook)
-  (add-hook 'kill-buffer-hook 'navi2ch-article-save-info t t)
-  (add-hook 'kill-buffer-hook 'navi2ch-article-backward-buffer t t)
+  (add-hook 'kill-buffer-hook 'navi2ch-article-kill-buffer-hook t t)
   (run-hooks 'navi2ch-article-mode-hook))
+
+(defun navi2ch-article-kill-buffer-hook ()
+  (navi2ch-article-save-info)
+  (if (eq (window-buffer) (current-buffer))
+      (navi2ch-article-backward-buffer)))
 
 (defun navi2ch-article-exit ()
   (interactive)

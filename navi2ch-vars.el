@@ -195,6 +195,12 @@ nil ならば手動で更新しないかぎり取りにいかない。"
   :type 'boolean
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-valid-host-regexp
+  "\\(\\.2ch\\.net\\|\\.bbspink\\.com\\)$"
+  "*２ちゃんねるの板とみなすホストの正規表現。"
+  :type 'regexp
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。nil なら全部ダウンロードする。"

@@ -484,9 +484,11 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			  (if (or (string= tag "A") (string= tag "a"))
 			      (when (and start
 					 (not ignore))
-				(when (string-match
-				       "href=\\(.+/\\([^/]+\\)/\\)"
-				       href)
+				(when (and (string-match
+					    "href=\\(.+/\\([^/]+\\)/\\)"
+					    href)
+					   (navi2ch-list-valid-board
+					    (match-string 1 href)))
 				  (concat cont "\n"
 					  (match-string 1 href) "\n"
 					  (match-string 2 href) "\n")))
@@ -499,6 +501,13 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			    (when (not ignore)
 			      (concat cont "\n\n\n")))))))
 	str2))))
+
+(defun navi2ch-list-valid-board (uri)
+  (save-match-data
+    (when (string-match "http://\\([^/]+\\)/\\([^/]+\\)/" uri)
+      (let ((host (match-string 1 uri))
+	    (board (match-string 2 uri)))
+	(string-match navi2ch-list-valid-host-regexp host)))))
 
 (defun navi2ch-list-mouse-select (e)
   (interactive "e")
