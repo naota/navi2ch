@@ -1726,7 +1726,7 @@ bookmark モードで sort しても、次にブックマークを開くと元の並び順に戻っ
 sort 後に @kbd{X} で現在の並び順を記憶する。
 それもめんどうなら、
 @lisp
-(setq navi2ch-bookmark-rememver-order-after-sort t)
+(setq navi2ch-bookmark-remember-order-after-sort t)
 @end lisp
 しておくと sort 後の並び順をいつでも記憶するようになる。
 

@@ -469,7 +469,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 (defun navi2ch-bookmark-sort (&optional arg)
   (interactive "P")
   (navi2ch-bm-sort arg)
-  (and navi2ch-bookmark-rememver-order-after-sort
+  (and navi2ch-bookmark-remember-order-after-sort
        (navi2ch-bookmark-remember-order)))
 
 (run-hooks 'navi2ch-bookmark-load-hook)

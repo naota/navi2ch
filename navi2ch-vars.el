@@ -336,7 +336,7 @@ non-nil なら下に移動する
   :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bookmark-rememver-order-after-sort nil
+(defcustom navi2ch-bookmark-remember-order-after-sort nil
   "*bookmark モードで sort 後のスレ並び順を記憶するかどうか。
 non-nil ならば記憶する。"
   :type 'boolean
