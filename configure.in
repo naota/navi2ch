@@ -7,4 +7,4 @@ AC_ARG_WITH(xemacs,           --with-xemacs             Use XEmacs to build, [ i
 AC_ARG_WITH(emacs,            --with-emacs              Use Emacs to build, [ if test "${withval}" = "yes"; then EMACS=emacs; else EMACS=${withval}; fi; EMACS=$EMACS ]; AC_MSG_RESULT(EMACS=$EMACS))
 AC_ARG_WITH(lispdir,          --with-lispdir            Where to install lisp files, lispdir=${withval}; AC_MSG_RESULT(lispdir=$lispdir))
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT([Makefile doc/Makefile])

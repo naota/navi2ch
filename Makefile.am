@@ -25,3 +25,4 @@ etc_files =										\
 
 lisp_LISP = $(el_files)
 EXTRA_DIST = $(el_files) $(etc_files)
+SUBDIRS = doc
