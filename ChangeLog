@@ -1,3 +1,10 @@
+2004-03-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-by-message):
+	navi2ch-article-message-filter-subr() の引数が副作用で並べかえられ
+	るのでとりあえず修正。
+	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/349>
+
 2004-03-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: 1.7.2-DEV にアップデート。

@@ -773,12 +773,16 @@ START, END, NOFIRST で範囲を指定する"
      (cdr (assq 'name alist)))))
 
 (defun navi2ch-article-message-filter-by-message (alist)
-  (when (or navi2ch-article-default-message-filter-by-message-alist
-	    navi2ch-article-message-filter-by-message-alist)
-    (navi2ch-article-message-filter-subr
-     (append navi2ch-article-default-message-filter-by-message-alist
-	     navi2ch-article-message-filter-by-message-alist)
-     (cdr (assq 'data alist)))))
+  (let ((l (append navi2ch-article-default-message-filter-by-message-alist
+		   navi2ch-article-message-filter-by-message-alist
+		   nil))) ; ←appendの最後の引数はコピーされないので必要
+    (when l
+      (prog1
+	  (navi2ch-article-message-filter-subr
+	   l (cdr (assq 'data alist)))
+	(dolist (elt navi2ch-article-default-message-filter-by-message-alist)
+	  (setq l (delq elt l)))
+	(setq navi2ch-article-message-filter-by-message-alist l)))))
 
 (defun navi2ch-article-message-filter-by-id (alist)
   (let ((case-fold-search nil))
