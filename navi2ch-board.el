@@ -407,7 +407,8 @@
 	(goto-char (point-min))
 	(while (re-search-forward
 		;; この正規表現も仕様変更でだめになるのかも。
-		"<a +href=\"\\([0-9]+\\).*\">[0-9]+: \\(.*\\)</a>" nil t)
+		;;   ……なりました。
+		"<a +href=\"\\([0-9]+\\)[^>]*\">[0-9]+[^0-9].\\(.*\\)</a>" nil t)
 	  (let ((dat (match-string 1))
 		(title (match-string 2)))
 	    (setq str2
