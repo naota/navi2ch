@@ -1018,7 +1018,8 @@ article buffer から抜けるなら 'quit を返す。"
 	  (and (not no-ask)
 	       (eq navi2ch-article-enable-through 'ask)))
       (navi2ch-y-or-n-p "Through next article or quit?" 'quit)
-    navi2ch-article-enable-through))
+    (or no-ask
+	navi2ch-article-enable-through)))
   
 (defun navi2ch-article-through-next ()
   (interactive)

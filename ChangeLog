@@ -2,9 +2,9 @@
 
 	* navi2ch-article.el: コンパイルできなくなってたので provide ->
 	require の位置を変更。
-
-	これで navi2ch.el 中の他に依存しない関数は navi2ch-util.el への移
-	動が完了したかな。
+	(navi2ch-article-through-ask): FR#502627
+	no-ask が no-nil の時も navi2ch-article-enable-through を返してい
+	たのを修正。
 
 	* navi2ch.el (navi2ch-offline): navi2ch-util.el へ移動。
 	(navi2ch-offline-on): 同上。
@@ -15,6 +15,9 @@
 	(navi2ch-offline-on): 同上。
 	(navi2ch-offline-off): 同上。
 	(navi2ch-toggle-offline): 同上。
+
+	これで navi2ch.el 中の他に依存しない関数は navi2ch-util.el への移
+	動が完了したかな。
 
 2002-01-13  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 	今度は navi2ch-board-misc 関連の整理。おかしくなっていたら御免なさ
