@@ -1,6 +1,16 @@
+2003-09-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map): C-c C-r に下記関
+	数をバインド。
+	(navi2ch-article-remove-article): 新規関数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map):
+	navi2ch-article-mode-map の変更に伴い、C-c C-r にも
+	navi2ch-bm-remove-article をバインド。
+
 2003-09-07  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-to-url): 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-to-url):
 	"最新レスn個" に対応。
 
 	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-to-url): 同上。
@@ -44,7 +54,7 @@
 	* navi2ch-oyster.el : スレの何方かが提供してくださったSESSION-ID取得を
 	りトライするためのパッチを適用
 
-	* navi2ch-futaba.el : 新規ファイル 
+	* navi2ch-futaba.el : 新規ファイル
 	ふたばちゃんねる(http://www.2chan.net)の"文字の"掲示板に対応
 
 2003-08-04  mami  <mami@users.sourceforge.net>
@@ -64,13 +74,13 @@
 
 	http://pc.2ch.net/test/read.cgi/unix/1054769287/519
 
-	* navi2ch-vars.el (navi2ch-auto-modify-file): 
+	* navi2ch-vars.el (navi2ch-auto-modify-file):
 	初期値と docstring を変更。
 
-	* navi2ch-auto-modify.el (navi2ch-auto-modify-file): 
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-file):
 	上記変更にともない廃止。
 	(navi2ch-auto-modify-load): 同上。
-	(navi2ch-auto-modify-customize-variable-p): 
+	(navi2ch-auto-modify-customize-variable-p):
 	変数 navi2ch-auto-modify-file を直接参照するように。
 	(navi2ch-auto-modify-save): 同上。
 	また、default-major-mode を 'fundamental-mode に束縛して
@@ -154,7 +164,7 @@
 	* navi2ch-board.el (navi2ch-board-insert-subjects):
 	navi2ch-board-other-field-form に代え、上記新変数を使うように。
 
-	* navi2ch-article.el (navi2ch-article-check-message-suppression): 
+	* navi2ch-article.el (navi2ch-article-check-message-suppression):
 	フィルター結果を保存するように。
 	(navi2ch-article-get-last-read-number): 新関数。
 	(navi2ch-article-save-message-filter-cache): 第3引き数を追加。
@@ -251,13 +261,13 @@
 
 2003-06-03  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-popup-article.el (navi2ch-popup-article-sift-messages): 
+	* navi2ch-popup-article.el (navi2ch-popup-article-sift-messages):
 	navi2ch-article-save-view() 内の不要な save-excursion() を削除。
 
-	* navi2ch-mona.el (navi2ch-mona-arrange-message): 
+	* navi2ch-mona.el (navi2ch-mona-arrange-message):
 	PopUp Article モードでも Article モードに準じて face を設定するように。
 
-	* navi2ch-board.el (navi2ch-board-check-article-update-suppression): 
+	* navi2ch-board.el (navi2ch-board-check-article-update-suppression):
 	廃止。
 	(navi2ch-board-last-seen-alist): 新変数。
 	(navi2ch-board-insert-subjects): 上記変数を使うように。
@@ -268,7 +278,7 @@
 	また、Board モード以外の板系モードでもフィルター処理をチェック
 	できるように。
 
-	* navi2ch-article.el (navi2ch-article-check-message-suppression): 
+	* navi2ch-article.el (navi2ch-article-check-message-suppression):
 	第4引き数を追加。
 	(navi2ch-article-get-current-word-in-body): face に依存しないように。
 
@@ -322,12 +332,12 @@
 	(navi2ch-article-get-current-subject): 新関数。
 	(navi2ch-article-message-filter-subr): フィルター条件を適用した順番に
 	並べかえられるように。
-	(navi2ch-article-toggle-message-filter): 
+	(navi2ch-article-toggle-message-filter):
 	`navi2ch-article-sort-message-filter-rules' を nil にバインドして
 	レスを挿入しなおすように。
 	(navi2ch-article-check-message-suppression): 新関数。
 
-	* navi2ch-board.el (navi2ch-board-check-article-update-suppression): 
+	* navi2ch-board.el (navi2ch-board-check-article-update-suppression):
 	新関数。
 	(navi2ch-board-insert-subjects): 新スレの ID を
 	`navi2ch-board-current-board' に保持するように。
@@ -370,7 +380,7 @@
 
 2003-04-23  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-get-visible-numbers): 
+	* navi2ch-article.el (navi2ch-article-get-visible-numbers):
 	navi2ch-article-previous-message() を使わないように。
 	http://pc.2ch.net/test/read.cgi/unix/1046402063/536-537n
 	(navi2ch-article-sync): navi2ch-article-view-range を考慮して
@@ -390,7 +400,7 @@
 
 2003-04-19  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): 
+	* navi2ch-article.el (navi2ch-article-set-link-property):
 	navi2ch-article-number-prefix-regexp と
 	navi2ch-article-number-separator-regexp で `\(...\)' を使えるように。
 	(navi2ch-article-reinsert-partial-messages): 第2引き数を渡さないと
@@ -399,7 +409,7 @@
 	navi2ch-article-use-message-filter-cache が nil でも
 	navi2ch-article-message-filter-cache に値をロードするように。
 	(navi2ch-article-view-article-from-file): 同上。
-	(navi2ch-article-get-visible-numbers): 
+	(navi2ch-article-get-visible-numbers):
 	navi2ch-article-through-previous-function が throw するシンボルが、
 	navi2ch-article-get-visible-numbers 内でのみ catch されるように。
 	(navi2ch-article-toggle-message-filter): 初めてフィルタを on に

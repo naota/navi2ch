@@ -1,3 +1,8 @@
+2003-09-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Board Misc Mode Key Bindings): "C-c C-r" を追加。
+	(Article Mode Key Bindings): "C-c C-r" を追加。
+
 2003-07-16  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi: Copyright 更新。

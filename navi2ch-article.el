@@ -91,6 +91,7 @@
     (define-key map "F" 'navi2ch-article-toggle-message-filter)
     (define-key map "x" 'undefined)
     (define-key map "!" 'navi2ch-article-add-message-filter-rule)
+    (define-key map "\C-c\C-r" 'navi2ch-article-remove-article)
     (navi2ch-ifxemacs
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
@@ -3253,6 +3254,17 @@ PREFIX が与えられた場合は、
 			    (if (numberp initial-input)
 				(number-to-string initial-input)
 			      "0")))))))
+
+(defun navi2ch-article-remove-article ()
+  (interactive)
+  (let ((board navi2ch-article-current-board)
+	(article navi2ch-article-current-article))
+    (when (and board article)
+      (navi2ch-article-exit)
+      (navi2ch-bm-remove-article-subr board article)
+      (when (eq (navi2ch-get-major-mode navi2ch-board-buffer-name)
+		'navi2ch-board-mode)
+	(navi2ch-board-update-buffer navi2ch-board-buffer-name)))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

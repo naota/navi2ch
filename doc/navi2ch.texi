@@ -744,7 +744,7 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 
 検索結果の表示バッファでは、@kbd{D} を押すと表示されているレスをまとめ
 て隠すことができ、@kbd{A} を押すと同様にまとめてブックマークすることが
-できる。また、これらの操作の対象にしたくないレスがあるときは、@kbd{d} 
+できる。また、これらの操作の対象にしたくないレスがあるときは、@kbd{d}
 でカーソル位置のレスを除外することができる。間違って除外してしまったと
 きは、@kbd{C-u d} でレスが復活する。
 
@@ -784,9 +784,9 @@ Navi2ch には、名前や本文中の語句など、レスに含まれる特定の文字列を条件
 レスを検査する方法を、拡張形式によってくわしく指定する (Use
 extensional match) か。
 
-拡張形式で指定する場合、部分一致 (substring)、あいまい一致 
+拡張形式で指定する場合、部分一致 (substring)、あいまい一致
 (fuzzy-substring)、完全一致 (exact-string)、正規表現 (regexp) のうち、
-どの方法を使うか。その際、大文字と小文字の違いは無視する (Ignore case) 
+どの方法を使うか。その際、大文字と小文字の違いは無視する (Ignore case)
 か。
 
 @item
@@ -1234,6 +1234,7 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 戻る
 
 @item R
+@item C-c C-r
 @code{navi2ch-bm-remove-article} スレの情報 (取得した .dat ファイルや既読情報など) を消す
 
 @item C-o
@@ -1519,6 +1520,9 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item !
 @code{navi2ch-article-add-message-filter-rule} レスに対する
 フィルタ処理の条件を対話的に追加する
+
+@item C-c C-r
+@code{navi2ch-article-remove-article} スレの情報 (取得した .dat ファイルや既読情報など) を消す
 
 @end table
 

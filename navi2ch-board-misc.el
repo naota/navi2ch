@@ -55,6 +55,7 @@
     (define-key map "?" 'navi2ch-bm-search)
     (define-key map "\C-c\C-m" 'navi2ch-message-pop-message-buffer)
     (define-key map "R" 'navi2ch-bm-remove-article)
+    (define-key map "\C-c\C-r" 'navi2ch-bm-remove-article)
     (define-key map "\C-o" 'navi2ch-bm-save-dat-file)
     (define-key map "I" 'navi2ch-bm-fetch-maybe-new-articles)
 
