@@ -1,3 +1,11 @@
+2004-03-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-list-moved-board-alist): 新変数。
+	キーが旧 URL、値が新 URL の alist。
+
+	* navi2ch-list.el (navi2ch-list-make-board-txt): 上記変数を使用し
+	て移転した板の URL を変更できるように。
+
 2004-03-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-splash.el (navi2ch-splash-copyright-notice):

@@ -1853,6 +1853,22 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @item Q.
 ○○板がサーバ移転で見られなくなったみたい。どうしたらいい?
 
+@item A.
+変数 @code{navi2ch-list-moved-board-alist} で新旧 URL を変換できるよ。
+
+@lisp
+(setq navi2ch-list-moved-board-alist
+      (("http://pc.2ch.net/unix/" . "http://pc3.2ch.net/unix/")
+       ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
+@end lisp
+
+キーの部分は板 URL と完全マッチなので、@file{~/.navi2ch/board.txt} を
+見てそれと同じように書いてね。
+
+Navi2ch 1.7.2 以前 (navi2ch-list.el:1.66 より前) を使ってる場合、
+この方法は使えないので次の質問を参照。
+
+@item Q.
 同じ 2ch タイプの他の掲示板も Navi2ch で読みたいんだけど。
 
 @item A.

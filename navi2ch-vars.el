@@ -283,6 +283,15 @@ nil ならば手動で更新しないかぎり取りにいかない。"
   :type '(repeat sexp)
   :group 'navi2ch-list)
 
+(defcustom navi2ch-list-moved-board-alist nil
+  "*移転した板の新旧 URL の alist。
+http://pc.2ch.net/unix/ が http://pc3.2ch.net/unix/ に移転した場合、
+\((\"http://pc.2ch.net/unix/\" . \"http://pc3.2ch.net/unix/\"))
+のように指定する。"
+  :type '(alist :key-type (string :tag "移転前の URL")
+		:value-type (string :tag "移転後の URL"))
+  :group 'navi2ch-list)
+
 ;;; board variables
 (defcustom navi2ch-board-max-line nil
   "*ダウンロードする subject.txt の行数。nil なら全部ダウンロードする。"

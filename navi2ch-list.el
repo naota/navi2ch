@@ -578,6 +578,10 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 		(when (and (not ignore)
 			   (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
 			   (setq url (match-string 1 attr))
+			   (setq url (or (cdr (assoc
+					       url
+					       navi2ch-list-moved-board-alist))
+					 url))
 			   (setq id (navi2ch-list-board-id-from-url url))
 			   (navi2ch-list-valid-board url))
 		  (when (and (setq u (cdr (assoc id id-to-url-alist)))

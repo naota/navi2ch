@@ -1,3 +1,8 @@
+2004-03-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Board Questions): navi2ch-list-moved-board-alist
+	について追記。
+
 2004-03-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Can not Read): 板移転について追記。
