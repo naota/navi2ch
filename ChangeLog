@@ -1,3 +1,16 @@
+2002-01-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* ChangeLog: 末尾に $ I d $ を追加。cvs stat しなくても ChangeLog
+	のリビジョンがわかるように。
+
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file):
+	Emacs CE 用の navi2ch-net-get-content-subr をリネーム。
+	(navi2ch-net-get-content-subr-function): 新変数。
+	(navi2ch-net-get-content): 上記変数を経由して *-subr を呼ぶように。
+	top-level での if 等はバイトコンパイル時に展開されてしまうので、こ
+	うしとかないとよそで作ったバイトコードだと Emacs CE 用関数が有効に
+	ならない。
+
 2002-01-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi: スレ/レスを隠す方法について記述.
@@ -2355,4 +2368,5 @@
 2000-12-12  
 	
 	* all: とりあえず完成。
-
+
+$Id$

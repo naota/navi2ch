@@ -146,35 +146,41 @@
                          list)))
       (nreverse list))))
 
-(if (string-match "windowsce" system-configuration)
-    (defun navi2ch-net-get-content-subr (gzip-p cont)
-      (if gzip-p
-	  (with-temp-buffer
-	    (insert cont)
-	    (let* ((tempfn (expand-file-name (make-temp-name "navi2ch") (getenv "TMP")))
-		   (tempfngz (concat tempfn ".gz")))
-	      (write-file tempfngz nil)
-	      (call-process shell-file-name nil nil nil
-			    shell-command-switch (concat "gzip -d " tempfngz))
-	      (set-visited-file-name tempfn nil t)
-	      (revert-buffer t t)
-	      (delete-file tempfn))
-	    (buffer-string))
-	cont))
+(defun navi2ch-net-get-content-subr-with-temp-file (gzip-p cont)
+  (if gzip-p
+      (with-temp-buffer
+	(insert cont)
+	(let* ((tempfn (expand-file-name (make-temp-name "navi2ch") (getenv "TMP")))
+	       (tempfngz (concat tempfn ".gz")))
+	  (write-file tempfngz nil)
+	  (call-process shell-file-name nil nil nil
+			shell-command-switch (concat "gzip -d " tempfngz))
+	  (set-visited-file-name tempfn nil t)
+	  (revert-buffer t t)
+	  (delete-file tempfn))
+	(buffer-string))
+    cont))
 
-  (defun navi2ch-net-get-content-subr (gzip-p cont)
-    (if gzip-p
-	(with-temp-buffer
-	  (insert cont)
-	  (apply 'call-process-region
-		 (point-min) (point-max)
-		 navi2ch-net-gunzip-program t t nil
-		 navi2ch-net-gunzip-args)
-	  (buffer-string))
-      cont)))
+(defun navi2ch-net-get-content-subr (gzip-p cont)
+  (if gzip-p
+      (with-temp-buffer
+	(insert cont)
+	(apply 'call-process-region
+	       (point-min) (point-max)
+	       navi2ch-net-gunzip-program t t nil
+	       navi2ch-net-gunzip-args)
+	(buffer-string))
+    cont))
+
+(defvar navi2ch-net-get-content-subr-function nil)
 
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
+  (if (null navi2ch-net-get-content-subr-function)
+      (setq navi2ch-net-get-content-subr-function
+	    (if (string-match "windowsce" system-configuration)
+		'navi2ch-net-get-content-subr-with-temp-file
+	      'navi2ch-net-get-content-subr)))
   (let ((gzip (and navi2ch-net-accept-gzip
 		   (string-match "gzip"
 				 (or (cdr (assoc "Content-Encoding"
@@ -188,10 +194,11 @@
       (re-search-forward "\r\n\r?\n")
       (save-restriction
 	(narrow-to-region (point) (point-max))
-	(navi2ch-net-get-content-subr gzip
-				      (buffer-substring (point-min)
-							(point-max)))))))
-		   
+	(funcall navi2ch-net-get-content-subr-function
+		 gzip
+		 (buffer-substring (point-min)
+				   (point-max)))))))
+
 (defun navi2ch-net-download-file (url &optional time accept-status other-header)
   "URL からダウンロードを開始する。
 TIME が `non-nil' ならば TIME より新しい時だけダウンロードする。
