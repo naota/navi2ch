@@ -3,6 +3,8 @@
 	* navi2ch-util.el (navi2ch-temp-directory): expand-file-name され
 	た値を返すようにした。
 	http://pc.2ch.net/test/read.cgi/unix/1023884490/542
+	(navi2ch-base64-insert-file): 古い base64.el を使っている場合は 3
+	番目の引数が無いので、自力で改行を消すようにした。
 
 	* navi2ch-mona.el
 	(navi2ch-mona-create-face-from-family-name): 新関数。

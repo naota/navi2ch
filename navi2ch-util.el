@@ -627,7 +627,10 @@ base64デコードすべき内容がない場合はエラーになる。"
       (with-temp-buffer
 	(let ((buffer-file-coding-system 'binary))
 	  (insert-file-contents-literally filename)
-	  (base64-encode-region (point-min) (point-max) t)
+	  (base64-encode-region (point-min) (point-max))
+	  (goto-char (point-min))
+	  (while (search-forward "\n" nil t)
+	    (replace-match ""))
 	  (goto-char (point-min))
 	  (insert (format "%s(%s)\n" navi2ch-base64-begin-delimiter
 			  (file-name-nondirectory filename)))
