@@ -81,16 +81,23 @@
   "ローカルルールを持ってきて表示。head.txtに保存しちゃうよ。"
   (interactive)
   (let* ((uri (navi2ch-head-get-uri))
-	(filename (concat  (expand-file-name navi2ch-directory) "/"
-			  (progn
-			    (string-match "^http://\\(.*\\)" uri)
-			    (match-string 1 uri)))))
-    (navi2ch-net-update-file uri filename)
+	 (filename (concat  (expand-file-name navi2ch-directory) "/"
+			    (progn
+			      (string-match "^http://\\(.*\\)" uri)
+			      (match-string 1 uri)))))
+    (or navi2ch-offline
+	(navi2ch-net-update-file uri filename))
     (message uri filename)
     (save-excursion
       (find-file filename)
-      (if (eq (point-max) (point-min))
-	  (insert-string "'H'を押す。\n  ↓\n板ローカルルールを見る。\n  ↓\n板ローカルルールはない!\n  ↓\n(ﾟдﾟ)ﾏｼﾞｳﾏｰ\n"))
+      (when (eq (point-max) (point-min))
+	(insert-string "'H'を押す。\n")
+	(insert-string "  ↓\n")
+	(insert-string "板ローカルルールを見る。\n")
+	(insert-string "  ↓\n")
+	(insert-string "板ローカルルールはない!\n")
+	(insert-string "  ↓\n")
+	(insert-string "(ﾟдﾟ)ﾏｼﾞｳﾏｰ\n"))
       (set-buffer-modified-p nil)
       (navi2ch-head-mode))))
 

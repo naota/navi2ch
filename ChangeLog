@@ -1,3 +1,10 @@
+2002-08-28  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-head.el (navi2ch-head-get-head-txt): 
+	navi2ch-offline が t のときはファイルを取ってこないように。
+	insert-string を行ごとに分割。
+	インデント調整。
+
 2002-08-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-copy): 移動元と移動先が同
