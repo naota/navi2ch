@@ -1067,7 +1067,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
     (setq ret (if (string= ret "") default ret))
     (if ret
 	(let ((num (string-to-number ret)))
-	  (if (> num 0)
+	  (if (and (> num 0)
+		   (equal ret (number-to-string num)))
 	      (navi2ch-article-goto-number num t t)
 	    (let (board board-id)
 	      (setq board-id (try-completion ret alist))
