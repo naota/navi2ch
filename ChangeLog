@@ -1,3 +1,9 @@
+2002-10-03  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-yank): (beginning-of-line)
+	を追加。
+	行頭以外で C-y すると崩れてたのに対処。
+
 2002-10-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-multibbs.el (navi2ch-2ch-board-update):
