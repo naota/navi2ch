@@ -449,6 +449,17 @@ return new alist whose car is the new pair and cdr is ALIST.
     (when point
       (1- point))))
 
+(defun navi2ch-change-text-property (point prop value)
+  (unless (get-text-property point prop)
+    (error "POINT (%d) does not have property %s" point prop))
+  (let ((start (if (or (= (point-min) point)
+		       (not (eq (get-text-property (1- point) prop)
+				(get-text-property point prop))))
+		   point
+		 (or (previous-single-property-change point prop) point)))
+	(end (or (next-single-property-change point prop) point)))
+    (put-text-property start end prop value)))
+
 (defun navi2ch-set-minor-mode (mode name map)
   (make-variable-buffer-local mode)
   (unless (assq mode minor-mode-alist)

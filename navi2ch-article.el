@@ -1358,7 +1358,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   (defvar mark-active)
   (defvar deactivate-mark))
 
-(defun navi2ch-article-get-link-text (&optional point)
+(defun navi2ch-article-get-link-text-subr (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を得る。"
   (setq point (or point (point)))
   (let (mark-active deactivate-mark)	; transient-mark-mode が切れないよう
@@ -1403,6 +1403,19 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 			      (format "[%s]" (cdr (assq 'name board))))
 			    (eval navi2ch-article-display-link-width))))))))))
       nil)))
+
+(defun navi2ch-article-get-link-text (&optional point)
+  "POINT (省略時はカレントポイント) のリンク先を得る。
+結果を help-echo プロパティに設定してキャッシュする。"
+  (setq point (or point (point)))
+  (let ((help-echo-prop (get-text-property point 'help-echo))
+	mark-active deactivate-mark)	; transient-mark-mode が切れないよう
+    (unless (or (null help-echo-prop)
+		(stringp help-echo-prop))
+      (setq help-echo-prop (navi2ch-article-get-link-text-subr point))
+      (let ((buffer-read-only nil))
+	(navi2ch-change-text-property point 'help-echo help-echo-prop)))
+    help-echo-prop))
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"

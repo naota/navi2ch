@@ -1,3 +1,14 @@
+2002-08-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	link を追いかけた結果をキャッシュするようにした。
+
+	* navi2ch-article.el (navi2ch-article-get-link-text-subr):
+	navi2ch-article-get-link-text から名称変更。
+	(navi2ch-article-get-link-text): 上記関数を呼び出した後、help-echo
+	プロパティを変更する。
+
+	* navi2ch-util.el (navi2ch-change-text-property): 新関数。
+
 2002-08-06  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-renumber): レス番号の桁数にか
