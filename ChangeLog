@@ -1,3 +1,30 @@
+2002-12-18  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-head.el (navi2ch-head-file-name): 新変数。
+	(navi2ch-head-buffer-name): 同上。
+	(navi2ch-head-current-board): 同上。
+	(navi2ch-head-current-article): 同上。
+	(navi2ch-head-save-time): 新関数。
+	(navi2ch-head-load-time): 同上。
+	(navi2ch-head-kill-buffer): 同上。
+	(navi2ch-head-exit): exit した後に元いたバッファに戻るように。
+	(navi2ch-head-get-uri): 削除。
+	(navi2ch-head-select-current-w3m-link): 新関数。
+	(navi2ch-head-mode-map): "M" に `navi2ch-head-select-current-w3m-link'
+	をバインド。
+	(navi2ch-head-set-mode-line): 新関数。
+	(toplevel): `navi2ch-list-mode-map' の "H" に
+	'navi2ch-head-get-head-txt をバインド。
+	(navi2ch-head-get-head-txt): emacs-w3m があれば使うように。
+
+	* navi2ch.el (navi2ch-save-info): `print-length' と `print-level' を
+	nil に。
+
+	* navi2ch-list.el (navi2ch-list-mode): kill-all-local-variables する
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
+	kill-all-local-variables する
+
 2002-12-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-header): Date: ヘッダを使って

@@ -100,6 +100,7 @@ stack が空なら、PopUp Article モードを抜ける。"
 (defun navi2ch-popup-article-mode ()
   "\\{navi2ch-popup-article-mode-map}"
   (interactive)
+  (kill-all-local-variables)
   (setq major-mode 'navi2ch-popup-article-mode)
   (setq mode-name "Navi2ch PopUp Article")
   (setq buffer-read-only t)

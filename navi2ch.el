@@ -280,7 +280,8 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 	    (setq temp-file (navi2ch-make-temp-file
 			     (file-name-directory file)))
 	    (with-temp-file temp-file
-	      (let ((standard-output (current-buffer)))
+	      (let ((standard-output (current-buffer))
+		    print-length print-level)
 		(prin1 info)))
 	    (if (and backup (file-exists-p file))
 		(rename-file file backup-file t))

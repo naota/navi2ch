@@ -370,6 +370,7 @@
 (defun navi2ch-list-mode ()
   "\\{navi2ch-list-mode-map}"
   (interactive)
+  (kill-all-local-variables)
   (setq major-mode 'navi2ch-list-mode)
   (setq mode-name "Navi2ch List")
   (setq buffer-read-only t)
