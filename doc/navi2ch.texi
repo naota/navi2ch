@@ -1187,6 +1187,12 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item s
 @code{navi2ch-bookmark-sync} ブックマークバッファを最新の情報に更新
+
+@item X
+@code{navi2ch-bookmark-remember-order} ブックマークの現在のスレの並び順を記憶
+
+@item S
+@code{navi2ch-bookmark-sort} スレをソート
 @end table
 
 @node Article Mode Key Bindings
@@ -1710,6 +1716,19 @@ board mode で + をすると hide したスレッドも出てくるんだけど。
 るの Navi2ch スレで報告してね。その際、使ってる Emacs の種類やバージョ
 ン、Navi2ch のバージョン (CVS 版を使ってる時は ChangeLog の一番最後に
 あるリビジョン) も教えてくれると対応が早いかも。
+
+@item Q.
+bookmark モードで sort しても、次にブックマークを開くと元の並び順に戻っ
+てる。
+なんとかならん?
+
+@item A.
+sort 後に @kbd{X} で現在の並び順を記憶する。
+それもめんどうなら、
+@lisp
+(setq navi2ch-bookmark-rememver-order-after-sort t)
+@end lisp
+しておくと sort 後の並び順をいつでも記憶するようになる。
 
 @ignore
 @item Q.

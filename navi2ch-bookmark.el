@@ -49,6 +49,8 @@
     (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
     (define-key map "mo" 'navi2ch-bookmark-move-mark-article)
     (define-key map "s" 'navi2ch-bookmark-sync)
+    (define-key map "X" 'navi2ch-bookmark-remember-order)
+    (define-key map "S" 'navi2ch-bookmark-sort)
     (setq navi2ch-bookmark-mode-map map)))
 
 (defvar navi2ch-bookmark-mode-menu-spec
@@ -447,6 +449,28 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (erase-buffer)
     (save-excursion
       (navi2ch-bookmark-insert-subjects))))
+
+(defun navi2ch-bookmark-remember-order ()
+  "ブックマークの現在のスレの並び順を記憶する。"
+  (interactive)
+  (let ((bookmark (assoc navi2ch-bookmark-current-bookmark-id
+			 navi2ch-bookmark-list))
+	list item)
+    (save-excursion
+      (goto-char (point-max))
+      (while (eq 0 (forward-line -1))
+	(and (setq item
+		   (navi2ch-bookmark-get-property (point)))
+	     (push (assoc item (cddr bookmark))
+		   list))))
+    (setcdr (cdr bookmark) list)
+    (navi2ch-bm-renumber)))
+
+(defun navi2ch-bookmark-sort (&optional arg)
+  (interactive "P")
+  (navi2ch-bm-sort arg)
+  (and navi2ch-bookmark-rememver-order-after-sort
+       (navi2ch-bookmark-remember-order)))
 
 (run-hooks 'navi2ch-bookmark-load-hook)
 ;;; navi2ch-bookmark.el ends here

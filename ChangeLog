@@ -1,3 +1,12 @@
+2002-08-18  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-bookmark-rememver-order-after-sort):
+	新変数。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-remember-order): 新関数。
+	(navi2ch-bookmark-sort): 新関数。
+	(navi2ch-bookmark-mode-map): 上記2関数を "X" と "S" にバインド。
+
 2002-08-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-select-current-link):
