@@ -1,8 +1,8 @@
 ;;; navi2ch.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2000 by 2ちゃんねる
+;; Copyright (C) 2000 by Navi2ch Project
 
-;; Author: (not 1)
+;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
 
 ;; This file is free software; you can redistribute it and/or modify

@@ -1,8 +1,8 @@
 ;;; navi2ch-history.el --- global history module for navi2ch
 
-;; Copyright (C) 2001 by 2ちゃんねる
+;; Copyright (C) 2001 by Navi2ch Project
 
-;; Author: (not 1)
+;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
 
 ;; This file is free software; you can redistribute it and/or modify
