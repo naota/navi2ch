@@ -62,7 +62,8 @@
   :type '(choice (const :tag "特定グループの奴らのみが書きこめる" ?\775)
 		 (const :tag "自分のみが書きこめる" ?\755)
 		 (const :tag "特定グループの奴らのみが読み書きできる" ?\770)
-		 (const :tag "自分のみが読み書きできる" ?\700)))
+		 (const :tag "自分のみが読み書きできる" ?\700))
+  :group 'navi2ch-localfile)
 
 (defcustom navi2ch-localfile-default-user-name "名無しさん"
   "*ローカル BBS に書き込む際の名無しの名前。"
@@ -132,9 +133,9 @@
 BODY の実行後は DIRECTORY のロックを解除する。"
   `(unwind-protect
        (progn
-	 (navi2ch-localfile-lock directory)
+	 (navi2ch-localfile-lock ,directory)
 	 ,@body)
-     (navi2ch-localfile-unlock directory)))
+     (navi2ch-localfile-unlock ,directory)))
 
 (put 'navi2ch-localfile-with-lock 'lisp-indent-function 1)
 

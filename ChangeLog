@@ -1,3 +1,12 @@
+2003-12-04  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-localfile): 新規 custom グループ。
+	* navi2ch-localfile.el (navi2ch-localfile-default-file-modes):
+	custom グループ追加。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/378
+	(navi2ch-localfile-with-lock): directory を unquote してなかった。
+	http://pc.2ch.net/test/read.cgi/unix/1065246418/384
+
 2003-11-26  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-board): 正規表現を

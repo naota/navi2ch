@@ -68,6 +68,11 @@
   :prefix "navi2ch-"
   :group 'navi2ch)
 
+(defgroup navi2ch-localfile nil
+  "*Navi2ch, localbbs."
+  :prefix "navi2ch-"
+  :group 'navi2ch)
+
 ;;; navi2ch variables
 (defcustom navi2ch-ask-when-exit 'y-or-n-p
   "*non-nil なら、navi2ch 終了の確認メッセージを表示する。"
