@@ -1815,8 +1815,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		(current-word))))
     (when (string-match
 	   (regexp-quote word)
-	   (cdr (assq 'data (cdr (assq (navi2ch-article-get-current-number)
-				       navi2ch-article-message-list)))))
+	   (navi2ch-article-get-message-string
+	    (navi2ch-article-get-current-number)))
       word)))
 
 (defun navi2ch-article-get-current-subject ()

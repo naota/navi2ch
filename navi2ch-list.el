@@ -496,30 +496,40 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	  (navi2ch-net-force-update (or navi2ch-net-force-update
 					force))
 	  (file (navi2ch-list-get-file-name))
-	  updated old-category-list)
-      (setq old-category-list
-	    (if first
-		(progn
-		  (navi2ch-list-load-info)
-		  (navi2ch-list-get-category-list file))
-	      (navi2ch-list-get-normal-category-list
-	       navi2ch-list-category-list)))
+	  (bbstable (or navi2ch-list-bbstable-url
+			navi2ch-list-bbstable-default-url))
+	  (change (cdr (assq 'change navi2ch-list-current-list)))
+	  updated header time old-category-list)
+      (when first
+	(navi2ch-list-load-info))
+      (navi2ch-set-mode-line-identification)
+      (setq old-category-list (navi2ch-list-get-normal-category-list
+			       navi2ch-list-category-list))
       (unless (or navi2ch-offline
 		  (and first
 		       (not navi2ch-list-sync-update-on-boot)
 		       (file-exists-p file)))
-	(setq updated (navi2ch-net-update-file
-		       (or navi2ch-list-bbstable-url
-			   navi2ch-list-bbstable-default-url)
-		       file nil
-		       'navi2ch-list-make-board-txt)))
-      (when t				;(or first updated)
-	(erase-buffer)
+	(setq time (and (equal (cdr (assq 'bbstable navi2ch-list-current-list))
+			       bbstable)
+			(cdr (assq 'time navi2ch-list-current-list))))
+	(setq header (navi2ch-net-update-file bbstable file time
+					      'navi2ch-list-make-board-txt))
+	(setq updated (and header
+			   (not (navi2ch-net-get-state 'not-updated header))
+			   (not (navi2ch-net-get-state 'error header)))))
+      (when updated
+	(setq navi2ch-list-current-list
+	      (navi2ch-put-alist 'time
+				 (or (cdr (assoc "Last-Modified" header))
+				     (cdr (assoc "Date" header)))
+				 navi2ch-list-current-list))
+	(setq navi2ch-list-current-list
+	      (navi2ch-put-alist 'bbstable bbstable
+				 navi2ch-list-current-list)))
+      (when (or updated change)
 	(let ((category-list (navi2ch-list-get-category-list file)))
-	  (when updated
-	    (navi2ch-list-apply-changed-status
-	     (navi2ch-list-get-changed-status
-	      old-category-list category-list)))
+	  (navi2ch-list-apply-changed-status
+	   (navi2ch-list-get-changed-status old-category-list category-list))
 	  (setq navi2ch-list-category-list
 		(append
 		 (delq nil
@@ -532,8 +542,10 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 			      category-list)))
 		 category-list))
 	  (setq navi2ch-list-board-name-list
-		(navi2ch-list-get-board-name-list navi2ch-list-category-list)))
-	(navi2ch-set-mode-line-identification)
+		(navi2ch-list-get-board-name-list
+		 navi2ch-list-category-list))))
+      (when (or updated change first)
+	(erase-buffer)
 	(navi2ch-list-insert-board-names navi2ch-list-category-list))))
   (run-hooks 'navi2ch-list-after-sync-hook))
 
@@ -669,7 +681,9 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
      (list (cons 'bookmark (navi2ch-list-normalize-bookmark
 			    navi2ch-list-current-list))
 	   (assq 'category navi2ch-list-current-list)
-	   (assq 'change navi2ch-list-current-list))
+	   (assq 'change navi2ch-list-current-list)
+	   (assq 'bbstable navi2ch-list-current-list)
+	   (assq 'time navi2ch-list-current-list))
      t)))
 
 (defun navi2ch-list-load-info ()
@@ -677,7 +691,21 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	(navi2ch-load-info (navi2ch-list-get-file-name "list.info")))
   (if navi2ch-list-load-category-list
       (setq navi2ch-list-category-list
-	    (cdr (assq 'category navi2ch-list-current-list)))))
+	    (cdr (assq 'category navi2ch-list-current-list))))
+  (let* ((file (navi2ch-list-get-file-name))
+	 (category-list (navi2ch-list-get-category-list file)))
+    (setq navi2ch-list-category-list
+	  (append
+	   (delq nil
+		 (list (navi2ch-list-get-category
+			navi2ch-list-navi2ch-category-name
+			navi2ch-list-navi2ch-category-alist)
+		       (navi2ch-list-get-global-bookmark-category)
+		       (navi2ch-list-get-etc-category)
+		       (navi2ch-list-get-changed-category category-list)))
+	   category-list))
+    (setq navi2ch-list-board-name-list
+	  (navi2ch-list-get-board-name-list navi2ch-list-category-list))))
 
 (defun navi2ch-list-get-current-category-list ()
   (save-excursion

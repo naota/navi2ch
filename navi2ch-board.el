@@ -329,8 +329,8 @@
       (if (and (eq navi2ch-board-current-board board)
 	       (eq old-mode major-mode))
 	  (navi2ch-board-sync force)
-	(run-hooks 'navi2ch-board-select-board-hook)
 	(setq navi2ch-board-current-board (navi2ch-board-load-info board))
+	(run-hooks 'navi2ch-board-select-board-hook)
 	(navi2ch-board-sync force 'first)))))
 
 (easy-menu-define navi2ch-board-mode-menu

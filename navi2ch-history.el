@@ -175,8 +175,7 @@ key は (concat uri artid)。
 			  (assq 'subject article)
 			  (assq 'artid article)))))
 	       navi2ch-history-alist)))
-    (if info
-	(navi2ch-save-info navi2ch-history-file info t))))
+    (navi2ch-save-info navi2ch-history-file info t)))
 
 (defun navi2ch-history-load-info ()
   (setq navi2ch-history-alist

@@ -188,11 +188,11 @@
 
 (defvar navi2ch-offline nil "オフラインモードかどうか")
 (defvar navi2ch-online-indicator  "[ON] ")
-(put 'navi2ch-online-indicator 'risky-local-variable t)
 (defvar navi2ch-offline-indicator "[--] ")
-(put 'navi2ch-offline-indicator 'risky-local-variable t)
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
 (defvar navi2ch-modeline-offline navi2ch-offline-indicator)
+(put 'navi2ch-modeline-online 'risky-local-variable t)
+(put 'navi2ch-modeline-offline 'risky-local-variable t)
 
 ;; shut up XEmacs warnings
 (eval-when-compile
@@ -654,10 +654,11 @@ return new alist whose car is the new pair and cdr is ALIST.
                "0:00")
              (cadr timezone)) nil nil)))
 
-(defun navi2ch-end-of-buffer ()
-  (interactive)
-  (goto-char (point-max))
-  (forward-line -1))
+(defun navi2ch-end-of-buffer (&optional arg)
+  "バッファの最終行に移動。"
+  (interactive "P")
+  (end-of-buffer arg)
+  (when (eobp) (forward-line -1)))
 
 (defun navi2ch-uudecode-region (start end &optional filename)
   "STARTとENDの間のリージョンをuudecodeする。

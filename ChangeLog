@@ -1,3 +1,25 @@
+2003-06-04  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-get-current-word-in-body):
+	navi2ch-article-get-message-string を使う。
+
+	* navi2ch-list.el (navi2ch-list-sync): bbstable を読み込んだ時間を
+	保存。
+	(navi2ch-list-save-info): bbstable の URL, 読み込んだ時間を保存。
+	(navi2ch-list-load-info): navi2ch-list-category-list,
+	navi2ch-list-board-name-list を設定。
+
+	* navi2ch-history.el (navi2ch-history-save-info): 履歴が空のときも
+	保存。
+
+	* navi2ch-util.el (navi2ch-end-of-buffer): end-of-buffer を使う。
+	(navi2ch-modeline-online): risky-local-variable
+	(navi2ch-modeline-offline): 同上。
+
+	* navi2ch-board.el (navi2ch-board-select-board):
+	navi2ch-board-current-board を設定した後で
+	navi2ch-board-select-board-hook を呼ぶ。
+
 2003-06-04  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-insert-subjects): レスの増分を
