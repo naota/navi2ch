@@ -440,7 +440,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
       (cond ((or (not proc)
 		 (not status)
 		 (not header))
-	     (setq header nil))		; $BG0$N$?$a(B
+	     ;; $BG0$N$?$a(B
+	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    ((string= status "200")
 	     (message (if diff
 			  "%s: getting file diff..."
@@ -472,7 +473,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 	    ((string= status "304")
 	     (setq header (navi2ch-net-add-state 'not-updated header)))
 	    (t
-	     (setq header nil))))	; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
+	     ;; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
+	     (setq header (navi2ch-net-add-state 'not-updated header)))))
     header))
 
 (defun navi2ch-net-get-length-from-header (header)
@@ -540,7 +542,7 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 		((string= status "304")
 		 (setq header (navi2ch-net-add-state 'not-updated header)))
 		(t
-		 (setq header nil)))
+		 (setq header (navi2ch-net-add-state 'not-updated header))))
 	  (if (not aborn-flag)
 	      header
 	    (message "$B$"$\!<$s(B!!!")
@@ -572,8 +574,8 @@ DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
 	    (coding-system-for-read 'binary))
 	(message (if diff
 		     "%s: getting file diff with read.cgi..."
-		   "%s: getting new file with read.cgi..."
-		   (current-message)))
+		   "%s: getting new file with read.cgi...")
+		 (current-message))
 	(setq header (navi2ch-net-get-header proc))
 	(setq cont (navi2ch-net-get-content proc))
 	(if (or (not cont)

@@ -1,5 +1,19 @@
 2002-10-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
+	* navi2ch-net.el (navi2ch-net-update-file): 更新できないときに必ず
+	'not-updated を header に含めるように。
+	(navi2ch-net-update-file-diff): 同上。
+	(navi2ch-net-update-file-with-readcgi): カッコの対応がとれてなかっ
+	たんで修正。
+	<http://pc.2ch.net/test/read.cgi/unix/1031231315/341>
+
+	* navi2ch-localfile.el (navi2ch-localfile-encode-html-tag-alist): 
+	"<" が "&gt;"、">" が "&lt;" になってたので修正。
+	<http://pc.2ch.net/test/read.cgi/unix/1031231315/337>
+	
+	
+2002-10-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
 	multibbs-module で差分取得をできるようにしてみる。
 	一応 bofore_multibbs_diff タグを付けた。
 	ちょいと ad-hoc な気もするけどまぁ OK でしょう。

@@ -95,8 +95,8 @@
 (defconst navi2ch-localfile-coding-system 'shift_jis-unix)
 
 (defvar navi2ch-localfile-encode-html-tag-alist
-  '(("<" . "&gt;")
-    (">" . "&lt;")
+  '((">" . "&gt;")
+    ("<" . "&lt;")
     ("\n" . "<br>")))
 
 (defvar navi2ch-localfile-subject-file-name "subject.txt")
