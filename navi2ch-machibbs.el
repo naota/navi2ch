@@ -44,7 +44,6 @@
     (url-to-article 	. navi2ch-machibbs-url-to-article)
     (send-message   	. navi2ch-machibbs-send-message)
     (send-success-p 	. navi2ch-machibbs-send-message-success-p)
-    (error-string   	. navi2ch-machibbs-navi2ch-net-get-content)
     (board-update	. navi2ch-machibbs-board-update)))
 
 (defvar navi2ch-machibbs-variable-alist

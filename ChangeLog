@@ -1,3 +1,9 @@
+2003-02-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-func-alist): 不要かつ存在
+	しない関数を使用することになっていた。
+	http://pc.2ch.net/test/read.cgi/unix/1039935998/814
+
 2003-02-14  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-mark-states): 新関数。
