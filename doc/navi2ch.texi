@@ -1870,26 +1870,6 @@ Navi2ch をずっと使ってると Emacs のメモリ使用量がとんでもないことにな
 @table @asis
 
 @item Q.
-○○板がサーバ移転で見られなくなったみたい。どうしたらいい?
-
-@item A.
-変数 @code{navi2ch-list-moved-board-alist} で新旧 URL を変換できるよ。
-
-@lisp
-(setq navi2ch-list-moved-board-alist
-      '(("http://pc.2ch.net/unix/" . "http://pc3.2ch.net/unix/")
-        ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
-@end lisp
-
-などとして、List モードで @kbd{C-u s}。
-
-キーの部分は板 URL と完全マッチなので、@file{~/.navi2ch/board.txt} を
-見てそれと同じように書いてね。
-
-Navi2ch 1.7.3 より古いバージョンを使ってる場合、この方法は使えないので
-次の質問を参照。
-
-@item Q.
 同じ 2ch タイプの他の掲示板も Navi2ch で読みたいんだけど。
 
 @item A.
@@ -1910,27 +1890,50 @@ fuga
 Boards File}.
 
 @item Q.
+突然とある板が更新されなくなったみたいなんだけど。
+
+@item A.
+２ちゃんねるで板の移転があったのかも。
+まずは
+運用情報板 (@uref{http://qb5.2ch.net/operate/}) の
+「新設板・板移動情報」スレや
+新・かちゅ〜しゃ板 (@uref{http://azlucky.s31.xrea.com/katjusha/}) で
+移転情報をチェックしよう。
+
+移転だったら、List モードで @kbd{s} してみよう。
+移転情報が板リスト (@code{bbstable}) に反映されていればこれで読めるはず。
+反映されてなかったら、反映されるまでの間は
+@kbd{C-c C-u} で新しい板の URL を入力して読んでね。
+
+いちいち URL を入れるのがめんどうなときは、
+Navi2ch 1.7.3 以降なら
+変数 @code{navi2ch-list-moved-board-alist} で新旧 URL を変換できるよ。
+
+@lisp
+(setq navi2ch-list-moved-board-alist
+      '(("http://pc.2ch.net/unix/" . "http://pc3.2ch.net/unix/")
+        ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
+@end lisp
+
+などとして、List モードで @kbd{C-u s}。
+キーの部分は板 URL と完全マッチなので、@file{~/.navi2ch/board.txt} を
+見てそれと同じように書いてね。
+
+Navi2ch 1.7.3 より古いバージョンを使ってる場合、この方法は使えないので
+@file{~/.navi2ch/etc.txt} を駆使してがんばれ。
+
+@item Q.
 違う板リスト (@code{bbstable}) を見るようにしたいんだけど。
 
 @item A.
 変数 @code{navi2ch-list-bbstable-url} の値を板リストの URL に設定しま
-す。例えば、@code{"http://www.2ch.net/newbbsmenu.html"} とすると本家の
-板メニューを指定できます。@xref{Customize}.
+す。@code{nil} に設定すると本家のものを使用します。xref{Customize}.
 
-@item Q.
-突然とある板が更新されなくなったみたいなんだけど。
-
-@item A.
-それは多分２ちゃんねる側の問題。板の移転があったのかも。
-移転情報は運用情報板 (@uref{http://qb3.2ch.net/operate/}) の
-「新設板・板移動情報」スレでチェック。
-@file{~/.navi2ch/etc.txt} を駆使するか、有志がメンテナンスしている
-最新の板一覧 (◆YaAzLuckyc さんの
-@uref{http://azlucky.s25.xrea.com/2chboard/bbsmenu.html}
-とか、
-@uref{http://azlucky.s25.xrea.com/}
-の【 他のボード一覧配布先 】にあるものとか) を
-@code{navi2ch-list-bbstable-url} に設定するといいかも。
+本家の他、有志がメンテナンスしている板リストが
+AzLucky さんの
+「２ちゃんねる閲覧ソフト用 ボード一覧」
+(@uref{http://azlucky.s25.xrea.com/})
+のページにいろいろあるよ。
 
 @end table
 
