@@ -110,7 +110,8 @@
 		  (file-name-nondirectory (file-name-sans-extension file)))))
 	 (sort (directory-files directory nil "\\.dat$" t)
 	       (lambda (x y)
-		 (> (string-to-number x) (string-to-number y)))))))
+		 (let ((r (navi2ch-compare-strings x y)))
+		   (and (numberp r) (> r 0))))))))
 
 (defun navi2ch-directory-find-directory (directory)
   (interactive "Ddirectory: ")

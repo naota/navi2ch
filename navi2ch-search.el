@@ -116,15 +116,16 @@
 (defun navi2ch-search-for-each-article (article-func board-list)
   (navi2ch-search-for-each-board
    (lambda (board)
-     (let ((default-directory (navi2ch-board-get-file-name board ""))
-	   alist)
-       (dolist (file (and (file-directory-p default-directory)
-			  (directory-files default-directory
-					   nil "[0-9]+\\.dat$")))
-	 (let ((result (funcall article-func board file)))
-	   (if result
-	       (push result alist))))
-       alist))
+     (let ((default-directory (navi2ch-board-get-file-name board "")))
+       (delq nil
+	     (mapcar (lambda (file)
+		       (funcall article-func board file))
+		     (and (file-directory-p default-directory)
+			  (sort (directory-files default-directory
+						 nil "[0-9]+\\.dat$")
+				(lambda (x y)
+				  (let ((r (navi2ch-compare-strings x y)))
+				    (and (numberp r) (< r 0))))))))))
    board-list))
 
 (defun navi2ch-search-board-subject-regexp (board-list regexp)

@@ -1109,5 +1109,16 @@ This function is a cutdown version of cl-seq's one."
       sexp
     (list 'quote sexp)))
 
+(defun navi2ch-compare-strings (x y)
+  "X と Y とを右寄せにして比較する。
+つまり、\"999\" < \"1000\" になる。
+X < Y の場合負の整数、X = Y の場合 t、X > Y の場合正の整数を返す。"
+  (unless (and (stringp x) (stringp y))
+    (signal 'wrong-type-argument '(x y)))
+  (let* ((l (max (length x) (length y)))
+	 (f (format "%%%ds" l)))
+    (compare-strings (format f x) 0 l
+		     (format f y) 0 l)))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
