@@ -679,7 +679,9 @@ ask なら明示的に移動する時以外なら質問する
 
 (defcustom navi2ch-article-link-regexp-alist
   '(("<\\(UR[IL]:\\)?\\([^:>]+\\)>" . nil)
-    ("<\\(UR[IL]:\\)?\\([a-z][-+.0-9a-z]*:[^>]*\\)>" . "\\2"))
+    ("<\\(UR[IL]:\\)?\\([a-z][-+.0-9a-z]*:[^>]*\\)>" . "\\2")
+    ("\\<h?t?tp:\\(//www.amazon.co.jp/exec/obidos/ASIN/[^/]+/\\)" .
+     "http:\\1"))
   "*各要素の car を正規表現とし、マッチしたテキストに cdr へのリンクを張る。
 置換先に使える特殊文字については `replace-match' 等を参照。
 cdr が nil の場合はリンクを貼らない。

@@ -1,3 +1,8 @@
+2004-04-30  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): amazon のア
+	フィリエイトを無視。
+
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-face.el (navi2ch-article-header-fusianasan-face):
