@@ -1,3 +1,12 @@
+2002-04-09  タカノ  <504@unix.2ch.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 
+	"m?" に navi2ch-bm-mark-by-query を設定。
+	(navi2ch-bm-mode-map): "mb" に navi2ch-bm-add-bookmark-mark-article を
+	設定。
+	(navi2ch-bm-add-bookmark-mark-article): 新関数。
+	(navi2ch-bm-mark-by-query): 新関数。
+
 2002-04-07  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-board.el (navi2ch-board-save-info): logo を save しない

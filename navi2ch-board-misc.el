@@ -60,6 +60,8 @@
     (define-key map "mi" 'navi2ch-bm-fetch-mark-article)
     (define-key map "me" 'navi2ch-bm-textize-mark-article)
     (define-key map "mm" 'navi2ch-bm-mark-marks)
+    (define-key map "m?" 'navi2ch-bm-mark-by-query)
+    (define-key map "mb" 'navi2ch-bm-add-bookmark-mark-article)
     (setq navi2ch-bm-mode-map map)))
 
 (defvar navi2ch-bm-mode-menu-spec
@@ -596,6 +598,12 @@ ARG が non-nil なら移動方向を逆にする。"
   (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
   (navi2ch-bm-exec-subr 'navi2ch-bm-add-global-bookmark bookmark-id))
    
+
+;; add marked ones to the board bookmark
+(defun navi2ch-bm-add-bookmark-mark-article ()
+  (interactive)
+  (navi2ch-bm-exec-subr 'navi2ch-board-add-bookmark))
+
 (defun navi2ch-bm-mark-region-subr (begin end mark)
   (save-excursion
     (save-restriction
@@ -630,6 +638,14 @@ ARG が non-nil なら移動方向を逆にする。"
         (when (looking-at rep)
           (navi2ch-bm-mark-subr (if arg " " "*")))
         (forward-line)))))
+
+;; mark by regexp query
+(defun navi2ch-bm-mark-by-query (query &optional arg)
+  (interactive "Mquery (regexp): ")
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward query nil t)
+      (navi2ch-bm-mark-subr (if arg " " "*")))))
 
 ;;; sort
 (defun navi2ch-bm-sort-subr (rev start-key-fun end-key-fun)
