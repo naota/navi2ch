@@ -1,3 +1,9 @@
+2004-08-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-article-url-regexp): "(" ")" を URL の
+	一部と見なさないように。
+	(navi2ch-article-link-regexp-alist): 同上。
+
 2004-08-05  mami  <mami@users.sourceforge.net>
 
 	* NEWS: 更新。
@@ -38,7 +44,7 @@
 
 2004-07-13  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p): 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p):
 	http://jbbs.livedoor.com/ に対応。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/259
 
