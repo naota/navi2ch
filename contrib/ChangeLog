@@ -1,3 +1,10 @@
+2003-12-21  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-spamfilter.el (navi2ch-spamf-additional-token-flag):
+	新変数。
+	(navi2ch-article-bayesian-tokenizer): 上記変数が non-nil の場合
+	レスの日時、番号等をトークンとして追加する。
+
 2003-11-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-spamfilter.el (navi2ch-article-bayesian-tokenizer): 現在

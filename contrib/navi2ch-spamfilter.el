@@ -77,6 +77,10 @@ navi2ch-article-message-filter-by-bayesian で自動登録する場合は 2 以上
 
 (defvar navi2ch-article-before-save-corpus-hook nil)
 
+(defvar navi2ch-spamf-additional-token-flag nil
+  "non-nil $Bの場合、レスの日時、番号等をトークンとして追加する。
+経験では、コーパスが大きくなる割に効果は薄いと思われる。")
+
 (dolist (map (list navi2ch-article-mode-map navi2ch-popup-article-mode-map))
   (define-key map "\C-c\C-g"
     'navi2ch-article-add-message-filter-by-bayesian-good)
@@ -112,14 +116,16 @@ navi2ch-article-message-filter-by-bayesian で自動登録する場合は 2 以上
   (nconc
    (funcall spamf-tokenize-string-function
 	    (cdr (assq 'data alist)))
-   (mapcar (lambda (str)
-	     (concat "date:" str))
-	   (split-string (cdr (assq 'date alist)) "[ $B　]+"))
+   (if navi2ch-spamf-additional-token-flag
+       (mapcar (lambda (str)
+		 (concat "date:" str))
+	       (split-string (cdr (assq 'date alist)) "[ 　]+")))
    (if (string-match "◆[^ ]+" (cdr (assq 'name alist)))
        (list (concat "trip:" (match-string 0 (cdr (assq 'name alist))))))
    (let ((number (or (cdr (assq 'number alist))
 		     (navi2ch-article-get-current-number))))
-     (when (numberp number)
+     (when (and navi2ch-spamf-additional-token-flag
+		(numberp number))
        (list (concat "num:"  (number-to-string number)))))
    (list
     (concat "mail:" (cdr (assq 'mail alist)))
