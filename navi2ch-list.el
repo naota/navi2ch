@@ -610,7 +610,8 @@ changed-list は '((board-id old-board new-board) ...) な alist。
   (save-match-data
     (when (string-match "http://\\([^/]+\\)/\\([^/]+\\)/" uri)
       (let ((host (match-string 1 uri)))
-	(string-match navi2ch-list-valid-host-regexp host)))))
+	(and (not (string-match navi2ch-list-invalid-host-regexp host))
+	     (string-match navi2ch-list-valid-host-regexp host))))))
 
 (defun navi2ch-list-mouse-select (e)
   (interactive "e")
