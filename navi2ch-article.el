@@ -1603,10 +1603,10 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 					   navi2ch-board-current-board))))
 	(let ((ret (navi2ch-article-through-ask interactive-flag num)))
 	  (cond ((eq ret 'quit)
-		 (goto-char (if (> num 0) (point-max) (point-min)))
+;;; 		 (goto-char (if (> num 0) (point-max) (point-min)))
 		 (navi2ch-article-exit))
 		(ret
-		 (goto-char (if (> num 0) (point-max) (point-min)))
+;;; 		 (goto-char (if (> num 0) (point-max) (point-min)))
 		 (let ((window (get-buffer-window navi2ch-board-buffer-name)))
 		   (if window
 		       (progn

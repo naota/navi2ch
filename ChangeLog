@@ -1,3 +1,8 @@
+2003-03-15  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-through-subr): N や P でスレ
+	を移動する際にポイントを動かさないように。
+
 2003-03-14  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-through-forward-line-function):
