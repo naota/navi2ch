@@ -1,3 +1,22 @@
+2003-11-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	JBBS@したらばの変更に対応。
+	http://jbbs.shitaraba.com/computer/bbs/read.cgi?BBS=351&KEY=1040452916&START=126&END=126&NOFIRST=TRUE
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message): DIR を渡す
+	ように。
+	(navi2ch-js-url-regexp): 新変数。
+	(navi2ch-js-get-writecgi-url): /bbs/write.cgi を使うように。
+	(navi2ch-js-get-dir): 新関数。
+
+2003-11-06  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-ifemacsce): EmacsCE かどうかの判断をコ
+	ンパイル時ではなく、実行時に行うように。emacs-major-version が同じ
+	なら、他の環境でバイトコンパイルした物が使えるようになる。
+	(navi2ch-line-beginning-position, navi2ch-line-end-position):
+	toplevel に移動。etags は ^(def で見てるようなので。
+
 2003-11-01  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file):

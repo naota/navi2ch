@@ -125,6 +125,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 		      (cons "MAIL" (or mail ""))
 		      (cons "MESSAGE" message)
 		      (cons "BBS" bbs)
+		      (cons "DIR" (navi2ch-js-get-dir board))
 		      (if subject
 			  (cons "SUBJECT" subject)
 			(cons "KEY" key))
@@ -216,11 +217,21 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-js-article-callback-diff ()
   (navi2ch-js-article-callback t))
 
+(defconst navi2ch-js-url-regexp
+  ;; prefix、カテゴリ、BBS番号
+  "\\`\\(.+\\)/\\([^/]+\\)/\\([^/]+\\)/\\'")
+
 (defun navi2ch-js-get-writecgi-url (board)
   "write.cgi の url を返す"
   (let ((uri (navi2ch-board-get-uri board)))
-    (string-match "\\(.+\\)/[^/]+/$" uri)
-    (format "%s/bbs/write.cgi" (match-string 1 uri))))
+    (and (string-match navi2ch-js-url-regexp uri)
+	 (format "%s/bbs/write.cgi" (match-string 1 uri)))))
+
+(defun navi2ch-js-get-dir (board)
+  "write.cgi に渡す DIR パラメータを返す。"
+  (let ((uri (navi2ch-board-get-uri board)))
+    (and (string-match navi2ch-js-url-regexp uri)
+	 (match-string 2 uri))))
 
 (defun navi2ch-js-board-update (board)
   (let ((url (navi2ch-board-get-url board))

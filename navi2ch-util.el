@@ -213,9 +213,9 @@ GNU Emacs's one, this macro is very useful."
 (defmacro navi2ch-ifemacsce (then &rest else)
   "If on EmacsCE, do THEN, else do ELSE.
 Expanded at compilation time."
-  (if (string-match "windowsce" system-configuration)
-      then
-    (cons 'progn else)))
+  `(if (string-match "windowsce" system-configuration)
+       ,then
+     (progn ,@else)))
 (put 'navi2ch-ifemacsce 'lisp-indent-function 1)
 
 (defmacro navi2ch-define-mouse-key (map num command)
@@ -1016,12 +1016,10 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
     (delete-directory lockname))
   (not (file-exists-p lockname)))
 
-(navi2ch-ifxemacs
-    (progn
-      (defalias 'navi2ch-line-beginning-position 'point-at-bol)
-      (defalias 'navi2ch-line-end-position 'point-at-eol))
-  (defalias 'navi2ch-line-beginning-position 'line-beginning-position)
-  (defalias 'navi2ch-line-end-position 'line-end-position))
+(defalias 'navi2ch-line-beginning-position
+  (navi2ch-ifxemacs 'point-at-bol 'line-beginning-position))
+(defalias 'navi2ch-line-end-position
+  (navi2ch-ifxemacs 'point-at-eol 'line-end-position))
 
 (defun navi2ch-count-lines-file (file)
   "$B$=$N%U%!%$%k$N9T?t$r?t$($k(B"
