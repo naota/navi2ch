@@ -233,7 +233,7 @@
 	  (set-text-properties prev (1- (point))
 			       (list 'mouse-face navi2ch-list-mouse-face
 				     'face 'navi2ch-list-category-face))
-	  (put-text-property prev (point) 'category (car pair))
+	  (put-text-property prev (point) 'genre (car pair))
 	  (when open
 	    (navi2ch-list-insert-board-names-subr (cdr (assq 'child alist))))
 	  (setq prev (point)))))))
@@ -270,7 +270,7 @@
 	  (end-of-line)
 	  (re-search-backward "^\\[[+-]\\]" nil t))
     (goto-char (match-beginning 0))
-    (let* ((category (get-text-property (point) 'category))
+    (let* ((category (get-text-property (point) 'genre))
 	   (props (text-properties-at (point)))
 	   (pair (assoc category navi2ch-list-category-list))
 	   (alist (cdr pair))
@@ -295,7 +295,7 @@
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'board))
 	   (navi2ch-list-select-board prop force))
-	  ((get-text-property (point) 'category)
+	  ((get-text-property (point) 'genre)
 	   (navi2ch-list-toggle-open))
 	  (t
 	   (message "can't select this line!")))))
@@ -676,7 +676,7 @@ changed-list は '((board-id old-board new-board) ...) な alist。
   (save-excursion
     (end-of-line)
     (when (re-search-backward "^\\[[+-]\\]" nil t)
-      (let ((category (get-text-property (point) 'category)))
+      (let ((category (get-text-property (point) 'genre)))
 	(cdr (assq 'child (cdr
 			   (assoc category
 				  navi2ch-list-category-list))))))))
