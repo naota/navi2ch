@@ -77,8 +77,12 @@
   navi2ch-message-paragraph-separate
   "*`navi2ch-message-mode' で使用される `paragraph-start'。")
 
-(defvar navi2ch-message-sendlog-board-id "sendlog"
-  "*投稿履歴を保存する板のID")
+(defvar navi2ch-message-sendlog-board
+  `((name . "送信控え")
+    (type . board)
+    (id . "sendlog")
+    (bbstype . localfile)
+    (uri . ,(concat "x-localbbs://" (navi2ch-expand-file-name "sendlog/")))))
 
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
@@ -456,16 +460,6 @@
   ;; nil を返すと、履歴は保存されません。
   navi2ch-message-sendlog-subject)
 
-(defun navi2ch-message-sendlog-board ()
-  (let ((boards (cdr (assq 'child (navi2ch-list-get-etc-category)))))
-    (catch 'loop
-      (while boards
-	(when (string= (cdr (assq 'id (car boards)))
-		       navi2ch-message-sendlog-board-id)
-	  (throw 'loop nil))
-	(setq boards (cdr boards))))
-    (car boards)))
-
 (defun navi2ch-message-sendlog-article (board subject)
   (when board
     (let* ((file (navi2ch-board-get-file-name board))
@@ -478,10 +472,11 @@
       (car sbjs))))
 
 (defun navi2ch-message-add-sendlog (from mail message subject board article)
-  (let* ((url (navi2ch-article-to-url board article))
+  (let* ((navi2ch-localfile-default-file-modes ?\700)
+	 (url (navi2ch-article-to-url board article))
 	 (sbj (or subject (cdr (assq 'subject article))))
 	 (lsubject (navi2ch-message-sendlog-subject board article))
-	 (lboard (navi2ch-message-sendlog-board))
+	 (lboard navi2ch-message-sendlog-board)
 	 (larticle (navi2ch-message-sendlog-article lboard lsubject)))
     (when (and lsubject lboard)
       (setq message (format "Subject: %s\nURL: %s\n\n%s" sbj url message))

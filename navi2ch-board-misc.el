@@ -170,8 +170,7 @@
 	(navi2ch-put-alist type open-func
 			   navi2ch-bm-board-type-alist))
   (when board
-    (setq navi2ch-list-navi2ch-category-alist
-	  (cons board navi2ch-list-navi2ch-category-alist))))
+    (add-to-list 'navi2ch-list-navi2ch-category-alist board)))
 
 (defun navi2ch-bm-select-board (board &optional force)
   (let ((buf (get-buffer-create navi2ch-board-buffer-name))

@@ -824,11 +824,25 @@ SPC$B!"(BC-l$B!"(BC-g$B!"(BC-v$B$O%j%9%HI=<($N:]$K;HMQ$5$l$k$N$G%-!<$K$O;
   :group 'navi2ch-message)
 
 (defcustom navi2ch-message-save-sendlog nil
-  "*non-nil $B$J$i!"Aw?.$7$?%l%9$r(Blocalbbs$B$KJ]B8$9$k!#(B"
+  "*non-nil $B$J$i!"Aw?.$7$?%l%9$N95$($r$H$k!#(B
+Emacs $B$N%+%9%?%^%$%:%$%s%?!<%U%'%$%9$r;H$C$F$3$NCM$r(B non-nil $B$K$7$?>l9g!"(B
+Navi2ch$B%+%F%4%j$K!VAw?.95$(!WHD$,<+F0E*$KDI2C$5$l$^$9!#(B
+`navi2ch-init-file'$B$K(B
+  (setq navi2ch-message-save-sendlog t)
+$B$H=q$$$?>l9g$O!"$5$i$K(B
+  (add-to-list 'navi2ch-list-navi2ch-category-alist
+               navi2ch-message-sendlog-board)
+$B$rDI2C$7!"(BNavi2ch$B%+%F%4%j$K!VAw?.95$(!WHD$rDI2C$7$F2<$5$$!#(B"
   :type 'boolean
-  :group 'navi2ch-message)
+  :group 'navi2ch-message
+  :set (lambda (symbol value)
+	 (when value
+	   (eval-after-load "navi2ch"
+	     '(add-to-list 'navi2ch-list-navi2ch-category-alist
+			   navi2ch-message-sendlog-board)))
+	 (set-default symbol value)))
 
-(defcustom navi2ch-message-sendlog-subject "$BAw?.MzNr(B"
+(defcustom navi2ch-message-sendlog-subject "$BAw?.95$((B"
   "*$BAw?.$7$?%l%9$rJ]B8$9$k%9%l$N%?%$%H%k!#(B"
   :type 'string
   :group 'navi2ch-message)

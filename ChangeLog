@@ -1,3 +1,16 @@
+2002-10-24  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-regist-board): Navi2chカテゴリに
+	二重登録しないように。
+
+	* navi2ch-message.el (navi2ch-message-sendlog-board-id): 削除。
+	(navi2ch-message-sendlog-board): 関数を同名の変数で置換。
+	(navi2ch-message-add-sendlog): navi2ch-localfile-default-file-modes
+	を 700 に。
+
+	* navi2ch-vars.el (navi2ch-message-save-sendlog): Docstring補足。
+	(navi2ch-message-sendlog-subject): デフォルト値を「送信控え」に。
+
 2002-10-22  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-localfile.el (navi2ch-localfile-update-file): mtimeを使って
