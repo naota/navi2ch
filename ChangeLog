@@ -1,5 +1,10 @@
 2003-03-01  extra  <ekisutora@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-message-filter-by-subject):
+	= を eq に変更。
+
+2003-03-01  extra  <ekisutora@users.sourceforge.net>
+
 	* navi2ch-article.el (navi2ch-article-message-filter-by-subject): 
 	navi2ch-article-current-article にスレタイが入っていない場合を
 	考えてなかったバグを修正。

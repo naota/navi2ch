@@ -767,7 +767,7 @@ START, END, NOFIRST で範囲を指定する"
     (if slot
 	(cdr slot)
       (let ((subject (or (cdr (assq 'subject navi2ch-article-current-article))
-			 (and (= (cdr (assq 'number alist)) 1)
+			 (and (eq (cdr (assq 'number alist)) 1)
 			      (cdr (assq 'subject alist))))))
 	(when subject
 	  (let ((result (when navi2ch-article-message-filter-by-subject-alist
