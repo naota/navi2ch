@@ -482,11 +482,11 @@ state はあぼーんされてれば aborn というシンボル。"
 		 (cond ((and (> size 0)
 			     (not (= (aref cont 0) ?\n)))
 			(setq aborn-flag t)) ; \n で始まってない場合はあぼーん
-		       ((string= cont "\n")
-			(message "%snot updated" (current-message))
-			(setq header (cons '("Not-Updated" . "yes")
-					   header))
-			(setq ret (list header nil)))
+;;; 		       ((string= cont "\n")
+;;; 			(message "%snot updated" (current-message))
+;;; 			(setq header (cons '("Not-Updated" . "yes")
+;;; 					   header))
+;;; 			(setq ret (list header nil)))
 		       (t
 			(with-temp-file file
 			  (insert-file-contents file nil nil size)

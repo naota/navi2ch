@@ -1,3 +1,11 @@
+2002-06-28  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-update-file-diff): ちゃんと
+	Last-Modified -> If-Modified-Since が動くようになったので、更新内
+	容が \n のみの場合分けをコメントアウト。昨日の navi2ch-article.el
+	の変更と合わせ、これで m a m i すればファイルの 'time 属性がちゃん
+	と保存されるはず。
+
 2002-06-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-directory.el: 新ファイル。ディレクトリにあるスレを全て表
