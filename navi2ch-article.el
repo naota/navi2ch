@@ -2050,18 +2050,20 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	    (setq subject
 		  (cdr (assq 'subject
 			     (navi2ch-article-parse-message (cdar msg-list))))))))
-;    (when (not subject)
-;      (if (equal (cdr (assq 'name board))
-;		 (cdr (assq 'name navi2ch-board-current-board)))
-;	  (setq subject-list navi2ch-board-subject-list)
-;	(setq subject-list (navi2ch-board-get-subject-list
-;			    (navi2ch-board-get-file-name board))))
-;      (while (and (not subject)
-;		  subject-list)
-;	(if (equal artid
-;		   (cdr (assq 'artid (car subject-list))))
-;	    (setq subject (cdr (assq 'subject (car subject-list)))))
-;	(pop subject-list)))
+    (when (not subject)
+      (let ((subject-list
+	     (if (equal (cdr (assq 'name board))
+			(cdr (assq 'name navi2ch-board-current-board)))
+		 navi2ch-board-subject-list
+;;;	       (navi2ch-board-get-subject-list
+;;;		(navi2ch-board-get-file-name board))
+	       )))
+	(setq subject
+	      (catch 'subject
+		(dolist (s subject-list)
+		  (if (equal (cdr (assq 'artid article))
+			     (cdr (assq 'artid s)))
+		      (throw 'subject (cdr (assq 'subject s)))))))))
     (when (not subject)
       (setq subject "navi2ch: ???"))	; 変数にして navi2ch-vars.el に入れるべき?
     subject))
