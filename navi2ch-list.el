@@ -506,7 +506,9 @@ changed-list は '((board-id old-board new-board) ...) な alist。
 		       (not navi2ch-list-sync-update-on-boot)
 		       (file-exists-p file)))
 	(setq updated (navi2ch-net-update-file
-		       navi2ch-list-bbstable-url file nil
+		       (or navi2ch-list-bbstable-url
+			   "http://www.ff.iij4u.or.jp/~ch2/bbsmenu.html")
+		       file nil
 		       'navi2ch-list-make-board-txt)))
       (when t				;(or first updated)
 	(erase-buffer)

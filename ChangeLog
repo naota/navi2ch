@@ -1,3 +1,9 @@
+2003-05-09  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-list.el (navi2ch-list-sync): navi2ch-list-bbstable-url
+	が nil のときは公式 bbsmenu を取りに行くように。
+	update が off のときにエラーとなっていた。
+
 2003-04-28  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-save-view): 本体処理後の
