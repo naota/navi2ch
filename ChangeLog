@@ -1,6 +1,17 @@
 2002-01-27  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el
+	(navi2ch-bookmark-create-bookmark): (navi2ch-bookmark-save-info) を
+	追加。
+	(navi2ch-bookmark-delete-bookmark): 同上。
+	(navi2ch-bookmark-change-bookmark): 同上。
+	(navi2ch-bookmark-add-subr): 同上。
+	(navi2ch-bookmark-delete-subr): 同上。
+	(navi2ch-bookmark-copy): 同上。
+
+2002-01-27  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-bookmark.el
 	(navi2ch-bookmark-delete-subr):
 	新関数。中身は旧 navi2ch-bookmark-delete ほぼそのまま。
 	(navi2ch-bookmark-delete):

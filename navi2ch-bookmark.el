@@ -38,7 +38,8 @@
     ;; (define-key map "q" 'navi2ch-bookmark-exit)
     (define-key map "i" 'navi2ch-bookmark-fetch-article)
     (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
-    (define-key map "d" 'navi2ch-bookmark-delete)
+    (define-key map "d" 'navi2ch-bookmark-cut)
+    ;(define-key map "d" 'navi2ch-bookmark-delete)
     (define-key map "\C-k" 'navi2ch-bookmark-cut)
     (define-key map "\C-y" 'navi2ch-bookmark-yank)
     (define-key map "o" 'navi2ch-bookmark-move)
@@ -133,7 +134,8 @@
 	    navi2ch-bookmark-list)
       (save-excursion
 	(set-buffer navi2ch-list-buffer-name)
-	(navi2ch-list-sync-global-bookmark-category)))))
+	(navi2ch-list-sync-global-bookmark-category))
+      (navi2ch-bookmark-save-info))))
 
 (defun navi2ch-bookmark-delete-bookmark (bookmark-id)
   (let ((bookmark (assoc bookmark-id navi2ch-bookmark-list)))
@@ -142,7 +144,8 @@
       (setq navi2ch-bookmark-list (delete bookmark navi2ch-bookmark-list))
       (save-excursion
 	(set-buffer navi2ch-list-buffer-name)
-	(navi2ch-list-sync-global-bookmark-category)))))
+	(navi2ch-list-sync-global-bookmark-category))
+      (navi2ch-bookmark-save-info))))
   
 (defun navi2ch-bookmark-change-bookmark (bookmark-id)
   (let* ((bookmark (assoc bookmark-id navi2ch-bookmark-list))
@@ -152,7 +155,8 @@
     (setcar (cdr bookmark) name)
     (save-excursion
       (set-buffer navi2ch-list-buffer-name)
-      (navi2ch-list-sync-global-bookmark-category))))
+      (navi2ch-list-sync-global-bookmark-category))
+    (navi2ch-bookmark-save-info)))
     
 (defun navi2ch-bookmark-add-subr (bookmark-id board article)
   "BOARD と ARTICLE で表される スレッドを追加"
@@ -167,6 +171,7 @@
 		   (cons 'board board)
 		   (cons 'article article))
 	     (cddr bookmark))))
+  (navi2ch-bookmark-save-info)
   (message "Add current article to global bookmark."))
 
 (defun navi2ch-bookmark-add (bookmark-id board article)
@@ -186,7 +191,7 @@
       (setq i (1+ i)))))
 
 (defun navi2ch-bookmark-delete-subr ()
-  "その行を bookmark から削除する"
+  "その行を bookmark から削除する。(確認なし)"
   (save-excursion
     (beginning-of-line)
     (let ((item (navi2ch-bookmark-get-property (point)))
@@ -199,11 +204,12 @@
 		    (delq pair (cddr bookmark)))
 	    (delete-region (point)
 			   (save-excursion (forward-line) (point)))
-	    (navi2ch-bm-renumber))
+	    (navi2ch-bm-renumber)
+	    (navi2ch-bookmark-save-info))
 	(message "Can't select this line!")))))
 
 (defun navi2ch-bookmark-delete ()
-  "その行を bookmark から削除する"
+  "その行を bookmark から削除する。"
   (interactive)
   (if (y-or-n-p "Delete this line?")
       (navi2ch-bookmark-delete-subr)))
@@ -215,7 +221,8 @@
     (let ((item (navi2ch-bookmark-get-property (point))))
       (navi2ch-bookmark-add-subr bookmark-id
 				 (navi2ch-bookmark-get-board item)
-				 (navi2ch-bookmark-get-article item)))))
+				 (navi2ch-bookmark-get-article item))
+      (navi2ch-bookmark-save-info))))
 
 (defun navi2ch-bookmark-move (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
