@@ -1,6 +1,11 @@
 2002-03-24    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-enable-readcgi): デフォルトを nil に。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/310
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 
+	navi2ch-article-base64-decode-message を M-b から M-d に変更。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/331
 
 2002-03-24    mami  <mami@users.sourceforge.net>
 	SPID Cookie に対応。
