@@ -1,3 +1,9 @@
+2002-07-24  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Compile): ./configure の --help オプションについて
+	追記。
+	(FAQ): 板によってはスレ立てられないかも、を追記。
+
 2002-07-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch.texi (Message Mode): C-c C-o について追記。

@@ -199,11 +199,14 @@ Navi2ch Project Summary Page
 お終い@dots{} だけじゃあれなんで一応重要な configure のオプションを。
 
 @table @option
+@item --help
+configure のオプションを一覧表示。
+
 @item --with-emacs
-Emacs の種類を指定
+Emacs の種類を指定。
 
 @item --with-xemacs
-XEmacs の種類を指定
+XEmacs の種類を指定。
 
 @item --with-lispdir
 Navi2ch をインストールするディレクトリを指定。
@@ -1480,7 +1483,8 @@ Emacs の起動と同時に Navi2ch を起動したいんだけど。
 スレ立てたいんだけど。
 
 @item A.
-Board モードで @kbd{w} で立てれば?
+Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
+そのときはブラウザで立ててください。スマソ。
 
 @item Q.
 複数のスレを巡回したいんだけど。
