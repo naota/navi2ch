@@ -2,6 +2,10 @@
 
 	* navi2ch-pizaunix.el: 新ファイル。
 
+	* Makefile.am (EXTRA_DIST): 上記を追加。
+
+	* README: 同上。
+
 2003-01-21  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* izonmoji-mode.el (toplevel): Wanderlust の設定例を追加

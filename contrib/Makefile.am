@@ -1,5 +1,5 @@
 EXTRA_DIST = gikope.el izonmoji-mode.el navi2ch-logo.el \
-	navi2ch-migemo.el navi2ch-track-mouse.el
+	navi2ch-migemo.el navi2ch-pizaunix.el navi2ch-track-mouse.el
 
 all:
 

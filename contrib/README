@@ -24,5 +24,9 @@ Copyright (C) 2000-2002 Navi2ch Project
   Emacs20 では Mule-UCS の jisx0213.el が必要。
   XEmacs の場合は Commentary にある設定をしてあげてね。
   
+* navi2ch-pizaunix.el
+  http://piza.2ch.net/log/unix/0008251/ の
+  Unix 板過去ログ倉庫を見るための multibbs module です。
+
 
 $Id$
