@@ -46,10 +46,7 @@
     (define-key map "j" 'navi2ch-article-few-scroll-up)
     (define-key map "k" 'navi2ch-article-few-scroll-down)
     (define-key map " " 'navi2ch-article-scroll-up)
-    (define-key map [del] 'navi2ch-article-scroll-down)
-    (define-key map [delete] 'navi2ch-article-scroll-down)
-    (define-key map [backspace] 'navi2ch-article-scroll-down)
-    (define-key map "\177" 'navi2ch-article-scroll-down)
+    (define-key map "\d" 'navi2ch-article-scroll-down)
     (define-key map "w" 'navi2ch-article-write-message)
     (define-key map "W" 'navi2ch-article-write-sage-message)
     (define-key map "\r" 'navi2ch-article-select-current-link)
@@ -1004,6 +1001,8 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
       (navi2ch-article-goto-number number t))
     (navi2ch-history-add navi2ch-article-current-board
 			 navi2ch-article-current-article)
+    (navi2ch-bm-update-article navi2ch-article-current-board
+			       navi2ch-article-current-article)
     list))
 
 (defun navi2ch-article-view-article-from-file (file)
@@ -1065,6 +1064,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (run-hooks 'navi2ch-article-mode-hook))
 
 (defun navi2ch-article-kill-buffer-hook ()
+  (navi2ch-bm-update-article navi2ch-article-current-board
+			     navi2ch-article-current-article
+			     'cache)
   (navi2ch-article-save-info))
 
 (defun navi2ch-article-exit (&optional kill)
@@ -3318,10 +3320,7 @@ PREFIX が与えられた場合は、
 	(article navi2ch-article-current-article))
     (when (and board article)
       (navi2ch-article-exit)
-      (navi2ch-bm-remove-article-subr board article)
-      (when (eq (navi2ch-get-major-mode navi2ch-board-buffer-name)
-		'navi2ch-board-mode)
-	(navi2ch-board-update-buffer navi2ch-board-buffer-name)))))
+      (navi2ch-bm-remove-article-subr board article))))
 
 (defun navi2ch-article-orphan-p (board article)
   "BOARD と ARTICLE で指定されるスレがオルファンな場合、non-nil を返す。"

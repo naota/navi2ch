@@ -42,8 +42,7 @@
     (define-key map "." 'navi2ch-bm-display-article)
     (define-key map "i" 'navi2ch-bm-fetch-article)
     (define-key map "e" 'navi2ch-bm-textize-article)
-    (define-key map [del] 'navi2ch-bm-select-article-or-scroll-down)
-    (define-key map [backspace] 'navi2ch-bm-select-article-or-scroll-down)
+    (define-key map "\d" 'navi2ch-bm-select-article-or-scroll-down)
     (define-key map "n" 'navi2ch-bm-next-line)
     (define-key map "p" 'navi2ch-bm-previous-line)
     (define-key map "U" 'navi2ch-bm-show-url)
@@ -205,26 +204,25 @@
 					  (assq state
 						navi2ch-bm-state-alist))))
 
+(defsubst navi2ch-bm-get-state-from-article (board article)
+  (cond ((navi2ch-board-from-file-p board)
+	 (cond ((get-buffer (navi2ch-article-get-buffer-name
+			     board article))
+		'view)
+	       ((file-exists-p (navi2ch-article-get-file-name board article))
+		'cache)
+	       (t nil)))
+	((navi2ch-bm-fetched-article-p board article)
+	 'update)
+	(t
+	 (navi2ch-article-check-cached board article))))
+
 (defsubst navi2ch-bm-insert-subject (item number subject other
 					  &optional updated)
   (let* ((article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item))
 	 (point (point))
-	 (state (cond ((navi2ch-board-from-file-p board)
-					; navi2ch-article-check-cached $B$G=hM}$9$Y$-$+!#(B
-		       (cond ((get-buffer (navi2ch-article-get-buffer-name
-					   board article))
-			      'view)
-			     ((file-exists-p
-			       (navi2ch-article-get-file-name
-				board article))
-			      'cache)
-			     (t
-			      nil)))
-		      ((navi2ch-bm-fetched-article-p board article)
-		       'update)
-		      (t
-		       (navi2ch-article-check-cached board article))))
+	 (state (navi2ch-bm-get-state-from-article board article))
 	 string)
     (unless subject (setq subject navi2ch-bm-empty-subject))
     (setq string (format (concat "%" (number-to-string navi2ch-bm-number-width)
@@ -888,6 +886,34 @@ ARG $B$,(B non-nil $B$J$i0\F0J}8~$r5U$K$9$k!#(B"
   (setq navi2ch-bm-fetched-article-list
         (navi2ch-load-info navi2ch-bm-fetched-info-file)))
 
+(defun navi2ch-bm-update-article (board article &optional state updated)
+  "$BHD%P%C%U%!$N$&$A!"(BBOARD $B$H(B ARTICLE $B$K%^%C%A$9$k9T$r99?7$9$k!#(B"
+  (let ((buffer (get-buffer navi2ch-board-buffer-name)))
+    (when buffer
+      (with-current-buffer buffer
+	(let ((buffer-read-only nil))
+	  (save-excursion
+	    (goto-char (point-min))
+	    (while (not (eobp))
+	      (let* ((item (navi2ch-bm-get-property-internal (point)))
+		     (item-article (navi2ch-bm-get-article-internal item))
+		     (item-board (navi2ch-bm-get-board-internal item)))
+		(when (and (equal (cdr (assq 'id board))
+				  (cdr (assq 'id item-board)))
+			   (equal (cdr (assq 'artid article))
+				  (cdr (assq 'artid item-article))))
+		  (let ((state (or state
+				   (navi2ch-bm-get-state-from-article
+				    board article)))
+			(updated (or updated
+				     (get-text-property (point)
+							'updated))))
+		    (navi2ch-bm-insert-state item state updated)
+		    (navi2ch-bm-set-property (navi2ch-line-beginning-position)
+					     (navi2ch-line-end-position)
+					     item state updated))))
+	      (forward-line))))))))
+
 (defun navi2ch-bm-remove-article-subr (board articles)
   "BOARD $B$H(B ARTICLES $B$G;XDj$5$l$k%9%l$N>pJs$r>C$9!#(B
 ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>l9g$O;XDj$5(B
@@ -916,7 +942,8 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 	    (error nil)))
 	(navi2ch-bm-remove-fetched-article board article)
 	(while (setq elt (assoc artid summary)) ; $B%/%I$$(B?
-	  (setq summary (delq elt summary)))))
+	  (setq summary (delq elt summary))))
+      (navi2ch-bm-update-article board article))
     (navi2ch-article-save-article-summary board summary)))
 
 (defun navi2ch-bm-remove-article ()
@@ -925,8 +952,7 @@ ARTILCES $B$,(B alist $B$N>l9g$O$=$N%9%l$N$_$r!"(Balist $B$N(B list $B$N>
 	 (article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item)))
     (when (and board article)
-      (navi2ch-bm-remove-article-subr board article)
-      (navi2ch-bm-insert-state item nil nil))))
+      (navi2ch-bm-remove-article-subr board article))))
 
 (defun navi2ch-bm-remove-mark-article ()
   (interactive)

@@ -1,3 +1,33 @@
+2004-04-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-global-view-map):
+	[del] [delete] [backspace] で "\d" が入力されるように。
+	* (上記の子 map): scrolldown 系のバインドは "\d" のみに。
+
+	* navi2ch-board-misc.el (navi2ch-bm-get-state-from-article): 新関数。
+	(navi2ch-bm-insert-subject): 上記関数を使用。
+	(navi2ch-bm-update-article): 新関数。
+	(navi2ch-bm-remove-article-subr): 上記関数を使用。
+	(navi2ch-bm-remove-article): 不要な更新を削除。
+
+	* navi2ch-article.el (navi2ch-article-view-article):
+	navi2ch-bm-update-article を使用。
+	(navi2ch-article-kill-buffer-hook): 同上。
+	(navi2ch-article-remove-article): 不要な更新を削除。
+
+	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): key は整数な
+	ので assq を使用。
+	(navi2ch-update-html-tag-regexp): 新関数。
+	(navi2ch-add-replace-html-tag-regexp): 上記関数を使うように。
+	(navi2ch-add-replace-html-tag): 同上。
+	regexp-opt のバグに由来する work around を削除。
+
+	* navi2ch-net.el (navi2ch-net-ignore-errors): make-symbol したシン
+	ボルを使用。ちょっと書き直し。
+	(navi2ch-net-url-unreserved-chars): 準拠仕様を RFC 2396 に。
+	(navi2ch-net-url-hexify-string): ちょっと書き直し。
+	(navi2ch-net-get-param-string): 「=」の左辺もエスケープ。
+
 2004-04-05  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-re-search-forward-regexp-alist): 再マッ

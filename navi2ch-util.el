@@ -909,32 +909,24 @@ base64デコードすべき内容がない場合はエラーになる。"
     (vconcat (mapcar 'navi2ch-strip-properties obj)))
    (t obj)))
 
-(defun navi2ch-add-replace-html-tag (tag value)
-  "TAG を表示する際に VALUE で置き換える。
-ののたんのAAを表示するなら ~/.navi2ch/init.el に
-\(navi2ch-add-replace-html-tag (navi2ch-string-as-multibyte \"\\372D\")
-                              \"ｖ\")
-と書く。"
-  ;; ののたんの口を navi2ch-replace-html-tag-alist に入れると
-  ;; regexp-opt が無限再帰になっちゃうのれす。
-  (add-to-list 'navi2ch-replace-html-tag-regexp-alist
-	       (cons (regexp-quote tag) value))
+(defun navi2ch-update-html-tag-regexp ()
   (setq navi2ch-replace-html-tag-regexp
 	(concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
 		"\\|"
 		(mapconcat 'car
 			   navi2ch-replace-html-tag-regexp-alist "\\|"))))
 
-(defun navi2ch-add-replace-html-tag-regexp (tag value)
-  "TAG を表示する際に VALUE で置き換える。
-TAG は正規表現。"
-  (add-to-list 'navi2ch-replace-html-tag-regexp-alist
+(defun navi2ch-add-replace-html-tag (tag value)
+  "TAG を表示する際に VALUE で置き換える。"
+  (add-to-list 'navi2ch-replace-html-tag-alist
 	       (cons tag value))
-  (setq navi2ch-replace-html-tag-regexp
-	(concat (regexp-opt (mapcar 'car navi2ch-replace-html-tag-alist))
-		"\\|"
-		(mapconcat 'car
-			   navi2ch-replace-html-tag-regexp-alist "\\|"))))
+  (navi2ch-update-html-tag-regexp))
+
+(defun navi2ch-add-replace-html-tag-regexp (regexp value)
+  "REGEXP にマッチする tag を表示する際に VALUE で置き換える。"
+  (add-to-list 'navi2ch-replace-html-tag-regexp-alist
+	       (cons regexp value))
+  (navi2ch-update-html-tag-regexp))
 
 (defun navi2ch-filename-to-url (filename)
   (concat "file://" (expand-file-name filename)))
@@ -1121,7 +1113,7 @@ This function is a cutdown version of cl-seq's one."
   (apply #'string= (navi2ch-right-align-strings s1 s2)))
 
 (defsubst navi2ch-regexp-alist-to-number-alist (regexp-alist)
-  (if (numberp (caar regexp-alist))
+  (if (integerp (caar regexp-alist))
       regexp-alist
     (let ((n 1))
       (mapcar (lambda (elt)
@@ -1142,10 +1134,9 @@ back reference は有効に動作しない。
 	 (number-list (mapcar #'car number-alist))
 	 (combined-regexp (mapconcat #'cadr number-alist "\\|")))
     (when (funcall match-function combined-regexp)
-      (catch 'result
-	(dolist (n number-list)
-	  (when (match-beginning n)
-	    (throw 'result (nth 2 (assoc n number-alist)))))))))
+      (dolist (n number-list)
+	(when (match-beginning n)
+	  (return (nth 2 (assq n number-alist))))))))
 
 (defun navi2ch-re-search-forward-regexp-alist
   (regexp-alist &optional bound noerror count)

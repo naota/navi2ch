@@ -59,23 +59,24 @@
 (defmacro navi2ch-net-ignore-errors (&rest body)
   "BODY を評価し、その値を返す。
 BODY の評価中にエラーが起こると nil を返す。"
-  `(condition-case err
-       ,(cons 'progn body)
-     (error
-      (condition-case nil
-	  (navi2ch-net-cleanup-process)
-	(error nil))
-      (ding)
-      (if err
-	  (message "Error: %s" (error-message-string err))
-	(message "Error"))
-      (sleep-for 1)
-      nil)
-     (quit
-      (condition-case nil
-	  (navi2ch-net-cleanup-process)
-	(error nil))
-      (signal (car err) (cdr err)))))
+  (let ((done (make-symbol "--done-temp--"))
+	(err (make-symbol "--err-temp--")))
+    `(let ((,done nil))
+       (unwind-protect
+	   (condition-case ,err
+	       (prog1
+		   ,(cons 'progn body)
+		 (setq ,done t))
+	     (error
+	      (ding)
+	      (if ,err
+		  (message "Error: %s" (error-message-string ,err))
+		(message "Error"))
+	      (sleep-for 1)
+	      nil))
+	 (unless ,done
+	   (ignore-errors
+	     (navi2ch-net-cleanup-process)))))))
 
 (defun navi2ch-net-cleanup ()
   (let (buf)
@@ -678,37 +679,35 @@ DIFF が non-nil ならば差分を取得する。
 	   (setq header (navi2ch-net-add-state 'error header))))
     header))
 
+;; <http://www.ietf.org/rfc/rfc2396.txt>
+;; 2.3. Unreserved Characters
+;; unreserved  = alphanum | mark
+;; mark        = "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
+
 ;; from Emacs/W3
 (defconst navi2ch-net-url-unreserved-chars
   '(
     ?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o ?p ?q ?r ?s ?t ?u ?v ?w ?x ?y ?z
     ?A ?B ?C ?D ?E ?F ?G ?H ?I ?J ?K ?L ?M ?N ?O ?P ?Q ?R ?S ?T ?U ?V ?W ?X ?Y ?Z
     ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9
-    ?$ ?- ?_ ?. ?! ?~ ?* ?' ?\( ?\) ?,)
+    ?- ?_ ?. ?! ?~ ?* ?' ?\( ?\))
   "A list of characters that are _NOT_ reserve in the URL spec.
-This is taken from draft-fielding-url-syntax-02.txt - check your local
-internet drafts directory for a copy.")
+This is taken from RFC 2396.")
 
 ;; from Emacs/W3
 (defun navi2ch-net-url-hexify-string (str)
   "Escape characters in a string"
-  (mapconcat
-   (function
-    (lambda (char)
-      (if (not (memq char navi2ch-net-url-unreserved-chars))
-	  (if (< char 16)
-	      (upcase (format "%%0%x" char))
-	    (upcase (format "%%%x" char)))
-	(char-to-string char))))
-   (encode-coding-string str navi2ch-coding-system) ""))
+  (mapconcat (lambda (char)
+	       (if (not (memq char navi2ch-net-url-unreserved-chars))
+		   (format "%%%02X" char)
+		 (char-to-string char)))
+	     (encode-coding-string str navi2ch-coding-system) ""))
 
 (defun navi2ch-net-get-param-string (param-alist)
-  (mapconcat
-   (function
-    (lambda (x)
-      (concat (car x) "=" (navi2ch-net-url-hexify-string (cdr x)))))
-   param-alist
-   "&"))
+  (mapconcat (lambda (x)
+	       (concat (navi2ch-net-url-hexify-string (car x)) "="
+		       (navi2ch-net-url-hexify-string (cdr x))))
+	     param-alist "&"))
 
 (defun navi2ch-net-send-message-success-p (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)
