@@ -1,10 +1,22 @@
 2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el: Emacs で編集する時 syntax-table がくさるので、
+	文字列中の行頭の '(' を '\(' にした。
+	(navi2ch-article-auto-expunge): 新変数。(今のところデフォルトは nil)
+	(navi2ch-message-user-name): デフォルトを 20 に変更。
+	もっと多くてもいいかな。
+
 	* navi2ch-article.el: コンパイルできなくなってたので provide ->
 	require の位置を変更。
 	(navi2ch-article-through-ask): FR#502627
 	no-ask が no-nil の時も navi2ch-article-enable-through を返してい
 	たのを修正。
+	(navi2ch-article-expunge-buffers): バッファの数を 0 個にできるよう
+	にした。
+	(navi2ch-article-view-article): navi2ch-article-auto-expunge が
+	non-nil の時だけ expunge するように。
+	バッファを作る前に navi2ch-article-expunge-buffers するように。
+	(navi2ch-article-view-article-from-file): 同上。
 
 	* navi2ch.el (navi2ch-offline): navi2ch-util.el へ移動。
 	(navi2ch-offline-on): 同上。

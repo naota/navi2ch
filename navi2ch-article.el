@@ -419,14 +419,12 @@ START, END, NOFIRST で範囲を指定する"
   "スレのバッファの数を NUM に制限する。
 NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (interactive "P")
-  (if (or (not (numberp num)) ; C-uのみの時4個にしたいわけじゃないと思われ
-	  (= num 0))
-      (setq num navi2ch-article-max-buffers))
-  (if (> num 0)
-      (save-excursion
-	(dolist (killed-buf (nthcdr num (navi2ch-article-buffer-list)))
-	  (set-buffer killed-buf)
-	  (navi2ch-article-kill-buffer)))))
+  (if (not (numberp num) ; C-uのみの時4個にしたいわけじゃないと思われ
+	   (setq num navi2ch-article-max-buffers)))
+  (save-excursion
+    (dolist (killed-buf (nthcdr num (navi2ch-article-buffer-list)))
+      (set-buffer killed-buf)
+      (navi2ch-article-kill-buffer))))
 
 (defun navi2ch-article-view-article (board article
 				     &optional force number max-line)
@@ -440,9 +438,11 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
         (progn
           (switch-to-buffer buf-name)
           (navi2ch-article-sync force nil number))
+      (if (and navi2ch-article-auto-expunge
+	       (> navi2ch-article-max-buffers 0))
+	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
       (navi2ch-article-mode)
-      (navi2ch-article-expunge-buffers)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p nil)
@@ -466,9 +466,11 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
         (progn
           (switch-to-buffer buf-name)
           (navi2ch-article-sync))
+      (if (and navi2ch-article-auto-expunge
+	       (> navi2ch-article-max-buffers 0))
+	  (navi2ch-article-expunge-buffers (1- navi2ch-article-max-buffers)))
       (switch-to-buffer (get-buffer-create buf-name))
       (navi2ch-article-mode)
-      (navi2ch-article-expunge-buffers)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
             navi2ch-article-from-file-p t)

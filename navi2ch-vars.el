@@ -402,7 +402,7 @@ non-nil で狭める"
 といった感じの list を設定する。
 板IDを引数で指定するなら board というシンボルを板名を渡したい場所に書く。
 例えばこんな感じ。
-(setq navi2ch-article-filter-list
+\(setq navi2ch-article-filter-list
       '(navi2ch-filter
         (\"perl\" \"2ch.pl\")
         (\"perl\" \"filter-with-board.pl\" \"-b\" board)
@@ -435,14 +435,20 @@ non-nil なら範囲内に変更する"
 (defcustom navi2ch-article-message-separator-width '(/ (window-width) 2)
   "*レスとレスの区切り文字の幅。
 幅を 80 文字分にしたいなら
-(setq navi2ch-article-message-separator-width 80)
+\(setq navi2ch-article-message-separator-width 80)
 window の幅と同じにしたいなら
-(setq navi2ch-article-message-separator-width '(window-width))
+\(setq navi2ch-article-message-separator-width '(window-width))
 等指定する。"
   :type 'sexp
   :group 'navi2ch-article)
 
-(defcustom navi2ch-article-max-buffers 0
+(defcustom navi2ch-article-auto-expunge nil
+  "*スレを開いた時に自動的に古いバッファを消すか。
+`non-nil' なら navi2ch-article-max-buffers 以上にならないようにする。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-max-buffers 20
   "*バッファとして保持するスレの最大数。
 0 ならば無制限。"
   :type 'integer
