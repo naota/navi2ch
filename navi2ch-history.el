@@ -40,8 +40,10 @@
     ;; (define-key map "q" 'navi2ch-history-exit)
     (define-key map "\C-k" 'navi2ch-history-cut)
     (define-key map "\C-y" 'navi2ch-history-yank)
-    (define-key map "d" 'navi2ch-history-delete)
-    (define-key map "md" 'navi2ch-history-delete-mark-article)
+    (define-key map "d" 'navi2ch-history-cut)
+    (define-key map "D" 'navi2ch-history-delete)
+    ;(define-key map "md" 'navi2ch-history-cut-mark-article)
+    (define-key map "mD" 'navi2ch-history-delete-mark-article)
     (define-key map "s" 'navi2ch-history-sync)
     (setq navi2ch-history-mode-map map)))
 

@@ -47,6 +47,7 @@
     (define-key map "O" 'navi2ch-bookmark-copy)
     (define-key map "mi" 'navi2ch-bookmark-fetch-mark-article)
     (define-key map "md" 'navi2ch-bookmark-cut-mark-article)
+    ;(define-key map "mD" 'navi2ch-bookmark-delete-mark-article)
     (define-key map "mo" 'navi2ch-bookmark-move-mark-article)
     (define-key map "s" 'navi2ch-bookmark-sync)
     (define-key map "X" 'navi2ch-bookmark-remember-order)
