@@ -30,6 +30,11 @@
 (add-hook 'navi2ch-hook 'navi2ch-offline-init-icons)
 
 (eval-when-compile
+  (navi2ch-defalias-maybe 'display-mouse-p 'ignore)
+  (navi2ch-defalias-maybe 'make-mode-line-mouse-map 'ignore)
+  (navi2ch-defalias-maybe 'display-images-p 'ignore)
+  (navi2ch-defalias-maybe 'image-type-available-p 'ignore)
+  (navi2ch-defalias-maybe 'find-image 'ignore)
   (defmacro navi2ch-e21-display-image-p ()
     '(and (display-images-p)
 	  (image-type-available-p 'xpm))))

@@ -43,6 +43,10 @@
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
+;; shut up XEmacs warnings
+(eval-when-compile
+  (defvar inherit-process-coding-system))
+
 (defmacro navi2ch-net-ignore-errors (&rest body)
   "BODY を評価し、その値を返す。
 BODY の評価中にエラーが起こると nil を返す。"
@@ -161,7 +165,7 @@ BODY の評価中にエラーが起こると nil を返す。"
       (setq navi2ch-net-process proc))))
 
 (defun navi2ch-net-split-url (url &optional proxy)
-  (let (host file port host2ch)
+  (let (host2ch)
     (string-match "http://\\([^/]+\\)" url)
     (setq host2ch (match-string 1 url))
     (if proxy

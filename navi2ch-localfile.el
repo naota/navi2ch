@@ -216,7 +216,6 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
     (navi2ch-localfile-with-lock directory
       (let ((coding-system-for-read navi2ch-localfile-coding-system)
 	    (coding-system-for-write navi2ch-localfile-coding-system)
-	    (redo t)
 	    (dat-directory (expand-file-name "dat" directory))
 	    now article-id file)
 	(unless (file-exists-p dat-directory)

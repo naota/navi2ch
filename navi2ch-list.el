@@ -520,8 +520,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 (defun navi2ch-list-valid-board (uri)
   (save-match-data
     (when (string-match "http://\\([^/]+\\)/\\([^/]+\\)/" uri)
-      (let ((host (match-string 1 uri))
-	    (board (match-string 2 uri)))
+      (let ((host (match-string 1 uri)))
 	(string-match navi2ch-list-valid-host-regexp host)))))
 
 (defun navi2ch-list-mouse-select (e)
@@ -563,7 +562,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (setq list (delq (assoc navi2ch-list-global-bookmark-category-name list) list))))
 
 (defun navi2ch-list-get-board-name-list (list)
-  (let (alist name-list)
+  (let (alist)
     (dolist (x list)
       (unless (string= (car x) navi2ch-list-changed-category-name)
 	(setq alist (append alist (cdr (assq 'child x))))))

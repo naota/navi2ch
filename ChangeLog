@@ -1,3 +1,76 @@
+2002-07-16  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map):
+	[(shift tab)] に加えて [(shift iso-lefttab)] もバインド。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/476
+
+	XEmacs を中心に warning が出ないようにした。
+
+	* navi2ch.el (navi2ch-two-pane): 不要な束縛を削除。
+	(navi2ch-goto-url): 同上。
+	(navi2ch-find-file): 同上。
+
+	* navi2ch-article.el (navi2ch-article-select-current-link):
+	不要な束縛を削除。
+	(navi2ch-article-scroll-up): 同上。
+	(navi2ch-article-scroll-down): 同上。
+	(navi2ch-article-get-current-number): 同上。
+	(navi2ch-article-next-message): 同上。
+	(navi2ch-article-previous-message): 同上。
+	(navi2ch-article-cached-subject): 同上。
+	(navi2ch-article-auto-decode-base64-section):
+	match-string-no-properties -> navi2ch-match-string-no-properties
+	line-beginning-position -> navi2ch-line-beginning-position
+	line-end-position -> navi2ch-line-end-position
+	(toplevel): XEmacs に存在しない変数を defvar。
+	(navi2ch-article-popup-dialog): XEmacs では何もしないように。
+
+	* navi2ch-board.el (navi2ch-board-get-matched-article):
+	不要な束縛を削除。
+	(navi2ch-board-url-to-board): 同上。
+	(navi2ch-board-insert-subjects): 同上。
+	(navi2ch-board-sync): 同上。
+
+	* navi2ch-e21.el (navi2ch-defalias-maybe):
+	ぞぞっと navi2ch-defalias-maybe。(まあ、一応。。。)
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-make-article):
+	不要な束縛を削除。
+
+	* navi2ch-list.el (navi2ch-list-valid-board):
+	不要な束縛を削除。
+	(navi2ch-list-get-board-name-list): 同上。
+
+	* navi2ch-localfile.el (navi2ch-localfile-create-thread):
+	不要な束縛を削除。
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-make-article):
+	不要な束縛を削除。
+	(navi2ch-machibbs-article-callback): 同上。
+
+	* navi2ch-mona.el (toplevel): set-face-attribute を defalias-maybe
+	(navi2ch-mona-create-fontset-from-family-name):
+	navi2ch-ifxemacs を使うように。
+
+	* navi2ch-net.el (toplevel): XEmacs に存在しない変数を defvar。
+	(navi2ch-net-split-url): 不要な束縛を削除。
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-scroll-up):
+	不要な束縛を削除。
+
+	* navi2ch-splash.el (navi2ch-splash-insert-image):
+	不要な束縛を削除。
+	(navi2ch-splash-insert-image):
+	line-beginning-position -> navi2ch-line-beginning-position
+	(toplevel): XEmacs に存在しない変数を defvar。
+
+	* navi2ch-util.el (toplevel): XEmacs に存在しない変数を defvar。
+	(navi2ch-y-or-n-p): let -> let*
+	(navi2ch-base64-write-region): 不要な束縛を削除。
+	(navi2ch-base64-insert-file): 同上。
+	(navi2ch-line-beginning-position): 新関数。
+	(navi2ch-line-end-position): 新関数。
+
 2002-07-15  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):

@@ -113,7 +113,7 @@
 
 (defun navi2ch-popup-article-scroll-up ()
   (interactive)
-  (condition-case error
+  (condition-case nil
       (scroll-up)
     (end-of-buffer
      (navi2ch-popup-article-exit)))

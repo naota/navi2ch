@@ -177,8 +177,7 @@
   "match した結果から article を得る"
   (let ((id (match-string 1))
 	(str (match-string 2))
-	(num (match-string 3))
-	article)
+	(num (match-string 3)))
     (setq str (navi2ch-replace-string "^ +" "" str)
 	  str (navi2ch-replace-string " +$" "" str)
 	  str (navi2ch-replace-html-tag str))
@@ -191,18 +190,17 @@
   (let* ((alist (navi2ch-multibbs-url-to-board url))
 	 (uri  (cdr (assq 'uri alist)))
 	 (id   (cdr (assq 'id alist)))
-	 board kako)
+	 board)
     (when id
-      (let (name)
-        (dolist (x (navi2ch-list-get-board-name-list
-                    navi2ch-list-category-list))
-          (when (string= (cdr (assq 'uri x)) uri)
-            (setq board x)))
-        (unless board
-          (setq board (list (cons 'uri uri)
-                            (cons 'id id)
-                            (cons 'name "No Name"))))
-	board))))
+      (dolist (x (navi2ch-list-get-board-name-list
+		  navi2ch-list-category-list))
+	(when (string= (cdr (assq 'uri x)) uri)
+	  (setq board x)))
+      (unless board
+	(setq board (list (cons 'uri uri)
+			  (cons 'id id)
+			  (cons 'name "No Name"))))
+      board)))
 
 (defun navi2ch-board-to-url (board)
   "BOARD から url に変換"
@@ -245,8 +243,7 @@
 
 
 (defun navi2ch-board-insert-subjects (list)
-  (let ((prev (point))
-	(bookmark (cdr (assq 'bookmark navi2ch-board-current-board)))
+  (let ((bookmark (cdr (assq 'bookmark navi2ch-board-current-board)))
 	(hide (cdr (assq 'hide navi2ch-board-current-board)))
 	(summary (navi2ch-article-load-article-summary
 		  navi2ch-board-current-board))
@@ -347,7 +344,6 @@
 	   (navi2ch-net-force-update (or navi2ch-net-force-update
 					 force))
 	   (board navi2ch-board-current-board)
-	   (url (navi2ch-board-get-url board))
 	   (file (navi2ch-board-get-file-name board))
 	   (old-file (navi2ch-board-get-file-name
 		      board

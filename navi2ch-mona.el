@@ -44,6 +44,7 @@
 (require 'navi2ch-util)
 
 (eval-when-compile
+  (navi2ch-defalias-maybe 'set-face-attribute 'ignore)
   (autoload 'x-decompose-font-name "fontset"))
 
 (make-face 'navi2ch-mona-face)
@@ -63,41 +64,40 @@ XEmacs では明示的にフォントセットを作る必要がないので、
 を返すだけ。"
   (let ((fontset-name (format "-%s-medium-r-*--%d-*-*-*-p-*-*-*"
                               family-name height)))
-    (cond (navi2ch-on-xemacs
-           fontset-name)
-          (navi2ch-on-emacs21
-           (let* ((fields (x-decompose-font-name fontset-name))
-                  (foundry (aref fields 0))
-                  (family (aref fields 1))
-                  (slant (aref fields 3))
-                  (swidth (aref fields 4))
-                  (fontset-templ (format
-                                  "-%s-%s-%%s-%s-%s--%d-*-*-*-p-*-fontset-mona%d"
-                                  foundry family slant swidth height height))
-                  (font-templ (progn
-                                (string-match "^\\(.*\\)\\(fontset-mona[^-]+\\)$"
-                                              fontset-templ)
-                                (concat (match-string 1 fontset-templ) "%s")))
-                  (fontset (format "-%s-%s-*-*-*--%d-*-*-*-*-*-%s"
-                                   foundry family height
-                                   (match-string 2 fontset-templ))))
-             (setq fontset-name fontset)
-             (dolist (weight '("medium" "bold"))
-               (let ((fontset (format fontset-templ weight))
-                     (font (format font-templ weight "%s")))
-                 (unless (query-fontset fontset)
-                   (new-fontset fontset
-                                (list (cons 'ascii
-                                            (format font "iso8859-1"))
-                                      (cons 'latin-iso8859-1
-                                            (format font "iso8859-1"))
-                                      (cons 'katakana-jisx0201
-                                            (format font "jisx0201.1976-0"))
-                                      (cons 'latin-jisx0201
-                                            (format font "jisx0201.1976-0"))
-                                      (cons 'japanese-jisx0208
-                                            (format font "jisx0208.1990-0"))))))))
-           fontset-name))))
+    (navi2ch-ifxemacs
+	fontset-name
+      (let* ((fields (x-decompose-font-name fontset-name))
+	     (foundry (aref fields 0))
+	     (family (aref fields 1))
+	     (slant (aref fields 3))
+	     (swidth (aref fields 4))
+	     (fontset-templ (format
+			     "-%s-%s-%%s-%s-%s--%d-*-*-*-p-*-fontset-mona%d"
+			     foundry family slant swidth height height))
+	     (font-templ (progn
+			   (string-match "^\\(.*\\)\\(fontset-mona[^-]+\\)$"
+					 fontset-templ)
+			   (concat (match-string 1 fontset-templ) "%s")))
+	     (fontset (format "-%s-%s-*-*-*--%d-*-*-*-*-*-%s"
+			      foundry family height
+			      (match-string 2 fontset-templ))))
+	(setq fontset-name fontset)
+	(dolist (weight '("medium" "bold"))
+	  (let ((fontset (format fontset-templ weight))
+		(font (format font-templ weight "%s")))
+	    (unless (query-fontset fontset)
+	      (new-fontset fontset
+			   (list (cons 'ascii
+				       (format font "iso8859-1"))
+				 (cons 'latin-iso8859-1
+				       (format font "iso8859-1"))
+				 (cons 'katakana-jisx0201
+				       (format font "jisx0201.1976-0"))
+				 (cons 'latin-jisx0201
+				       (format font "jisx0201.1976-0"))
+				 (cons 'japanese-jisx0208
+				       (format font "jisx0208.1990-0"))))))))
+      fontset-name)))
 
 (defun navi2ch-mona-set-font-family-name (symbol value)
   "VALUEで指定されるフォントセットに応じてフェイスを作成する。"

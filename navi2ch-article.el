@@ -61,6 +61,7 @@
     (define-key map "P" 'navi2ch-article-through-previous)
     (define-key map "N" 'navi2ch-article-through-next)
     (define-key map [(shift tab)] 'navi2ch-article-previous-link)
+    (define-key map [(shift iso-lefttab)] 'navi2ch-article-previous-link)
     (define-key map "\e\C-i" 'navi2ch-article-previous-link)
     (define-key map "\C-\i" 'navi2ch-article-next-link)
     (define-key map  "i" 'navi2ch-article-fetch-link)
@@ -928,7 +929,6 @@ state はあぼーんされてれば aborn というシンボル。
                  (error "File not writable: %s" filename)
              (with-temp-buffer
                (let ((buffer-file-coding-system 'binary)
-                     (file-coding-system 'binary)
                      (coding-system-for-write 'binary)
                      ;; auto-compress-mode を disable にする
                      (inhibit-file-name-operation 'write-region)
@@ -1109,7 +1109,7 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-scroll-up ()
   (interactive)
-  (condition-case error
+  (condition-case nil
       (scroll-up)
     (end-of-buffer
      (funcall navi2ch-article-through-next-function)))
@@ -1117,7 +1117,7 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-article-scroll-down ()
   (interactive)
-  (condition-case error
+  (condition-case nil
       (scroll-down)
     (beginning-of-buffer
      (funcall navi2ch-article-through-previous-function)))
@@ -1197,7 +1197,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-get-current-number ()
   "今の位置のレスの番号を得る"
-  (condition-case error
+  (condition-case nil
       (or (get-text-property (point) 'current-number)
           (get-text-property
            (navi2ch-previous-property (point) 'current-number)
@@ -1281,7 +1281,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-next-message ()
   "次のメッセージへ"
   (interactive)
-  (condition-case error
+  (condition-case nil
       (progn
         (goto-char (navi2ch-next-property (point) 'current-number))
         (navi2ch-article-goto-number
@@ -1292,7 +1292,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-previous-message ()
   "前のメッセージへ"
   (interactive)
-  (condition-case error
+  (condition-case nil
       (progn
         (goto-char (navi2ch-previous-property (point) 'current-number))
         (navi2ch-article-goto-number
@@ -1323,8 +1323,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   "キャッシュされている dat ファイルからスレタイトルを得る。"
 ;  "キャッシュされている dat ファイルやスレ一覧からスレタイトルを得る。"
   (let ((state (navi2ch-article-check-cached board article))
-	(artid (cdr (assq 'artid article)))
-	subject subject-list)
+	subject)
     (if (eq state 'view)
 	(save-excursion
 	  (set-buffer (navi2ch-article-get-buffer-name board article))
@@ -1510,14 +1509,16 @@ gunzip に通してから文字コードの推測を試みる。"
   (catch 'loop
     (while (re-search-forward navi2ch-base64-begin-delimiter-regexp nil t)
       (let* ((begin (match-beginning 0))
-             (filename (match-string-no-properties 2))
+             (filename (navi2ch-match-string-no-properties 2))
              (end (and (re-search-forward navi2ch-base64-end-delimiter-regexp nil t)
                        (match-end 0)))
              encoded decoded)
         (unless end (throw 'loop nil))
         (setq encoded (buffer-substring-no-properties
-                       (progn (goto-char begin) (line-beginning-position 2))
-                       (progn (goto-char end) (line-end-position 0))))
+                       (progn (goto-char begin)
+			      (navi2ch-line-beginning-position 2))
+                       (progn (goto-char end)
+			      (navi2ch-line-end-position 0))))
         (with-temp-buffer
           (insert encoded)
           (goto-char (point-min))
@@ -1564,6 +1565,10 @@ gunzip に通してから文字コードの推測を試みる。"
             (add-text-properties part-begin (point)
                                  '(hard t face navi2ch-article-base64-face))))))))
 
+;; shut up XEmacs warnings
+(eval-when-compile
+  (defvar w32-start-process-show-window))
+
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
 	 (file (make-temp-name (navi2ch-temp-directory))))
@@ -1575,11 +1580,13 @@ gunzip に通してから文字コードの推測を試みる。"
     (delete-file file)))
 
 (defun navi2ch-article-popup-dialog (str)
-  (x-popup-dialog
-   t (cons "navi2ch"
-           (mapcar (lambda (x)
-                     (cons x t))
-                   (split-string str "\n")))))
+  (navi2ch-ifxemacs
+      (ignore str)			; とりあえず何もしない
+    (x-popup-dialog
+     t (cons "navi2ch"
+	     (mapcar (lambda (x)
+		       (cons x t))
+		     (split-string str "\n"))))))
 
 (defun navi2ch-article-view-aa ()
   (interactive)

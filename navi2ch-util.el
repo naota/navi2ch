@@ -100,6 +100,10 @@
 (defvar navi2ch-modeline-online navi2ch-online-indicator)
 (defvar navi2ch-modeline-offline navi2ch-offline-indicator)
 
+;; shut up XEmacs warnings
+(eval-when-compile
+  (defvar message-log-max)
+  (defvar minibuffer-allow-text-properties))
 
 ;;;; macros
 (defmacro navi2ch-ifxemacs (then &rest else)
@@ -364,8 +368,8 @@ PROMPT) $B$rI=<($7$F:FEY(B `read-char' $B$r8F$V!#(B"
     c))
 
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
-  (let ((prompt (concat prompt "(y, n, or q) "))
-	(c (navi2ch-read-char-with-retry
+  (let* ((prompt (concat prompt "(y, n, or q) "))
+	 (c (navi2ch-read-char-with-retry
 	     prompt
 	     (concat "Please answer y, n, or q.  " prompt)
 	     '(?q ?Q ?y ?Y ?\  ?n ?N ?\177))))
@@ -582,7 +586,6 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
 	  (setq end (match-end 0)))
       (with-temp-buffer
 	(let ((buffer-file-coding-system 'binary)
-	      (file-coding-system 'binary)
 	      (coding-system-for-write 'binary)
 	      ;; auto-compress-mode$B$r(Bdisable$B$K$9$k(B
 	      (inhibit-file-name-operation 'write-region)
@@ -624,8 +627,7 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
   (save-excursion
     (let ((str nil))
       (with-temp-buffer
-	(let ((buffer-file-coding-system 'binary)
-	      (file-coding-system 'binary))
+	(let ((buffer-file-coding-system 'binary))
 	  (insert-file-contents-literally filename)
 	  (base64-encode-region (point-min) (point-max) t)
 	  (goto-char (point-min))
@@ -787,6 +789,26 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
   (ignore-errors
     (delete-directory lockname))
   (not (file-exists-p lockname)))
+
+(defun navi2ch-line-beginning-position (&optional n)
+  "N - 1 $B9T@h$N9TF,$N>l=j$rJV$9!#(B"
+  (save-excursion
+    (beginning-of-line n)
+    (point)))
+
+;; line-beginning-position $B$,;H$($k$J$i$=$C$A$r;H$&(B
+(if (fboundp 'line-beginning-position)
+    (defalias 'navi2ch-line-beginning-position 'line-beginning-position))
+
+(defun navi2ch-line-end-position (&optional n)
+  "N - 1 $B9T@h$N9TKv$N>l=j$rJV$9!#(B"
+  (save-excursion
+    (end-of-line n)
+    (point)))
+
+;; line-end-position $B$,;H$($k$J$i$=$C$A$r;H$&(B
+(if (fboundp 'line-end-position)
+    (defalias 'navi2ch-line-end-position 'line-end-position))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

@@ -209,7 +209,6 @@ SUSPEND が non-nil なら buffer を消さない"
   (let* ((list-buf (get-buffer navi2ch-list-buffer-name))
 	 (board-buf (get-buffer navi2ch-board-buffer-name))
 	 (art-buf (navi2ch-article-current-buffer))
-	 (list-win (get-buffer-window (or list-buf "")))
 	 (board-win (get-buffer-window (or board-buf "")))
 	 (art-win (get-buffer-window (or art-buf "")))
 	 (buf (current-buffer))
@@ -337,11 +336,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 (defun navi2ch-goto-url (url &optional force)
   "URL からスレまたは板を選ぶ"
   (interactive "sURL: ")
-  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
-        (board-win (get-buffer-window navi2ch-board-buffer-name))
-        (art-win (and (navi2ch-article-current-buffer)
-                      (get-buffer-window (navi2ch-article-current-buffer))))
-	(article (navi2ch-article-url-to-article url))
+  (let ((article (navi2ch-article-url-to-article url))
 	(board (navi2ch-board-url-to-board url)))
     (cond (article
 	   (navi2ch-split-window 'article)
@@ -356,11 +351,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 (defun navi2ch-find-file (file)
   "FILE からスレまたは板を選ぶ"
   (interactive "fFind article file or board directory: ")
-  (let ((list-win (get-buffer-window navi2ch-list-buffer-name))
-        (board-win (get-buffer-window navi2ch-board-buffer-name))
-        (art-win (and (navi2ch-article-current-buffer)
-                      (get-buffer-window (navi2ch-article-current-buffer))))
-	(article-p (file-regular-p file))
+  (let ((article-p (file-regular-p file))
 	(board-p (file-directory-p file)))
     (cond (article-p
 	   (navi2ch-split-window 'article)

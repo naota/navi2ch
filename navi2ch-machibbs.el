@@ -171,8 +171,7 @@
     (re-search-forward navi2ch-machibbs-parse-regexp nil t)))
 
 (defun navi2ch-machibbs-make-article (&optional subject)
-  (let ((no (match-string 1))
-	(mail (match-string 3))
+  (let ((mail (match-string 3))
 	(name (match-string 4))
 	(date (match-string 5))
 	(date-tail (match-string 7))
@@ -183,7 +182,7 @@
 
 (navi2ch-multibbs-defcallback navi2ch-machibbs-article-callback (machibbs)
   (let ((beg (point))
-	str subject)
+	subject)
     (setq subject (navi2ch-machibbs-parse-subject))
     (while (navi2ch-machibbs-parse)
       (insert (prog1 (navi2ch-machibbs-make-article subject)

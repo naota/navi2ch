@@ -206,8 +206,7 @@ Return a number of lines that an image occupies in the buffer."
 		((eq 'bitmap image-type)
 		 ;; Use ready-composed bitmap image.
 		 (require 'bitmap)
-		 (let ((coding-system-for-read 'iso-2022-7bit)
-		       (input-coding-system '*iso-2022-jp*))
+		 (let ((coding-system-for-read 'iso-2022-7bit))
 		   (insert-file-contents file))
 		 (goto-char (point-max))
 		 (unless (bolp)
@@ -232,7 +231,7 @@ Return a number of lines that an image occupies in the buffer."
 			    (end-of-line 0)
 			    (not (bobp)))
 		     ;; Decode bitmap data line by line.
-		     (decode-coding-region (line-beginning-position)
+		     (decode-coding-region (navi2ch-line-beginning-position)
 					   (point)
 					   'iso-2022-7bit)
 		     (setq width (max width (current-column)))))
@@ -297,6 +296,12 @@ should be a number of lines that an image occupies in the buffer."
       (put-text-property start (point) 'face 'navi2ch-splash-screen-face))
     (let ((fill-column (window-width)))
       (center-region start (point)))))
+
+;; shut up XEmacs warnings
+(eval-when-compile
+  (defvar default-enable-multibyte-characters)
+  (defvar default-mc-flag)
+  (defvar default-line-spacing))
 
 (defun navi2ch-splash (&optional image-type)
   "Demo on the startup screen.  IMAGE-TYPE should be a symbol which
