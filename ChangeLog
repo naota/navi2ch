@@ -1,3 +1,12 @@
+2002-07-19  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-article-to-url): nofirst を指
+	定しても start が 1 の ときは &NOFIRST=TRUE をつけないように。
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-article-to-url): 同上。
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): 同上。
+
 2002-07-19  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-parse-regexp): あぼーんが
