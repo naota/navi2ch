@@ -428,8 +428,8 @@ START, END, NOFIRST で範囲を指定する"
 			       (not (memq num hide))))))
           (when (stringp alist)
             (setq alist (navi2ch-article-parse-message alist)))
-          ;; (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
-          (setcdr x (navi2ch-put-alist 'point (point) alist))
+	  (setcdr x (navi2ch-put-alist 'point (point-marker) alist))
+          ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
           (navi2ch-article-insert-message num alist))))
     (garbage-collect) ; navi2ch-parse-message は大量にゴミを残す
     (message "inserting current messages...done")))
