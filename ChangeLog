@@ -1,5 +1,8 @@
 2002-01-14  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi): 壊れてた。
+	てことで直した。
+
 	* navi2ch-article.el (navi2ch-article-update-file): ヘッダに
 	Not-Updated が含まれている場合は state に nil を入れるようにした。
 	これで update されてない時もバッファを split しなおすのが直るかな。

@@ -389,6 +389,10 @@ DIFF が non-nil ならば差分を取得する。
     (unless (file-exists-p dir)
       (make-directory dir t))
     (setq proc (navi2ch-net-download-file url time))
+    (when (and proc
+	       (string= (navi2ch-net-get-status proc) "304"))
+      (delete-process proc)
+      (setq proc nil))
     (when proc
       (let ((coding-system-for-write 'binary)
 	    (coding-system-for-read 'binary))
