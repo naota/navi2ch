@@ -62,6 +62,7 @@
     (define-key map [(shift tab)] 'navi2ch-article-previous-link)
     (define-key map "\e\C-i" 'navi2ch-article-previous-link)
     (define-key map "\C-\i" 'navi2ch-article-next-link)
+    (define-key map  "i" 'navi2ch-article-fetch-link)
     (define-key map ">" 'navi2ch-article-goto-last-message)
     (define-key map "<" 'navi2ch-article-goto-first-message)
     (define-key map "\eu" 'navi2ch-article-uudecode-message)
@@ -1421,6 +1422,17 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     (if point
 	(goto-char point)))
   (navi2ch-article-display-link-minibuffer (point)))
+
+(defun navi2ch-article-fetch-link (&optional force)
+  (interactive)
+  (let ((url (get-text-property (point) 'url)))
+    (when url
+      (if (navi2ch-2ch-url-p url)
+	  (let ((article (navi2ch-article-url-to-article url))
+		(board (navi2ch-board-url-to-board url)))
+	    (and (navi2ch-article-fetch-article board article force)
+		 (navi2ch-bm-remember-fetched-article board article)))))
+    (navi2ch-article-display-link-minibuffer (point))))
 
 (defun navi2ch-article-uudecode-message ()
   (interactive)

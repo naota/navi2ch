@@ -25,6 +25,9 @@
 	(navi2ch-history-mode-map): 上記関数を "md" にバインド。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/887
 	
+	* navi2ch-article.el (navi2ch-article-fetch-link): 新関数。
+	(navi2ch-article-mode-map): 上記関数を "i" にバインド。
+
 2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	久々の commit。mami さんすんません。
@@ -198,6 +201,7 @@
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/331
 
 2002-03-24    mami  <mami@users.sourceforge.net>
+
 	SPID Cookie に対応。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/312
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/318
