@@ -147,6 +147,12 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-through-next-function)
 (make-variable-buffer-local 'navi2ch-article-through-previous-function)
 
+;; add hook
+(add-hook 'kill-emacs-hook
+	  (lambda ()
+	    (navi2ch-article-expunge-buffers 0)))
+
+;;; navi2ch-article functions
 (defun navi2ch-article-get-url (board article)
   (let ((artid (cdr (assq 'artid article)))
 	(url (navi2ch-board-get-uri board)))
@@ -566,6 +572,7 @@ NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
   (interactive)
   ;; (navi2ch-article-add-number)
   (run-hooks 'navi2ch-article-exit-hook)
+  (navi2ch-article-save-info)
   (let ((buf (current-buffer)))
     (if (null navi2ch-article-message-list)
         (progn

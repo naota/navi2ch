@@ -1,3 +1,11 @@
+2002-02-07    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (toplevel): 
+	kill-emacs-hook に (navi2ch-article-expunge-buffers 0) を追加。
+	Emacs 終了時に navi2ch-article-save-info されるように。
+	(navi2ch-article-exit): (navi2ch-article-save-info) を追加。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/908
+
 2002-02-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-popup-article.el (navi2ch-popup-article): parse が済んで
