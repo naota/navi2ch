@@ -770,7 +770,9 @@ This is taken from RFC 2396.")
 	  ((string-match "<b>\\([^<]+\\)" str)
 	   (match-string 1 str))
 	  ((string-match "\\([^<>\n]+\\)<br>\\([^<>]+\\)<hr>"  str)
-	   (concat (match-string 1 str) (match-string 2 str))))))
+	   (concat (match-string 1 str) (match-string 2 str)))
+	  ((setq str (and proc (navi2ch-net-get-status proc)))
+	   (concat "HTTP status: " str)))))
 
 ;; Set-Cookie: SPID=6w9HFhEM; expires=Tuesday, 23-Apr-2002 00:00:00 GMT; path=/
 (defun navi2ch-net-send-message-get-spid (proc)

@@ -1,5 +1,10 @@
 2004-12-12  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-send-message-error-string): 文字列が
+	取得できなかったときは HTTP status を返すように。
+
+2004-12-12  mami  <mami@users.sourceforge.net>
+
 	* navi2ch-board.el (navi2ch-board-expire): 
 	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
 	を修正。
