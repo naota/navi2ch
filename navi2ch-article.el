@@ -460,6 +460,10 @@ START, END, NOFIRST で範囲を指定する"
         (from (format "[%d] %s <%s>\n" number name mail))
         (date-header "Date: ")
         str p)
+    ;;曜日表示する？
+    (if navi2ch-article-dispweek
+	    (setq date (navi2ch-article-appendweek date))
+      )
     (setq str (concat from-header from date-header date "\n\n"))
 
     (setq p (length from-header))
@@ -472,6 +476,27 @@ START, END, NOFIRST で範囲を指定する"
     (put-text-property p (setq p (+ p (length date)))
 		       'face 'navi2ch-article-header-contents-face str)
     str))
+
+(defun navi2ch-article-appendweek (d)
+  "YY/MM/DD形式の日付に曜日を足す"
+  (let (year month day et dt time)
+    (setq youbi '("日" "月" "火" "水" "木" "金" "土"))
+    ;"あぼーん"とかIDとか旧形式の日付にも対応しているはず．
+    ;正規表現に工夫が必要かも…
+    (if (string-match "^\\([0-9/]+\\) \\([A-Za-z0-9: +/?]+\\)$" d)
+	(progn
+	  (setq time (match-string 2 d))
+	   (setq date (match-string 1 d))
+	   (string-match "\\(.+\\)/\\(.*\\)/\\(.*\\)" date)
+	   (setq year (+ (string-to-number (match-string 1 date)) 2000))
+	   (setq month (string-to-number (match-string 2 date)))
+	   (setq day (string-to-number (match-string 3 date)))
+	   (setq et (encode-time 0 0 0 day month year))
+	   (setq dt (decode-time et))
+	   ;頭に20を足してYYYY形式にする(2100年問題ボッパツ予定)
+	   (concat "20" date "("  (nth (nth 6 dt) youbi) ") " time )
+	   )
+    d)))
 
 (defun navi2ch-article-expunge-buffers (&optional num)
   "スレのバッファの数を NUM に制限する。

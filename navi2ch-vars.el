@@ -602,6 +602,11 @@ nil の場合は同じスレの内容のみを得る。"
   :type 'boolean
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-dispweek nil
+  "* non-nilならばYY/MM/DDの日付に曜日表示し，年をYYYY表記にする"
+  :type 'boolean
+  :group 'navi2ch-article)
+
 ;;; message variables
 (defcustom navi2ch-message-user-name
   (cond ((featurep 'xemacs) "名無しさん＠ＸＥｍａｃｓ")
