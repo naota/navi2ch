@@ -1,3 +1,9 @@
+2005-01-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el
+	(navi2ch-article-insert-message-separator-by-char): 区切り文字の文
+	字数が負になることがあったので対処。
+
 2005-01-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el

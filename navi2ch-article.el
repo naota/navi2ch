@@ -468,8 +468,9 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 
 (defun navi2ch-article-insert-message-separator-by-char ()
   (navi2ch-article-insert-hide-number-following)
-  (insert (make-string (- (eval navi2ch-article-message-separator-width)
-			  (current-column))
+  (insert (make-string (max 0
+			    (- (eval navi2ch-article-message-separator-width)
+			       (current-column)))
 		       navi2ch-article-message-separator) "\n"))
 
 (defsubst navi2ch-article-set-link-property-subr (start end type value
