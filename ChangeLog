@@ -1,3 +1,12 @@
+2004-09-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-decode-coding-region-linewise): 新関数。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): XEmacs では
+	上記関数を使うように。
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/461-463n
+	http://pc5.2ch.net/test/read.cgi/unix/1085940686/487
+
 2004-08-26  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-link-regexp-alist):

@@ -1251,5 +1251,17 @@ STRING2 の方が大きい場合は負数を返す。
 	(forward-line)))
     (= exitcode 0)))
 
+(defun navi2ch-decode-coding-region-linewise (start end coding-system)
+  (save-restriction
+    (narrow-to-region start end)
+    (let ((bol (point-min)))
+      (while (< bol (point-max))
+	(goto-char bol)
+	;; decode 前後で (navi2ch-line-end-position) の値がずれるのに注意
+	(decode-coding-region bol (navi2ch-line-end-position) coding-system)
+	(goto-char bol)			; 念のため
+	(setq bol (1+ (navi2ch-line-end-position))))))
+  (goto-char start))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

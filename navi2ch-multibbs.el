@@ -156,8 +156,9 @@ SPEC は (BBSTYPE [ARG]...)。
 	      (,decoding (navi2ch-multibbs-get-variable
 			  ,bbstype 'coding-system
 			  navi2ch-coding-system)))
-	 (decode-coding-region (point-min) (point-max)
-			       ,decoding)
+	 (navi2ch-ifxemacs
+	     (navi2ch-decode-coding-region-linewise (point-min) (point-max) ,decoding)
+	   (decode-coding-region (point-min) (point-max) ,decoding))
 	 (navi2ch-set-buffer-multibyte t)
 	 ,@body
 	 (encode-coding-region (point-min) (point-max)
