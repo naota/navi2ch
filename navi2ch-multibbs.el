@@ -348,8 +348,14 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	     (setq list (cons (cons 'number
 				    (string-to-number (match-string 1 url)))
 			      list))))
+	  ;; "http://pc.2ch.net/unix/kako/999/999166513.html" とか。
 	  ((string-match
 	    "http://.+/kako/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
+	   (setq list (list (cons 'artid (match-string 1 url))
+			    (cons 'kako t))))
+	  ;; "http://pc.2ch.net/unix/kako/1009/10093/1009340234.html" とか。
+	  ((string-match
+	    "http://.+/kako/[0-9]+/[0-9]+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)
 	   (setq list (list (cons 'artid (match-string 1 url))
 			    (cons 'kako t))))
 	  ((string-match "http://.+/\\([0-9]+\\)\\.\\(dat\\|html\\)" url)

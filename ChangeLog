@@ -1,3 +1,12 @@
+2002-12-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-multibbs.el (navi2ch-2ch-url-to-article): 記事 ID が10桁
+	のとき倉庫行きになっても '(kako . t) がついていなかった。
+	つけるように。
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-url-to-article): 倉庫行き
+	になった記事に対応。
+
 2002-12-23  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-bzip2-program): 新変数。

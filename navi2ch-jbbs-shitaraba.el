@@ -99,14 +99,18 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 (defun navi2ch-js-url-to-article (url)
   "URL から article に変換。"
   (let (list)
-    (if (string-match
-	 "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
-	(progn
-	  (setq list (list (cons 'artid (match-string 1 url))))
-	  (when (string-match "&START=\\([0-9]+\\)" url)
-	    (setq list (cons (cons 'number
-				   (string-to-number (match-string 1 url)))
-			     list)))))
+    (cond ((string-match
+	    "http://[^/]+/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
+	   (setq list (list (cons 'artid (match-string 1 url))))
+	   (when (string-match "&START=\\([0-9]+\\)" url)
+	     (setq list (cons (cons 'number
+				    (string-to-number (match-string 1 url)))
+			      list))))
+	  ;; "http://jbbs.shitaraba.com/computer/351/storage/1022028671.html" とか。
+	  ((string-match
+	    "http://.+/storage/\\([0-9]+\\)\\.html" url)
+	   (setq list (list (cons 'artid (match-string 1 url))
+			    (cons 'kako t)))))
     list))
 
 (defun navi2ch-js-send-message
