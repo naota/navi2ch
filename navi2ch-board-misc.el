@@ -714,15 +714,26 @@ ARG が non-nil なら移動方向を逆にする。"
      nil) ; end-key-fun を呼ばせるには nil が欲しいらしい。はまった(泣)。
    'end-of-line))
 
+(defun navi2ch-bm-sort-by-date (rev)
+  (navi2ch-bm-sort-subr
+   (not rev)
+   (lambda ()
+     (string-to-number
+      (cdr (assq 'artid
+		 (navi2ch-bm-get-article-internal
+		  (navi2ch-bm-get-property-internal (point)))))))
+   nil))
+
 (defun navi2ch-bm-sort (&optional arg)
   (interactive "P")
-  (message "Sort by n)umber s)tate t)itle o)ther?")
+  (message "Sort by n)umber s)tate t)itle o)ther d)ate?")
   (let ((ch (read-char)))
     (funcall
      (cond ((eq ch ?n) 'navi2ch-bm-sort-by-number)
            ((eq ch ?s) 'navi2ch-bm-sort-by-state)
            ((eq ch ?t) 'navi2ch-bm-sort-by-subject)
-           ((eq ch ?o) 'navi2ch-bm-sort-by-other))
+           ((eq ch ?o) 'navi2ch-bm-sort-by-other)
+	   ((eq ch ?d) 'navi2ch-bm-sort-by-date))
      arg)))
 
 ;;; search

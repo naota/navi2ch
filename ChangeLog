@@ -1,3 +1,12 @@
+2002-06-12    mami  <mami@users.sourceforge.net>
+
+	* 「nanashi さんおかえりヽ(´▽｀)ノ」リリース。
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-date): 新関数。
+	(navi2ch-bm-sort): navi2ch-bm-sort-by-date を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/919
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/955-956n
+
 2002-06-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	久々の commit。mami さんすんません。
