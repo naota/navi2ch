@@ -1,3 +1,11 @@
+2002-07-22  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-http-date.el (navi2ch-http-date-encode):
+	Windows で TZ が設定されてなくても問題ないよう、set-time-zone-rule
+	を使わないようにした。
+	(navi2ch-http-date-decode): timezone-fix-time に渡す引数として、
+	GMT を明示。
+
 2002-07-22  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-jump-to-message-buffer):

@@ -99,26 +99,25 @@
 
 (defun navi2ch-http-date-encode (time)
   "内部形式 TIME を RFC 1123 形式に変換する。"
-  (let ((tz (getenv "TZ")))
-    (unwind-protect
-	(progn
-	  (set-time-zone-rule "GMT")
-	  (let* ((now (decode-time time))
-		 (wkday (nth (nth 6 now) navi2ch-http-date-wkday-list))
-		 (month (nth (1- (nth 4 now)) navi2ch-http-date-month-list)))
+  (let* ((now (timezone-fix-time (current-time-string time)
+				 (current-time-zone time)
+				 "GMT"))
+	 (abs (timezone-absolute-from-gregorian (aref now 0) (aref now 1)
+						(aref now 2)))
+	 (wkday (nth (% abs 7) navi2ch-http-date-wkday-list))
+	 (month (nth (1- (aref now 1)) navi2ch-http-date-month-list)))
 	    ;; しかし、なんで標準に locale 依存の曜日や月名を入れるかねぇ。
 	    ;; ISO 8601 形式の yyyy-mm-dd HH:MM:SS でいーじゃんよ。
-	    (format "%s, %02d %s %04d %02d:%02d:%02d GMT"
-		    wkday (nth 3 now) month (nth 5 now)
-		    (nth 2 now) (nth 1 now) (nth 0 now))))
-      (set-time-zone-rule tz))))
+    (format "%s, %02d %s %04d %02d:%02d:%02d GMT"
+	    wkday (aref now 2) month (aref now 0)
+	    (aref now 3) (aref now 4) (aref now 5))))
 
 (defun navi2ch-http-date-decode (http-date)
   "HTTP-DATE を内部形式に変換する。"
   ;; XEmacs だと RFC 850 形式の "-" 付きの日付をパースできないので。
   (if (string-match "\\([0-9]+\\)-\\([A-Za-z]+\\)-\\([0-9]+\\)" http-date)
       (setq http-date (replace-match "\\1 \\2 \\3" nil nil http-date)))
-  (let ((now (timezone-fix-time http-date nil nil))) ; timezone.el にまかせる。
+  (let ((now (timezone-fix-time http-date "GMT" "GMT")))
     (encode-time (aref now 5) (aref now 4) (aref now 3)
 		 (aref now 2) (aref now 1) (aref now 0)
 		 (aref now 6))))
