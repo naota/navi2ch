@@ -294,6 +294,12 @@ non-nil なら下に移動する
   :type 'file
   :group 'navi2ch-board)
 
+(defcustom navi2ch-board-expire-bookmark-p nil
+  "*expire するときに bookarmk されているスレも expire するかどうか。
+non-nil ならば expire する。"
+  :type 'boolean
+  :group 'navi2ch-board)
+  
 ;;; article variables
 (defcustom navi2ch-article-aadisplay-program
   (if (eq window-system 'w32)

@@ -1,3 +1,23 @@
+2002-04-07  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	* navi2ch-board.el (navi2ch-board-save-info): logo を save しない
+	ようにた。
+	
+	* navi2ch-board.el (navi2ch-board-expire):
+	navi2ch-board-expire-bookmark-p で bookmark を expire するかどうか
+	判断するようにした。
+	navi2ch-bookmark-delete-article-all を使うように。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/460
+	
+	* navi2ch-bookmark.el (navi2ch-bookmark-delete-key): 新関数。
+	(navi2ch-bookmark-delete-article): 同上。
+	(navi2ch-bookmark-delete-article-all): 同上。
+	(navi2ch-bookmark-delete-subr): navi2ch-bookmark-delete-key を使う
+	ように。
+
+	* navi2ch-vars.el (navi2ch-board-expire-bookmark-p): 新変数。
+	bookmark も expire するかどうか。
+
 2002-04-02    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-goto-other-column):

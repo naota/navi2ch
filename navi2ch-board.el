@@ -469,8 +469,7 @@
      (list (assq 'bookmark board)
 	   (assq 'hide board)
 	   (assq 'time board)
-	   (assq 'logo board)
-	   (assq 'seen board)))))
+	   (assq 'logo board)))))
 
 (defun navi2ch-board-load-info (&optional board)
   (or board (setq board navi2ch-board-current-board))
@@ -539,7 +538,8 @@
 	       navi2ch-board-expire-date)
       (let ((article-list (mapcar (lambda (file)
 				    (when (string-match "[0-9]+" file)
-				      (list (cons 'artid (match-string 0 file)))))
+				      (list (cons 'artid
+						  (match-string 0 file)))))
 				  (directory-files dir nil "\\.dat$")))
 	    (summary (navi2ch-article-load-article-summary board))
 	    (key-datevec (navi2ch-get-offset-datevec
@@ -549,8 +549,10 @@
 	(dolist (article article-list)
 	  (let ((artid (cdr (assq 'artid article)))
 		(file (navi2ch-article-get-file-name board article)))
-	    (when (and (not (member artid (cdr (assq 'bookmark board))))
-		       (not (navi2ch-bookmark-exist-all board article))
+	    (when (and (or navi2ch-board-expire-bookmark-p
+			   (not (or (member artid (cdr (assq 'bookmark board)))
+				    (navi2ch-bookmark-exist-all board
+								article))))
 		       (navi2ch-board-expire-date-p
 			key-datevec file
 			(navi2ch-article-summary-element-access-time
@@ -559,7 +561,13 @@
 		(when (file-exists-p info) (delete-file info))
 		(delete-file file)
 		(when (assq 'hide board)
-		  (setcdr (assq 'hide board) (delq artid (cdr (assq 'hide board)))))
+		  (setcdr (assq 'hide board)
+			  (delq artid (cdr (assq 'hide board)))))
+		(when navi2ch-board-expire-bookmark-p
+		  (when (assq 'bookmark board)
+		    (setcdr (assq 'bookmark board)
+			    (delq artid (cdr (assq 'bookmark board)))))
+		  (navi2ch-bookmark-delete-article-all board article))
 		(when (assoc artid summary)
 		  (setq summary (delete (assoc artid summary) summary)))))))
 	(navi2ch-board-save-info board)
