@@ -1,3 +1,11 @@
+2002-10-09  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-jisx0213.el: 削除。
+
+	* izonmoji-mode.el: 新ファイル。
+
+	* README: navi2ch-jisx0213.el -> izonmoji-mode.el に。
+
 2002-10-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* README: navi2ch-jisx0213 の typo を修正。

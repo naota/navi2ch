@@ -210,7 +210,11 @@
 		      ((navi2ch-bm-fetched-article-p board article)
 		       'update)
 		      (t
-		       (navi2ch-article-check-cached board article)))))
+		       (navi2ch-article-check-cached board article))))
+	 ;; for contrib/izonmoji-mode.el
+	 (buffer-display-table (if (and (boundp 'izonmoji-mode) izonmoji-mode)
+				   nil
+				 buffer-display-table)))
     (unless subject (setq subject navi2ch-bm-empty-subject))
     (insert (format (concat "%" (number-to-string navi2ch-bm-number-width) "d %s%s %s%s%s\n")
                     number
