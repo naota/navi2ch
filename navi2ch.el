@@ -290,7 +290,15 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 		(rename-file file backup-file t))
 	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info
 	    ;; がバックアップファイルから読んでくれる。
-	    (rename-file temp-file file t))
+	    (condition-case err
+		(progn
+		  (unless (file-exists-p file)
+		    (with-temp-file file)) ; ファイルが作成可能かチェック
+		  (rename-file temp-file file t))
+	      (file-error
+	       (message "%s: %s"
+			(cadr err)
+			(mapconcat #'identity (cddr err) ", ")))))
 	(if (and temp-file (file-exists-p temp-file))
 	    (delete-file temp-file))))))
 

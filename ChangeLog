@@ -1,3 +1,9 @@
+2003-03-27  extra  <ekisutora@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch-save-info): 
+	http://pc.2ch.net/test/read.cgi/unix/********** のようなリンクを踏んで、
+	ワイルドカード等を名前に含むファイルを作れずエラーになる場合に対応。
+
 2003-03-26  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-lock): ここで navi2ch-use-lock を見るように。
