@@ -1,3 +1,8 @@
+2003-02-22  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* izonmoji-mode.el (toplevel): Commentary に JISX0213用のフォント
+	が必要であることを追加。
+
 2003-02-02  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* izonmoji-mode.el (toplevel): izonmoji-shift_jis を

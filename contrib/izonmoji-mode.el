@@ -30,6 +30,9 @@
 
 ;;; Commentary:
 
+;; 機種依存文字を表示可能な文字列に置き換えて表示する。
+;; デフォルトでは置換先に JISX0213 の文字も使っていますので、
+;; JISX0213用のフォントが必要です。
 ;; 全ての機種依存文字を表示できるわけではありませんので注意。
 
 ;; commands:
@@ -40,7 +43,11 @@
 ;; coding-system:
 ;;   izonmoji-shift-jis 読み込み時に、IBM拡張文字を対応するNEC特殊文字、
 ;;                      NEC選定IBM拡張文字に置換する。
-;;                      shift_jisで読み込んだ時とはbufferの内容が異なります。
+
+;; izonmoji-mode-on は buffer の内容を変更しませんが、izonmoji-shift-jis で
+;; ファイルを読み込んだ時と shift_jisで読み込んだ時とでは buffer の内容が
+;; 異なる場合もありますので、意図せずに file の内容を変更しないよう注意
+;; して下さい。
 
 ;; Emacs のバージョン
 ;;  Emacs 20 以降、XEmacs 21.4 以降を使って下さい。
