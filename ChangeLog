@@ -1,7 +1,7 @@
 2002-02-13    mami  <mami@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch-exit): navi2ch-ask-when-exit が nil のときに
-	終了できなかったのを修正。
+	* navi2ch.el (navi2ch-exit): navi2ch-ask-when-exit が nil や t の
+	ときに終了できなかったのを修正。
 	http://pc.2ch.net/test/read.cgi/unix/1013457056/
 
 2002-02-13  Nanashi San  <nanashi@users.sourceforge.net>

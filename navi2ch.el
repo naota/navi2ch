@@ -87,7 +87,9 @@ SUSPEND が non-nil なら buffer を消さない"
   (when (or suspend
             (not navi2ch-ask-when-exit)
             (and (functionp navi2ch-ask-when-exit)
-                 (funcall navi2ch-ask-when-exit "really exit navi2ch?")))
+		 (funcall navi2ch-ask-when-exit "really exit navi2ch?"))
+	    (y-or-n-p "really exit navi2ch?")	; backward compatibility
+	    )
     (run-hooks 'navi2ch-exit-hook)
     (navi2ch-save-status)
     (dolist (x (append
