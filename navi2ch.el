@@ -43,8 +43,10 @@
 (require 'navi2ch-search)
 (require 'navi2ch-directory)
 (require 'navi2ch-message)
-(and navi2ch-on-emacs21
-     (require 'navi2ch-e21))
+(navi2ch-ifxemacs
+    (require 'navi2ch-xmas)
+  (when navi2ch-on-emacs21
+    (require 'navi2ch-e21)))
 (require 'navi2ch-splash)
 (require 'navi2ch-version)
 (require 'navi2ch-jbbs-net)
