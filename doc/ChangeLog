@@ -1,3 +1,9 @@
+2002-12-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): デフォルトの名前の変数名を間違えていたので、
+	修正。
+	(navi2ch-message-remember-user-name → navi2ch-message-user-name)
+
 2002-12-19  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch.texi (Updated Flag): 新スレフラグを追加。

@@ -1727,7 +1727,7 @@ Boards File}.
 レスを書き込むときの名前を設定したい。
 
 @item A.
-変数 @code{navi2ch-message-remember-user-name} に名前の文字列を設定する。
+変数 @code{navi2ch-message-user-name} に名前の文字列を設定する。
 @xref{Customize}.
 板ごとに違う名前を使いたいときはこんな感じで。
 @lisp
