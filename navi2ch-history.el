@@ -79,25 +79,30 @@
 
 (defun navi2ch-history-add (board article)
   "BOARD と ARTICLE で表される スレッドを追加"
-  (when (assq 'subject article)
-    (let ((key (navi2ch-history-get-key board article)))
-      (setq navi2ch-history-alist
-	    (delete (assoc key navi2ch-history-alist)
-		    navi2ch-history-alist))
-      (setq navi2ch-history-alist
-	    (cons (list key board article)
-		  navi2ch-history-alist)))
-    (when (and navi2ch-history-max-line
-	       (> (length navi2ch-history-alist)
-		  navi2ch-history-max-line))
-      (setcdr (nthcdr (1- navi2ch-history-max-line)
-		      navi2ch-history-alist)
-	      nil))))
+  (let* ((key (navi2ch-history-get-key board article))
+	 (old-node (assoc key navi2ch-history-alist))
+	 (old-subject (cdr (assq 'subject (nth 2 old-node))))
+	 (subject (cdr (assq 'subject article))))
+    (setq navi2ch-history-alist (delete old-node navi2ch-history-alist))
+    (setq navi2ch-history-alist
+	  (cons (if (or subject (not old-subject))
+		    (list key board article)
+		  old-node)
+		navi2ch-history-alist)))
+  (when (and navi2ch-history-max-line
+	     (> (length navi2ch-history-alist)
+		navi2ch-history-max-line))
+    (setcdr (nthcdr (1- navi2ch-history-max-line)
+		    navi2ch-history-alist)
+	    nil)))
 
 (defun navi2ch-history-insert-subject (num item)
   (navi2ch-bm-insert-subject
    item num
-   (cdr (assq 'subject (navi2ch-history-get-article item)))
+   (or (cdr (assq 'subject (navi2ch-history-get-article item)))
+       (navi2ch-history-get-key
+	(navi2ch-history-get-board item)
+	(navi2ch-history-get-article item)))
    (format "[%s]" (cdr (assq 'name (navi2ch-history-get-board item))))))
 
 (defun navi2ch-history-insert-subjects ()

@@ -378,14 +378,14 @@ LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5(B"
 		       'face 'navi2ch-article-citation-face)))
 
 
-(defun navi2ch-article-view-article (board article &optional force number max-line)
-  "$B%9%l$r8+$k!#(BFORCE $B$G6/@)FI$_9~$_(B
-MAX-LINE $B$GFI$_9~$`9T?t$r;XDj!#$@$?(B `navi2ch-article-max-line' $B$H$O5U$G(B t $B$GA4ItFI$_9~$_(B"
+(defun navi2ch-article-view-article (board article
+				     &optional force number max-line)
+  "$B%9%l$r8+$k!#(BFORCE $B$G6/@)FI$_9~$_(B MAX-LINE $B$GFI$_9~$`9T?t$r;XDj!#(B
+$B$@$?(B `navi2ch-article-max-line' $B$H$O5U$G(B t $B$GA4ItFI$_9~$_(B"
   (let ((buf-name (navi2ch-article-get-buffer-name board article))
 	(navi2ch-article-max-line (cond ((numberp max-line) max-line)
 					(max-line nil)
 					(t navi2ch-article-max-line))))
-    (navi2ch-history-add board article)
     (if (get-buffer buf-name)
         (progn
           (switch-to-buffer buf-name)
@@ -407,7 +407,9 @@ MAX-LINE $B$GFI$_9~$`9T?t$r;XDj!#$@$?(B `navi2ch-article-max-line' $B$H$O5U$G
                   navi2ch-article-exist-message-range)
           (setq navi2ch-article-view-range
                 navi2ch-article-new-message-range)))
-      (navi2ch-article-sync force 'first number))))
+      (prog1 (navi2ch-article-sync force 'first number)
+	(navi2ch-history-add navi2ch-article-current-board
+			     navi2ch-article-current-article)))))
 
 (defun navi2ch-article-view-article-from-file (file)
   "FILE $B$+$i%9%l$r8+$k!#(B"
