@@ -1,3 +1,16 @@
+2003-11-01  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file):
+	gzip の実行に失敗したらエラーにする。
+	(navi2ch-net-get-content-subr-region): 同上。
+
+	* navi2ch-search.el (navi2ch-search-all-board-list): 新関数。
+	下記関数の共通部分。
+	(navi2ch-search-all-subject): 上記関数を使うように。
+	(navi2ch-search-all-article): 同上。
+	(navi2ch-search-all-cache): 同上。
+	(navi2ch-search-all-orphan): 同上。
+
 2003-10-31  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-show-url-subr): last をサポー

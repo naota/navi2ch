@@ -223,29 +223,29 @@
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-board-subject-regexp
          board-list (navi2ch-read-string "Subject regexp: " nil
-				 'navi2ch-search-history)))
+					 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
+
+(defun navi2ch-search-all-board-list ()
+  ;; TODO: 板が移転した後も過去ログは旧サーバなので洩れがある。
+  (navi2ch-list-get-board-name-list
+   (navi2ch-list-get-normal-category-list
+    navi2ch-list-category-list)))
 
 (defun navi2ch-search-all-subject ()
   (interactive)
-  (navi2ch-search-subject-subr
-   (navi2ch-list-get-board-name-list
-    (navi2ch-list-get-normal-category-list
-     navi2ch-list-category-list))))
+  (navi2ch-search-subject-subr (navi2ch-search-all-board-list)))
 
 (defun navi2ch-search-article-subr (board-list)
   (setq navi2ch-search-searched-subject-list
         (navi2ch-search-article-regexp
          board-list (navi2ch-read-string "Search regexp: " nil
-				 'navi2ch-search-history)))
+					 'navi2ch-search-history)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-article ()
   (interactive)
-  (navi2ch-search-article-subr
-   (navi2ch-list-get-board-name-list
-    (navi2ch-list-get-normal-category-list
-     navi2ch-list-category-list))))
+  (navi2ch-search-article-subr (navi2ch-search-all-board-list)))
 
 (defun navi2ch-search-cache-subr (board-list)
   (setq navi2ch-search-searched-subject-list
@@ -254,10 +254,7 @@
 
 (defun navi2ch-search-all-cache ()
   (interactive)
-  (navi2ch-search-cache-subr
-   (navi2ch-list-get-board-name-list
-    (navi2ch-list-get-normal-category-list
-     navi2ch-list-category-list))))
+  (navi2ch-search-cache-subr (navi2ch-search-all-board-list)))
 
 (defun navi2ch-search-orphan-subr (board-list)
   (setq navi2ch-search-searched-subject-list
@@ -266,10 +263,7 @@
 
 (defun navi2ch-search-all-orphan ()
   (interactive)
-  (navi2ch-search-orphan-subr
-   (navi2ch-list-get-board-name-list
-    (navi2ch-list-get-normal-category-list
-     navi2ch-list-category-list))))
+  (navi2ch-search-orphan-subr (navi2ch-search-all-board-list)))
 
 (run-hooks 'navi2ch-search-load-hook)
 ;;; navi2ch-search.el ends here

@@ -267,8 +267,11 @@ BODY の評価中にエラーが起こると nil を返す。"
 	      (inhibit-file-name-handlers (cons 'jka-compr-handler
 						inhibit-file-name-handlers)))
 	  (navi2ch-write-region start end tempfngz))
-	(call-process shell-file-name nil nil nil
-		      shell-command-switch (concat "gzip -d " tempfngz))
+	(let ((status (call-process shell-file-name nil nil nil
+				    shell-command-switch
+				    (concat "gzip -d " tempfngz))))
+	  (unless (and (numberp status) (zerop status))
+	    (error "Failed to execute gzip.")))
 	(delete-region start end)
 	(goto-char start)
 	(goto-char (+ start
@@ -277,10 +280,12 @@ BODY の評価中にエラーが起こると nil を返す。"
 
 (defun navi2ch-net-get-content-subr-region (gzip-p start end)
   (if gzip-p
-      (apply 'call-process-region
-	     start end
-	     navi2ch-net-gunzip-program t t nil
-	     navi2ch-net-gunzip-args)))
+      (let ((status (apply 'call-process-region
+			   start end
+			   navi2ch-net-gunzip-program t t nil
+			   navi2ch-net-gunzip-args)))
+	(unless (and (numberp status) (zerop status))
+	  (error "Failed to execute gzip.")))))
 
 (defalias 'navi2ch-net-get-content-subr
   (navi2ch-ifemacsce
