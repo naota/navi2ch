@@ -1328,12 +1328,36 @@ article buffer から抜けるなら 'quit を返す。"
       (setq msg (navi2ch-article-parse-message msg)))
     (cdr (assq 'data msg))))
 
+(defun navi2ch-article-cached-subject-minimum-size (file)
+  "スレタイトルを得るに最低限のファイルサイズを求める。"
+  (with-temp-buffer
+    (let ((beg 0) (end 1024))
+      (navi2ch-insert-file-contents file beg end)
+      (forward-line)
+      (while (= (point) (point-max))
+	(setq beg end)
+	(setq end (+ end 1024))
+	(navi2ch-insert-file-contents file beg end)
+	(forward-line))
+      end)))
+
+(defun navi2ch-article-cached-subject (board article)
+  "キャッシュされている dat ファイルからスレタイトルを得る。"
+  (let ((file (navi2ch-article-get-file-name board article))
+	list)
+    (when (navi2ch-article-check-cached board article)
+      (setq list (navi2ch-article-get-message-list
+		  file 0 (navi2ch-article-cached-subject-minimum-size file)))
+      (cdr (assq 'subject (navi2ch-article-parse-message (cdar list)))))))
+
 (defun navi2ch-article-display-link-minibuffer (point)
   "point のリンク先を minibuffer に表示"
-  (let ((prop (get-text-property (point) 'number))
+  (let ((num-prop (get-text-property (point) 'number))
+	(url-prop (get-text-property (point) 'url))
 	num-list num)
-    (when prop
-      (setq num-list (navi2ch-article-str-to-num (japanese-hankaku prop)))
+    (cond
+     (num-prop
+      (setq num-list (navi2ch-article-str-to-num (japanese-hankaku num-prop)))
       (cond ((numberp num-list)
 	     (setq num num-list))
 	    (t
@@ -1348,7 +1372,15 @@ article buffer から抜けるなら 'quit を返す。"
           (message
            "%s" (truncate-string-to-width
                  (format "[%d]: %s" num msg)
-                 (eval navi2ch-article-display-link-width))))))))
+                 (eval navi2ch-article-display-link-width))))))
+     (url-prop
+      (if (navi2ch-2ch-url-p url-prop)
+	  (let ((board (navi2ch-board-url-to-board url-prop))
+		(article (navi2ch-article-url-to-article url-prop)))
+	    (if (navi2ch-article-check-cached board article)
+		(message "[%s]: %s"
+			 (cdr (assq 'name board))
+			 (navi2ch-article-cached-subject board article)))))))))
 
 (defun navi2ch-article-next-link ()
   "次のリンクへ"

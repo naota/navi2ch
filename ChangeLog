@@ -1,3 +1,13 @@
+2002-05-15    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el
+	(navi2ch-article-cached-subject-minimum-size): 新関数。
+	(navi2ch-article-cached-subject): 新関数。
+	(navi2ch-article-display-link-minibuffer): リンク先がキャッシュさ
+	れているスレの URL のとき、スレタイトルを表示するように。
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/721
+	http://pc.2ch.net/test/read.cgi/unix/1013457056/726
+	
 2002-05-11    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-next-link): 移動しなかったと
