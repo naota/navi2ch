@@ -20,7 +20,6 @@ el_files =										\
 etc_files =										\
 	README										\
 	ChangeLog									\
-	Todo										\
 	bcomp.el									\
 	Makefile.old
 
