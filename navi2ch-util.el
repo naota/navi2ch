@@ -217,11 +217,6 @@ Expanded at compilation time."
      (progn ,@else)))
 (put 'navi2ch-ifemacsce 'lisp-indent-function 1)
 
-(defmacro navi2ch-define-mouse-key (map num command)
-  (if (featurep 'xemacs)
-      `(define-key ,map ',(intern (format "button%d" num)) ,command)
-    `(define-key ,map ,(vector (intern (format "mouse-%d" num))) ,command)))
-
 ;; from apel
 (defmacro navi2ch-defalias-maybe (symbol definition)
   "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
@@ -234,37 +229,6 @@ See also the function `defalias'."
                  (defalias (quote (, symbol)) (, definition))
                ;; `defalias' updates `load-history' internally.
                (put (quote (, symbol)) 'defalias-maybe t))))))
-
-;; from apel
-(defmacro navi2ch-set-buffer-multibyte (flag)
-  (if (featurep 'xemacs)
-      flag
-    `(set-buffer-multibyte ,flag)))
-
-;; from apel
-(defmacro navi2ch-string-as-unibyte (string)
-  (if (featurep 'xemacs)
-      string
-    `(string-as-unibyte ,string)))
-
-(defmacro navi2ch-string-as-multibyte (string)
-  (if (featurep 'xemacs)
-      string
-    `(string-as-multibyte ,string)))
-
-;;; from Wanderlust (elmo-date.el)
-(defmacro navi2ch-make-sortable-date (datevec)
-  "Make a sortable string from DATEVEC."
-  (` (timezone-make-sortable-date
-      (aref (, datevec) 0)
-      (aref (, datevec) 1)
-      (aref (, datevec) 2)
-      (aref (, datevec) 3))))
-
-(defmacro navi2ch-match-string-no-properties (num &optional string)
-  (if (featurep 'xemacs)
-      `(match-string ,num ,string)
-    `(match-string-no-properties ,num ,string)))
 
 (defmacro navi2ch-with-default-file-modes (mode &rest body)
   "default-file-modes を MODE にして BODY を実行する。"
@@ -285,6 +249,36 @@ See also the function `defalias'."
 
 
 ;;;; other misc stuff
+(defun navi2ch-mouse-key (num)
+  (navi2ch-ifxemacs
+      (intern (format "button%d" num))
+    (vector (intern (format "mouse-%d" num)))))
+
+(defun navi2ch-define-mouse-key (map num command)
+  (define-key map (navi2ch-mouse-key num) command))
+
+;; from apel
+(defalias 'navi2ch-set-buffer-multibyte
+  (navi2ch-ifxemacs #'identity #'set-buffer-multibyte))
+
+;; from apel
+(defalias 'navi2ch-string-as-unibyte
+  (navi2ch-ifxemacs #'identity #'string-as-unibyte))
+
+(defalias 'navi2ch-string-as-multibyte
+  (navi2ch-ifxemacs #'identity #'string-as-multibyte))
+
+;;; from Wanderlust (elmo-date.el)
+(defun navi2ch-make-sortable-date (datevec)
+  "Make a sortable string from DATEVEC."
+  (timezone-make-sortable-date (aref datevec 0) (aref datevec 1)
+			       (aref datevec 2) (aref datevec 3)))
+
+(defsubst navi2ch-match-string-no-properties (num &optional string)
+  (navi2ch-ifxemacs
+      (match-string num string)
+    (match-string-no-properties num string)))
+
 (defsubst navi2ch-no-logging-message (fmt &rest args)
   (navi2ch-ifxemacs
       (apply #'lmessage 'no-log fmt args)
@@ -918,9 +912,18 @@ base64デコードすべき内容がない場合はエラーになる。"
 
 (defun navi2ch-add-replace-html-tag (tag value)
   "TAG を表示する際に VALUE で置き換える。"
-  (add-to-list 'navi2ch-replace-html-tag-alist
-	       (cons tag value))
-  (navi2ch-update-html-tag-regexp))
+  (let ((as-regexp (condition-case nil
+		       (progn
+			 ;; 文字列によっては regexp-opt-group() が無限
+			 ;; 再帰になる
+			 (regexp-opt (list "あ" tag))
+			 nil)
+		     (error t))))
+    (if as-regexp
+	(navi2ch-add-replace-html-tag-regexp (regexp-quote tag) value)
+      (add-to-list 'navi2ch-replace-html-tag-alist
+		   (cons tag value))
+      (navi2ch-update-html-tag-regexp))))
 
 (defun navi2ch-add-replace-html-tag-regexp (regexp value)
   "REGEXP にマッチする tag を表示する際に VALUE で置き換える。"

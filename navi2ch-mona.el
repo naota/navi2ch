@@ -249,20 +249,20 @@ Otherwise, FACE-OR-NAME should be a symbol.  If there is no such face,
 nil is returned.  Otherwise the associated face object is returned."
   (car (memq face-or-name (face-list))))
 
-(defmacro navi2ch-find-face (face-or-name)
+(defalias 'navi2ch-find-face
   (if (fboundp 'find-face)
-      `(find-face ,face-or-name)
-    `(navi2ch-find-face-subr ,face-or-name)))
+      #'find-face
+    #'navi2ch-find-face-subr))
 
-(defmacro navi2ch-mona-char-height ()
-  (if (featurep 'xemacs)
-      '(font-height (face-font 'default))
-    '(frame-char-height)))
+(defun navi2ch-mona-char-height ()
+  (navi2ch-ifxemacs
+      (font-height (face-font 'default))
+    (frame-char-height)))
 
-(defmacro navi2ch-set-face-parent (face parent)
-  (if (featurep 'xemacs)
-      `(set-face-parent ,face ,parent)
-    `(set-face-attribute ,face nil :inherit ,parent)))
+(defun navi2ch-set-face-parent (face parent)
+  (navi2ch-ifxemacs
+      (set-face-parent face parent)
+    (set-face-attribute face nil :inherit parent)))
 
 ;; functions
 (defun navi2ch-mona-set-mona-face ()

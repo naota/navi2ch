@@ -1,3 +1,30 @@
+2004-04-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	マクロの使用を未評価の引数が必要な場合のみに制限。
+
+	* navi2ch-util.el (navi2ch-mouse-key): 新関数。
+	(navi2ch-define-mouse-key): 上記関数を使うように。
+	マクロ→関数。
+	(navi2ch-set-buffer-multibyte): マクロ→エイリアス
+	(navi2ch-string-as-unibyte): 同上
+	(navi2ch-string-as-multibyte): 同上
+	(navi2ch-make-sortable-date): マクロ→関数
+	(navi2ch-match-string-no-properties): マクロ→インライン関数
+
+	* navi2ch-mona.el (navi2ch-find-face): マクロ→エイリアス
+	(navi2ch-mona-char-height): マクロ→関数
+	(navi2ch-set-face-parent): 同上
+
+2004-04-09  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch): condition-case して signal すると
+	debug-on-* が signal の部分になるので unwind-protect を使用。
+
+	* navi2ch-util.el (navi2ch-add-replace-html-tag): regexp-opt のバ
+	グへに再び対処。この関数の実行時間はそれほど重要ではないので、まず
+	regexp-opt がエラーを起こすかどうかを試し、regexp-opt を使うか
+	regexp-quote を使うかを判別する。
+
 2004-04-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-global-view-map):
