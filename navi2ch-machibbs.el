@@ -178,7 +178,7 @@
     (while (navi2ch-machibbs-parse)
       (insert (prog1 (navi2ch-machibbs-make-article subject)
 		(delete-region beg (point))))
-      (setq bubject nil)
+      (setq subject nil)
       (setq beg (point)))
     (delete-region beg (point-max))
     (encode-coding-region (point-min) (point-max) navi2ch-coding-system)))
