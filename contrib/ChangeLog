@@ -1,5 +1,18 @@
 2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-spamfilter.el (navi2ch-spamf-good-corpus): 新変数。
+	(navi2ch-spamf-bad-corpus): 新変数。
+	(navi2ch-spamf-register-good-token): 上記変数を使うように。
+	(navi2ch-spamf-register-spam-token): 同上。
+	(navi2ch-spamf-register-good-token-list): 同上。
+	(navi2ch-spamf-register-spam-token-list): 同上。
+	(navi2ch-article-save-corpus): 同上。
+	(navi2ch-article-load-corpus): 同上。
+	(navi2ch-article-spam-probability): 同上。
+	(navi2ch-article-show-spam-probability): 同上。
+
+2003-10-12  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-spamfilter.el: 新ファイル。
 
 	* Makefile.am (EXTRA_DIST): 上記を追加。

@@ -50,6 +50,12 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
   "non-nil $B$N>l9g!"%^!<%/$NIU$$$F$J$$%l%9$b(B good $B$H$7$FEPO?$9$k!#(B
 `navi2ch-article-register-to-corpus' $B$b;2>H!#(B")
 
+(defvar navi2ch-spamf-good-corpus
+  (make-spamf-corpus :table (make-hash-table :test #'eq) :message-count 0))
+
+(defvar navi2ch-spamf-bad-corpus
+  (make-spamf-corpus :table (make-hash-table :test #'eq) :message-count 0))
+
 (dolist (map (list navi2ch-article-mode-map navi2ch-popup-article-mode-map))
   (define-key map "\C-c\C-g"
     'navi2ch-article-add-message-filter-by-bayesian-good)
@@ -64,11 +70,11 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 
 (defsubst navi2ch-spamf-register-good-token (token)
   (interactive "MToken: ")
-  (navi2ch-spamf-register-token spamf-good-corpus token))
+  (navi2ch-spamf-register-token navi2ch-spamf-good-corpus token))
 
 (defsubst navi2ch-spamf-register-spam-token (token)
   (interactive "MToken: ")
-  (navi2ch-spamf-register-token spamf-bad-corpus token))
+  (navi2ch-spamf-register-token navi2ch-spamf-bad-corpus token))
 
 (defsubst navi2ch-spamf-register-token-list (corpus list)
   (dolist (token list)
@@ -76,10 +82,10 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
   (incf (spamf-corpus-message-count corpus)))
 
 (defsubst navi2ch-spamf-register-good-token-list (list)
-  (navi2ch-spamf-register-token-list spamf-good-corpus list))
+  (navi2ch-spamf-register-token-list navi2ch-spamf-good-corpus list))
 
 (defsubst navi2ch-spamf-register-spam-token-list (list)
-  (navi2ch-spamf-register-token-list spamf-bad-corpus list))
+  (navi2ch-spamf-register-token-list navi2ch-spamf-bad-corpus list))
 
 (defun navi2ch-article-bayesian-tokenizer (alist)
   (nconc
@@ -115,14 +121,18 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
      (navi2ch-article-tokenize-current-message))))
 
 (defsubst navi2ch-article-spam-probability (token)
-  (spamf-sum-spam-probability
-   (mapcar #'cdr (spamf-cutoff-words token spamf-cutoff-words-limit))))
+  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
+	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
+    (spamf-sum-spam-probability
+     (mapcar #'cdr (spamf-cutoff-words token spamf-cutoff-words-limit)))))
 
 (defun navi2ch-article-show-spam-probability (&optional prefix)
   "$B%l%9$N(B spam $B$C$]$5$rI=<($9$k!#(B"
   (interactive "P")
   (let* ((token (navi2ch-article-tokenize-current-message))
-	 (prob (navi2ch-article-spam-probability token)))
+	 (prob (navi2ch-article-spam-probability token))
+	 (spamf-good-corpus navi2ch-spamf-good-corpus)
+	 (spamf-bad-corpus navi2ch-spamf-bad-corpus))
     (if prefix
 	(with-output-to-temp-buffer "*spam probability*"
 	  (princ (format "Spam probability: %f\n\n" prob))
@@ -139,12 +149,18 @@ navi2ch-article-message-filter-by-bayesian $B$G<+F0EPO?$9$k>l9g$O(B 2 $B0J>e
 
 (defun navi2ch-article-save-corpus ()
   (message "Saving corpus file...")
-  (spamf-save-corpus navi2ch-article-bayesian-save-file-name)
+  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
+	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
+    (spamf-save-corpus navi2ch-article-bayesian-save-file-name))
   (message "Saving corpus file...done"))
 
 (defun navi2ch-article-load-corpus ()
   (message "Loading corpus file...")
-  (spamf-load-corpus navi2ch-article-bayesian-save-file-name)
+  (let ((spamf-good-corpus navi2ch-spamf-good-corpus)
+	(spamf-bad-corpus navi2ch-spamf-bad-corpus))
+    (spamf-load-corpus navi2ch-article-bayesian-save-file-name)
+    (setq navi2ch-spamf-good-corpus spamf-good-corpus
+	  navi2ch-spamf-bad-corpus spamf-bad-corpus))
   (message "Loading corpus file...done"))
 
 (defun navi2ch-article-register-to-corpus ()
