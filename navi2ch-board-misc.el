@@ -729,6 +729,7 @@ ARG が non-nil なら移動方向を逆にする。"
   "更新されている可能性のあるスレを fetch する。"
   (interactive)
   (navi2ch-bm-mark-states "[^=]")
+  (sit-for 0)
   (navi2ch-bookmark-fetch-mark-article))
 
 (defun navi2ch-bm-mark-all (&optional arg)

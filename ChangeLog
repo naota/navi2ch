@@ -1,3 +1,8 @@
+2003-09-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-maybe-new-articles): マー
+	クをつけた直後に再描画するよう sit-for を追加。
+
 2003-09-10  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-delete-message):
