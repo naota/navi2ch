@@ -1,5 +1,9 @@
 2002-07-02  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-machibbs.el (navi2ch-machibbs-subject-callback): バッファ
+	の文字コードを decode するようにしてみた。
+	BBSごとにこれやるのは冗長なので統一的なしくみが欲すい。
+
 	* navi2ch-multibbs.el: 	ファイルの文字コードを iso-2022-jp に変更。
 
 	* navi2ch-vars.el (navi2ch-list-valid-host-regexp): .machibbs.com

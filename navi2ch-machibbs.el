@@ -67,8 +67,10 @@
 (defun navi2ch-machibbs-subject-callback ()
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
+  (decode-coding-region (point-min) (point-max) 'shift_jis)
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-    (replace-match "\\1dat\\2")))
+    (replace-match "\\1dat\\2"))
+  (encode-coding-region (point-min) (point-max) navi2ch-coding-system))
 
 (defun navi2ch-machibbs-article-update (board article)
   "BOARD ARTICLEの記事を更新する。"
