@@ -1,3 +1,11 @@
+2002-07-26  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-subject-callback): 
+	jbbs のスレ一覧では最初のスレがなぜか最後にも登場している。
+	最後のスレを削除するように。
+
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-subject-callback): 同上。
+
 2002-07-26  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* README: 謝辞に APEL、Wanderlust を追加。

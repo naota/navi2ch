@@ -60,7 +60,9 @@
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
   (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-    (replace-match "\\1dat\\2")))
+    (replace-match "\\1dat\\2"))
+   (re-search-backward "\\(\n.*\n\\)")
+   (replace-match "\n"))
 
 (defun navi2ch-jbbs-article-update (board article)
   (let* ((file (navi2ch-article-get-file-name board article))
@@ -78,7 +80,7 @@
 
 (defun navi2ch-jbbs-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
-START, END, NOFIRST で範囲を指定する"	; 効かなかったら教えてください。
+START, END, NOFIRST で範囲を指定する"
   (let ((uri   (cdr (assq 'uri board)))
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
