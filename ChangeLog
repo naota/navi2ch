@@ -1,5 +1,8 @@
 2002-01-19  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-board.el (navi2ch-board-update-file): read.cgi を使う際
+	の戻り値の扱いが間違っていたので修正。
+
 	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi):
 	offlaw.cgi が使えなくなったのでコメントアウト。
 

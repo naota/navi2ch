@@ -339,8 +339,8 @@
     (let ((file (navi2ch-board-get-file-name board))
 	  (time (cdr (assq 'time board))))
       (if navi2ch-board-enable-readcgi
-	  (navi2ch-net-update-file-with-readcgi
-	   (navi2ch-board-get-readcgi-raw-url board) file time)
+	  (car (navi2ch-net-update-file-with-readcgi
+		(navi2ch-board-get-readcgi-raw-url board) file time))
 	(navi2ch-net-update-file (navi2ch-board-get-url board) file time)))))
 
 (defun navi2ch-board-sync (&optional force first)
