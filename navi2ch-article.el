@@ -366,8 +366,8 @@ START, END, NOFIRST で範囲を指定する"
 	      (end (cdr (cdr (assq 'name alist)))))
 	  (when (and start end)
 	    (goto-char start)
-	    (while (re-search-forward "</b>[^<]+<b>" end t)
-	      ;; fusianasan
+	    (while (re-search-forward "\\(</b>[^<]+<b>\\)\\|\\(<font[^>]+>[^<]+</font>\\)" end t)
+	      ;; fusianasan やトリップなど
 	      (replace-match (navi2ch-propertize (match-string 0)
 						 'navi2ch-fusianasan-flag t)
 			     t t))))

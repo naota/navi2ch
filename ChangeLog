@@ -1,3 +1,8 @@
+2004-08-25  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-parse-message): JBBS@したら
+	ばのキャップやトリップもフォント変更するように。
+
 2004-08-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
