@@ -377,6 +377,18 @@ LEN は RANGE で範囲を指定される list の長さ"
 		       (match-end 0)
 		       'face 'navi2ch-article-citation-face)))
 
+(defun navi2ch-article-expunge-buffers (&optional num)
+  "スレのバッファの数を NUM に制限する。
+NUM を指定しない場合は `navi2ch-article-max-buffers' を使用。"
+  (interactive "P")
+  (if (or (not (numberp num)) ; C-uのみの時4個にしたいわけじゃないと思われ
+	  (= num 0))
+      (setq num navi2ch-article-max-buffers))
+  (if (> num 0)
+      (save-excursion
+	(dolist (killed-buf (nthcdr num (navi2ch-article-buffer-list)))
+	  (set-buffer killed-buf)
+	  (navi2ch-article-kill-buffer)))))
 
 (defun navi2ch-article-view-article (board article
 				     &optional force number max-line)
@@ -390,13 +402,8 @@ LEN は RANGE で範囲を指定される list の長さ"
         (progn
           (switch-to-buffer buf-name)
           (navi2ch-article-sync force nil number))
-      (if (> navi2ch-article-max-buffers 0)
-	  (dolist
-	      (killed-buf (nthcdr (1- navi2ch-article-max-buffers)
-				  (navi2ch-article-buffer-list)))
-	    (set-buffer killed-buf)
-	    (navi2ch-article-kill-buffer)))
       (switch-to-buffer (get-buffer-create buf-name))
+      (navi2ch-article-expunge-buffers)
       (navi2ch-article-mode)
       (setq navi2ch-article-current-board board
             navi2ch-article-current-article article
@@ -431,7 +438,8 @@ LEN は RANGE で範囲を指定される list の長さ"
               navi2ch-article-new-message-range))
       (save-excursion
 	(setq navi2ch-article-message-list
-	      (navi2ch-article-sync-from-file file))))))
+	      (navi2ch-article-sync-from-file file))
+	(navi2ch-article-set-mode-line)))))
   
 (defun navi2ch-article-setup-menu ()
   (easy-menu-define navi2ch-article-mode-menu
@@ -613,13 +621,11 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
 (defun navi2ch-article-sync-from-file (file)
   "スレを FILE から更新する。"
   (when navi2ch-article-from-file-p
-    (let* ((list navi2ch-article-message-list)
-           (range navi2ch-article-view-range))
-      (setq list (navi2ch-article-get-message-list file))
+    (let ((list (navi2ch-article-get-message-list file))
+	  (range navi2ch-article-view-range))
       (let ((buffer-read-only nil))
         (erase-buffer)
         (navi2ch-article-insert-messages list range))
-      (navi2ch-article-set-mode-line)
       list)))
 
 (defun navi2ch-article-set-mode-line ()

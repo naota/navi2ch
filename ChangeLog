@@ -1,8 +1,15 @@
 2002-01-10  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-summary-element-set-seen):
+	* navi2ch-article.el (navi2ch-article-summary-element-set-seen): 
 	マクロ引数の element が展開されてなかったので修正。
 	(navi2ch-article-summary-element-set-access-time): 同上
+	(navi2ch-article-expunge-buffers): article buffer の掃除を別関数に
+	分けてみた。手動で実行できてウマー。
+	(navi2ch-article-view-article): 上記関数を使うように。
+	(navi2ch-article-view-article-from-file):
+	navi2ch-article-message-list を設定した後でモードラインを更新。
+	(navi2ch-article-sync-from-file): 上記に伴いモードラインを更新しな
+	いように。
 
 2002-01-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
