@@ -1,6 +1,6 @@
 ;;; navi2ch-oyster.el --- oyster module for Navi2ch.
 
-;; Copyright (C) 2000 by Navi2ch Project
+;; Copyright (C) 2002 by Navi2ch Project
 
 ;; Author: MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -43,8 +43,7 @@
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
     (article-update 	. navi2ch-oyster-article-update)
-    (send-message   	. navi2ch-oyster-send-message)
-    ))
+    (send-message   	. navi2ch-oyster-send-message)))
 ;; navi2ch-net-user-agent も multibbs 化する必要あり?
 
 (defvar navi2ch-oyster-variable-alist
@@ -82,36 +81,34 @@ state はあぼーんされてれば aborn というシンボル。
 	(url (navi2ch-article-get-url board article))
 	header
 	ret)
-	(setq ret (if (and (file-exists-p file)
-			   navi2ch-article-enable-diff)
-		      (navi2ch-net-update-file-diff url file time)
-		    (let ((header (navi2ch-net-update-file url file time)))
-		      (and header (list header nil)))))
-	(unless ret
-	  (setq url (navi2ch-article-get-kako-url board article))
-	  (let ((header (navi2ch-net-update-file url file)))
-	    (and header (setq ret (list header 'kako)))))
-	(unless ret
-	  (and (not navi2ch-oyster-session-id)
-	       (navi2ch-oyster-login))
-	  (setq url (navi2ch-oyster-get-offlaw-url board article navi2ch-oyster-session-id file))
-	  (message "offlaw url %s" url)
-	  (setq ret
-		(if (file-exists-p file)
-			(progn
-			  (message "article %s" article)
-			  (setq header (navi2ch-oyster-update-file-with-offlaw url file time t))
-			  (and header (setq ret (list header 'kako)))
-			  ret
-			  )
-
-		      (let ((header (navi2ch-oyster-update-file-with-offlaw url file time nil)))
-			(message "getting from 0 offlaw.cgi")
-			(and header (setq ret (list header 'kako))))
-		)
-		)
-	  )
-	ret))
+    (setq ret (if (and (file-exists-p file)
+		       navi2ch-article-enable-diff)
+		  (navi2ch-net-update-file-diff url file time)
+		(let ((header (navi2ch-net-update-file url file time)))
+		  (and header (list header nil)))))
+    (unless ret
+      (setq url (navi2ch-article-get-kako-url board article))
+      (let ((header (navi2ch-net-update-file url file)))
+	(and header (setq ret (list header 'kako)))))
+    (unless ret
+      (and (not navi2ch-oyster-session-id)
+	   (navi2ch-oyster-login))
+      (setq url (navi2ch-oyster-get-offlaw-url
+		 board article navi2ch-oyster-session-id file))
+      (message "offlaw url %s" url)
+      (setq ret
+	    (if (file-exists-p file)
+		(progn
+		  (message "article %s" article)
+		  (setq header (navi2ch-oyster-update-file-with-offlaw
+				url file time t))
+		  (and header (setq ret (list header 'kako)))
+		  ret)
+	      (let ((header (navi2ch-oyster-update-file-with-offlaw
+			     url file time nil)))
+		(message "getting from 0 offlaw.cgi")
+		(and header (setq ret (list header 'kako)))))))
+    ret))
 
 (defun navi2ch-oyster-send-message
   (from mail message subject bbs key time board article)
@@ -129,13 +126,10 @@ state はあぼーんされてれば aborn というシンボル。
 		      ;;y-n で聞きたいなぁ
 		      (if navi2ch-oyster-session-id
 			  (cons "sid" navi2ch-oyster-session-id)
-			(cons "sid" "" ))
-
-
+			(cons "sid" ""))
 		      (if subject
 			  (cons "subject" subject)
-			(cons "key"    key)))))
-
+			(cons "key" key)))))
     (let ((proc
 	   (navi2ch-net-send-request
 	    url "POST"
@@ -150,21 +144,17 @@ state はあぼーんされてれば aborn というシンボル。
 
 (defun navi2ch-oyster-get-offlaw-url (board article sid file)
   "BOARD, ARTICLE, SESSION-ID, FILE  から offlaw url に変換。"
-  (let (
-	(uri (navi2ch-board-get-uri board))
+  (let ((uri (navi2ch-board-get-uri board))
  	(artid (cdr (assq 'artid article)))
 	(size 0)
-	encoded-s
-	)
-;    (setq  encoded-s (w3m-url-encode-string sid))
-    (setq  encoded-s (navi2ch-net-url-hexify-string sid))
+	encoded-s)
+;    (setq encoded-s (w3m-url-encode-string sid))
+    (setq encoded-s (navi2ch-net-url-hexify-string sid))
     (when (file-exists-p file)
       (setq size (max 0 (nth 7 (file-attributes file)))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri)
     (format "%s/test/offlaw.cgi/%s/%s/?raw=.%s&sid=%s"
- 	    (match-string 1 uri) (match-string 2 uri) artid size encoded-s)
-    )
-  )
+ 	    (match-string 1 uri) (match-string 2 uri) artid size encoded-s)))
 
 (defun navi2ch-oyster-update-file-with-offlaw (url file &optional time diff)
   "FILE を URL から offlaw.cgi を使って更新する。
@@ -217,8 +207,7 @@ state はあぼーんされてれば aborn というシンボル。"
 	     ((string= "-ERR" state)
 	      (let ((err-msg (decode-coding-string
 			      data navi2ch-coding-system)))
-		(message "error! %s" err-msg)
-		)))))))))
+		(message "error! %s" err-msg))))))))))
 
 
 (defun navi2ch-oyster-get-status (proc)
@@ -254,15 +243,16 @@ state はあぼーんされてれば aborn というシンボル。"
 			   (concat
 			    "POST /~tora3n2c/futen.cgi HTTP/1.0\n"
 			    "User-Agent: DOLIB/1.00\n"
-			    "X-2ch-UA: " (format "Navigator for 2ch %s" navi2ch-version) "\n"
-			    "Content-Length: " (number-to-string (length contents)) "\n"
+			    "X-2ch-UA: "
+			    (format "Navigator for 2ch %s" navi2ch-version) "\n"
+			    "Content-Length: "
+			    (number-to-string (length contents)) "\n"
 			    "\n"
 			    contents)))
     (setq navi2ch-oyster-session-id (navi2ch-oyster-get-status proc))
     (message "IDを取得しますた ID= %s" navi2ch-oyster-session-id)
     (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
 	 (message "ID取得に失敗しますた" navi2ch-oyster-session-id)
-	 (setq navi2ch-oyster-session-id nil))
-    ))
+	 (setq navi2ch-oyster-session-id nil))))
 
 ;;; navi2ch-oyster.el ends here

@@ -1,3 +1,11 @@
+2002-09-03  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-oyster.el: Copyright の年を 2000 から 2002 に修正。
+	閉じ括弧をぶら下げずに行末へ。
+	空行を削除。
+	mark-whole-buffer → indent-region でインデント修正。
+	改行位置を調整。
+
 2002-09-02  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-oyster.el (toplevel): ssl.el が無い環境でもバイトコンパ
