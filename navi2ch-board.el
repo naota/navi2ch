@@ -158,11 +158,27 @@
     (format "%s/test/read.cgi/%s/"
 	    (match-string 1 uri) (match-string 2 uri))))
 
+(defcustom navi2ch-board-default-bbscgi-path "/test/bbs.cgi"
+  "*bbs.cgi のデフォルトの path。"
+  :type 'string
+  :group 'navi2ch-board)
+
+(defcustom navi2ch-board-bbscgi-path-alist nil
+  "*板 URL から bbs.cgi の path への alist。"
+  :type '(repeat (cons (string :tag "URL") (string :tag "path")))
+  :group 'navi2ch-board)
+
+(defun navi2ch-board-get-bbscgi-path (board)
+  "bbs.cgi の path を返す。"
+  (let ((uri (navi2ch-board-get-uri board)))
+    (or (cdr (assoc uri navi2ch-board-bbscgi-path-alist))
+	navi2ch-board-default-bbscgi-path)))
+
 (defun navi2ch-board-get-bbscgi-url (board)
-  "bbs.cgi の url を返す"
+  "bbs.cgi の url を返す。"
   (let ((uri (navi2ch-board-get-uri board)))
     (string-match "\\(.+\\)/[^/]+/$" uri)
-    (format "%s/test/bbs.cgi" (match-string 1 uri))))
+    (concat (match-string 1 uri) (navi2ch-board-get-bbscgi-path board))))
 
 (defun navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))

@@ -1,3 +1,11 @@
+2003-02-08  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-board.el (navi2ch-board-default-bbscgi-path): 新変数。
+	(navi2ch-board-bbscgi-path-alist): 新変数。
+	(navi2ch-board-get-bbscgi-path): 新関数。
+	(navi2ch-board-get-bbscgi-url): 上記関数を使うように。
+	bbs.cgi の場所が変わりそうなので。
+
 2003-02-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-mona.el (navi2ch-mona-enable-article-list): 新変数。
