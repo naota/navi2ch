@@ -1311,32 +1311,60 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (interactive "P")
   (let (prop)
     (cond ((setq prop (get-text-property (point) 'number))
-           (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
-	   (if browse-p
-               (navi2ch-browse-url-internal
-		(navi2ch-article-to-url navi2ch-article-current-board
-					navi2ch-article-current-article
-					(if (numberp prop) prop (apply 'min prop))
-					(if (numberp prop) prop (apply 'max prop))
-					t))
-	     (if (numberp prop)
-		 (navi2ch-article-goto-number prop t t)
-	       (navi2ch-popup-article prop))))
+	   (navi2ch-article-select-current-link-number
+	    (navi2ch-article-str-to-num (japanese-hankaku prop))
+	    browse-p))
           ((setq prop (get-text-property (point) 'url))
-           (let ((2ch-url-p (navi2ch-2ch-url-p prop)))
-             (if (and 2ch-url-p
-                      (or (navi2ch-board-url-to-board prop)
-                          (navi2ch-article-url-to-article prop))
-                      (not browse-p))
-		 (progn
-		   (and (get-text-property (point) 'help-echo)
-			(let ((buffer-read-only nil))
-			  (navi2ch-article-change-help-echo-property
-			   (point) (function navi2ch-article-help-echo))))
-		   (navi2ch-goto-url prop))
-               (navi2ch-browse-url-internal prop))))
+           (navi2ch-article-select-current-link-url prop browse-p nil))
           ((setq prop (get-text-property (point) 'content))
 	   (navi2ch-article-save-content)))))
+
+(defun navi2ch-article-select-current-link-number (prop browse-p)
+  ;; prop は「数の list」か「数」。
+  (cond (browse-p
+	 (navi2ch-browse-url-internal
+	  (navi2ch-article-to-url navi2ch-article-current-board
+				  navi2ch-article-current-article
+				  (if (numberp prop) prop (apply 'min prop))
+				  (if (numberp prop) prop (apply 'max prop))
+				  t)))
+	((eq navi2ch-article-select-current-link-number-style 'popup)
+	 (navi2ch-popup-article (if (listp prop) prop (list prop))))
+	((eq navi2ch-article-select-current-link-number-style 'jump)
+	 (navi2ch-article-goto-number (if (listp prop) (car prop) prop)
+				      t t))
+	;; (eq navi2ch-article-select-current-link-number-style 'auto)
+	((numberp prop)
+	 (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
+	       (imp (cdr (assq 'important navi2ch-article-current-article)))
+	       (range navi2ch-article-view-range)
+	       (len (length navi2ch-article-message-list)))
+	   (if (cond (navi2ch-article-hide-mode
+		      (memq prop hide))
+		     (navi2ch-article-important-mode
+		      (memq prop imp))
+		     (t
+		      (and (navi2ch-article-inside-range-p prop range len)
+			   (not (memq prop hide)))))
+	       (navi2ch-article-goto-number prop t t)
+	     (navi2ch-popup-article (list prop)))))
+	(t
+	 (navi2ch-popup-article prop))))
+
+(defun navi2ch-article-select-current-link-url (url browse-p popup)
+  (if (and (not browse-p)
+	   (navi2ch-2ch-url-p url)
+	   (or (navi2ch-board-url-to-board url)
+	       (navi2ch-article-url-to-article url)))
+      (progn
+	(if popup
+	    (navi2ch-popup-article-exit)
+	  (and (get-text-property (point) 'help-echo)
+	       (let ((buffer-read-only nil))
+		 (navi2ch-article-change-help-echo-property
+		  (point) (function navi2ch-article-help-echo)))))
+	(navi2ch-goto-url url))
+    (navi2ch-browse-url-internal url)))
 
 (defun navi2ch-article-mouse-select (e)
   (interactive "e")

@@ -1,3 +1,21 @@
+2003-03-30  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-vars.el
+	(navi2ch-article-select-current-link-number-style): 新変数。
+
+	* navi2ch-article.el
+	(navi2ch-article-select-current-link): 下記新関数に分離。
+	(navi2ch-article-select-current-link-number): 新関数。
+	表示方法を上記新変数で設定できるように。
+	表示範囲外だったり hide されていたりなどでリンク先レスが表示されて
+	いないときは popup するように。
+	http://pc.2ch.net/test/read.cgi/unix/1046402063/311-316n
+	(navi2ch-article-select-current-link-url): 新関数。
+
+	* navi2ch-popup-article.el
+	(navi2ch-popup-article-select-current-link): 上記新関数を使うよう
+	に。
+
 2003-03-27  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch.el (navi2ch-save-info): 

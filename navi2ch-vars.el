@@ -601,6 +601,16 @@ ask なら明示的に移動する時以外なら質問する
   :type 'regexp
   :group 'navi2ch-article)
 
+(defcustom navi2ch-article-select-current-link-number-style 'auto
+  "*スレ内リンク (>>3 とか) をたどるときの表示方法。
+'popup ならつねに別ウィンドウを popup する。
+'jump なら popup せずに移動する。
+'auto なら自動で切り替える。"
+  :type '(choice (const :tag "Popup" popup)
+                 (const :tag "Jump" jump)
+		 (const :tag "Auto" auto))
+  :group 'navi2ch-article)
+
 (defcustom navi2ch-article-url-regexp
   "\\(h?ttps?\\|x-localbbs\\)\\(://[-a-zA-Z0-9_=?#$@~`%&*+|\\/.,:;]+\\)"
   "*レスのテキストのうち URL とみなす部分の正規表現。"

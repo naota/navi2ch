@@ -178,23 +178,13 @@ stack が空なら、PopUp Article モードを抜ける。"
     (cond
      ((setq prop (get-text-property (point) 'number))
       (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
-      (if (integerp prop)
-	  (progn
-	    (unless (assq prop navi2ch-article-message-list)
-	      (navi2ch-popup-article-exit))
-	    (navi2ch-article-goto-number prop t t))
+      (if (and (integerp prop)
+	       (assq prop navi2ch-article-message-list))
+	  (navi2ch-article-goto-number prop t t)
 	(navi2ch-popup-article-exit)
-	(navi2ch-popup-article prop)))
+	(navi2ch-article-select-current-link-number prop browse-p)))
      ((setq prop (get-text-property (point) 'url))
-      (let ((2ch-url-p (navi2ch-2ch-url-p prop)))
-	(if (and 2ch-url-p
-		 (or (navi2ch-board-url-to-board prop)
-		     (navi2ch-article-url-to-article prop))
-		 (not browse-p))
-	    (progn
-	      (navi2ch-popup-article-exit)
-	      (navi2ch-goto-url prop))
-	  (navi2ch-browse-url-internal prop))))
+      (navi2ch-article-select-current-link-url prop browse-p t)))
      ((setq prop (get-text-property (point) 'content))
       (navi2ch-article-save-content)))))
 
