@@ -693,7 +693,7 @@ ARG が non-nil なら移動方向を逆にする。"
   (navi2ch-bm-exec-subr 'navi2ch-bm-fetch-article force))
 
 (defun navi2ch-bm-textize-mark-article (directory &optional file)
-  (interactive "Ddirectory: \nFlist file: ")
+  (interactive "DDirectory: \nFList file: ")
   (let ((buffer (get-buffer-create (make-temp-name "*navi2ch "))))
     (navi2ch-bm-exec-subr 'navi2ch-bm-textize-article directory buffer)
     (save-excursion
@@ -760,7 +760,7 @@ ARG が non-nil なら移動方向を逆にする。"
 
 ;; mark by regexp query
 (defun navi2ch-bm-mark-by-query (query &optional arg)
-  (interactive "Mquery (regexp): ")
+  (interactive "MQuery (regexp): ")
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward query nil t)

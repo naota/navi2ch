@@ -113,7 +113,7 @@
 		 (not (navi2ch-right-aligned-string< x y)))))))
 
 (defun navi2ch-directory-find-directory (directory)
-  (interactive "Ddirectory: ")
+  (interactive "DDirectory: ")
   (when (file-directory-p directory)
     (setq directory (expand-file-name directory))
     (setq default-directory directory)

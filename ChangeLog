@@ -1,3 +1,15 @@
+2004-11-21  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
+	プロンプトの文頭を大文字に。
+
+	* navi2ch-board-misc.el (navi2ch-bm-textize-mark-article): 同上。
+	(navi2ch-bm-mark-by-query): 同上。
+
+	* navi2ch-article.el (navi2ch-article-select-view-range-subr): 同
+	上。
+	(navi2ch-article-goto-number): 同上。
+
 2004-10-26  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-articles.el (navi2ch-articles-remove-article): 新関数。

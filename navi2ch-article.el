@@ -1431,7 +1431,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 		  (setq i (1+ i)))))
 	    (display-buffer buf)
 	    (let (n)
-	      (setq n (navi2ch-read-char "input: "))
+	      (setq n (navi2ch-read-char "Input: "))
 	      (when (or (< n ?0) (> n ?9))
 		(error "%c is bad key" n))
 	      (setq n (- n ?0))
@@ -1696,7 +1696,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 
 (defun navi2ch-article-goto-number (num &optional save pop)
   "NUM 番目のレスに移動。"
-  (interactive "ninput number: ")
+  (interactive "nInput number: ")
   (when (and num (> num 0)
 	     navi2ch-article-message-list)
     (when (or (interactive-p) save)
