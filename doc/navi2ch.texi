@@ -254,7 +254,18 @@ checkout した後は @file{navi2ch} ディレクトリで
 @end group
 @end example
 
-とすると最新版に同期することができる。
+とすると最新版に同期することができる。configure した後であれば
+
+@example
+@group
+% make update
+@end group
+@end example
+
+このようにしてもいい。@footnote{GNU make 以外の make (例えば FreeBSD
+の標準 make など) では、Makefile ターゲットが更新されても、Makefile を
+再読み込みしないものがある。update ターゲットは、このようなシステムで
+もうまく動くよう、cvs update の後に Makefile を更新する。}
 
 CVS についての詳しい説明は
 @uref{http://www.cvshome.org/}
