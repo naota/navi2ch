@@ -1,3 +1,7 @@
+2004-07-29  mami  <mami@users.sourceforge.net>
+
+	* navi2ch.texi (Misc Questions): expire のキーバインドを補足。
+
 2004-05-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Board Questions): typo 修正。
@@ -452,7 +456,7 @@
 	* navi2ch.texi: 「このドキュメントについて」章を追加。
 	「Bookmark モード」セクションを追加。
 	キーバインドの node 名を「〜 Key Bindings」に統一。
-	2ストロークキーは間にスペースを入れた。\C-? は C-? に変更。
+	2ストロークキーは間にスペースを入れた。＼C-? は C-? に変更。
 	クロスリファレンスをちょっと見直し。
 
 	* Makefile: tar 玉に ChangeLog を入れるようにした。
