@@ -334,11 +334,12 @@ UNIX 板を読みたいなら、カーソルを @code{UNIX} の行に移動して
 ローバルブックマーク (@ref{Bookmark Mode}) とは違うので注意。)
 
 List モードでは、基本的に２ちゃんねるの板がカテゴリごとに並んでいるが、
-先頭の3つのカテゴリに属する板は特殊な板である。
+先頭の4つのカテゴリに属する板は特殊な板である。
 
 @example
 @group
 [-]Navi2ch
+  ファイル一覧
   表示スレ一覧
   検索一覧
   履歴
@@ -351,6 +352,11 @@ List モードでは、基本的に２ちゃんねるの板がカテゴリごとに並んでいるが、
 
 @itemize @bullet
 @item
+「ファイル一覧」には最後に表示したディレクトリのスレの一覧が保存されてい
+る。ディレクトリのスレの一覧は @kbd{C-c C-f} を押した後、ディレクトリを
+指定する事で表示できる。
+
+@item
 「表示スレ一覧」には現在のセッションで表示したスレの一覧が追加される。
 
 @item
@@ -361,7 +367,7 @@ Board モード (@ref{Board Mode}) を参照のこと。
 「履歴」には (現在のセッションに限らず) 表示したスレの一覧が追加される。
 @end itemize
 
-以上の3つの板には Navi2ch が自動的にスレを追加していくが、それ以外はグ
+以上の4つの板には Navi2ch が自動的にスレを追加していくが、それ以外はグ
 ローバルブックマークと同等である。@xref{Browsing Bookmark}.
 
 「ブックマーク」カテゴリにはグローバルブックマークが含まれる。
@@ -825,7 +831,8 @@ FSF Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 
 @table @kbd
 @item C-c C-f
-@code{navi2ch-article-find-file} スレのログファイルを指定
+@code{navi2ch-find-file} スレのログファイルまたはログファイルが保存され
+ているディレクトリを指定
 
 @item C-c C-t
 @code{navi2ch-toggle-offline} オフライン・オンラインの切り替え
@@ -843,6 +850,9 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 @table @kbd
 @item 1
 @code{navi2ch-one-pane} 1ペイン表示に切り替え
+
+@item 2
+@code{navi2ch-two-pane} 2ペイン表示に切り替え
 
 @item 3
 @code{navi2ch-three-pane} 3ペイン表示に切り替え
@@ -917,9 +927,6 @@ Message モード以外では以下のキーバインドも使える。ただし、モードで上書
 
 @item ]
 @code{navi2ch-list-close-all-category} すべての板リストを閉じる
-
-@item 2
-@code{navi2ch-list-two-pane} 二画面表示
 
 @item D
 @code{navi2ch-list-delete-global-bookmark} グローバルブックマークを削除
@@ -1228,9 +1235,6 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 
 @item $
 @code{navi2ch-article-toggle-important} スレのブックマークを表示
-
-@item 2
-@code{navi2ch-article-two-pane} 二画面表示
 
 @item A
 @code{navi2ch-article-add-global-bookmark} スレをグローバルブックマークに登録
