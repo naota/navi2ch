@@ -1,3 +1,13 @@
+2002-01-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-update-file): cont が nil の場合はエ
+	ラーメッセージを表示。
+
+	* navi2ch-mona.el (navi2ch-mona-font): Emacs 21 の時、mona フォン
+	トのサイズを取得する。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/681
+	(navi2ch-mona-font-height): 新マクロ。
+
 2002-01-25  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-write-message): 

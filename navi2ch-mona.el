@@ -48,13 +48,23 @@
   "mona フォントを使用しない板のリスト")
 (defvar navi2ch-mona-pack-space-p nil
   "2つ以上の空白をまとめるか")
-(cond
- ((featurep 'xemacs)
-  (defvar navi2ch-mona-font "-mona-gothic-medium-r-*--16-*-p-*"))
- ((and (boundp 'emacs-major-version)
-       (>= emacs-major-version 21))
-  (defvar navi2ch-mona-font "-mona-gothic-*-*-*--16-*-*-*-*-*-fontset-mona16"))
- )
+(defmacro navi2ch-mona-font-height ()
+  (if (featurep 'xemacs)
+      '(font-height (face-font 'default))
+    '(frame-char-height)))
+(defvar navi2ch-mona-font
+  (let ((font-size (navi2ch-mona-font-height)))
+    (unless (memq font-size '(12 14 16))
+      (setq font-size 16))
+    (cond
+     ((featurep 'xemacs)
+      (format "-mona-gothic-medium-r-*--%d-*-p-*"
+	      font-size))
+     ((and (boundp 'emacs-major-version)
+	   (>= emacs-major-version 21))
+      (format "-mona-gothic-*-*-*--%d-*-*-*-*-*-fontset-mona%d"
+	      font-size font-size))))
+  "使用する mona フォントの名前")
 
 ;; mona 用の face を作成。
 (add-hook
