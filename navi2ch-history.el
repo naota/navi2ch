@@ -22,10 +22,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-history)
+(defvar navi2ch-history-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -41,7 +42,7 @@
     (define-key map "d" 'navi2ch-history-delete)
     (define-key map "md" 'navi2ch-history-delete-mark-article)
     (setq navi2ch-history-mode-map map)))
-  
+
 (defvar navi2ch-history-mode-menu-spec
   (navi2ch-bm-make-menu-spec
    "History"
@@ -159,7 +160,7 @@ key は (concat uri artid)。
 	       (lambda (x)
 		 (let ((board (nth 1 x))
 		       (article (nth 2 x)))
-		   (list (list 
+		   (list (list
 			  (assq 'name board)
 			  (assq 'uri board)
 			  (assq 'id board))
@@ -242,5 +243,5 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 	 navi2ch-history-alist))
   (navi2ch-history-save-info))
 
-(run-hooks 'navi2ch-history-load-hook)        
+(run-hooks 'navi2ch-history-load-hook)
 ;;; navi2ch-history.el ends here

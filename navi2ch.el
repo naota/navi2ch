@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch)
+(defvar navi2ch-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -498,6 +499,22 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   "`navi2ch-directory' のロックを解除する。"
   (ignore-errors
     (delete-directory navi2ch-lock-directory)))
+
+(defun navi2ch-ident-list ()
+  "ロードしている Navi2ch の各モジュールの Id を表示する。"
+  (interactive)
+  (let (ident-list)
+    (mapatoms (lambda (symbol)
+		(if (and (boundp symbol)
+			 (string-match "\\`navi2ch-.+-ident\\'"
+				       (symbol-name symbol)))
+		    (setq ident-list (cons symbol ident-list)))))
+    (when ident-list
+      (setq ident-list (sort ident-list
+			     (lambda (a b) (string< (symbol-name a)
+						    (symbol-name b)))))
+      (with-output-to-temp-buffer "*Navi2ch Ident List*"
+	(princ (mapconcat 'symbol-value ident-list "\n"))))))
 
 (run-hooks 'navi2ch-load-hook)
 ;;; navi2ch.el ends here

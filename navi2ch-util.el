@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-util)
+(defvar navi2ch-util-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 (require 'timezone)
@@ -229,7 +230,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 
 (defun navi2ch-expand-file-name (file)
   (expand-file-name file navi2ch-directory))
-  
+
 (defun navi2ch-uudecode-region (start end)
   (interactive "r")
   (let (dir)
@@ -238,7 +239,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
       (setq dir (read-file-name "directory name: ")))
     (unless (file-directory-p dir)
       (error "%s is not directory" dir))
-    
+
     (let ((default-directory dir)
           (coding-system-for-read 'binary)
           (coding-system-for-write 'binary)
@@ -315,7 +316,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 
 (defun navi2ch-read-char-with-retry (prompt retry-prompt list)
   "PROMPT を表示 (non-nil の場合) して `read-char' を呼び出す。
-入力された文字が LIST に含まれない場合、RETRY-PROMPT (nil の場合は 
+入力された文字が LIST に含まれない場合、RETRY-PROMPT (nil の場合は
 PROMPT) を表示して再度 `read-char' を呼ぶ。"
   (let ((retry t) c)
     (while retry
@@ -328,7 +329,7 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	     (ding)
 	     (setq prompt (or retry-prompt prompt)))))
     c))
-	 
+
 (defun navi2ch-y-or-n-p (prompt &optional quit-symbol)
   (let ((prompt (concat prompt "(y, n, or q) "))
 	(c (navi2ch-read-char-with-retry
@@ -405,7 +406,7 @@ return new alist whose car is the new pair and cdr is ALIST.
     (setq minor-mode-alist
           (cons (list mode name) minor-mode-alist)))
   (unless (assq mode minor-mode-map-alist)
-    (setq minor-mode-map-alist 
+    (setq minor-mode-map-alist
           (cons (cons mode map) minor-mode-map-alist))))
 
 (defun navi2ch-call-process-buffer (program &rest args)

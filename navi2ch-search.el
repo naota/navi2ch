@@ -41,6 +41,7 @@
 
 ;;; Code:
 (provide 'navi2ch-search)
+(defvar navi2ch-search-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -52,7 +53,7 @@
     (set-keymap-parent map navi2ch-bm-mode-map)
     (define-key map "Q" 'navi2ch-search-return-previous-board-maybe)
     (setq navi2ch-search-mode-map map)))
-  
+
 (defvar navi2ch-search-mode-menu-spec
   (navi2ch-bm-make-menu-spec
    "Search"
@@ -173,7 +174,7 @@
     (erase-buffer)
     (save-excursion
       (navi2ch-search-insert-subjects))))
-  
+
 (defun navi2ch-search-return-previous-board-maybe ()
   (interactive)
   (if navi2ch-board-current-board

@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-net)
+(defvar navi2ch-net-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 (require 'timezone)
@@ -157,10 +158,10 @@ BODY の評価中にエラーが起こると nil を返す。"
       (message "%sconnected" (current-message))
       (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
-      
+
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host file port host2ch)
-    (string-match "http://\\([^/]+\\)" url)    
+    (string-match "http://\\([^/]+\\)" url)
     (setq host2ch (match-string 1 url))
     (if proxy
         (progn
@@ -224,7 +225,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 		 list)
 	     (goto-char (point-min))
 	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
-	       (setq list (cons (cons (match-string 1) (match-string 2)) 
+	       (setq list (cons (cons (match-string 1) (match-string 2))
 				list)))
 	     (setq navi2ch-net-header (nreverse list))))))))
 
@@ -343,7 +344,7 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
    (let (proc status)
      (while (not status)
        (setq proc
-	     (navi2ch-net-send-request 
+	     (navi2ch-net-send-request
 	      url "GET"
 	      (append
 	       (list (if navi2ch-net-force-update
@@ -384,8 +385,8 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 			     (append
 			      (list (cons "Range" (concat "bytes=" range)))
 			      other-header)))
-  
-  
+
+
 (defun navi2ch-net-update-file (url file &optional time func location)
   "FILE を更新する。
 TIME が non-nil ならば TIME より新しい時だけ更新する。
@@ -451,14 +452,14 @@ header に長さが含まれていない場合は nil を返す。"
 	   (string-to-number (match-string 1 range)))
 	  (length
 	   (string-to-number length)))))
-  
+
 (defun navi2ch-net-check-aborn (size header)
   "あぼーんされてなければ t"
   (let ((len (navi2ch-net-get-length-from-header header)))
     (if len
 	(>= len (or size 0))
       t)))				; ホントにこれでいいかな?
-  
+
 (defun navi2ch-net-update-file-diff (url file &optional time)
   "FILE を差分で更新する。
 TIME が `non-nil' ならば TIME より新しい時だけ更新する。
@@ -565,7 +566,7 @@ state はあぼーんされてれば aborn というシンボル。"
 		(insert (substring cont 0 cont-size)))
 	      (list header nil))
 	     ((string= "-INCR" state);; あぼーん
-	      (with-temp-file file 
+	      (with-temp-file file
 		(navi2ch-set-buffer-multibyte nil)
 		(insert (substring cont 0 cont-size))
 		(list header 'aborn)))
@@ -627,7 +628,7 @@ internet drafts directory for a copy.")
 	   (match-string 1 str))
 	  ((string-match "<b>\\([^<]+\\)" str)
 	   (match-string 1 str)))))
-		   
+
 ;; Set-Cookie: SPID=6w9HFhEM; expires=Tuesday, 23-Apr-2002 00:00:00 GMT; path=/
 (defun navi2ch-net-send-message-get-spid (proc)
   (dolist (pair (navi2ch-net-get-header proc))

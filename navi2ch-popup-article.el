@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-popup-article)
+(defvar navi2ch-popup-article-ident "$Id$")
 
 (require 'navi2ch)
 
@@ -42,7 +43,7 @@
     (define-key map "l" 'navi2ch-popup-article-pop-point-or-exit)
     (define-key map "L" 'navi2ch-article-pop-poped-point)
     (define-key map "m" 'navi2ch-article-push-point)
-      
+
     (define-key map "." 'navi2ch-article-redisplay-current-message)
     (define-key map "p" 'navi2ch-article-previous-message)
     (define-key map "n" 'navi2ch-article-next-message)
@@ -55,13 +56,13 @@
     (define-key map "\ed" 'navi2ch-article-base64-decode-message)
     (define-key map "v" 'navi2ch-article-view-aa)
     (setq navi2ch-popup-article-mode-map map)))
-    
+
 (defun navi2ch-popup-article-exit ()
   (interactive)
   (run-hooks 'navi2ch-popup-article-exit-hook)
   (bury-buffer)
   (set-window-configuration navi2ch-popup-article-window-configuration))
-  
+
 (defun navi2ch-popup-article-pop-point-or-exit ()
   (interactive)
   (if navi2ch-article-point-stack

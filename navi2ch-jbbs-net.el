@@ -25,10 +25,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-jbbs-net)
+(defvar navi2ch-jbbs-net-ident "$Id$")
 
 (require 'navi2ch-multibbs)
 

@@ -25,10 +25,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-multibbs)
+(defvar navi2ch-multibbs-ident "$Id$")
 
 (require 'navi2ch)
 
@@ -50,16 +51,16 @@ FUNC-ALIST は以下の通り
  (send-success-p	. SEND-MESSAGE-SUCCESS-P-FUNC)
  (error-string		. ERROR-STRING-FUNC))
 
-BBS-P-FUNC(URI): 
+BBS-P-FUNC(URI):
     URI がその BBS のものならば non-nil を返す。
 
-SUBJECT-CALLBACK-FUNC(): 
+SUBJECT-CALLBACK-FUNC():
     subject.txt を取得するときにnavi2ch-net-update-file で使われるコー
     ルバック関数
 
 ARTICLE-UPDATE-FUNC(BOARD ARTICLE):
     BOARD ARTICLE で表されるファイルを更新する。
-    
+
 ARTICLE-TO-URL-FUNC(BOARD ARTICLE
 		    &OPTIONAL START END NOFIRST):
     BOARD, ARTICLE から url に変換する。
@@ -70,7 +71,7 @@ URL から board に変換する。
 URL-TO-ARTICLE-FUNC(URL):
 URL から article に変換する。
 
-SEND-MESSAGE-FUNC(FROM MAIL MESSAGE 
+SEND-MESSAGE-FUNC(FROM MAIL MESSAGE
 		  SUBJECT BBS KEY TIME BOARD ARTICLE):
     MESSAGE を送信する。
 
@@ -94,7 +95,7 @@ VARIABLE-ALIST は以下の通り
 CODING-SYSTEM-VAR:
     その BBS のファイルの文字コード
 ")
-  
+
 
 (defun navi2ch-multibbs-get-bbstype-subr (uri list)
   (if list
@@ -106,13 +107,13 @@ CODING-SYSTEM-VAR:
 
 (defun navi2ch-multibbs-set-bbstype (board type)
   (when (consp board)
-      (setcdr board 
+      (setcdr board
 	      (cons (cons 'bbstype type) (cdr board)))))
 
 (defun navi2ch-multibbs-get-bbstype (board)
   (let ((type (cdr (assq 'bbstype board))))
     (unless type
-      (setq type (navi2ch-multibbs-url-to-bbstype 
+      (setq type (navi2ch-multibbs-url-to-bbstype
 		  (cdr (assq 'uri board))))
       (navi2ch-multibbs-set-bbstype board type))
     type))
@@ -148,7 +149,7 @@ SPEC は (BBSTYPE)。
 	 (encode-coding-region (point-min) (point-max)
 			       navi2ch-coding-system)))))
 (put 'navi2ch-multibbs-defcallback 'lisp-indent-function 2)
-	      
+
 (defun navi2ch-multibbs-article-update (board article)
   (let* ((bbstype (navi2ch-multibbs-get-bbstype board))
 	 (func    (navi2ch-multibbs-get-func
@@ -185,40 +186,40 @@ SPEC は (BBSTYPE)。
 
 (defun navi2ch-multibbs-url-to-bbstype (url)
   (or
-   (and url 
+   (and url
 	(navi2ch-multibbs-get-bbstype-subr url navi2ch-multibbs-func-alist))
    'unknown))
 
 (defun navi2ch-multibbs-url-to-article (url)
   (let* ((bbstype (navi2ch-multibbs-url-to-bbstype url))
-	 (func    (navi2ch-multibbs-get-func 
+	 (func    (navi2ch-multibbs-get-func
 		   bbstype 'url-to-article 'navi2ch-2ch-url-to-article)))
     (funcall func url)))
 
 (defun navi2ch-multibbs-url-to-board (url)
   (let* ((bbstype (navi2ch-multibbs-url-to-bbstype url))
-	 (func    (navi2ch-multibbs-get-func 
+	 (func    (navi2ch-multibbs-get-func
 		   bbstype 'url-to-board 'navi2ch-2ch-url-to-board)))
     (funcall func url)))
 
-(defun navi2ch-multibbs-article-to-url 
+(defun navi2ch-multibbs-article-to-url
   (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
 START, END, NOFIRST で範囲を指定する"
-  (let ((func (navi2ch-multibbs-get-func-from-board 
+  (let ((func (navi2ch-multibbs-get-func-from-board
 	       board 'article-to-url 'navi2ch-2ch-article-to-url)))
     (funcall func board article start end nofirst)))
 
 
-(defun navi2ch-multibbs-send-message 
+(defun navi2ch-multibbs-send-message
   (from mail message subject board article)
   (let* ((bbstype      (navi2ch-multibbs-get-bbstype board))
-	 (send         (navi2ch-multibbs-get-func 
+	 (send         (navi2ch-multibbs-get-func
 			bbstype 'send-message 'navi2ch-2ch-send-message))
-	 (success-p    (navi2ch-multibbs-get-func 
-			bbstype 'send-success-p 
+	 (success-p    (navi2ch-multibbs-get-func
+			bbstype 'send-success-p
 			'navi2ch-2ch-send-message-success-p))
-	 (error-string (navi2ch-multibbs-get-func 
+	 (error-string (navi2ch-multibbs-get-func
 			bbstype 'send-error-string
 			'navi2ch-2ch-send-message-error-string))
 	 (bbs          (let ((uri (navi2ch-board-get-uri board)))
@@ -247,7 +248,7 @@ START, END, NOFIRST で範囲を指定する"
 ;;;-----------------------------------------------
 
 (defun navi2ch-2ch-subject-callback ()
-  (when navi2ch-board-use-subback-html 
+  (when navi2ch-board-use-subback-html
     (navi2ch-board-make-subject-txt)))
 
 (defun navi2ch-2ch-article-update (board article)

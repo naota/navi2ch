@@ -1,4 +1,4 @@
-;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode 
+;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode
 
 ;; Copyright (C) 2001 by Navi2ch Project
 
@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-board-misc)
+(defvar navi2ch-board-misc-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -156,7 +157,7 @@
 	  menu-spec))
 
 ;; (defvar navi2ch-list-navi2ch-category-alist nil) ; コンパイルを通す為
-  
+
 (defun navi2ch-bm-regist-board (type open-func &optional board)
   "TYPE な板を開く関数 OPEN-FUNC を `navi2ch-bm-board-type-alist' に登
 録する。また、同時に BOARD を `navi2ch-list-navi2ch-category-alist' に
@@ -250,7 +251,7 @@
   (navi2ch-bm-set-property (save-excursion (beginning-of-line) (point))
 			   (save-excursion (end-of-line) (point))
 			   item state updated))
-  
+
 (defun navi2ch-bm-get-state (&optional point)
   "その位置の state を調べる"
   (save-excursion
@@ -609,7 +610,7 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-add-global-bookmark-mark-article (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "bookmark id: ")))
   (navi2ch-bm-exec-subr 'navi2ch-bm-add-global-bookmark bookmark-id))
-   
+
 
 ;; add marked ones to the board bookmark
 (defun navi2ch-bm-add-bookmark-mark-article ()
@@ -770,7 +771,7 @@ ARG が non-nil なら移動方向を逆にする。"
 	  ((eq ch ?c)
 	   (cond ((eq ch2 ?b) (navi2ch-bm-search-current-board-cache))
 		 ((eq ch2 ?a) (navi2ch-search-all-cache)))))))
-  
+
 ;;; save and load info
 (defun navi2ch-bm-save-info ()
   (if navi2ch-bm-fetched-article-list

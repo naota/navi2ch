@@ -1,3 +1,11 @@
+2002-07-11  Nanashi San  <nanashi@users.sourceforge.net>
+
+	各ファイルに $ I d $ を入れました。
+	M-x navi2ch-ident-list で全ての	Id を表示できるよ。
+
+	* README: アウトラインモードにした。
+	* navi2ch.el (navi2ch-ident-list): 新関数。
+
 2002-07-10  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* configure.in: ln -s をチェック。

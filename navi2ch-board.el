@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-board)
+(defvar navi2ch-board-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -123,7 +124,7 @@
 (defun navi2ch-board-exit ()
   (run-hooks 'navi2ch-board-exit-hook)
   (navi2ch-board-save-info))
- 
+
 ;; regist board
 (navi2ch-bm-regist-board 'board 'navi2ch-board-select-board)
 
@@ -160,11 +161,11 @@
   (let ((uri (navi2ch-board-get-uri board)))
     (string-match "\\(.+\\)/[^/]+/$" uri)
     (format "%s/test/bbs.cgi" (match-string 1 uri))))
-	  
+
 (defun navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))
 	   (cdr (assq 'uri board2))))
-  
+
 (defun navi2ch-board-get-file-name (board &optional file-name)
   (let ((uri (navi2ch-board-get-uri board)))
     (when uri
@@ -179,7 +180,7 @@
 
 (defsubst navi2ch-board-from-file-p (board)
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
-	     
+
 
 (defsubst navi2ch-board-get-matched-article ()
   "match した結果から article を得る"
@@ -215,7 +216,7 @@
 (defun navi2ch-board-to-url (board)
   "BOARD から url に変換"
   (navi2ch-board-get-uri board))
-							   
+
 (defun navi2ch-board-get-subject-list (file)
   "file からスレの list を作る。"
   (when (file-exists-p file)
@@ -304,7 +305,7 @@
 
 (defun navi2ch-board-setup-menu ()
   (easy-menu-add navi2ch-board-mode-menu))
-  
+
 (defun navi2ch-board-mode ()
   "\\{navi2ch-board-mode-map}"
   (interactive)
@@ -325,7 +326,7 @@
 			 board
 			 navi2ch-board-old-subject-file-name)
 	  (navi2ch-insert-file-contents file))))))
-  
+
 (defun navi2ch-board-update-seen-articles ()
   (let ((summary (navi2ch-article-load-article-summary
 		  navi2ch-board-current-board)))
@@ -540,7 +541,7 @@
 	(navi2ch-bm-remove-article-subr board remove-list)
 	(navi2ch-board-save-info board)
 	(message "expiring %s...done" (cdr (assq 'name board)))))))
-  
+
 (defun navi2ch-board-toggle-minor-mode (mode)
   (dolist (m navi2ch-board-minor-mode-list)
     (if (eq m mode)

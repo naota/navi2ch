@@ -4,7 +4,7 @@
 
 ;; Author: UEYAMA Rui <rui314159@users.sourceforge.net>
 ;; 110 の名無しさん http://pc.2ch.net/test/read.cgi/unix/1013457056/110
-;;         
+;;
 ;; Keywords: network, 2ch
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -34,6 +34,7 @@
 
 ;;; Code:
 (provide 'navi2ch-splash)
+(defvar navi2ch-splash-ident "$Id$")
 
 (eval-when-compile
   (require 'cl))

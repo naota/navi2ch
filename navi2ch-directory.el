@@ -22,10 +22,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-directory)
+(defvar navi2ch-directory-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -46,7 +47,7 @@
    '((name . "ファイル一覧")
       (type . directory)
       (id . "directory")))
-  
+
 (defvar navi2ch-directory-current-board nil)
 (defvar navi2ch-directory-subject-list nil)
 
@@ -117,7 +118,7 @@
     (navi2ch-directory-set-current-board directory)
     (navi2ch-directory-set-subject-list directory)
     (navi2ch-bm-select-board navi2ch-directory-board)))
-  
+
 (defun navi2ch-directory (&rest args)
   "directory を表示する"
   (navi2ch-directory-mode)
@@ -146,5 +147,5 @@
   (navi2ch-directory-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-directory-mode-hook))
 
-(run-hooks 'navi2ch-directory-load-hook)        
+(run-hooks 'navi2ch-directory-load-hook)
 ;;; navi2ch-directory.el ends here

@@ -22,10 +22,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-bookmark)
+(defvar navi2ch-bookmark-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -163,7 +164,7 @@ KEY は (concat URI ARTID) ")
 	(set-buffer navi2ch-list-buffer-name)
 	(navi2ch-list-sync-global-bookmark-category))
       (navi2ch-bookmark-save-info))))
-  
+
 (defun navi2ch-bookmark-change-bookmark (bookmark-id)
   "ブックマーク BOOKMARK-ID の ID、名称を変更する"
   (let* ((bookmark (assoc bookmark-id navi2ch-bookmark-list))
@@ -175,7 +176,7 @@ KEY は (concat URI ARTID) ")
       (set-buffer navi2ch-list-buffer-name)
       (navi2ch-list-sync-global-bookmark-category))
     (navi2ch-bookmark-save-info)))
-    
+
 (defun navi2ch-bookmark-add-subr (bookmark-id board article)
   "BOARD と ARTICLE で表される スレッドを追加"
   (unless (assoc bookmark-id navi2ch-bookmark-list)
@@ -192,7 +193,7 @@ KEY は (concat URI ARTID) ")
 (defun navi2ch-bookmark-add (bookmark-id board article)
   (navi2ch-bookmark-add-subr bookmark-id board article)
   (message "Add current article to global bookmark."))
-   
+
 (defun navi2ch-bookmark-insert-subject (num item)
   (navi2ch-bm-insert-subject
    item num
@@ -219,7 +220,7 @@ KEY は (concat URI ARTID) ")
 
 (defun navi2ch-bookmark-delete-article (bookmark-id board article)
   "ブックマーク BOOKMARK-ID からスレッドを削除する。
-削除されるのは BOARD, ARTICLE で表わされるスレッド。" 
+削除されるのは BOARD, ARTICLE で表わされるスレッド。"
  (navi2ch-bookmark-delete-key bookmark-id
 			     (navi2ch-bookmark-get-key board article)))
 
@@ -263,7 +264,7 @@ KEY は (concat URI ARTID) ")
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
   (navi2ch-bookmark-copy bookmark-id)
   (navi2ch-bookmark-delete-subr))
-  
+
 (defun navi2ch-bookmark-move-mark-article (bookmark-id)
   (interactive (list (navi2ch-bookmark-read-id "move to: ")))
   (navi2ch-bm-exec-subr 'navi2ch-bookmark-move bookmark-id))
@@ -319,7 +320,7 @@ KEY は (concat URI ARTID) ")
      (list (cons 'id (car bookmark))
 	   (cons 'name (cadr bookmark))
 	   (cons 'type 'bookmark)))))
-  
+
 (defun navi2ch-bookmark (board &rest args)
   "bookmark を表示する"
   (let ((bookmark-id (cdr (assq 'id board))))
@@ -357,7 +358,7 @@ KEY は (concat URI ARTID) ")
 				  (article (cdr (assq 'article (cdr x)))))
 			      (cons (car x)
 				    (list (cons 'board
-						(list 
+						(list
 						 (assq 'name board)
 						 (assq 'uri board)
 						 (assq 'id board)))
@@ -392,9 +393,9 @@ KEY は (concat URI ARTID) ")
 		 ;; 俺も知らないです:-)
 		 (cdr (assq 'subject
 			    (navi2ch-article-get-first-message-from-file file)))))))
-	(when newsubject 
+	(when newsubject
 	  (setq article (navi2ch-put-alist 'subject newsubject article))
-	  (navi2ch-bookmark-add-subr 
+	  (navi2ch-bookmark-add-subr
 	   navi2ch-bookmark-current-bookmark-id board article))))
     state))
 
@@ -447,5 +448,5 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
     (save-excursion
       (navi2ch-bookmark-insert-subjects))))
 
-(run-hooks 'navi2ch-bookmark-load-hook)	
+(run-hooks 'navi2ch-bookmark-load-hook)
 ;;; navi2ch-bookmark.el ends here

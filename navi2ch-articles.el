@@ -22,10 +22,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-articles)
+(defvar navi2ch-articles-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -49,7 +50,7 @@
   '((name . "表示スレ一覧")
      (type . articles)
      (id . "articles")))
-  
+
 ;;; navi2ch-bm callbacks
 (defun navi2ch-articles-set-property (begin end item)
   (put-text-property begin end 'buffer item))
@@ -101,7 +102,7 @@
 	  (and (eobp) (not (bobp))
 	       (forward-line -1)))
       (message "Can't select this line!"))))
- 
+
 (defun navi2ch-articles-delete-mark-aritcle ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-articles-delete))
@@ -134,5 +135,5 @@
   (navi2ch-articles-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-articles-mode-hook))
 
-(run-hooks 'navi2ch-articles-load-hook)        
+(run-hooks 'navi2ch-articles-load-hook)
 ;;; navi2ch-articles.el ends here

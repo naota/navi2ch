@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-message)
+(defvar navi2ch-message-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -134,7 +135,7 @@
 	      navi2ch-message-mail-address "")
 	  "\n"
 	  (navi2ch-propertize navi2ch-message-header-separator
-			      'read-only t 
+			      'read-only t
 			      'front-sticky t 'rear-nonsticky t)))
 
 (defun navi2ch-message-cleanup-message ()
@@ -188,7 +189,7 @@
 	      result)
 	  ; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
 	  ; ↓   navi2ch-2ch-send-message で処理する。
-	  (setq result (navi2ch-multibbs-send-message	
+	  (setq result (navi2ch-multibbs-send-message
 			from mail message subject board article))
 	  (when result
 	    (message "waiting new message...")
@@ -259,7 +260,7 @@
       (let ((point (point)))
 	(insert msg "\n")
 	(string-rectangle point (point) navi2ch-message-cite-prefix)))))
-    
+
 (defun navi2ch-message-exit (&optional after-send)
   (interactive)
   (run-hooks 'navi2ch-message-exit-hook)
@@ -338,7 +339,7 @@
 (defun navi2ch-message-insert-aa-list ()
   (let ((aa-width navi2ch-message-popup-aa-width)
 	(nl nil))
-    (dolist (elt (append navi2ch-message-aa-alist 
+    (dolist (elt (append navi2ch-message-aa-alist
 			 navi2ch-message-aa-default-alist))
       (let* ((key (car elt))
 	     (val (cdr elt))
@@ -386,7 +387,7 @@
   "aa を入力する。"
   (interactive)
   (let* ((char (navi2ch-message-popup-aa-list))
-	 (aa (cdr (assoc (char-to-string char) 
+	 (aa (cdr (assoc (char-to-string char)
 			 (append navi2ch-message-aa-alist
 				 navi2ch-message-aa-default-alist)))))
     (if (stringp aa)

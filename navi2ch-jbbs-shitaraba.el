@@ -25,10 +25,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-jbbs-shitaraba)
+(defvar navi2ch-jbbs-shitaraba-ident "$Id$")
 
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
@@ -52,7 +53,7 @@
 			 navi2ch-js-variable-alist)
 
 ;;-------------
-	
+
 (defun navi2ch-js-p (uri)
   "URI がJBBS＠したらばなら non-nilを返す。"
   (string-match "http://jbbs.shitaraba.com/" uri))
@@ -82,7 +83,7 @@
 	  ((string-match
 	    "\\(http://jbbs.shitaraba.com/[^/]+\\)/bbs/read\\.cgi.*BBS=\
 \\([0-9]+\\)" url)
-	   (setq uri (format "%s/%s/" (match-string 1 url) 
+	   (setq uri (format "%s/%s/" (match-string 1 url)
 			     (match-string 2 url))
 		 id  (match-string 2 url))))
     (if id (list (cons 'uri uri) (cons 'id id)))))
@@ -92,7 +93,7 @@
        "http://jbbs.shitaraba.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
       (list (cons 'artid (match-string 1 url)))))
 
-(defun navi2ch-js-send-message 
+(defun navi2ch-js-send-message
   (from mail message subject bbs key time board article)
   (let ((url         (navi2ch-js-get-writecgi-url board))
 	(referer     (navi2ch-board-get-uri board))

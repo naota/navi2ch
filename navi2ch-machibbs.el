@@ -25,10 +25,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 (provide 'navi2ch-machibbs)
+(defvar navi2ch-machibbs-ident "$Id$")
 
 (require 'navi2ch-multibbs)
 
@@ -55,7 +56,7 @@
 ;; 0の場合は全て表示する。")
 
 ;;-------------
-	
+
 (defun navi2ch-machibbs-p (uri)
   "URI が machibbs なら non-nilを返す。"
   (string-match "http://[^\\.]+\\.machibbs\\.com/" uri))
@@ -66,7 +67,7 @@
 ;;   (let ((sub-string (if (> navi2ch-machibbs-subject-max-bytes 0)
 ;; 			(substring string 0 navi2ch-machibbs-subject-max-bytes)
 ;; 		      string)))
-;;     (navi2ch-replace-string 
+;;     (navi2ch-replace-string
 ;;      "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" "\\1dat\\2" sub-string t)))
 
 (navi2ch-multibbs-defcallback navi2ch-machibbs-subject-callback (machibbs)
@@ -122,7 +123,7 @@
 	  "http://www.machibbs.com/[^/]+/bbs/read\\.cgi.*KEY=\\([0-9]+\\)" url)
 	 (list (cons 'artid (match-string 1 url))))
 	((string-match
-	  "http://[^\\.]+\\.machibbs\\.com/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)" 
+	  "http://[^\\.]+\\.machibbs\\.com/bbs/read\\.\\(pl\\|cgi\\).*KEY=\\([0-9]+\\)"
 	  url)
 	 (list (cons 'artid (match-string 2 url))))))
 

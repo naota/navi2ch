@@ -38,6 +38,7 @@
 
 ;;; Code:
 (provide 'navi2ch-mona)
+(defvar navi2ch-mona-ident "$Id$")
 (eval-when-compile (require 'cl))
 (require 'navi2ch-util)
 

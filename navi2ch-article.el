@@ -22,6 +22,7 @@
 
 ;;; Code:
 (provide 'navi2ch-article)
+(defvar navi2ch-article-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 (require 'browse-url)
@@ -1133,7 +1134,7 @@ article buffer $B$+$iH4$1$k$J$i(B 'quit $B$rJV$9!#(B"
       (navi2ch-y-or-n-p
        (concat (save-excursion
 		 (set-buffer navi2ch-board-buffer-name)
-		 (save-excursion 
+		 (save-excursion
 		   (forward-line num)
 		   (cdr (assq 'subject
 			      (navi2ch-bm-get-article-internal
@@ -1181,7 +1182,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   "$B<!$N%9%l$K0\F0$9$k!#(B"
   (interactive)
   (navi2ch-article-through-subr (interactive-p) 1))
- 
+
 (defun navi2ch-article-through-previous ()
   "$BA0$N%9%l$K0\F0$9$k!#(B"
   (interactive)
@@ -1250,7 +1251,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-copy-title (board article)
   "$B%a%K%e!<$rI=<($7$F!"%?%$%H%k$rF@$k(B"
-  (let* ((char (navi2ch-read-char-with-retry 
+  (let* ((char (navi2ch-read-char-with-retry
 		"b)oard a)rticle B)oard&url A)rtile&url: "
 		nil '(?b ?a ?B ?A)))
 	 (title (cond ((eq char ?b)
@@ -1475,7 +1476,7 @@ PREFIX$B$r;XDj$7$?>l9g$O!"(Bmark$B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$J$
 $B$=$N$&$A%G%U%)%k%H$N%G%3!<%@$r?dB,$9$k$h$&$K$7$?$$!#(B"
   (interactive)
   (let ((c (navi2ch-read-char-with-retry
-	    "(u)udecode or (b)ase64: " 
+	    "(u)udecode or (b)ase64: "
 	    "Please answer u, or b.  (u)udecode or (b)ase64: "
 	    '(?u ?U ?b ?B))))
     (call-interactively (cond ((memq c '(?u ?U))

@@ -1,3 +1,4 @@
+-*- mode: outline; coding: iso-2022-7bit -*-
 Copyright (C) 2000-2002 Navi2ch Project
 
 Navi2ch $B$O!"(BGNU Emacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B$GF0:n$9$k!"#2$A$c(B
@@ -9,25 +10,27 @@ Navi2ch $B$O!"(BGNU Emacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B
 $B$k$+!"%&%'%V%V%V%i%&%6$+$i(B http://navi2ch.sourceforge.net/ $B$r3+$$$F$/(B
 $B$@$5$$!#(B
 
-$B%&%'%V%5%$%H(B::
- Navi2ch Project Home Page <http://navi2ch.sourceforge.net/>
- UNIX$B!w(B2ch$B7G<(HD(B <http://pc.2ch.net/unix/>
+* $B%&%'%V%5%$%H(B
+  Navi2ch Project Home Page <http://navi2ch.sourceforge.net/>
+  UNIX$B!w(B2ch$B7G<(HD(B <http://pc.2ch.net/unix/>
 
-$B%U%!%$%k9=@.(B::
- $B%H%C%W%G%#%l%/%H%j(B:
-  elisp $B%U%!%$%k!"$$$/$D$+$N%I%-%e%a%s%H$,F~$C$F$$$^$9!#(B
- contrib:
-  Navi2ch $B$H$$$C$7$g$K;H$&$HJXMx$J%U%!%$%k$,F~$C$F$$$^$9!#(B
-  $B$"$^$jG.?4$K%a%s%F%J%s%9$5$l$F$J$$$N$GCm0U!#(B
- doc:
-  $B%^%K%e%"%k$,F~$C$F$$$^$9!#(B
- icons:
-  $B%$%a!<%8%U%!%$%k$,F~$C$F$$$^$9!#(B
+* $B%U%!%$%k9=@.(B
+** $B%H%C%W%G%#%l%/%H%j(B
+   elisp $B%U%!%$%k!"$$$/$D$+$N%I%-%e%a%s%H$,F~$C$F$$$^$9!#(B
+** contrib
+   Navi2ch $B$H$$$C$7$g$K;H$&$HJXMx$J%U%!%$%k$,F~$C$F$$$^$9!#(B
+   $B$"$^$jG.?4$K%a%s%F%J%s%9$5$l$F$J$$$N$GCm0U!#(B
+** doc
+   $B%^%K%e%"%k$,F~$C$F$$$^$9!#(B
+** icons
+   $B%$%a!<%8%U%!%$%k$,F~$C$F$$$^$9!#(B
 
-$BCm0U(B::
- Windows $B$J$I$G$O4D6-JQ?t(B TZ $B$r(B JST-9 $B$H$+$K$7$H$$$?J}$,$$$$$G$9!#(B
- Emacs 20 $B0J9_!"(BXEmacs 21 $B0J9_$G$J$$$HF0$-$^$;$s!#(B
- XEmacs $B$G$O(B mail-lib $B%Q%C%1!<%8$+(B flim $B$r%$%s%9%H!<%k$7$F$/$@$5$$!#(B
+* $BCm0U(B
+  Windows $B$J$I$G$O4D6-JQ?t(B TZ $B$r(B JST-9 $B$H$+$K$7$H$$$?J}$,$$$$$G$9!#(B
+  Emacs 20 $B0J9_!"(BXEmacs 21 $B0J9_$G$J$$$HF0$-$^$;$s!#(B
+  XEmacs $B$G$O(B mail-lib $B%Q%C%1!<%8$+(B flim $B$r%$%s%9%H!<%k$7$F$/$@$5$$!#(B
 
-$B<U<-(B::
- $B:G=i$K(B perl $BHG$r:n$C$?(B hc2ivan $B$5$s$K46<U$G$9!#(B
+* $B<U<-(B
+  $B:G=i$K(B perl $BHG$r:n$C$?(B hc2ivan $B$5$s$K46<U$G$9!#(B
+
+$Id$

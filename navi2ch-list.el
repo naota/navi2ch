@@ -26,6 +26,7 @@
 
 ;;; Code:
 (provide 'navi2ch-list)
+(defvar navi2ch-list-ident "$Id$")
 
 (eval-when-compile (require 'cl))
 
@@ -132,7 +133,7 @@
   (navi2ch-list-set-category
    navi2ch-list-global-bookmark-category-name
    (navi2ch-list-get-global-bookmark-board-list)))
-  
+
 (defun navi2ch-list-sync-global-bookmark-category ()
   (navi2ch-list-set-global-bookmark-category)
   (let ((buffer-read-only nil)
@@ -181,7 +182,7 @@
 			   list2)))
 	    (setq list (cdr list)))
 	  (nreverse list2))))))
-    
+
 (defun navi2ch-list-get-etc-category ()
   (let ((file (navi2ch-list-get-file-name navi2ch-list-etc-file-name)))
     (when (file-exists-p file)
@@ -237,7 +238,7 @@
 	   uri)
 	  ((and type id)
 	   (cons type id)))))
-	    
+
 (defun navi2ch-list-insert-bookmarks (list)
   (let ((bookmark (cdr (assq 'bookmark navi2ch-list-current-list)))
 	list2)
@@ -319,7 +320,7 @@
     (setq navi2ch-list-category-list
 	  (mapcar (lambda (x)
 		    (navi2ch-put-alist 'open nil x))
-		  navi2ch-list-category-list))	
+		  navi2ch-list-category-list))
     (let ((buffer-read-only nil))
       (erase-buffer)
       (navi2ch-list-insert-board-names
@@ -369,7 +370,7 @@
 
 (defun navi2ch-list-get-changed-status (old-category-list category-list)
   "$B0JA0$NHD$N0lMw(B OLD-CATEGORY-LIST $B$H8=:_$NHD$N0lMw(B CATEGORY-LIST $B$r(B
-$BHf$Y$F!"DI2C!"JQ99$N$"$C$?HD$r(B 
+$BHf$Y$F!"DI2C!"JQ99$N$"$C$?HD$r(B
 '((add . added-list)
   (change . changed-list))
 $B$N(B alist $B$K$7$FJV$9!#(B
@@ -545,7 +546,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 				 ": ")
 			 alist nil t)
 			alist))))
-    (setq board (or board 
+    (setq board (or board
 		    (assoc (cdr (assq 'id default)) alist)))
     (when board
       (when (eq (navi2ch-get-major-mode navi2ch-board-buffer-name)
@@ -559,7 +560,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
     (setq list (delq (assoc navi2ch-list-navi2ch-category-name list) list)))
   (when (assoc navi2ch-list-global-bookmark-category-name list)
     (setq list (delq (assoc navi2ch-list-global-bookmark-category-name list) list))))
-    
+
 (defun navi2ch-list-get-board-name-list (list)
   (let (alist name-list)
     (dolist (x list)
