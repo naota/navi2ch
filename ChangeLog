@@ -1,5 +1,9 @@
 2002-07-28  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-article.el (navi2ch-article-get-link-text): 処理中に
+	transient-mark-mode のハイライトが切れてしまっていたみたい。
+	http://pc.2ch.net/test/read.cgi/unix/1023884490/463
+
 	* navi2ch-vars.el (navi2ch-mona-setup-hook): 新変数。
 	(navi2ch-mona-undo-setup-hook): 同上。
 

@@ -1358,50 +1358,55 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
       (setq subject "navi2ch: ???"))	;; 変数にして navi2ch-vars.el に入れるべき?
     subject))
 
+(eval-when-compile
+  (defvar mark-active)
+  (defvar deactivate-mark))
+
 (defun navi2ch-article-get-link-text (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を得る。"
   (setq point (or point (point)))
-  (catch 'ret
-    (when (eq major-mode 'navi2ch-article-mode)
-      (let ((num-prop (get-text-property point 'number))
-	    (url-prop (get-text-property point 'url))
-	    num-list num)
-	(cond
-	 (num-prop
-	  (setq num-list (navi2ch-article-str-to-num
-			  (japanese-hankaku num-prop)))
-	  (cond ((numberp num-list)
-		 (setq num num-list))
-		(t
-		 (setq num (car num-list))))
-	  (let ((msg (navi2ch-article-get-message-string num)))
-	    (when msg
-	      (setq msg (navi2ch-replace-string
-			 navi2ch-article-citation-regexp "" msg t))
-	      (setq msg (navi2ch-replace-string
-			 "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
-	      (setq msg (navi2ch-replace-string "\n+" " " msg t))
-	      (throw
-	       'ret
-	       (format "%s" (truncate-string-to-width
-			     (format "[%d]: %s" num msg)
-			     (eval navi2ch-article-display-link-width)))))))
-	 ((and navi2ch-article-get-url-text
-	       url-prop)
-	  (if (navi2ch-2ch-url-p url-prop)
-	      (let ((board (navi2ch-board-url-to-board url-prop))
-		    (article (navi2ch-article-url-to-article url-prop)))
+  (let (mark-active deactivate-mark)	; transient-mark-mode が切れないよう
+    (catch 'ret
+      (when (eq major-mode 'navi2ch-article-mode)
+	(let ((num-prop (get-text-property point 'number))
+	      (url-prop (get-text-property point 'url))
+	      num-list num)
+	  (cond
+	   (num-prop
+	    (setq num-list (navi2ch-article-str-to-num
+			    (japanese-hankaku num-prop)))
+	    (cond ((numberp num-list)
+		   (setq num num-list))
+		  (t
+		   (setq num (car num-list))))
+	    (let ((msg (navi2ch-article-get-message-string num)))
+	      (when msg
+		(setq msg (navi2ch-replace-string
+			   navi2ch-article-citation-regexp "" msg t))
+		(setq msg (navi2ch-replace-string
+			   "\\(\\cj\\)\n+\\(\\cj\\)" "\\1\\2" msg t))
+		(setq msg (navi2ch-replace-string "\n+" " " msg t))
 		(throw
 		 'ret
-		 (format "%s"
-			 (truncate-string-to-width
-			  (if article
-			      (format "[%s]: %s"
-				      (cdr (assq 'name board))
-				      (navi2ch-article-cached-subject board article))
-			    (format "[%s]" (cdr (assq 'name board))))
-			  (eval navi2ch-article-display-link-width))))))))))
-    nil))
+		 (format "%s" (truncate-string-to-width
+			       (format "[%d]: %s" num msg)
+			       (eval navi2ch-article-display-link-width)))))))
+	   ((and navi2ch-article-get-url-text
+		 url-prop)
+	    (if (navi2ch-2ch-url-p url-prop)
+		(let ((board (navi2ch-board-url-to-board url-prop))
+		      (article (navi2ch-article-url-to-article url-prop)))
+		  (throw
+		   'ret
+		   (format "%s"
+			   (truncate-string-to-width
+			    (if article
+				(format "[%s]: %s"
+					(cdr (assq 'name board))
+					(navi2ch-article-cached-subject board article))
+			      (format "[%s]" (cdr (assq 'name board))))
+			    (eval navi2ch-article-display-link-width))))))))))
+      nil)))
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
