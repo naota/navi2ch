@@ -635,7 +635,7 @@ non-nil なら付加する。"
   :type 'file
   :group 'navi2ch-net)
 
-(defcustom navi2ch-net-gunzip-args '("-d" "-c")
+(defcustom navi2ch-net-gunzip-args '("-d" "-c" "-q")
   "*gunzip を呼出すときの引数。"
   :type '(repeat :tag "引数" string)
   :group 'navi2ch-net)

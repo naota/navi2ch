@@ -521,5 +521,12 @@ base64デコードすべき内容がない場合はエラーになる。"
   (let ((minibuffer-allow-text-properties nil))
     (read-string prompt initial-input history)))
 
+(defmacro navi2ch-temp-directory ()
+  (list 'or
+	(if (featurep 'xemacs)
+	    '(temp-directory)
+	  'temporary-file-directory)
+	'(getenv "TMP")))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

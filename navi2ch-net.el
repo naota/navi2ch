@@ -189,33 +189,36 @@
 			     list)))
 	  (setq navi2ch-net-header (nreverse list))))))
 
-(defun navi2ch-net-get-content-subr-with-temp-file (gzip-p cont)
+(defun navi2ch-net-get-content-subr-with-temp-file (gzip-p start end)
   (if gzip-p
-      (with-temp-buffer
-	(insert cont)
-	(let* ((tempfn (expand-file-name (make-temp-name "navi2ch") (getenv "TMP")))
-	       (tempfngz (concat tempfn ".gz")))
-	  (write-file tempfngz nil)
-	  (call-process shell-file-name nil nil nil
-			shell-command-switch (concat "gzip -d " tempfngz))
-	  (set-visited-file-name tempfn nil t)
-	  (revert-buffer t t)
-	  (delete-file tempfn))
-	(buffer-string))
-    cont))
+      (let* ((tempfn (make-temp-name
+		      (expand-file-name "navi2ch" (navi2ch-temp-directory))))
+	     (tempfngz (concat tempfn ".gz")))
+	(let ((coding-system-for-write 'binary)
+	      ;; auto-compress-modeをdisableにする
+	      (inhibit-file-name-operation 'write-region)
+	      (inhibit-file-name-handlers (cons 'jka-compr-handler
+						inhibit-file-name-handlers)))
+	  (navi2ch-write-region start end tempfngz))
+	(call-process shell-file-name nil nil nil
+		      shell-command-switch (concat "gzip -d " tempfngz))
+	(delete-region start end)
+	(goto-char start)
+	(goto-char (+ start
+		      (nth 1 (insert-file-contents-literally tempfn))))
+	(delete-file tempfn))))
 
-(defun navi2ch-net-get-content-subr (gzip-p cont)
+(defun navi2ch-net-get-content-subr-region (gzip-p start end)
   (if gzip-p
-      (with-temp-buffer
-	(insert cont)
-	(apply 'call-process-region
-	       (point-min) (point-max)
-	       navi2ch-net-gunzip-program t t nil
-	       navi2ch-net-gunzip-args)
-	(buffer-string))
-    cont))
+      (apply 'call-process-region
+	     start end
+	     navi2ch-net-gunzip-program t t nil
+	     navi2ch-net-gunzip-args)))
 
-(defvar navi2ch-net-get-content-subr-function nil)
+(fset 'navi2ch-net-get-content-subr
+      (if (string-match "windowsce" system-configuration)
+	  'navi2ch-net-get-content-subr-with-temp-file
+	'navi2ch-net-get-content-subr-region))
 
 (defun navi2ch-net-get-chunk (proc)
   "カレントバッファの PROC の point 以降を chunk とみなして chunk を得る。
@@ -240,6 +243,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		  (goto-char end)
 		  (not (= (point) end)))
 	(accept-process-output proc))
+      (goto-char end)
       (when (not (= (point) end))
 	(message "unable goto chunk end (size: %d, end: %d, point: %d)"
 		 size end (point))
@@ -253,11 +257,6 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
-  (if (null navi2ch-net-get-content-subr-function)
-      (setq navi2ch-net-get-content-subr-function
-	    (if (string-match "windowsce" system-configuration)
-		'navi2ch-net-get-content-subr-with-temp-file
-	      'navi2ch-net-get-content-subr)))
   (or navi2ch-net-content
       (let* ((header (navi2ch-net-get-header proc))
 	     (gzip (and navi2ch-net-accept-gzip
@@ -281,16 +280,16 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 		   (while (and (eq (process-status proc) 'open)
 			       (goto-char (+ p size))
 			       (not (= (point) (+ p size))))
-		     (accept-process-output))))
+		     (accept-process-output))
+		   (goto-char (+ p size))))
 		((not navi2ch-net-enable-http11)
 		 (while (eq (process-status proc) 'open)
 		   (accept-process-output proc))
 		 (goto-char (point-max))))
+	  (navi2ch-net-get-content-subr gzip p (point))
 	  (setq navi2ch-net-content
-		 (funcall navi2ch-net-get-content-subr-function
-			  gzip
-			  (navi2ch-string-as-multibyte
-			   (buffer-substring-no-properties p (point)))))))))
+		(navi2ch-string-as-multibyte
+		 (buffer-substring-no-properties p (point))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)

@@ -1,3 +1,23 @@
+2002-01-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-net.el (navi2ch-net-get-chunk): goto-char の前にコネクショ
+	ンが閉じた場合に対処。
+	(navi2ch-net-get-content): 同上。
+	http://pc.2ch.net/test/read.cgi/unix/1009340234/612
+
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file): 
+	リージョンを直接処理するよう変更。Unix と Windows では動くことを確
+	認したけど、肝心の Windows CE ではテストしてない。
+	(navi2ch-net-get-content-subr-region): リージョンを直接処理するよ
+	う変更。
+	(navi2ch-net-get-content-subr): get-content-subr-function をやめて
+	fset するようにした。
+	(navi2ch-net-get-content): 上記変更に対応。ちょっと速くなった。
+
+	* navi2ch-util.el (navi2ch-temp-directory): 新規マクロ。
+
+	* navi2ch-vars.el (navi2ch-net-gunzip-args): -q を追加。
+
 2002-01-22  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-net.el (navi2ch-net-get-status): HTTP status が見付から
