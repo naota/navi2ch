@@ -1,5 +1,17 @@
 2004-03-28  mami  <mami@users.sourceforge.net>
 
+	* navi2ch-jbbs-net.el
+	(navi2ch-jbbs-url-regexp): 新変数。
+	(navi2ch-jbbs-get-writecgi-url): 新関数。
+	(navi2ch-jbbs-send-message): 上記を使うように。
+	http://pc3.2ch.net/test/read.cgi/unix/1075905430/452
+
+	(navi2ch-jbbs-func-alist): error-string を削除。
+	(navi2ch-jbbs-send-message): Cookie に NAME と MAIL を追加。
+	MESSAGE が二重になっていたので片方を削除。
+
+2004-03-28  mami  <mami@users.sourceforge.net>
+
 	* ChangeLog: ChangeLog.1, ChangeLog.2 に分割。
 
 2004-03-28  mami  <mami@users.sourceforge.net>

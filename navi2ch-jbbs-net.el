@@ -41,7 +41,6 @@
     (article-to-url 	. navi2ch-jbbs-article-to-url)
     (send-message   	. navi2ch-jbbs-send-message)
     (send-success-p 	. navi2ch-jbbs-send-message-success-p)
-    (error-string   	. navi2ch-net-get-content)
     (board-update	. navi2ch-jbbs-board-update)))
 
 (defvar navi2ch-jbbs-variable-alist
@@ -101,9 +100,21 @@ START, END, NOFIRST で範囲を指定する"
 	  (not (eq start 1))
 	  "&NOFIRST=TRUE"))))
 
+(defconst navi2ch-jbbs-url-regexp
+  ;;    prefix   カテゴリ     BBS番号
+  "\\`\\(.+\\)/\\([^/]+\\)/\\([^/]+\\)/\\'")
+
+(defun navi2ch-jbbs-get-writecgi-url (board)
+  "write.cgi の url を返す"
+  (let ((uri (navi2ch-board-get-uri board)))
+    (and (string-match navi2ch-jbbs-url-regexp uri)
+	 (format "%s/%s/bbs/write.cgi"
+		 (match-string 1 uri)
+		 (match-string 2 uri)))))
+
 (defun navi2ch-jbbs-send-message
   (from mail message subject bbs key time board article)
-  (let ((url         (navi2ch-js-get-writecgi-url board)) ;jbbs-shitaraba
+  (let ((url         (navi2ch-jbbs-get-writecgi-url board))
 	(referer     (navi2ch-board-get-uri board))
 	(param-alist (list
 		      (cons "submit" "書き込む")
@@ -112,11 +123,11 @@ START, END, NOFIRST で範囲を指定する"
 		      (cons "MESSAGE" message)
 		      (cons "BBS" bbs)
 		      (cons "KEY" key)
-		      (cons "TIME" time)
-		      (cons "MESSAGE" message))))
+		      (cons "TIME" time))))
     (navi2ch-net-send-request
      url "POST"
      (list (cons "Content-Type" "application/x-www-form-urlencoded")
+	   (cons "Cookie" (concat "NAME=" from "; MAIL=" mail))
 	   (cons "Referer" referer))
      (navi2ch-net-get-param-string param-alist))))
 
