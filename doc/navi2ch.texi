@@ -1100,6 +1100,8 @@ Board 系モード共通のキーバインドも参照。@xref{Board Misc Mode Key Bindings}.
 @item m o
 @code{navi2ch-bookmark-move-mark-article} マークしたスレを別のブックマークに移動
 
+@item s
+@code{navi2ch-bookmark-sync} ブックマークバッファを最新の情報に更新
 @end table
 
 @node Article Mode Key Bindings
