@@ -1,3 +1,18 @@
+2002-05-06    mami  <mami@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-temp-directory): 
+	マクロを廃止。関数として作成。
+	navi2ch-directory 以下の tmp/ ディレクトリを使用するように。
+
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file):
+	マクロ navi2ch-temp-directory ではなく関数 navi2ch-temp-directory
+	を使うように。
+
+	* navi2ch-article.el (navi2ch-article-call-aadisplay): 
+	変数 temporary-file-directory ではなく関数 navi2ch-temp-directory
+	を使うように。
+	* navi2ch.el (navi2ch-change-log-directory): 同上。
+
 2002-04-18    mami  <mami@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-make-board-txt): 

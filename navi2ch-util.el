@@ -544,12 +544,13 @@ base64デコードすべき内容がない場合はエラーになる。"
   (let ((minibuffer-allow-text-properties nil))
     (read-string prompt initial-input history)))
 
-(defmacro navi2ch-temp-directory ()
-  (list 'or
-	(if (featurep 'xemacs)
-	    '(temp-directory)
-	  'temporary-file-directory)
-	'(getenv "TMP")))
+(defun navi2ch-temp-directory ()
+  (let ((dir (concat
+	      (file-name-as-directory navi2ch-directory)
+	      "tmp")))
+    (or (file-directory-p dir)
+	(make-directory dir))
+    dir))
 
 (defmacro navi2ch-match-string-no-properties (num &optional string)
   (if (featurep 'xemacs)

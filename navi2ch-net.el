@@ -208,8 +208,7 @@ BODY の評価中にエラー、quit が起こると nil を返す。"
 
 (defun navi2ch-net-get-content-subr-with-temp-file (gzip-p start end)
   (if gzip-p
-      (let* ((tempfn (make-temp-name
-		      (expand-file-name "navi2ch" (navi2ch-temp-directory))))
+      (let* ((tempfn (make-temp-name (navi2ch-temp-directory)))
 	     (tempfngz (concat tempfn ".gz")))
 	(let ((coding-system-for-write 'binary)
 	      ;; auto-compress-modeをdisableにする

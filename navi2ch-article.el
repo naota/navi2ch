@@ -1491,7 +1491,7 @@ gunzip に通してから文字コードの推測を試みる。"
 
 (defun navi2ch-article-call-aadisplay (str)
   (let* ((coding-system-for-write navi2ch-article-aadisplay-coding-system)
-	 (file (make-temp-name (concat temporary-file-directory "navi2ch"))))
+	 (file (make-temp-name (navi2ch-temp-directory))))
     (with-temp-file file
       (insert str))
     (let ((w32-start-process-show-window t)) ; for meadow

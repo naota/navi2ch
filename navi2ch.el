@@ -312,7 +312,7 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 	    (while t
 	      (setq tmp-dir (expand-file-name
 			     (make-temp-name (concat "navi2ch-" (car node)))
-			     temporary-file-directory))
+			     (navi2ch-temp-directory)))
 	      (unless (file-exists-p tmp-dir)
 		(throw 'loop nil))))
 	  (rename-file new-dir tmp-dir))
