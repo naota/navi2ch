@@ -1,4 +1,25 @@
 2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
+	HTTP/1.1 に対応してみました。まだまだ不具合ありまくりなので素人に
+	はお勧めしない、です。ハクできる人の人柱きぼんぬ。
+
+	* navi2ch-net.el (navi2ch-net-last-host): 新変数。
+	(navi2ch-net-last-port): 同上。
+	(navi2ch-net-header): 同上。
+	(navi2ch-net-content): 同上。
+	(navi2ch-net-enable-http11): 同上。
+	(navi2ch-net-cleanup): navi2ch-net-header、navi2ch-net-content を
+	クリアするように。
+	(navi2ch-net-send-request): HTTP/1.1 に対応してみた。
+	(navi2ch-net-get-header): 結果を navi2ch-net-header に保存するよう
+	にした。バッファを見るのは navi2ch-net-header が nil の時だけ。
+	(navi2ch-net-get-chunk): 新関数。Transfer-Encoding: chunk をデコー
+	ドする。
+	(navi2ch-net-get-content): 結果を navi2ch-net-content に保存するよ
+	うにした。Transfer-Encoding: chunk、Content-Length に対応。
+
+	* navi2ch-util.el (navi2ch-string-as-multibyte): 新マクロ。
+
+2002-01-21  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-insert-messages): 'point を
 	point から point-marker に戻した。

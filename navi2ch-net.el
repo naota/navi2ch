@@ -33,6 +33,13 @@
 (defvar navi2ch-net-setting-file-name "SETTING.TXT")
 (defvar navi2ch-net-last-url nil)
 (defvar navi2ch-net-process nil)
+(defvar navi2ch-net-last-host nil)
+(defvar navi2ch-net-last-port nil)
+(defvar navi2ch-net-header nil)
+(defvar navi2ch-net-content nil)
+
+(defvar navi2ch-net-enable-http11 nil
+  "たぶんまだ不具合山盛り")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
@@ -41,13 +48,16 @@
       (let ((buf (process-buffer navi2ch-net-process)))
 	(delete-process navi2ch-net-process)
 	(kill-buffer buf)))
-  (setq navi2ch-net-process nil))
+  (setq navi2ch-net-header nil
+	navi2ch-net-content nil
+	navi2ch-net-process nil))
 
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
-  (if (processp navi2ch-net-process)
-      (delete-process navi2ch-net-process))
-  (setq navi2ch-net-process nil)
+  (unless navi2ch-net-enable-http11
+    (if (processp navi2ch-net-process)
+	(delete-process navi2ch-net-process))
+    (setq navi2ch-net-process nil))
   (let ((buf (get-buffer-create (concat " *" navi2ch-net-connection-name)))
         (process-connection-type nil)
 	(inherit-process-coding-system
@@ -62,26 +72,44 @@
       (setq credentials (navi2ch-net-http-proxy-basic-credentials
 			 navi2ch-net-http-proxy-userid
 			 navi2ch-net-http-proxy-password)))
-    (save-excursion
-        (set-buffer buf)
-        (erase-buffer))
-    (message "now connecting...")
-    (let ((proc (open-network-stream
-                 navi2ch-net-connection-name buf host port)))
+    (let ((proc navi2ch-net-process))
+      (if (and navi2ch-net-enable-http11
+	       (equal host navi2ch-net-last-host)
+	       (equal port navi2ch-net-last-port)
+	       (processp proc)
+	       (eq (process-status proc) 'open))
+	  (progn
+	    (message "reusing connection...")
+	    (navi2ch-net-get-content proc)) ; 前回のゴミを読み飛ばしておく
+	(message "now connecting...")
+	(setq proc (open-network-stream navi2ch-net-connection-name
+					buf host port)))
+      (save-excursion
+	(set-buffer buf)
+	(navi2ch-set-buffer-multibyte nil)
+	(erase-buffer))
+      (setq navi2ch-net-last-host host)
+      (setq navi2ch-net-last-port port)
       (set-process-coding-system proc 'binary 'binary)
       (set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
       (process-send-string
        proc
        (format (concat
-                "%s %s HTTP/1.0\r\n"
+                "%s %s %s\r\n"
                 "MIME-Version: 1.0\r\n"
                 "Host: %s\r\n"
-                "Connection: close\r\n"
+                "%s"			;connection
                 "%s"                    ;other-header
                 "%s"                    ;content
                 "\r\n")
                method file
+	       (if navi2ch-net-enable-http11
+		   "HTTP/1.1"
+		 "HTTP/1.0")
                host2ch
+	       (if navi2ch-net-enable-http11
+		   ""
+		 "Connection: close\r\n")
 	       (or (navi2ch-net-make-request-header
 		    (cons (cons "Proxy-Authorization" credentials)
 			  other-header))
@@ -91,7 +119,9 @@
                            (length content) content)
                  "")))
       (message "%sconnected" (current-message))
-      (setq navi2ch-net-process proc))))
+      (setq navi2ch-net-header nil
+	    navi2ch-net-content nil
+	    navi2ch-net-process proc))))
       
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host file port host2ch)
@@ -142,21 +172,22 @@
 
 (defun navi2ch-net-get-header (proc)
   "PROC の接続のヘッダ部を返す"
-  (save-excursion
-    (set-buffer (process-buffer proc))
-    (while (and (eq (process-status proc) 'open)
-                (goto-char (point-min))
-                (not (re-search-forward "\r\n\r?\n" nil t)))
-      (accept-process-output proc))
-    (goto-char (point-min))
-    (re-search-forward "\r\n\r?\n")
-    (let ((end (match-end 0))
-          list)
-      (goto-char (point-min))
-      (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
-        (setq list (cons (cons (match-string 1) (match-string 2)) 
-                         list)))
-      (nreverse list))))
+  (or navi2ch-net-header
+      (save-excursion
+	(set-buffer (process-buffer proc))
+	(while (and (eq (process-status proc) 'open)
+		    (goto-char (point-min))
+		    (not (re-search-forward "\r\n\r?\n" nil t)))
+	  (accept-process-output proc))
+	(goto-char (point-min))
+	(re-search-forward "\r\n\r?\n")
+	(let ((end (match-end 0))
+	      list)
+	  (goto-char (point-min))
+	  (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
+	    (setq list (cons (cons (match-string 1) (match-string 2)) 
+			     list)))
+	  (setq navi2ch-net-header (nreverse list))))))
 
 (defun navi2ch-net-get-content-subr-with-temp-file (gzip-p cont)
   (if gzip-p
@@ -186,6 +217,33 @@
 
 (defvar navi2ch-net-get-content-subr-function nil)
 
+(defun navi2ch-net-get-chunk (proc)
+  "カレントバッファの PROC の point 以降を chunk とみなして chunk を得る。
+chunk のサイズを返す。point は chunk の直後に移動。"
+  (catch 'ret
+    (let ((p (point))
+	  size end)
+      (while (and (eq (process-status proc) 'open)
+		  (not (looking-at "\\([0-9a-fA-F]+\\).*\r\n")))
+	(accept-process-output proc))
+      (if (not (match-string 1))
+	  (throw 'ret 0))
+      (forward-line 1)
+      (setq size (string-to-number (match-string 1) 16)
+	    end (+ p size 2))		; chunk-data CRLF
+      (delete-region p (point))		; chunk size 行を消す
+      (while (and (eq (process-status proc) 'open)
+		  (goto-char end)
+		  (not (= (point) end)))
+	(accept-process-output proc))
+      (if (not (= (point) end))
+	  (throw 'ret 0))
+      (if (not (string= (buffer-substring (- (point) 2) (point))
+			"\r\n"))
+	  (throw 'ret 0))		; chunk-data の末尾が CRLF じゃない
+      (delete-region (- (point) 2) (point))
+      size)))
+
 (defun navi2ch-net-get-content (proc)
   "PROC の接続の本文を返す"
   (if (null navi2ch-net-get-content-subr-function)
@@ -193,23 +251,39 @@
 	    (if (string-match "windowsce" system-configuration)
 		'navi2ch-net-get-content-subr-with-temp-file
 	      'navi2ch-net-get-content-subr)))
-  (let ((gzip (and navi2ch-net-accept-gzip
-		   (string-match "gzip"
-				 (or (cdr (assoc "Content-Encoding"
-						 (navi2ch-net-get-header proc)))
-				     "")))))
-    (save-excursion
-      (set-buffer (process-buffer proc))
-      (while (eq (process-status proc) 'open)
-	(accept-process-output proc))
-      (goto-char (point-min))
-      (re-search-forward "\r\n\r?\n")
-      (save-restriction
-	(narrow-to-region (point) (point-max))
-	(funcall navi2ch-net-get-content-subr-function
-		 gzip
-		 (buffer-substring (point-min)
-				   (point-max)))))))
+  (or navi2ch-net-content
+      (let* ((header (navi2ch-net-get-header proc))
+	     (gzip (and navi2ch-net-accept-gzip
+			(string-match "gzip"
+				      (or (cdr (assoc "Content-Encoding"
+						      header))
+					  ""))))
+	     p size)
+	(save-excursion
+	  (set-buffer (process-buffer proc))
+	  (goto-char (point-min))
+	  (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
+	  (setq p (point))
+	  (cond ((equal (cdr (assoc "Transfer-Encoding" header))
+			"chunked")
+		 (while (> (navi2ch-net-get-chunk proc) 0)
+		   nil))
+		((assoc "Content-Length" header)
+		 (let ((size (string-to-number (cdr (assoc "Content-Length"
+							   header)))))
+		   (while (and (eq (process-status proc) 'open)
+			       (goto-char (+ p size))
+			       (not (= (point) (+ p size))))
+		     (accept-process-output))))
+		((not navi2ch-net-enable-http11)
+		 (while (eq (process-status proc) 'open)
+		   (accept-process-output proc))
+		 (goto-char (point-max))))
+	  (setq navi2ch-net-content
+		 (funcall navi2ch-net-get-content-subr-function
+			  gzip
+			  (navi2ch-string-as-multibyte
+			   (buffer-substring p (point)))))))))
 
 (defun navi2ch-net-download-file (url
 				  &optional time accept-status other-header)
