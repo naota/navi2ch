@@ -1,5 +1,9 @@
 2002-07-19  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-machibbs.el (navi2ch-machibbs-parse-regexp): あぼーんが
+	あった時のフォーマットが微妙に違うのに対応。とりあえず、空白の後に
+	すべて「?」を入れてみますた。
+
 	base64-ほげほげ を使う際は (require 'base64) するようにした。
 	o GNU Emacs 20、21、XEmacs 21.4 では base64 が provide されてる。
 	o flim を使うパッケージは (mel-find-function ...) をしており、

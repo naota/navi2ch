@@ -156,9 +156,9 @@
 
 ;; -- parse html --
 (defvar navi2ch-machibbs-parse-regexp "\
-<dt>\\([0-9]+\\) 名前：\\(<a href=\"mailto:\\([^\"]*\\)\"><b> \\|<font[^>]*>\
-<b> \\)\\(.*\\) </b>.+ 投稿日： \\(.*\\)\\(\n\\( ]</font>\\)\\)?<br>\
-<dd> \\(.*\\) <br><br>$")
+<dt>\\([0-9]+\\) ?名前：\\(<a href=\"mailto:\\([^\"]*\\)\"><b> ?\\|<font[^>]*>\
+<b> ?\\)\\(.*\\) ?</b>.+ ?投稿日： ?\\(.*\\)\\(\n\\( ?]</font>\\)\\)?<br>\
+<dd> ?\\(.*\\) ?<br><br>$")
 (defvar navi2ch-machibbs-parse-subject-regexp "<title>\\(.*\\)</title>")
 
 (defun navi2ch-machibbs-parse-subject ()
