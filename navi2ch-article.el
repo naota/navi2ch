@@ -1241,6 +1241,8 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (condition-case nil
       (scroll-up)
     (end-of-buffer
+     (let ((navi2ch-article-goto-number-recenter nil))
+       (navi2ch-article-goto-last-message))
      (funcall navi2ch-article-through-next-function)))
   (force-mode-line-update t))
 
@@ -1249,36 +1251,55 @@ first が nil ならば、ファイルが更新されてなければ何もしない"
   (condition-case nil
       (scroll-down)
     (beginning-of-buffer
+     (let ((navi2ch-article-goto-number-recenter nil))
+       (navi2ch-article-goto-first-message))
      (funcall navi2ch-article-through-previous-function)))
   (force-mode-line-update t))
 
 (defun navi2ch-article-through-ask-y-or-n-p (num title)
   "次のスレに移動するときに \"y or n\" で確認する。"
-  (navi2ch-y-or-n-p
-   (concat title " --- Through " (if (< num 0) "previous" "next")
-	   " article or quit?")
-   'quit))
+  (if title
+      (navi2ch-y-or-n-p
+       (concat title " --- Through " (if (< num 0) "previous" "next")
+	       " article or quit? ")
+       'quit)
+    (when (navi2ch-y-or-n-p
+	   (concat " --- The " (if (< num 0) "first" "last")
+		   " article. Quit? ")
+	   t)
+      'quit)))
 
 (defun navi2ch-article-through-ask-n-or-p-p (num title)
   "次のスレに移動するときに \"n\" か \"p\" で確認する。"
   (let* ((accept-key (if (< num 0) '(?p ?P ?\177) '(?n ?N ?\ )))
-	 (c (navi2ch-read-char
-	     (format "%s --- Through %s article or quit? (%c or q) "
-		     title (if (< num 0) "previous" "next")
-		     (car accept-key)))))
+	 (accept-value (if title t 'quit))
+	 (prompt (if title 
+		     (format "%s --- Through %s article or quit? (%c or q) "
+			     title (if (< num 0) "previous" "next")
+			     (car accept-key))
+		   (format " --- The %s article. Quit? (%c or q) "
+			   (if (< num 0) "first" "last")
+			   (car accept-key))))
+	 (c (navi2ch-read-char prompt)))
     (if (memq c accept-key)
-	t
+	accept-value
       (push (navi2ch-ifxemacs (character-to-event c) c)
 	    unread-command-events)
       nil)))
 
 (defun navi2ch-article-through-ask-last-command-p (num title)
   "次のスレに移動するときに、直前のコマンドと同じかで確認する。"
-  (let ((c (navi2ch-read-char
-	    (format "Type %s for %s"
-		    (single-key-description last-command-char) title))))
+  (let* ((accept-value (if title t 'quit))
+	 (prompt (if title 
+		     (format "Type %s for %s "
+			     (single-key-description last-command-char)
+			     title)
+		   (format "The %s article. Type %s for quit "
+			   (if (< num 0) "first" "last")
+			   (single-key-description last-command-char))))
+	 (c (navi2ch-read-char prompt)))
     (if (equal c last-command-char)
-	t
+	accept-value
       (push (navi2ch-ifxemacs (character-to-event c) c)
 	    unread-command-events)
       nil)))
@@ -1296,11 +1317,11 @@ article buffer から抜けるなら 'quit を返す。"
 	       (save-excursion
 		 (set-buffer navi2ch-board-buffer-name)
 		 (save-excursion
-		   (forward-line num)
-		   (cdr (assq 'subject
-			      (navi2ch-bm-get-article-internal
-			       (navi2ch-bm-get-property-internal
-				(point))))))))
+		   (when (eq (forward-line num) 0)
+		     (cdr (assq 'subject
+				(navi2ch-bm-get-article-internal
+				 (navi2ch-bm-get-property-internal
+				  (point)))))))))
     (or no-ask
 	navi2ch-article-enable-through)))
 

@@ -1,6 +1,19 @@
+2002-10-28  SAITO Takuya  <tabmore@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-scroll-up): article-through-next
+	する前に最後のメッセージに移動。
+	(navi2ch-article-scroll-down): article-through-previous する前に最初
+	のメッセージに移動。
+	(navi2ch-article-through-ask-y-or-n-p): 最初/最後の article を考慮。
+	(navi2ch-article-through-ask-n-or-p-p): 同上。
+	(navi2ch-article-through-ask-last-command-p): 同上。
+	(navi2ch-article-through-ask): 最初/最後の article のときは、title が
+	nil になるように。
+
 2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-cancel-hide-message): Fix typo.
+	http://pc.2ch.net/test/read.cgi/unix/1031231315/610
 
 2002-10-26  SAITO Takuya  <tabmore@users.sourceforge.net>
 
