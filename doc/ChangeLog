@@ -1,3 +1,7 @@
+2002-01-13  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (FAQ): navi2ch-article.el の変更に対応。
+
 2002-01-12  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (FAQ): 変数の設定方法では ~/navi2ch/init.el に言及
