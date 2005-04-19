@@ -1,3 +1,15 @@
+2005-04-20  mami  <mami@users.sourceforge.net>
+
+	バーボン対策でウェイトを入れるように。
+	http://pc8.2ch.net/test/read.cgi/unix/1106152504/841-847n
+
+	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 新変数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): 上記変数
+	を使うように。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。
+
 2005-03-16  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el
@@ -10,7 +22,7 @@
 	のときはすぐ終了するように。
 	(navi2ch-bm-fetch-maybe-new-articles): 同上。
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。	
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。
 
 2005-02-18  mami  <mami@users.sourceforge.net>
 
