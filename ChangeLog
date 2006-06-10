@@ -1,3 +1,12 @@
+2006-06-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* クレジット入れ忘れのため削除依頼に対応
+
+2006-05-29  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch-multibbs.el: 2ch側の新しい書き込みチェックに対応
+	  (hana patch)
+
 2005-09-20  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-list.el (navi2ch-list-bbstable-default-url): bbsmenu URL
