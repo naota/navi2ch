@@ -1,3 +1,13 @@
+2006-07-02  Masatake YAMATO  <jet@gyve.org>
+
+       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera 
+	 cookieに対応。
+       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera 
+	 cookieを追加する。
+       (navi2ch-2ch-send-message): hanamogera-cookieが定義されていれば、
+       param-alistに追加する。
+       (navi2ch-multibbs-send-message): hanamogera-cookieをセット。
+
 2006-06-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* クレジット入れ忘れのため削除依頼に対応
