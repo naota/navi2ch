@@ -285,9 +285,10 @@ START, END, NOFIRST で範囲を指定する"
 	 (navi2ch-net-http-proxy-password (if navi2ch-net-http-proxy-for-send-message
 					      navi2ch-net-http-proxy-password-for-send-message
 					    navi2ch-net-http-proxy-password))
-	 (tries 2)			; 送信試行の最大回数
+	 (tries 3)			; 送信試行の最大回数
 	 (message-str "send message...")
-	 (result 'retry))
+	 (result 'retry)
+	 (hanamogera-cookie nil))
     (dotimes (i tries)
       (let ((proc (funcall send from mail message subject bbs key time
 			   board article)))
@@ -299,6 +300,7 @@ START, END, NOFIRST で範囲を指定する"
 		   (insert (decode-coding-string
 			    (navi2ch-net-get-content proc)
 			    (navi2ch-board-get-coding-system board)))
+		   (setq hanamogera-cookie (navi2ch-multibbs-get-hanamogera-cookie))
 		   (navi2ch-replace-html-tag-with-buffer)
 		   (goto-char (point-min))
 		   (while (re-search-forward "[ \t]*\n\\([ \t]*\n\\)*" nil t)
@@ -328,6 +330,18 @@ START, END, NOFIRST で範囲を指定する"
   (let ((func (navi2ch-multibbs-get-func-from-board
 	       board 'board-get-file-name 'navi2ch-2ch-board-get-file-name)))
     (funcall func board file-name)))
+
+(defun navi2ch-multibbs-get-hanamogera-cookie ()
+  ;; Get hana and mogera from following string.
+  ;; <input type=hidden name="hana" value="mogera">  
+  (save-excursion
+    (save-match-data
+      (goto-char (point-max))
+      (when (re-search-backward 
+	     "<input[ \t]+type=hidden[ \t]+name=\"\\([^\"]+\\)\"[ \t]+value=\"\\([^\"]+\\)\""
+	     nil
+	     t)
+	(cons (match-string 1) (match-string 2))))))
 
 ;;;-----------------------------------------------
 
@@ -434,6 +448,11 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 		      (if subject
 			  (cons "subject" subject)
 			(cons "key"    key)))))
+
+    ;; If hanamogera cookie is set, cons it to param-alist.
+    (when (and (boundp 'hanamogera-cookie) hanamogera-cookie)
+      (setq param-alist (cons hanamogera-cookie param-alist)))
+
     (setq navi2ch-2ch-send-message-last-board board)
     (setq spid
 	  (when (and (consp spid)
