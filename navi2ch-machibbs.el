@@ -138,7 +138,7 @@ START, END, NOFIRST で範囲を指定する" ; 効かなかったら教えてください。
 	 (list (cons 'artid (match-string 1 url))))))
 
 (defun navi2ch-machibbs-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (let ((url          (navi2ch-machibbs-get-writecgi-url board))
 	(referer      (navi2ch-board-get-uri board))
 	(param-alist  (list

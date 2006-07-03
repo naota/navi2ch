@@ -113,7 +113,7 @@ START, END, NOFIRST で範囲を指定する"
 		 (match-string 2 uri)))))
 
 (defun navi2ch-jbbs-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (let ((url         (navi2ch-jbbs-get-writecgi-url board))
 	(referer     (navi2ch-board-get-uri board))
 	(param-alist (list

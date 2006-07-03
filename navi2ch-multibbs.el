@@ -52,6 +52,7 @@ FUNC-ALIST は以下の通り
  (url-to-board		. URL-TO-BOARD-FUNC)
  (url-to-article	. URL-TO-ARTICLE-FUNC)
  (send-message		. SEND-MESSAGE-FUNC)
+ (extract-post          . EXTRACT-POST-FUNC)
  (send-success-p	. SEND-MESSAGE-SUCCESS-P-FUNC)
  (error-string		. ERROR-STRING-FUNC)
  (board-update		. BOARD-UPDATE-FUNC)
@@ -79,8 +80,18 @@ URL-TO-ARTICLE-FUNC(URL):
 URL から article に変換する。
 
 SEND-MESSAGE-FUNC(FROM MAIL MESSAGE
-		  SUBJECT BBS KEY TIME BOARD ARTICLE):
+		  SUBJECT BBS KEY TIME BOARD ARTICLE POST):
     MESSAGE を送信する。
+
+EXTRACT-POST-FUNC(OLD-POST BUFFER):
+    MESSAGE の再送信に使う情報を取り出す。取り出したデータを
+    返り値として返すと、再送のためにSEND-MESSAGE-FUNCを呼び出す
+    ときに、その値がPOST引数に束縛されます。
+     
+    BUFFERには、SEND-MESSAGE-FUNCが返したPROCから取り出したコン
+    テンツをデコードしたものが挿入されています。再送を繰り返す
+    場合、最後にEXTRACT-POST-FUNCが返した値がOLD-POSTに束縛され
+    ています。
 
 SEND-MESSAGE-SUCCESS-P-FUNC(PROC):
     PROC の送信セッションが成功していれば non-nil を、
@@ -267,6 +278,8 @@ START, END, NOFIRST で範囲を指定する"
   (let* ((bbstype      (navi2ch-multibbs-get-bbstype board))
 	 (send         (navi2ch-multibbs-get-func
 			bbstype 'send-message 'navi2ch-2ch-send-message))
+	 (extract-post (navi2ch-multibbs-get-func
+			bbstype 'extract-post 'navi2ch-2ch-extract-post))
 	 (success-p    (navi2ch-multibbs-get-func
 			bbstype 'send-success-p
 			'navi2ch-2ch-send-message-success-p))
@@ -285,13 +298,13 @@ START, END, NOFIRST で範囲を指定する"
 	 (navi2ch-net-http-proxy-password (if navi2ch-net-http-proxy-for-send-message
 					      navi2ch-net-http-proxy-password-for-send-message
 					    navi2ch-net-http-proxy-password))
-	 (tries 3)			; 送信試行の最大回数
+	 (tries 2)			; 送信試行の最大回数
 	 (message-str "send message...")
 	 (result 'retry)
-	 (hanamogera-cookie nil))
+	 (post-data nil))
     (dotimes (i tries)
       (let ((proc (funcall send from mail message subject bbs key time
-			   board article)))
+			   board article post-data)))
 	(message message-str)
 	(setq result (funcall success-p proc))
 	(cond ((eq result 'retry)
@@ -300,7 +313,7 @@ START, END, NOFIRST で範囲を指定する"
 		   (insert (decode-coding-string
 			    (navi2ch-net-get-content proc)
 			    (navi2ch-board-get-coding-system board)))
-		   (setq hanamogera-cookie (navi2ch-multibbs-get-hanamogera-cookie))
+		   (setq post-data (funcall extract-post post-data (current-buffer)))
 		   (navi2ch-replace-html-tag-with-buffer)
 		   (goto-char (point-min))
 		   (while (re-search-forward "[ \t]*\n\\([ \t]*\n\\)*" nil t)
@@ -330,18 +343,6 @@ START, END, NOFIRST で範囲を指定する"
   (let ((func (navi2ch-multibbs-get-func-from-board
 	       board 'board-get-file-name 'navi2ch-2ch-board-get-file-name)))
     (funcall func board file-name)))
-
-(defun navi2ch-multibbs-get-hanamogera-cookie ()
-  ;; Get hana and mogera from following string.
-  ;; <input type=hidden name="hana" value="mogera">  
-  (save-excursion
-    (save-match-data
-      (goto-char (point-max))
-      (when (re-search-backward 
-	     "<input[ \t]+type=hidden[ \t]+name=\"\\([^\"]+\\)\"[ \t]+value=\"\\([^\"]+\\)\""
-	     nil
-	     t)
-	(cons (match-string 1) (match-string 2))))))
 
 ;;;-----------------------------------------------
 
@@ -434,7 +435,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 (defvar navi2ch-2ch-send-message-last-board nil)
 
 (defun navi2ch-2ch-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (let ((url         (navi2ch-board-get-bbscgi-url board))
 	(referer     (navi2ch-board-get-uri board))
 	(spid        (navi2ch-board-load-spid board))
@@ -449,9 +450,9 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 			  (cons "subject" subject)
 			(cons "key"    key)))))
 
-    ;; If hanamogera cookie is set, cons it to param-alist.
-    (when (and (boundp 'hanamogera-cookie) hanamogera-cookie)
-      (setq param-alist (cons hanamogera-cookie param-alist)))
+    (let ((hanamogera-cookie (cdr (assq 'hanamogera-cookie post))))
+      (when hanamogera-cookie
+	(setq param-alist (cons hanamogera-cookie param-alist))))
 
     (setq navi2ch-2ch-send-message-last-board board)
     (setq spid
@@ -526,5 +527,23 @@ START, END, NOFIRST で範囲を指定する"
 	     (expand-file-name (or file-name
 				   navi2ch-board-subject-file-name)
 			       (match-string 1 uri)))))))
+
+(defun navi2ch-2ch-extract-post (old-post buffer)
+  ;; Get hana and mogera from following string.
+  ;; <input type=hidden name="hana" value="mogera">  
+  (with-current-buffer buffer
+    (save-excursion
+      (save-match-data
+	(goto-char (point-max))
+	(when (re-search-backward 
+	       "<input[ \t]+type=hidden[ \t]+name=\"\\([^\"]+\\)\"[ \t]+value=\"\\([^\"]+\\)\""
+	       nil
+	       t)
+	  ;; (('hana-mogera-cookie "hana" . "mogera"))
+	  (list 
+	   (cons 'hanamogera-cookie (cons 
+				      (match-string 1) ; hana
+				      (match-string 2) ; mogera
+				      ))))))))
 
 ;;; navi2ch-multibbs.el ends here

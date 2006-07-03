@@ -1,3 +1,27 @@
+2006-07-03  Masatake YAMATO  <jet@gyve.org>
+
+        * navi2ch-multibbs.el (navi2ch-multibbs-func-alist): extract-post
+	 を追加。
+        (navi2ch-multibbs-func-alist): SEND-MESSAGE-FUNCにPOST引数を追加。
+        (navi2ch-multibbs-send-message): extract-postを取得して、再送前に
+         呼び出すことで、バッファをスキャンするして再送に必要な情報を得ること
+         ができるようにした。送信試行の最大回数を元に脅した。hanamogera-cookie
+         をpost-dataとして一般化した。
+        (navi2ch-2ch-extract-post): navi2ch-multibbs-get-hanamogera-cookieから
+         名前を変更した。
+        (navi2ch-2ch-send-message): ダイナミックスコープからhanamogera-cookieを
+         捜すのではなく、POSTという引数を追加して、そこからhanamogera-cookieを
+	 キーとしてassqして、hanamogera-cookieの値を取り出せるようにした。
+        * navi2ch-jbbs-net.el (navi2ch-jbbs-get-writecgi-url): 引数POSTを追加
+	 した。
+        * navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-localfile.el (navi2ch-localfile-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-machibbs.el (navi2ch-machibbs-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-oyster.el (navi2ch-oyster-send-message): 引数POSTを追加した。
+	
 2006-07-02  Masatake YAMATO  <jet@gyve.org>
 
        * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera 

@@ -152,7 +152,7 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	list))))
 
 (defun navi2ch-js-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (let ((url         (navi2ch-js-get-cgi-url "write" board))
 	(referer     (navi2ch-board-get-uri board))
 	(param-alist (list

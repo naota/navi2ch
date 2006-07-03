@@ -113,7 +113,7 @@ START からじゃないかもしれないけど・・・。
     header))
 
 (defun navi2ch-oyster-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (let ((url         (navi2ch-board-get-bbscgi-url board))
 	(referer     (navi2ch-board-get-uri board))
 	(spid        (navi2ch-board-load-spid board))

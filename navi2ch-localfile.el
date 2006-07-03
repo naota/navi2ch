@@ -334,7 +334,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 (defvar navi2ch-localfile-last-error nil)
 
 (defun navi2ch-localfile-send-message
-  (from mail message subject bbs key time board article)
+  (from mail message subject bbs key time board article &optional post)
   (setq navi2ch-localfile-last-error
 	(catch 'error
 	  (when (= (length message) 0)
