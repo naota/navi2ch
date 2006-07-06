@@ -1,3 +1,9 @@
+2006-07-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* navi2ch-oyster.el (navi2ch-oyster-send-message): hanamogera-cookie
+	  対応処理を追加
+	  (navi2ch-oyster-func-alist): extract-postを追加
+
 2006-07-03  Masatake YAMATO  <jet@gyve.org>
 
         * navi2ch-multibbs.el (navi2ch-multibbs-func-alist): extract-post

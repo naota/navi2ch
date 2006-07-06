@@ -43,7 +43,8 @@
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
     (article-update 	. navi2ch-oyster-article-update)
-    (send-message   	. navi2ch-oyster-send-message)))
+    (send-message   	. navi2ch-oyster-send-message)
+    (extract-post	. navi2ch-2ch-extract-post)))
 ;; navi2ch-net-user-agent も multibbs 化する必要あり?
 
 (defvar navi2ch-oyster-variable-alist
@@ -132,6 +133,11 @@ START からじゃないかもしれないけど・・・。
 		      (if subject
 			  (cons "subject" subject)
 			(cons "key" key)))))
+
+    (let ((hanamogera-cookie (cdr (assq 'hanamogera-cookie post))))
+      (when hanamogera-cookie
+	(setq param-alist (cons hanamogera-cookie param-alist))))
+
     (setq spid
 	  (when (and (consp spid)
 		     (navi2ch-compare-times (cdr spid) (current-time)))
