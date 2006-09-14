@@ -2041,7 +2041,7 @@ Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
 仕様です。ただし、以下の設定を~/.navi2ch/init.elに追加すれば回避できます。
 この設定を行うことによってあなたが不利益をかぶったとしても、
 navi2ch Projectはなんら責任を負いません。あくまで自己責任で。
-@list
+@lisp
 (setq navi2ch-multibbs-send-message-retry-confirm-function #'always-t)
 @end lisp
 
