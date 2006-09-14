@@ -2034,6 +2034,17 @@ Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
 @item A.
 時計を合わせましょう。
 
+@item Q.
+毎回書き込みをするたびに確認を求められてうざいんですけど。
+
+@item A.
+仕様です。ただし、以下の設定を~/.navi2ch/init.elに追加すれば回避できます。
+この設定を行うことによってあなたが不利益をかぶったとしても、
+navi2ch Projectはなんら責任を負いません。あくまで自己責任で。
+@list
+(setq navi2ch-multibbs-send-message-retry-confirm-function #'always-t)
+@end lisp
+
 @end table
 
 @node Misc Questions

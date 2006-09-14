@@ -1,3 +1,8 @@
+2006-09-14  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* doc/navi2ch.texi (How to Write): FAQに書き込み時の確認を回避
+	  する方法に付いて言及
+
 2006-07-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-oyster.el (navi2ch-oyster-send-message): hanamogera-cookie
