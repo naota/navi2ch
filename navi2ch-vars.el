@@ -435,7 +435,7 @@ non-nil ならば記憶する。"
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-history-file "history.txt")
+(defcustom navi2ch-history-file "history.txt"
   "*ヒストリを保存しておくファイル。"
   :type 'file
   :group 'navi2ch-board)
