@@ -1,5 +1,13 @@
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-down-host-alist): 新変数
+	(navi2ch-net-retry-down-host): 新変数
+	(navi2ch-net-add-down-host): 新関数
+	(navi2ch-net-down-p): 新関数
+	(navi2ch-net-send-request): 上記変数・関数を使用して落ちているホス
+	トは `navi2ch-net-retry-down-host' の間スキップするように
+	patch#1432266 (アイディアのみ)
+	
 	* navi2ch-net.el (navi2ch-net-cookies): 新変数
 	(navi2ch-net-store-cookie): 新関数
 	(navi2ch-net-match-cookies): 新関数

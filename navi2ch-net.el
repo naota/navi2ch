@@ -158,6 +158,27 @@ BODY の評価中にエラーが起こると nil を返す。"
     (setq navi2ch-net-connect-time-list
 	  (cons (cons host (navi2ch-float-time)) list))))
 
+(defvar navi2ch-net-down-host-alist nil)
+
+(defvar navi2ch-net-retry-down-host 300
+  "以前落ちていたホストに再接続するまでの秒数。
+nil なら常に再接続する。")
+
+(defun navi2ch-net-add-down-host (host)
+  (setq host (intern (downcase (format "%s" host))))
+  (setq navi2ch-net-down-host-alist
+	(navi2ch-put-alist host (navi2ch-float-time)
+			   navi2ch-net-down-host-alist)))
+
+(defun navi2ch-net-down-p (host)
+  (setq host (intern (downcase (format "%s" host))))
+  (let ((elt (assq host navi2ch-net-down-host-alist)))
+    (and elt
+	 (numberp navi2ch-net-retry-down-host)
+	 (> navi2ch-net-retry-down-host 0)
+	 (< (navi2ch-float-time)
+	    (+ (cdr elt) (float navi2ch-net-retry-down-host))))))
+
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
   (unless navi2ch-net-enable-http11
@@ -186,7 +207,6 @@ BODY の評価中にエラーが起こると nil を返す。"
 		   (memq (process-status proc) '(open run)))
 	      (progn
 		(message "Reusing connection...")
-		(process-send-string proc "") ; ping
 		(navi2ch-net-get-content proc))	; 前回のゴミを読み飛ばしておく
 	    (if (processp proc)
 		(delete-process proc))
@@ -196,44 +216,50 @@ BODY の評価中にエラーが起こると nil を返す。"
 		(not (processp proc))
 		(not (memq (process-status proc) '(open run))))
 	(message "Now connecting...")
-	(setq proc (funcall navi2ch-open-network-stream-function
-			    navi2ch-net-connection-name buf host port)))
-      (save-excursion
-	(set-buffer buf)
-	(navi2ch-set-buffer-multibyte nil)
-	(erase-buffer))
-      (setq navi2ch-net-last-host host)
-      (setq navi2ch-net-last-port port)
-      (message "%ssending request..." (current-message))
-      (set-process-coding-system proc 'binary 'binary)
-      (set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
-      (process-send-string
-       proc
-       (format (concat
-                "%s %s %s\r\n"
-                "MIME-Version: 1.0\r\n"
-                "Host: %s\r\n"
-                "%s"			;connection
-                "%s"                    ;other-header
-                "%s"                    ;content
-                "\r\n")
-               method file
-	       (if navi2ch-net-enable-http11
-		   "HTTP/1.1"
-		 "HTTP/1.0")
-               host2ch
-	       (if navi2ch-net-enable-http11
-		   ""
-		 "Connection: close\r\n")
-	       (or (navi2ch-net-make-request-header
-		    (cons (cons "Proxy-Authorization" credentials)
-			  other-header))
-		   "")
-	       (if content
-                   (format "Content-length: %d\r\n\r\n%s"
-                           (length content) content)
-                 "")))
-      (message "%sdone" (current-message))
+	(setq proc nil)
+	(unless (navi2ch-net-down-p host)
+	  (unwind-protect
+	      (setq proc (funcall navi2ch-open-network-stream-function
+				  navi2ch-net-connection-name buf host port))
+	    (unless proc
+	      (navi2ch-net-add-down-host host)))))
+      (when proc
+	(save-excursion
+	  (set-buffer buf)
+	  (navi2ch-set-buffer-multibyte nil)
+	  (erase-buffer))
+	(setq navi2ch-net-last-host host)
+	(setq navi2ch-net-last-port port)
+	(message "%ssending request..." (current-message))
+	(set-process-coding-system proc 'binary 'binary)
+	(set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
+	(process-send-string
+	 proc
+	 (format (concat
+		  "%s %s %s\r\n"
+		  "MIME-Version: 1.0\r\n"
+		  "Host: %s\r\n"
+		  "%s"			;connection
+		  "%s"			;other-header
+		  "%s"			;content
+		  "\r\n")
+		 method file
+		 (if navi2ch-net-enable-http11
+		     "HTTP/1.1"
+		   "HTTP/1.0")
+		 host2ch
+		 (if navi2ch-net-enable-http11
+		     ""
+		   "Connection: close\r\n")
+		 (or (navi2ch-net-make-request-header
+		      (cons (cons "Proxy-Authorization" credentials)
+			    other-header))
+		     "")
+		 (if content
+		     (format "Content-length: %d\r\n\r\n%s"
+			     (length content) content)
+		   "")))
+	(message "%sdone" (current-message)))
       (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
 
