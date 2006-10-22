@@ -85,11 +85,8 @@
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
-    (let ((navi2ch-update-file (expand-file-name navi2ch-update-file
-						 navi2ch-directory)))
-      (when (file-exists-p navi2ch-update-file)
-	(load-file navi2ch-update-file)))
-    (load navi2ch-init-file t)
+    (load (expand-file-name navi2ch-update-file navi2ch-directory) t)
+    (load (expand-file-name navi2ch-init-file navi2ch-directory) t)
     (navi2ch-lock)
     (when navi2ch-auto-update
       (let ((done nil))
