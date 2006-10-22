@@ -131,6 +131,33 @@ BODY の評価中にエラーが起こると nil を返す。"
 	       (list shell-file-name shell-command-switch command)
 	     command))))
 
+;; (let ((sum 0))
+;;   (dotimes (i 400 sum)
+;;     (setq sum (+ sum (1- (floor (expt 1.00925 i)))))))
+;; => 3602
+(defvar navi2ch-net-connect-wait-power 1.00925)
+(defvar navi2ch-net-connect-time-list '())
+
+(defun navi2ch-net-connect-wait (host)
+  (let* ((host (intern host))
+	 (now (navi2ch-float-time))
+	 (limit (- now 3600.0))
+	 (list (delq nil (mapcar (lambda (x) (if (> (cdr x) limit) x))
+				 navi2ch-net-connect-time-list)))
+	 (len (length (delq nil (mapcar (lambda (x)
+					  (if (eq host (car x)) x))
+					list))))
+	 (wait (floor (- (+ (expt navi2ch-net-connect-wait-power len)
+			    (or (cdr (assq host list)) now))
+			 1
+			 now))))
+    (when (> wait 0)
+      (message "waiting for %dsec..." wait)
+      (sleep-for wait)
+      (message "waiting for %dsec...done" wait))
+    (setq navi2ch-net-connect-time-list
+	  (cons (cons host (navi2ch-float-time)) list))))
+
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
   (unless navi2ch-net-enable-http11
@@ -145,6 +172,7 @@ BODY の評価中にエラーが起こると nil を返す。"
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
+    (navi2ch-net-connect-wait host)
     (when navi2ch-net-http-proxy
       (setq credentials (navi2ch-net-http-proxy-basic-credentials
 			 navi2ch-net-http-proxy-userid

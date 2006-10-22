@@ -1279,5 +1279,13 @@ STRING2 の方が大きい場合は負数を返す。
 (defun navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
 
+(defun navi2ch-float-time (&optional specified-time)
+  "Return the current time, as a float number of seconds since the epoch.
+If an argument is given, it specifies a time to convert to float
+instead of the current time."
+  (apply (lambda (high low &optional usec)
+	   (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
+	 (or specified-time (current-time))))
+
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

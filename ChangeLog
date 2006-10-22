@@ -1,5 +1,19 @@
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-vars.el (navi2ch-message-sendlog-message-format-function):
+	グループを追加
+
+	* navi2ch-util.el (navi2ch-float-time): 新関数
+
+	* navi2ch-net.el (navi2ch-net-connect-wait-power): 新変数
+	(navi2ch-net-connect-time-list): 新変数
+	(navi2ch-net-connect-wait): 上記変数を使用して待機時間を計算
+	(navi2ch-net-send-request): 上記時間を挿入
+
+	patch#1187825,1188245
+
+2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-history.el (navi2ch-history-add): history に必要な情報の
 	みを記録
 

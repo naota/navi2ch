@@ -1568,7 +1568,8 @@ Navi2chカテゴリに「送信控え」板が自動的に追加されます。
 	   :tag "板名付きのフォーマット"
 	   :value navi2ch-message-sendlog-message-format-with-board-name
 	   :doc "[板名]: スレッドタイトル\nURL: http://")
-	  (function :tag "関数を指定")))
+	  (function :tag "関数を指定"))
+  :group 'navi2ch-message)
 
 ;; net variables
 (defcustom navi2ch-net-http-proxy
