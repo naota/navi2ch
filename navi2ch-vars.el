@@ -488,11 +488,6 @@ non-nil ならば記憶する。"
 	       (cons (const :tag "状態   " "  ") (number :tag "順番")))
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetch-wait 3
-  "*複数のスレを一度に取得する際に使用するウェイトの秒数。"
-  :type 'number
-  :group 'navi2ch-board)
-
 (defcustom navi2ch-board-filter-list nil
   "*スレッドの一覧をいじるフィルターのリスト。
 それぞれのフィルターは elisp の関数ならば その symbol、

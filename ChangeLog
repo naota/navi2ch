@@ -1,3 +1,17 @@
+2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file の
+	load の仕方を変更
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): prefix key ("m") に
+	nil を割り当てておく
+	(navi2ch-bm-fetch-mark-article): navi2ch-net-connect-wait でウェイ
+	トを入れるようにしたので navi2ch-bm-fetch-wait を使用しない
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上
+
+	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 削除
+
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-assoc-ignore-case): 新関数
