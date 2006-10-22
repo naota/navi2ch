@@ -1,3 +1,12 @@
+2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-util.el (navi2ch-coding-system): navi2ch-vars.el に移動
+
+	* navi2ch-vars.el (navi2ch-coding-system): navi2ch-util.el から移動
+	(navi2ch-board-coding-system-alist): 上記変数を使用
+
+	patch#1124650
+
 2006-09-14  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi (How to Write): FAQに書き込み時の確認を回避

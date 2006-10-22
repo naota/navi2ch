@@ -187,10 +187,6 @@
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
   "base64 コードのみが含まれる行にマッチする正規表現。")
 
-(defvar navi2ch-coding-system
-  (or (car (memq 'cp932 (coding-system-list)))
-      'shift_jis))
-
 (defvar navi2ch-offline nil "オフラインモードかどうか。")
 (defvar navi2ch-online-indicator  "[ON] ")
 (defvar navi2ch-offline-indicator "[--] ")

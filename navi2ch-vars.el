@@ -35,6 +35,10 @@
 (defconst navi2ch-on-emacs20 (and (not navi2ch-on-xemacs)
                                   (= emacs-major-version 20)))
 
+(defvar navi2ch-coding-system
+  (or (car (memq 'cp932 (coding-system-list)))
+      'shift_jis))
+
 (defgroup navi2ch nil
   "*Navigator for 2ch."
   :prefix "navi2ch-"
@@ -544,6 +548,7 @@ CODING-SYSTEM $B$O(B BOARD-ID $B$G;XDj$5$l$kHD$K;XDj$9$k(B coding-system$B!
 	  (cons
 	   (string :tag "$BHD(BID")
 	   (choice :tag "$BJ8;z%3!<%I(B"
+		   :value ,navi2ch-coding-system
 		   ,@(mapcar (lambda (x)
 			       (list 'const x))
 			     (coding-system-list)))))
