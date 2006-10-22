@@ -1,5 +1,18 @@
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-megabbs.el: 新ファイル
+
+	* Makefile.am (lisp_LISP): 上記ファイルを追加
+
+	patch#1153242
+
+	* Makefile.in, aclocal.m4, */Makefile.in:
+	再作成 (automake 1.9.6)
+
+	* config.guess, config.sub, elisp-comp, install-sh, missing
+	* mkinstalldirs, doc/texinfo.tex:
+	automake 1.9.6 付属のものに更新
+
 	* navi2ch-net.el (navi2ch-net-down-host-alist): 新変数
 	(navi2ch-net-retry-down-host): 新変数
 	(navi2ch-net-add-down-host): 新関数
@@ -7,7 +20,7 @@
 	(navi2ch-net-send-request): 上記変数・関数を使用して落ちているホス
 	トは `navi2ch-net-retry-down-host' の間スキップするように
 	patch#1432266 (アイディアのみ)
-	
+
 	* navi2ch-net.el (navi2ch-net-cookies): 新変数
 	(navi2ch-net-store-cookie): 新関数
 	(navi2ch-net-match-cookies): 新関数
@@ -73,7 +86,7 @@
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p): 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p):
 	patch#1229486
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
@@ -159,12 +172,12 @@
         * navi2ch-machibbs.el (navi2ch-machibbs-send-message): 引数POSTを追加
 	 した。
         * navi2ch-oyster.el (navi2ch-oyster-send-message): 引数POSTを追加した。
-	
+
 2006-07-02  Masatake YAMATO  <jet@gyve.org>
 
-       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera 
+       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera
 	 cookieに対応。
-       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera 
+       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera
 	 cookieを追加する。
        (navi2ch-2ch-send-message): hanamogera-cookieが定義されていれば、
        param-alistに追加する。
@@ -287,7 +300,7 @@
 	(navi2ch-article-file-name-to-artid): 新関数。
 
 	* navi2ch-board-misc.el
-	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article) 
+	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article)
 	(navi2ch-bm-insert-subject): defsubst -> defun.
 
 	* navi2ch.el (navi2ch-update): navi2ch-file-mtime,
@@ -477,7 +490,7 @@
 
 2005-01-22  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-get-number-list): 
+	* navi2ch-article.el (navi2ch-article-get-number-list):
 	数字部分が8文字以上のレスアンカーで、正しくレス番を指せないバグを修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/929
 
@@ -550,7 +563,7 @@
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board.el (navi2ch-board-expire): 
+	* navi2ch-board.el (navi2ch-board-expire):
 	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
 	を修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/748
@@ -639,7 +652,7 @@
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): 新関
 	数。
-	(navi2ch-bookmark-mode-map): 上記関数をバインド。 
+	(navi2ch-bookmark-mode-map): 上記関数をバインド。
 
 2004-09-28  mami  <mami@users.sourceforge.net>
 

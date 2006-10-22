@@ -10,7 +10,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-splash.el navi2ch-directory.el \
 	navi2ch-be2ch.el navi2ch-multibbs.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
-	navi2ch-futaba.el \
+	navi2ch-futaba.el navi2ch-megabbs.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
 	navi2ch-auto-modify.el
 
