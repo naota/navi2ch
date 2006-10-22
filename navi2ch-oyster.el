@@ -295,7 +295,7 @@ DIFF が non-nil ならば差分を取得する。
     (setq navi2ch-oyster-session-id (navi2ch-oyster-get-status proc))
     (message "IDを取得しますた ID= %s" navi2ch-oyster-session-id)
     (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
-	 (message "ID取得に失敗しますた" navi2ch-oyster-session-id)
+	 (message "ID取得に失敗しますた ID= %s" navi2ch-oyster-session-id)
 	 (setq navi2ch-oyster-session-id nil))))
 
 ;;; navi2ch-oyster.el ends here
