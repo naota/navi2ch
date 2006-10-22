@@ -367,10 +367,17 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 ;;       (message "Please enter a number")
 ;;       (sit-for 1))))
 
+(defalias 'navi2ch-assoc-ignore-case
+  (if (fboundp 'assoc-string)
+      '(lambda (key alist)
+	 (assoc-string key alist t))
+    'assoc-ignore-case))
+
 (defsubst navi2ch-replace-html-tag-to-string (str)
   (let ((ret
 	 (or (cdr (if case-fold-search
-		      (assoc-ignore-case str navi2ch-replace-html-tag-alist)
+		      (navi2ch-assoc-ignore-case
+		       str navi2ch-replace-html-tag-alist)
 		    (assoc str navi2ch-replace-html-tag-alist)))
 	     (save-match-data
 	       (let ((alist navi2ch-replace-html-tag-regexp-alist)
@@ -420,7 +427,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
   (save-match-data
     (if (and navi2ch-decode-character-references
 	     (string-match "&#\\([^;]+\\)" ref))
-	(or (navi2ch-ucs-to-str (string-to-int (match-string 1 ref))) "〓")
+	(or (navi2ch-ucs-to-str (string-to-number (match-string 1 ref))) "〓")
       ref)))
 
 ;; shut up byte-compile warnings
@@ -628,10 +635,10 @@ return new alist whose car is the new pair and cdr is ALIST.
 		'navi2ch-mode-line-identification)))
   (force-mode-line-update t))
 
-(defun navi2ch-end-of-buffer (&optional arg)
+(defun navi2ch-end-of-buffer ()
   "バッファの最終行に移動。"
-  (interactive "P")
-  (end-of-buffer arg)
+  (interactive)
+  (call-interactively 'end-of-buffer)
   (when (eobp) (forward-line -1)))
 
 (defun navi2ch-uudecode-region (start end &optional filename)
@@ -1286,6 +1293,11 @@ instead of the current time."
   (apply (lambda (high low &optional usec)
 	   (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
 	 (or specified-time (current-time))))
+
+(defalias 'navi2ch-make-local-hook
+  (if (>= emacs-major-version 22)
+      'ignore
+    'make-local-hook))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

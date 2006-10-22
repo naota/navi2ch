@@ -153,8 +153,8 @@ SPEC は (BBSTYPE [ARG]...)。
 実際には、callback を定義するのに必要な BBSTYPE な板の coding-system
 による decode, encode 処理を BODY を評価する前後に行なう、NAME という
 引数 [ARG]... を持つ関数が定義される。"
-  (let ((bbstype (gensym "--bbstype--"))
-	(decoding (gensym "--decoding--"))
+  (let ((bbstype (make-symbol "--bbstype--"))
+	(decoding (make-symbol "--decoding--"))
 	docstring)
     (when (stringp (car body))
       (setq docstring (car body))

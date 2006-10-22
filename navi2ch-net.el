@@ -313,7 +313,7 @@ BODY の評価中にエラーが起こると nil を返す。"
 	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
 	       (setq list (cons (cons (match-string 1) (match-string 2))
 				list)))
-	     (let ((date (assoc-ignore-case "Date" list)))
+	     (let ((date (navi2ch-assoc-ignore-case "Date" list)))
 	       (when (and date (stringp (cdr date)))
 		 (setq navi2ch-net-last-date (cdr date))))
 	     (setq navi2ch-net-header (nreverse list))))))))

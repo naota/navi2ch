@@ -144,7 +144,7 @@
   (when (get-buffer navi2ch-message-backup-buffer-name)
     (let ((inhibit-read-only t))
       (erase-buffer))
-    (insert-buffer navi2ch-message-backup-buffer-name)))
+    (insert-buffer-substring navi2ch-message-backup-buffer-name)))
 
 (defun navi2ch-message-insert-header (new sage)
   (and sage (setq sage "sage"))
@@ -234,7 +234,7 @@
 	      (set-buffer (get-buffer-create
 			   navi2ch-message-backup-buffer-name))
 	      (erase-buffer)
-	      (insert-buffer buffer)))
+	      (insert-buffer-substring buffer)))
 	  (when navi2ch-message-trip
 	    (setq from (concat from "#" navi2ch-message-trip)))
 	  (let ((board navi2ch-message-current-board)

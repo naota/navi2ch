@@ -1,5 +1,33 @@
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-util.el (navi2ch-assoc-ignore-case): 新関数
+	(navi2ch-replace-html-tag-to-string):
+	assoc-ignore-case -> navi2ch-assoc-ignore-case
+	(navi2ch-numeric-reference-to-str):
+	string-to-int -> string-to-number
+	(navi2ch-end-of-buffer): call-interactively 'end-of-buffer
+	(navi2ch-make-local-hook): 新関数
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
+	make-local-hook -> navi2ch-make-local-hook
+
+	* navi2ch-net.el (navi2ch-net-get-header):
+	assoc-ignore-case -> navi2ch-assoc-ignore-case
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback):
+	gensym -> make-symbol
+
+	* navi2ch-message.el (navi2ch-message-insert-backup):
+	insert-buffer -> insert-buffer-substring
+	(navi2ch-message-send-message): 同上
+
+	* navi2ch-article.el (navi2ch-article-mode): make-local-hook
+	ではなく navi2ch-make-local-hook を使う
+
+	emacs-22 cleanup
+
+2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p): 
 	patch#1229486
 
