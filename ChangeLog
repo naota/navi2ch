@@ -1,5 +1,10 @@
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p): 
+	patch#1229486
+
+2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch-vars.el (navi2ch-message-sendlog-message-format-function):
 	グループを追加
 
