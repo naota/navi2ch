@@ -85,8 +85,10 @@
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
-    (when (file-exists-p navi2ch-update-file)
-      (load-file navi2ch-update-file))
+    (let ((navi2ch-update-file (expand-file-name navi2ch-update-file
+						 navi2ch-directory)))
+      (when (file-exists-p navi2ch-update-file)
+	(load-file navi2ch-update-file)))
     (load navi2ch-init-file t)
     (navi2ch-lock)
     (when navi2ch-auto-update
@@ -276,7 +278,7 @@ SUSPEND が non-nil なら buffer を消さない。"
   "lisp-object INFO を FILE に保存する。
 BACKUP が non-nil の場合は元のファイルをバックアップする。"
   (setq info (navi2ch-strip-properties info)
-	file (expand-file-name file))	; 絶対パスにしておく
+	file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
       (make-directory dir t)))
@@ -313,7 +315,7 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 
 (defun navi2ch-load-info (file)
   "FILE から lisp-object を読み込み、それを返す。"
-  (setq file (expand-file-name file))	; 絶対パスにしておく
+  (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
   (let ((backup-file (navi2ch-make-backup-file-name file)))
     (when (and (file-exists-p backup-file)
 	       (file-regular-p backup-file)
@@ -433,12 +435,14 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
 (defun navi2ch-update ()
   "navi2ch-update.el をダウンロードして実行する。"
   (interactive)
-  (let ((new (concat navi2ch-update-file ".new"))
-	(time (and (file-exists-p navi2ch-update-file)
-		   (navi2ch-file-mtime navi2ch-update-file)))
-	(asc (concat navi2ch-update-file ".asc"))
-	(asc-url (concat navi2ch-update-url ".asc"))
-	verified)
+  (let* ((navi2ch-update-file (expand-file-name navi2ch-update-file
+						navi2ch-directory))
+	 (new (concat navi2ch-update-file ".new"))
+	 (time (and (file-exists-p navi2ch-update-file)
+		    (navi2ch-file-mtime navi2ch-update-file)))
+	 (asc (concat navi2ch-update-file ".asc"))
+	 (asc-url (concat navi2ch-update-url ".asc"))
+	 verified)
     (when (and navi2ch-update-url
 	       (not (string= navi2ch-update-url ""))
 	       (not navi2ch-offline)

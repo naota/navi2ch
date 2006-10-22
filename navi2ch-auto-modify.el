@@ -89,23 +89,28 @@ Navi2ch 終了時に自動的に変更・保存される。
   (run-hooks 'navi2ch-auto-modify-save-hook)
   (navi2ch-auto-modify-truncate-lists)
   (when navi2ch-auto-modify-variable-list
-    (when navi2ch-auto-modify-file
-      (let ((inhibit-read-only t)
-	    (require-final-newline (eq require-final-newline t))
-	    (value-buffer (current-buffer))
-	    (exist-buffer (get-file-buffer navi2ch-auto-modify-file)))
-	(save-current-buffer
-	  (let ((default-major-mode 'fundamental-mode))
-	    (set-buffer (find-file-noselect navi2ch-auto-modify-file)))
-	  (save-excursion
-	    (save-restriction
-	      (widen)
-	      (navi2ch-auto-modify-narrow)
-	      (navi2ch-auto-modify-save-variables value-buffer)))
-	  (unless exist-buffer
-	    (basic-save-buffer)
-	    (kill-buffer (current-buffer))))))
-    (navi2ch-auto-modify-customize-variables)))
+    (let ((navi2ch-auto-modify-file
+	   (if (eq navi2ch-auto-modify-file t)
+	       (locate-library (expand-file-name navi2ch-init-file
+						 navi2ch-directory))
+	     navi2ch-auto-modify-file)))
+      (when navi2ch-auto-modify-file
+	(let ((inhibit-read-only t)
+	      (require-final-newline (eq require-final-newline t))
+	      (value-buffer (current-buffer))
+	      (exist-buffer (get-file-buffer navi2ch-auto-modify-file)))
+	  (save-current-buffer
+	    (let ((default-major-mode 'fundamental-mode))
+	      (set-buffer (find-file-noselect navi2ch-auto-modify-file)))
+	    (save-excursion
+	      (save-restriction
+		(widen)
+		(navi2ch-auto-modify-narrow)
+		(navi2ch-auto-modify-save-variables value-buffer)))
+	    (unless exist-buffer
+	      (basic-save-buffer)
+	      (kill-buffer (current-buffer))))))
+      (navi2ch-auto-modify-customize-variables))))
 
 (defun navi2ch-auto-modify-skip-comments ()
   (while (and (not (eobp))

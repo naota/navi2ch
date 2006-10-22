@@ -114,9 +114,7 @@
   :type '(repeat :tag "引数" string)
   :group 'navi2ch)
 
-(defcustom navi2ch-init-file (concat
-                              (file-name-as-directory navi2ch-directory)
-                              "init")
+(defcustom navi2ch-init-file "init"
   "*navi2ch の初期化ファイル。"
   :type 'file
   :group 'navi2ch)
@@ -421,16 +419,12 @@ non-nil なら下に移動する
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetched-info-file (concat
-                                         (file-name-as-directory navi2ch-directory)
-                                         "fetched.txt")
+(defcustom navi2ch-bm-fetched-info-file "fetched.txt"
   "*既読スレのリストを保存しておくファイル。"
   :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bookmark-file (concat
-                                  (file-name-as-directory navi2ch-directory)
-                                  "bookmark2.txt")
+(defcustom navi2ch-bookmark-file "bookmark2.txt"
   "*グローバルブックマークを保存しておくファイル。"
   :type 'file
   :group 'navi2ch-board)
@@ -441,9 +435,7 @@ non-nil ならば記憶する。"
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-history-file (concat
-                                 (file-name-as-directory navi2ch-directory)
-                                 "history.txt")
+(defcustom navi2ch-history-file "history.txt")
   "*ヒストリを保存しておくファイル。"
   :type 'file
   :group 'navi2ch-board)
@@ -1714,9 +1706,7 @@ ask なら保存する前に質問する
   :group 'navi2ch-net)
 
 ;;; update variables
-(defcustom navi2ch-update-file (concat
-                                (file-name-as-directory navi2ch-directory)
-                                "navi2ch-update.el")
+(defcustom navi2ch-update-file "navi2ch-update.el"
   "*Navi2ch の自動更新に利用するファイルのローカルファイル名。"
   :type 'file
   :group 'navi2ch)
@@ -1748,15 +1738,9 @@ ask なら保存する前に質問する
   :group 'navi2ch)
 
 ;;; auto modify variables
-(defcustom navi2ch-auto-modify-file
-  (let ((file (or (locate-library navi2ch-init-file)
-		  (and (file-name-absolute-p navi2ch-init-file)
-		       (expand-file-name navi2ch-init-file)))))
-    (when (and file
-	       (not (string-match "\\.elc\\(\\.\\(Z\\|gz\\|bz2\\)\\)?\\'"
-				  file)))
-      file))
+(defcustom navi2ch-auto-modify-file t
   "*設定を自動的に変更して保存するファイル。
+t なら `navi2ch-init-file' に保存し、
 nil なら、`customize'を利用して`custom-file'に保存する。
 
 このファイル単体が自動的にロードされることはないので、
