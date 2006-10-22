@@ -293,7 +293,8 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 	    (with-temp-file temp-file
 	      (let ((standard-output (current-buffer))
 		    print-length print-level)
-		(prin1 info)))
+		(princ ";;; -*- mode: emacs-lisp; -*-\n")
+		(pp info)))
 	    (if (and backup (file-exists-p file))
 		(rename-file file backup-file t))
 	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info

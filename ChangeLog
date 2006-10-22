@@ -1,5 +1,28 @@
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-net.el (navi2ch-net-cookies): 新変数
+	(navi2ch-net-store-cookie): 新関数
+	(navi2ch-net-match-cookies): 新関数
+	(navi2ch-net-cookie-file): 新変数
+	(navi2ch-net-save-cookies): 新関数
+	(navi2ch-net-load-cookies): 新関数
+	(navi2ch-net-update-cookies): 新関数
+	(navi2ch-net-expire-cookies): 新関数
+	(navi2ch-net-cookie-string): 新関数
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message-retry-confirm):
+	ちゃんとしたタイミングで Set-Cookie されるようになったのでキャンセ
+	ル時の hack を削除
+	(navi2ch-2ch-send-message): 引数 post を (cons key value) な alist
+	として扱うように
+	navi2ch-net-cookie-* を使用して Cookie を扱う
+	(navi2ch-2ch-extract-post): post すべきデータとして、最後の一つだけ
+	ではなく、複数取り出すように
+
+	* navi2ch.el (navi2ch-save-info): 編集しやすいように保存
+
+2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file の
 	load の仕方を変更
 
