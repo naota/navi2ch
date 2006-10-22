@@ -1,5 +1,12 @@
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
+	* navi2ch-history.el (navi2ch-history-add): history に必要な情報の
+	みを記録
+
+	patch#1166324
+
+2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
+
 	* navi2ch.el (navi2ch): 同上
 	(navi2ch-save-info): 同上
 	(navi2ch-load-info): 同上
