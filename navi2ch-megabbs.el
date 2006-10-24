@@ -206,26 +206,25 @@ START, END, NOFIRST で範囲を指定する"
 
 (defun navi2ch-megabbs-send-message
   (from mail message subject bbs key time board article)
-  (let ((alist (navi2ch-megabbs-url-to-board (cdr (assq 'uri board)))))
-    (let ((url         (navi2ch-megabbs-get-writecgi-url board))
-          (referer     (navi2ch-board-get-uri board))
-          (param-alist (list
-                        (cons "submit" "書き込む")
-                        (cons "mode" "res")
-                        (cons "pre" "")
-                        (cons "touhaba" "")
-                        (cons "name" (or from ""))
-                        (cons "email" (or mail ""))
-                        (cons "com" message)
-                        (cons "cook" "on")
-                        (cons "board" bbs)
-                        (cons "res" key))))
-      (navi2ch-net-send-request
-       url "POST"
-       (list (cons "Content-Type" "application/x-www-form-urlencoded")
-             (cons "Cookie" (concat "NAME=" from "; MAIL=" mail))
-             (cons "Referer" referer))
-       (navi2ch-net-get-param-string param-alist)))))
+  (let ((url         (navi2ch-megabbs-get-writecgi-url board))
+	(referer     (navi2ch-board-get-uri board))
+	(param-alist (list
+		      (cons "submit" "書き込む")
+		      (cons "mode" "res")
+		      (cons "pre" "")
+		      (cons "touhaba" "")
+		      (cons "name" (or from ""))
+		      (cons "email" (or mail ""))
+		      (cons "com" message)
+		      (cons "cook" "on")
+		      (cons "board" bbs)
+		      (cons "res" key))))
+    (navi2ch-net-send-request
+     url "POST"
+     (list (cons "Content-Type" "application/x-www-form-urlencoded")
+	   (cons "Cookie" (concat "NAME=" from "; MAIL=" mail))
+	   (cons "Referer" referer))
+     (navi2ch-net-get-param-string param-alist))))
 
 (defun navi2ch-megabbs-send-message-success-p (proc)
   (string-match "302 Found" (navi2ch-net-get-content proc)))
