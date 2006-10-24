@@ -115,45 +115,13 @@ START からじゃないかもしれないけど・・・。
 
 (defun navi2ch-oyster-send-message
   (from mail message subject bbs key time board article &optional post)
-  (let ((url         (navi2ch-board-get-bbscgi-url board))
-	(referer     (navi2ch-board-get-uri board))
-	(spid        (navi2ch-board-load-spid board))
-	(param-alist (list
-		      (cons "submit" "書き込む")
-		      (cons "FROM"   (or from ""))
-		      (cons "mail"   (or mail ""))
-		      (cons "bbs"    bbs)
-		      (cons "time"   time)
-		      (cons "MESSAGE" message)
-		      ;;セッションID取得済みであれば●カキコ
-		      ;;y-n で聞きたいなぁ
-		      (if navi2ch-oyster-session-id
-			  (cons "sid" navi2ch-oyster-session-id)
-			(cons "sid" ""))
-		      (if subject
-			  (cons "subject" subject)
-			(cons "key" key)))))
-
-    (let ((hanamogera-cookie (cdr (assq 'hanamogera-cookie post))))
-      (when hanamogera-cookie
-	(setq param-alist (cons hanamogera-cookie param-alist))))
-
-    (setq spid
-	  (when (and (consp spid)
-		     (navi2ch-compare-times (cdr spid) (current-time)))
-	    (car spid)))
-    (let ((proc
-	   (navi2ch-net-send-request
-	    url "POST"
-	    (list (cons "Content-Type" "application/x-www-form-urlencoded")
-		  (cons "Cookie" (concat "NAME=" from "; MAIL=" mail
-					 (if spid (concat "; SPID=" spid
-							  "; PON=" spid))))
-		  (cons "Referer" referer))
-	    (navi2ch-net-get-param-string param-alist))))
-      (setq spid (navi2ch-net-send-message-get-spid proc))
-      (if spid (navi2ch-board-save-spid board spid))
-      proc)))
+  (let ((post (navi2ch-put-alist "sid"
+				 ;;セッションID取得済みであれば●カキコ
+				 ;;y-n で聞きたいなぁ
+				 (or navi2ch-oyster-session-id "")
+				 post)))
+    (navi2ch-2ch-send-message from mail message subject bbs key
+			      time board article post)))
 
 (defun navi2ch-oyster-get-offlaw-url (board article session-id file)
   "BOARD, ARTICLE, SESSION-ID, FILE から offlaw url に変換。"

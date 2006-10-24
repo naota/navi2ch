@@ -1,3 +1,8 @@
+2006-10-25  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-send-message):
+	navi2ch-2ch-send-message を使用。
+
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-megabbs.el: 新ファイル
