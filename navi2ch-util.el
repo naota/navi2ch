@@ -187,6 +187,10 @@
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
   "base64 コードのみが含まれる行にマッチする正規表現。")
 
+(defvar navi2ch-coding-system
+  (or (car (memq 'cp932 (coding-system-list)))
+      'shift_jis))
+
 (defvar navi2ch-offline nil "オフラインモードかどうか。")
 (defvar navi2ch-online-indicator  "[ON] ")
 (defvar navi2ch-offline-indicator "[--] ")
@@ -367,17 +371,10 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 ;;       (message "Please enter a number")
 ;;       (sit-for 1))))
 
-(defalias 'navi2ch-assoc-ignore-case
-  (if (fboundp 'assoc-string)
-      '(lambda (key alist)
-	 (assoc-string key alist t))
-    'assoc-ignore-case))
-
 (defsubst navi2ch-replace-html-tag-to-string (str)
   (let ((ret
 	 (or (cdr (if case-fold-search
-		      (navi2ch-assoc-ignore-case
-		       str navi2ch-replace-html-tag-alist)
+		      (assoc-ignore-case str navi2ch-replace-html-tag-alist)
 		    (assoc str navi2ch-replace-html-tag-alist)))
 	     (save-match-data
 	       (let ((alist navi2ch-replace-html-tag-regexp-alist)
@@ -427,7 +424,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
   (save-match-data
     (if (and navi2ch-decode-character-references
 	     (string-match "&#\\([^;]+\\)" ref))
-	(or (navi2ch-ucs-to-str (string-to-number (match-string 1 ref))) "〓")
+	(or (navi2ch-ucs-to-str (string-to-int (match-string 1 ref))) "〓")
       ref)))
 
 ;; shut up byte-compile warnings
@@ -635,10 +632,10 @@ return new alist whose car is the new pair and cdr is ALIST.
 		'navi2ch-mode-line-identification)))
   (force-mode-line-update t))
 
-(defun navi2ch-end-of-buffer ()
+(defun navi2ch-end-of-buffer (&optional arg)
   "バッファの最終行に移動。"
-  (interactive)
-  (call-interactively 'end-of-buffer)
+  (interactive "P")
+  (end-of-buffer arg)
   (when (eobp) (forward-line -1)))
 
 (defun navi2ch-uudecode-region (start end &optional filename)
@@ -1285,19 +1282,6 @@ STRING2 の方が大きい場合は負数を返す。
 
 (defun navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
-
-(defun navi2ch-float-time (&optional specified-time)
-  "Return the current time, as a float number of seconds since the epoch.
-If an argument is given, it specifies a time to convert to float
-instead of the current time."
-  (apply (lambda (high low &optional usec)
-	   (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
-	 (or specified-time (current-time))))
-
-(defalias 'navi2ch-make-local-hook
-  (if (>= emacs-major-version 22)
-      'ignore
-    'make-local-hook))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here

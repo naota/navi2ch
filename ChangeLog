@@ -1,151 +1,3 @@
-2006-10-25  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-megabbs.el (navi2ch-megabbs-send-message): 不要な変数束縛
-	を削除
-
-	* navi2ch-oyster.el (navi2ch-oyster-send-message):
-	navi2ch-2ch-send-message を使用。
-
-2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-megabbs.el: 新ファイル
-
-	* Makefile.am (lisp_LISP): 上記ファイルを追加
-
-	patch#1153242
-
-	* Makefile.in, aclocal.m4, */Makefile.in:
-	再作成 (automake 1.9.6)
-
-	* config.guess, config.sub, elisp-comp, install-sh, missing
-	* mkinstalldirs, doc/texinfo.tex:
-	automake 1.9.6 付属のものに更新
-
-	* navi2ch-net.el (navi2ch-net-down-host-alist): 新変数
-	(navi2ch-net-retry-down-host): 新変数
-	(navi2ch-net-add-down-host): 新関数
-	(navi2ch-net-down-p): 新関数
-	(navi2ch-net-send-request): 上記変数・関数を使用して落ちているホス
-	トは `navi2ch-net-retry-down-host' の間スキップするように
-	patch#1432266 (アイディアのみ)
-
-	* navi2ch-net.el (navi2ch-net-cookies): 新変数
-	(navi2ch-net-store-cookie): 新関数
-	(navi2ch-net-match-cookies): 新関数
-	(navi2ch-net-cookie-file): 新変数
-	(navi2ch-net-save-cookies): 新関数
-	(navi2ch-net-load-cookies): 新関数
-	(navi2ch-net-update-cookies): 新関数
-	(navi2ch-net-expire-cookies): 新関数
-	(navi2ch-net-cookie-string): 新関数
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-send-message-retry-confirm):
-	ちゃんとしたタイミングで Set-Cookie されるようになったのでキャンセ
-	ル時の hack を削除
-	(navi2ch-2ch-send-message): 引数 post を (cons key value) な alist
-	として扱うように
-	navi2ch-net-cookie-* を使用して Cookie を扱う
-	(navi2ch-2ch-extract-post): post すべきデータとして、最後の一つだけ
-	ではなく、複数取り出すように
-
-	* navi2ch.el (navi2ch-save-info): 編集しやすいように保存
-
-2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file の
-	load の仕方を変更
-
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): prefix key ("m") に
-	nil を割り当てておく
-	(navi2ch-bm-fetch-mark-article): navi2ch-net-connect-wait でウェイ
-	トを入れるようにしたので navi2ch-bm-fetch-wait を使用しない
-
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上
-
-	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 削除
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-util.el (navi2ch-assoc-ignore-case): 新関数
-	(navi2ch-replace-html-tag-to-string):
-	assoc-ignore-case -> navi2ch-assoc-ignore-case
-	(navi2ch-numeric-reference-to-str):
-	string-to-int -> string-to-number
-	(navi2ch-end-of-buffer): call-interactively 'end-of-buffer
-	(navi2ch-make-local-hook): 新関数
-
-	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
-	make-local-hook -> navi2ch-make-local-hook
-
-	* navi2ch-net.el (navi2ch-net-get-header):
-	assoc-ignore-case -> navi2ch-assoc-ignore-case
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback):
-	gensym -> make-symbol
-
-	* navi2ch-message.el (navi2ch-message-insert-backup):
-	insert-buffer -> insert-buffer-substring
-	(navi2ch-message-send-message): 同上
-
-	* navi2ch-article.el (navi2ch-article-mode): make-local-hook
-	ではなく navi2ch-make-local-hook を使う
-
-	emacs-22 cleanup
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p):
-	patch#1229486
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-vars.el (navi2ch-message-sendlog-message-format-function):
-	グループを追加
-
-	* navi2ch-util.el (navi2ch-float-time): 新関数
-
-	* navi2ch-net.el (navi2ch-net-connect-wait-power): 新変数
-	(navi2ch-net-connect-time-list): 新変数
-	(navi2ch-net-connect-wait): 上記変数を使用して待機時間を計算
-	(navi2ch-net-send-request): 上記時間を挿入
-
-	patch#1187825,1188245
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-history.el (navi2ch-history-add): history に必要な情報の
-	みを記録
-
-	patch#1166324
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.el (navi2ch): 同上
-	(navi2ch-save-info): 同上
-	(navi2ch-load-info): 同上
-	(navi2ch-update): 同上
-
-	* navi2ch-auto-modify.el (navi2ch-auto-modify-save): 同上
-
-	* navi2ch-vars.el (navi2ch-init-file): navi2ch-directory からの相対
-	パスに
-	(navi2ch-bm-fetched-info-file): 同上
-	(navi2ch-bookmark-file): 同上
-	(navi2ch-history-file): 同上
-	(navi2ch-update-file): 同上
-	(navi2ch-auto-modify-file): 同上
-
-	patch#1146248
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-util.el (navi2ch-coding-system): navi2ch-vars.el に移動
-
-	* navi2ch-vars.el (navi2ch-coding-system): navi2ch-util.el から移動
-	(navi2ch-board-coding-system-alist): 上記変数を使用
-
-	patch#1124650
-
 2006-09-14  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi (How to Write): FAQに書き込み時の確認を回避
@@ -180,12 +32,12 @@
         * navi2ch-machibbs.el (navi2ch-machibbs-send-message): 引数POSTを追加
 	 した。
         * navi2ch-oyster.el (navi2ch-oyster-send-message): 引数POSTを追加した。
-
+	
 2006-07-02  Masatake YAMATO  <jet@gyve.org>
 
-       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera
+       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera 
 	 cookieに対応。
-       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera
+       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera 
 	 cookieを追加する。
        (navi2ch-2ch-send-message): hanamogera-cookieが定義されていれば、
        param-alistに追加する。
@@ -308,7 +160,7 @@
 	(navi2ch-article-file-name-to-artid): 新関数。
 
 	* navi2ch-board-misc.el
-	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article)
+	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article) 
 	(navi2ch-bm-insert-subject): defsubst -> defun.
 
 	* navi2ch.el (navi2ch-update): navi2ch-file-mtime,
@@ -498,7 +350,7 @@
 
 2005-01-22  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-get-number-list):
+	* navi2ch-article.el (navi2ch-article-get-number-list): 
 	数字部分が8文字以上のレスアンカーで、正しくレス番を指せないバグを修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/929
 
@@ -571,7 +423,7 @@
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board.el (navi2ch-board-expire):
+	* navi2ch-board.el (navi2ch-board-expire): 
 	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
 	を修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/748
@@ -660,7 +512,7 @@
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): 新関
 	数。
-	(navi2ch-bookmark-mode-map): 上記関数をバインド。
+	(navi2ch-bookmark-mode-map): 上記関数をバインド。 
 
 2004-09-28  mami  <mami@users.sourceforge.net>
 

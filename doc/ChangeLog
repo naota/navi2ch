@@ -1,10 +1,3 @@
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* Makefile.am (.texi.info): source ディレクトリ以外で
-	configure した場合も info 作成できるように。
-
-	patch#1144721
-
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch.texi (Saving Send Log): 送信控えのレスの表示 を追記。

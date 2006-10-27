@@ -99,8 +99,6 @@ key は (concat uri artid)。")
 (defun navi2ch-history-add (board article)
   "BOARD と ARTICLE で表される スレッドを追加。"
   (let* ((key (navi2ch-history-get-key board article))
-	 (article (list (assq 'subject article)
-			(assq 'artid article)))
 	 (old-node (assoc key navi2ch-history-alist))
 	 (old-subject (cdr (assq 'subject (nth 2 old-node))))
 	 (subject (cdr (assq 'subject article))))

@@ -1154,9 +1154,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
-  (navi2ch-make-local-hook 'kill-buffer-hook)
+  (make-local-hook 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'navi2ch-article-kill-buffer-hook t t)
-  (navi2ch-make-local-hook 'post-command-hook)
+  (make-local-hook 'post-command-hook)
   (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-article-mode-hook))
 

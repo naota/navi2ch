@@ -35,10 +35,6 @@
 (defconst navi2ch-on-emacs20 (and (not navi2ch-on-xemacs)
                                   (= emacs-major-version 20)))
 
-(defvar navi2ch-coding-system
-  (or (car (memq 'cp932 (coding-system-list)))
-      'shift_jis))
-
 (defgroup navi2ch nil
   "*Navigator for 2ch."
   :prefix "navi2ch-"
@@ -114,7 +110,9 @@
   :type '(repeat :tag "$B0z?t(B" string)
   :group 'navi2ch)
 
-(defcustom navi2ch-init-file "init"
+(defcustom navi2ch-init-file (concat
+                              (file-name-as-directory navi2ch-directory)
+                              "init")
   "*navi2ch $B$N=i4|2=%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch)
@@ -419,12 +417,16 @@ non-nil $B$J$i2<$K0\F0$9$k(B
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetched-info-file "fetched.txt"
+(defcustom navi2ch-bm-fetched-info-file (concat
+                                         (file-name-as-directory navi2ch-directory)
+                                         "fetched.txt")
   "*$B4{FI%9%l$N%j%9%H$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bookmark-file "bookmark2.txt"
+(defcustom navi2ch-bookmark-file (concat
+                                  (file-name-as-directory navi2ch-directory)
+                                  "bookmark2.txt")
   "*$B%0%m!<%P%k%V%C%/%^!<%/$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
@@ -435,7 +437,9 @@ non-nil $B$J$i$P5-21$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-history-file "history.txt"
+(defcustom navi2ch-history-file (concat
+                                 (file-name-as-directory navi2ch-directory)
+                                 "history.txt")
   "*$B%R%9%H%j$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
@@ -488,6 +492,11 @@ non-nil $B$J$i$P5-21$9$k!#(B"
 	       (cons (const :tag "$B>uBV(B   " "  ") (number :tag "$B=gHV(B")))
   :group 'navi2ch-board)
 
+(defcustom navi2ch-bm-fetch-wait 3
+  "*$BJ#?t$N%9%l$r0lEY$K<hF@$9$k:]$K;HMQ$9$k%&%'%$%H$NIC?t!#(B"
+  :type 'number
+  :group 'navi2ch-board)
+
 (defcustom navi2ch-board-filter-list nil
   "*$B%9%l%C%I$N0lMw$r$$$8$k%U%#%k%?!<$N%j%9%H!#(B
 $B$=$l$>$l$N%U%#%k%?!<$O(B elisp $B$N4X?t$J$i$P(B $B$=$N(B symbol$B!"(B
@@ -535,7 +544,6 @@ CODING-SYSTEM $B$O(B BOARD-ID $B$G;XDj$5$l$kHD$K;XDj$9$k(B coding-system$B!
 	  (cons
 	   (string :tag "$BHD(BID")
 	   (choice :tag "$BJ8;z%3!<%I(B"
-		   :value ,navi2ch-coding-system
 		   ,@(mapcar (lambda (x)
 			       (list 'const x))
 			     (coding-system-list)))))
@@ -1563,8 +1571,7 @@ Navi2ch$B%+%F%4%j$K!VAw?.95$(!WHD$,<+F0E*$KDI2C$5$l$^$9!#(B
 	   :tag "$BHDL>IU$-$N%U%)!<%^%C%H(B"
 	   :value navi2ch-message-sendlog-message-format-with-board-name
 	   :doc "[$BHDL>(B]: $B%9%l%C%I%?%$%H%k(B\nURL: http://")
-	  (function :tag "$B4X?t$r;XDj(B"))
-  :group 'navi2ch-message)
+	  (function :tag "$B4X?t$r;XDj(B")))
 
 ;; net variables
 (defcustom navi2ch-net-http-proxy
@@ -1702,7 +1709,9 @@ ask $B$J$iJ]B8$9$kA0$K<ALd$9$k(B
   :group 'navi2ch-net)
 
 ;;; update variables
-(defcustom navi2ch-update-file "navi2ch-update.el"
+(defcustom navi2ch-update-file (concat
+                                (file-name-as-directory navi2ch-directory)
+                                "navi2ch-update.el")
   "*Navi2ch $B$N<+F099?7$KMxMQ$9$k%U%!%$%k$N%m!<%+%k%U%!%$%kL>!#(B"
   :type 'file
   :group 'navi2ch)
@@ -1734,9 +1743,15 @@ ask $B$J$iJ]B8$9$kA0$K<ALd$9$k(B
   :group 'navi2ch)
 
 ;;; auto modify variables
-(defcustom navi2ch-auto-modify-file t
+(defcustom navi2ch-auto-modify-file
+  (let ((file (or (locate-library navi2ch-init-file)
+		  (and (file-name-absolute-p navi2ch-init-file)
+		       (expand-file-name navi2ch-init-file)))))
+    (when (and file
+	       (not (string-match "\\.elc\\(\\.\\(Z\\|gz\\|bz2\\)\\)?\\'"
+				  file)))
+      file))
   "*$B@_Dj$r<+F0E*$KJQ99$7$FJ]B8$9$k%U%!%$%k!#(B
-t $B$J$i(B `navi2ch-init-file' $B$KJ]B8$7!"(B
 nil $B$J$i!"(B`customize'$B$rMxMQ$7$F(B`custom-file'$B$KJ]B8$9$k!#(B
 
 $B$3$N%U%!%$%kC1BN$,<+F0E*$K%m!<%I$5$l$k$3$H$O$J$$$N$G!"(B
