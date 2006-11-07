@@ -1,3 +1,8 @@
+2006-11-07  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch.texi (Getting Develop Version): CVS ホストを
+	navi2ch.cvs.sourceforge.net に
+
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch.texi (Saving Send Log): 送信控えのレスの表示 を追記。
