@@ -238,5 +238,23 @@
   "Face used for displaying splash screen."
   :group 'navi2ch-face)
 
+(defface navi2ch-message-link-face
+  '((((class color) (background light)) (:bold t))
+    (((class color) (background dark)) (:bold t)))
+  "同じスレ中へのリンクの face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-message-url-face
+  '((((class color) (background light)) (:bold t))
+    (((class color) (background dark)) (:bold t)))
+  "url の face"
+  :group 'navi2ch-face)
+
+(defface navi2ch-message-citation-face
+  '((((class color) (background light)) (:foreground "FireBrick"))
+    (((class color) (background dark)) (:foreground "HotPink1")))
+  "引用の face"
+  :group 'navi2ch-face)
+
 (run-hooks 'navi2ch-face-load-hook)
 ;;; navi2ch-face.el ends here

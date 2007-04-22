@@ -35,6 +35,10 @@
 (defconst navi2ch-on-emacs20 (and (not navi2ch-on-xemacs)
                                   (= emacs-major-version 20)))
 
+(defvar navi2ch-coding-system
+  (or (car (memq 'cp932 (coding-system-list)))
+      'shift_jis))
+
 (defgroup navi2ch nil
   "*Navigator for 2ch."
   :prefix "navi2ch-"
@@ -110,28 +114,9 @@
   :type '(repeat :tag "$B0z?t(B" string)
   :group 'navi2ch)
 
-(defcustom navi2ch-init-file (concat
-                              (file-name-as-directory navi2ch-directory)
-                              "init")
+(defcustom navi2ch-init-file "init"
   "*navi2ch $B$N=i4|2=%U%!%$%k!#(B"
   :type 'file
-  :group 'navi2ch)
-
-(defcustom navi2ch-enable-readcgi nil
-  "*non-nil $B$J$i!"%U%!%$%k<hF@$K(B read.cgi $B$N(B raw mode $B$rMxMQ$9$k!#(B"
-  :type 'boolean
-  :group 'navi2ch)
-
-(defcustom navi2ch-enable-readcgi-host-list nil
-  "*read.cgi $B$N(B raw mode $B$r;H$C$F%U%!%$%k$r<h$C$F$/$k%[%9%H$N%j%9%H!#(B
-`navi2ch-enable-readcgi' $B$,(B nil $B$N;~$KM-8z!#(B"
-  :type '(repeat (string :tag "$B%[%9%H(B"))
-  :group 'navi2ch)
-
-(defcustom navi2ch-disable-readcgi-host-list nil
-  "*read.cgi $B$N(B raw mode $B$r;H$o$J$$$G%U%!%$%k$r<h$C$F$/$k%[%9%H$N%j%9%H!#(B
-`navi2ch-enable-readcgi' $B$,(B t $B$N;~$KM-8z(B"
-  :type '(repeat (string :tag "$B%[%9%H(B"))
   :group 'navi2ch)
 
 (defcustom navi2ch-browse-url-browser-function nil
@@ -417,16 +402,12 @@ non-nil $B$J$i2<$K0\F0$9$k(B
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetched-info-file (concat
-                                         (file-name-as-directory navi2ch-directory)
-                                         "fetched.txt")
+(defcustom navi2ch-bm-fetched-info-file "fetched.txt"
   "*$B4{FI%9%l$N%j%9%H$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bookmark-file (concat
-                                  (file-name-as-directory navi2ch-directory)
-                                  "bookmark2.txt")
+(defcustom navi2ch-bookmark-file "bookmark2.txt"
   "*$B%0%m!<%P%k%V%C%/%^!<%/$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
@@ -437,9 +418,7 @@ non-nil $B$J$i$P5-21$9$k!#(B"
   :type 'boolean
   :group 'navi2ch-board)
 
-(defcustom navi2ch-history-file (concat
-                                 (file-name-as-directory navi2ch-directory)
-                                 "history.txt")
+(defcustom navi2ch-history-file "history.txt"
   "*$B%R%9%H%j$rJ]B8$7$F$*$/%U%!%$%k!#(B"
   :type 'file
   :group 'navi2ch-board)
@@ -492,11 +471,6 @@ non-nil $B$J$i$P5-21$9$k!#(B"
 	       (cons (const :tag "$B>uBV(B   " "  ") (number :tag "$B=gHV(B")))
   :group 'navi2ch-board)
 
-(defcustom navi2ch-bm-fetch-wait 3
-  "*$BJ#?t$N%9%l$r0lEY$K<hF@$9$k:]$K;HMQ$9$k%&%'%$%H$NIC?t!#(B"
-  :type 'number
-  :group 'navi2ch-board)
-
 (defcustom navi2ch-board-filter-list nil
   "*$B%9%l%C%I$N0lMw$r$$$8$k%U%#%k%?!<$N%j%9%H!#(B
 $B$=$l$>$l$N%U%#%k%?!<$O(B elisp $B$N4X?t$J$i$P(B $B$=$N(B symbol$B!"(B
@@ -544,6 +518,7 @@ CODING-SYSTEM $B$O(B BOARD-ID $B$G;XDj$5$l$kHD$K;XDj$9$k(B coding-system$B!
 	  (cons
 	   (string :tag "$BHD(BID")
 	   (choice :tag "$BJ8;z%3!<%I(B"
+		   :value ,navi2ch-coding-system
 		   ,@(mapcar (lambda (x)
 			       (list 'const x))
 			     (coding-system-list)))))
@@ -907,37 +882,57 @@ nil $B$N>l9g$OF1$8%9%l$NFbMF$N$_$rF@$k!#(B"
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-name-alist nil
-  "*$B%l%9$r%U%#%k%?$9$kL>A0$H!"%U%#%k%?=hM}$N(B alist$B!#(B
+  "*$B%l%9$r%U%#%k%?$9$k$?$a$NL>A0$N>r7o$H!"%U%#%k%?=hM}$N(B alist$B!#(B
 
-$BL>A0$K$OJ8;zNs$+!"(B
-\($BJ8;zNs(B $B%7%s%\%k(B)$B$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+$B>r7o$K$OJ8;zNs$+!"(B
+\($BJ8;zNs(B $B%7%s%\%k(B ...)$B$N7A<0$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+
+$BJ8;zNs$r;XDj$9$k$H!"(B
+$BL>A0$,$=$NJ8;zNs$r4^$`$H$-$K%U%#%k%?=hM}$,<B9T$5$l$k!#(B
 
 $B3HD%7A<0$r;XDj$9$k$H!"(B
-$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9$r8!::$9$k!#(B
+$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$GL>A0$r8!::$9$k!#(B
 
 S,s	$BItJ,0lCW(B
 E,e	$B40A40lCW(B
-F,f	$B$"$$$^$$0lCW(B($B6uGr$H2~9T$NB8:_$rL5;k$7!"(B
-		     $B1Q?t5-9f$NA43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
+F,f	$B$"$$$^$$0lCW(B	($B6uGr$d2~9T$NM-L5$dB?>/$rL5;k$7!"(B
+			$B$^$?A43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
 R,r	$B@55,I=8=(B
 
 $BBgJ8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7!"(B
 $B>.J8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7$J$$!#(B
 
-$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?t;z$N$I$l$+$r;XDj$9$k!#(B
+$B$"$$$^$$0lCW$r>.J8;z$G;XDj$7$?>l9g$O!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J$$!#(B
+
+$B%7%s%\%k$N8e$K$O%-!<%o!<%I$rDI2C$7!"(B
+$BCM$K$h$C$F%U%#%k%?>r7o$r2<5-$N$h$&$KJdB-$9$k$3$H$,$G$-$k!#(B
+
+:invert		t (non-nil)$B$r;XDj$9$k$H!"J8;zNs0lCW$N??56$r5UE>$9$k(B
+
+:board-id	$B%U%#%k%?BP>]$H$J$kHD$N(B ID $B$r;XDj$9$k(B
+:artid		$B%U%#%k%?BP>]$H$J$k%9%l%C%I$N(B ID $B$b;XDj$9$k(B
+
+:float		$B%U%#%k%?>r7o$,0lCW$7$?$H$-!"$3$N%U%#%k%?9`L\$r(B
+		`navi2ch-article-sort-message-filter-rules'$B$rL5;k$7$F(B
+		$B>o$K(B alist $B$N@hF,$K;}$C$F$/$k>l9g$O(B 1 ($B@5?tCM(B)$B$r;XDj$7!"(B
+		$B$=$N$^$^$K$9$k>l9g$O(B 0 ($BHs@5?tCM(B)$B$r;XDj$9$k(B
+
+
+$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?tCM$N$I$l$+$r;XDj$9$k!#(B
 
 $BJ8;zNs$r;XDj$9$k$H!"%l%9$,$=$NJ8;zNs$KCV$-49$o$k!#(B
 
-$BL>A0$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
+$B%U%#%k%?>r7o$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
 $BCV498e$NJ8;zNsCf$N(B \\1$B!A(B\\9 $B$*$h$S(B \\& $B$O!"0lCW$7$?J8;zNs$KE83+$5$l$k!#(B
-\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$BEy$r;2>H$N$3$H!#(B
+\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$B$r;2>H$N$3$H!#(B
 
 $B%7%s%\%k$r;XDj$9$k$H!"%7%s%\%k$K9g$o$;$F2<5-$N=hM}$,9T$o$l$k!#(B
 
 hide		$B%l%9$r1#$9(B
 important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
-$B?t;z$r;XDj$9$k$H!"%l%9$NF@E@$K$=$NE@?t$r2C$(!"%U%#%k%?=hM}$rB39T$9$k!#(B
+$B?tCM$r;XDj$9$k$H!"%l%9$NF@E@$K$=$N?tCMJ,$NE@?t$r2C$($F!"(B
+$B;D$j$N%U%#%k%?$r<B9T$9$k!#(B
 
 $BNc$($P2<5-$NCM$r@_Dj$9$k$H!"(B
 $BL>A0$K!V$U$,!W$,4^$^$l$F$$$k$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
@@ -945,78 +940,134 @@ important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
 '((\"$B$U$,(B\" . \"$B$"$\$\!<$s(B\")
   ((\"$B%[%2(B\" S) . hide))"
-  :type '(repeat (cons (choice (string :tag "$BL>A0(B")
-			       (choice :tag "($B3HD%7A<0(B)"
-				       (list :tag "$BItJ,0lCW(B"
-					     (string :tag "$BL>A0(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value S)
-						     (const :tag "$B$7$J$$(B"
-							    :value s)))
-				       (list :tag "$B40A40lCW(B"
-					     (string :tag "$BL>A0(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value E)
-						     (const :tag "$B$7$J$$(B"
-							    :value e)))
-				       (list :tag "$B$"$$$^$$0lCW(B"
-					     (string :tag "$BL>A0(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value F)
-						     (const :tag "$B$7$J$$(B"
-							    :value f)))
-				       (list :tag "$B@55,I=8=(B"
-					     (regexp :tag "$BL>A0(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value R)
-						     (const :tag "$B$7$J$$(B"
-							    :value r)))))
-		       (choice (string :tag "$BCV$-49$($k(B"
-				       :value "$B$"$\$\!<$s(B")
-			       (const :tag "$B1#$9(B"
-				      :value hide)
-			       (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
-				      :value important)
-			       (number :tag "$BE@?t$r2C$($k(B"
-				       :value 0))))
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "$BJ8;zNs0lCW$N??56$r5UE>(B"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "$BHD$r;XDj(B"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "$B%9%l%C%I$b;XDj(B"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "$B>r7o$,0lCW$7$?$H$-$N%U%#%k%?$N0LCV(B"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "$B$=$N$^$^(B"
+						:value 0)
+					 (const :tag "$B@hF,$X(B"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "$B>r7o(B"
+				 (string)
+				 (list :tag "$BItJ,0lCW(B"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value S)
+					       (const :tag "$B$J$7(B"
+						      :value s))
+				       ,plist)
+				 (list :tag "$B40A40lCW(B"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value E)
+					       (const :tag "$B$J$7(B"
+						      :value e))
+				       ,plist)
+				 (list :tag "$B$"$$$^$$0lCW(B"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z!&$R$i$,$J$H%+%?%+%J$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value F)
+					       (const :tag "$B$J$7(B"
+						      :value f))
+				       ,plist)
+				 (list :tag "$B@55,I=8=(B"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value R)
+					       (const :tag "$B$J$7(B"
+						      :value r))
+				       ,plist))
+			 (choice :tag "$B=hM}(B"
+				 (string :tag "$BCV$-49$($k(B"
+					 :value "$B$"$\$\!<$s(B")
+				 (const :tag "$B1#$9(B"
+					:value hide)
+				 (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
+					:value important)
+				 (number :tag "$BE@?t$r2C$($k(B"
+					 :value 0)))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-message-alist nil
-  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%l%9K\J8$NFbMF$H!"%U%#%k%?=hM}$N(B alist$B!#(B
+  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%l%9K\J8$N>r7o$H!"%U%#%k%?=hM}$N(B alist$B!#(B
 
-$B%l%9K\J8$NFbMF$K$OJ8;zNs$+!"(B
-\($BJ8;zNs(B $B%7%s%\%k(B)$B$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+$B>r7o$K$OJ8;zNs$+!"(B
+\($BJ8;zNs(B $B%7%s%\%k(B ...)$B$N7A<0$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+
+$BJ8;zNs$r;XDj$9$k$H!"(B
+$B%l%9K\J8$,$=$NJ8;zNs$r4^$`$H$-$K%U%#%k%?=hM}$,<B9T$5$l$k!#(B
 
 $B3HD%7A<0$r;XDj$9$k$H!"(B
-$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9$r8!::$9$k!#(B
+$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9K\J8$r8!::$9$k!#(B
 
 S,s	$BItJ,0lCW(B
 E,e	$B40A40lCW(B
-F,f	$B$"$$$^$$0lCW(B($B6uGr$H2~9T$NB8:_$rL5;k$7!"(B
-		     $B1Q?t5-9f$NA43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
+F,f	$B$"$$$^$$0lCW(B	($B6uGr$d2~9T$NM-L5$dB?>/$rL5;k$7!"(B
+			$B$^$?A43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
 R,r	$B@55,I=8=(B
 
 $BBgJ8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7!"(B
 $B>.J8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7$J$$!#(B
 
-$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?t;z$N$I$l$+$r;XDj$9$k!#(B
+$B$"$$$^$$0lCW$r>.J8;z$G;XDj$7$?>l9g$O!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J$$!#(B
+
+$B%7%s%\%k$N8e$K$O%-!<%o!<%I$rDI2C$7!"(B
+$BCM$K$h$C$F%U%#%k%?>r7o$r2<5-$N$h$&$KJdB-$9$k$3$H$,$G$-$k!#(B
+
+:invert		t (non-nil)$B$r;XDj$9$k$H!"J8;zNs0lCW$N??56$r5UE>$9$k(B
+
+:board-id	$B%U%#%k%?BP>]$H$J$kHD$N(B ID $B$r;XDj$9$k(B
+:artid		$B%U%#%k%?BP>]$H$J$k%9%l%C%I$N(B ID $B$b;XDj$9$k(B
+
+:float		$B%U%#%k%?>r7o$,0lCW$7$?$H$-!"$3$N%U%#%k%?9`L\$r(B
+		`navi2ch-article-sort-message-filter-rules'$B$rL5;k$7$F(B
+		$B>o$K(B alist $B$N@hF,$K;}$C$F$/$k>l9g$O(B 1 ($B@5?tCM(B)$B$r;XDj$7!"(B
+		$B$=$N$^$^$K$9$k>l9g$O(B 0 ($BHs@5?tCM(B)$B$r;XDj$9$k(B
+
+
+$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?tCM$N$I$l$+$r;XDj$9$k!#(B
 
 $BJ8;zNs$r;XDj$9$k$H!"%l%9$,$=$NJ8;zNs$KCV$-49$o$k!#(B
 
-$B%l%9K\J8$NFbMF$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
+$B%U%#%k%?>r7o$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
 $BCV498e$NJ8;zNsCf$N(B \\1$B!A(B\\9 $B$*$h$S(B \\& $B$O!"0lCW$7$?J8;zNs$KE83+$5$l$k!#(B
-\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$BEy$r;2>H$N$3$H!#(B
+\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$B$r;2>H$N$3$H!#(B
 
 $B%7%s%\%k$r;XDj$9$k$H!"%7%s%\%k$K9g$o$;$F2<5-$N=hM}$,9T$o$l$k!#(B
 
 hide		$B%l%9$r1#$9(B
 important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
-$B?t;z$r;XDj$9$k$H!"%l%9$NF@E@$K$=$NE@?t$r2C$(!"%U%#%k%?=hM}$rB39T$9$k!#(B
+$B?tCM$r;XDj$9$k$H!"%l%9$NF@E@$K$=$N?tCMJ,$NE@?t$r2C$($F!"(B
+$B;D$j$N%U%#%k%?$r<B9T$9$k!#(B
 
 $BNc$($P2<5-$NCM$r@_Dj$9$k$H!"(B
 $B%l%9K\J8$K!V$U$,!W$,4^$^$l$F$$$k$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
@@ -1024,157 +1075,269 @@ important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
 '((\"$B$U$,(B\" . \"$B$"$\$\!<$s(B\")
   ((\"$B%[%2(B\" S) . hide))"
-  :type '(repeat (cons (choice (string :tag "$BK\J8(B")
-			       (choice :tag "($B3HD%7A<0(B)"
-				       (list :tag "$BItJ,0lCW(B"
-					     (string :tag "$BK\J8(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value S)
-						     (const :tag "$B$7$J$$(B"
-							    :value s)))
-				       (list :tag "$B40A40lCW(B"
-					     (string :tag "$BK\J8(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value E)
-						     (const :tag "$B$7$J$$(B"
-							    :value e)))
-				       (list :tag "$B$"$$$^$$0lCW(B"
-					     (string :tag "$BK\J8(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value F)
-						     (const :tag "$B$7$J$$(B"
-							    :value f)))
-				       (list :tag "$B@55,I=8=(B"
-					     (regexp :tag "$BK\J8(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value R)
-						     (const :tag "$B$7$J$$(B"
-							    :value r)))))
-		       (choice (string :tag "$BCV$-49$($k(B"
-				       :value "$B$"$\$\!<$s(B")
-			       (const :tag "$B1#$9(B"
-				      :value hide)
-			       (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
-				      :value important)
-			       (number :tag "$BE@?t$r2C$($k(B"
-				       :value 0))))
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "$BJ8;zNs0lCW$N??56$r5UE>(B"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "$BHD$r;XDj(B"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "$B%9%l%C%I$b;XDj(B"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "$B>r7o$,0lCW$7$?$H$-$N%U%#%k%?$N0LCV(B"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "$B$=$N$^$^(B"
+						:value 0)
+					 (const :tag "$B@hF,$X(B"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "$B>r7o(B"
+				 (string)
+				 (list :tag "$BItJ,0lCW(B"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value S)
+					       (const :tag "$B$J$7(B"
+						      :value s))
+				       ,plist)
+				 (list :tag "$B40A40lCW(B"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value E)
+					       (const :tag "$B$J$7(B"
+						      :value e))
+				       ,plist)
+				 (list :tag "$B$"$$$^$$0lCW(B"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z!&$R$i$,$J$H%+%?%+%J$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value F)
+					       (const :tag "$B$J$7(B"
+						      :value f))
+				       ,plist)
+				 (list :tag "$B@55,I=8=(B"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value R)
+					       (const :tag "$B$J$7(B"
+						      :value r))
+				       ,plist))
+			 (choice :tag "$B=hM}(B"
+				 (string :tag "$BCV$-49$($k(B"
+					 :value "$B$"$\$\!<$s(B")
+				 (const :tag "$B1#$9(B"
+					:value hide)
+				 (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
+					:value important)
+				 (number :tag "$BE@?t$r2C$($k(B"
+					 :value 0)))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-id-alist nil
-  "*$B%l%9$r%U%#%k%?$9$k(B ID $B$H!"%U%#%k%?=hM}$N(B alist$B!#(B
+  "*$B%l%9$r%U%#%k%?$9$k$?$a$N(B ID $B$N>r7o$H!"%U%#%k%?=hM}$N(B alist$B!#(B
 
-ID $B$K$OJ8;zNs$+!"(B
-\($BJ8;zNs(B $B%7%s%\%k(B)$B$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+$B>r7o$K$OJ8;zNs$+!"(B
+\($BJ8;zNs(B $B%7%s%\%k(B ...)$B$N7A<0$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+
+$BJ8;zNs$r;XDj$9$k$H!"(B
+ID $B$,$=$NJ8;zNs$r4^$`$H$-$K%U%#%k%?=hM}$,<B9T$5$l$k!#(B
 
 $B3HD%7A<0$r;XDj$9$k$H!"(B
-$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9$r8!::$9$k!#(B
+$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G(B ID $B$r8!::$9$k!#(B
 
 S,s	$BItJ,0lCW(B
 E,e	$B40A40lCW(B
-F,f	$B$"$$$^$$0lCW(B($B6uGr$H2~9T$NB8:_$rL5;k$7!"(B
-		     $B1Q?t5-9f$NA43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
+F,f	$B$"$$$^$$0lCW(B	($B6uGr$d2~9T$NM-L5$dB?>/$rL5;k$7!"(B
+			$B$^$?A43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
 R,r	$B@55,I=8=(B
 
 $BBgJ8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7!"(B
 $B>.J8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7$J$$!#(B
 
-$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?t;z$N$I$l$+$r;XDj$9$k!#(B
+$B$"$$$^$$0lCW$r>.J8;z$G;XDj$7$?>l9g$O!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J$$!#(B
+
+$B%7%s%\%k$N8e$K$O%-!<%o!<%I$rDI2C$7!"(B
+$BCM$K$h$C$F%U%#%k%?>r7o$r2<5-$N$h$&$KJdB-$9$k$3$H$,$G$-$k!#(B
+
+:invert		t (non-nil)$B$r;XDj$9$k$H!"J8;zNs0lCW$N??56$r5UE>$9$k(B
+
+:board-id	$B%U%#%k%?BP>]$H$J$kHD$N(B ID $B$r;XDj$9$k(B
+:artid		$B%U%#%k%?BP>]$H$J$k%9%l%C%I$N(B ID $B$b;XDj$9$k(B
+
+:float		$B%U%#%k%?>r7o$,0lCW$7$?$H$-!"$3$N%U%#%k%?9`L\$r(B
+		`navi2ch-article-sort-message-filter-rules'$B$rL5;k$7$F(B
+		$B>o$K(B alist $B$N@hF,$K;}$C$F$/$k>l9g$O(B 1 ($B@5?tCM(B)$B$r;XDj$7!"(B
+		$B$=$N$^$^$K$9$k>l9g$O(B 0 ($BHs@5?tCM(B)$B$r;XDj$9$k(B
+
+
+$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?tCM$N$I$l$+$r;XDj$9$k!#(B
 
 $BJ8;zNs$r;XDj$9$k$H!"%l%9$,$=$NJ8;zNs$KCV$-49$o$k!#(B
 
-ID $B$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
+$B%U%#%k%?>r7o$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
 $BCV498e$NJ8;zNsCf$N(B \\1$B!A(B\\9 $B$*$h$S(B \\& $B$O!"0lCW$7$?J8;zNs$KE83+$5$l$k!#(B
-\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$BEy$r;2>H$N$3$H!#(B
+\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$B$r;2>H$N$3$H!#(B
 
 $B%7%s%\%k$r;XDj$9$k$H!"%7%s%\%k$K9g$o$;$F2<5-$N=hM}$,9T$o$l$k!#(B
 
 hide		$B%l%9$r1#$9(B
 important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
-$B?t;z$r;XDj$9$k$H!"%l%9$NF@E@$K$=$NE@?t$r2C$(!"%U%#%k%?=hM}$rB39T$9$k!#(B
+$B?tCM$r;XDj$9$k$H!"%l%9$NF@E@$K$=$N?tCMJ,$NE@?t$r2C$($F!"(B
+$B;D$j$N%U%#%k%?$r<B9T$9$k!#(B
 
 $BNc$($P2<5-$NCM$r@_Dj$9$k$H!"(B
-ID $B$,!V(BFUga1234$B!W$@$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
+ID $B$K!V(BFUga1234$B!W$,4^$^$l$F$$$k$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
 ID $B$,!V(BhoGE0987$B!W$@$H%l%9$,1#$5$l$k!#(B
 
-'(((\"FUga1234\" E) . \"$B$"$\$\!<$s(B\")
+'((\"FUga1234\" . \"$B$"$\$\!<$s(B\")
   ((\"hoGE0987\" E) . hide))"
-  :type '(repeat (cons (choice (string :tag "ID")
-			       (choice :tag "($B3HD%7A<0(B)"
-				       (list :tag "$BItJ,0lCW(B"
-					     (string :tag "ID")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value S)
-						     (const :tag "$B$7$J$$(B"
-							    :value s)))
-				       (list :tag "$B40A40lCW(B"
-					     (string :tag "ID")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value E)
-						     (const :tag "$B$7$J$$(B"
-							    :value e)))
-				       (list :tag "$B$"$$$^$$0lCW(B"
-					     (string :tag "ID")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value F)
-						     (const :tag "$B$7$J$$(B"
-							    :value f)))
-				       (list :tag "$B@55,I=8=(B"
-					     (regexp :tag "ID")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value R)
-						     (const :tag "$B$7$J$$(B"
-							    :value r)))))
-		       (choice (string :tag "$BCV$-49$($k(B"
-				       :value "$B$"$\$\!<$s(B")
-			       (const :tag "$B1#$9(B"
-				      :value hide)
-			       (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
-				      :value important)
-			       (number :tag "$BE@?t$r2C$($k(B"
-				       :value 0))))
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "$BJ8;zNs0lCW$N??56$r5UE>(B"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "$BHD$r;XDj(B"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "$B%9%l%C%I$b;XDj(B"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "$B>r7o$,0lCW$7$?$H$-$N%U%#%k%?$N0LCV(B"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "$B$=$N$^$^(B"
+						:value 0)
+					 (const :tag "$B@hF,$X(B"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "$B>r7o(B"
+				 (string)
+				 (list :tag "$BItJ,0lCW(B"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value S)
+					       (const :tag "$B$J$7(B"
+						      :value s))
+				       ,plist)
+				 (list :tag "$B40A40lCW(B"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value E)
+					       (const :tag "$B$J$7(B"
+						      :value e))
+				       ,plist)
+				 (list :tag "$B$"$$$^$$0lCW(B"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z!&$R$i$,$J$H%+%?%+%J$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value F)
+					       (const :tag "$B$J$7(B"
+						      :value f))
+				       ,plist)
+				 (list :tag "$B@55,I=8=(B"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value R)
+					       (const :tag "$B$J$7(B"
+						      :value r))
+				       ,plist))
+			 (choice :tag "$B=hM}(B"
+				 (string :tag "$BCV$-49$($k(B"
+					 :value "$B$"$\$\!<$s(B")
+				 (const :tag "$B1#$9(B"
+					:value hide)
+				 (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
+					:value important)
+				 (number :tag "$BE@?t$r2C$($k(B"
+					 :value 0)))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-mail-alist nil
-  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%a!<%kMs$NFbMF$H!"%U%#%k%?=hM}$N(B alist$B!#(B
+  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%a!<%kMs$N>r7o$H!"%U%#%k%?=hM}$N(B alist$B!#(B
 
-$B%a!<%kMs$NFbMF$K$OJ8;zNs$+!"(B
-\($BJ8;zNs(B $B%7%s%\%k(B)$B$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+$B>r7o$K$OJ8;zNs$+!"(B
+\($BJ8;zNs(B $B%7%s%\%k(B ...)$B$N7A<0$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+
+$BJ8;zNs$r;XDj$9$k$H!"(B
+$B%a!<%kMs$,$=$NJ8;zNs$r4^$`$H$-$K%U%#%k%?=hM}$,<B9T$5$l$k!#(B
 
 $B3HD%7A<0$r;XDj$9$k$H!"(B
-$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9$r8!::$9$k!#(B
+$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%a!<%kMs$r8!::$9$k!#(B
 
 S,s	$BItJ,0lCW(B
 E,e	$B40A40lCW(B
-F,f	$B$"$$$^$$0lCW(B($B6uGr$H2~9T$NB8:_$rL5;k$7!"(B
-		     $B1Q?t5-9f$NA43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
+F,f	$B$"$$$^$$0lCW(B	($B6uGr$d2~9T$NM-L5$dB?>/$rL5;k$7!"(B
+			$B$^$?A43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
 R,r	$B@55,I=8=(B
 
 $BBgJ8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7!"(B
 $B>.J8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7$J$$!#(B
 
-$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?t;z$N$I$l$+$r;XDj$9$k!#(B
+$B$"$$$^$$0lCW$r>.J8;z$G;XDj$7$?>l9g$O!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J$$!#(B
+
+$B%7%s%\%k$N8e$K$O%-!<%o!<%I$rDI2C$7!"(B
+$BCM$K$h$C$F%U%#%k%?>r7o$r2<5-$N$h$&$KJdB-$9$k$3$H$,$G$-$k!#(B
+
+:invert		t (non-nil)$B$r;XDj$9$k$H!"J8;zNs0lCW$N??56$r5UE>$9$k(B
+
+:board-id	$B%U%#%k%?BP>]$H$J$kHD$N(B ID $B$r;XDj$9$k(B
+:artid		$B%U%#%k%?BP>]$H$J$k%9%l%C%I$N(B ID $B$b;XDj$9$k(B
+
+:float		$B%U%#%k%?>r7o$,0lCW$7$?$H$-!"$3$N%U%#%k%?9`L\$r(B
+		`navi2ch-article-sort-message-filter-rules'$B$rL5;k$7$F(B
+		$B>o$K(B alist $B$N@hF,$K;}$C$F$/$k>l9g$O(B 1 ($B@5?tCM(B)$B$r;XDj$7!"(B
+		$B$=$N$^$^$K$9$k>l9g$O(B 0 ($BHs@5?tCM(B)$B$r;XDj$9$k(B
+
+
+$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?tCM$N$I$l$+$r;XDj$9$k!#(B
 
 $BJ8;zNs$r;XDj$9$k$H!"%l%9$,$=$NJ8;zNs$KCV$-49$o$k!#(B
 
-$B%a!<%kMs$NFbMF$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
+$B%U%#%k%?>r7o$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
 $BCV498e$NJ8;zNsCf$N(B \\1$B!A(B\\9 $B$*$h$S(B \\& $B$O!"0lCW$7$?J8;zNs$KE83+$5$l$k!#(B
-\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$BEy$r;2>H$N$3$H!#(B
+\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$B$r;2>H$N$3$H!#(B
 
 $B%7%s%\%k$r;XDj$9$k$H!"%7%s%\%k$K9g$o$;$F2<5-$N=hM}$,9T$o$l$k!#(B
 
 hide		$B%l%9$r1#$9(B
 important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
-$B?t;z$r;XDj$9$k$H!"%l%9$NF@E@$K$=$NE@?t$r2C$(!"%U%#%k%?=hM}$rB39T$9$k!#(B
+$B?tCM$r;XDj$9$k$H!"%l%9$NF@E@$K$=$N?tCMJ,$NE@?t$r2C$($F!"(B
+$B;D$j$N%U%#%k%?$r<B9T$9$k!#(B
 
 $BNc$($P2<5-$NCM$r@_Dj$9$k$H!"(B
 $B%a!<%kMs$K!V$U$,!W$,4^$^$l$F$$$k$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
@@ -1182,123 +1345,215 @@ important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
 '((\"$B$U$,(B\" . \"$B$"$\$\!<$s(B\")
   ((\"$B%[%2(B\" S) . hide))"
-  :type '(repeat (cons (choice (string :tag "$B%a!<%kMs(B")
-			       (choice :tag "($B3HD%7A<0(B)"
-				       (list :tag "$BItJ,0lCW(B"
-					     (string :tag "$B%a!<%kMs(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value S)
-						     (const :tag "$B$7$J$$(B"
-							    :value s)))
-				       (list :tag "$B40A40lCW(B"
-					     (string :tag "$B%a!<%kMs(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value E)
-						     (const :tag "$B$7$J$$(B"
-							    :value e)))
-				       (list :tag "$B$"$$$^$$0lCW(B"
-					     (string :tag "$B%a!<%kMs(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value F)
-						     (const :tag "$B$7$J$$(B"
-							    :value f)))
-				       (list :tag "$B@55,I=8=(B"
-					     (regexp :tag "$B%a!<%kMs(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value R)
-						     (const :tag "$B$7$J$$(B"
-							    :value r)))))
-		       (choice (string :tag "$BCV$-49$($k(B"
-				       :value "$B$"$\$\!<$s(B")
-			       (const :tag "$B1#$9(B"
-				      :value hide)
-			       (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
-				      :value important)
-			       (number :tag "$BE@?t$r2C$($k(B"
-				       :value 0))))
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "$BJ8;zNs0lCW$N??56$r5UE>(B"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "$BHD$r;XDj(B"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "$B%9%l%C%I$b;XDj(B"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "$B>r7o$,0lCW$7$?$H$-$N%U%#%k%?$N0LCV(B"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "$B$=$N$^$^(B"
+						:value 0)
+					 (const :tag "$B@hF,$X(B"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "$B>r7o(B"
+				 (string)
+				 (list :tag "$BItJ,0lCW(B"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value S)
+					       (const :tag "$B$J$7(B"
+						      :value s))
+				       ,plist)
+				 (list :tag "$B40A40lCW(B"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value E)
+					       (const :tag "$B$J$7(B"
+						      :value e))
+				       ,plist)
+				 (list :tag "$B$"$$$^$$0lCW(B"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z!&$R$i$,$J$H%+%?%+%J$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value F)
+					       (const :tag "$B$J$7(B"
+						      :value f))
+				       ,plist)
+				 (list :tag "$B@55,I=8=(B"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value R)
+					       (const :tag "$B$J$7(B"
+						      :value r))
+				       ,plist))
+			 (choice :tag "$B=hM}(B"
+				 (string :tag "$BCV$-49$($k(B"
+					 :value "$B$"$\$\!<$s(B")
+				 (const :tag "$B1#$9(B"
+					:value hide)
+				 (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
+					:value important)
+				 (number :tag "$BE@?t$r2C$($k(B"
+					 :value 0)))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-message-filter-by-subject-alist nil
-  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%9%l$N%?%$%H%k$H!"%U%#%k%?=hM}$N(B alist$B!#(B
+  "*$B%l%9$r%U%#%k%?$9$k$?$a$N%9%l%C%I$N%?%$%H%k$N>r7o$H!"%U%#%k%?=hM}$N(B alist$B!#(B
 
-$B%9%l$N%?%$%H%k$K$OJ8;zNs$+!"(B
-\($BJ8;zNs(B $B%7%s%\%k(B)$B$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+$B>r7o$K$OJ8;zNs$+!"(B
+\($BJ8;zNs(B $B%7%s%\%k(B ...)$B$N7A<0$N%j%9%H(B($B3HD%7A<0(B)$B$r;XDj$9$k!#(B
+
+$BJ8;zNs$r;XDj$9$k$H!"(B
+$B%9%l%C%I$N%?%$%H%k$,$=$NJ8;zNs$r4^$`$H$-$K%U%#%k%?=hM}$,<B9T$5$l$k!#(B
 
 $B3HD%7A<0$r;XDj$9$k$H!"(B
-$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%l%9$r8!::$9$k!#(B
+$B%7%s%\%k$K9g$o$;$F2<5-$NJ}K!$G%9%l%C%I$N%?%$%H%k$r8!::$9$k!#(B
 
 S,s	$BItJ,0lCW(B
 E,e	$B40A40lCW(B
-F,f	$B$"$$$^$$0lCW(B($B6uGr$H2~9T$NB8:_$rL5;k$7!"(B
-		     $B1Q?t5-9f$NA43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
+F,f	$B$"$$$^$$0lCW(B	($B6uGr$d2~9T$NM-L5$dB?>/$rL5;k$7!"(B
+			$B$^$?A43Q$HH>3Q$r6hJL$7$J$$ItJ,0lCW(B)
 R,r	$B@55,I=8=(B
 
 $BBgJ8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7!"(B
 $B>.J8;z$N%7%s%\%k$r;XDj$9$k$HJ8;zNs$NBgJ8;z$H>.J8;z$r6hJL$7$J$$!#(B
 
-$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?t;z$N$I$l$+$r;XDj$9$k!#(B
+$B$"$$$^$$0lCW$r>.J8;z$G;XDj$7$?>l9g$O!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J$$!#(B
+
+$B%7%s%\%k$N8e$K$O%-!<%o!<%I$rDI2C$7!"(B
+$BCM$K$h$C$F%U%#%k%?>r7o$r2<5-$N$h$&$KJdB-$9$k$3$H$,$G$-$k!#(B
+
+:invert		t (non-nil)$B$r;XDj$9$k$H!"J8;zNs0lCW$N??56$r5UE>$9$k(B
+
+:board-id	$B%U%#%k%?BP>]$H$J$kHD$N(B ID $B$r;XDj$9$k(B
+:artid		$B%U%#%k%?BP>]$H$J$k%9%l%C%I$N(B ID $B$b;XDj$9$k(B
+
+:float		$B%U%#%k%?>r7o$,0lCW$7$?$H$-!"$3$N%U%#%k%?9`L\$r(B
+		`navi2ch-article-sort-message-filter-rules'$B$rL5;k$7$F(B
+		$B>o$K(B alist $B$N@hF,$K;}$C$F$/$k>l9g$O(B 1 ($B@5?tCM(B)$B$r;XDj$7!"(B
+		$B$=$N$^$^$K$9$k>l9g$O(B 0 ($BHs@5?tCM(B)$B$r;XDj$9$k(B
+
+
+$B%U%#%k%?=hM}$K$O!"J8;zNs!&%7%s%\%k!&?tCM$N$I$l$+$r;XDj$9$k!#(B
 
 $BJ8;zNs$r;XDj$9$k$H!"%l%9$,$=$NJ8;zNs$KCV$-49$o$k!#(B
 
-$B%9%l$N%?%$%H%k$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
+$B%U%#%k%?>r7o$r3HD%7A<0$G;XDj$7$F$$$?>l9g!"(B
 $BCV498e$NJ8;zNsCf$N(B \\1$B!A(B\\9 $B$*$h$S(B \\& $B$O!"0lCW$7$?J8;zNs$KE83+$5$l$k!#(B
-\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$BEy$r;2>H$N$3$H!#(B
+\\1$B!A(B\\9 $B$*$h$S(B \\& $B$N0UL#$K$D$$$F$O!"(B`replace-match'$B$r;2>H$N$3$H!#(B
 
 $B%7%s%\%k$r;XDj$9$k$H!"%7%s%\%k$K9g$o$;$F2<5-$N=hM}$,9T$o$l$k!#(B
 
 hide		$B%l%9$r1#$9(B
 important	$B%l%9$r%V%C%/%^!<%/$KEPO?$9$k(B
 
-$B?t;z$r;XDj$9$k$H!"%l%9$NF@E@$K$=$NE@?t$r2C$(!"%U%#%k%?=hM}$rB39T$9$k!#(B
+$B?tCM$r;XDj$9$k$H!"%l%9$NF@E@$K$=$N?tCMJ,$NE@?t$r2C$($F!"(B
+$B;D$j$N%U%#%k%?$r<B9T$9$k!#(B
 
 $BNc$($P2<5-$NCM$r@_Dj$9$k$H!"(B
-$B%9%l$N%?%$%H%k$K!V$U$,!W$,4^$^$l$F$$$k$H%l%9$,!V$"$\$\!<$s!W$KCV$-49$o$j!"(B
-$B%9%l$N%?%$%H%k$K!V%[%2!W$,4^$^$l$F$$$k$H%l%9$,1#$5$l$k!#(B
+$B%9%l%C%I$N%?%$%H%k$K!V$U$,!W$,4^$^$l$F$$$k$H%l%9$NF@E@$,(B +1000 $B$5$l!"(B
+$B%9%l%C%I$N%?%$%H%k$K!V%[%2!W$,4^$^$l$F$$$k$H%l%9$NF@E@$,(B -1000 $B$5$l$k!#(B
 
-'((\"$B$U$,(B\" . \"$B$"$\$\!<$s(B\")
-  ((\"$B%[%2(B\" S) . hide))"
-  :type '(repeat (cons (choice (string :tag "$B%9%l$N%?%$%H%k(B")
-			       (choice :tag "($B3HD%7A<0(B)"
-				       (list :tag "$BItJ,0lCW(B"
-					     (string :tag "$B%9%l$N%?%$%H%k(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value S)
-						     (const :tag "$B$7$J$$(B"
-							    :value s)))
-				       (list :tag "$B40A40lCW(B"
-					     (string :tag "$B%9%l$N%?%$%H%k(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value E)
-						     (const :tag "$B$7$J$$(B"
-							    :value e)))
-				       (list :tag "$B$"$$$^$$0lCW(B"
-					     (string :tag "$B%9%l$N%?%$%H%k(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value F)
-						     (const :tag "$B$7$J$$(B"
-							    :value f)))
-				       (list :tag "$B@55,I=8=(B"
-					     (regexp :tag "$B%9%l$N%?%$%H%k(B")
-					     (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
-						     (const :tag "$B$9$k(B"
-							    :value R)
-						     (const :tag "$B$7$J$$(B"
-							    :value r)))))
-		       (choice (string :tag "$BCV$-49$($k(B"
-				       :value "$B$"$\$\!<$s(B")
-			       (const :tag "$B1#$9(B"
-				      :value hide)
-			       (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
-				      :value important)
-			       (number :tag "$BE@?t$r2C$($k(B"
-				       :value 0))))
+'((\"$B$U$,(B\" . 1000)
+  ((\"$B%[%2(B\" S) . -1000))"
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "$BJ8;zNs0lCW$N??56$r5UE>(B"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "$BHD$r;XDj(B"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "$B%9%l%C%I$b;XDj(B"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "$B>r7o$,0lCW$7$?$H$-$N%U%#%k%?$N0LCV(B"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "$B$=$N$^$^(B"
+						:value 0)
+					 (const :tag "$B@hF,$X(B"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "$B>r7o(B"
+				 (string)
+				 (list :tag "$BItJ,0lCW(B"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value S)
+					       (const :tag "$B$J$7(B"
+						      :value s))
+				       ,plist)
+				 (list :tag "$B40A40lCW(B"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value E)
+					       (const :tag "$B$J$7(B"
+						      :value e))
+				       ,plist)
+				 (list :tag "$B$"$$$^$$0lCW(B"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "$BBgJ8;z$H>.J8;z!&$R$i$,$J$H%+%?%+%J$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value F)
+					       (const :tag "$B$J$7(B"
+						      :value f))
+				       ,plist)
+				 (list :tag "$B@55,I=8=(B"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "$BBgJ8;z$H>.J8;z$N6hJL(B"
+					       (const :tag "$B$"$j(B"
+						      :value R)
+					       (const :tag "$B$J$7(B"
+						      :value r))
+				       ,plist))
+			 (choice :tag "$B=hM}(B"
+				 (string :tag "$BCV$-49$($k(B"
+					 :value "$B$"$\$\!<$s(B")
+				 (const :tag "$B1#$9(B"
+					:value hide)
+				 (const :tag "$B%V%C%/%^!<%/$KEPO?$9$k(B"
+					:value important)
+				 (number :tag "$BE@?t$r2C$($k(B"
+					 :value 0)))))
   :group 'navi2ch-article)
 
 (defcustom navi2ch-article-auto-activate-message-filter t
@@ -1571,7 +1826,8 @@ Navi2ch$B%+%F%4%j$K!VAw?.95$(!WHD$,<+F0E*$KDI2C$5$l$^$9!#(B
 	   :tag "$BHDL>IU$-$N%U%)!<%^%C%H(B"
 	   :value navi2ch-message-sendlog-message-format-with-board-name
 	   :doc "[$BHDL>(B]: $B%9%l%C%I%?%$%H%k(B\nURL: http://")
-	  (function :tag "$B4X?t$r;XDj(B")))
+	  (function :tag "$B4X?t$r;XDj(B"))
+  :group 'navi2ch-message)
 
 ;; net variables
 (defcustom navi2ch-net-http-proxy
@@ -1709,9 +1965,7 @@ ask $B$J$iJ]B8$9$kA0$K<ALd$9$k(B
   :group 'navi2ch-net)
 
 ;;; update variables
-(defcustom navi2ch-update-file (concat
-                                (file-name-as-directory navi2ch-directory)
-                                "navi2ch-update.el")
+(defcustom navi2ch-update-file "navi2ch-update.el"
   "*Navi2ch $B$N<+F099?7$KMxMQ$9$k%U%!%$%k$N%m!<%+%k%U%!%$%kL>!#(B"
   :type 'file
   :group 'navi2ch)
@@ -1743,15 +1997,9 @@ ask $B$J$iJ]B8$9$kA0$K<ALd$9$k(B
   :group 'navi2ch)
 
 ;;; auto modify variables
-(defcustom navi2ch-auto-modify-file
-  (let ((file (or (locate-library navi2ch-init-file)
-		  (and (file-name-absolute-p navi2ch-init-file)
-		       (expand-file-name navi2ch-init-file)))))
-    (when (and file
-	       (not (string-match "\\.elc\\(\\.\\(Z\\|gz\\|bz2\\)\\)?\\'"
-				  file)))
-      file))
+(defcustom navi2ch-auto-modify-file t
   "*$B@_Dj$r<+F0E*$KJQ99$7$FJ]B8$9$k%U%!%$%k!#(B
+t $B$J$i(B `navi2ch-init-file' $B$KJ]B8$7!"(B
 nil $B$J$i!"(B`customize'$B$rMxMQ$7$F(B`custom-file'$B$KJ]B8$9$k!#(B
 
 $B$3$N%U%!%$%kC1BN$,<+F0E*$K%m!<%I$5$l$k$3$H$O$J$$$N$G!"(B
@@ -1781,7 +2029,12 @@ nil $B$J$i!"(B`customize'$B$rMxMQ$7$F(B`custom-file'$B$KJ]B8$9$k!#(B
   :group 'navi2ch)
 
 (defcustom navi2ch-icon-directory
-  (cond ((fboundp 'locate-data-directory)
+  (cond ((condition-case nil
+	     (progn
+	       (require 'navi2ch-config)
+	       navi2ch-config-icondir)
+	   (error nil)))
+	((fboundp 'locate-data-directory)
 	 (locate-data-directory "navi2ch"))
 	((let ((icons (expand-file-name "navi2ch/icons/"
 					data-directory)))
@@ -1801,7 +2054,7 @@ nil $B$J$i!"(B`customize'$B$rMxMQ$7$F(B`custom-file'$B$KJ]B8$9$k!#(B
 (defcustom navi2ch-splash-display-logo (and window-system
 					    (or navi2ch-on-emacs21
 						navi2ch-on-xemacs)
-					    t)
+					    nil)
   "If it is T, show graphic logo in the startup screen.
 You can set it to a symbol `bitmap', `xbm' or `xpm' in order
 to force the image format."
@@ -1949,6 +2202,7 @@ to force the image format."
 (unless navi2ch-global-view-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map navi2ch-global-map)
+    (suppress-keymap map t)
     (define-key map "1" 'navi2ch-one-pane)
     (define-key map "2" 'navi2ch-two-pane)
     (define-key map "3" 'navi2ch-three-pane)

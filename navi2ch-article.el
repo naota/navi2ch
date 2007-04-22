@@ -120,7 +120,6 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-poped-point-stack nil)
 (defvar navi2ch-article-separator nil)
 (defvar navi2ch-article-hide-mode nil)
-(defvar navi2ch-article-window-configuretion nil)
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
 (defvar navi2ch-article-through-forward-line-function 'navi2ch-bm-forward-line
@@ -169,13 +168,7 @@ last が最後からいくつ表示するか。
 
 (defvar navi2ch-article-message-filter-cache nil)
 (defvar navi2ch-article-save-message-filter-cache-keys
-  '(cache replace hide important aborn))
-
-;; defcustom にしないでおく
-(defvar navi2ch-article-default-message-filter-by-message-alist
-  `(((,(regexp-opt '("(mule-caesar" "(base64-decode"
-		     "(shell-command" "(call-process" "(delete-file")) r)
-     . hide)))
+  '(cache replace hide important))
 
 ;; sticky mode
 (defvar navi2ch-article-sticky-mode nil)
@@ -236,20 +229,20 @@ last が最後からいくつ表示するか。
 (defun navi2ch-article-file-name-to-artid (filename)
   "*FILENAME をスレIDに変換する。"
   (file-name-sans-extension (file-name-nondirectory filename)))
-   
 
-(defsubst navi2ch-article-inside-range-p (num range len)
+
+(defun navi2ch-article-inside-range-p (num range len)
   "NUM が RANGE で示す範囲に入ってるか。
 LEN は RANGE で範囲を指定される list の長さ。"
   (or (not range)
       (<= num (car range))
       (> num (- len (cdr range)))))
 
-(defsubst navi2ch-article-get-buffer-name (board article)
+(defun navi2ch-article-get-buffer-name (board article)
   (concat navi2ch-article-buffer-name-prefix
 	  (navi2ch-article-get-url board article 'no-kako)))
 
-(defsubst navi2ch-article-check-cached (board article)
+(defun navi2ch-article-check-cached (board article)
   "BOARD と ARTICLE で指定されるスレッドがキャッシュされてるか。"
   (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
          'view)
@@ -322,7 +315,7 @@ LEN は RANGE で範囲を指定される list の長さ。"
 START, END, NOFIRST で範囲を指定する"
   (navi2ch-multibbs-article-to-url board article start end nofirst))
 
-(defsubst navi2ch-article-cleanup-message ()
+(defun navi2ch-article-cleanup-message ()
   (let (re)
     (when navi2ch-article-cleanup-trailing-newline ; レス末尾の空白を取り除く
       (goto-char (point-min))
@@ -340,20 +333,9 @@ START, END, NOFIRST で範囲を指定する"
       (while (re-search-forward re nil t)
 	(replace-match "<br>")))))	; "\n" でもいいかも。
 
-(defsubst navi2ch-article-parse-message (str &optional sep)
+(defun navi2ch-article-parse-message (str &optional sep)
   (or sep (setq sep navi2ch-article-separator))
   (unless (string= str "")
-;;;     (let ((strs (split-string str sep))
-;;; 	  (syms '(name mail date data subject))
-;;; 	  s)
-;;;       (mapcar (lambda (sym)
-;;; 		(setq s (or (car strs) "")
-;;; 		      strs (cdr strs))
-;;; 		(cons sym
-;;; 		      (if (eq sym 'data)
-;;; 			  (navi2ch-replace-html-tag-with-temp-buffer s)
-;;; 			(navi2ch-replace-html-tag s))))
-;;; 	      syms))))
     (with-temp-buffer
       (let ((syms '(name mail date data subject))
 	    alist max)
@@ -393,7 +375,7 @@ START, END, NOFIRST で範囲を指定する"
 	  " *<> *"
 	" *, *"))))
 
-(defsubst navi2ch-article-get-first-message ()
+(defun navi2ch-article-get-first-message ()
   "current-buffer の article の最初の message を返す。"
   (goto-char (point-min))
   (navi2ch-article-parse-message
@@ -402,7 +384,7 @@ START, END, NOFIRST で範囲を指定する"
 					  (1- (point))))
    (navi2ch-article-get-separator)))
 
-(defsubst navi2ch-article-get-first-message-from-file (file &optional board)
+(defun navi2ch-article-get-first-message-from-file (file &optional board)
   "FILE で指定された article の最初の message を返す。
 BOARD non-nil ならば、その板の coding-system を使う。"
   (with-temp-buffer
@@ -523,7 +505,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
     (put-text-property pos (point) 'face 'navi2ch-article-message-separator-face)
     (insert "\n")))
 
-(defsubst navi2ch-article-set-link-property-subr (start end type value
+(defun navi2ch-article-set-link-property-subr (start end type value
 							&optional object)
   (let ((face (cond ((eq type 'number) 'navi2ch-article-link-face)
 		    ((eq type 'url) 'navi2ch-article-url-face))))
@@ -538,7 +520,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 			 (list 'link-head t)
 			 object)))
 
-(defsubst navi2ch-article-set-link-property ()
+(defun navi2ch-article-set-link-property ()
   ">>1 とか http:// に property を付ける。"
   (goto-char (point-min))
   (let* ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
@@ -585,14 +567,14 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	     start end 'url url))
 	  (goto-char (max (1+ start) end)))))))
 
-(defsubst navi2ch-article-put-cite-face ()
+(defun navi2ch-article-put-cite-face ()
   (goto-char (point-min))
   (while (re-search-forward navi2ch-article-citation-regexp nil t)
     (put-text-property (match-beginning 0)
 		       (match-end 0)
 		       'face 'navi2ch-article-citation-face)))
 
-(defsubst navi2ch-article-arrange-message ()
+(defun navi2ch-article-arrange-message ()
   (goto-char (point-min))
   (let ((id (cdr (assq 'id navi2ch-article-current-board))))
     (when (or (member id navi2ch-article-enable-fill-list)
@@ -604,13 +586,13 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	(fill-region (point-min) (point-max)))))
   (run-hooks 'navi2ch-article-arrange-message-hook))
 
-(defsubst navi2ch-article-insert-message (num alist)
+(defun navi2ch-article-insert-message (num alist)
   (let ((p (point)))
     (insert (funcall navi2ch-article-header-format-function
-                     num
-                     (cdr (assq 'name alist))
-                     (cdr (assq 'mail alist))
-                     (cdr (assq 'date alist))))
+		     num
+		     (cdr (assq 'name alist))
+		     (cdr (assq 'mail alist))
+		     (cdr (assq 'date alist))))
     (put-text-property p (1+ p) 'current-number num)
     (setq p (point))
     (insert (cdr (assq 'data alist)) "\n")
@@ -637,22 +619,31 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	(imp (cdr (assq 'important navi2ch-article-current-article)))
 	(unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
 	(cache (cdr (assq 'cache navi2ch-article-message-filter-cache)))
-	(reps (cdr (assq 'replace navi2ch-article-message-filter-cache)))
-	(f-hide (cdr (assq 'hide navi2ch-article-message-filter-cache)))
-	(f-imp (cdr (assq 'important navi2ch-article-message-filter-cache)))
-	(aborn (cdr (assq 'aborn navi2ch-article-message-filter-cache)))
+	(rep (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+	(orig (cdr (assq 'original navi2ch-article-message-filter-cache)))
 	(progress 0)
 	(percent 0))
     (message msg)
-    (if navi2ch-article-message-filter-mode
-	(setq hide (navi2ch-union hide f-hide)
-	      imp (navi2ch-union imp f-imp))
-      (setq hide (navi2ch-set-difference hide f-hide)
-	    imp (navi2ch-set-difference imp f-imp)))
+    (let ((func (if navi2ch-article-message-filter-mode
+		    #'navi2ch-union
+		  #'navi2ch-set-difference)))
+      (setq hide (funcall func
+			  hide
+			  (cdr (assq 'hide
+				     navi2ch-article-message-filter-cache))))
+      (setq imp (funcall func
+			 imp
+			 (cdr (assq 'important
+				    navi2ch-article-message-filter-cache)))))
+    (setq navi2ch-article-current-article
+	  (navi2ch-put-alist 'hide hide navi2ch-article-current-article))
+    (setq navi2ch-article-current-article
+	  (navi2ch-put-alist 'important imp navi2ch-article-current-article))
     (dolist (x list)
       (let* ((num (car x))
 	     (alist (cdr x))
-	     (rep (cdr (assq num reps)))
+	     (rep-alist (cdr (assq num rep)))
+	     (orig-alist (cdr (assq num orig)))
 	     suppress)
         (when (and alist
 		   (cond (navi2ch-article-hide-mode
@@ -662,118 +653,59 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 			 (t
 			  (and (navi2ch-article-inside-range-p num range len)
 			       (not (memq num hide))))))
-          (when (stringp alist)
-            (setq alist (navi2ch-article-parse-message alist))
-	    ;; 新しく「あぼーん」されたレスはキャッシュをクリア
-	    (when (and (not (memq num aborn))
-		       (string= "あぼーん" (cdr (assq 'date alist))))
-	      (setq cache (delq num cache)
-		    unfilter (delq num unfilter))
-	      (setq aborn (cons num aborn))
-	      (setq navi2ch-article-message-filter-cache
-		    (navi2ch-put-alist 'aborn
-				       aborn
-				       navi2ch-article-message-filter-cache)))
-	    ;; 置換前のレスをキャッシュに退避
-	    (when rep
-	      (dolist (slot rep)
-		(setcdr (cdr slot) (list (cdr (assq (car slot) alist)))))
-	      (navi2ch-put-alist num rep reps)
-	      (navi2ch-put-alist 'replace
-				 reps
-				 navi2ch-article-message-filter-cache)))
-	  (if (or (not navi2ch-article-message-filter-mode)
-		  (memq num unfilter))
-	      ;; 置換前のレスをキャッシュから復元
-	      (dolist (slot rep)
-		(let ((org (cddr slot)))
-		  (when org
-		    (navi2ch-put-alist (car slot) (car org) alist))))
-	    (if (and navi2ch-article-use-message-filter-cache
-		     (memq num cache))
-		;; 置換後のレスをキャッシュから抽出
-		(dolist (slot rep)
-		  (let ((new (cadr slot)))
-		    (when new
-		      (setq alist (navi2ch-put-alist (car slot) new
-						     alist)))))
-	      ;; フィルタ処理の本体
-	      (let ((alist-old (copy-alist alist)))
-		(let (filter-result)
-		  (setq filter-result
-			(let ((filtered (navi2ch-article-apply-message-filters
-					 (navi2ch-put-alist 'number num alist))))
-			  (when filtered
-			    (cond ((stringp filtered)
-				   (let ((case-fold-search nil))
-				     (navi2ch-put-alist 'name filtered alist)
-				     (navi2ch-put-alist 'data filtered alist)
-				     (navi2ch-put-alist 'mail
-							(if (string-match "sage"
-									  (cdr (assq 'mail alist)))
-							    "sage"
-							  "")
-							alist)
-				     (navi2ch-put-alist 'date
-							(navi2ch-replace-string " ID:[^ ]+"
-										" ID:???"
-										(cdr (assq 'date alist)))
-							alist)))
-				  ((eq filtered 'hide)
-				   'hide)
-				  ((eq filtered 'important)
-				   'important)))))
-		  (if (and (eq filter-result 'hide)
-			   (not navi2ch-article-hide-mode))
-		      (progn
-			(setq hide (cons num hide))
-			(setq navi2ch-article-current-article
-			      (navi2ch-put-alist 'hide
-						 hide
-						 navi2ch-article-current-article))
-			(setq suppress t)
-			(when navi2ch-article-use-message-filter-cache
-			  (setq f-hide (cons num f-hide))
-			  (setq navi2ch-article-message-filter-cache
-				(navi2ch-put-alist 'hide
-						   f-hide
-						   navi2ch-article-message-filter-cache))))
-		    (when (and (eq filter-result 'important)
-			       (not navi2ch-article-important-mode))
-		      (setq imp (cons num imp))
-		      (setq navi2ch-article-current-article
-			    (navi2ch-put-alist 'important
-					       imp
-					       navi2ch-article-current-article))
-		      (when navi2ch-article-use-message-filter-cache
-			(setq f-imp (cons num f-imp))
-			(setq navi2ch-article-message-filter-cache
-			      (navi2ch-put-alist 'important
-						 f-imp
-						 navi2ch-article-message-filter-cache))))))
-		;; フィルタ処理の結果をキャッシュに登録
-		(when navi2ch-article-use-message-filter-cache
-		  (unless (memq num cache)
-		    (setq cache (cons num cache))
-		    (setq navi2ch-article-message-filter-cache
-			  (navi2ch-put-alist 'cache
-					     cache
-					     navi2ch-article-message-filter-cache)))
-		  (dolist (slot alist-old)
-		    (let ((new (cdr (assq (car slot) alist)))
-			  (org (or (cddr (assq (car slot) rep))
-				   (list (cdr slot)))))
-		      (unless (equal new (car org))
-			(setq rep
-			      (navi2ch-put-alist (car slot)
-						 (cons new org)
-						 rep)))))
-		  (when rep
-		    (setq reps (navi2ch-put-alist num rep reps))
-		    (setq navi2ch-article-message-filter-cache
-			  (navi2ch-put-alist 'replace
-					     reps
-					     navi2ch-article-message-filter-cache)))))))
+          (if (stringp alist)
+	      (progn
+		(setq alist (navi2ch-article-parse-message alist))
+		(cond
+		 ((and (string= "あぼーん" (cdr (assq 'date alist)))
+		       (memq num cache))
+		  ;; 新しく「あぼーん」されたレスはキャッシュをクリア
+		  (setq unfilter (delq num unfilter))
+		  (setq navi2ch-article-current-article
+			(navi2ch-put-alist
+			 'unfilter
+			 unfilter
+			 navi2ch-article-current-article))
+		  (setq cache (delq num cache))
+		  (setq navi2ch-article-message-filter-cache
+			(navi2ch-put-alist
+			 'cache
+			 cache
+			 navi2ch-article-message-filter-cache)))
+		 (rep-alist
+		  ;; 置換後のキャッシュがある場合は置換前のレスを退避
+		  (setq orig-alist (mapcar
+				    (lambda (x)
+				      (cons (car x)
+					    (cdr (assq (car x) alist))))
+				    rep-alist))
+		  (setq orig (navi2ch-put-alist num orig-alist orig))
+		  (setq navi2ch-article-message-filter-cache
+			(navi2ch-put-alist
+			 'original
+			 orig
+			 navi2ch-article-message-filter-cache)))))
+	    (dolist (slot alist)
+	      (when (stringp (cdr slot))
+		(set-text-properties 0 (length (cdr slot)) nil (cdr slot)))))
+	  (if (and navi2ch-article-message-filter-mode
+		   (not (memq num unfilter)))
+	      (if (and navi2ch-article-use-message-filter-cache
+		       (memq num cache))
+		  ;; 置換後のレスをキャッシュから抽出
+		  (dolist (slot rep-alist)
+		    (when (cdr slot)
+		      (navi2ch-put-alist (car slot) (cdr slot) alist)))
+		;; フィルタ処理の本体
+		(let ((result (navi2ch-article-apply-message-filters
+			       (navi2ch-put-alist 'number num alist))))
+		  (when (and (eq result 'hide)
+			     (not navi2ch-article-hide-mode))
+		    (setq suppress t))))
+	    ;; 置換前のレスをキャッシュから復元
+	    (dolist (slot orig-alist)
+	      (when (cdr slot)
+		(navi2ch-put-alist (car slot) (cdr slot) alist))))
 	  (setq alist (navi2ch-put-alist 'point (point-marker) alist))
 	  (setcdr x alist)
 	  ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
@@ -784,7 +716,8 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	;; 進捗表示
 	(and (> (setq progress (+ progress 100)) 10000)
 	     (/= (/ progress len) percent)
-	     (navi2ch-no-logging-message "%s%d%%" msg (setq percent (/ progress len))))))
+	     (navi2ch-no-logging-message
+	      "%s%d%%" msg (setq percent (/ progress len))))))
     (message "Garbage collecting...")
     (garbage-collect)	    ; navi2ch-parse-message は大量にゴミを残す
     (message "Garbage collecting...done")
@@ -839,33 +772,100 @@ BOARD non-nil ならば、その板の coding-system を使う。"
     (navi2ch-article-insert-messages list nil)))
 
 (defun navi2ch-article-apply-message-filters (alist)
-  (let (score)
-    (catch 'loop
-      (dolist (filter navi2ch-article-message-filter-list)
-	(let ((result (funcall filter alist)))
-	  (when result
-	    (if (numberp result)
-		(setq score (+ (or score 0) result))
-	      (throw 'loop result)))))
+  (let* ((num (cdr (assq 'number alist)))
+	 (orig (cdr (assq 'original navi2ch-article-message-filter-cache))))
+    ;; 置換前のレスをキャッシュから復元
+    (dolist (slot (cdr (assq num orig)))
+      (when (cdr slot)
+	(navi2ch-put-alist (car slot) (cdr slot) alist)))
+    (let ((old-alist (copy-alist alist))
+	  score result)
+      (catch 'loop
+	(dolist (filter navi2ch-article-message-filter-list)
+	  (setq result (funcall filter alist))
+	  (cond ((numberp result)
+		 (setq score (+ (or score 0) result)))
+		(result
+		 (throw 'loop nil)))))
       (when score
 	(cond
-	 ((and (car navi2ch-article-message-replace-below)
-	       navi2ch-article-message-hide-below
-	       (< score (min (car navi2ch-article-message-replace-below)
-			     navi2ch-article-message-hide-below)))
-	  (if (< (car navi2ch-article-message-replace-below)
-		 navi2ch-article-message-hide-below)
-	      (cdr navi2ch-article-message-replace-below)
-	    'hide))
-	 ((and (car navi2ch-article-message-replace-below)
-	       (< score (car navi2ch-article-message-replace-below)))
-	  (cdr navi2ch-article-message-replace-below))
-	 ((and navi2ch-article-message-hide-below
-	       (< score navi2ch-article-message-hide-below))
-	  'hide)
 	 ((and navi2ch-article-message-add-important-above
 	       (> score navi2ch-article-message-add-important-above))
-	  'important))))))
+	  (setq result 'important))
+	 ((and navi2ch-article-message-replace-below
+	       navi2ch-article-message-hide-below
+	       (< score (car navi2ch-article-message-replace-below))
+	       (< score navi2ch-article-message-hide-below))
+	  ;; `navi2ch-article-message-replace-below' と
+	  ;; `navi2ch-article-message-hide-below' が両方とも
+	  ;; 適用されうる場合、しきい値の低い方を優先
+	  (if (< navi2ch-article-message-hide-below
+		 (car navi2ch-article-message-replace-below))
+	      (setq result 'hide)
+	    (setq result (cdr navi2ch-article-message-replace-below))))
+	 ((and navi2ch-article-message-replace-below
+	       (< score (car navi2ch-article-message-replace-below)))
+	  (setq result (cdr navi2ch-article-message-replace-below)))
+	 ((and navi2ch-article-message-hide-below
+	       (< score navi2ch-article-message-hide-below))
+	  (setq result 'hide))))
+      (cond
+       ((stringp result)
+	(let ((case-fold-search nil))
+	  (navi2ch-put-alist 'name result alist)
+	  (navi2ch-put-alist 'data result alist)
+	  (navi2ch-put-alist 'mail
+			     (if (string-match "sage"
+					       (cdr (assq 'mail alist)))
+				 "sage"
+			       "")
+			     alist)
+	  (navi2ch-put-alist 'date
+			     (navi2ch-replace-string " ID:.*"
+						     ""
+						     (cdr (assq 'date alist)))
+			     alist)))
+       ((memq result '(hide important unfilter))
+	(let ((nums (cdr (assq result navi2ch-article-current-article))))
+	  (unless (memq num nums)
+	    (setq navi2ch-article-current-article
+		  (navi2ch-put-alist result
+				     (cons num nums)
+				     navi2ch-article-current-article))))))
+      (unless (equal old-alist alist)
+	(setq navi2ch-article-message-filter-cache
+	      (navi2ch-put-alist
+	       'original
+	       (navi2ch-put-alist
+		num
+		(navi2ch-set-difference old-alist alist)
+		orig)
+	       navi2ch-article-message-filter-cache)))
+      (when navi2ch-article-use-message-filter-cache
+	(unless (equal alist old-alist)
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist
+		 'replace
+		 (navi2ch-put-alist
+		  num
+		  (copy-alist (navi2ch-set-difference alist old-alist))
+		  (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+		 navi2ch-article-message-filter-cache)))
+	(unless (or (memq result '(nil cache replace original unfilter))
+		    (stringp result))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist
+		 result
+		 (cons num
+		       (cdr (assq result navi2ch-article-message-filter-cache)))
+		 navi2ch-article-message-filter-cache)))
+	(setq navi2ch-article-message-filter-cache
+	      (navi2ch-put-alist
+	       'cache
+	       (cons num
+		     (cdr (assq 'cache navi2ch-article-message-filter-cache)))
+	       navi2ch-article-message-filter-cache)))
+      result)))
 
 (defun navi2ch-article-message-filter-by-name (alist)
   (when navi2ch-article-message-filter-by-name-alist
@@ -874,15 +874,10 @@ BOARD non-nil ならば、その板の coding-system を使う。"
      (cdr (assq 'name alist)))))
 
 (defun navi2ch-article-message-filter-by-message (alist)
-  (let ((l (append navi2ch-article-default-message-filter-by-message-alist
-		   navi2ch-article-message-filter-by-message-alist)))
-    (when l
-      (prog1
-	  (navi2ch-article-message-filter-subr
-	   l (cdr (assq 'data alist)))
-	(dolist (elt navi2ch-article-default-message-filter-by-message-alist)
-	  (setq l (delq elt l)))
-	(setq navi2ch-article-message-filter-by-message-alist l)))))
+  (when navi2ch-article-message-filter-by-message-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-message-alist
+     (cdr (assq 'data alist)))))
 
 (defun navi2ch-article-message-filter-by-id (alist)
   (let ((case-fold-search nil))
@@ -900,70 +895,67 @@ BOARD non-nil ならば、その板の coding-system を使う。"
      (cdr (assq 'mail alist)))))
 
 (defun navi2ch-article-message-filter-by-subject (alist)
-  (let ((slot (assq 'subject navi2ch-article-message-filter-cache)))
-    (if slot
-	(cdr slot)
-      (let ((subject (or (cdr (assq 'subject navi2ch-article-current-article))
-			 (if (eq (cdr (assq 'number alist)) 1)
-			     (cdr (assq 'subject alist))
-			   (let ((msg (navi2ch-article-get-message 1)))
-			     (when (stringp msg)
-			       (setq msg (navi2ch-article-parse-message msg)))
-			     (cdr (assq 'subject msg)))))))
-	(when subject
-	  (let ((result (when navi2ch-article-message-filter-by-subject-alist
-			  (navi2ch-article-message-filter-subr
-			   navi2ch-article-message-filter-by-subject-alist
-			   subject))))
-	    (when navi2ch-article-use-message-filter-cache
-	      (setq navi2ch-article-message-filter-cache
-		    (navi2ch-put-alist 'subject
-				       result
-				       navi2ch-article-message-filter-cache)))
-	    result))))))
+  (when navi2ch-article-message-filter-by-subject-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-subject-alist
+     (if (equal (or (cdr (assq 'subject alist)) "") "")
+	 (navi2ch-article-get-current-subject)
+       (cdr (assq 'subject alist))))))
 
 (defun navi2ch-article-message-filter-subr (rules string)
-  (let (score)
+  (let ((board-id (cdr (assq 'id navi2ch-article-current-board)))
+	(artid (cdr (assq 'artid navi2ch-article-current-article)))
+	score)
     (catch 'loop
       (dolist (rule rules)
-	(let* ((char (and (listp (car rule))
-			  (string-to-char (symbol-name (cadar rule)))))
-	       (case-fold-search (and char
-				      (eq char
-					  (setq char (downcase char)))))
-	       (regexp (cond
-			((null char)
-			 (regexp-quote (car rule)))
-			((eq char ?r)
-			 (caar rule))
-			((eq char ?s)
-			 (regexp-quote (caar rule)))
-			((eq char ?e)
-			 (concat "\\`" (regexp-quote (caar rule)) "\\'"))
-			((eq char ?f)
-			 (regexp-quote
-			  (apply #'concat
-				 (split-string
-				  (japanese-hankaku (caar rule) t))))))))
-	  (when (and regexp
-		     (string-match regexp
-				   (if (eq char ?f)
-				       (apply #'concat
-					      (split-string
-					       (japanese-hankaku string t)))
-				     string)))
-	    ;; 適用したフィルタ条件を age
-	    (when (and navi2ch-article-sort-message-filter-rules
-		       (not (eq rule (car rules))))
-	      (setcdr rules (cons (car rules) (delq rule (cdr rules))))
-	      (setcar rules rule))
-	    (if (numberp (cdr rule))
-		(setq score (+ (or score 0) (cdr rule)))
-	      (throw 'loop
-		     (if (and char
-			      (stringp (cdr rule)))
-			 (navi2ch-expand-newtext (cdr rule) string)
-		       (cdr rule)))))))
+	(when (or (not (consp (car rule)))
+		  (equal (or (plist-get (car rule) :board-id) board-id)
+			 (and (equal (or (plist-get (car rule) :artid) artid)
+				     artid)
+			      board-id)))
+	  (let* ((char (and (consp (car rule))
+			    (stringp (car (car rule)))
+			    (string-to-char (symbol-name (cadr (car rule))))))
+		 (case-fold-search (and char
+					(eq char
+					    (setq char (downcase char)))))
+		 (regexp (cond
+			  ((null char)
+			   (regexp-quote (car rule)))
+			  ((eq char ?r)
+			   (car (car rule)))
+			  ((eq char ?s)
+			   (regexp-quote (car (car rule))))
+			  ((eq char ?e)
+			   (concat "\\`" (regexp-quote (car (car rule))) "\\'"))
+			  ((eq char ?f)
+			   (navi2ch-fuzzy-regexp (car (car rule))
+						 case-fold-search
+						 "[　 \f\t\n\r\v]*"))
+			  (t
+			   ""))))
+	    (when (if (and char
+			   (plist-get (car rule) :invert))
+		      (not (string-match regexp string))
+		    (string-match regexp string))
+	      ;; 適用したフィルタ条件を age
+	      (when (and (not (eq rule (car rules)))
+			 (> (or (and char
+				     (plist-get (car rule) :float))
+				(if navi2ch-article-sort-message-filter-rules
+				    1
+				  0))
+			    0))
+		(setcdr rules (cons (car rules) (delq rule (cdr rules))))
+		(setcar rules rule))
+	      (if (numberp (cdr rule))
+		  (setq score (+ (or score 0) (cdr rule)))
+		(throw 'loop
+		       (if (and char
+				(stringp (cdr rule))
+				(not (plist-get (car rule) :invert)))
+			   (navi2ch-expand-newtext (cdr rule) string)
+			 (cdr rule))))))))
       score)))
 
 (defun navi2ch-article-default-header-format-function (number name mail date)
@@ -1154,9 +1146,9 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
-  (make-local-hook 'kill-buffer-hook)
+  (navi2ch-make-local-hook 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'navi2ch-article-kill-buffer-hook t t)
-  (make-local-hook 'post-command-hook)
+  (navi2ch-make-local-hook 'post-command-hook)
   (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-article-mode-hook))
 
@@ -1342,32 +1334,16 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 		    (navi2ch-article-load-message-filter-cache
 		     navi2ch-article-current-board
 		     navi2ch-article-current-article))
-	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
-		    (f-hide (cdr (assq 'hide navi2ch-article-message-filter-cache))))
-		(catch 'loop
-		  (dolist (x (nthcdr (1- start) navi2ch-article-message-list))
-		    (if (eq (navi2ch-article-apply-message-filters
-			     (navi2ch-put-alist
-			      'number
-			      (car x)
-			      (navi2ch-article-parse-message (cdr x))))
-			    'hide)
-			(progn
-			  (setq hide (cons (car x) hide))
-			  (setq navi2ch-article-current-article
-				(navi2ch-put-alist
-				 'hide
-				 hide
-				 navi2ch-article-current-article))
-			  (when navi2ch-article-use-message-filter-cache
-			    (setq f-hide (cons (car x) f-hide))
-			    (setq navi2ch-article-message-filter-cache
-				  (navi2ch-put-alist
-				   'hide
-				   f-hide
-				   navi2ch-article-message-filter-cache))))
-		      (throw 'loop nil)))
-		  (setq suppressed res)))
+	      (catch 'loop
+		(dolist (x (nthcdr (1- start) navi2ch-article-message-list))
+		  (unless (eq (navi2ch-article-apply-message-filters
+			       (navi2ch-put-alist
+				'number
+				(car x)
+				(navi2ch-article-parse-message (cdr x))))
+			      'hide)
+		    (throw 'loop nil)))
+		(setq suppressed res))
 	      (navi2ch-article-save-info
 	       navi2ch-article-current-board
 	       navi2ch-article-current-article)
@@ -1398,16 +1374,6 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (while (memq (1+ num) hide)
 	(setq num (1+ num)))
       num)))
-
-(defun navi2ch-article-get-readcgi-raw-url (board article &optional start)
-  (let ((url (navi2ch-article-to-url board article))
-	(file (navi2ch-article-get-file-name board article))
-	size)
-    (if start
-	(setq size (navi2ch-file-size file))
-      (setq start 0
-	    size 0))
-    (format "%s?raw=%s.%s" url start size)))
 
 (defun navi2ch-article-update-file (board article &optional force)
   "BOARD, ARTICLE に対応するファイルを更新する。
@@ -2403,7 +2369,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 
 (defun navi2ch-article-detect-encoded-regions (&optional sort)
   "バッファから uuencode または base64 エンコードされた領域を探す。
-(list (list type fname start end)) を返す。
+\(list (list type fname start end)) を返す。
 SORT が non-nil のときは start でソートした結果を返す。
 ただし、
  type: 'uuencode か 'base64
@@ -2950,15 +2916,15 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
     (setq list (funcall func num list))
     (setq article (navi2ch-put-alist sym list article))
     (unless (memq num list)
-      (let* ((cache navi2ch-article-message-filter-cache)
-	     (f-list (cdr (assq sym cache)))
-	     (unfilter (cdr (assq 'unfilter article))))
-	(setq f-list (delq num f-list))
-	(setq cache (navi2ch-put-alist sym f-list cache))
-	(setq navi2ch-article-message-filter-cache
-	      (navi2ch-put-alist 'cache
-				 (delq num (cdr (assq 'cache cache)))
-				 cache))
+      (let ((cache navi2ch-article-message-filter-cache)
+	    (unfilter (cdr (assq 'unfilter article))))
+	(setq cache (navi2ch-put-alist sym
+				       (delq num (cdr (assq sym cache)))
+				       cache))
+	(setq cache (navi2ch-put-alist 'cache
+				       (delq num (cdr (assq 'cache cache)))
+				       cache))
+	(setq navi2ch-article-message-filter-cache cache)
 	(when (and perm
 		   (not (memq num unfilter)))
 	  (setq article (navi2ch-put-alist 'unfilter
@@ -3186,29 +3152,14 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 	  (or article (setq article navi2ch-article-current-article))
 	  (or cache (setq cache navi2ch-article-message-filter-cache))))))
   (when cache
-    (let ((file (navi2ch-article-get-message-filter-cache-file-name board article))
+    (let ((file (navi2ch-article-get-message-filter-cache-file-name board
+								    article))
 	  (alist (delq nil
 		       (mapcar
 			(lambda (key)
 			  (let ((slot (assq key cache)))
-			    (if (eq key 'replace)
-				(let ((reps (delq nil
-						  (mapcar
-						   (lambda (reps-slot)
-						     (let ((rep (delq nil
-								      (mapcar
-								       (lambda (rep-slot)
-									 (and (cdr rep-slot)
-									      (cons (car rep-slot)
-										    (cadr rep-slot))))
-								       (cdr reps-slot)))))
-						       (and rep
-							    (cons (car reps-slot) rep))))
-						   (cdr slot)))))
-				  (and reps
-				       (cons key reps)))
-			      (and (cdr slot)
-				   slot))))
+			    (and (cdr slot)
+				 slot)))
 			navi2ch-article-save-message-filter-cache-keys))))
       (if (and (null alist)
 	       (file-exists-p file))
@@ -3218,26 +3169,19 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 	(navi2ch-save-info file alist)))))
 
 (defun navi2ch-article-load-message-filter-cache (&optional board article)
-  (or board (setq board navi2ch-article-current-board))
-  (or article (setq article navi2ch-article-current-article))
-  (let ((alist (navi2ch-load-info
-		(navi2ch-article-get-message-filter-cache-file-name board article))))
-    (dolist (reps-slot (cdr (assq 'replace alist)) alist)
-      (dolist (rep-slot (cdr reps-slot))
-	(setcdr rep-slot (list (cdr rep-slot)))))))
+  (navi2ch-load-info
+   (navi2ch-article-get-message-filter-cache-file-name
+    (or board navi2ch-article-current-board)
+    (or article navi2ch-article-current-article))))
 
 (defun navi2ch-article-toggle-replace-message (&optional prefix)
   "現在のレスの置換の有効・無効を切り替える。"
   (interactive "P")
-  (let* ((unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
-	 (num (navi2ch-article-get-current-number))
-	 (rep (cdr (assq num
-			 (cdr (assq 'replace navi2ch-article-message-filter-cache)))))
-	 (msg "No replacement cached"))
-    (when (catch 'loop
-	    (dolist (slot rep)
-	      (when (cdr slot)
-		(throw 'loop t))))
+  (let ((unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
+	(rep (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+	(num (navi2ch-article-get-current-number))
+	(msg "No replacement cached"))
+    (when (cdr (assq num rep))
       (if (memq num unfilter)
 	  (setq unfilter (delq num unfilter)
 		msg "Replace message")
@@ -3252,15 +3196,20 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 	  (navi2ch-article-reinsert-partial-messages num num)))
       (when (and prefix
 		 (memq num unfilter))
-	(navi2ch-put-alist num
-			   nil
-			   (cdr (assq 'replace navi2ch-article-message-filter-cache)))
 	(setq navi2ch-article-message-filter-cache
-	      (navi2ch-put-alist
-	       'cache
-	       (delq num
-		     (cdr (assq 'cache navi2ch-article-message-filter-cache)))
-	       navi2ch-article-message-filter-cache))))
+	      (navi2ch-put-alist 'replace
+				 (delq (assq num rep) rep)
+				 navi2ch-article-message-filter-cache))
+	(let ((orig (cdr (assq 'original navi2ch-article-message-filter-cache)))
+	      (cache (cdr (assq 'cache navi2ch-article-message-filter-cache))))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist 'original
+				   (delq (assq num orig) orig)
+				   navi2ch-article-message-filter-cache))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist 'cache
+				   (delq (assq num cache) cache)
+				   navi2ch-article-message-filter-cache)))))
     (message msg)))
 
 (defun navi2ch-article-toggle-message-filter (&optional prefix)
@@ -3278,24 +3227,27 @@ PREFIX が与えられた場合は、
 		(navi2ch-article-load-message-filter-cache))))
     (when navi2ch-article-message-filter-cache
       ;; フィルタ前のレスの状態をキャッシュから復元
-      (dolist (reps-slot (cdr (assq 'replace navi2ch-article-message-filter-cache)))
-	(let ((alist (navi2ch-article-get-message (car reps-slot))))
-	  (dolist (rep-slot (cdr reps-slot))
-	    (let ((org (cddr rep-slot)))
-	      (when org
-		(navi2ch-put-alist (car rep-slot) (car org) alist))))))
+      (when navi2ch-article-message-filter-mode
+	(dolist (slots (cdr (assq 'original
+				  navi2ch-article-message-filter-cache)))
+	  (let ((alist (navi2ch-article-get-message (car slots))))
+	    (dolist (slot (cdr slots))
+	      (when (cdr slot)
+		(navi2ch-put-alist (car slot) (cdr slot) alist))))))
       (setq navi2ch-article-current-article
-	    (navi2ch-put-alist 'hide
-			       (navi2ch-set-difference
-				(cdr (assq 'hide navi2ch-article-current-article))
-				(cdr (assq 'hide navi2ch-article-message-filter-cache)))
-			       navi2ch-article-current-article))
+	    (navi2ch-put-alist
+	     'hide
+	     (navi2ch-set-difference
+	      (cdr (assq 'hide navi2ch-article-current-article))
+	      (cdr (assq 'hide navi2ch-article-message-filter-cache)))
+	     navi2ch-article-current-article))
       (setq navi2ch-article-current-article
-	    (navi2ch-put-alist 'important
-			       (navi2ch-set-difference
-				(cdr (assq 'important navi2ch-article-current-article))
-				(cdr (assq 'important navi2ch-article-message-filter-cache)))
-			       navi2ch-article-current-article))
+	    (navi2ch-put-alist
+	     'important
+	     (navi2ch-set-difference
+	      (cdr (assq 'important navi2ch-article-current-article))
+	      (cdr (assq 'important navi2ch-article-message-filter-cache)))
+	     navi2ch-article-current-article))
       ;; キャッシュをクリア
       (setq navi2ch-article-message-filter-cache nil))
     (setq navi2ch-article-message-filter-mode t))
@@ -3383,32 +3335,79 @@ PREFIX が与えられた場合は、
     (set variable (cons (cons match result)
 			(delq current (symbol-value variable))))
     (navi2ch-auto-modify-variables (list variable))
-    (when (y-or-n-p "Apply new rules to current messages now? ")
-      (navi2ch-article-toggle-message-filter t))))
+    (if (y-or-n-p "Apply new rules to current messages now? ")
+	(navi2ch-article-toggle-message-filter t)
+      (message "Don't apply now"))))
 
 (defun navi2ch-article-read-message-filter-match (prompt
 						  &optional initial-input)
-  (let (char str)
-    (when (y-or-n-p "Use extensional match? ")
-      (setq char (navi2ch-read-char-with-retry
-		  "Match for: s)ubstring f)uzzy-substring e)xact-string r)egxp"
-		  nil
-		  '(?s ?f ?e ?r)))
-      (when (and (eq char ?r)
-		 initial-input)
-	(setq initial-input (regexp-quote initial-input)))
-      (unless (y-or-n-p "Ignore case? ")
-	(setq char (upcase char))))
+  (let (str list)
+    (when (y-or-n-p "Use extended matching? ")
+      (let ((char (navi2ch-read-char-with-retry
+		   "Type: s)ubstring f)uzzy e)xact r)egxp: "
+		   nil
+		   '(?s ?f ?e ?r))))
+	(when (and (eq char ?r)
+		   initial-input)
+	  (setq initial-input (regexp-quote initial-input)))
+	(unless (y-or-n-p "Ignore case? ")
+	  (setq char (upcase char)))
+	(setq list (list initial-input (intern (char-to-string char))))
+	(when (y-or-n-p "Invert match? ")
+	  (setq list (plist-put list :invert t)))))
     (setq str (navi2ch-read-string prompt
 				   initial-input
 				   'navi2ch-search-history))
-    (if char
-	(list str (intern (char-to-string char)))
-      str)))
+    (if (null list)
+	str
+      (setcar list str)
+      (let ((options '("s)cope" "f)loating")))
+	(while (and options
+		    (y-or-n-p "Set other options? "))
+	  (let ((char (navi2ch-read-char-with-retry
+		       (concat "Options: "
+			       (mapconcat #'identity options " ")
+			       ": ")
+		       nil
+		       (mapcar
+			(lambda (x) (aref x (1- (string-match ")" x))))
+			options))))
+	    (cond
+	     ((eq char ?s)
+	      (let ((char (navi2ch-read-char-with-retry
+			   "Scope: b)oard-local a)rticle-local d)efault: "
+			   nil
+			   '(?b ?a ?d))))
+		(when (memq char '(?b ?a))
+		  (setq list
+			(plist-put
+			 list
+			 :board-id
+			 (cdr (assq 'id navi2ch-article-current-board))))
+		  (when (eq char ?a)
+		    (setq list
+			  (plist-put
+			   list
+			   :artid
+			   (cdr (assq 'artid
+				      navi2ch-article-current-article))))))
+		(setq options (delete "s)cope" options))))
+	     ((eq char ?f)
+	      (let ((char (navi2ch-read-char-with-retry
+			   "Floating: n)ever a)lways d)efault: "
+			   nil
+			   '(?n ?a ?d))))
+		(cond
+		 ((eq char ?n)
+		  (setq list (plist-put list :float 0)))
+		 ((eq char ?a)
+		  (setq list (plist-put list :float 1))))
+		(setq options (delete "f)loating" options))))))))
+      list)))
 
 (defun navi2ch-article-read-message-filter-result (&optional initial-input)
   (let ((char (navi2ch-read-char-with-retry
-	       "Result: r)eplace h)ide i)mportant s)core"
+	       "Result: r)eplace h)ide i)mportant s)core: "
 	       nil
 	       '(?r ?h ?i ?s))))
     (cond

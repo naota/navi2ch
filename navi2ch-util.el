@@ -187,10 +187,6 @@
    "[+/0-9A-Za-z][+/0-9A-Za-z][+/0-9A-Za-z=][+/0-9A-Za-z=] *$")
   "base64 $B%3!<%I$N$_$,4^$^$l$k9T$K%^%C%A$9$k@55,I=8=!#(B")
 
-(defvar navi2ch-coding-system
-  (or (car (memq 'cp932 (coding-system-list)))
-      'shift_jis))
-
 (defvar navi2ch-offline nil "$B%*%U%i%$%s%b!<%I$+$I$&$+!#(B")
 (defvar navi2ch-online-indicator  "[ON] ")
 (defvar navi2ch-offline-indicator "[--] ")
@@ -273,29 +269,23 @@ See also the function `defalias'."
   (dolist (key navi2ch-delete-keys)
     (define-key map key command)))
 
-;; from apel
 (defalias 'navi2ch-set-buffer-multibyte
-  (navi2ch-ifxemacs #'identity #'set-buffer-multibyte))
+  (if (fboundp 'set-buffer-multibyte)
+      #'set-buffer-multibyte
+    #'identity))
 
-;; from apel
-(defalias 'navi2ch-string-as-unibyte
-  (navi2ch-ifxemacs #'identity #'string-as-unibyte))
+(defalias 'navi2ch-match-string-no-properties
+  (if (fboundp 'match-string-no-properties)
+      #'match-string-no-properties
+    #'match-string))
 
-(defalias 'navi2ch-string-as-multibyte
-  (navi2ch-ifxemacs #'identity #'string-as-multibyte))
-
-(defsubst navi2ch-match-string-no-properties (num &optional string)
-  (navi2ch-ifxemacs
-      (match-string num string)
-    (match-string-no-properties num string)))
-
-(defsubst navi2ch-no-logging-message (fmt &rest args)
+(defun navi2ch-no-logging-message (fmt &rest args)
   (navi2ch-ifxemacs
       (apply #'lmessage 'no-log fmt args)
     (let ((message-log-max nil))
       (apply #'message fmt args))))
 
-(defsubst navi2ch-replace-string (regexp rep string
+(defun navi2ch-replace-string (regexp rep string
 					 &optional all fixedcase literal)
   "STRING $B$K4^$^$l$k(B REGEXP $B$r(B REP $B$GCV49$9$k!#(B
 REP $B$,4X?t$N>l9g$O!"%^%C%A$7$?J8;zNs$r0z?t$K$7$F$=$N4X?t$r8F$S=P$9!#(B
@@ -356,25 +346,20 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 	result
       (error "Wrong file name"))))
 
-;; (defun navi2ch-read-number (prompt)
-;;   "$B?t;z$r(B minibuffer $B$+$iFI$_9~$`(B"
-;;   (catch 'loop
-;;     (while t
-;;       (let (elt)
-;;         (setq elt (read-string prompt init history default))
-;;         (cond ((string= elt "")
-;;                (throw 'loop nil))
-;;               ((string-match "^[ \t]*0+[ \t]*$" elt)
-;;                (throw 'loop 0))
-;;               ((not (eq (string-to-number elt) 0))
-;;                (throw 'loop (string-to-int elt)))))
-;;       (message "Please enter a number")
-;;       (sit-for 1))))
+(eval-when-compile
+  (navi2ch-defalias-maybe 'assoc-string 'ignore))
 
-(defsubst navi2ch-replace-html-tag-to-string (str)
+(defalias 'navi2ch-assoc-ignore-case
+  (if (fboundp 'assoc-string)
+      (lambda (key alist)
+	(assoc-string key alist t))
+    #'assoc-ignore-case))
+
+(defun navi2ch-replace-html-tag-to-string (str)
   (let ((ret
 	 (or (cdr (if case-fold-search
-		      (assoc-ignore-case str navi2ch-replace-html-tag-alist)
+		      (navi2ch-assoc-ignore-case
+		       str navi2ch-replace-html-tag-alist)
 		    (assoc str navi2ch-replace-html-tag-alist)))
 	     (save-match-data
 	       (let ((alist navi2ch-replace-html-tag-regexp-alist)
@@ -391,20 +376,20 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 	(funcall ret str)
       ret)))
 
-(defsubst navi2ch-replace-html-tag (str)
+(defun navi2ch-replace-html-tag (str)
   (let ((case-fold-search t))
     (navi2ch-replace-string navi2ch-replace-html-tag-regexp
 			    'navi2ch-replace-html-tag-to-string
 			    str t nil t)))
 
-(defsubst navi2ch-replace-html-tag-with-buffer ()
+(defun navi2ch-replace-html-tag-with-buffer ()
   (goto-char (point-min))
   (let ((case-fold-search t))
     (while (re-search-forward navi2ch-replace-html-tag-regexp nil t)
       (replace-match (navi2ch-replace-html-tag-to-string (match-string 0))
 		     nil t))))
 
-(defsubst navi2ch-replace-html-tag-with-temp-buffer (str)
+(defun navi2ch-replace-html-tag-with-temp-buffer (str)
   (with-temp-buffer
     (insert str)
     (navi2ch-replace-html-tag-with-buffer)
@@ -424,7 +409,7 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
   (save-match-data
     (if (and navi2ch-decode-character-references
 	     (string-match "&#\\([^;]+\\)" ref))
-	(or (navi2ch-ucs-to-str (string-to-int (match-string 1 ref))) "$B".(B")
+	(or (navi2ch-ucs-to-str (string-to-number (match-string 1 ref))) "$B".(B")
       ref)))
 
 ;; shut up byte-compile warnings
@@ -500,23 +485,17 @@ PROMPT) $B$rI=<($7$F:FEY(B `read-char' $B$r8F$V!#(B"
 	  ((memq c '(?n ?N ?\177))
 	   nil))))
 
-(defsubst navi2ch-boundp (symbol)
-  "SYMBOL $B$,%P%$%s%I$5$l$F$$$J$$;~$O(B nil $B$rJV$9!#(B
-boundp $B$H0c$$!"(BSYMBOL $B$,%P%$%s%I$5$l$F$$$k;~$O(B t $B$G$O$J$/%7%s%\%k$rJV$9!#(B"
-  (and (boundp symbol) symbol))
-
-(defsubst navi2ch-fboundp (symbol)
-  "SYMBOL $B$,%P%$%s%I$5$l$F$$$J$$;~$O(B nil $B$rJV$9!#(B
-fboundp $B$H0c$$!"(BSYMBOL $B$,%P%$%s%I$5$l$F$$$k;~$O(B t $B$G$O$J$/%7%s%\%k$rJV$9!#(B"
-  (and (fboundp symbol) symbol))
+(eval-when-compile
+  (defvar browse-url-new-window-flag)
+  (defvar browse-url-new-window-p))
 
 (defun navi2ch-browse-url-internal (url &rest args)
   (let ((browse-url-browser-function (or navi2ch-browse-url-browser-function
 					 browse-url-browser-function))
-	(new-window-flag (symbol-value (or (navi2ch-boundp
-					    'browse-url-new-window-flag)
-					   (navi2ch-boundp
-					    'browse-url-new-window-p)))))
+	(new-window-flag (cond ((boundp 'browse-url-new-window-flag)
+				browse-url-new-window-flag)
+			       ((boundp 'browse-url-new-window-p)
+				browse-url-new-window-p))))
     (if (eq browse-url-browser-function 'navi2ch-browse-url)
 	(error "Set navi2ch-browse-url-browser-function correctly"))
     (cond ((and navi2ch-browse-url-image-program ; images
@@ -543,7 +522,7 @@ don't offer a form of remote control."
          (append navi2ch-browse-url-image-args (list url))))
 
 ;; from apel
-(defsubst navi2ch-put-alist (item value alist)
+(defun navi2ch-put-alist (item value alist)
   "Modify ALIST to set VALUE to ITEM.
 If there is a pair whose car is ITEM, replace its cdr by VALUE.
 If there is not such pair, create new pair (ITEM . VALUE) and
@@ -572,17 +551,6 @@ return new alist whose car is the new pair and cdr is ALIST.
     (when point
       (1- point))))
 
-;; (defun navi2ch-change-text-property (point prop value)
-;;   (unless (get-text-property point prop)
-;;     (error "POINT (%d) does not have property %s" point prop))
-;;   (let ((start (if (or (= (point-min) point)
-;; 		       (not (eq (get-text-property (1- point) prop)
-;; 				(get-text-property point prop))))
-;; 		   point
-;; 		 (or (previous-single-property-change point prop) point)))
-;; 	(end (or (next-single-property-change point prop) point)))
-;;     (put-text-property start end prop value)))
-
 (defun navi2ch-set-minor-mode (mode name map)
   (make-variable-buffer-local mode)
   (unless (assq mode minor-mode-alist)
@@ -608,14 +576,6 @@ return new alist whose car is the new pair and cdr is ALIST.
 (defun navi2ch-write-region (begin end filename)
   (write-region begin end filename nil 'no-msg))
 
-(defun navi2ch-enable-readcgi-p (host)
-  "HOST $B$,(B read.cgi $B$r;H$&%[%9%H$+$I$&$+$rJV$9!#(B"
-  (if navi2ch-enable-readcgi
-      (not (member host
-		   navi2ch-disable-readcgi-host-list))
-    (member host
-	    navi2ch-enable-readcgi-host-list)))
-
 (defun navi2ch-get-major-mode (buffer)
   (when (get-buffer buffer)
     (save-excursion
@@ -632,10 +592,10 @@ return new alist whose car is the new pair and cdr is ALIST.
 		'navi2ch-mode-line-identification)))
   (force-mode-line-update t))
 
-(defun navi2ch-end-of-buffer (&optional arg)
+(defun navi2ch-end-of-buffer ()
   "$B%P%C%U%!$N:G=*9T$K0\F0!#(B"
-  (interactive "P")
-  (end-of-buffer arg)
+  (interactive)
+  (call-interactively 'end-of-buffer)
   (when (eobp) (forward-line -1)))
 
 (defun navi2ch-uudecode-region (start end &optional filename)
@@ -918,28 +878,28 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
   (rename-file (navi2ch-chop-/ file)
 	       (navi2ch-chop-/ newname) ok-if-already-exists))
 
-(defsubst navi2ch-propertize (string &rest properties)
-  "Return a copy of STRING with text properties added.
+(defalias 'navi2ch-propertize
+  (if (fboundp 'propertize)
+      #'propertize
+    (lambda (string &rest properties)
+      "Return a copy of STRING with text properties added.
 First argument is the string to copy.
 Remaining arguments form a sequence of PROPERTY VALUE pairs for text
 properties to add to the result"
-  ;; $B%I%-%e%a%s%H$O(B Emacs 21 $B$+$i%3%T%Z(B
-  (prog1
-      (setq string (copy-sequence string))
-    (add-text-properties 0 (length string) properties string)))
+      ;; $B%I%-%e%a%s%H$O(B Emacs 21 $B$+$i%3%T%Z(B
+      (prog1
+	  (setq string (copy-sequence string))
+	(add-text-properties 0 (length string) properties string)))))
 
-(defun navi2ch-set-keymap-default-binding (map command)
-  "$B%-!<%^%C%W$N%G%U%)%k%H%P%$%s%I$r@_Dj$9$k!#(B"
-  (funcall (or (navi2ch-fboundp 'set-keymap-default-binding)
-	       (lambda (map command)
-		 (define-key map [t] command)))
-	   map command))
+(defalias 'navi2ch-set-keymap-default-binding
+  (if (fboundp 'set-keymap-default-binding)
+      #'set-keymap-default-binding
+    (lambda (map command)
+      "$B%-!<%^%C%W$N%G%U%)%k%H%P%$%s%I$r@_Dj$9$k!#(B"
+      (define-key map [t] command))))
 
-(defun navi2ch-char-valid-p (obj)
-  "$B%*%V%8%'%/%H$,%-%c%i%/%?$+$I$&$+D4$Y$k!#(B"
-  (navi2ch-ifxemacs
-      (characterp obj)
-    (char-valid-p obj)))
+(defalias 'navi2ch-char-valid-p
+  (if (fboundp 'characterp) #'characterp #'char-valid-p))
 
 ;;; $B%m%C%/(B
 ;; $B:G$bHFMQE*$J(B mkdir $B%m%C%/$r<BAu$7$F$_$?!#(B
@@ -953,8 +913,9 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
   (setq lockname (navi2ch-chop-/ (expand-file-name (or lockname "lockdir")
 						   directory))
 	directory (file-name-directory lockname))
-  (let ((make-directory-function (or (navi2ch-fboundp 'make-directory-internal)
-				     'make-directory)))
+  (let ((make-directory-function (if (fboundp 'make-directory-internal)
+				     #'make-directory-internal
+				   #'make-directory)))
     (if (not (file-exists-p lockname))	; lockdir $B$,$9$G$K$"$k$H<:GT(B
 	(condition-case error
 	    (and (progn
@@ -986,9 +947,14 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
   (not (file-exists-p lockname)))
 
 (defalias 'navi2ch-line-beginning-position
-  (navi2ch-ifxemacs 'point-at-bol 'line-beginning-position))
+  (if (fboundp 'point-at-bol)
+	#'point-at-bol
+      #'line-beginning-position))
+
 (defalias 'navi2ch-line-end-position
-  (navi2ch-ifxemacs 'point-at-eol 'line-end-position))
+  (if (fboundp 'point-at-eol)
+      #'point-at-eol
+    #'line-end-position))
 
 (defun navi2ch-count-lines-file (file)
   "$B$=$N%U%!%$%k$N9T?t$r?t$($k!#(B"
@@ -996,39 +962,9 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
     (insert-file-contents file)
     (count-lines (point-min) (point-max))))
 
-(defun navi2ch-compare-number-list (list1 list2)
-  "LIST1 $B$H(B LIST2 $B$N3FMWAG$r?tCM$H$7$FHf3S$9$k!#(B
-LIST1 $B$H(B LIST2 $B$,Ey$7$$>l9g$O(B 0 $B$r!"(BLIST1 $B$NJ}$,Bg$-$$>l9g$O@5?t$r!"(B
-LIST2 $B$NJ}$,Bg$-$$>l9g$OIi?t$rJV$9!#(B"
-  (let ((r 0)
-	n1 n2)
-    (while (and (or list1 list2)
-		(= r 0))
-      (setq n1 (car-safe list1)
-	    list1 (cdr-safe list1)
-	    n2 (car-safe list2)
-	    list2 (cdr-safe list2)
-	    r (- (or n1 0) (or n2 0))))
-    r))
-
-(defun navi2ch-lists-to-list-of-list (&rest lists)
-  "LISTS $B$N3FMWAG$r$^$H$a$?MWAG$+$i$J$k%j%9%H$rJV$9!#(B
-$BNc$($P(B '(0 1 2) '(a b) $B$rEO$9$H(B ((0 a) (1 b) (2 nil)) $B$rJV$9!#(B"
-  (let (r)
-    (while (remq nil lists)
-      (push (mapcar #'car lists) r)
-      (setq lists (mapcar #'cdr lists)))
-    (nreverse r)))
-
-(defun navi2ch-add-number-lists (&rest lists)
-  "LISTS $BCf$N3F%j%9%H$N3FMWAG$r?tCM$H$7$F2C;;$9$k!#(B"
-  (mapcar (lambda (l)
-	    (apply #'+ (mapcar (lambda (x) (or x 0)) l)))
-	  (apply #'navi2ch-lists-to-list-of-list lists)))
-
 (defun navi2ch-compare-times (t1 t2)
   "T1 $B$,(B T2 $B$h$j?7$7$1$l$P(B non-nil $B$rJV$9!#(B"
-  (> (navi2ch-compare-number-list t1 t2) 0))
+  (> (navi2ch-float-time t1) (navi2ch-float-time t2)))
 
 (defun navi2ch-add-days-to-time (time days)
   "TIME $B$N(B DAYS $BF|8e(B ($BIi$N>l9g$OA0(B) $B$N(B TIME $B$rJV$9!#(B"
@@ -1073,6 +1009,133 @@ This function is a cutdown version of cl-seq's one."
 	     (and (< (match-end 0) (length original))
 		  (- (match-end 0) (length original)))))
 
+(defun navi2ch-fuzzy-regexp (string &optional kana-fold-search regexp)
+  "STRING $B$KBP$7!"A43Q$HH>3Q$r6hJL$;$:%^%C%A$9$k$h$&$J@55,I=8=$rJV$9!#(B
+$B$=$N:](B `case-fold-search' $B$,(B non-nil $B$J$i!"A43Q1Q;z$bBgJ8;z$H>.J8;z$N(B
+$BN>J}$r4^$`$b$N$r@8@.$9$k!#(B
+
+KANA-FOLD-SEARCH $B$K(B non-nil $B$r;XDj$9$k$H!"$R$i$,$J$H%+%?%+%J$b6hJL$7$J(B
+$B$$@55,I=8=$rJV$9!#(B
+
+REGEXP $B$r;XDj$9$k$H!"@55,I=8=$N@8@.$K@hN)$A(B REGEXP $B$K%^%C%A$7$?J8;zNs(B
+$B$r(B REGEXP $B$KCV$-49$($k!#(B
+$B$=$l$K$h$j!"Nc$($P(B REGEXP $B$K(B \"[$B!!(B \\f\\t\\n\\r\\v]+\" $B$rM?$($k$H6uGr$d2~9T$N(B
+$BB?>/$rL5;k$7$F%^%C%A$9$k$h$&$J@55,I=8=$r@8@.$9$k!#(B"
+  (let ((default-case-fold-search case-fold-search))
+    (save-excursion
+      (set-buffer (get-buffer-create " *Navi2ch fuzzy work*"))
+      (erase-buffer)
+      (insert string)
+      (goto-char (point-min))
+      (let ((last (point)))
+	(while (progn
+		 (while (and regexp
+			     (not (eobp))
+			     (looking-at regexp)
+			     (< last (match-end 0)))
+		   (insert "\\(?:" regexp "\\)")
+		   (delete-char (- (match-end 0) (match-beginning 0)))
+		   (setq last (point)))
+		 (not (eobp)))
+	  (let ((char (following-char))
+		prop next slot)
+	    (cond
+	     ((and (setq prop (get-char-code-property char 'kana-composition))
+		   (setq next (or (char-after (1+ (point))) 0))
+		   (setq slot (assq next prop)))
+	      (cond
+	       ((eq (char-charset char) 'katakana-jisx0201)
+		;; (char = $BH>3Q%+%J(B) + (next = $BH>3QByE@Ey(B)
+		;; (cdr slot) = $BA43Q%+%J(B
+		(let (hira)
+		  (if (and kana-fold-search
+			   (setq hira
+				 (get-char-code-property (cdr slot) 'hiragana)))
+		      (if (stringp hira)
+			  (insert "\\(?:" char next
+				  "\\|" (cdr slot) "\\|" hira "\\)")
+			(insert "\\(?:" char next
+				"\\|[" (cdr slot) hira "]\\)"))
+		    (insert "\\(?:" char next "\\|" (cdr slot) "\\)")))
+		(delete-char 2))
+	       (kana-fold-search
+		;; (char = $B$R$i$,$J(B) + (next = $BA43QByE@Ey(B)
+		;; (cdr slot) = $BA43Q%+%J(B
+		(insert "\\(?:" char next "\\|"
+			(get-char-code-property char 'jisx0201)
+			(get-char-code-property next 'jisx0201)
+			"\\|" (cdr slot) "\\)")
+		(delete-char 2))
+	       (t
+		(forward-char))))
+	     ((or (setq prop (get-char-code-property char 'jisx0201))
+		  (eq (char-charset char) 'katakana-jisx0201))
+	      (let (kata)
+		(cond
+		 ((null prop)
+		  ;; char = $BH>3Q%+%J(B
+		  (setq kata (get-char-code-property char 'jisx0208))
+		  (let (hira)
+		    (if (and kana-fold-search
+			     (setq hira (get-char-code-property char
+								'hiragana)))
+			(insert ?\[ char kata hira ?\])
+		      (insert ?\[ char kata ?\])))
+		  (delete-char 1))
+		 ((null (setq kata (get-char-code-property char 'katakana)))
+		  ;; char = $BA43Q%+%J!"(Bprop = $BH>3Q%+%J(B
+		  (let (hira)
+		    (if (and kana-fold-search
+			     (setq hira (get-char-code-property char
+								'hiragana)))
+			(cond
+			 ((stringp hira)
+			  (insert "\\(?:" char "\\|" hira "\\|" prop "\\)"))
+			 ((stringp prop)
+			  (insert "\\(?:[" char hira "]\\|" prop "\\)"))
+			 (t
+			  (insert ?\[ char hira prop ?\])))
+		      (if (stringp prop)
+			  (insert "\\(?:" char "\\|" prop "\\)")
+			(insert ?\[ char prop ?\]))))
+		  (delete-char 1))
+		 (kana-fold-search
+		  ;; char = $B$R$i$,$J!"(Bprop = $BH>3Q%+%J!"(Bkata = $BA43Q%+%J(B
+		  (if (stringp prop)
+		      (insert "\\(?:[" char kata "]\\|" prop "\\)")
+		    (insert ?\[ char kata prop ?\]))
+		  (delete-char 1))
+		 (t
+		  (forward-char)))))
+	     ((and (eq (char-charset char) 'ascii)
+		   (setq prop (get-char-code-property char 'jisx0208)))
+	      ;; char = $BH>3Q1Q?t!"(Bprop = $BA43Q1Q?t(B
+	      (if (or (not case-fold-search)
+		      (eq (upcase char) (downcase char)))
+		  (if (memq char '(?- ?^))
+		      (insert ?\[ prop char ?\])
+		    (insert ?\[ char prop ?\]))
+		(insert ?\[ char
+			(get-char-code-property (upcase char) 'jisx0208)
+			(get-char-code-property (downcase char) 'jisx0208)
+			?\]))
+	      (delete-char 1))
+	     ((setq prop (get-char-code-property char 'ascii))
+	      ;; char = $BA43Q1Q?t!"(Bprop = $BH>3Q1Q?t(B
+	      (if (or (not case-fold-search)
+		      (eq (upcase prop) (downcase prop)))
+		  (if (eq prop ?\])
+		      (insert ?\[ prop char ?\])
+		    (insert ?\[ char prop ?\]))
+		(insert ?\[
+			(get-char-code-property (upcase prop) 'jisx0208)
+			(get-char-code-property (downcase prop) 'jisx0208)
+			prop ?\]))
+	      (delete-char 1))
+	     (t
+	      (forward-char))))))
+      (buffer-string))))
+
 (defun navi2ch-apply-filters (board filter-list)
   (dolist (filter filter-list)
     (if (stringp (car-safe filter))
@@ -1108,7 +1171,7 @@ This function is a cutdown version of cl-seq's one."
       sexp
     (list 'quote sexp)))
 
-(defsubst navi2ch-right-align-strings (s1 s2)
+(defun navi2ch-right-align-strings (s1 s2)
   (let* ((l (max (length s1) (length s2)))
 	 (f (format "%%%ds" l)))
     (list (format f s1) (format f s2))))
@@ -1116,10 +1179,7 @@ This function is a cutdown version of cl-seq's one."
 (defun navi2ch-right-aligned-string< (s1 s2)
   (apply #'string< (navi2ch-right-align-strings s1 s2)))
 
-(defun navi2ch-right-aligned-string= (s1 s2)
-  (apply #'string= (navi2ch-right-align-strings s1 s2)))
-
-(defsubst navi2ch-regexp-alist-to-number-alist (regexp-alist)
+(defun navi2ch-regexp-alist-to-number-alist (regexp-alist)
   (if (integerp (caar regexp-alist))
       regexp-alist
     (let ((n 1))
@@ -1130,7 +1190,7 @@ This function is a cutdown version of cl-seq's one."
 		    (setq n (+ n (regexp-opt-depth r))))))
 	      regexp-alist))))
 
-(defsubst navi2ch-match-regexp-alist-subr (match-function regexp-alist)
+(defun navi2ch-match-regexp-alist-subr (match-function regexp-alist)
   "REGEXP-ALIST $B$N3FMWAG$N(B car $B$r@55,I=8=$H$7!"(BMATCH-FUNCTION $B$r8F$S=P$9!#(B
 $B%^%C%A$7$?MWAG$rJV$9!#(B
 REGEXP-ALIST $BCf$N@55,I=8=$OO"7k$5$l$k$?$a!"@55,I=8=Cf$N(B \\$B?t;zEy$N(B
@@ -1160,36 +1220,6 @@ BOUND NOERROR COUNT $B$O(B `re-search-forward' $B$K$=$N$^$^EO$5$l$k!#(B"
       (re-search-forward (car matched-elt) bound noerror count))
     matched-elt))
 
-(defun navi2ch-string-match-regexp-alist (regexp-alist string &optional start)
-  "REGEXP-ALIST $B$N3FMWAG$N(B car $B$r@55,I=8=$H$7!"(B`string-match' $B$r8F$S=P$9!#(B
-`match-data' $B$r%^%C%A$7$?@55,I=8=$NJ*$K$7!"%^%C%A$7$?MWAG$rJV$9!#(B
-REGEXP-ALIST $B$K$D$$$F$O(B `navi2ch-match-regexp-alist-subr' $B$r;2>H!#(B
-START $B$O(B `string-match' $B$K$=$N$^$^EO$5$l$k!#(B"
-  (let ((matched-elt (navi2ch-match-regexp-alist-subr
-		      (lambda (regexp)
-			(string-match regexp string start))
-		      regexp-alist)))
-    (when matched-elt
-      (string-match (car matched-elt) string (match-beginning 0)))
-    matched-elt))
-
-(defun navi2ch-replace-regexp-alist (regexp-alist &optional fixedcase literal)
-  "REGEXP-ALIST $B$N3FMWAG$N(B car $B$r@55,I=8=$H$7!"(Bcdr $B$GCV$-49$($k!#(B
-cdr $B$,J8;zNs$N>l9g$O$=$l<+?H$H!"4X?t$N>l9g$O%^%C%A$7$?J8;zNs$r0z?t(B
-$B$H$7$F8F$S=P$7$?7k2L$HCV$-49$($k!#(B
-REGEXP-ALIST $B$K$D$$$F$O(B `navi2ch-match-regexp-alist-subr' $B$r;2>H!#(B
-FIXEDCASE$B!"(BLITERAL $B$O(B `replace-match' $B$K$=$N$^$^EO$5$l$k!#(B"
-  (let ((alist (navi2ch-regexp-alist-to-number-alist regexp-alist))
-	elt rep)
-    (while (setq elt (navi2ch-re-search-forward-regexp-alist alist nil t))
-      (setq rep (cdr elt))
-      (replace-match (cond ((stringp rep) rep)
-			   ((functionp rep) (funcall rep (match-string 0)))
-			   (t (signal 'wrong-type-argument
-				      (list 'stringp-or-functionp
-					    rep))))
-		     fixedcase literal))))
-
 ;; XEmacs $B$G$O(B `char-width' $B$r9MN8$7$F$/$l$J$$$N$G!#(B
 (defun navi2ch-truncate-string-to-width
   (str end-column &optional start-column padding)
@@ -1216,29 +1246,6 @@ FIXEDCASE$B!"(BLITERAL $B$O(B `replace-match' $B$K$=$N$^$^EO$5$l$k!#(B"
     (message "%s (%s) is disabled in Navi2ch."
 	     (key-description key)
 	     (lookup-key (current-global-map) key))))
-
-(defun navi2ch-caller-p (function-list)
-  "$B8F$S=P$785$N4X?t$,(B FUNCTION-LIST $B$K4^$^$l$F$$$l$P(B non-nil $B$rJV$9!#(B"
-  (let ((n 1)
-	frame function)
-    (while (and (not function)
-		(setq frame (backtrace-frame n)))
-      (setq n (1+ n))
-      (when (car frame)
-	(setq function (car (memq (cadr frame) function-list)))))
-    function))
-
-(defun navi2ch-compare-version-string (string1 string2)
-  "STRING1 $B$H(B STRING2 $B$r%P!<%8%g%sHV9f$H$7$FHf3S$9$k!#(B
-STRING1 $B$H(B STRING2 $B$,Ey$7$1$l$P(B 0 $B$r!"(BSTRING1 $B$NJ}$,Bg$-$$>l9g$O@5?t$r!"(B
-STRING2 $B$NJ}$,Bg$-$$>l9g$OIi?t$rJV$9!#(B
-$B0lHL$N>.?tE@?t$H$O;v$J$j!"(B4.10 > 4.9 $B$H$J$k!#(B"
-  (apply #'navi2ch-compare-number-list
-	 (mapcar (lambda (s)
-		   (mapcar #'string-to-number
-			   (when (string-match "[0-9]+\\(\\.[0-9]+\\)+" s)
-			     (split-string (match-string 0 s) "\\."))))
-		 (list string1 string2))))
 
 (defun navi2ch-verify-signature-file (signature-file file)
   "FILE $B$r(B SIGNATURE-FILE $B$G8!>Z$9$k!#(B
@@ -1282,6 +1289,19 @@ STRING2 $B$NJ}$,Bg$-$$>l9g$OIi?t$rJV$9!#(B
 
 (defun navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
+
+(defun navi2ch-float-time (&optional specified-time)
+  "Return the current time, as a float number of seconds since the epoch.
+If an argument is given, it specifies a time to convert to float
+instead of the current time."
+  (apply (lambda (high low &optional usec)
+	   (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
+	 (or specified-time (current-time))))
+
+(defalias 'navi2ch-make-local-hook
+  (if (>= emacs-major-version 22)
+      #'ignore
+    #'make-local-hook))
 
 (run-hooks 'navi2ch-util-load-hook)
 ;;; navi2ch-util.el ends here
