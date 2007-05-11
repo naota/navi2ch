@@ -3,7 +3,8 @@ EXTRA_DIST = Makefile.pmake batch-texi2info.el
 CLEANFILES = navi2ch.pdf navi2ch.html
 
 .texi.info:
-	rm -f $(@)*
+	cd $(srcdir) && \
+	rm -f ${@}* && \
 	$(EMACS) -q -batch -l $(srcdir)/batch-texi2info.el \
 		-f batch-texi2info $<
 

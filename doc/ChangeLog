@@ -1,33 +1,7 @@
-2007-01-13  extra  <ekisutora@users.sourceforge.net>
-
-	* navi2ch.texi (Article Message Filter): 
-	フィルタ機能の拡張にともなう変更の反映
-
-2006-11-12  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.texi (Compile): --with-emacs --with-xemacs を削除
-	EMACS EMACSLOADPATH 環境変数を追加
-	上記変更を実行例に反映
-
 2006-11-07  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch.texi (Getting Develop Version): CVS ホストを
 	navi2ch.cvs.sourceforge.net に
-
-2006-10-29  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* Makefile.am (.texi.info): 作成前に *.info* を削除
-
-	* navi2ch.texi (How to Write):
-	navi2ch-multibbs-send-message-retry-confirm-function についての記述
-	を削除
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* Makefile.am (.texi.info): source ディレクトリ以外で
-	configure した場合も info 作成できるように。
-
-	patch#1144721
 
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 

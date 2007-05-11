@@ -1,382 +1,3 @@
-2007-02-06  extra  <ekisutora@users.sourceforge.net>
-
-	* navi2ch-article.el (navi2ch-article-message-filter-subr): 
-	フィルタ条件が拡張形式でない場合エラーになっていたのを修正。
-
-2007-01-13  extra  <ekisutora@users.sourceforge.net>
-
-	* navi2ch-util.el (navi2ch-fuzzy-regexp): Bug fix.
-
-2007-01-13  extra  <ekisutora@users.sourceforge.net>
-
-	* navi2ch-vars.el (navi2ch-article-message-filter-by-name-alist) 
-	(navi2ch-article-message-filter-by-message-alist) 
-	(navi2ch-article-message-filter-by-id-alist) 
-	(navi2ch-article-message-filter-by-mail-alist) 
-	(navi2ch-article-message-filter-by-subject-alist): 
-	フィルタ条件の拡張。
-
-	* navi2ch-util.el (navi2ch-fuzzy-regexp): 新関数。
-
-	* navi2ch-localfile.el (navi2ch-localfile-update-file): 
-	ファイルの新規作成ができなくなっていたのに対処。
-
-	* navi2ch-article.el
-	(navi2ch-article-save-message-filter-cache-keys): aborn 廃止。
-	(navi2ch-article-insert-messages): 
-	フィルタ処理の部分を navi2ch-article-apply-message-filters() に移
-	し、結果だけ受けとるように。
-	Article / Hide / Important / Message Filter モード切り替えで再描画
-	を繰り返すと navi2ch-article-header-format-function() によって 
-	alist の中身に何重にも text-property が付くことがあったので、いっ
-	たん text-property を nil にするように。
-	(navi2ch-article-apply-message-filters): フィルタ処理の部分を 
-	navi2ch-article-insert-messages() から移し、結果だけ返すように。
-	(navi2ch-article-message-filter-by-subject): 
-	subject 欄の特別扱いをやめる。
-	(navi2ch-article-message-filter-subr): フィルタ条件の拡張に対応。
-	(navi2ch-article-check-message-suppression): フィルタ処理の部分を 
-	navi2ch-article-apply-message-filters() に移動・集約。
-	(navi2ch-article-delete-message): 微修正。
-	(navi2ch-article-save-message-filter-cache): 
-	replace 情報の持ち方を変えたので、セーブ時の形式変換をやめる。
-	(navi2ch-article-load-message-filter-cache): 
-	同上により、ロード時の変換をやめる。
-	(navi2ch-article-toggle-replace-message): 
-	同上により、replace 情報の扱いの変更。
-	(navi2ch-article-toggle-message-filter): 同上。
-	(navi2ch-article-add-message-filter-rule-subr): 
-	フィルタをすぐ適用しない場合のメッセージを表示するように。
-	(navi2ch-article-read-message-filter-match): 
-	フィルタ条件の拡張に対応。
-	(navi2ch-article-read-message-filter-result): 微修正。
-
-2006-11-12  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* acinclude.m4 (AM_PATH_LISPDIR): 削除
-
-	* configure.in: lispdir の扱いを automake にまかせる
-	すでに不要だったので cygwin の特別扱いをやめる
-	使っていないプログラムの検出をやめる
-
-2006-11-06  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-vars.el (navi2ch-icon-directory): ここで cl マクロを
-	使っちゃダメだった
-	(navi2ch-splash-display-logo): 当面 nil にしておく
-
-2006-11-04  Nanashi San  <nanashi@users.sourceforge.net>
-
-	splash に使っている画像は GPL 的フリーではないらしい。
-
-	* icons/Makefile.am (icon_DATA): ロゴ削除
-
-	* icons/navi2ch-logo.img (Tag): 同上
-
-	* icons/navi2ch-logo.xbm (Tag): 同上
-
-	* icons/navi2ch-logo.xpm (Tag): 同上
-
-2006-11-02  Nanashi San  <nanashi@users.sourceforge.net>
-
-	defsubst を defun に
-	以前最適化した時と比べると、filter 等の処理が増えたことで、関数呼び
-	出しのコストは相対的に低下
-	hotspot を見付けやすくするためにも一旦 inline function をやめてみる
-
-	* navi2ch-article.el (navi2ch-article-inside-range-p): defun に
-	(navi2ch-article-get-buffer-name): 同上
-	(navi2ch-article-check-cached): 同上
-	(navi2ch-article-cleanup-message): 同上
-	(navi2ch-article-parse-message): 同上
-	(navi2ch-article-get-first-message): 同上
-	(navi2ch-article-get-first-message-from-file): 同上
-	(navi2ch-article-set-link-property-subr): 同上
-	(navi2ch-article-set-link-property): 同上
-	(navi2ch-article-put-cite-face): 同上
-	(navi2ch-article-arrange-message): 同上
-	(navi2ch-article-insert-message): 同上
-
-	* navi2ch-board.el (navi2ch-board-from-file-p): 同上
-	(navi2ch-board-get-matched-article): 同上
-	(navi2ch-board-updated-article-p): 同上
-	(navi2ch-board-expire-date-p): 同上
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-get-func-from-board): 同上
-
-	* navi2ch-util.el (navi2ch-no-logging-message): 同上
-	(navi2ch-replace-string): 同上
-	(navi2ch-replace-html-tag-to-string): 同上
-	(navi2ch-replace-html-tag): 同上
-	(navi2ch-replace-html-tag-with-buffer): 同上
-	(navi2ch-replace-html-tag-with-temp-buffer): 同上
-	(navi2ch-put-alist): 同上
-	(navi2ch-right-align-strings): 同上
-	(navi2ch-regexp-alist-to-number-alist): 同上
-	(navi2ch-match-regexp-alist-subr): 同上
-
-2006-11-02  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-vars.el (navi2ch-global-view-map): self-insert は不要
-
-	* navi2ch-util.el (navi2ch-set-buffer-multibyte): xemacs かどうかで
-	はなく、set-buffer-multibyte() が束縛されているかで処理を変える
-	(navi2ch-match-string-no-properties): defalias に
-
-	* navi2ch-multibbs.el (navi2ch-2ch-article-to-url): start が nil で
-	も number でもない時の処理がおかしかったのを修正
-
-	* navi2ch-board.el (navi2ch-board-insert-subjects): emacs と
-	xemacs で共通の処理に
-
-2006-11-01  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-megabbs.el (navi2ch-megabbs-with-board): id が nil の場合
-	束縛しないように
-	(navi2ch-megabbs-board-get-file-name): id を使用しないので nil に
-
-2006-11-01  Nanashi San  <nanashi@users.sourceforge.net>
-
-	read.cgi の raw モードを削除
-
-	* navi2ch-article.el (navi2ch-article-get-readcgi-raw-url): 削除
-
-	* navi2ch-board.el (navi2ch-board-enable-readcgi): 削除
-	(navi2ch-board-get-readcgi-url): 削除
-	(navi2ch-board-get-readcgi-raw-url): 削除
-
-	* navi2ch-multibbs.el (navi2ch-2ch-article-update): read.cgi 使用部
-	を削除
-	(navi2ch-2ch-article-to-url): navi2ch-board-get-readcgi-url を使用
-	しない
-	(navi2ch-2ch-board-update): read.cgi 使用部を削除
-
-	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi): 削除
-
-	* navi2ch-util.el (navi2ch-enable-readcgi-p): 削除
-
-	* navi2ch-vars.el (navi2ch-enable-readcgi): 削除
-	(navi2ch-enable-readcgi-host-list): 削除
-	(navi2ch-disable-readcgi-host-list): 削除
-
-2006-10-31  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-config.el.in: 新ファイル
-	configure の結果を保存 (今のところ icondir のみ)
-
-	* Makefile.am (AUTOMAKE_OPTIONS): 要 automake 1.8
-	(lisp_DATA): 新変数
-
-	* configure.in: navi2ch-config.el を出力
-
-	* navi2ch-vars.el (navi2ch-icon-directory): navi2ch-config があれば
-	その変数を使用
-
-2006-10-31  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-article.el (navi2ch-article-window-configuretion): 削除
-
-	* navi2ch-util.el (navi2ch-string-as-unibyte)
-	(navi2ch-string-as-multibyte): 削除
-	(navi2ch-assoc-ignore-case): lambda がバイトコンパイルされるように
-	(navi2ch-boundp, navi2ch-fboundp): 削除
-	(navi2ch-browse-url-internal): browse-url-new-window-{flag,p} の選
-	択法を変更
-	(navi2ch-propertize, navi2ch-set-keymap-default-binding)
-	(navi2ch-char-valid-p): defalias に
-	(navi2ch-lock-directory): fboundp を使用
-	(navi2ch-line-beginning-position, navi2ch-line-end-position):
-	navi2ch-ifxemacs ではなく fboundp を使用
-	(navi2ch-compare-number-list, navi2ch-lists-to-list-of-list)
-	(navi2ch-add-number-lists): 削除
-	(navi2ch-compare-times): navi2ch-float-time を使用
-	(navi2ch-right-aligned-string=, navi2ch-string-match-regexp-alist)
-	(navi2ch-replace-regexp-alist, navi2ch-caller-p)
-	(navi2ch-compare-version-string): 削除
-
-	* navi2ch-net.el (navi2ch-net-send-message-get-spid): 削除
-
-2006-10-30  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-net.el (navi2ch-net-send-request): C-g で止めた場合は
-	navi2ch-net-add-down-host を呼び出さない
-	(navi2ch-net-download-file): navi2ch-net-send-request が nil を返し
-	た場合は nil を返すように
-
-2006-10-29  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-multibbs.el
-	(navi2ch-multibbs-send-message-retry-confirm-function)
-	(navi2ch-multibbs-send-message-retry-confirm): 削除
-	(navi2ch-multibbs-send-message): 上記関数を使用しない
-	navi2ch-multibbs-send-message-retry-confirm-function を
-	使ってた人は around advice して flet してください
-
-	* navi2ch-article.el
-	(navi2ch-article-default-message-filter-by-message-alist): 削除
-	(navi2ch-article-message-filter-by-message): 上記変数を使用しない
-
-	* navi2ch-message.el (navi2ch-message-font-lock-keywords)
-	(navi2ch-message-link-face, navi2ch-message-url-face)
-	(navi2ch-message-citation-face): 新変数
-	(navi2ch-message-mode): define-drived-mode を使用
-	上記変数を font-lock-defaults に
-
-	* navi2ch-face.el (navi2ch-message-link-face)
-	(navi2ch-message-url-face ,navi2ch-message-citation-face): 新 face
-
-2006-10-27  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.el (navi2ch-save-info): 遅いようなので元に戻す
-
-2006-10-25  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-megabbs.el (navi2ch-megabbs-send-message): 不要な変数束縛
-	を削除
-
-	* navi2ch-oyster.el (navi2ch-oyster-send-message):
-	navi2ch-2ch-send-message を使用。
-
-2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-megabbs.el: 新ファイル
-
-	* Makefile.am (lisp_LISP): 上記ファイルを追加
-
-	patch#1153242
-
-	* Makefile.in, aclocal.m4, */Makefile.in:
-	再作成 (automake 1.9.6)
-
-	* config.guess, config.sub, elisp-comp, install-sh, missing
-	* mkinstalldirs, doc/texinfo.tex:
-	automake 1.9.6 付属のものに更新
-
-	* navi2ch-net.el (navi2ch-net-down-host-alist): 新変数
-	(navi2ch-net-retry-down-host): 新変数
-	(navi2ch-net-add-down-host): 新関数
-	(navi2ch-net-down-p): 新関数
-	(navi2ch-net-send-request): 上記変数・関数を使用して落ちているホス
-	トは `navi2ch-net-retry-down-host' の間スキップするように
-	patch#1432266 (アイディアのみ)
-
-	* navi2ch-net.el (navi2ch-net-cookies): 新変数
-	(navi2ch-net-store-cookie): 新関数
-	(navi2ch-net-match-cookies): 新関数
-	(navi2ch-net-cookie-file): 新変数
-	(navi2ch-net-save-cookies): 新関数
-	(navi2ch-net-load-cookies): 新関数
-	(navi2ch-net-update-cookies): 新関数
-	(navi2ch-net-expire-cookies): 新関数
-	(navi2ch-net-cookie-string): 新関数
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-send-message-retry-confirm):
-	ちゃんとしたタイミングで Set-Cookie されるようになったのでキャンセ
-	ル時の hack を削除
-	(navi2ch-2ch-send-message): 引数 post を (cons key value) な alist
-	として扱うように
-	navi2ch-net-cookie-* を使用して Cookie を扱う
-	(navi2ch-2ch-extract-post): post すべきデータとして、最後の一つだけ
-	ではなく、複数取り出すように
-
-	* navi2ch.el (navi2ch-save-info): 編集しやすいように保存
-
-2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file の
-	load の仕方を変更
-
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): prefix key ("m") に
-	nil を割り当てておく
-	(navi2ch-bm-fetch-mark-article): navi2ch-net-connect-wait でウェイ
-	トを入れるようにしたので navi2ch-bm-fetch-wait を使用しない
-
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上
-
-	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 削除
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-util.el (navi2ch-assoc-ignore-case): 新関数
-	(navi2ch-replace-html-tag-to-string):
-	assoc-ignore-case -> navi2ch-assoc-ignore-case
-	(navi2ch-numeric-reference-to-str):
-	string-to-int -> string-to-number
-	(navi2ch-end-of-buffer): call-interactively 'end-of-buffer
-	(navi2ch-make-local-hook): 新関数
-
-	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
-	make-local-hook -> navi2ch-make-local-hook
-
-	* navi2ch-net.el (navi2ch-net-get-header):
-	assoc-ignore-case -> navi2ch-assoc-ignore-case
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback):
-	gensym -> make-symbol
-
-	* navi2ch-message.el (navi2ch-message-insert-backup):
-	insert-buffer -> insert-buffer-substring
-	(navi2ch-message-send-message): 同上
-
-	* navi2ch-article.el (navi2ch-article-mode): make-local-hook
-	ではなく navi2ch-make-local-hook を使う
-
-	emacs-22 cleanup
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message-success-p):
-	patch#1229486
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-vars.el (navi2ch-message-sendlog-message-format-function):
-	グループを追加
-
-	* navi2ch-util.el (navi2ch-float-time): 新関数
-
-	* navi2ch-net.el (navi2ch-net-connect-wait-power): 新変数
-	(navi2ch-net-connect-time-list): 新変数
-	(navi2ch-net-connect-wait): 上記変数を使用して待機時間を計算
-	(navi2ch-net-send-request): 上記時間を挿入
-
-	patch#1187825,1188245
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-history.el (navi2ch-history-add): history に必要な情報の
-	みを記録
-
-	patch#1166324
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch.el (navi2ch): 同上
-	(navi2ch-save-info): 同上
-	(navi2ch-load-info): 同上
-	(navi2ch-update): 同上
-
-	* navi2ch-auto-modify.el (navi2ch-auto-modify-save): 同上
-
-	* navi2ch-vars.el (navi2ch-init-file): navi2ch-directory からの相対
-	パスに
-	(navi2ch-bm-fetched-info-file): 同上
-	(navi2ch-bookmark-file): 同上
-	(navi2ch-history-file): 同上
-	(navi2ch-update-file): 同上
-	(navi2ch-auto-modify-file): 同上
-
-	patch#1146248
-
-2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-util.el (navi2ch-coding-system): navi2ch-vars.el に移動
-
-	* navi2ch-vars.el (navi2ch-coding-system): navi2ch-util.el から移動
-	(navi2ch-board-coding-system-alist): 上記変数を使用
-
-	patch#1124650
-
 2006-09-14  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi (How to Write): FAQに書き込み時の確認を回避
@@ -411,12 +32,12 @@
         * navi2ch-machibbs.el (navi2ch-machibbs-send-message): 引数POSTを追加
 	 した。
         * navi2ch-oyster.el (navi2ch-oyster-send-message): 引数POSTを追加した。
-
+	
 2006-07-02  Masatake YAMATO  <jet@gyve.org>
 
-       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera
+       * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera 
 	 cookieに対応。
-       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera
+       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera 
 	 cookieを追加する。
        (navi2ch-2ch-send-message): hanamogera-cookieが定義されていれば、
        param-alistに追加する。
@@ -539,7 +160,7 @@
 	(navi2ch-article-file-name-to-artid): 新関数。
 
 	* navi2ch-board-misc.el
-	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article)
+	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article) 
 	(navi2ch-bm-insert-subject): defsubst -> defun.
 
 	* navi2ch.el (navi2ch-update): navi2ch-file-mtime,
@@ -729,7 +350,7 @@
 
 2005-01-22  extra  <ekisutora@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-get-number-list):
+	* navi2ch-article.el (navi2ch-article-get-number-list): 
 	数字部分が8文字以上のレスアンカーで、正しくレス番を指せないバグを修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/929
 
@@ -802,7 +423,7 @@
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-board.el (navi2ch-board-expire):
+	* navi2ch-board.el (navi2ch-board-expire): 
 	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
 	を修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/748
@@ -891,7 +512,7 @@
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): 新関
 	数。
-	(navi2ch-bookmark-mode-map): 上記関数をバインド。
+	(navi2ch-bookmark-mode-map): 上記関数をバインド。 
 
 2004-09-28  mami  <mami@users.sourceforge.net>
 

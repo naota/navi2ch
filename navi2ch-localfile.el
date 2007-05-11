@@ -396,9 +396,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	(when time (setq time (navi2ch-http-date-decode time)))
 	(setq header (list (cons "Date" mtime-string)
 			   (cons "Server" "localfile")))
-	(if (or navi2ch-net-force-update
-		(navi2ch-compare-times mtime time)
-		(not (file-exists-p file)))
+	(if (navi2ch-compare-times mtime time)
 	    (progn
 	      (copy-file source-file file t)
 	      (setq header (cons (cons "Last-Modified" mtime-string) header))

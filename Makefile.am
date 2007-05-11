@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = 1.8
+AUTOMAKE_OPTIONS = 1.5
 lisp_LISP = navi2ch-version.el \
 	navi2ch-vars.el navi2ch-face.el navi2ch-util.el \
 	navi2ch-net.el navi2ch-list.el navi2ch-article.el \
@@ -10,10 +10,9 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-splash.el navi2ch-directory.el \
 	navi2ch-be2ch.el navi2ch-multibbs.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
-	navi2ch-futaba.el navi2ch-megabbs.el \
+	navi2ch-futaba.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
 	navi2ch-auto-modify.el
-lisp_DATA = navi2ch-config.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in

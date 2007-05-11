@@ -131,54 +131,6 @@ BODY の評価中にエラーが起こると nil を返す。"
 	       (list shell-file-name shell-command-switch command)
 	     command))))
 
-;; (let ((sum 0))
-;;   (dotimes (i 400 sum)
-;;     (setq sum (+ sum (1- (floor (expt 1.00925 i)))))))
-;; => 3602
-(defvar navi2ch-net-connect-wait-power 1.00925)
-(defvar navi2ch-net-connect-time-list '())
-
-(defun navi2ch-net-connect-wait (host)
-  (let* ((host (intern host))
-	 (now (navi2ch-float-time))
-	 (limit (- now 3600.0))
-	 (list (delq nil (mapcar (lambda (x) (if (> (cdr x) limit) x))
-				 navi2ch-net-connect-time-list)))
-	 (len (length (delq nil (mapcar (lambda (x)
-					  (if (eq host (car x)) x))
-					list))))
-	 (wait (floor (- (+ (expt navi2ch-net-connect-wait-power len)
-			    (or (cdr (assq host list)) now))
-			 1
-			 now))))
-    (when (> wait 0)
-      (message "waiting for %dsec..." wait)
-      (sleep-for wait)
-      (message "waiting for %dsec...done" wait))
-    (setq navi2ch-net-connect-time-list
-	  (cons (cons host (navi2ch-float-time)) list))))
-
-(defvar navi2ch-net-down-host-alist nil)
-
-(defvar navi2ch-net-retry-down-host 300
-  "以前落ちていたホストに再接続するまでの秒数。
-nil なら常に再接続する。")
-
-(defun navi2ch-net-add-down-host (host)
-  (setq host (intern (downcase (format "%s" host))))
-  (setq navi2ch-net-down-host-alist
-	(navi2ch-put-alist host (navi2ch-float-time)
-			   navi2ch-net-down-host-alist)))
-
-(defun navi2ch-net-down-p (host)
-  (setq host (intern (downcase (format "%s" host))))
-  (let ((elt (assq host navi2ch-net-down-host-alist)))
-    (and elt
-	 (numberp navi2ch-net-retry-down-host)
-	 (> navi2ch-net-retry-down-host 0)
-	 (< (navi2ch-float-time)
-	    (+ (cdr elt) (float navi2ch-net-retry-down-host))))))
-
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
   (unless navi2ch-net-enable-http11
@@ -193,7 +145,6 @@ nil なら常に再接続する。")
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
-    (navi2ch-net-connect-wait host)
     (when navi2ch-net-http-proxy
       (setq credentials (navi2ch-net-http-proxy-basic-credentials
 			 navi2ch-net-http-proxy-userid
@@ -207,6 +158,7 @@ nil なら常に再接続する。")
 		   (memq (process-status proc) '(open run)))
 	      (progn
 		(message "Reusing connection...")
+		(process-send-string proc "") ; ping
 		(navi2ch-net-get-content proc))	; 前回のゴミを読み飛ばしておく
 	    (if (processp proc)
 		(delete-process proc))
@@ -216,49 +168,44 @@ nil なら常に再接続する。")
 		(not (processp proc))
 		(not (memq (process-status proc) '(open run))))
 	(message "Now connecting...")
-	(setq proc nil)
-	(unless (navi2ch-net-down-p host)
-	  (condition-case nil
-	      (setq proc (funcall navi2ch-open-network-stream-function
-				  navi2ch-net-connection-name buf host port))
-	    (error (navi2ch-net-add-down-host host)))))
-      (when proc
-	(save-excursion
-	  (set-buffer buf)
-	  (navi2ch-set-buffer-multibyte nil)
-	  (erase-buffer))
-	(setq navi2ch-net-last-host host)
-	(setq navi2ch-net-last-port port)
-	(message "%ssending request..." (current-message))
-	(set-process-coding-system proc 'binary 'binary)
-	(set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
-	(process-send-string
-	 proc
-	 (format (concat
-		  "%s %s %s\r\n"
-		  "MIME-Version: 1.0\r\n"
-		  "Host: %s\r\n"
-		  "%s"			;connection
-		  "%s"			;other-header
-		  "%s"			;content
-		  "\r\n")
-		 method file
-		 (if navi2ch-net-enable-http11
-		     "HTTP/1.1"
-		   "HTTP/1.0")
-		 host2ch
-		 (if navi2ch-net-enable-http11
-		     ""
-		   "Connection: close\r\n")
-		 (or (navi2ch-net-make-request-header
-		      (cons (cons "Proxy-Authorization" credentials)
-			    other-header))
-		     "")
-		 (if content
-		     (format "Content-length: %d\r\n\r\n%s"
-			     (length content) content)
-		   "")))
-	(message "%sdone" (current-message)))
+	(setq proc (funcall navi2ch-open-network-stream-function
+			    navi2ch-net-connection-name buf host port)))
+      (save-excursion
+	(set-buffer buf)
+	(navi2ch-set-buffer-multibyte nil)
+	(erase-buffer))
+      (setq navi2ch-net-last-host host)
+      (setq navi2ch-net-last-port port)
+      (message "%ssending request..." (current-message))
+      (set-process-coding-system proc 'binary 'binary)
+      (set-process-sentinel proc 'ignore) ; exited abnormary を出さなくする
+      (process-send-string
+       proc
+       (format (concat
+                "%s %s %s\r\n"
+                "MIME-Version: 1.0\r\n"
+                "Host: %s\r\n"
+                "%s"			;connection
+                "%s"                    ;other-header
+                "%s"                    ;content
+                "\r\n")
+               method file
+	       (if navi2ch-net-enable-http11
+		   "HTTP/1.1"
+		 "HTTP/1.0")
+               host2ch
+	       (if navi2ch-net-enable-http11
+		   ""
+		 "Connection: close\r\n")
+	       (or (navi2ch-net-make-request-header
+		    (cons (cons "Proxy-Authorization" credentials)
+			  other-header))
+		   "")
+	       (if content
+                   (format "Content-length: %d\r\n\r\n%s"
+                           (length content) content)
+                 "")))
+      (message "%sdone" (current-message))
       (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
 
@@ -338,7 +285,7 @@ nil なら常に再接続する。")
 	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
 	       (setq list (cons (cons (match-string 1) (match-string 2))
 				list)))
-	     (let ((date (navi2ch-assoc-ignore-case "Date" list)))
+	     (let ((date (assoc-ignore-case "Date" list)))
 	       (when (and date (stringp (cdr date)))
 		 (setq navi2ch-net-last-date (cdr date))))
 	     (setq navi2ch-net-header (nreverse list))))))))
@@ -467,57 +414,54 @@ TIME が `non-nil' ならば TIME より新しい時だけダウンロードする。
 $Bている時だけダウンロードする。
 OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 ダウンロードできればその接続を返す。"
-  (catch 'ret
-    (navi2ch-net-ignore-errors
-     (let ((time (if (or (null time) (stringp time)) time
-		   (navi2ch-http-date-encode time)))
-	   proc status)
-       (while (not status)
-	 (setq proc
-	       (navi2ch-net-send-request
-		url "GET"
-		(append
-		 (list (if navi2ch-net-force-update
-			   (cons "Pragma" "no-cache")
-			 (and time (cons "If-Modified-Since" time)))
-		       (and navi2ch-net-accept-gzip
-			    ;; regexp は変数にした方がいいのかな。いい変数名が思いつかない。
-			    (not (string-match "\\.gz$" url))
-			    (not (assoc "Range" other-header))
-			    '("Accept-Encoding" . "gzip"))
-		       (and navi2ch-net-user-agent
-			    (cons "User-Agent" navi2ch-net-user-agent)))
-		 other-header)))
-	 (unless proc
-	   (throw 'ret nil))
-	 (message "Checking file...")
-	 (setq status (navi2ch-net-get-status proc))
-	 (when (and (string= status "416")
-		    (assoc "Range" other-header))
-	   (let ((elt (assoc "Range" other-header)))
-	     (setq other-header (delq elt other-header)
-		   status nil)))
-	 (unless status
-	   (message "Retrying...")
-	   (sit-for 3)))		; リトライする前にちょっと待つ
-       (cond ((not (stringp status))
-	      (message "%serror" (current-message))
-	      (setq proc nil))
-	     ((string= status "404")
-	      (message "%snot found" (current-message))
-	      (setq proc nil))
-	     ((string= status "304")
-	      (message "%snot updated" (current-message)))
-	     ((string= status "302")
-	      (message "%smoved" (current-message)))
-	     ((string-match "\\`2[0-9][0-9]\\'" status)
-	      (message "%supdated" (current-message)))
-	     (t
-	      (message "%serror" (current-message))
-	      (setq proc nil)))
-       (if (or (not accept-status)
-	       (member status accept-status))
-	   proc)))))
+  (navi2ch-net-ignore-errors
+   (let ((time (if (or (null time) (stringp time)) time
+		 (navi2ch-http-date-encode time)))
+	 proc status)
+     (while (not status)
+       (setq proc
+	     (navi2ch-net-send-request
+	      url "GET"
+	      (append
+	       (list (if navi2ch-net-force-update
+			 (cons "Pragma" "no-cache")
+		       (and time (cons "If-Modified-Since" time)))
+		     (and navi2ch-net-accept-gzip
+			  ;; regexp は変数にした方がいいのかな。いい変数名が思いつかない。
+			  (not (string-match "\\.gz$" url))
+			  (not (assoc "Range" other-header))
+			  '("Accept-Encoding" . "gzip"))
+		     (and navi2ch-net-user-agent
+			  (cons "User-Agent" navi2ch-net-user-agent)))
+	       other-header)))
+       (message "Checking file...")
+       (setq status (navi2ch-net-get-status proc))
+       (when (and (string= status "416")
+		  (assoc "Range" other-header))
+	 (let ((elt (assoc "Range" other-header)))
+	   (setq other-header (delq elt other-header)
+		 status nil)))
+       (unless status
+	 (message "Retrying...")
+	 (sit-for 3)))			; リトライする前にちょっと待つ
+     (cond ((not (stringp status))
+	    (message "%serror" (current-message))
+	    (setq proc nil))
+	   ((string= status "404")
+	    (message "%snot found" (current-message))
+	    (setq proc nil))
+	   ((string= status "304")
+	    (message "%snot updated" (current-message)))
+	   ((string= status "302")
+	    (message "%smoved" (current-message)))
+	   ((string-match "\\`2[0-9][0-9]\\'" status)
+	    (message "%supdated" (current-message)))
+	   (t
+	    (message "%serror" (current-message))
+	    (setq proc nil)))
+     (if (or (not accept-status)
+	     (member status accept-status))
+	 proc))))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range ヘッダを使ってファイルをダウンロードする。"
@@ -698,6 +642,81 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 		 (y-or-n-p "あぼーん!!! Backup old file? ")))
     (copy-file file (read-file-name "file name: "))))
 
+(defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
+  "FILE を URL から read.cgi を使って更新する。
+TIME が non-nil ならば TIME より新しい時だけ更新する。
+DIFF が non-nil ならば差分を取得する。
+更新できれば HEADER を返す。"
+  (let ((dir (file-name-directory file))
+	proc header status)
+    (unless (file-exists-p dir)
+      (make-directory dir t))
+    (setq proc (navi2ch-net-download-file url time))
+    (setq header (and proc
+		      (navi2ch-net-get-header proc)))
+    (setq status (and proc
+		      (navi2ch-net-get-status proc)))
+    (cond ((or (not proc)
+	       (not header)
+	       (not status))
+	   (setq header (navi2ch-net-add-state 'error header)))
+	  ((string= status "304")
+	   (setq header (navi2ch-net-add-state 'not-updated header)))
+	  ((string= status "200")
+	   (let ((coding-system-for-write 'binary)
+		 (coding-system-for-read 'binary)
+		 cont)
+	     (message (if diff
+			  "%s: Getting file diff with read.cgi..."
+			"%s: Getting new file with read.cgi...")
+		      (current-message))
+	     (setq cont (navi2ch-net-get-content proc))
+	     (if (or (not cont)
+		     (string= cont ""))
+		 (progn (message "%sfailed" (current-message))
+			(signal 'navi2ch-update-failed nil))
+	       (message "%sdone" (current-message))
+	       (let (state data cont-size)
+		 (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
+		   (setq state (match-string 1 cont))
+		   (setq data (match-string 2 cont))
+		   (setq cont (replace-match "" t nil cont)))
+		 (when (and (string-match "\\(OK\\|INCR\\)" state)
+			    (string-match "\\(.+\\)/\\(.+\\)K" data))
+		   (setq cont-size (string-to-number (match-string 1 data))))
+		 (cond
+		  ((string= "+OK" state)
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (when (and (file-exists-p file) diff)
+		       (insert-file-contents file)
+		       (goto-char (point-max)))
+		     (insert (substring cont 0 cont-size))))
+		  ((string= "-INCR" state) ;; あぼーん
+		   (with-temp-file file
+		     (navi2ch-set-buffer-multibyte nil)
+		     (insert (substring cont 0 cont-size)))
+		   (setq header (navi2ch-net-add-state 'aborn header)))
+		  ((string= "-ERR" state)
+		   (let ((err-msg (decode-coding-string
+				   data navi2ch-coding-system)))
+		     (message "Error! %s" err-msg)
+		     (cond
+		      ((string-match "過去ログ倉庫で発見" err-msg)
+		       (setq header (navi2ch-net-add-state 'kako header)))
+;;; 		      ((and (string-match "html化待ち" err-msg)
+;;; 			    (string-match "/read\\.cgi/" url))
+;;; 		       (setq url (replace-match "/offlaw.cgi/" t nil url))
+;;; 		       (navi2ch-net-update-file-with-readcgi
+;;; 			url file time diff))
+		      (t
+		       (setq header
+			     (navi2ch-net-add-state 'error header)))))))))))
+	  (t
+	   ;; ここに来るはずないけど一応
+	   (setq header (navi2ch-net-add-state 'error header))))
+    header))
+
 ;; <http://www.ietf.org/rfc/rfc2396.txt>
 ;; 2.3. Unreserved Characters
 ;; unreserved  = alphanum | mark
@@ -755,132 +774,17 @@ This is taken from RFC 2396.")
 	  ((string-match "\\([^<>\n]+\\)<br>\\([^<>]+\\)<hr>"  str)
 	   (concat (match-string 1 str) (match-string 2 str))))))
 
-;; Cookie はこんな感じの alist に入れておく。
-;; ((domain1 (/path1 ("name1" "value1" ...)
-;;		     ("name2" "value2" ...) ...)
-;;	     (/path2 ...) ...)
-;;  (domain2 ...) ...)
-
-(defvar navi2ch-net-cookies nil)
-
-(defun navi2ch-net-store-cookie (cookie domain path)
-  (let ((domain (if (stringp domain) (intern (downcase domain)) domain))
-	(path (if (stringp path) (intern path) path)))
-    (let ((path-alist (assq domain navi2ch-net-cookies)))
-      (unless path-alist
-	(setq path-alist (list domain))
-	(push path-alist navi2ch-net-cookies))
-      (let ((cookie-list (assq path (cdr path-alist))))
-	(if cookie-list
-	    (let ((elt (assoc (car cookie) (cdr cookie-list))))
-	      (if elt
-		  (setcdr elt (cdr cookie))
-		(setcdr cookie-list (cons cookie (cdr cookie-list)))))
-	  (setq cookie-list (list path cookie))
-	  (setcdr path-alist (cons cookie-list (cdr path-alist))))))))
-
-(defun navi2ch-net-match-cookies (url)
-  (let* ((alist (navi2ch-net-split-url url))
-	 (host (cdr (assq 'host alist)))
-	 (file (cdr (assq 'file alist)))
-	 (domain-list (list (intern (downcase host))))
-	 path-list)
-    (when (string-match "\\..*\\..*\\'" host)
-      (push (intern (downcase (match-string 0 host))) domain-list))
-    (while (string-match "\\`\\(.*\\)/[^/]*" file)
-      (let ((f (match-string 1 file)))
-	(push (intern (if (string= f "") "/" f)) path-list)
-	(setq file f)))
-    (flet ((mcn (function list) (apply #'nconc (mapcar function list))))
-      (mcn (lambda (domain)
-	     (mcn (lambda (path)
-		    (navi2ch-net-expire-cookies
-		     (cdr (assq path
-				(cdr (assq domain
-					   navi2ch-net-cookies))))))
-		  path-list))
-	   domain-list))))
-
-(defvar navi2ch-net-cookie-file "cookie.info")
-
-(defun navi2ch-net-save-cookies ()
-  (let ((now (current-time)))
-    (flet ((strip (f l) (let ((tmp (delq nil (mapcar f (cdr l)))))
-			  (and tmp (cons (car l) tmp)))))
-      (navi2ch-save-info
-       navi2ch-net-cookie-file
-       (delq nil
-	     (mapcar (lambda (path-alist)
-		       (strip (lambda (cookie-list)
-				(strip (lambda (cookie)
-					 (and (cddr cookie)
-					      (navi2ch-compare-times
-					       (cddr cookie) now)
-					      cookie))
-				       cookie-list))
-			      path-alist))
-		     navi2ch-net-cookies))))))
-
-(defun navi2ch-net-load-cookies ()
-  (setq navi2ch-net-cookies
-	(navi2ch-load-info navi2ch-net-cookie-file)))
-
-(add-hook 'navi2ch-save-status-hook 'navi2ch-net-save-cookies)
-(add-hook 'navi2ch-load-status-hook 'navi2ch-net-load-cookies)
-
-(defun navi2ch-net-update-cookies (url proc coding-system)
-  (let* ((case-fold-search t)
-	 (alist (navi2ch-net-split-url url))
-	 (host (cdr (assq 'host alist)))
-	 (file (cdr (assq 'file alist))))
-    (dolist (pair (navi2ch-net-get-header proc) navi2ch-net-cookies)
-      (when (string= (car pair) "Set-Cookie")
+;; Set-Cookie: SPID=6w9HFhEM; expires=Tuesday, 23-Apr-2002 00:00:00 GMT; path=/
+(defun navi2ch-net-send-message-get-spid (proc)
+  (dolist (pair (navi2ch-net-get-header proc))
+    (if (string-equal "Set-Cookie" (car pair))
 	(let* ((str (cdr pair))
-	       (date (when (string-match "expires=\\([^;]+\\)" str)
-		       (navi2ch-http-date-decode (match-string 1 str))))
-	       (domain (if (string-match "domain=\\([^;]+\\)" str)
-			   (match-string 1 str)
-			 host))
-	       (path (if (string-match "path=\\([^;]+\\)" str)
-			 (match-string 1 str)
-		       (if (and (string-match "\\(.*\\)/" file)
-				(> (length (match-string 1 file)) 0))
-			   (match-string 1 file)
-			 "/"))))
-	  (when (string-match "^\\([^=]+\\)=\\([^;]*\\)" str)
-	    (let ((name (match-string 1 str))
-		  (value (match-string 2 str)))
-	      (setq value
-		    (decode-coding-string
-		     (navi2ch-replace-string "%[0-9A-Za-z][0-9A-Za-z]"
-					     (lambda (s)
-					       (string (string-to-number
-							(substring s 1) 16)))
-					     value t t t)
-		     coding-system))
-	      (navi2ch-net-store-cookie (cons name
-					      (cons value date))
-					domain path))))))))
-
-(defun navi2ch-net-expire-cookies (cookie-list)
-  "COOKIE-LIST から期限切れのクッキーを除いたリストを返す。"
-  (let ((now (current-time)))
-    (delq nil
-	  (mapcar (lambda (cookie)
-		    (when (or (null (cddr cookie))
-			      (navi2ch-compare-times (cddr cookie) now))
-		      cookie))
-		  cookie-list))))
-
-(defun navi2ch-net-cookie-string (cookies coding-system)
-  "HTTP の Cookie ヘッダとして渡す文字列を返す。"
-  (mapconcat (lambda (elt)
-	       (concat (navi2ch-net-url-hexify-string (car elt)
-						      coding-system)
-		       "="
-		       (navi2ch-net-url-hexify-string (cadr elt)
-						      coding-system)))
-	     cookies "; "))
+	       (date (when (string-match "expires=\\([^;]+\\);" str)
+		       (navi2ch-http-date-decode (match-string 1 str)))))
+	  (cond ((string-match "^SPID=\\([^;]+\\);" str)
+		 (return (cons (match-string 1 str) date)))
+		((string-match "^PON=\\([^;]+\\);" str)
+		 (return (cons (match-string 1 str) date))))))))
 
 (defun navi2ch-net-download-logo (board)
   (let ((coding-system-for-read 'binary)

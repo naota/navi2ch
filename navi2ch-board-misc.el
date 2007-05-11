@@ -65,7 +65,6 @@
     ;; mark command
     (define-key map "*" 'navi2ch-bm-mark)
     (define-key map "u" 'navi2ch-bm-unmark)
-    (define-key map "m" nil)
     (define-key map "mr" 'navi2ch-bm-mark-region)
     (define-key map "ma" 'navi2ch-bm-mark-all)
     (define-key map "mA" 'navi2ch-bm-add-global-bookmark-mark-article)
@@ -692,7 +691,11 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-fetch-mark-article (&optional force)
   (interactive "P")
   (unless navi2ch-offline
-    (navi2ch-bm-exec-subr #'navi2ch-bm-fetch-article force)))
+    (navi2ch-bm-exec-subr (lambda (force)
+			    (sit-for 0)	; force redisplay
+			    (sleep-for navi2ch-bm-fetch-wait)
+			    (navi2ch-bm-fetch-article force))
+			  force)))
 
 (defun navi2ch-bm-textize-mark-article (directory &optional file)
   (interactive "DDirectory: \nFList file: ")

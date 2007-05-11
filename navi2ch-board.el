@@ -71,6 +71,7 @@
 (defvar navi2ch-board-old-subject-alist nil)
 (defvar navi2ch-board-subject-file-name "subject.txt")
 (defvar navi2ch-board-old-subject-file-name "old-subject.txt")
+(defvar navi2ch-board-enable-readcgi nil)
 (defvar navi2ch-board-last-seen-alist nil)
 
 (defvar navi2ch-board-subback-file-name "subback.html")
@@ -155,6 +156,13 @@
     (concat (navi2ch-board-get-uri board)
 	    (or file-name navi2ch-board-subject-file-name))))
 
+(defun navi2ch-board-get-readcgi-url (board)
+  "read.cgi の板名までの url を返す。"
+  (let ((uri (navi2ch-board-get-uri board)))
+    (string-match "\\(.+\\)/\\([^/]+\\)/$" uri)
+    (format "%s/test/read.cgi/%s/"
+	    (match-string 1 uri) (match-string 2 uri))))
+
 (defcustom navi2ch-board-default-bbscgi-path "/test/bbs.cgi"
   "*bbs.cgi のデフォルトの path。"
   :type 'string
@@ -184,10 +192,10 @@
 (defun navi2ch-board-get-file-name (board &optional file-name)
   (navi2ch-multibbs-board-get-file-name board file-name))
 
-(defun navi2ch-board-from-file-p (board)
+(defsubst navi2ch-board-from-file-p (board)
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
 
-(defun navi2ch-board-get-matched-article ()
+(defsubst navi2ch-board-get-matched-article ()
   "match した結果から article を得る。"
   (let ((id (match-string 1))
 	(str (match-string 2))
@@ -259,7 +267,7 @@
 	  (navi2ch-board-get-subject-list file))
       (ignore-errors (navi2ch-board-save-old-subject-file board 'restore)))))
 
-(defun navi2ch-board-updated-article-p (article seen)
+(defsubst navi2ch-board-updated-article-p (article seen)
   (let* ((artid (cdr (assq 'artid article)))
 	 (res (cdr (assoc artid navi2ch-board-subject-alist)))
 	 old-res)
@@ -322,9 +330,16 @@
 			  (concat
 			   "/"
 			   (if last
-			       (format "%5s"
-				       (format "+%d"
-					       (- (string-to-number res) last)))
+			       (navi2ch-ifxemacs
+				   (format "%+5d"
+					   (- (string-to-number res) last))
+				 (if (>= (string-to-number res) last)
+				     (substring
+				      (format "   +%d"
+					      (- (string-to-number res) last))
+				      -5)
+				   (format "%5d"
+					   (- (string-to-number res) last))))
 			     "    -")))
 		     (and navi2ch-board-insert-subject-with-unread
 			  (concat
@@ -407,6 +422,9 @@
 	(navi2ch-put-alist artid element summary)))
     (navi2ch-article-save-article-summary
      navi2ch-board-current-board summary)))
+
+(defun navi2ch-board-get-readcgi-raw-url (board)
+  (format "%s?raw=0.0" (navi2ch-board-get-readcgi-url board)))
 
 (defun navi2ch-board-update-file (board)
   (unless navi2ch-offline
@@ -539,7 +557,7 @@
 	  (message msg))
       (message "Can't select this line!"))))
 
-(defun navi2ch-board-expire-date-p (key-time file access-time)
+(defsubst navi2ch-board-expire-date-p (key-time file access-time)
   (let ((time (ignore-errors (or access-time
 				 (navi2ch-file-mtime file)))))
     (and time key-time

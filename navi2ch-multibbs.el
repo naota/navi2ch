@@ -153,8 +153,8 @@ SPEC は (BBSTYPE [ARG]...)。
 実際には、callback を定義するのに必要な BBSTYPE な板の coding-system
 による decode, encode 処理を BODY を評価する前後に行なう、NAME という
 引数 [ARG]... を持つ関数が定義される。"
-  (let ((bbstype (make-symbol "--bbstype--"))
-	(decoding (make-symbol "--decoding--"))
+  (let ((bbstype (gensym "--bbstype--"))
+	(decoding (gensym "--decoding--"))
 	docstring)
     (when (stringp (car body))
       (setq docstring (car body))
@@ -191,7 +191,7 @@ SPEC は (BBSTYPE [ARG]...)。
 	(cons (cons bbstype variable-alist)
 	      navi2ch-multibbs-variable-alist)))
 
-(defun navi2ch-multibbs-get-func-from-board
+(defsubst navi2ch-multibbs-get-func-from-board
   (board func &optional default-func)
   (navi2ch-multibbs-get-func
    (navi2ch-multibbs-get-bbstype board)
@@ -247,6 +247,20 @@ START, END, NOFIRST で範囲を指定する"
 	(setq l (+ l 65536)
 	      h (- h 0)))
       (cons h l))))
+
+(defvar navi2ch-multibbs-send-message-retry-confirm-function #'yes-or-no-p)
+
+(defun navi2ch-multibbs-send-message-retry-confirm (board)
+  (let ((func (or (navi2ch-fboundp
+		   navi2ch-multibbs-send-message-retry-confirm-function)
+		  #'yes-or-no-p))
+	spid)
+    (unwind-protect
+	(let ((result (funcall func "Retry? ")))
+	  (when result
+	    (setq spid (navi2ch-board-load-spid board)))
+	  result)
+      (navi2ch-board-save-spid board spid))))
 
 (defun navi2ch-multibbs-send-message-error-string (board proc)
   (let* ((func (navi2ch-multibbs-get-func
@@ -306,7 +320,7 @@ START, END, NOFIRST で範囲を指定する"
 		     (replace-match "\n"))
 		   (delete-other-windows)
 		   (switch-to-buffer (current-buffer))
-		   (unless (y-or-n-p "Retry? ")
+		   (unless (navi2ch-multibbs-send-message-retry-confirm board)
 		     (return nil))))
 	       (sit-for navi2ch-message-retry-wait-time)
 	       (setq message-str "re-send message..."))
@@ -343,11 +357,19 @@ START が non-nil ならばレス番号 START からの差分を取得する。
   (let ((file (navi2ch-article-get-file-name board article))
 	(time (cdr (assq 'time article)))
 	url header kako-p)
-    (setq url (navi2ch-article-get-url board article))
-    (setq header (if start
-		     (navi2ch-net-update-file-diff url file time)
-		   (navi2ch-net-update-file url file time)))
-    (setq kako-p (navi2ch-net-get-state 'error header))
+    (if (and (navi2ch-enable-readcgi-p
+	      (navi2ch-board-get-host board)))
+	(progn
+	  (setq url (navi2ch-article-get-readcgi-raw-url board article start))
+	  (setq header (navi2ch-net-update-file-with-readcgi url file
+							     time start))
+	  ;; read.cgi を使っててエラーになるのはホントにエラーのとき
+	  (setq kako-p (navi2ch-net-get-state 'kako header)))
+      (setq url (navi2ch-article-get-url board article))
+      (setq header (if start
+		       (navi2ch-net-update-file-diff url file time)
+		     (navi2ch-net-update-file url file time)))
+      (setq kako-p (navi2ch-net-get-state 'error header)))
     (when kako-p
       (setq url (navi2ch-article-get-kako-url board article))
       (setq header (navi2ch-net-update-file url file))
@@ -414,61 +436,61 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 
 (defun navi2ch-2ch-send-message
   (from mail message subject bbs key time board article &optional post)
-  (let* ((url         (navi2ch-board-get-bbscgi-url board))
-	 (referer     (navi2ch-board-get-uri board))
-	 (param-alist (list
-		       (cons "submit" "書き込む")
-		       (cons "FROM"   (or from ""))
-		       (cons "mail"   (or mail ""))
-		       (cons "bbs"    bbs)
-		       (cons "time"   time)
-		       (cons "MESSAGE" message)
-		       (if subject
-			   (cons "subject" subject)
-			 (cons "key"    key))))
-	 (coding-system (navi2ch-board-get-coding-system board))
-	 (cookies (nconc (navi2ch-net-match-cookies url)
-			 ;; navi2ch-be2ch で navi2ch-net の cookie 関数
-			 ;; を使うようにしたほうがいいかも
-			 (when (navi2ch-be2ch-login-p)
-			   (list (list "MDMD" navi2ch-be2ch-mdmd)
-				 (list "DMDM" navi2ch-be2ch-dmdm))))))
-    (dolist (param post)
-      (unless (assoc (car param) param-alist)
-	(push param param-alist)))
+  (let ((url         (navi2ch-board-get-bbscgi-url board))
+	(referer     (navi2ch-board-get-uri board))
+	(spid        (navi2ch-board-load-spid board))
+	(param-alist (list
+		      (cons "submit" "書き込む")
+		      (cons "FROM"   (or from ""))
+		      (cons "mail"   (or mail ""))
+		      (cons "bbs"    bbs)
+		      (cons "time"   time)
+		      (cons "MESSAGE" message)
+		      (if subject
+			  (cons "subject" subject)
+			(cons "key"    key)))))
+
+    (let ((hanamogera-cookie (cdr (assq 'hanamogera-cookie post))))
+      (when hanamogera-cookie
+	(setq param-alist (cons hanamogera-cookie param-alist))))
+
     (setq navi2ch-2ch-send-message-last-board board)
+    (setq spid
+	  (when (and (consp spid)
+		     (navi2ch-compare-times (cdr spid) (current-time)))
+	    (car spid)))
     (let ((proc
 	   (navi2ch-net-send-request
 	    url "POST"
 	    (list (cons "Content-Type" "application/x-www-form-urlencoded")
-		  (cons "Cookie"
-			(navi2ch-net-cookie-string cookies coding-system))
+		  (cons "Cookie" (concat "NAME=" from "; MAIL=" mail
+					 (if spid (concat "; SPID=" spid
+							  "; PON=" spid))
+					 (if (navi2ch-be2ch-login-p)
+					     (concat "; MDMD=" navi2ch-be2ch-mdmd
+						     "; DMDM=" navi2ch-be2ch-dmdm))))
 		  (cons "Referer" referer))
 	    (navi2ch-net-get-param-string param-alist
-					  coding-system))))
-      (navi2ch-net-update-cookies url proc coding-system)
-      (navi2ch-net-save-cookies)
+					  (navi2ch-board-get-coding-system board)))))
+      (setq spid (navi2ch-net-send-message-get-spid proc))
+      (if spid (navi2ch-board-save-spid board spid))
       proc)))
 
 (defun navi2ch-2ch-article-to-url
   (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
 START, END, NOFIRST で範囲を指定する"
-  (let ((uri (navi2ch-board-get-uri board))
-	(start (if (numberp start)
-		   (number-to-string start)
-		 start))
-	(end (if (numberp end)
-		 (number-to-string end)
-	       end)))
-    (if (string-match "\\(.+\\)/\\([^/]+\\)/$" uri)
-	(format "%s/test/read.cgi/%s/%s/%s"
-		(match-string 1 uri) (match-string 2 uri)
-		(cdr (assq 'artid article))
-		(if (equal start end)
-		    (or start "")
-		  (concat start (and (or start end) "-") end
-			  (and nofirst "n")))))))
+  (let ((url (navi2ch-board-get-readcgi-url board)))
+    (setq url (concat url (cdr (assq 'artid article)) "/"))
+    (if (numberp start)
+	(setq start (number-to-string start)))
+    (if (numberp end)
+	(setq end (number-to-string end)))
+    (if (equal start end)
+	(concat url start)
+      (concat url
+	      start (and (or start end) "-") end
+	      (and nofirst "n")))))
 
 (defun navi2ch-2ch-send-message-success-p (proc)
   (navi2ch-net-send-message-success-p
@@ -485,11 +507,14 @@ START, END, NOFIRST で範囲を指定する"
 (defun navi2ch-2ch-board-update (board)
   (let ((file (navi2ch-board-get-file-name board))
 	(time (cdr (assq 'time board))))
-    (let ((url (navi2ch-board-get-url
-		board (if navi2ch-board-use-subback-html
-			  navi2ch-board-subback-file-name)))
-	  (func (navi2ch-multibbs-subject-callback board)))
-      (navi2ch-net-update-file url file time func))))
+    (if navi2ch-board-enable-readcgi
+	(navi2ch-net-update-file-with-readcgi
+	 (navi2ch-board-get-readcgi-raw-url board) file time)
+      (let ((url (navi2ch-board-get-url
+		  board (if navi2ch-board-use-subback-html
+			    navi2ch-board-subback-file-name)))
+	    (func (navi2ch-multibbs-subject-callback board)))
+	(navi2ch-net-update-file url file time func)))))
 
 (defun navi2ch-2ch-board-get-file-name (board &optional file-name)
   (let ((uri (navi2ch-board-get-uri board)))
@@ -509,21 +534,16 @@ START, END, NOFIRST で範囲を指定する"
   (with-current-buffer buffer
     (save-excursion
       (save-match-data
-	(goto-char (point-min))
-	(let ((case-fold-search t)
-	      (re "\\<%s=\\(\"\\([^\"]*\\)\"\\|[^\"> \r\n\t]*\\)")
-	      r)
-	  (while (re-search-forward "<input\\>[^>]+>" nil t)
-	    (let ((str (match-string 0)) name value)
-	      (and (string-match (format re "name") str)
-		   (setq name (or (match-string 2 str)
-				  (match-string 1 str)))
-		   (string-match (format re "value") str)
-		   (setq value (or (match-string 2 str)
-				   (match-string 1 str)))
-		   (setq name (navi2ch-replace-html-tag name)
-			 value (navi2ch-replace-html-tag value))
-		   (push (cons name value) r))))
-	  (nreverse r))))))
+	(goto-char (point-max))
+	(when (re-search-backward 
+	       "<input[ \t]+type=hidden[ \t]+name=\"\\([^\"]+\\)\"[ \t]+value=\"\\([^\"]+\\)\""
+	       nil
+	       t)
+	  ;; (('hana-mogera-cookie "hana" . "mogera"))
+	  (list 
+	   (cons 'hanamogera-cookie (cons 
+				      (match-string 1) ; hana
+				      (match-string 2) ; mogera
+				      ))))))))
 
 ;;; navi2ch-multibbs.el ends here
