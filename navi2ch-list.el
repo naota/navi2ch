@@ -68,7 +68,7 @@
   "Menu definition for navi2ch-list.")
 
 (defvar navi2ch-list-ignore-category-list
-  '("$B%A%c%C%H(B" "$B$*3($+$-(B" "$B1?1D0FFb(B" "$B%D!<%kN`(B" "$BB>$N7G<(HD(B" "$BB>$N%5%$%H(B"))
+  '("$B%A%c%C%H(B" "$B$*3($+$-(B" "$B1?1D0FFb(B" "$B%D!<%kN`(B" "$BB>$N7G<(HD(B" "$BB>$N%5%$%H(B" "$BFCJL4k2h(B"))
 (defvar navi2ch-list-buffer-name "*navi2ch list*")
 (defvar navi2ch-list-current-list nil)
 (defvar navi2ch-list-category-list nil)
@@ -79,10 +79,11 @@
 
 (defvar navi2ch-list-navi2ch-category-alist nil)
 
-(defvar navi2ch-list-state-alist
-  '((add "A" navi2ch-list-add-board-name-face)
-    (change "C" navi2ch-list-change-board-name-face)
-    (nil " " navi2ch-list-board-name-face)))
+(defvar navi2ch-list-state-table
+  (navi2ch-alist-to-hash
+   '((add "A" navi2ch-list-add-board-name-face)
+     (change "C" navi2ch-list-change-board-name-face)
+     (nil " " navi2ch-list-board-name-face))))
 
 (defconst navi2ch-list-bbstable-default-url
   "http://menu.2ch.net/bbsmenu.html")
@@ -208,8 +209,8 @@
 	(change (cdr (assq 'change navi2ch-list-current-list))))
     (dolist (board list)
       (let* ((board-id (cdr (assq 'id board)))
-	     (state (cdr (assq (cdr (assoc board-id change))
-			       navi2ch-list-state-alist))))
+	     (state (gethash (cdr (assoc board-id change))
+			     navi2ch-list-state-table)))
 	(insert (car state)
 		indent
 		(cdr (assq 'name board)))
@@ -522,8 +523,8 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
       (when updated
 	(setq navi2ch-list-current-list
 	      (navi2ch-put-alist 'time
-				 (or (cdr (assoc "Last-Modified" header))
-				     (cdr (assoc "Date" header)))
+				 (or (cdr (assq 'last-modified header))
+				     (cdr (assq 'date header)))
 				 navi2ch-list-current-list))
 	(setq navi2ch-list-current-list
 	      (navi2ch-put-alist 'bbstable bbstable
@@ -568,7 +569,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	(coding-system-for-write 'binary)
 	(case-fold-search t)
 	(beg (point))
-	id-to-url-alist
+	(id-to-url-table (make-hash-table :test 'eq))
 	ignore)
     (when (re-search-forward "<b>[^>]+</b>" nil t)
       (goto-char (match-beginning 0))
@@ -579,30 +580,31 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	      (cont (match-string 3)))
 	  (delete-region beg (point))
 	  (if (string-match "a" tag)
-	      (let (url id u)
+	      (let (url board-id id u)
 		(when (and (not ignore)
-			   (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr)
-			   (setq url (match-string 1 attr))
-			   (setq url (or (cdr (assoc
-					       url
-					       navi2ch-list-moved-board-alist))
-					 url))
-			   (setq id (navi2ch-list-board-id-from-url url))
-			   (navi2ch-list-valid-board url))
-		  (when (and (setq u (cdr (assoc id id-to-url-alist)))
-			     (not (string= u url)))
-		    ;; $BF1$8(B ID $B$G(B URL $B$,0c$&HD$,$"$k>l9g(B
-		    (let ((i 2))
-		      (while (and (setq u (cdr (assoc (format "%s:%d" id i)
-						      id-to-url-alist)))
-				  (not (string= u url)))
-			(setq i (1+ i)))
-		      (setq id (format "%s:%d" id i))))
-		  (setq id-to-url-alist
-			(navi2ch-put-alist id url id-to-url-alist))
-		  (insert cont "\n"
-			  url "\n"
-			  id "\n")))
+			   (string-match "href=\\(.+/\\([^/]+\\)/\\)" attr))
+		  (setq url (match-string 1 attr))
+		  (setq url (or (cdr (assoc
+				      url
+				      navi2ch-list-moved-board-alist))
+				url))
+		  (when (and (navi2ch-list-valid-board url)
+			     (setq board-id (navi2ch-list-board-id-from-url url)))
+		    (setq id (intern board-id))
+		    (when (and (setq u (gethash id id-to-url-table))
+			       (not (string= u url)))
+		      ;; $BF1$8(B ID $B$G(B URL $B$,0c$&HD$,$"$k>l9g(B
+		      (let ((i 2)
+			    newid)
+			(while (and (setq newid (intern (format "%s:%d" id i)))
+				    (setq u (gethash newid id-to-url-table))
+				    (not (string= u url)))
+			  (setq i (1+ i)))
+			(setq id newid)))
+		    (puthash id url id-to-url-table)
+		    (insert cont "\n"
+			    url "\n"
+			    (symbol-name id) "\n"))))
 	    (setq ignore
 		  (member (decode-coding-string
 			   cont navi2ch-coding-system)

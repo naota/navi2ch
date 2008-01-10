@@ -65,7 +65,7 @@
 (defvar navi2ch-search-board
   '((name . "検索一覧")
     (type . search)
-    (id . "search")))
+    (id . "#search")))
 
 (defvar navi2ch-search-history nil)
 
@@ -144,6 +144,7 @@
    (lambda (board file)
      (with-temp-buffer
        (navi2ch-board-insert-file-contents board file)
+       (navi2ch-apply-filters board navi2ch-article-filter-list)
        (goto-char (point-min))
        (when (re-search-forward regexp nil t)
 	 (let ((subject

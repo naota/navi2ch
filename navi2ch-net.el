@@ -46,13 +46,13 @@
 (defvar navi2ch-net-status nil)
 (defvar navi2ch-net-header nil)
 (defvar navi2ch-net-content nil)
-(defvar navi2ch-net-state-header-alist
-  '((aborn . "X-Navi2ch-Aborn")		; $B$"$\!<$s$5$l$F$k(B
-    (kako . "X-Navi2ch-Kako")		; $B2a5n%m%0$K$J$C$F$k(B
-    (not-updated . "X-Navi2ch-Not-Updated") ; $B99?7$5$l$F$$$J$$(B
-    (error . "X-Navi2ch-Error"))  ; $B%(%i!<(B($B%U%!%$%k$,<hF@$G$-$J$$$H$+(B)
-
-  "STATE $B$N%7%s%\%k$H<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B alist$B!#(B")
+(defvar navi2ch-net-state-header-table
+  (navi2ch-alist-to-hash
+   '((aborn . "X-Navi2ch-Aborn")             ; $B$"$\!<$s$5$l$F$k(B
+     (kako . "X-Navi2ch-Kako")               ; $B2a5n%m%0$K$J$C$F$k(B
+     (not-updated . "X-Navi2ch-Not-Updated") ; $B99?7$5$l$F$$$J$$(B
+     (error . "X-Navi2ch-Error")))          ; $B%(%i!<(B($B%U%!%$%k$,<hF@$G$-$J$$$H$+(B)
+  "STATE $B$N%7%s%\%k$H<B:]$K%X%C%@$K=q$+$l$kJ8;zNs$N(B hash$B!#(B")
 
 (add-hook 'navi2ch-exit-hook 'navi2ch-net-cleanup)
 
@@ -131,6 +131,54 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 	       (list shell-file-name shell-command-switch command)
 	     command))))
 
+;; (let ((sum 0))
+;;   (dotimes (i 400 sum)
+;;     (setq sum (+ sum (1- (floor (expt 1.00925 i)))))))
+;; => 3602
+(defvar navi2ch-net-connect-wait-power 1.00925)
+(defvar navi2ch-net-connect-time-list '())
+
+(defun navi2ch-net-connect-wait (host)
+  (let* ((host (intern host))
+	 (now (navi2ch-float-time))
+	 (limit (- now 3600.0))
+	 (list (delq nil (mapcar (lambda (x) (if (> (cdr x) limit) x))
+				 navi2ch-net-connect-time-list)))
+	 (len (length (delq nil (mapcar (lambda (x)
+					  (if (eq host (car x)) x))
+					list))))
+	 (wait (floor (- (+ (expt navi2ch-net-connect-wait-power len)
+			    (or (cdr (assq host list)) now))
+			 1
+			 now))))
+    (when (> wait 0)
+      (message "waiting for %dsec..." wait)
+      (sleep-for wait)
+      (message "waiting for %dsec...done" wait))
+    (setq navi2ch-net-connect-time-list
+	  (cons (cons host (navi2ch-float-time)) list))))
+
+(defvar navi2ch-net-down-host-alist nil)
+
+(defvar navi2ch-net-retry-down-host 300
+  "$B0JA0Mn$A$F$$$?%[%9%H$K:F@\B3$9$k$^$G$NIC?t!#(B
+nil $B$J$i>o$K:F@\B3$9$k!#(B")
+
+(defun navi2ch-net-add-down-host (host)
+  (setq host (intern (downcase (format "%s" host))))
+  (setq navi2ch-net-down-host-alist
+	(navi2ch-put-alist host (navi2ch-float-time)
+			   navi2ch-net-down-host-alist)))
+
+(defun navi2ch-net-down-p (host)
+  (setq host (intern (downcase (format "%s" host))))
+  (let ((elt (assq host navi2ch-net-down-host-alist)))
+    (and elt
+	 (numberp navi2ch-net-retry-down-host)
+	 (> navi2ch-net-retry-down-host 0)
+	 (< (navi2ch-float-time)
+	    (+ (cdr elt) (float navi2ch-net-retry-down-host))))))
+
 (defun navi2ch-net-send-request (url method &optional other-header content)
   (setq navi2ch-net-last-url url)
   (unless navi2ch-net-enable-http11
@@ -145,6 +193,7 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
+    (navi2ch-net-connect-wait host)
     (when navi2ch-net-http-proxy
       (setq credentials (navi2ch-net-http-proxy-basic-credentials
 			 navi2ch-net-http-proxy-userid
@@ -158,7 +207,6 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 		   (memq (process-status proc) '(open run)))
 	      (progn
 		(message "Reusing connection...")
-		(process-send-string proc "") ; ping
 		(navi2ch-net-get-content proc))	; $BA02s$N%4%_$rFI$_Ht$P$7$F$*$/(B
 	    (if (processp proc)
 		(delete-process proc))
@@ -168,44 +216,49 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 		(not (processp proc))
 		(not (memq (process-status proc) '(open run))))
 	(message "Now connecting...")
-	(setq proc (funcall navi2ch-open-network-stream-function
-			    navi2ch-net-connection-name buf host port)))
-      (save-excursion
-	(set-buffer buf)
-	(navi2ch-set-buffer-multibyte nil)
-	(erase-buffer))
-      (setq navi2ch-net-last-host host)
-      (setq navi2ch-net-last-port port)
-      (message "%ssending request..." (current-message))
-      (set-process-coding-system proc 'binary 'binary)
-      (set-process-sentinel proc 'ignore) ; exited abnormary $B$r=P$5$J$/$9$k(B
-      (process-send-string
-       proc
-       (format (concat
-                "%s %s %s\r\n"
-                "MIME-Version: 1.0\r\n"
-                "Host: %s\r\n"
-                "%s"			;connection
-                "%s"                    ;other-header
-                "%s"                    ;content
-                "\r\n")
-               method file
-	       (if navi2ch-net-enable-http11
-		   "HTTP/1.1"
-		 "HTTP/1.0")
-               host2ch
-	       (if navi2ch-net-enable-http11
-		   ""
-		 "Connection: close\r\n")
-	       (or (navi2ch-net-make-request-header
-		    (cons (cons "Proxy-Authorization" credentials)
-			  other-header))
-		   "")
-	       (if content
-                   (format "Content-length: %d\r\n\r\n%s"
-                           (length content) content)
-                 "")))
-      (message "%sdone" (current-message))
+	(setq proc nil)
+	(unless (navi2ch-net-down-p host)
+	  (condition-case nil
+	      (setq proc (funcall navi2ch-open-network-stream-function
+				  navi2ch-net-connection-name buf host port))
+	    (error (navi2ch-net-add-down-host host)))))
+      (when proc
+	(save-excursion
+	  (set-buffer buf)
+	  (navi2ch-set-buffer-multibyte nil)
+	  (erase-buffer))
+	(setq navi2ch-net-last-host host)
+	(setq navi2ch-net-last-port port)
+	(message "%ssending request..." (current-message))
+	(set-process-coding-system proc 'binary 'binary)
+	(set-process-sentinel proc 'ignore) ; exited abnormary $B$r=P$5$J$/$9$k(B
+	(process-send-string
+	 proc
+	 (format (concat
+		  "%s %s %s\r\n"
+		  "MIME-Version: 1.0\r\n"
+		  "Host: %s\r\n"
+		  "%s"			;connection
+		  "%s"			;other-header
+		  "%s"			;content
+		  "\r\n")
+		 method file
+		 (if navi2ch-net-enable-http11
+		     "HTTP/1.1"
+		   "HTTP/1.0")
+		 host2ch
+		 (if navi2ch-net-enable-http11
+		     ""
+		   "Connection: close\r\n")
+		 (or (navi2ch-net-make-request-header
+		      (cons (cons "Proxy-Authorization" credentials)
+			    other-header))
+		     "")
+		 (if content
+		     (format "Content-length: %d\r\n\r\n%s"
+			     (length content) content)
+		   "")))
+	(message "%sdone" (current-message)))
       (navi2ch-net-cleanup-vars)
       (setq navi2ch-net-process proc))))
 
@@ -283,9 +336,10 @@ BODY $B$NI>2ACf$K%(%i!<$,5/$3$k$H(B nil $B$rJV$9!#(B"
 		 list)
 	     (goto-char (point-min))
 	     (while (re-search-forward "^\\([^\r\n:]+\\): \\(.+\\)\r\n" end t)
-	       (setq list (cons (cons (match-string 1) (match-string 2))
+	       (setq list (cons (cons (intern (downcase (match-string 1)))
+				      (match-string 2))
 				list)))
-	     (let ((date (assoc-ignore-case "Date" list)))
+	     (let ((date (assq 'date list)))
 	       (when (and date (stringp (cdr date)))
 		 (setq navi2ch-net-last-date (cdr date))))
 	     (setq navi2ch-net-header (nreverse list))))))))
@@ -368,8 +422,8 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 	 (let* ((header (navi2ch-net-get-header proc))
 		(gzip (and navi2ch-net-accept-gzip
 			   (string-match "gzip"
-					 (or (cdr (assoc "Content-Encoding"
-							 header))
+					 (or (cdr (assq 'content-encoding
+							header))
 					     ""))))
 		p)
 	   (save-excursion
@@ -377,13 +431,13 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 	     (goto-char (point-min))
 	     (re-search-forward "\r\n\r?\n") ; header $B$N8e$J$N$G<h$l$F$k$O$:(B
 	     (setq p (point))
-	     (cond ((equal (cdr (assoc "Transfer-Encoding" header))
+	     (cond ((equal (cdr (assq 'transfer-encoding header))
 			   "chunked")
 		    (while (> (navi2ch-net-get-chunk proc) 0)
 		      nil))
-		   ((assoc "Content-Length" header)
-		    (let ((size (string-to-number (cdr (assoc "Content-Length"
-							      header)))))
+		   ((assq 'content-length header)
+		    (let ((size (string-to-number (cdr (assq 'content-length
+							     header)))))
 		      (while (and (memq (process-status proc) '(open run))
 				  (goto-char (+ p size))
 				  (not (= (point) (+ p size))))
@@ -392,14 +446,14 @@ chunk $B$N%5%$%:$rJV$9!#(Bpoint $B$O(B chunk $B$ND>8e$K0\F0!#(B"
 		   ((or (string= (navi2ch-net-get-protocol proc)
 				 "HTTP/1.0")
 			(not navi2ch-net-enable-http11)
-			(and (stringp (cdr (assoc "Connection" header)))
-			     (string= (cdr (assoc "Connection" header))
+			(and (stringp (cdr (assq 'connection header)))
+			     (string= (cdr (assq 'connection header))
 				      "close")))
 		    (while (memq (process-status proc) '(open run))
 		      (accept-process-output proc))
 		    (goto-char (point-max))))
-	     (when (and (stringp (cdr (assoc "Connection" header)))
-			(string= (cdr (assoc "Connection" header))
+	     (when (and (stringp (cdr (assq 'connection header)))
+			(string= (cdr (assq 'connection header))
 				 "close"))
 	       (delete-process proc))
 	     (navi2ch-net-get-content-subr gzip p (point))
@@ -414,54 +468,57 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$1%@%&%s%m!<%I$9$k!#
 $B$F$$$k;~$@$1%@%&%s%m!<%I$9$k!#(B
 OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 $B%@%&%s%m!<%I$G$-$l$P$=$N@\B3$rJV$9!#(B"
-  (navi2ch-net-ignore-errors
-   (let ((time (if (or (null time) (stringp time)) time
-		 (navi2ch-http-date-encode time)))
-	 proc status)
-     (while (not status)
-       (setq proc
-	     (navi2ch-net-send-request
-	      url "GET"
-	      (append
-	       (list (if navi2ch-net-force-update
-			 (cons "Pragma" "no-cache")
-		       (and time (cons "If-Modified-Since" time)))
-		     (and navi2ch-net-accept-gzip
-			  ;; regexp $B$OJQ?t$K$7$?J}$,$$$$$N$+$J!#$$$$JQ?tL>$,;W$$$D$+$J$$!#(B
-			  (not (string-match "\\.gz$" url))
-			  (not (assoc "Range" other-header))
-			  '("Accept-Encoding" . "gzip"))
-		     (and navi2ch-net-user-agent
-			  (cons "User-Agent" navi2ch-net-user-agent)))
-	       other-header)))
-       (message "Checking file...")
-       (setq status (navi2ch-net-get-status proc))
-       (when (and (string= status "416")
-		  (assoc "Range" other-header))
-	 (let ((elt (assoc "Range" other-header)))
-	   (setq other-header (delq elt other-header)
-		 status nil)))
-       (unless status
-	 (message "Retrying...")
-	 (sit-for 3)))			; $B%j%H%i%$$9$kA0$K$A$g$C$HBT$D(B
-     (cond ((not (stringp status))
-	    (message "%serror" (current-message))
-	    (setq proc nil))
-	   ((string= status "404")
-	    (message "%snot found" (current-message))
-	    (setq proc nil))
-	   ((string= status "304")
-	    (message "%snot updated" (current-message)))
-	   ((string= status "302")
-	    (message "%smoved" (current-message)))
-	   ((string-match "\\`2[0-9][0-9]\\'" status)
-	    (message "%supdated" (current-message)))
-	   (t
-	    (message "%serror" (current-message))
-	    (setq proc nil)))
-     (if (or (not accept-status)
-	     (member status accept-status))
-	 proc))))
+  (catch 'ret
+    (navi2ch-net-ignore-errors
+     (let ((time (if (or (null time) (stringp time)) time
+		   (navi2ch-http-date-encode time)))
+	   proc status)
+       (while (not status)
+	 (setq proc
+	       (navi2ch-net-send-request
+		url "GET"
+		(append
+		 (list (if navi2ch-net-force-update
+			   (cons "Pragma" "no-cache")
+			 (and time (cons "If-Modified-Since" time)))
+		       (and navi2ch-net-accept-gzip
+			    ;; regexp $B$OJQ?t$K$7$?J}$,$$$$$N$+$J!#$$$$JQ?tL>$,;W$$$D$+$J$$!#(B
+			    (not (string-match "\\.gz$" url))
+			    (not (assoc "Range" other-header))
+			    '("Accept-Encoding" . "gzip"))
+		       (and navi2ch-net-user-agent
+			    (cons "User-Agent" navi2ch-net-user-agent)))
+		 other-header)))
+	 (unless proc
+	   (throw 'ret nil))
+	 (message "Checking file...")
+	 (setq status (navi2ch-net-get-status proc))
+	 (when (and (string= status "416")
+		    (assoc "Range" other-header))
+	   (let ((elt (assoc "Range" other-header)))
+	     (setq other-header (delq elt other-header)
+		   status nil)))
+	 (unless status
+	   (message "Retrying...")
+	   (sit-for 3)))		; $B%j%H%i%$$9$kA0$K$A$g$C$HBT$D(B
+       (cond ((not (stringp status))
+	      (message "%serror" (current-message))
+	      (setq proc nil))
+	     ((string= status "404")
+	      (message "%snot found" (current-message))
+	      (setq proc nil))
+	     ((string= status "304")
+	      (message "%snot updated" (current-message)))
+	     ((string= status "302")
+	      (message "%smoved" (current-message)))
+	     ((string-match "\\`2[0-9][0-9]\\'" status)
+	      (message "%supdated" (current-message)))
+	     (t
+	      (message "%serror" (current-message))
+	      (setq proc nil)))
+       (if (or (not accept-status)
+	       (member status accept-status))
+	   proc)))))
 
 (defun navi2ch-net-download-file-range (url range &optional time other-header)
   "Range $B%X%C%@$r;H$C$F%U%!%$%k$r%@%&%s%m!<%I$9$k!#(B"
@@ -531,8 +588,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 	       (message "%snot updated" (current-message))))
 	    ((and location
 		  (string= status "302")
-		  (assoc "Location" header))
-	     (setq url (cdr (assoc "Location" header))
+		  (assq 'location header))
+	     (setq url (cdr (assq 'location header))
 		   redo t)
 	     (message "%s: Redirecting..." (current-message)))
 	    ((string= status "304")
@@ -545,8 +602,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
 (defun navi2ch-net-get-length-from-header (header)
   "header $B$+$i(B contents $BA4BN$ND9$5$rF@$k!#(B
 header $B$KD9$5$,4^$^$l$F$$$J$$>l9g$O(B nil $B$rJV$9!#(B"
-  (let ((range (cdr (assoc "Content-Range" header)))
-	(length (cdr (assoc "Content-Length" header))))
+  (let ((range (cdr (assq 'content-range header)))
+	(length (cdr (assq 'content-length header))))
     (cond ((and range
 		(string-match "/\\(.+\\)" range))
 	   (string-to-number (match-string 1 range)))
@@ -642,81 +699,6 @@ TIME $B$,(B `non-nil' $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 		 (y-or-n-p "$B$"$\!<$s(B!!! Backup old file? ")))
     (copy-file file (read-file-name "file name: "))))
 
-(defun navi2ch-net-update-file-with-readcgi (url file &optional time diff)
-  "FILE $B$r(B URL $B$+$i(B read.cgi $B$r;H$C$F99?7$9$k!#(B
-TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
-DIFF $B$,(B non-nil $B$J$i$P:9J,$r<hF@$9$k!#(B
-$B99?7$G$-$l$P(B HEADER $B$rJV$9!#(B"
-  (let ((dir (file-name-directory file))
-	proc header status)
-    (unless (file-exists-p dir)
-      (make-directory dir t))
-    (setq proc (navi2ch-net-download-file url time))
-    (setq header (and proc
-		      (navi2ch-net-get-header proc)))
-    (setq status (and proc
-		      (navi2ch-net-get-status proc)))
-    (cond ((or (not proc)
-	       (not header)
-	       (not status))
-	   (setq header (navi2ch-net-add-state 'error header)))
-	  ((string= status "304")
-	   (setq header (navi2ch-net-add-state 'not-updated header)))
-	  ((string= status "200")
-	   (let ((coding-system-for-write 'binary)
-		 (coding-system-for-read 'binary)
-		 cont)
-	     (message (if diff
-			  "%s: Getting file diff with read.cgi..."
-			"%s: Getting new file with read.cgi...")
-		      (current-message))
-	     (setq cont (navi2ch-net-get-content proc))
-	     (if (or (not cont)
-		     (string= cont ""))
-		 (progn (message "%sfailed" (current-message))
-			(signal 'navi2ch-update-failed nil))
-	       (message "%sdone" (current-message))
-	       (let (state data cont-size)
-		 (when (string-match "^\\([^ ]+\\) \\(.+\\)\n" cont)
-		   (setq state (match-string 1 cont))
-		   (setq data (match-string 2 cont))
-		   (setq cont (replace-match "" t nil cont)))
-		 (when (and (string-match "\\(OK\\|INCR\\)" state)
-			    (string-match "\\(.+\\)/\\(.+\\)K" data))
-		   (setq cont-size (string-to-number (match-string 1 data))))
-		 (cond
-		  ((string= "+OK" state)
-		   (with-temp-file file
-		     (navi2ch-set-buffer-multibyte nil)
-		     (when (and (file-exists-p file) diff)
-		       (insert-file-contents file)
-		       (goto-char (point-max)))
-		     (insert (substring cont 0 cont-size))))
-		  ((string= "-INCR" state) ;; $B$"$\!<$s(B
-		   (with-temp-file file
-		     (navi2ch-set-buffer-multibyte nil)
-		     (insert (substring cont 0 cont-size)))
-		   (setq header (navi2ch-net-add-state 'aborn header)))
-		  ((string= "-ERR" state)
-		   (let ((err-msg (decode-coding-string
-				   data navi2ch-coding-system)))
-		     (message "Error! %s" err-msg)
-		     (cond
-		      ((string-match "$B2a5n%m%0AR8K$GH/8+(B" err-msg)
-		       (setq header (navi2ch-net-add-state 'kako header)))
-;;; 		      ((and (string-match "html$B2=BT$A(B" err-msg)
-;;; 			    (string-match "/read\\.cgi/" url))
-;;; 		       (setq url (replace-match "/offlaw.cgi/" t nil url))
-;;; 		       (navi2ch-net-update-file-with-readcgi
-;;; 			url file time diff))
-		      (t
-		       (setq header
-			     (navi2ch-net-add-state 'error header)))))))))))
-	  (t
-	   ;; $B$3$3$KMh$k$O$:$J$$$1$I0l1~(B
-	   (setq header (navi2ch-net-add-state 'error header))))
-    header))
-
 ;; <http://www.ietf.org/rfc/rfc2396.txt>
 ;; 2.3. Unreserved Characters
 ;; unreserved  = alphanum | mark
@@ -774,17 +756,150 @@ This is taken from RFC 2396.")
 	  ((string-match "\\([^<>\n]+\\)<br>\\([^<>]+\\)<hr>"  str)
 	   (concat (match-string 1 str) (match-string 2 str))))))
 
-;; Set-Cookie: SPID=6w9HFhEM; expires=Tuesday, 23-Apr-2002 00:00:00 GMT; path=/
-(defun navi2ch-net-send-message-get-spid (proc)
-  (dolist (pair (navi2ch-net-get-header proc))
-    (if (string-equal "Set-Cookie" (car pair))
+;; Cookie $B$O$3$s$J46$8$N(B alist $B$KF~$l$F$*$/!#(B
+;; ((domain1 (/path1 ("name1" "value1" ...)
+;;		     ("name2" "value2" ...) ...)
+;;	     (/path2 ...) ...)
+;;  (domain2 ...) ...)
+
+(defvar navi2ch-net-cookies nil)
+
+(defun navi2ch-net-cookie-domains (host)
+  (let* ((host (downcase host))
+	 (domain-list (list (intern host)
+			    (intern (concat "." host)))))
+    (while (string-match "\\.\\(.*\\..*\\)\\'" host)
+      (push (intern (match-string 0 host)) domain-list)
+      (let ((h (match-string 1 host)))
+	(push (intern h) domain-list)
+	(setq host h)))
+    domain-list))
+
+(defun navi2ch-net-cookie-paths (file)
+  (let (path-list)
+    (while (string-match "\\`\\(.*\\)/" file)
+      (push (intern (match-string 0 file)) path-list)
+      (let ((f (match-string 1 file)))
+	(unless (string= f "")
+	  (push (intern f) path-list))
+	(setq file f)))
+    path-list))
+
+(defun navi2ch-net-store-cookie (cookie domain path)
+  (let ((domain (if (stringp domain) (intern (downcase domain)) domain))
+	(path (if (stringp path) (intern path) path)))
+    (let ((path-alist (assq domain navi2ch-net-cookies)))
+      (unless path-alist
+	(setq path-alist (list domain))
+	(push path-alist navi2ch-net-cookies))
+      (let ((cookie-list (assq path (cdr path-alist))))
+	(if cookie-list
+	    (let ((elt (assoc (car cookie) (cdr cookie-list))))
+	      (if elt
+		  (setcdr elt (cdr cookie))
+		(setcdr cookie-list (cons cookie (cdr cookie-list)))))
+	  (setq cookie-list (list path cookie))
+	  (setcdr path-alist (cons cookie-list (cdr path-alist))))))))
+
+(defun navi2ch-net-match-cookies (url)
+  (let* ((alist (navi2ch-net-split-url url))
+	 (domain-list (navi2ch-net-cookie-domains (cdr (assq 'host alist))))
+	 (path-list (navi2ch-net-cookie-paths (cdr (assq 'file alist)))))
+    (flet ((mcn (function list) (apply #'nconc (mapcar function list))))
+      (mcn (lambda (domain)
+	     (mcn (lambda (path)
+		    (navi2ch-net-expire-cookies
+		     (cdr (assq path
+				(cdr (assq domain
+					   navi2ch-net-cookies))))))
+		  path-list))
+	   domain-list))))
+
+(defvar navi2ch-net-cookie-file "cookie.info")
+
+(defun navi2ch-net-save-cookies ()
+  (let ((now (current-time)))
+    (flet ((strip (f l) (let ((tmp (delq nil (mapcar f (cdr l)))))
+			  (and tmp (cons (car l) tmp)))))
+      (navi2ch-save-info
+       navi2ch-net-cookie-file
+       (delq nil
+	     (mapcar (lambda (path-alist)
+		       (strip (lambda (cookie-list)
+				(strip (lambda (cookie)
+					 (and (cddr cookie)
+					      (navi2ch-compare-times
+					       (cddr cookie) now)
+					      cookie))
+				       cookie-list))
+			      path-alist))
+		     navi2ch-net-cookies))))))
+
+(defun navi2ch-net-load-cookies ()
+  (setq navi2ch-net-cookies
+	(navi2ch-load-info navi2ch-net-cookie-file)))
+
+(add-hook 'navi2ch-save-status-hook 'navi2ch-net-save-cookies)
+(add-hook 'navi2ch-load-status-hook 'navi2ch-net-load-cookies)
+
+(defun navi2ch-net-update-cookies (url proc coding-system)
+  (let* ((case-fold-search t)
+	 (alist (navi2ch-net-split-url url))
+	 (host (cdr (assq 'host alist)))
+	 (file (cdr (assq 'file alist)))
+	 (domain-list (navi2ch-net-cookie-domains host))
+	 (path-list (navi2ch-net-cookie-paths file)))
+    (dolist (pair (navi2ch-net-get-header proc) navi2ch-net-cookies)
+      (when (eq (car pair) 'set-cookie)
 	(let* ((str (cdr pair))
-	       (date (when (string-match "expires=\\([^;]+\\);" str)
-		       (navi2ch-http-date-decode (match-string 1 str)))))
-	  (cond ((string-match "^SPID=\\([^;]+\\);" str)
-		 (return (cons (match-string 1 str) date)))
-		((string-match "^PON=\\([^;]+\\);" str)
-		 (return (cons (match-string 1 str) date))))))))
+	       (date (when (string-match "expires=\\([^;]+\\)" str)
+		       (navi2ch-http-date-decode (match-string 1 str))))
+	       (domain (intern (downcase (if (string-match "domain=\\([^;]+\\)"
+							   str)
+					     (match-string 1 str)
+					   host))))
+	       (path (intern (if (string-match "path=\\([^;]+\\)" str)
+				 (match-string 1 str)
+			       (if (and (string-match "\\(.*\\)/" file)
+					(> (length (match-string 1 file)) 0))
+				   (match-string 1 file)
+				 "/")))))
+	  (when (and (memq domain domain-list)
+		     (memq path path-list)
+		     (string-match "^\\([^=]+\\)=\\([^;]*\\)" str))
+	    (let ((name (match-string 1 str))
+		  (value (match-string 2 str)))
+	      (setq value
+		    (decode-coding-string
+		     (navi2ch-replace-string "%[0-9A-Za-z][0-9A-Za-z]"
+					     (lambda (s)
+					       (string (string-to-number
+							(substring s 1) 16)))
+					     value t t t)
+		     coding-system))
+	      (navi2ch-net-store-cookie (cons name
+					      (cons value date))
+					domain path))))))))
+
+(defun navi2ch-net-expire-cookies (cookie-list)
+  "COOKIE-LIST $B$+$i4|8B@Z$l$N%/%C%-!<$r=|$$$?%j%9%H$rJV$9!#(B"
+  (let ((now (current-time)))
+    (delq nil
+	  (mapcar (lambda (cookie)
+		    (when (or (null (cddr cookie))
+			      (navi2ch-compare-times (cddr cookie) now))
+		      cookie))
+		  cookie-list))))
+
+(defun navi2ch-net-cookie-string (cookies coding-system)
+  "HTTP $B$N(B Cookie $B%X%C%@$H$7$FEO$9J8;zNs$rJV$9!#(B"
+  (mapconcat (lambda (elt)
+	       (concat (navi2ch-net-url-hexify-string (car elt)
+						      coding-system)
+		       "="
+		       (navi2ch-net-url-hexify-string (cadr elt)
+						      coding-system)))
+	     cookies "; "))
 
 (defun navi2ch-net-download-logo (board)
   (let ((coding-system-for-read 'binary)
@@ -816,14 +931,14 @@ This is taken from RFC 2396.")
 
 (defun navi2ch-net-add-state (state header)
   "HEADER $B$K(B STATE $B$rDI2C$9$k!#(B"
-  (navi2ch-put-alist (cdr (assq state navi2ch-net-state-header-alist))
+  (navi2ch-put-alist (gethash state navi2ch-net-state-header-table)
 		     "yes"
 		     header))
 
 (defun navi2ch-net-get-state (state header)
   "HEADER $B$+$i(B STATE $B$r<hF@$9$k!#(B"
-  (cdr (assoc (cdr (assq state navi2ch-net-state-header-alist))
-	      header)))
+  (cdr (assq (gethash state navi2ch-net-state-header-table)
+	     header)))
 
 (run-hooks 'navi2ch-net-load-hook)
 ;;; navi2ch-net.el ends here

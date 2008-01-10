@@ -87,6 +87,15 @@
     (bbstype . localfile)
     (uri . ,(concat "x-localbbs://" (navi2ch-expand-file-name "sendlog/")))))
 
+(defvar navi2ch-message-font-lock-keywords
+  `(("^>\\s-+.*$" . navi2ch-message-citation-face)
+    ("[>＞]+[0-9０-９]+" 0 navi2ch-message-link-face t)
+    (,navi2ch-article-url-regexp 0 navi2ch-message-url-face t)))
+
+(defvar navi2ch-message-link-face 'navi2ch-message-link-face)
+(defvar navi2ch-message-url-face 'navi2ch-message-url-face)
+(defvar navi2ch-message-citation-face 'navi2ch-message-citation-face)
+
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
 	    (if (functionp navi2ch-message-ask-before-write)
@@ -144,7 +153,7 @@
   (when (get-buffer navi2ch-message-backup-buffer-name)
     (let ((inhibit-read-only t))
       (erase-buffer))
-    (insert-buffer navi2ch-message-backup-buffer-name)))
+    (insert-buffer-substring navi2ch-message-backup-buffer-name)))
 
 (defun navi2ch-message-insert-header (new sage)
   (and sage (setq sage "sage"))
@@ -166,8 +175,8 @@
 	      navi2ch-message-mail-address "")
 	  "\n"
 	  (navi2ch-read-only-string
-	   (navi2ch-propertize navi2ch-message-header-separator
-			       'navi2ch-message-header-separator t)))
+	   (propertize navi2ch-message-header-separator
+		       'navi2ch-message-header-separator t)))
   (setq buffer-undo-list nil)
   (set-buffer-modified-p nil))
 
@@ -234,7 +243,7 @@
 	      (set-buffer (get-buffer-create
 			   navi2ch-message-backup-buffer-name))
 	      (erase-buffer)
-	      (insert-buffer buffer)))
+	      (insert-buffer-substring buffer)))
 	  (when navi2ch-message-trip
 	    (setq from (concat from "#" navi2ch-message-trip)))
 	  (let ((board navi2ch-message-current-board)
@@ -377,12 +386,9 @@
     (substitute-key-definition (car old-new-def) (cdr old-new-def)
 			       navi2ch-message-mode-map (current-global-map))))
 
-(defun navi2ch-message-mode ()
+(define-derived-mode navi2ch-message-mode text-mode
+  "Navi2ch Message"
   "\\{navi2ch-message-mode-map}"
-  (interactive)
-  (kill-all-local-variables)
-  (setq major-mode 'navi2ch-message-mode)
-  (setq mode-name "Navi2ch Message")
   (set (make-local-variable 'fill-paragraph-function)
        'navi2ch-message-fill-paragraph)
   (set (make-local-variable 'paragraph-separate)
@@ -391,11 +397,10 @@
        navi2ch-message-paragraph-start)
   (set (make-local-variable 'auto-fill-inhibit-regexp)
        "^[A-Z][^: \n\t]+:")		; ヘッダ
-  (use-local-map navi2ch-message-mode-map)
+  (set (make-local-variable 'font-lock-defaults)
+       '(navi2ch-message-font-lock-keywords t))
   (navi2ch-message-setup-menu)
-  (navi2ch-message-substitute-key-definitions)
-  (run-hooks 'navi2ch-message-mode-hook)
-  (force-mode-line-update))
+  (navi2ch-message-substitute-key-definitions))
 
 (defun navi2ch-message-self-insert-aa ()
   "最後入力したキーにしたがって AA を入力する。"

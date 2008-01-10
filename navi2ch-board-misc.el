@@ -65,6 +65,7 @@
     ;; mark command
     (define-key map "*" 'navi2ch-bm-mark)
     (define-key map "u" 'navi2ch-bm-unmark)
+    (define-key map "m" nil)
     (define-key map "mr" 'navi2ch-bm-mark-region)
     (define-key map "ma" 'navi2ch-bm-mark-all)
     (define-key map "mA" 'navi2ch-bm-add-global-bookmark-mark-article)
@@ -108,38 +109,51 @@
 (defvar navi2ch-bm-fetched-article-list nil)
 (defvar navi2ch-bm-board-type-alist nil)
 
-(defvar navi2ch-bm-state-alist
-  '((view "V"
-	  navi2ch-bm-view-face
-	  navi2ch-bm-new-view-face
-	  navi2ch-bm-updated-view-face
-	  navi2ch-bm-seen-view-face)
-    (cache "C"
-	   navi2ch-bm-cache-face
-	   navi2ch-bm-new-cache-face
-	   navi2ch-bm-updated-cache-face
-	   navi2ch-bm-seen-cache-face)
-    (update "U"
-	    navi2ch-bm-update-face
-	    navi2ch-bm-new-update-face
-	    navi2ch-bm-updated-update-face
-	    navi2ch-bm-seen-update-face)
-    (nil " "
-	 navi2ch-bm-unread-face
-	 navi2ch-bm-new-unread-face
-	 navi2ch-bm-updated-unread-face
-	 navi2ch-bm-seen-unread-face)
-    (mark " "
-	  navi2ch-bm-mark-face
-	  navi2ch-bm-new-mark-face
-	  navi2ch-bm-updated-mark-face
-	  navi2ch-bm-seen-mark-face)))
+(defvar navi2ch-bm-state-char-table
+  (navi2ch-alist-to-hash
+   '((view   . ?V)
+     (cache  . ?C)
+     (update . ?U)
+     (nil    . ? ))
+   :test 'eq))
+  
 
-(defvar navi2ch-bm-updated-mark-alist
-  '((new . "%")
-    (updated . "+")
-    (seen . "=")
-    (nil . " ")))
+(let ((state-list '(view cache update nil))
+      (update-list '(nil new updated seen)))
+  (let ((func (lambda (f)
+		(navi2ch-alist-to-hash
+		 (mapcar (lambda (state)
+			   (cons state
+				 (navi2ch-alist-to-hash
+				  (mapcar (lambda (update)
+					    (cons update
+						  (funcall f state update)))
+					  update-list)
+				  :test 'eq)))
+			 state-list)
+		 :test 'eq))))
+  (defconst navi2ch-bm-state-face-table
+    (funcall func
+	     (lambda (state update)
+	       (intern (format "navi2ch-bm%s-%s-face"
+			       (if update
+				   (format "-%s" update)
+				 "")
+			       (or state 'unread))))))
+  (defconst navi2ch-bm-state-mark-face-table
+    (funcall func
+	     (lambda (state update)
+	       (intern (format "navi2ch-bm%s-mark-face"
+			       (if update
+				   (format "-%s" update)
+				 ""))))))))
+
+(defconst navi2ch-bm-updated-mark-table
+  (navi2ch-alist-to-hash '((new     . ?%)
+			   (updated . ?+)
+			   (seen    . ?=)
+			   (nil     . ? ))
+			 :test 'eq))
 
 (defvar navi2ch-bm-move-downward t)
 
@@ -196,17 +210,21 @@
   (run-hooks 'navi2ch-bm-select-board-hook)
   (navi2ch-set-mode-line-identification))
 
-(defun navi2ch-bm-set-property (begin end item state &optional updated)
+(defun navi2ch-bm-set-property (begin end item state &optional updated mark)
   (navi2ch-bm-set-property-internal begin end item)
-  (setq updated (or updated (get-text-property (1+ begin) 'updated)))
-  (put-text-property begin end 'updated updated)
-  (put-text-property begin end 'mouse-face navi2ch-bm-mouse-face)
-  (put-text-property begin end 'face (nth (cond ((null updated) 2)
-						((eq updated 'new) 3)
-						((eq updated 'updated) 4)
-						((eq updated 'seen) 5))
-					  (assq state
-						navi2ch-bm-state-alist))))
+  (let ((updated (or updated 
+		     (get-text-property begin 'navi2ch-bm-updated)))
+	(face-table (if mark
+			navi2ch-bm-state-mark-face-table
+		      navi2ch-bm-state-face-table)))
+    (add-text-properties begin end
+			 (list 'navi2ch-bm-updated updated
+			       'navi2ch-bm-state state
+			       'navi2ch-bm-mark mark
+			       'mouse-face navi2ch-bm-mouse-face
+			       'face
+			       (gethash updated
+					(gethash state face-table))))))
 
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)
@@ -221,25 +239,29 @@
 	(t
 	 (navi2ch-article-check-cached board article))))
 
+(defun navi2ch-bm-format-subject
+  (number updated-char state-char subject other)
+  (format (concat "%" (number-to-string navi2ch-bm-number-width)
+		  "d %c%c %s%s%s\n")
+	  number updated-char state-char subject
+	  (make-string (max (- navi2ch-bm-subject-width
+			       (string-width subject))
+			    1)
+		       ? )
+	  other))
+
 (defun navi2ch-bm-insert-subject (item number subject other
-					  &optional updated)
+				       &optional updated)
   (let* ((article (navi2ch-bm-get-article-internal item))
 	 (board (navi2ch-bm-get-board-internal item))
 	 (point (point))
 	 (state (navi2ch-bm-get-state-from-article board article))
-	 string)
-    (unless subject (setq subject navi2ch-bm-empty-subject))
-    (setq string (format (concat "%" (number-to-string navi2ch-bm-number-width)
-				 "d %s%s %s%s%s\n")
-			 number
-			 (cdr (assq updated navi2ch-bm-updated-mark-alist))
-			 (cadr (assq state navi2ch-bm-state-alist))
-			 subject
-			 (make-string (max (- navi2ch-bm-subject-width
-					      (string-width subject))
-					   1)
-				      ? )
-			 other))
+	 (string (navi2ch-bm-format-subject
+		  number
+		  (gethash updated navi2ch-bm-updated-mark-table)
+		  (gethash state navi2ch-bm-state-char-table)
+		  (or subject navi2ch-bm-empty-subject)
+		  other)))
     ;; for contrib/izonmoji-mode.el
     (navi2ch-ifxemacs
 	(insert string)
@@ -308,29 +330,19 @@
       (navi2ch-bm-goto-state-column)
       (backward-char 1)
       (delete-char 2)
-      (insert (cdr (assq updated navi2ch-bm-updated-mark-alist)))
-      (insert (cadr (assq state navi2ch-bm-state-alist)))
+      (insert (gethash updated navi2ch-bm-updated-mark-table)
+	      (gethash state navi2ch-bm-state-char-table))
       (navi2ch-bm-set-property (navi2ch-line-beginning-position)
 			       (navi2ch-line-end-position)
 			       item state updated))))
 
 (defun navi2ch-bm-get-state (&optional point)
   "その位置の state を調べる。"
-  (save-excursion
-    (and point (goto-char point))
-    (navi2ch-bm-goto-state-column)
-    (cdr (assoc (char-to-string (char-after))
-		(mapcar (lambda (x)
-			  (cons (cadr x) (car x)))
-			navi2ch-bm-state-alist)))))
+  (get-text-property (or point (point)) 'navi2ch-bm-state))
 
 (defun navi2ch-bm-get-updated-mark (&optional point)
   "その位置の updated-mark を調べる。"
-  (save-excursion
-    (and point (goto-char point))
-    (when (navi2ch-bm-goto-updated-mark-column)
-      (car (rassoc (char-to-string (char-after))
-		   navi2ch-bm-updated-mark-alist)))))
+  (get-text-property (or point (point)) 'navi2ch-bm-updated))
 
 (defun navi2ch-bm-select-article (&optional max-line)
   (interactive "P")
@@ -629,26 +641,18 @@
 INTERACTIVE が non-nil なら mark したあと移動する。
 ARG が non-nil なら移動方向を逆にする。"
   (let ((item (navi2ch-bm-get-property-internal (point)))
-	(state 'mark)
-	(alist (mapcar
-		(lambda (x)
-		  (cons (cadr x) (car x)))
-		navi2ch-bm-state-alist)))
+	(state (navi2ch-bm-get-state (point)))
+	(table (and mark navi2ch-bm-state-mark-face-table)))
     (when item
-      (let ((buffer-read-only nil))
-	(when (string= mark " ")
-	  (save-excursion
-	    (navi2ch-bm-goto-state-column)
-	    (setq state (cdr (assoc (char-to-string (char-after (point)))
-				    alist)))))
-	(let ((point (point)))
-	  (navi2ch-bm-goto-mark-column)
-	  (delete-char 1)
-	  (insert mark)
-	  (navi2ch-bm-set-property (navi2ch-line-beginning-position)
-				   (navi2ch-line-end-position)
-				   item state)
-	  (goto-char point))))
+      (let ((buffer-read-only nil)
+	    (pos (point)))
+	(navi2ch-bm-goto-mark-column)
+	(delete-char 1)
+	(insert (if mark ?* ? ))
+	(navi2ch-bm-set-property (navi2ch-line-beginning-position)
+				 (navi2ch-line-end-position)
+				 item state nil table)
+	(goto-char pos)))
     (when (and navi2ch-bm-mark-and-move interactive)
       (let (downward)
 	(cond ((eq navi2ch-bm-mark-and-move 'follow)
@@ -662,11 +666,11 @@ ARG が non-nil なら移動方向を逆にする。"
 
 (defun navi2ch-bm-mark (&optional arg)
   (interactive "P")
-  (navi2ch-bm-mark-subr "*" arg (interactive-p)))
+  (navi2ch-bm-mark-subr t arg (interactive-p)))
 
 (defun navi2ch-bm-unmark (&optional arg)
   (interactive "P")
-  (navi2ch-bm-mark-subr " " arg (interactive-p)))
+  (navi2ch-bm-mark-subr nil arg (interactive-p)))
 
 (defun navi2ch-bm-exec-subr (func &rest args)
   (save-excursion
@@ -691,11 +695,7 @@ ARG が non-nil なら移動方向を逆にする。"
 (defun navi2ch-bm-fetch-mark-article (&optional force)
   (interactive "P")
   (unless navi2ch-offline
-    (navi2ch-bm-exec-subr (lambda (force)
-			    (sit-for 0)	; force redisplay
-			    (sleep-for navi2ch-bm-fetch-wait)
-			    (navi2ch-bm-fetch-article force))
-			  force)))
+    (navi2ch-bm-exec-subr #'navi2ch-bm-fetch-article force)))
 
 (defun navi2ch-bm-textize-mark-article (directory &optional file)
   (interactive "DDirectory: \nFList file: ")
@@ -735,7 +735,7 @@ ARG が non-nil なら移動方向を逆にする。"
 							       (point-min)))
 					       (end-of-line)
 					       (point))
-			       (if arg " " "*")))
+			       (not arg)))
 
 (defun navi2ch-bm-fetch-maybe-new-articles ()
   "更新されている可能性のあるスレを fetch する。"
@@ -761,7 +761,7 @@ ARG が non-nil なら移動方向を逆にする。"
     (while (not (eobp))
       (navi2ch-bm-goto-updated-mark-column)
       (when (looking-at regexp)
-	(navi2ch-bm-mark-subr (if arg " " "*")))
+	(navi2ch-bm-mark-subr (not arg)))
       (forward-line))))
 
 ;; mark by regexp query
@@ -770,7 +770,7 @@ ARG が non-nil なら移動方向を逆にする。"
   (save-excursion
     (goto-char (point-min))
     (while (re-search-forward query nil t)
-      (navi2ch-bm-mark-subr (if arg " " "*")))))
+      (navi2ch-bm-mark-subr (not arg)))))
 
 ;;; sort
 (defun navi2ch-bm-sort-subr (rev start-key-fun end-key-fun)
@@ -919,8 +919,7 @@ ARG が non-nil なら移動方向を逆にする。"
 				   (navi2ch-bm-get-state-from-article
 				    board article)))
 			(updated (or updated
-				     (get-text-property (point)
-							'updated))))
+				     (navi2ch-bm-get-updated-mark))))
 		    (navi2ch-bm-insert-state item state updated)
 		    (navi2ch-bm-set-property (navi2ch-line-beginning-position)
 					     (navi2ch-line-end-position)

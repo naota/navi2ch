@@ -56,6 +56,7 @@
     (define-key map "n" 'navi2ch-article-next-message)
     (define-key map [(shift tab)] 'navi2ch-article-previous-link)
     (define-key map [(shift iso-lefttab)] 'navi2ch-article-previous-link)
+    (define-key map [(iso-lefttab)] 'navi2ch-article-previous-link)
     (define-key map "\e\C-i" 'navi2ch-article-previous-link)
     (define-key map "\C-\i" 'navi2ch-article-next-link)
     (define-key map ">" 'navi2ch-article-goto-last-message)
@@ -118,7 +119,7 @@ stack が空なら、PopUp Article モードを抜ける。"
   (use-local-map navi2ch-popup-article-mode-map)
   (setq navi2ch-article-point-stack nil)
   (setq navi2ch-popup-article-exclude-stack nil)
-  (make-local-hook 'post-command-hook)
+  (navi2ch-make-local-hook 'post-command-hook)
   (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-popup-article-mode-hook))
 

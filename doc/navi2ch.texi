@@ -223,12 +223,6 @@ Navi2ch Project Home Page
 @item --help
 configure のオプションを一覧表示。
 
-@item --with-emacs
-Emacs の種類を指定。
-
-@item --with-xemacs
-XEmacs の種類を指定。
-
 @item --with-lispdir
 Navi2ch をインストールするディレクトリを指定。
 
@@ -242,12 +236,23 @@ Info ファイルをインストールするディレクトリを指定。
 Navi2ch をインストールするパッケージディレクトリを指定。(XEmacs のみ)
 @end table
 
+configure は以下の環境変数も使用する。
+
+@table @option
+
+@item EMACS
+emacs のコマンド名
+
+@item EMACSLOADPATH
+emacs がライブラリをさがすパス
+
+@end table
+
 例えば Meadow だったら以下のとおり。
 
 @example
 @group
-./configure --with-emacs=meadow95.exe
-            --with-lispdir=/app/meadow/site-lisp/navi2ch
+./configure EMACS=/meadow/bin/Meadow.exe --with-lispdir=/meadow/site-lisp/navi2ch
 @end group
 @end example
 
@@ -256,14 +261,14 @@ XEmacs を使っていて、ホームディレクトリにインストールしたい場合は以下
 
 @example
 @group
-./configure --with-xemacs --with-packagedir=$HOME/.xemacs/mule-packages
+./configure EMACS=xemacs --with-packagedir=$HOME/.xemacs/mule-packages
 @end group
 @end example
 
 サイトによっては、管理者がインストールした Lisp パッケージによって
 メッセージが表示され、configure がうまく動作しない場合がある。
 
-その際は @option{--with-xemacs="xemacs -no-site-file"} などを加えると
+その際は @option{EMACS="xemacs -no-site-file"} などを加えると
 うまくインストールできるかもしれない。
 
 @subsection configure を使用しないでコンパイルする
@@ -785,13 +790,16 @@ Navi2ch には、名前や本文中の語句など、レスに含まれる特定の文字列を条件
 のタイトル (subject) のうち、どの項目でフィルタするか。
 
 @item
-レスを検査する方法を、拡張形式によってくわしく指定する (Use
-extensional match) か。
+レスを検査する方法を、拡張形式によってくわしく指定する (Use extended
+matching) か。
 
-拡張形式で指定する場合、部分一致 (substring)、あいまい一致
-(fuzzy-substring)、完全一致 (exact-string)、正規表現 (regexp) のうち、
-どの方法を使うか。その際、大文字と小文字の違いは無視する (Ignore case)
-か。
+拡張形式で指定する場合、部分一致 (substring)、あいまい一致(fuzzy)、完
+全一致 (exact)、正規表現 (regexp) のうち、どの方法を使うか。
+
+その際、大文字と小文字の違いは無視する (Ignore case) か。
+文字列一致の真偽を逆転して判定する (Invert match) か。
+
+その他のオプションについての指定はどうするか。
 
 @item
 どんな文字列をフィルタ対象にするか。
@@ -799,7 +807,9 @@ extensional match) か。
 @item
 条件が一致したレスに対し、置き換える (replace)、隠す (hide)、ブックマー
 クする (important)、点数を加える (score) のうち、どの処理をおこなうか。
-置き換える場合は、どう置き換えるか。点数を加える場合は、何点加えるか。
+
+置き換える場合は、どう置き換えるか。
+点数を加える場合は、何点加えるか。
 
 @item
 設定したフィルタを閲覧中のスレに今すぐ反映させるか。
@@ -2033,17 +2043,6 @@ Board モードで @kbd{w} で立てられるけど、板によってはだめかも。
 
 @item A.
 時計を合わせましょう。
-
-@item Q.
-毎回書き込みをするたびに確認を求められてうざいんですけど。
-
-@item A.
-仕様です。ただし、以下の設定を~/.navi2ch/init.elに追加すれば回避できます。
-この設定を行うことによってあなたが不利益をかぶったとしても、
-navi2ch Projectはなんら責任を負いません。あくまで自己責任で。
-@lisp
-(setq navi2ch-multibbs-send-message-retry-confirm-function #'always-t)
-@end lisp
 
 @end table
 

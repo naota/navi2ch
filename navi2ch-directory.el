@@ -48,7 +48,7 @@
 (defvar navi2ch-directory-board
   '((name . "ファイル一覧")
     (type . directory)
-    (id . "directory")))
+    (id . "#directory")))
 
 (defvar navi2ch-directory-current-board nil)
 (defvar navi2ch-directory-subject-list nil)

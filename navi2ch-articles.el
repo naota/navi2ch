@@ -53,7 +53,7 @@
 (defvar navi2ch-articles-board
   '((name . "表示スレ一覧")
     (type . articles)
-    (id . "articles")))
+    (id . "#articles")))
 
 ;;; navi2ch-bm callbacks
 (defun navi2ch-articles-set-property (begin end item)

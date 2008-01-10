@@ -90,27 +90,17 @@
 (require 'regexp-opt)
 (require 'timezone)
 
-(defconst navi2ch-http-date-wkday-list
-  '("Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat"))
-
-(defconst navi2ch-http-date-month-list
-  '("Jan" "Feb" "Mar" "Apr" "May" "Jun"
-    "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
-
 (defun navi2ch-http-date-encode (time)
   "内部形式 TIME を RFC 1123 形式に変換する。"
-  (let* ((now (timezone-fix-time (current-time-string time)
-				 (current-time-zone time)
-				 "GMT"))
-	 (abs (timezone-absolute-from-gregorian (aref now 0) (aref now 1)
-						(aref now 2)))
-	 (wkday (nth (% abs 7) navi2ch-http-date-wkday-list))
-	 (month (nth (1- (aref now 1)) navi2ch-http-date-month-list)))
-    ;; しかし、なんで標準に locale 依存の曜日や月名を入れるかねぇ。
-    ;; ISO 8601 形式の yyyy-mm-dd HH:MM:SS でいーじゃんよ。
-    (format "%s, %02d %s %04d %02d:%02d:%02d GMT"
-	    wkday (aref now 2) month (aref now 0)
-	    (aref now 3) (aref now 4) (aref now 5))))
+  (apply (lambda (wday month day time year)
+	   (format "%s, %02d %s %s %s GMT"
+		   wday (string-to-number day) month year time))
+	 (split-string
+	  (current-time-string (let ((decoded (decode-time time)))
+				 (apply #'encode-time
+					(- (car decoded)
+					   (car (last decoded)))
+					(cdr decoded)))))))
 
 (defun navi2ch-http-date-decode (http-date)
   "HTTP-DATE を内部形式に変換する。"
@@ -124,7 +114,7 @@
 
 ;; テスト
 (eval-when-compile
-  (let ((expected "Wed, 06 Nov 1994 08:49:37 GMT"))
+  (let ((expected "Sun, 06 Nov 1994 08:49:37 GMT"))
     (assert (string= expected (navi2ch-http-date-encode
 			       (navi2ch-http-date-decode
 				"Sun, 06 Nov 1994 08:49:37 GMT"))))

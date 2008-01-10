@@ -33,17 +33,24 @@
 
 (defconst navi2ch-be2ch-ident
   "$Id$")
+(defconst navi2ch-be2ch-coding-system 'euc-jp)
+(defconst navi2ch-be2ch-cookie-names '("MDMD" "DMDM"))
+(defconst navi2ch-be2ch-cookie-domain '2ch.net)
+(defconst navi2ch-be2ch-cookie-path '/)
 
 (defvar navi2ch-be2ch-login-url "http://be.2ch.net/test/login.php")
 
 (defvar navi2ch-be2ch-mail-address nil)
 (defvar navi2ch-be2ch-password nil)
-(defvar navi2ch-be2ch-mdmd nil)
-(defvar navi2ch-be2ch-dmdm nil)
+
+(defvar navi2ch-be2ch-login-flag nil)
 
 (defun navi2ch-be2ch-login-p ()
-  (and navi2ch-be2ch-mdmd
-       navi2ch-be2ch-dmdm))
+  (let ((cookies (navi2ch-net-match-cookies navi2ch-be2ch-login-url)))
+    (setq navi2ch-be2ch-login-flag
+	  (null (memq nil
+		      (mapcar (lambda (name) (assoc name cookies))
+			      navi2ch-be2ch-cookie-names))))))
 
 (defun navi2ch-be2ch-login (mail password)
   (interactive
@@ -64,27 +71,23 @@
 		(list 
 		 (cons "m" mail)
 		 (cons "p" password)
-		 (cons "submit" "登録"))))))
-    (with-temp-buffer
-      (navi2ch-set-buffer-multibyte nil)
-      (insert (navi2ch-net-get-content proc))
-      (goto-char (point-min))
-      ;; document.cookie = 'MDMD=... ; expires=Thu,05-Jan-30 00:00:01 GMT; domain=2ch.net; path=/;';
-      ;; document.cookie = 'DMDM=' + '...' + ' ; expires=Thu,05-Jan-30 00:00:01 GMT;path=/; domain=2ch.net;';
-      (while (re-search-forward "document.cookie *= *\\([^;]+\\);" nil t)
-	(let ((cookie (match-string 1)))
-	  (setq cookie (split-string (navi2ch-replace-string "[' +]" "" cookie t) "="))
-	  (cond ((string= (car cookie) "MDMD")
-		 (setq navi2ch-be2ch-mdmd (car (cdr cookie))))
-		((string= (car cookie) "DMDM")
-		 (setq navi2ch-be2ch-dmdm (car (cdr cookie)))))))
-      (when (navi2ch-be2ch-login-p)
-	(message "Be@2ch にログインしました。")))))
+		 (cons "submit" "登録"))
+		navi2ch-be2ch-coding-system))))
+    (navi2ch-net-update-cookies navi2ch-be2ch-login-url
+				proc
+				navi2ch-be2ch-coding-system)
+    (navi2ch-net-save-cookies)
+    (when (navi2ch-be2ch-login-p)
+      (message "Be@2ch にログインしました。"))))
 
 (defun navi2ch-be2ch-logout ()
   (interactive)
-  (setq navi2ch-be2ch-mdmd nil)
-  (setq navi2ch-be2ch-dmdm nil)
-  (message "Be@2ch からログアウトしました。"))
+    (dolist (name navi2ch-be2ch-cookie-names)
+      (navi2ch-net-store-cookie (list name "" 0 0)
+				navi2ch-be2ch-cookie-domain
+				navi2ch-be2ch-cookie-path))
+    (navi2ch-net-save-cookies)
+    (setq navi2ch-be2ch-login-flag nil)
+    (message "Be@2ch からログアウトしました。"))
 
 ;;; navi2ch-be2ch.el ends here

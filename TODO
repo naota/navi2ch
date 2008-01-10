@@ -6,5 +6,7 @@
 ・フィルタをちゃんと実装する。
 ・ツールチップでレスを表示
 ・navi2ch2 の作成 :-)
-・navi2ch-logo.el を Emacs20 に対応させる。
-  convert で xbm に変換して bitmap-mule でいける？
+・board id、article id とか (URL も?) を文字列では無くシンボルにする。
+  equal ではなく eq で比較できるように。
+・順不同でかまわない alist を hash で置き換える。
+・board、article などを alist ではなく defstruct にする。

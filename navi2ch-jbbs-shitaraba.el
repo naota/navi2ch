@@ -176,7 +176,10 @@ START が non-nil ならばレス番号 START からの差分を取得する。
        (navi2ch-net-get-param-string param-alist)))))
 
 (defun navi2ch-js-send-message-success-p (proc)
-  (string= "" (navi2ch-net-get-content proc)))
+  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				   navi2ch-js-coding-system)))
+    (or (string-match "<title>書きこみました。</title>" str)
+	(string= "" str))))
 
 (defun navi2ch-js-send-message-error-string (proc)
   (let ((str (decode-coding-string (navi2ch-net-get-content proc)

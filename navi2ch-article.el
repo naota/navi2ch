@@ -64,6 +64,7 @@
     (define-key map "P" 'navi2ch-article-through-previous)
     (define-key map "N" 'navi2ch-article-through-next)
     (define-key map [(shift tab)] 'navi2ch-article-previous-link)
+    (define-key map [(iso-left-tab)] 'navi2ch-article-previous-link)
     (define-key map [(shift iso-lefttab)] 'navi2ch-article-previous-link)
     (define-key map "\e\C-i" 'navi2ch-article-previous-link)
     (define-key map "\C-\i" 'navi2ch-article-next-link)
@@ -118,9 +119,7 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 (defvar navi2ch-article-message-list nil)
 (defvar navi2ch-article-point-stack nil "$B0LCV$r3P$($H$/(B stack")
 (defvar navi2ch-article-poped-point-stack nil)
-(defvar navi2ch-article-separator nil)
 (defvar navi2ch-article-hide-mode nil)
-(defvar navi2ch-article-window-configuretion nil)
 (defvar navi2ch-article-through-next-function 'navi2ch-article-through-next)
 (defvar navi2ch-article-through-previous-function 'navi2ch-article-through-previous)
 (defvar navi2ch-article-through-forward-line-function 'navi2ch-bm-forward-line
@@ -143,6 +142,10 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 (defvar navi2ch-article-local-dat-regexp "[0-9]+\\.dat\\'"
   "$B%m!<%+%k$K$"$k(B dat $B%U%!%$%k$rI=$o$9@55,I=8=!#(B
 $B%5!<%P$K$"$k(B dat $B%U%!%$%k$K$O$3$NJQ?t$r;H$C$F$O$$$1$J$$!#(B")
+
+(defvar navi2ch-article-link-internal nil)
+
+(defconst navi2ch-article-separator " *<> *")
 
 ;; important mode
 (defvar navi2ch-article-important-mode nil)
@@ -169,13 +172,7 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 
 (defvar navi2ch-article-message-filter-cache nil)
 (defvar navi2ch-article-save-message-filter-cache-keys
-  '(cache replace hide important aborn))
-
-;; defcustom $B$K$7$J$$$G$*$/(B
-(defvar navi2ch-article-default-message-filter-by-message-alist
-  `(((,(regexp-opt '("(mule-caesar" "(base64-decode"
-		     "(shell-command" "(call-process" "(delete-file")) r)
-     . hide)))
+  '(cache replace hide important))
 
 ;; sticky mode
 (defvar navi2ch-article-sticky-mode nil)
@@ -190,7 +187,6 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 (make-variable-buffer-local 'navi2ch-article-point-stack)
 (make-variable-buffer-local 'navi2ch-article-poped-point-stack)
 (make-variable-buffer-local 'navi2ch-article-view-range)
-(make-variable-buffer-local 'navi2ch-article-separator)
 (make-variable-buffer-local 'navi2ch-article-through-next-function)
 (make-variable-buffer-local 'navi2ch-article-through-previous-function)
 
@@ -236,20 +232,20 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
 (defun navi2ch-article-file-name-to-artid (filename)
   "*FILENAME $B$r%9%l(BID$B$KJQ49$9$k!#(B"
   (file-name-sans-extension (file-name-nondirectory filename)))
-   
 
-(defsubst navi2ch-article-inside-range-p (num range len)
+
+(defun navi2ch-article-inside-range-p (num range len)
   "NUM $B$,(B RANGE $B$G<($9HO0O$KF~$C$F$k$+!#(B
 LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5!#(B"
   (or (not range)
       (<= num (car range))
       (> num (- len (cdr range)))))
 
-(defsubst navi2ch-article-get-buffer-name (board article)
+(defun navi2ch-article-get-buffer-name (board article)
   (concat navi2ch-article-buffer-name-prefix
 	  (navi2ch-article-get-url board article 'no-kako)))
 
-(defsubst navi2ch-article-check-cached (board article)
+(defun navi2ch-article-check-cached (board article)
   "BOARD $B$H(B ARTICLE $B$G;XDj$5$l$k%9%l%C%I$,%-%c%C%7%e$5$l$F$k$+!#(B"
   (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
          'view)
@@ -322,7 +318,7 @@ LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5!#(B"
 START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
   (navi2ch-multibbs-article-to-url board article start end nofirst))
 
-(defsubst navi2ch-article-cleanup-message ()
+(defun navi2ch-article-cleanup-message ()
   (let (re)
     (when navi2ch-article-cleanup-trailing-newline ; $B%l%9KvHx$N6uGr$r<h$j=|$/(B
       (goto-char (point-min))
@@ -340,20 +336,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
       (while (re-search-forward re nil t)
 	(replace-match "<br>")))))	; "\n" $B$G$b$$$$$+$b!#(B
 
-(defsubst navi2ch-article-parse-message (str &optional sep)
-  (or sep (setq sep navi2ch-article-separator))
+(defun navi2ch-article-parse-message (str)
   (unless (string= str "")
-;;;     (let ((strs (split-string str sep))
-;;; 	  (syms '(name mail date data subject))
-;;; 	  s)
-;;;       (mapcar (lambda (sym)
-;;; 		(setq s (or (car strs) "")
-;;; 		      strs (cdr strs))
-;;; 		(cons sym
-;;; 		      (if (eq sym 'data)
-;;; 			  (navi2ch-replace-html-tag-with-temp-buffer s)
-;;; 			(navi2ch-replace-html-tag s))))
-;;; 	      syms))))
     (with-temp-buffer
       (let ((syms '(name mail date data subject))
 	    alist max)
@@ -365,7 +349,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 		     (lambda (sym)
 		       (cons sym
 			     (cons (point-marker)
-				   (if (re-search-forward sep nil t)
+				   (if (re-search-forward navi2ch-article-separator nil t)
 				       (copy-marker (match-beginning 0))
 				     (goto-char max)
 				     max))))
@@ -376,8 +360,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	    (goto-char start)
 	    (while (re-search-forward "\\(</b>[^<]+<b>\\)\\|\\(<font[^>]+>[^<]+</font>\\)" end t)
 	      ;; fusianasan $B$d%H%j%C%W$J$I(B
-	      (replace-match (navi2ch-propertize (match-string 0)
-						 'navi2ch-fusianasan-flag t)
+	      (replace-match (propertize (match-string 0)
+					 'navi2ch-fusianasan-flag t)
 			     t t))))
 	(navi2ch-replace-html-tag-with-buffer)
 	(dolist (x alist)
@@ -393,20 +377,20 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	  " *<> *"
 	" *, *"))))
 
-(defsubst navi2ch-article-get-first-message ()
+(defun navi2ch-article-get-first-message ()
   "current-buffer $B$N(B article $B$N:G=i$N(B message $B$rJV$9!#(B"
   (goto-char (point-min))
   (navi2ch-article-parse-message
    (buffer-substring-no-properties (point)
 				   (progn (forward-line 1)
-					  (1- (point))))
-   (navi2ch-article-get-separator)))
+					  (1- (point))))))
 
-(defsubst navi2ch-article-get-first-message-from-file (file &optional board)
+(defun navi2ch-article-get-first-message-from-file (file &optional board)
   "FILE $B$G;XDj$5$l$?(B article $B$N:G=i$N(B message $B$rJV$9!#(B
 BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
   (with-temp-buffer
     (navi2ch-board-insert-file-contents board file)
+    (navi2ch-apply-filters board navi2ch-article-filter-list)
     (navi2ch-article-get-first-message)))
 
 (defun navi2ch-article-get-message-list (file &optional begin end)
@@ -414,7 +398,7 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 $B6u9T$O(B nil$B!#(B"
   (when (file-exists-p file)
     (let ((board navi2ch-article-current-board)
-	  sep message-list)
+	  message-list)
       (with-temp-buffer
         (navi2ch-board-insert-file-contents board file begin end)
 	(run-hooks 'navi2ch-article-get-message-list-hook)
@@ -422,7 +406,6 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	  (navi2ch-apply-filters board navi2ch-article-filter-list)
           (message "Splitting current messages...")
           (goto-char (point-min))
-          (setq sep (navi2ch-article-get-separator))
           (while (not (eobp))
             (setq message-list
                   (cons (cons i
@@ -434,7 +417,6 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
                         message-list))
             (setq i (1+ i)))
           (message "Splitting current messages...done")))
-      (setq navi2ch-article-separator sep) ; it's a buffer local variable...
       (nreverse message-list))))
 
 (defun navi2ch-article-append-message-list (list1 list2)
@@ -523,52 +505,49 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
     (put-text-property pos (point) 'face 'navi2ch-article-message-separator-face)
     (insert "\n")))
 
-(defsubst navi2ch-article-set-link-property-subr (start end type value
+(defun navi2ch-article-set-link-property-subr (start end type value
 							&optional object)
   (let ((face (cond ((eq type 'number) 'navi2ch-article-link-face)
 		    ((eq type 'url) 'navi2ch-article-url-face))))
-    (add-text-properties start end
+        (add-text-properties start end
 			 (list 'face face
 			       'help-echo #'navi2ch-article-help-echo
-			       'link t
-			       'mouse-face navi2ch-article-mouse-face
-			       type value)
-			 object)
-    (add-text-properties start (1+ start)
-			 (list 'link-head t)
+			       'navi2ch-link-type type
+			       'navi2ch-link value
+			       'mouse-face navi2ch-article-mouse-face)
 			 object)))
 
-(defsubst navi2ch-article-set-link-property ()
+(defun navi2ch-article-link-regexp-alist-to-internal ()
+  (navi2ch-regexp-alist-to-internal
+   (append
+    navi2ch-article-link-regexp-alist
+    (list (cons (concat navi2ch-article-number-prefix-regexp
+			navi2ch-article-number-number-regexp)
+		(lambda (match)
+		  (navi2ch-article-set-link-property-subr
+		   (match-beginning 0) (match-end 0)
+		   'number (navi2ch-match-string-no-properties 1))
+		  (while (looking-at (concat
+				      navi2ch-article-number-separator-regexp
+				      navi2ch-article-number-number-regexp))
+		    (navi2ch-article-set-link-property-subr
+		     (match-beginning 1) (match-end 1)
+		     'number (navi2ch-match-string-no-properties 1))
+		    (goto-char (max (1+ (match-beginning 0))
+				    (match-end 0))))))
+	  (cons navi2ch-article-url-regexp
+		(lambda (url)
+		  (if (string-match "\\`\\(h?t?tp\\)\\(s?:\\)" url)
+		      (replace-match "http\\2" nil nil url)
+		    url)))))))  
+
+(defun navi2ch-article-set-link-property ()
   ">>1 $B$H$+(B http:// $B$K(B property $B$rIU$1$k!#(B"
   (goto-char (point-min))
-  (let* ((pref-depth (regexp-opt-depth navi2ch-article-number-prefix-regexp))
-	 (sep-depth (regexp-opt-depth navi2ch-article-number-separator-regexp))
-	 (number-func
-	  (lambda (match)
-	    (navi2ch-article-set-link-property-subr
-	     (match-beginning 0) (match-end 0)
-	     'number (navi2ch-match-string-no-properties (1+ pref-depth)))
-	    (while (looking-at (concat navi2ch-article-number-separator-regexp
-				       navi2ch-article-number-number-regexp))
-	      (navi2ch-article-set-link-property-subr
-	       (match-beginning (1+ sep-depth)) (match-end (1+ sep-depth))
-	       'number (navi2ch-match-string-no-properties (1+ sep-depth)))
-	      (goto-char (max (1+ (match-beginning 0)) (match-end 0))))))
-	 (url-func
-	  (lambda (url)
-	    (if (string-match "\\`\\(h?t?tp\\)\\(s?:\\)" url)
-		(replace-match "http\\2" nil nil url)
-	      url)))
-	 (alist (navi2ch-regexp-alist-to-number-alist
-		 (append
-		  navi2ch-article-link-regexp-alist
-		  (list (cons (concat navi2ch-article-number-prefix-regexp
-				      navi2ch-article-number-number-regexp)
-			      number-func)
-			(cons navi2ch-article-url-regexp
-			      url-func)))))
+  (let* ((reg-internal (or navi2ch-article-link-internal
+			   (navi2ch-article-link-regexp-alist-to-internal)))
 	 match rep literal)
-    (while (setq match (navi2ch-re-search-forward-regexp-alist alist nil t))
+    (while (setq match (navi2ch-re-search-forward-regexp-alist reg-internal nil t))
       (setq rep (cdr match)
 	    literal nil)
       (when (functionp rep)
@@ -585,14 +564,14 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	     start end 'url url))
 	  (goto-char (max (1+ start) end)))))))
 
-(defsubst navi2ch-article-put-cite-face ()
+(defun navi2ch-article-put-cite-face ()
   (goto-char (point-min))
   (while (re-search-forward navi2ch-article-citation-regexp nil t)
     (put-text-property (match-beginning 0)
 		       (match-end 0)
 		       'face 'navi2ch-article-citation-face)))
 
-(defsubst navi2ch-article-arrange-message ()
+(defun navi2ch-article-arrange-message ()
   (goto-char (point-min))
   (let ((id (cdr (assq 'id navi2ch-article-current-board))))
     (when (or (member id navi2ch-article-enable-fill-list)
@@ -604,13 +583,13 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	(fill-region (point-min) (point-max)))))
   (run-hooks 'navi2ch-article-arrange-message-hook))
 
-(defsubst navi2ch-article-insert-message (num alist)
+(defun navi2ch-article-insert-message (num alist)
   (let ((p (point)))
     (insert (funcall navi2ch-article-header-format-function
-                     num
-                     (cdr (assq 'name alist))
-                     (cdr (assq 'mail alist))
-                     (cdr (assq 'date alist))))
+		     num
+		     (cdr (assq 'name alist))
+		     (cdr (assq 'mail alist))
+		     (cdr (assq 'date alist))))
     (put-text-property p (1+ p) 'current-number num)
     (setq p (point))
     (insert (cdr (assq 'data alist)) "\n")
@@ -637,22 +616,32 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	(imp (cdr (assq 'important navi2ch-article-current-article)))
 	(unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
 	(cache (cdr (assq 'cache navi2ch-article-message-filter-cache)))
-	(reps (cdr (assq 'replace navi2ch-article-message-filter-cache)))
-	(f-hide (cdr (assq 'hide navi2ch-article-message-filter-cache)))
-	(f-imp (cdr (assq 'important navi2ch-article-message-filter-cache)))
-	(aborn (cdr (assq 'aborn navi2ch-article-message-filter-cache)))
+	(rep (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+	(orig (cdr (assq 'original navi2ch-article-message-filter-cache)))
 	(progress 0)
-	(percent 0))
+	(percent 0)
+	(navi2ch-article-link-internal (navi2ch-article-link-regexp-alist-to-internal)))
     (message msg)
-    (if navi2ch-article-message-filter-mode
-	(setq hide (navi2ch-union hide f-hide)
-	      imp (navi2ch-union imp f-imp))
-      (setq hide (navi2ch-set-difference hide f-hide)
-	    imp (navi2ch-set-difference imp f-imp)))
+    (let ((func (if navi2ch-article-message-filter-mode
+		    #'navi2ch-union
+		  #'navi2ch-set-difference)))
+      (setq hide (funcall func
+			  hide
+			  (cdr (assq 'hide
+				     navi2ch-article-message-filter-cache))))
+      (setq imp (funcall func
+			 imp
+			 (cdr (assq 'important
+				    navi2ch-article-message-filter-cache)))))
+    (setq navi2ch-article-current-article
+	  (navi2ch-put-alist 'hide hide navi2ch-article-current-article))
+    (setq navi2ch-article-current-article
+	  (navi2ch-put-alist 'important imp navi2ch-article-current-article))
     (dolist (x list)
       (let* ((num (car x))
 	     (alist (cdr x))
-	     (rep (cdr (assq num reps)))
+	     (rep-alist (cdr (assq num rep)))
+	     (orig-alist (cdr (assq num orig)))
 	     suppress)
         (when (and alist
 		   (cond (navi2ch-article-hide-mode
@@ -662,118 +651,59 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 			 (t
 			  (and (navi2ch-article-inside-range-p num range len)
 			       (not (memq num hide))))))
-          (when (stringp alist)
-            (setq alist (navi2ch-article-parse-message alist))
-	    ;; $B?7$7$/!V$"$\!<$s!W$5$l$?%l%9$O%-%c%C%7%e$r%/%j%"(B
-	    (when (and (not (memq num aborn))
-		       (string= "$B$"$\!<$s(B" (cdr (assq 'date alist))))
-	      (setq cache (delq num cache)
-		    unfilter (delq num unfilter))
-	      (setq aborn (cons num aborn))
-	      (setq navi2ch-article-message-filter-cache
-		    (navi2ch-put-alist 'aborn
-				       aborn
-				       navi2ch-article-message-filter-cache)))
-	    ;; $BCV49A0$N%l%9$r%-%c%C%7%e$KB`Hr(B
-	    (when rep
-	      (dolist (slot rep)
-		(setcdr (cdr slot) (list (cdr (assq (car slot) alist)))))
-	      (navi2ch-put-alist num rep reps)
-	      (navi2ch-put-alist 'replace
-				 reps
-				 navi2ch-article-message-filter-cache)))
-	  (if (or (not navi2ch-article-message-filter-mode)
-		  (memq num unfilter))
-	      ;; $BCV49A0$N%l%9$r%-%c%C%7%e$+$iI|85(B
-	      (dolist (slot rep)
-		(let ((org (cddr slot)))
-		  (when org
-		    (navi2ch-put-alist (car slot) (car org) alist))))
-	    (if (and navi2ch-article-use-message-filter-cache
-		     (memq num cache))
-		;; $BCV498e$N%l%9$r%-%c%C%7%e$+$iCj=P(B
-		(dolist (slot rep)
-		  (let ((new (cadr slot)))
-		    (when new
-		      (setq alist (navi2ch-put-alist (car slot) new
-						     alist)))))
-	      ;; $B%U%#%k%?=hM}$NK\BN(B
-	      (let ((alist-old (copy-alist alist)))
-		(let (filter-result)
-		  (setq filter-result
-			(let ((filtered (navi2ch-article-apply-message-filters
-					 (navi2ch-put-alist 'number num alist))))
-			  (when filtered
-			    (cond ((stringp filtered)
-				   (let ((case-fold-search nil))
-				     (navi2ch-put-alist 'name filtered alist)
-				     (navi2ch-put-alist 'data filtered alist)
-				     (navi2ch-put-alist 'mail
-							(if (string-match "sage"
-									  (cdr (assq 'mail alist)))
-							    "sage"
-							  "")
-							alist)
-				     (navi2ch-put-alist 'date
-							(navi2ch-replace-string " ID:[^ ]+"
-										" ID:???"
-										(cdr (assq 'date alist)))
-							alist)))
-				  ((eq filtered 'hide)
-				   'hide)
-				  ((eq filtered 'important)
-				   'important)))))
-		  (if (and (eq filter-result 'hide)
-			   (not navi2ch-article-hide-mode))
-		      (progn
-			(setq hide (cons num hide))
-			(setq navi2ch-article-current-article
-			      (navi2ch-put-alist 'hide
-						 hide
-						 navi2ch-article-current-article))
-			(setq suppress t)
-			(when navi2ch-article-use-message-filter-cache
-			  (setq f-hide (cons num f-hide))
-			  (setq navi2ch-article-message-filter-cache
-				(navi2ch-put-alist 'hide
-						   f-hide
-						   navi2ch-article-message-filter-cache))))
-		    (when (and (eq filter-result 'important)
-			       (not navi2ch-article-important-mode))
-		      (setq imp (cons num imp))
-		      (setq navi2ch-article-current-article
-			    (navi2ch-put-alist 'important
-					       imp
-					       navi2ch-article-current-article))
-		      (when navi2ch-article-use-message-filter-cache
-			(setq f-imp (cons num f-imp))
-			(setq navi2ch-article-message-filter-cache
-			      (navi2ch-put-alist 'important
-						 f-imp
-						 navi2ch-article-message-filter-cache))))))
-		;; $B%U%#%k%?=hM}$N7k2L$r%-%c%C%7%e$KEPO?(B
-		(when navi2ch-article-use-message-filter-cache
-		  (unless (memq num cache)
-		    (setq cache (cons num cache))
-		    (setq navi2ch-article-message-filter-cache
-			  (navi2ch-put-alist 'cache
-					     cache
-					     navi2ch-article-message-filter-cache)))
-		  (dolist (slot alist-old)
-		    (let ((new (cdr (assq (car slot) alist)))
-			  (org (or (cddr (assq (car slot) rep))
-				   (list (cdr slot)))))
-		      (unless (equal new (car org))
-			(setq rep
-			      (navi2ch-put-alist (car slot)
-						 (cons new org)
-						 rep)))))
-		  (when rep
-		    (setq reps (navi2ch-put-alist num rep reps))
-		    (setq navi2ch-article-message-filter-cache
-			  (navi2ch-put-alist 'replace
-					     reps
-					     navi2ch-article-message-filter-cache)))))))
+          (if (stringp alist)
+	      (progn
+		(setq alist (navi2ch-article-parse-message alist))
+		(cond
+		 ((and (string= "$B$"$\!<$s(B" (cdr (assq 'date alist)))
+		       (memq num cache))
+		  ;; $B?7$7$/!V$"$\!<$s!W$5$l$?%l%9$O%-%c%C%7%e$r%/%j%"(B
+		  (setq unfilter (delq num unfilter))
+		  (setq navi2ch-article-current-article
+			(navi2ch-put-alist
+			 'unfilter
+			 unfilter
+			 navi2ch-article-current-article))
+		  (setq cache (delq num cache))
+		  (setq navi2ch-article-message-filter-cache
+			(navi2ch-put-alist
+			 'cache
+			 cache
+			 navi2ch-article-message-filter-cache)))
+		 (rep-alist
+		  ;; $BCV498e$N%-%c%C%7%e$,$"$k>l9g$OCV49A0$N%l%9$rB`Hr(B
+		  (setq orig-alist (mapcar
+				    (lambda (x)
+				      (cons (car x)
+					    (cdr (assq (car x) alist))))
+				    rep-alist))
+		  (setq orig (navi2ch-put-alist num orig-alist orig))
+		  (setq navi2ch-article-message-filter-cache
+			(navi2ch-put-alist
+			 'original
+			 orig
+			 navi2ch-article-message-filter-cache)))))
+	    (dolist (slot alist)
+	      (when (stringp (cdr slot))
+		(set-text-properties 0 (length (cdr slot)) nil (cdr slot)))))
+	  (if (and navi2ch-article-message-filter-mode
+		   (not (memq num unfilter)))
+	      (if (and navi2ch-article-use-message-filter-cache
+		       (memq num cache))
+		  ;; $BCV498e$N%l%9$r%-%c%C%7%e$+$iCj=P(B
+		  (dolist (slot rep-alist)
+		    (when (cdr slot)
+		      (navi2ch-put-alist (car slot) (cdr slot) alist)))
+		;; $B%U%#%k%?=hM}$NK\BN(B
+		(let ((result (navi2ch-article-apply-message-filters
+			       (navi2ch-put-alist 'number num alist))))
+		  (when (and (eq result 'hide)
+			     (not navi2ch-article-hide-mode))
+		    (setq suppress t))))
+	    ;; $BCV49A0$N%l%9$r%-%c%C%7%e$+$iI|85(B
+	    (dolist (slot orig-alist)
+	      (when (cdr slot)
+		(navi2ch-put-alist (car slot) (cdr slot) alist))))
 	  (setq alist (navi2ch-put-alist 'point (point-marker) alist))
 	  (setcdr x alist)
 	  ;; (setcdr x (navi2ch-put-alist 'point (point) alist))
@@ -784,10 +714,8 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	;; $B?JD=I=<((B
 	(and (> (setq progress (+ progress 100)) 10000)
 	     (/= (/ progress len) percent)
-	     (navi2ch-no-logging-message "%s%d%%" msg (setq percent (/ progress len))))))
-    (message "Garbage collecting...")
-    (garbage-collect)	    ; navi2ch-parse-message $B$OBgNL$K%4%_$r;D$9(B
-    (message "Garbage collecting...done")
+	     (navi2ch-no-logging-message
+	      "%s%d%%" msg (setq percent (/ progress len))))))
     (message "%sdone" msg)))
 
 (defun navi2ch-article-reinsert-partial-messages (start &optional end)
@@ -839,33 +767,100 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
     (navi2ch-article-insert-messages list nil)))
 
 (defun navi2ch-article-apply-message-filters (alist)
-  (let (score)
-    (catch 'loop
-      (dolist (filter navi2ch-article-message-filter-list)
-	(let ((result (funcall filter alist)))
-	  (when result
-	    (if (numberp result)
-		(setq score (+ (or score 0) result))
-	      (throw 'loop result)))))
+  (let* ((num (cdr (assq 'number alist)))
+	 (orig (cdr (assq 'original navi2ch-article-message-filter-cache))))
+    ;; $BCV49A0$N%l%9$r%-%c%C%7%e$+$iI|85(B
+    (dolist (slot (cdr (assq num orig)))
+      (when (cdr slot)
+	(navi2ch-put-alist (car slot) (cdr slot) alist)))
+    (let ((old-alist (copy-alist alist))
+	  score result)
+      (catch 'loop
+	(dolist (filter navi2ch-article-message-filter-list)
+	  (setq result (funcall filter alist))
+	  (cond ((numberp result)
+		 (setq score (+ (or score 0) result)))
+		(result
+		 (throw 'loop nil)))))
       (when score
 	(cond
-	 ((and (car navi2ch-article-message-replace-below)
-	       navi2ch-article-message-hide-below
-	       (< score (min (car navi2ch-article-message-replace-below)
-			     navi2ch-article-message-hide-below)))
-	  (if (< (car navi2ch-article-message-replace-below)
-		 navi2ch-article-message-hide-below)
-	      (cdr navi2ch-article-message-replace-below)
-	    'hide))
-	 ((and (car navi2ch-article-message-replace-below)
-	       (< score (car navi2ch-article-message-replace-below)))
-	  (cdr navi2ch-article-message-replace-below))
-	 ((and navi2ch-article-message-hide-below
-	       (< score navi2ch-article-message-hide-below))
-	  'hide)
 	 ((and navi2ch-article-message-add-important-above
 	       (> score navi2ch-article-message-add-important-above))
-	  'important))))))
+	  (setq result 'important))
+	 ((and navi2ch-article-message-replace-below
+	       navi2ch-article-message-hide-below
+	       (< score (car navi2ch-article-message-replace-below))
+	       (< score navi2ch-article-message-hide-below))
+	  ;; `navi2ch-article-message-replace-below' $B$H(B
+	  ;; `navi2ch-article-message-hide-below' $B$,N>J}$H$b(B
+	  ;; $BE,MQ$5$l$&$k>l9g!"$7$-$$CM$NDc$$J}$rM%@h(B
+	  (if (< navi2ch-article-message-hide-below
+		 (car navi2ch-article-message-replace-below))
+	      (setq result 'hide)
+	    (setq result (cdr navi2ch-article-message-replace-below))))
+	 ((and navi2ch-article-message-replace-below
+	       (< score (car navi2ch-article-message-replace-below)))
+	  (setq result (cdr navi2ch-article-message-replace-below)))
+	 ((and navi2ch-article-message-hide-below
+	       (< score navi2ch-article-message-hide-below))
+	  (setq result 'hide))))
+      (cond
+       ((stringp result)
+	(let ((case-fold-search nil))
+	  (navi2ch-put-alist 'name result alist)
+	  (navi2ch-put-alist 'data result alist)
+	  (navi2ch-put-alist 'mail
+			     (if (string-match "sage"
+					       (cdr (assq 'mail alist)))
+				 "sage"
+			       "")
+			     alist)
+	  (navi2ch-put-alist 'date
+			     (navi2ch-replace-string " ID:.*"
+						     ""
+						     (cdr (assq 'date alist)))
+			     alist)))
+       ((memq result '(hide important unfilter))
+	(let ((nums (cdr (assq result navi2ch-article-current-article))))
+	  (unless (memq num nums)
+	    (setq navi2ch-article-current-article
+		  (navi2ch-put-alist result
+				     (cons num nums)
+				     navi2ch-article-current-article))))))
+      (unless (equal old-alist alist)
+	(setq navi2ch-article-message-filter-cache
+	      (navi2ch-put-alist
+	       'original
+	       (navi2ch-put-alist
+		num
+		(navi2ch-set-difference old-alist alist)
+		orig)
+	       navi2ch-article-message-filter-cache)))
+      (when navi2ch-article-use-message-filter-cache
+	(unless (equal alist old-alist)
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist
+		 'replace
+		 (navi2ch-put-alist
+		  num
+		  (copy-alist (navi2ch-set-difference alist old-alist))
+		  (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+		 navi2ch-article-message-filter-cache)))
+	(unless (or (memq result '(nil cache replace original unfilter))
+		    (stringp result))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist
+		 result
+		 (cons num
+		       (cdr (assq result navi2ch-article-message-filter-cache)))
+		 navi2ch-article-message-filter-cache)))
+	(setq navi2ch-article-message-filter-cache
+	      (navi2ch-put-alist
+	       'cache
+	       (cons num
+		     (cdr (assq 'cache navi2ch-article-message-filter-cache)))
+	       navi2ch-article-message-filter-cache)))
+      result)))
 
 (defun navi2ch-article-message-filter-by-name (alist)
   (when navi2ch-article-message-filter-by-name-alist
@@ -874,15 +869,10 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
      (cdr (assq 'name alist)))))
 
 (defun navi2ch-article-message-filter-by-message (alist)
-  (let ((l (append navi2ch-article-default-message-filter-by-message-alist
-		   navi2ch-article-message-filter-by-message-alist)))
-    (when l
-      (prog1
-	  (navi2ch-article-message-filter-subr
-	   l (cdr (assq 'data alist)))
-	(dolist (elt navi2ch-article-default-message-filter-by-message-alist)
-	  (setq l (delq elt l)))
-	(setq navi2ch-article-message-filter-by-message-alist l)))))
+  (when navi2ch-article-message-filter-by-message-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-message-alist
+     (cdr (assq 'data alist)))))
 
 (defun navi2ch-article-message-filter-by-id (alist)
   (let ((case-fold-search nil))
@@ -900,71 +890,91 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
      (cdr (assq 'mail alist)))))
 
 (defun navi2ch-article-message-filter-by-subject (alist)
-  (let ((slot (assq 'subject navi2ch-article-message-filter-cache)))
-    (if slot
-	(cdr slot)
-      (let ((subject (or (cdr (assq 'subject navi2ch-article-current-article))
-			 (if (eq (cdr (assq 'number alist)) 1)
-			     (cdr (assq 'subject alist))
-			   (let ((msg (navi2ch-article-get-message 1)))
-			     (when (stringp msg)
-			       (setq msg (navi2ch-article-parse-message msg)))
-			     (cdr (assq 'subject msg)))))))
-	(when subject
-	  (let ((result (when navi2ch-article-message-filter-by-subject-alist
-			  (navi2ch-article-message-filter-subr
-			   navi2ch-article-message-filter-by-subject-alist
-			   subject))))
-	    (when navi2ch-article-use-message-filter-cache
-	      (setq navi2ch-article-message-filter-cache
-		    (navi2ch-put-alist 'subject
-				       result
-				       navi2ch-article-message-filter-cache)))
-	    result))))))
+  (when navi2ch-article-message-filter-by-subject-alist
+    (navi2ch-article-message-filter-subr
+     navi2ch-article-message-filter-by-subject-alist
+     (if (equal (or (cdr (assq 'subject alist)) "") "")
+	 (navi2ch-article-get-current-subject)
+       (cdr (assq 'subject alist))))))
 
 (defun navi2ch-article-message-filter-subr (rules string)
-  (let (score)
+  (let ((board-id (cdr (assq 'id navi2ch-article-current-board)))
+	(artid (cdr (assq 'artid navi2ch-article-current-article)))
+	score)
     (catch 'loop
       (dolist (rule rules)
-	(let* ((char (and (listp (car rule))
-			  (string-to-char (symbol-name (cadar rule)))))
-	       (case-fold-search (and char
-				      (eq char
-					  (setq char (downcase char)))))
-	       (regexp (cond
-			((null char)
-			 (regexp-quote (car rule)))
-			((eq char ?r)
-			 (caar rule))
-			((eq char ?s)
-			 (regexp-quote (caar rule)))
-			((eq char ?e)
-			 (concat "\\`" (regexp-quote (caar rule)) "\\'"))
-			((eq char ?f)
-			 (regexp-quote
-			  (apply #'concat
-				 (split-string
-				  (japanese-hankaku (caar rule) t))))))))
-	  (when (and regexp
-		     (string-match regexp
-				   (if (eq char ?f)
-				       (apply #'concat
-					      (split-string
-					       (japanese-hankaku string t)))
-				     string)))
-	    ;; $BE,MQ$7$?%U%#%k%?>r7o$r(B age
-	    (when (and navi2ch-article-sort-message-filter-rules
-		       (not (eq rule (car rules))))
-	      (setcdr rules (cons (car rules) (delq rule (cdr rules))))
-	      (setcar rules rule))
-	    (if (numberp (cdr rule))
-		(setq score (+ (or score 0) (cdr rule)))
-	      (throw 'loop
-		     (if (and char
-			      (stringp (cdr rule)))
-			 (navi2ch-expand-newtext (cdr rule) string)
-		       (cdr rule)))))))
+	(when (or (not (consp (car rule)))
+		  (equal (or (plist-get (car rule) :board-id) board-id)
+			 (and (equal (or (plist-get (car rule) :artid) artid)
+				     artid)
+			      board-id)))
+	  (let* ((char (and (consp (car rule))
+			    (stringp (car (car rule)))
+			    (string-to-char (symbol-name (cadr (car rule))))))
+		 (case-fold-search (and char
+					(eq char
+					    (setq char (downcase char)))))
+		 (regexp (cond
+			  ((null char)
+			   (regexp-quote (car rule)))
+			  ((eq char ?r)
+			   (car (car rule)))
+			  ((eq char ?s)
+			   (regexp-quote (car (car rule))))
+			  ((eq char ?e)
+			   (concat "\\`" (regexp-quote (car (car rule))) "\\'"))
+			  ((eq char ?f)
+			   (navi2ch-fuzzy-regexp (car (car rule))
+						 case-fold-search
+						 "[$B!!(B \f\t\n\r\v]*"))
+			  (t
+			   ""))))
+	    (when (if (and char
+			   (plist-get (car rule) :invert))
+		      (not (string-match regexp string))
+		    (string-match regexp string))
+	      ;; $BE,MQ$7$?%U%#%k%?>r7o$r(B age
+	      (when (and (not (eq rule (car rules)))
+			 (> (or (and char
+				     (plist-get (car rule) :float))
+				(if navi2ch-article-sort-message-filter-rules
+				    1
+				  0))
+			    0))
+		(setcdr rules (cons (car rules) (delq rule (cdr rules))))
+		(setcar rules rule))
+	      (if (numberp (cdr rule))
+		  (setq score (+ (or score 0) (cdr rule)))
+		(throw 'loop
+		       (if (and char
+				(stringp (cdr rule))
+				(not (plist-get (car rule) :invert)))
+			   (navi2ch-expand-newtext (cdr rule) string)
+			 (cdr rule))))))))
       score)))
+
+(defun navi2ch-article-separator-filter ()
+  "$B5l7A<0$N%;%Q%l!<%?$r;HMQ$7$F$$$k%9%l$r?77A<0$KJQ49$9$k%U%#%k%?!#(B"
+  (save-excursion
+    (goto-char (point-min))
+    (when (looking-at "^.*,.*,.*,")
+      (while (re-search-forward ",\\|$B!w!.(B" nil t)
+	(if (string= (match-string 0) ",")
+	    (replace-match "<>")
+	  (replace-match ","))))))
+
+(defun navi2ch-article-date-format-be2ch (date)
+  "BE $B$K%j%s%/$rIU$1$k!#(B"
+  (when (string-match "BE:\\([0-9]*\\)-[^(]*([0-9]*)" date)
+    (set-text-properties (match-beginning 0) (match-end 0)
+			 (list 'mouse-face navi2ch-article-mouse-face
+			       'navi2ch-link (concat "http://be.2ch.net/test/p.php?i="
+						     (match-string 1 date))
+			       'navi2ch-link-type 'url
+			       'help-echo #'navi2ch-article-help-echo)
+			 date))
+  date)
+    
 
 (defun navi2ch-article-default-header-format-function (number name mail date)
   "$B%G%U%)%k%H$N%X%C%@$r%U%)!<%^%C%H$9$k4X?t!#(B
@@ -977,20 +987,17 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 					    'number
 					    (match-string 0 name)
 					    name))
-  (let ((from-header (navi2ch-propertize "From: "
-					 'face 'navi2ch-article-header-face))
-        (from (navi2ch-propertize (concat (format "[%d] " number)
-					  name
-					  (format " <%s>\n" mail))
-				  'face 'navi2ch-article-header-contents-face))
-        (date-header (navi2ch-propertize "Date: "
-					 'face 'navi2ch-article-header-face))
-	(date (navi2ch-propertize (if navi2ch-article-dispweek
-				      ;;$BMKF|I=<($9$k!)(B
-				      (navi2ch-article-appendweek date)
-				    date)
-				  'face
-				  'navi2ch-article-header-contents-face))
+  (let ((from-header (propertize "From: "
+				 'face 'navi2ch-article-header-face))
+        (from (propertize (concat (format "[%d] " number)
+				  name
+				  (format " <%s>\n" mail))
+			  'face 'navi2ch-article-header-contents-face))
+        (date-header (propertize "Date: "
+				 'face 'navi2ch-article-header-face))
+	(date (propertize (funcall navi2ch-article-date-format-function date)
+			  'face
+			  'navi2ch-article-header-contents-face))
 	(start 0) next)
     (while start
       (setq next
@@ -1154,9 +1161,9 @@ DONT-DISPLAY $B$,(B non-nil $B$N$H$-$O%9%l%P%C%U%!$rI=<($;$:$K<B9T!#(B"
   (use-local-map navi2ch-article-mode-map)
   (navi2ch-article-setup-menu)
   (setq navi2ch-article-point-stack nil)
-  (make-local-hook 'kill-buffer-hook)
+  (navi2ch-make-local-hook 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'navi2ch-article-kill-buffer-hook t t)
-  (make-local-hook 'post-command-hook)
+  (navi2ch-make-local-hook 'post-command-hook)
   (add-hook 'post-command-hook 'navi2ch-article-display-link-minibuffer nil t)
   (run-hooks 'navi2ch-article-mode-hook))
 
@@ -1342,42 +1349,23 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 		    (navi2ch-article-load-message-filter-cache
 		     navi2ch-article-current-board
 		     navi2ch-article-current-article))
-	      (let ((hide (cdr (assq 'hide navi2ch-article-current-article)))
-		    (f-hide (cdr (assq 'hide navi2ch-article-message-filter-cache))))
-		(catch 'loop
-		  (dolist (x (nthcdr (1- start) navi2ch-article-message-list))
-		    (if (eq (navi2ch-article-apply-message-filters
-			     (navi2ch-put-alist
-			      'number
-			      (car x)
-			      (navi2ch-article-parse-message (cdr x))))
-			    'hide)
-			(progn
-			  (setq hide (cons (car x) hide))
-			  (setq navi2ch-article-current-article
-				(navi2ch-put-alist
-				 'hide
-				 hide
-				 navi2ch-article-current-article))
-			  (when navi2ch-article-use-message-filter-cache
-			    (setq f-hide (cons (car x) f-hide))
-			    (setq navi2ch-article-message-filter-cache
-				  (navi2ch-put-alist
-				   'hide
-				   f-hide
-				   navi2ch-article-message-filter-cache))))
-		      (throw 'loop nil)))
-		  (setq suppressed res)))
+	      (catch 'loop
+		(dolist (x (nthcdr (1- start) navi2ch-article-message-list))
+		  (unless (eq (navi2ch-article-apply-message-filters
+			       (navi2ch-put-alist
+				'number
+				(car x)
+				(navi2ch-article-parse-message (cdr x))))
+			      'hide)
+		    (throw 'loop nil)))
+		(setq suppressed res))
 	      (navi2ch-article-save-info
 	       navi2ch-article-current-board
 	       navi2ch-article-current-article)
 	      (navi2ch-article-save-message-filter-cache
 	       navi2ch-article-current-board
 	       navi2ch-article-current-article
-	       navi2ch-article-message-filter-cache)
-	      (message "Garbage collecting...")
-	      (garbage-collect)	; `navi2ch-article-parse-message' $B$N%4%_A]=|(B
-	      (message "Garbage collecting...done")))
+	       navi2ch-article-message-filter-cache)))
 	  (message "Filtering current messages...done"))))
     suppressed))
 
@@ -1399,16 +1387,6 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 	(setq num (1+ num)))
       num)))
 
-(defun navi2ch-article-get-readcgi-raw-url (board article &optional start)
-  (let ((url (navi2ch-article-to-url board article))
-	(file (navi2ch-article-get-file-name board article))
-	size)
-    (if start
-	(setq size (navi2ch-file-size file))
-      (setq start 0
-	    size 0))
-    (format "%s?raw=%s.%s" url start size)))
-
 (defun navi2ch-article-update-file (board article &optional force)
   "BOARD, ARTICLE $B$KBP1~$9$k%U%!%$%k$r99?7$9$k!#(B
 $BJV$jCM$O(B \(article header) $B$N%j%9%H!#(B"
@@ -1426,9 +1404,9 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 	  (unless (or (navi2ch-net-get-state 'not-updated header)
 		      (navi2ch-net-get-state 'error header))
 	    (setq article (navi2ch-put-alist 'time
-					     (or (cdr (assoc "Last-Modified"
+					     (or (cdr (assq 'last-modified
 							     header))
-						 (cdr (assoc "Date"
+						 (cdr (assq 'date
 							     header)))
 					     article)))
 	  (when (navi2ch-net-get-state 'kako header)
@@ -1650,14 +1628,15 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 
 (defun navi2ch-article-select-current-link (&optional browse-p)
   (interactive "P")
-  (let (prop)
-    (cond ((setq prop (get-text-property (point) 'number))
-	   (navi2ch-article-select-current-link-number
+  (let ((type (get-text-property (point) 'navi2ch-link-type))
+	(prop (get-text-property (point) 'navi2ch-link)))
+    (cond ((eq type 'number)
+	   (navi2ch-article-select-current-link-number 
 	    (navi2ch-article-get-number-list prop)
 	    browse-p))
-          ((setq prop (get-text-property (point) 'url))
+	  ((eq type 'url)
            (navi2ch-article-select-current-link-url prop browse-p nil))
-          ((setq prop (get-text-property (point) 'content))
+          ((eq type 'content)
 	   (navi2ch-article-save-content)))))
 
 (defun navi2ch-article-number-list-to-url (number-list)
@@ -2053,12 +2032,12 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-get-current-word-in-body ()
   (let ((case-fold-search nil)
-	(word (if (get-text-property (point) 'url)
+	(word (if (eq (get-text-property (point) 'navi2ch-link-type) 'url)
 		  (buffer-substring-no-properties
-		   (if (get-text-property (1- (point)) 'url)
-		       (previous-single-property-change (point) 'url)
+		   (if (eq (get-text-property (1- (point)) 'navi2ch-link-type) 'url)
+		       (previous-single-property-change (point) 'navi2ch-link)
 		     (point))
-		   (next-single-property-change (point) 'url))
+		   (next-single-property-change (point) 'navi2ch-link))
 		(current-word))))
     (when (string-match
 	   (regexp-quote word)
@@ -2259,13 +2238,13 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
     (catch 'ret
       (when (or (eq major-mode 'navi2ch-article-mode)
 		(eq major-mode 'navi2ch-popup-article-mode))
-	(let ((num-prop (get-text-property point 'number))
-	      (url-prop (get-text-property point 'url))
+	(let ((type (get-text-property point 'navi2ch-link-type))
+	      (prop (get-text-property point 'navi2ch-link))
 	      num-list num)
 	  (cond
-	   (num-prop
+	   ((eq type 'number)
 	    (setq num-list (navi2ch-article-get-number-list
-			    num-prop (navi2ch-article-get-current-number)))
+			    prop (navi2ch-article-get-current-number)))
 	    (cond ((numberp num-list)
 		   (setq num num-list))
 		  (t
@@ -2283,10 +2262,10 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 			       (format "[%d]: %s" num msg)
 			       (eval navi2ch-article-display-link-width)))))))
 	   ((and navi2ch-article-get-url-text
-		 url-prop)
-	    (if (navi2ch-2ch-url-p url-prop)
-		(let ((board (navi2ch-board-url-to-board url-prop))
-		      (article (navi2ch-article-url-to-article url-prop)))
+		 (eq type 'url))
+	    (if (navi2ch-2ch-url-p prop)
+		(let ((board (navi2ch-board-url-to-board prop))
+		      (article (navi2ch-article-url-to-article prop)))
 		  (throw
 		   'ret
 		   (format "%s"
@@ -2316,11 +2295,11 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (unless (get-text-property point 'help-echo)
     (error "POINT (%d) does not have property help-echo" point))
   (let* ((end (or (min (next-single-property-change point 'help-echo)
-		       (or (navi2ch-next-property point 'link-head)
+		       (or (navi2ch-next-property point 'navi2ch-link)
 			   (point-max)))
 		  point))
 	 (start (or (max (previous-single-property-change end 'help-echo)
-			 (or (navi2ch-previous-property end 'link-head)
+			 (or (navi2ch-previous-property end 'navi2ch-link)
 			     (point-min)))
 		    point)))
     (put-text-property start end 'help-echo value)))
@@ -2356,21 +2335,23 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 (defun navi2ch-article-next-link ()
   "$B<!$N%j%s%/$X0\F0!#(B"
   (interactive)
-  (let ((point (navi2ch-next-property (point) 'link-head)))
+  (let ((point (navi2ch-next-property (point) 'navi2ch-link)))
     (if point
 	(goto-char point))))
 
 (defun navi2ch-article-previous-link ()
   "$BA0$N%j%s%/$X0\F0!#(B"
   (interactive)
-  (let ((point (navi2ch-previous-property (point) 'link-head)))
+  (let ((point (navi2ch-previous-property (point) 'navi2ch-link)))
     (if point
 	(goto-char point))))
 
 (defun navi2ch-article-fetch-link (&optional force)
   (interactive)
-  (let ((url (get-text-property (point) 'url)))
-    (and url
+  (let ((type (get-text-property (point) 'navi2ch-link-type))
+	(url  (get-text-property (point) 'navi2ch-link)))
+    (and (eq type 'url)
+	 url
 	 (navi2ch-2ch-url-p url)
 	 (let ((article (navi2ch-article-url-to-article url))
 	       (board (navi2ch-board-url-to-board url)))
@@ -2403,7 +2384,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
 
 (defun navi2ch-article-detect-encoded-regions (&optional sort)
   "$B%P%C%U%!$+$i(B uuencode $B$^$?$O(B base64 $B%(%s%3!<%I$5$l$?NN0h$rC5$9!#(B
-(list (list type fname start end)) $B$rJV$9!#(B
+\(list (list type fname start end)) $B$rJV$9!#(B
 SORT $B$,(B non-nil $B$N$H$-$O(B start $B$G%=!<%H$7$?7k2L$rJV$9!#(B
 $B$?$@$7!"(B
  type: 'uuencode $B$+(B 'base64
@@ -2571,16 +2552,17 @@ PREFIX $B$r;XDj$7$?>l9g$O!"(Bmark $B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$
 	      part-begin)
 	  (delete-region begin end)
 	  (goto-char begin)
-	  (insert (navi2ch-propertize
+	  (insert (propertize
 		   "> " 'face 'navi2ch-article-auto-decode-face)
-		  (navi2ch-propertize
+		  (propertize
 		   (format "%s" (or fname "$BL>L5$7%U%!%$%k$5$s(B"))
 		   'face '(navi2ch-article-url-face
 			   navi2ch-article-auto-decode-face)
 		   'link t
 		   'mouse-face navi2ch-article-mouse-face
 		   'file-name fname
-		   'content decoded))
+		   'navi2ch-link-type 'content
+		   'navi2ch-link decoded))
 	  (put-text-property begin (1+ begin) 'auto-decode-text 'off)
 	  (put-text-property (+ 2 begin) (+ 3 begin) 'link-head t)
 	  (setq part-begin (point))
@@ -2599,8 +2581,8 @@ PREFIX $B$r;XDj$7$?>l9g$O!"(Bmark $B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$
   (save-excursion
     (beginning-of-line)
     (let* ((point (next-single-property-change
-		   (point) 'link-head nil (navi2ch-line-end-position)))
-	   (content (get-text-property point 'content))
+		   (point) 'navi2ch-link nil (navi2ch-line-end-position)))
+	   (content (get-text-property point 'navi2ch-link))
 	   (filename (get-text-property point 'file-name))
 	   ret)
       (when (and (eq (get-text-property (point) 'auto-decode-text) 'off)
@@ -2718,7 +2700,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 
 (defun navi2ch-article-save-content ()
   (interactive)
-  (let ((prop (get-text-property (point) 'content))
+  (let ((prop (get-text-property (point) 'navi2ch-link))
 	(default-filename (get-text-property (point) 'file-name))
 	filename)
     (when default-filename
@@ -2950,15 +2932,15 @@ FUNC $B$O(B (NUMBER, LIST) $B$r0z?t$K<h$k4X?t$G$"$k;v!#(B"
     (setq list (funcall func num list))
     (setq article (navi2ch-put-alist sym list article))
     (unless (memq num list)
-      (let* ((cache navi2ch-article-message-filter-cache)
-	     (f-list (cdr (assq sym cache)))
-	     (unfilter (cdr (assq 'unfilter article))))
-	(setq f-list (delq num f-list))
-	(setq cache (navi2ch-put-alist sym f-list cache))
-	(setq navi2ch-article-message-filter-cache
-	      (navi2ch-put-alist 'cache
-				 (delq num (cdr (assq 'cache cache)))
-				 cache))
+      (let ((cache navi2ch-article-message-filter-cache)
+	    (unfilter (cdr (assq 'unfilter article))))
+	(setq cache (navi2ch-put-alist sym
+				       (delq num (cdr (assq sym cache)))
+				       cache))
+	(setq cache (navi2ch-put-alist 'cache
+				       (delq num (cdr (assq 'cache cache)))
+				       cache))
+	(setq navi2ch-article-message-filter-cache cache)
 	(when (and perm
 		   (not (memq num unfilter)))
 	  (setq article (navi2ch-put-alist 'unfilter
@@ -3186,29 +3168,14 @@ FUNC $B$O(B (NUMBER, LIST) $B$r0z?t$K<h$k4X?t$G$"$k;v!#(B"
 	  (or article (setq article navi2ch-article-current-article))
 	  (or cache (setq cache navi2ch-article-message-filter-cache))))))
   (when cache
-    (let ((file (navi2ch-article-get-message-filter-cache-file-name board article))
+    (let ((file (navi2ch-article-get-message-filter-cache-file-name board
+								    article))
 	  (alist (delq nil
 		       (mapcar
 			(lambda (key)
 			  (let ((slot (assq key cache)))
-			    (if (eq key 'replace)
-				(let ((reps (delq nil
-						  (mapcar
-						   (lambda (reps-slot)
-						     (let ((rep (delq nil
-								      (mapcar
-								       (lambda (rep-slot)
-									 (and (cdr rep-slot)
-									      (cons (car rep-slot)
-										    (cadr rep-slot))))
-								       (cdr reps-slot)))))
-						       (and rep
-							    (cons (car reps-slot) rep))))
-						   (cdr slot)))))
-				  (and reps
-				       (cons key reps)))
-			      (and (cdr slot)
-				   slot))))
+			    (and (cdr slot)
+				 slot)))
 			navi2ch-article-save-message-filter-cache-keys))))
       (if (and (null alist)
 	       (file-exists-p file))
@@ -3218,26 +3185,19 @@ FUNC $B$O(B (NUMBER, LIST) $B$r0z?t$K<h$k4X?t$G$"$k;v!#(B"
 	(navi2ch-save-info file alist)))))
 
 (defun navi2ch-article-load-message-filter-cache (&optional board article)
-  (or board (setq board navi2ch-article-current-board))
-  (or article (setq article navi2ch-article-current-article))
-  (let ((alist (navi2ch-load-info
-		(navi2ch-article-get-message-filter-cache-file-name board article))))
-    (dolist (reps-slot (cdr (assq 'replace alist)) alist)
-      (dolist (rep-slot (cdr reps-slot))
-	(setcdr rep-slot (list (cdr rep-slot)))))))
+  (navi2ch-load-info
+   (navi2ch-article-get-message-filter-cache-file-name
+    (or board navi2ch-article-current-board)
+    (or article navi2ch-article-current-article))))
 
 (defun navi2ch-article-toggle-replace-message (&optional prefix)
   "$B8=:_$N%l%9$NCV49$NM-8z!&L58z$r@Z$jBX$($k!#(B"
   (interactive "P")
-  (let* ((unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
-	 (num (navi2ch-article-get-current-number))
-	 (rep (cdr (assq num
-			 (cdr (assq 'replace navi2ch-article-message-filter-cache)))))
-	 (msg "No replacement cached"))
-    (when (catch 'loop
-	    (dolist (slot rep)
-	      (when (cdr slot)
-		(throw 'loop t))))
+  (let ((unfilter (cdr (assq 'unfilter navi2ch-article-current-article)))
+	(rep (cdr (assq 'replace navi2ch-article-message-filter-cache)))
+	(num (navi2ch-article-get-current-number))
+	(msg "No replacement cached"))
+    (when (cdr (assq num rep))
       (if (memq num unfilter)
 	  (setq unfilter (delq num unfilter)
 		msg "Replace message")
@@ -3252,15 +3212,20 @@ FUNC $B$O(B (NUMBER, LIST) $B$r0z?t$K<h$k4X?t$G$"$k;v!#(B"
 	  (navi2ch-article-reinsert-partial-messages num num)))
       (when (and prefix
 		 (memq num unfilter))
-	(navi2ch-put-alist num
-			   nil
-			   (cdr (assq 'replace navi2ch-article-message-filter-cache)))
 	(setq navi2ch-article-message-filter-cache
-	      (navi2ch-put-alist
-	       'cache
-	       (delq num
-		     (cdr (assq 'cache navi2ch-article-message-filter-cache)))
-	       navi2ch-article-message-filter-cache))))
+	      (navi2ch-put-alist 'replace
+				 (delq (assq num rep) rep)
+				 navi2ch-article-message-filter-cache))
+	(let ((orig (cdr (assq 'original navi2ch-article-message-filter-cache)))
+	      (cache (cdr (assq 'cache navi2ch-article-message-filter-cache))))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist 'original
+				   (delq (assq num orig) orig)
+				   navi2ch-article-message-filter-cache))
+	  (setq navi2ch-article-message-filter-cache
+		(navi2ch-put-alist 'cache
+				   (delq (assq num cache) cache)
+				   navi2ch-article-message-filter-cache)))))
     (message msg)))
 
 (defun navi2ch-article-toggle-message-filter (&optional prefix)
@@ -3278,24 +3243,27 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
 		(navi2ch-article-load-message-filter-cache))))
     (when navi2ch-article-message-filter-cache
       ;; $B%U%#%k%?A0$N%l%9$N>uBV$r%-%c%C%7%e$+$iI|85(B
-      (dolist (reps-slot (cdr (assq 'replace navi2ch-article-message-filter-cache)))
-	(let ((alist (navi2ch-article-get-message (car reps-slot))))
-	  (dolist (rep-slot (cdr reps-slot))
-	    (let ((org (cddr rep-slot)))
-	      (when org
-		(navi2ch-put-alist (car rep-slot) (car org) alist))))))
+      (when navi2ch-article-message-filter-mode
+	(dolist (slots (cdr (assq 'original
+				  navi2ch-article-message-filter-cache)))
+	  (let ((alist (navi2ch-article-get-message (car slots))))
+	    (dolist (slot (cdr slots))
+	      (when (cdr slot)
+		(navi2ch-put-alist (car slot) (cdr slot) alist))))))
       (setq navi2ch-article-current-article
-	    (navi2ch-put-alist 'hide
-			       (navi2ch-set-difference
-				(cdr (assq 'hide navi2ch-article-current-article))
-				(cdr (assq 'hide navi2ch-article-message-filter-cache)))
-			       navi2ch-article-current-article))
+	    (navi2ch-put-alist
+	     'hide
+	     (navi2ch-set-difference
+	      (cdr (assq 'hide navi2ch-article-current-article))
+	      (cdr (assq 'hide navi2ch-article-message-filter-cache)))
+	     navi2ch-article-current-article))
       (setq navi2ch-article-current-article
-	    (navi2ch-put-alist 'important
-			       (navi2ch-set-difference
-				(cdr (assq 'important navi2ch-article-current-article))
-				(cdr (assq 'important navi2ch-article-message-filter-cache)))
-			       navi2ch-article-current-article))
+	    (navi2ch-put-alist
+	     'important
+	     (navi2ch-set-difference
+	      (cdr (assq 'important navi2ch-article-current-article))
+	      (cdr (assq 'important navi2ch-article-message-filter-cache)))
+	     navi2ch-article-current-article))
       ;; $B%-%c%C%7%e$r%/%j%"(B
       (setq navi2ch-article-message-filter-cache nil))
     (setq navi2ch-article-message-filter-mode t))
@@ -3383,32 +3351,79 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
     (set variable (cons (cons match result)
 			(delq current (symbol-value variable))))
     (navi2ch-auto-modify-variables (list variable))
-    (when (y-or-n-p "Apply new rules to current messages now? ")
-      (navi2ch-article-toggle-message-filter t))))
+    (if (y-or-n-p "Apply new rules to current messages now? ")
+	(navi2ch-article-toggle-message-filter t)
+      (message "Don't apply now"))))
 
 (defun navi2ch-article-read-message-filter-match (prompt
 						  &optional initial-input)
-  (let (char str)
-    (when (y-or-n-p "Use extensional match? ")
-      (setq char (navi2ch-read-char-with-retry
-		  "Match for: s)ubstring f)uzzy-substring e)xact-string r)egxp"
-		  nil
-		  '(?s ?f ?e ?r)))
-      (when (and (eq char ?r)
-		 initial-input)
-	(setq initial-input (regexp-quote initial-input)))
-      (unless (y-or-n-p "Ignore case? ")
-	(setq char (upcase char))))
+  (let (str list)
+    (when (y-or-n-p "Use extended matching? ")
+      (let ((char (navi2ch-read-char-with-retry
+		   "Type: s)ubstring f)uzzy e)xact r)egxp: "
+		   nil
+		   '(?s ?f ?e ?r))))
+	(when (and (eq char ?r)
+		   initial-input)
+	  (setq initial-input (regexp-quote initial-input)))
+	(unless (y-or-n-p "Ignore case? ")
+	  (setq char (upcase char)))
+	(setq list (list initial-input (intern (char-to-string char))))
+	(when (y-or-n-p "Invert match? ")
+	  (setq list (plist-put list :invert t)))))
     (setq str (navi2ch-read-string prompt
 				   initial-input
 				   'navi2ch-search-history))
-    (if char
-	(list str (intern (char-to-string char)))
-      str)))
+    (if (null list)
+	str
+      (setcar list str)
+      (let ((options '("s)cope" "f)loating")))
+	(while (and options
+		    (y-or-n-p "Set other options? "))
+	  (let ((char (navi2ch-read-char-with-retry
+		       (concat "Options: "
+			       (mapconcat #'identity options " ")
+			       ": ")
+		       nil
+		       (mapcar
+			(lambda (x) (aref x (1- (string-match ")" x))))
+			options))))
+	    (cond
+	     ((eq char ?s)
+	      (let ((char (navi2ch-read-char-with-retry
+			   "Scope: b)oard-local a)rticle-local d)efault: "
+			   nil
+			   '(?b ?a ?d))))
+		(when (memq char '(?b ?a))
+		  (setq list
+			(plist-put
+			 list
+			 :board-id
+			 (cdr (assq 'id navi2ch-article-current-board))))
+		  (when (eq char ?a)
+		    (setq list
+			  (plist-put
+			   list
+			   :artid
+			   (cdr (assq 'artid
+				      navi2ch-article-current-article))))))
+		(setq options (delete "s)cope" options))))
+	     ((eq char ?f)
+	      (let ((char (navi2ch-read-char-with-retry
+			   "Floating: n)ever a)lways d)efault: "
+			   nil
+			   '(?n ?a ?d))))
+		(cond
+		 ((eq char ?n)
+		  (setq list (plist-put list :float 0)))
+		 ((eq char ?a)
+		  (setq list (plist-put list :float 1))))
+		(setq options (delete "f)loating" options))))))))
+      list)))
 
 (defun navi2ch-article-read-message-filter-result (&optional initial-input)
   (let ((char (navi2ch-read-char-with-retry
-	       "Result: r)eplace h)ide i)mportant s)core"
+	       "Result: r)eplace h)ide i)mportant s)core: "
 	       nil
 	       '(?r ?h ?i ?s))))
     (cond
@@ -3451,12 +3466,13 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
 
 (defun navi2ch-article-url-at-point (point)
   "POINT $B$N2<$N%j%s%/$r;X$9(B URL $B$rF@$k!#(B"
-  (let ((number-property (get-text-property point 'number))
-	(url-property (get-text-property point 'url)))
-    (cond (number-property
+  (let ((type 'navi2ch-link-type)
+	(prop (get-text-property point 'navi2ch-link)))
+    (cond ((eq type 'number)
 	   (navi2ch-article-number-list-to-url
-	    (navi2ch-article-get-number-list number-property)))
-	  (url-property))))
+	    (navi2ch-article-get-number-list prop)))
+	  ((eq type 'url)
+	   prop))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

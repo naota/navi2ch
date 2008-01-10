@@ -394,12 +394,14 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	     (mtime-string (navi2ch-http-date-encode mtime))
 	     header)
 	(when time (setq time (navi2ch-http-date-decode time)))
-	(setq header (list (cons "Date" mtime-string)
-			   (cons "Server" "localfile")))
-	(if (navi2ch-compare-times mtime time)
+	(setq header (list (cons 'date mtime-string)
+			   (cons 'server "localfile")))
+	(if (or navi2ch-net-force-update
+		(navi2ch-compare-times mtime time)
+		(not (file-exists-p file)))
 	    (progn
 	      (copy-file source-file file t)
-	      (setq header (cons (cons "Last-Modified" mtime-string) header))
+	      (setq header (cons (cons 'last-modified mtime-string) header))
 	      (message "%supdated" (current-message)))
 	  (setq header (navi2ch-net-add-state 'not-updated header))
 	  (message "%snot updated" (current-message)))
