@@ -1,3 +1,25 @@
+2008-01-12  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-config.el.in: 復活。
+
+	* navi2ch-article.el (navi2ch-article-mode-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
+
+	* navi2ch-list.el (navi2ch-list-mode-map): Ditto.
+
+	* navi2ch-board.el (navi2ch-board-mode-map): Ditto.
+
+	* navi2ch-message.el (navi2ch-message-mode-map): Ditto.
+
+	* navi2ch-be2ch.el (navi2ch-be2ch-toggle-login): 新関数。
+	(navi2ch-be2ch-logout): オプション引数 no-msg 追加。 t なら、ログア
+	ウトのメッセージを表示しない。
+	(navi2ch-be2ch-login): navi2ch-be2ch-logout() を no-msg を t にして
+	呼ぶ。
+
+	* navi2ch-board.el (navi2ch-board-get-subject-list): インデントを整
+	形。
+
 2008-01-08  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-util.el (navi2ch-defalias-maybe): quote を新形式に。

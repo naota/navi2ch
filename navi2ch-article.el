@@ -94,6 +94,7 @@
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
     (define-key map "u" 'navi2ch-show-url-at-point)
+    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec

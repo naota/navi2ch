@@ -59,7 +59,7 @@
 	(read-string "mail address: "))
     (or navi2ch-be2ch-password
 	(read-passwd "password: "))))
-  (navi2ch-be2ch-logout)
+  (navi2ch-be2ch-logout t)
   (let ((proc (navi2ch-net-send-request
 	       navi2ch-be2ch-login-url
 	       "POST"
@@ -80,14 +80,22 @@
     (when (navi2ch-be2ch-login-p)
       (message "Be@2ch にログインしました。"))))
 
-(defun navi2ch-be2ch-logout ()
+(defun navi2ch-be2ch-logout (&optional no-msg)
   (interactive)
-    (dolist (name navi2ch-be2ch-cookie-names)
-      (navi2ch-net-store-cookie (list name "" 0 0)
-				navi2ch-be2ch-cookie-domain
-				navi2ch-be2ch-cookie-path))
-    (navi2ch-net-save-cookies)
-    (setq navi2ch-be2ch-login-flag nil)
-    (message "Be@2ch からログアウトしました。"))
+  (dolist (name navi2ch-be2ch-cookie-names)
+    (navi2ch-net-store-cookie (list name "" 0 0)
+			      navi2ch-be2ch-cookie-domain
+			      navi2ch-be2ch-cookie-path))
+  (navi2ch-net-save-cookies)
+  (setq navi2ch-be2ch-login-flag nil)
+  (unless no-msg
+    (message "Be@2ch からログアウトしました。")))
+
+(defun navi2ch-be2ch-toggle-login ()
+  "Be@2ch へのログイン状態を切り替える。"
+  (interactive)
+  (if navi2ch-be2ch-login-flag
+      (navi2ch-be2ch-logout)
+    (call-interactively 'navi2ch-be2ch-login)))
 
 ;;; navi2ch-be2ch.el ends here

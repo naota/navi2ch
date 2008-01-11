@@ -48,6 +48,7 @@
     (define-key map "w" 'navi2ch-board-write-message)
     (define-key map "\M-e" 'navi2ch-board-expire)
     (define-key map "md" 'navi2ch-board-hide-mark-article)
+    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
     (setq navi2ch-board-mode-map map)))
 
 (defvar navi2ch-board-mode-menu-spec
@@ -244,7 +245,8 @@
 	    ;;		   (navi2ch-board-get-file-name
 	    ;;		    navi2ch-board-current-board "") nil "\\.dat$"))
 	    list)
-	(if (null regexp) nil
+	(if (null regexp)
+	    nil
 	  (while (re-search-forward regexp nil t)
 	    (setq list (cons (navi2ch-board-get-matched-article) list)))
 	  (nreverse list))))))
