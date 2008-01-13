@@ -16,6 +16,7 @@ expire 関連のバグ修正。
 (add-to-list 'navi2ch-article-filter-list
              'navi2ch-article-separator-filter)
 などとする。
+Samba24 の残り秒数が表示されるようになった。
 
 * navi2ch 1.7.4 -> 1.7.5
 JBBS@したらばの jbbs.livedoor.jp への移転に対応。

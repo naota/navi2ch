@@ -276,9 +276,11 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 
 (defun navi2ch-localfile-article-update (board article start)
   "BOARD ARTICLE の記事を更新する。"
-  (let ((url (navi2ch-article-get-url board article))
-	(file (navi2ch-article-get-file-name board article))
-	(time (cdr (assq 'time article))))
+  (let* ((url (navi2ch-article-get-url board article))
+	 (file (navi2ch-article-get-file-name board article))
+	 (time (or (cdr (assq 'time article))
+		   (and (file-exists-p file)
+			(navi2ch-file-mtime file)))))
     (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-article-to-url
@@ -365,9 +367,11 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
   navi2ch-localfile-last-error)
 
 (defun navi2ch-localfile-board-update (board)
-  (let ((url (navi2ch-board-get-url board))
-	(file (navi2ch-board-get-file-name board))
-	(time (cdr (assq 'time board))))
+  (let* ((url (navi2ch-board-get-url board))
+	 (file (navi2ch-board-get-file-name board))
+	 (time (or (cdr (assq 'time board))
+		   (and (file-exists-p file)
+			(navi2ch-file-mtime file)))))
     (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-board-get-file-name (board &optional file-name)

@@ -1,5 +1,11 @@
 2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
 
+	* NEWS: Samba24について記載。
+
+	* navi2ch-localfile.el (navi2ch-localfile-board-update)
+	(navi2ch-localfile-article-update): time が nil の時は file の更新
+	時間を使用。
+
 	* navi2ch-util.el (navi2ch-set-mode-line-identification): Samba24
 	の待ち時間を mode-line に表示。
 
