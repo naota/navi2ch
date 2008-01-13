@@ -194,7 +194,7 @@ stack が空なら、PopUp Article モードを抜ける。"
      ((eq type 'number)
       (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
       (if (and (integerp prop)
-	       (assq prop navi2ch-article-message-list))
+	       (listp (navi2ch-article-get-message prop))) ;; FIXME
 	  (navi2ch-article-goto-number prop t t)
 	(navi2ch-popup-article-exit)
 	(navi2ch-article-select-current-link-number prop browse-p)))
