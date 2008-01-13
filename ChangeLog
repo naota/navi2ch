@@ -1,5 +1,7 @@
 2008-01-13  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-vars.el: fixed coding-system problem.
+
 	* navi2ch-popup-article.el (navi2ch-popup-article-select-current-link):
 	adhoc だけど、 patch#1733433 と、 >>nn のリンク先をさらに popup す
 	ることができるように。
