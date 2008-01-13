@@ -1,6 +1,6 @@
 ;;; navi2ch-vars.el --- User variables for navi2ch.
 
-;; Copyright (C) 2001-2004 by Navi2ch Project
+;; Copyright (C) 2001-2004, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: www 2ch
@@ -1749,29 +1749,29 @@ nil $B$J$i!"=q$-$+$1$rGK4~$7$F$$$$$+Ld$$9g$o$;$k!#(B
 (defvar navi2ch-message-aa-default-alist
   '(("a" . "($B!-'%!.(B)")
     ("b" . "$B!3(B(`$B'%!-(B)(II(B")
-    ("B" . "((($B!((I_$B'%(I_(B))(I6^86^8L^YL^Y(B")
-    ("f" . "( $B!-(B_$B!5(B`)(IL0](B")
+    ("B" . "((($B!((B$B(I(B_$B'%(B$B(I(B_$B(B))(B$B(I6^86^8L^YL^Y(B$B(B")(B
+    $B("f"(B $B. "((B $B!-(B_$B!5(B`)(IL0](B")
     ("e" . "($B"?'U(B`)")
     ("F" . "($B!-!<!.(B)")
-    ("g" . "((I_$B'%(I_(B)(I:^Y'(B")
-    ("G" . "(I6^$B(,(,(B((I_$B'%(I_(B;)$B(,(,(I?(B!")
-    ("h" . "((I_$B'%(I_(B)(IJ'(B?")
-    ("H" . "(;$B!-'%!.(B)(IJ'J'(B")
-    ("i" . "((I%$B"O(I%(B)(I22(B!!")
-    ("I" . "((I%$B#A(I%(B)(I28E2(B!!")
-    ("j" . "((I%$B"O(I%(B)(I<^;8<^4]C^<@(B")
-    ("k" . "(I7@$B(,(,(,(,(,(,(B((I_$B"O(I_(B)$B(,(,(,(,(,(,(B !!!!!")
-    ("K" . "(I7@$B(,(B((I_$B"O(I_(B)$B(,(B( (I_$B"O(B)$B(,(B( $B!!(I_(B)$B(,(B($B!!!!(B)$B(,(B((I_(B $B!!(B)$B(,(B($B"O(I_(B )$B(,(B((I_$B"O(I_(B)$B(,(B!!!!")
+    ("g" . "((I_$B'%(B$B(I(B_$B(B(B)$B(I:^Y'(B$B(B")(B
+    $B("G"(B $B. (B"$B(I6^(,(,(B((I_$B'%(B$B(I(B_$B(B;)(,(,(B$B(I(B?$B(B!"(B)
+    $B("h"(B $B. "((B$B(I(B_$B'%(B$B(I(B_$B(B(B)$B(IJ'(B$B(B?"(B)
+    $B("H"(B $B. "((B;$B!-'%!.(B)(IJ'J'(B")
+    ("i" . "((I%$B"O(B$B(I(B%$B(B(B)$B(I22(B$B(B!!")(B
+    $B("I"(B $B. "((B$B(I(B%$B#A(B$B(I(B%$B(B(B)$B(I28E2(B$B(B!!")(B
+    $B("j"(B $B. "((B$B(I(B%$B"O(B$B(I(B%$B(B(B)$B(I<^;8<^4]C^<@(B$B(B")(B
+    $B("k"(B $B. (B"$B(I7@(,(,(,(,(,(,(B((I_$B"O(B$B(I(B_$B(B(B)$B(,(,(,(,(,(,(B !!!!!")
+    ("K" . "(I7@$B(,(B((I_$B"O(B$B(I(B_$B(B(B)$B(,(B( (I_$B"O(B)$B(,(B( $B!!(B$B(I(B_$B(B(B)$B(,(B($B!!!!(B)$B(,(B((I_(B $B!!(B)$B(,(B($B"O(B$B(I(B_$B(B(B )$B(,(B((I_$B"O(B$B(I(B_$B(B(B)$B(,(B!!!!")
     ("m" . "($B!-"O!.(B)")
     ("M" . "$B!3(B($B!-"&!.(B)(II(B")
     ("n" . "($B!1!<!1(B)$B%K%d%j%C(B")
     ("N" . "($B!-(B-`).(I!$B#o#O(B($B$J$s$G$@$m$&!)(B)")
-    ("p" . "$B!J!!(I_$B'U(I_$B!K(IN_60](B")
-    ("s" . "$B&2!J(I_$B'U(I_(Blll$B!K(I6^0](B")
-    ("S" . "($B!-(I%$B&X(I%(B`)(I<.N^0](B")
-    ("t" . "y=(I0(B( (I_$B'U(I_(B)(I%$B"h(B.$B!!(I@0](B")
-    ("u" . "((I_$B'U(I_(B)(I3O0(B")
-    ("U" . "(-$B!2(B-)(I3B@^(B"))
+    ("p" . "$B!J!!(B$B(I(B_$B'U(B$B(I(B_$B!K(B$B(IN_60(B]$B(B")(B
+    $B("s"(B $B. (B"$B&2!J(B$B(I(B_$B'U(B$B(I(B_$B(Bll(Bl$B!K(B$B(I6^0](B$B(B")(B
+    $B("S"(B $B. "(!-(B$B(I(B%$B&X(B$B(I(B%$B(B`)(B$B(I<.N^0](B$B(B")(B
+    $B("t"(B $B. "y(B=$B(I(B0$B(B( (B$B(I(B_$B'U(B$B(I(B_$B(B(B)$B(I(B%$B"h(B.$B!!(B$B(I@0(B]$B(B")(B
+    $B("u"(B $B. "((B$B(I(B_$B'U(B$B(I(B_$B(B(B)$B(I3O(B0$B(B")(B
+    $B("U"(B $B. "((B-$B!2(B-)(I3B@^(B"))
   "AA $B$rF~NO$9$k$H$-$N%-!<%P%$%s%I$H(B AA $B$N(B alist$B!#(B
 `navi2ch-message-aa-alist' $B$+$iCM$,8+IU$+$i$J$$>l9g$O$3$C$A$+$iC5$9!#(B")
 
@@ -2097,6 +2097,11 @@ to force the image format."
   "*Display splash screen at start time."
   :type 'boolean
   :group 'navi2ch)
+
+(defcustom navi2ch-message-samba24-show nil
+  "* non-nil $B$J$i(B $BO"B3Ej9F5,@)(B($BDL>N(BSAMBA24)$B$N7P2a;~4V%+%&%s%H%@%&%s$rI=<($9$k(B"
+  :type 'boolean
+  :group 'navi2ch-message)
 
 ;; Mona fonts.
 (defgroup navi2ch-mona nil

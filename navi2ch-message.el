@@ -1,6 +1,6 @@
 ;;; navi2ch-message.el --- write message module for navi2ch
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2004, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -96,6 +96,21 @@
 (defvar navi2ch-message-link-face 'navi2ch-message-link-face)
 (defvar navi2ch-message-url-face 'navi2ch-message-url-face)
 (defvar navi2ch-message-citation-face 'navi2ch-message-citation-face)
+
+;;SAMBA24のデータ(urlだの板名だの時間だの)
+(defvar navi2ch-message-samba24-samba-data nil)
+
+;;板IDと書き込み時間を保持
+(defvar navi2ch-message-samba24-send-time nil)
+
+;;モードラインに表示するカウントダウン
+(defvar navi2ch-message-samba24-mode-string nil)
+
+;;書き込み規制時間を表示するか
+(defvar navi2ch-message-samba24-show t)
+
+;;現在表示中の書き込み規制時間モードライン
+(defvar navi2ch-message-samba24-mode-string nil)
 
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
@@ -273,6 +288,7 @@
 		    (navi2ch-article-sync navi2ch-message-force-sync)))))
 	    (when (get-buffer navi2ch-message-backup-buffer-name)
 	      (bury-buffer navi2ch-message-backup-buffer-name)))))
+      (navi2ch-message-samba24)
       (run-hooks 'navi2ch-message-after-send-hook)
       (navi2ch-message-exit 'after-send))))
 
@@ -586,6 +602,116 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
   (message subject url board article)
   "送信控えのレスの板名付きのフォーマット。"
   (format "[%s]: %s\nURL: %s\n\n%s" (cdr (assq 'name board)) subject url message))
+
+
+(defun navi2ch-message-samba24-timer ()
+  "書き込み時に生成されるタイマー。
+1秒ごとに自分自身を呼び出し、必要が無くなったら自分自身をコールするのをやめる"
+  (let (timer-name)
+    (when navi2ch-message-samba24-send-time
+      (setq timer-name (run-at-time 1 nil 'navi2ch-message-samba24-timer))
+      (navi2ch-message-samba24-modeline))))
+
+(defun navi2ch-message-samba24-modeline ()
+  "書き込み経過時間をカウントダウンする。global-mode-line(時計とか表示する場所)をいじる。"
+  (let (tmp-time now-time samba-time)
+    (setq tmp-time (current-time))
+    (setq now-time (+ (lsh (car tmp-time) 16) (nth 1 tmp-time)))
+    (when navi2ch-message-samba24-mode-string
+      (setq global-mode-string 
+	    (delete navi2ch-message-samba24-mode-string global-mode-string))
+      (setq navi2ch-message-samba24-mode-string nil))
+    (dolist (x navi2ch-message-samba24-send-time)
+      (setq time-diff (- now-time (cdr x)))
+      (setq samba-time 
+	    (navi2ch-message-samba24-search-samba 
+	     (navi2ch-message-samba24-board-conversion 'id (car x) 'uri) (car x)))
+      (when samba-time
+	(setq samba-time (string-to-number samba-time))
+	(if (<= time-diff samba-time)
+	    (setq navi2ch-message-samba24-mode-string 
+		  (concat (format "%s:%d " 
+				  (navi2ch-message-samba24-board-conversion 'id (car x) 'name) 
+				  (- samba-time time-diff)) 
+			  navi2ch-message-samba24-mode-string))
+	  (setq navi2ch-message-samba24-send-time (delete x navi2ch-message-samba24-send-time)))
+	(if navi2ch-message-samba24-mode-string
+	    (setq global-mode-string 
+		  (cons navi2ch-message-samba24-mode-string global-mode-string)))
+	(force-mode-line-update t)))
+
+(defun navi2ch-message-samba24 ()
+  "SAMBA24(連続投稿規制)の対応のため、書き込み許可待ち時間を表示する。
+レス送信時にコールされ、モードラインでカウントダウンを表示する"
+  (catch 'loop
+    (let (tmp-time last-write-time id-list)
+      (when navi2ch-message-samba24-show
+	(if (null navi2ch-message-samba24-samba-data)
+	    (if (null (navi2ch-message-samba24-read-samba))
+		(progn 
+		  (message "samba.txtがありません")
+		  (throw 'loop nil))))
+	(setq tmp-time (current-time))
+	(setq last-write-time (+ (lsh (car tmp-time) 16) (nth 1 tmp-time)))
+	(setq id-list (assoc (cdr (assq 'id navi2ch-message-current-board)) 
+			     navi2ch-message-samba24-send-time))
+	(if id-list
+	    (setq navi2ch-message-samba24-send-time 
+		  (delete id-list navi2ch-message-samba24-send-time)))
+	(setq navi2ch-message-samba24-send-time 
+	      (append navi2ch-message-samba24-send-time 
+		      `((,(cdr (assq 'id navi2ch-message-current-board)) . ,last-write-time))))
+	(run-at-time 1 nil 'navi2ch-message-samba24-timer)))))
+
+(defun navi2ch-message-samba24-board-conversion (src val dst)
+  "板名、ID、URLなどの相互変換。
+src=変換元の連想リスト左側 val=変換元の値(右側) dst=変換先の左側指定"
+  (catch 'loop
+    (dolist (x navi2ch-list-board-name-list)
+      (if (string= val (cdr (assq src x)))
+	  (throw 'loop (cdr (assq dst x)))))))
+
+(defun navi2ch-message-samba24-read-samba ()
+  "samba.txt から各サーバ、板ごとの連続投稿規制時間を読み込み、リストとして保持する。
+samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得。"
+  (let (navi2ch-message-samba24-file nnn)
+    ;; 最新のsamba.txtを取得
+    (navi2ch-message-samba24-update)
+    (setq navi2ch-message-samba24-samba-data nil)
+    (setq navi2ch-message-samba24-file (navi2ch-expand-file-name "samba.txt"))
+    (unless (file-exists-p navi2ch-message-samba24-file)
+      (with-temp-buffer
+	(insert-file-contents navi2ch-message-samba24-file)
+	(goto-char (point-min))
+	(while (re-search-forward ".+\n" nil t)
+	  (and (setq nnn (split-string (match-string 0)))
+	       (setq navi2ch-message-samba24-samba-data
+		     (append navi2ch-message-samba24-samba-data (cons nnn nil)))))))
+    navi2ch-message-samba24-samba-data))
+
+(defun navi2ch-message-samba24-search-samba ( url id)
+  "サーバ名、板名から連続投稿規制時間を得る"
+  (let (server sn stime sl id rettime)
+    (setq server (nth 2 (split-string url "/")))
+    (dolist (list navi2ch-message-samba24-samba-data)
+      (setq sn (nth 0 (split-string (car list) "=")))
+      (setq stime (nth 1 (split-string (car list) "=")))
+      (setq sl (safe-length list))
+      (if (string= sn server)
+	  (if (= 1 sl)
+	      (setq rettime stime)
+	    (dolist (itaname (cdr list))
+	      (if (string= id (nth 0 (split-string itaname "=")))
+		  (setq rettime (nth 1 (split-string itaname "="))))))))
+    rettime))
+
+(defun navi2ch-message-samba24-update ()
+  (interactive)
+  (let (url file)
+    ;; ファイルが動的生成っぽいのでIf-Modified-Since見ない？（高負荷？）
+    (setq url "http://nullpo.s101.xrea.com/samba24/conv.xcg?browser=bbs2chreader&decsec=majority&offset=0&newline=crlf&output=download")
+    (setq file (concat navi2ch-directory "/samba.txt"))
+    (navi2ch-net-update-file url file 'file)))
 
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

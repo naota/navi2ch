@@ -1,6 +1,6 @@
 ;;; navi2ch-popup-article.el --- popup article module for navi2ch
 
-;; Copyright (C) 2001-2004 by Navi2ch Project
+;; Copyright (C) 2001-2004, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -164,6 +164,15 @@ stack が空なら、PopUp Article モードを抜ける。"
 	(navi2ch-article-insert-messages
 	 navi2ch-article-message-list
 	 nil))
+      (setq navi2ch-article-message-list
+	    (mapcar (lambda (x)
+		      (setq num (car x))
+		      (let ((msg (navi2ch-article-get-message num)))
+			(cond
+			 ((stringp msg) (cons num msg))
+			 (msg (cons num (copy-alist msg)))
+			 (t x))))
+		    mlist))
       (goto-char (point-min)))))
 
 (defun navi2ch-popup-article-scroll-up ()
@@ -179,18 +188,19 @@ stack が空なら、PopUp Article モードを抜ける。"
   ;; ほぼ navi2ch-article-select-current-link と同じ。
   "カーソル位置に応じて、リンク先の表示やファイルへの保存を行う。"
   (interactive "P")
-  (let (prop)
+  (let ((type (get-text-property (point) 'navi2ch-link-type))
+	(prop (get-text-property (point) 'navi2ch-link)))
     (cond
-     ((setq prop (get-text-property (point) 'number))
+     ((eq type 'number)
       (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
       (if (and (integerp prop)
 	       (assq prop navi2ch-article-message-list))
 	  (navi2ch-article-goto-number prop t t)
 	(navi2ch-popup-article-exit)
 	(navi2ch-article-select-current-link-number prop browse-p)))
-     ((setq prop (get-text-property (point) 'url))
+     ((eq type 'url)
       (navi2ch-article-select-current-link-url prop browse-p t))
-     ((setq prop (get-text-property (point) 'content))
+     ((eq type 'content)
       (navi2ch-article-save-content)))))
 
 (defun navi2ch-popup-article-mouse-select (e)
