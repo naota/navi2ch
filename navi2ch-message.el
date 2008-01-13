@@ -613,10 +613,11 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
       (navi2ch-message-samba24-modeline))))
 
 (defun navi2ch-message-samba24-modeline ()
-  "書き込み経過時間をカウントダウンする。global-mode-line(時計とか表示する場所)をいじる。"
-  (let (tmp-time now-time samba-time)
-    (setq tmp-time (current-time))
-    (setq now-time (+ (lsh (car tmp-time) 16) (nth 1 tmp-time)))
+  "書き込み経過時間をカウントダウンする。
+global-mode-lineをいじる。"
+  (let* ((tmp-time (current-time))
+	 (now-time (+ (lsh (car tmp-time) 16) (nth 1 tmp-time)))
+	 samba-time time-diff)
     (when navi2ch-message-samba24-mode-string
       (setq global-mode-string 
 	    (delete navi2ch-message-samba24-mode-string global-mode-string))
@@ -625,7 +626,8 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
       (setq time-diff (- now-time (cdr x)))
       (setq samba-time 
 	    (navi2ch-message-samba24-search-samba 
-	     (navi2ch-message-samba24-board-conversion 'id (car x) 'uri) (car x)))
+	     (navi2ch-message-samba24-board-conversion 'id (car x) 'uri) 
+	     (car x)))
       (when samba-time
 	(setq samba-time (string-to-number samba-time))
 	(if (<= time-diff samba-time)
@@ -638,7 +640,7 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 	(if navi2ch-message-samba24-mode-string
 	    (setq global-mode-string 
 		  (cons navi2ch-message-samba24-mode-string global-mode-string)))
-	(force-mode-line-update t)))
+	(force-mode-line-update t)))))
 
 (defun navi2ch-message-samba24 ()
   "SAMBA24(連続投稿規制)の対応のため、書き込み許可待ち時間を表示する。

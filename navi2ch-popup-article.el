@@ -166,8 +166,8 @@ stack が空なら、PopUp Article モードを抜ける。"
 	 nil))
       (setq navi2ch-article-message-list
 	    (mapcar (lambda (x)
-		      (setq num (car x))
-		      (let ((msg (navi2ch-article-get-message num)))
+		      (let* ((num (car x))
+			     (msg (navi2ch-article-get-message num)))
 			(cond
 			 ((stringp msg) (cons num msg))
 			 (msg (cons num (copy-alist msg)))
