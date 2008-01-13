@@ -1,3 +1,28 @@
+2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-util.el (navi2ch-set-mode-line-identification): Samba24
+	の待ち時間を mode-line に表示。
+
+	* navi2ch-message.el (navi2ch-message-samba24-check): 新関数。
+	(navi2ch-message-samba24-sambatxt-url): 新定数。
+	(navi2ch-message-samba24-send-time)
+	(navi2ch-message-samba24-show): docstring を追加。
+	(navi2ch-message-samba24-file-name): 新変数
+	(navi2ch-message-samba24-update): 上記定数、変数を使用。
+	navi2ch-expand-file-name() を使用するように。
+	(navi2ch-message-samba24-search-samba):
+	navi2ch-message-samba24-samba-data の仕様変更に追随。
+	(navi2ch-message-samba24-read-samba): 同上。
+	(navi2ch-message-samba24): 同上。
+	(navi2ch-message-samba24-modeline): global-mode-line ではなく、
+	navi2ch-message-samba24-mode-string だけを変更するように。
+	(navi2ch-message-samba24-timer): timer を保持しない。
+
+	* navi2ch-multibbs.el (navi2ch-2ch-send-message): 上記関数を使用。
+
+	* navi2ch-net.el (navi2ch-net-send-message-error-string)
+	(navi2ch-net-send-message-success-p): proc が nil だった時に対処。
+
 2008-01-13  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline): time-diff

@@ -1,6 +1,6 @@
 ;;; navi2ch-util.el --- useful utilities for navi2ch
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2004, 2008 by Navi2ch Project
 ;; Copyright (C) 1993-2000 Free Software Foundation, Inc.
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
@@ -628,6 +628,7 @@ return new alist whose car is the new pair and cdr is ALIST.
     (setq mode-line-buffer-identification
           (list offline
 		belogin
+		'navi2ch-message-samba24-mode-string
 		'navi2ch-mode-line-identification)))
   (force-mode-line-update t))
 

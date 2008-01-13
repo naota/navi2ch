@@ -1,6 +1,6 @@
 ;;; navi2ch-net.el --- Network module for navi2ch
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2004, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -730,31 +730,33 @@ This is taken from RFC 2396.")
 	     param-alist "&"))
 
 (defun navi2ch-net-send-message-success-p (proc coding-system)
-  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
-				   coding-system)))
-    (cond ((or (string-match "書きこみました。" str)
-	       (string-match "書きこみが終わりました。" str))
-	   t)
-	  ((or (string-match "<b>クッキーがないか期限切れです！</b>" str)
-	       (string-match "<b>書きこみ＆クッキー確認</b>" str))
-	   'retry)
-	  (t
-	   nil))))
+  (when proc
+    (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				     coding-system)))
+      (cond ((or (string-match "書きこみました。" str)
+		 (string-match "書きこみが終わりました。" str))
+	     t)
+	    ((or (string-match "<b>クッキーがないか期限切れです！</b>" str)
+		 (string-match "<b>書きこみ＆クッキー確認</b>" str))
+	     'retry)
+	    (t
+	     nil)))))
 
 (defun navi2ch-net-send-message-error-string (proc coding-system)
-  (let ((str (decode-coding-string (navi2ch-net-get-content proc)
-				   coding-system)))
-    (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
-	   (match-string 1 str))
-	  ;; Samba24 http://age.s22.xrea.com/talk2ch/new.txt
-	  ((string-match "ＥＲＲＯＲ - \\([^<\n]+\\)" str)
-	   (match-string 1 str))
-	  ((string-match "\\(ログインエラー[^<]*\\)<br>" str)
-	   (match-string 1 str))
-	  ((string-match "<b>\\([^<]+\\)" str)
-	   (match-string 1 str))
-	  ((string-match "\\([^<>\n]+\\)<br>\\([^<>]+\\)<hr>"  str)
-	   (concat (match-string 1 str) (match-string 2 str))))))
+  (when proc
+    (let ((str (decode-coding-string (navi2ch-net-get-content proc)
+				     coding-system)))
+      (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
+	     (match-string 1 str))
+	    ;; Samba24 http://age.s22.xrea.com/talk2ch/new.txt
+	    ((string-match "ＥＲＲＯＲ - \\([^<\n]+\\)" str)
+	     (match-string 1 str))
+	    ((string-match "\\(ログインエラー[^<]*\\)<br>" str)
+	     (match-string 1 str))
+	    ((string-match "<b>\\([^<]+\\)" str)
+	     (match-string 1 str))
+	    ((string-match "\\([^<>\n]+\\)<br>\\([^<>]+\\)<hr>"  str)
+	     (concat (match-string 1 str) (match-string 2 str)))))))
 
 ;; Cookie はこんな感じの alist に入れておく。
 ;; ((domain1 (/path1 ("name1" "value1" ...)

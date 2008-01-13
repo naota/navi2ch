@@ -1,6 +1,6 @@
 ;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch.
 
-;; Copyright (C) 2002-2004 by Navi2ch Project
+;; Copyright (C) 2002-2004, 2008 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -414,36 +414,37 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 
 (defun navi2ch-2ch-send-message
   (from mail message subject bbs key time board article &optional post)
-  (let* ((url         (navi2ch-board-get-bbscgi-url board))
-	 (referer     (navi2ch-board-get-uri board))
-	 (param-alist (list
-		       (cons "submit" "書き込む")
-		       (cons "FROM"   (or from ""))
-		       (cons "mail"   (or mail ""))
-		       (cons "bbs"    bbs)
-		       (cons "time"   time)
-		       (cons "MESSAGE" message)
-		       (if subject
-			   (cons "subject" subject)
-			 (cons "key"    key))))
-	 (coding-system (navi2ch-board-get-coding-system board))
-	 (cookies (navi2ch-net-match-cookies url)))
-    (dolist (param post)
-      (unless (assoc (car param) param-alist)
-	(push param param-alist)))
-    (setq navi2ch-2ch-send-message-last-board board)
-    (let ((proc
-	   (navi2ch-net-send-request
-	    url "POST"
-	    (list (cons "Content-Type" "application/x-www-form-urlencoded")
-		  (cons "Cookie"
-			(navi2ch-net-cookie-string cookies coding-system))
-		  (cons "Referer" referer))
-	    (navi2ch-net-get-param-string param-alist
-					  coding-system))))
-      (navi2ch-net-update-cookies url proc coding-system)
-      (navi2ch-net-save-cookies)
-      proc)))
+  (when (navi2ch-message-samba24-check board)
+    (let* ((url         (navi2ch-board-get-bbscgi-url board))
+	   (referer     (navi2ch-board-get-uri board))
+	   (param-alist (list
+			 (cons "submit" "書き込む")
+			 (cons "FROM"   (or from ""))
+			 (cons "mail"   (or mail ""))
+			 (cons "bbs"    bbs)
+			 (cons "time"   time)
+			 (cons "MESSAGE" message)
+			 (if subject
+			     (cons "subject" subject)
+			   (cons "key"    key))))
+	   (coding-system (navi2ch-board-get-coding-system board))
+	   (cookies (navi2ch-net-match-cookies url)))
+      (dolist (param post)
+	(unless (assoc (car param) param-alist)
+	  (push param param-alist)))
+      (setq navi2ch-2ch-send-message-last-board board)
+      (let ((proc
+	     (navi2ch-net-send-request
+	      url "POST"
+	      (list (cons "Content-Type" "application/x-www-form-urlencoded")
+		    (cons "Cookie"
+			  (navi2ch-net-cookie-string cookies coding-system))
+		    (cons "Referer" referer))
+	      (navi2ch-net-get-param-string param-alist
+					    coding-system))))
+	(navi2ch-net-update-cookies url proc coding-system)
+	(navi2ch-net-save-cookies)
+	proc))))
 
 (defun navi2ch-2ch-article-to-url
   (board article &optional start end nofirst)
