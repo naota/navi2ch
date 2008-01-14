@@ -1,5 +1,16 @@
 2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-message.el (navi2ch-message-samba24-check): Remove debug
+	message.
+	(navi2ch-message-samba24): 2ch 以外の板に書きこんでいた時にも
+	navi2ch-message-samba24-send-time に書きこみ時間が記録されていたバ
+	グを修正。すでに timer 呼び出しがあっても、 timer を生成していたバ
+	グを修正。
+	(navi2ch-message-samba24-timer): 削除。
+	(navi2ch-message-samba24-modeline):
+	navi2ch-message-samba24-send-time が nil になったら、 timer を解除。
+	(navi2ch-message-samba24-update-timer): 新変数。
+
 	* navi2ch-localfile.el (navi2ch-localfile-board-update): encode mtime.
 	(navi2ch-localfile-article-update): Ditto.
 
