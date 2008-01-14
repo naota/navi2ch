@@ -111,6 +111,7 @@
 (defvar navi2ch-message-samba24-mode-string nil)
 (defvar navi2ch-message-samba24-file-name "samba.txt"
   "Samba24 の規制秒数情報を保持するファイルのファイル名.")
+(defvar navi2ch-message-samba24-update-timer nil)
 
 (defun navi2ch-message-write-message (board article &optional new sage)
   (when (or (not navi2ch-message-ask-before-write)
@@ -603,13 +604,6 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
   "送信控えのレスの板名付きのフォーマット。"
   (format "[%s]: %s\nURL: %s\n\n%s" (cdr (assq 'name board)) subject url message))
 
-(defun navi2ch-message-samba24-timer ()
-  "書き込み時に生成されるタイマー。
-1秒ごとに自分自身を呼び出し、必要が無くなったら自分自身をコールするのをやめる"
-  (when navi2ch-message-samba24-send-time
-    (run-at-time 1 nil 'navi2ch-message-samba24-timer)
-    (navi2ch-message-samba24-modeline)))
-
 (defun navi2ch-message-samba24-modeline ()
   "書き込み経過時間をカウントダウンする."
   (let* ((tmp-time (current-time))
@@ -630,7 +624,9 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 			  (- samba-time time-diff)
 			  navi2ch-message-samba24-mode-string))
 	  (setq navi2ch-message-samba24-send-time
-		(delete x navi2ch-message-samba24-send-time)))))
+		(delete x navi2ch-message-samba24-send-time))
+	  (unless navi2ch-message-samba24-send-time
+	    (cancel-timer navi2ch-message-samba24-update-timer)))))
     (force-mode-line-update t)))
 
 (defun navi2ch-message-samba24 ()
@@ -644,13 +640,18 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 	     (last-write-time (+ (lsh (car tmp-time) 16) (cadr tmp-time)))
 	     (id (cdr (assq 'id navi2ch-message-current-board)))
 	     (id-list (assoc id navi2ch-message-samba24-send-time)))
-	(when id-list
+	(when (navi2ch-message-samba24-search-samba 
+	       (navi2ch-message-samba24-board-conversion 'id id 'uri) 
+	       id)
+	  (when id-list
+	    (setq navi2ch-message-samba24-send-time
+		  (delete id-list navi2ch-message-samba24-send-time)))
 	  (setq navi2ch-message-samba24-send-time
-		(delete id-list navi2ch-message-samba24-send-time)))
-	(setq navi2ch-message-samba24-send-time
-	      (cons (cons id last-write-time)
-		    navi2ch-message-samba24-send-time))
-	(run-at-time 1 nil 'navi2ch-message-samba24-timer)))))
+		(cons (cons id last-write-time)
+		      navi2ch-message-samba24-send-time))
+	  (setq navi2ch-message-samba24-update-timer
+		(or navi2ch-message-samba24-update-timer
+		    (run-at-time 1 1 'navi2ch-message-samba24-timer))))))))
 
 (defun navi2ch-message-samba24-board-conversion (src val dst)
   "板名、ID、URLなどの相互変換。
@@ -701,7 +702,6 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
   (let* ((id (cdr (assq 'id board)))
 	 (last-write-time (cdr (assoc id
 				      navi2ch-message-samba24-send-time))))
-    (message "%s" last-write-time)
     (or (null last-write-time)
 	(let* ((samba-time (navi2ch-message-samba24-search-samba 
 			    (navi2ch-message-samba24-board-conversion 'id id 'uri) 
