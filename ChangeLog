@@ -1,5 +1,8 @@
 2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-localfile.el (navi2ch-localfile-board-update): encode mtime.
+	(navi2ch-localfile-article-update): Ditto.
+
 	* NEWS: Samba24について記載。
 
 	* navi2ch-localfile.el (navi2ch-localfile-board-update)

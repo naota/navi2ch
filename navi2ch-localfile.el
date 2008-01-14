@@ -280,7 +280,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	 (file (navi2ch-article-get-file-name board article))
 	 (time (or (cdr (assq 'time article))
 		   (and (file-exists-p file)
-			(navi2ch-file-mtime file)))))
+			(navi2ch-http-date-encode (navi2ch-file-mtime file))))))
     (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-article-to-url
@@ -371,7 +371,7 @@ ARTICLE-ID が指定されていればそのアーティクルのみを更新する。
 	 (file (navi2ch-board-get-file-name board))
 	 (time (or (cdr (assq 'time board))
 		   (and (file-exists-p file)
-			(navi2ch-file-mtime file)))))
+			(navi2ch-http-date-encode (navi2ch-file-mtime file))))))
     (navi2ch-localfile-update-file url file time)))
 
 (defun navi2ch-localfile-board-get-file-name (board &optional file-name)
