@@ -255,6 +255,16 @@ See also the function `defalias'."
 
 (put 'navi2ch-with-default-file-modes 'lisp-indent-function 1)
 
+(defsubst navi2ch-cache-limit (cache)
+  (elt cache 0))
+
+(defsubst navi2ch-cache-hash-table (cache)
+  (elt cache 1))
+
+(defmacro navi2ch-cache-get (key value cache)
+  `(or (gethash ,key (navi2ch-cache-hash-table ,cache))
+       (navi2ch-cache-put ,key ,value ,cache)))
+
 
 ;;;; other misc stuff
 (defun navi2ch-mouse-key (num)
@@ -387,13 +397,15 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (insert-file-contents file nil begin end)))
 
 (defun navi2ch-expand-file-name (file)
-  (let ((result (expand-file-name (navi2ch-replace-string
-				   navi2ch-file-name-reserved-char-regexp
-				   (lambda (x)
-				     (format "%%%X" (string-to-char x)))
-				   file t)
-				  navi2ch-directory)))
-    (if (string-match (format "^%s"
+  (let ((result (expand-file-name
+		 (mapconcat (lambda (ch)
+			      (if (memq ch navi2ch-file-name-reserved-char-list)
+				  (format "%%%02X" ch)
+				(char-to-string ch)))
+			    (append file)
+			    "")
+		 navi2ch-directory)))
+    (if (string-match (concat "^"
 			      (regexp-quote (file-name-as-directory
 					     (expand-file-name navi2ch-directory))))
 		      result)
@@ -1351,10 +1363,10 @@ BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
 (defun navi2ch-read-only-string (string)
   (propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
 
-(defun navi2ch-file-mtime (filename)
+(defsubst navi2ch-file-mtime (filename)
   (nth 5 (file-attributes filename)))
 
-(defun navi2ch-file-size (filename)
+(defsubst navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
 
 (defun navi2ch-float-time (&optional specified-time)
@@ -1370,6 +1382,28 @@ instead of the current time."
       #'ignore
     #'make-local-hook))
 
+(defalias 'navi2ch-cache-p #'vectorp)
+
+(defsubst navi2ch-make-cache (&optional limit test)
+  (vector limit
+	  (apply #'make-hash-table
+		 (append (list :rehash-threshold 1.0)
+			 (and limit
+			      (integerp limit)
+			      (not (zerop limit))
+			      (list :size (1+ limit)))
+			 (and test
+			      (list :test test))))))
+
+(defun navi2ch-cache-put (key val cache)
+  (let ((limit (navi2ch-cache-limit cache))
+	(table (navi2ch-cache-hash-table cache)))
+    (prog1
+	(puthash key val table)
+      (when (and limit
+		 (eq (hash-table-count table) limit))
+	(clrhash table)))))
+  
 (navi2ch-update-html-tag-regexp)
 
 (run-hooks 'navi2ch-util-load-hook)

@@ -37,26 +37,26 @@
 (require 'navi2ch)
 (require 'navi2ch-be2ch)
 
-(defvar navi2ch-multibbs-func-alist nil
-  "BBS の種類と関数群の alist。
-各要素は
-\(BBSTYPE . FUNC-ALIST)
+(defvar navi2ch-multibbs-func-table nil
+  "BBS の種類と関数群の hash。
+BBSTYPE を key に FUNC-TABLE が格納される。
 BBSTYPE: BBS の種類を表すシンボル。
-FUNC-ALIST: その BBS での動作を指定する関数群。
+FUNC-TABLE: その BBS での動作を指定する関数群。
 
-FUNC-ALIST は以下の通り
-\((bbs-p			. BBS-P-FUNC)
- (subject-callback	. SUBJECT-CALLBACK-FUNC)
- (article-update	. ARTICLE-UPDATE-FUNC)
- (article-to-url	. ARTICLE-TO-URL-FUNC)
- (url-to-board		. URL-TO-BOARD-FUNC)
- (url-to-article	. URL-TO-ARTICLE-FUNC)
- (send-message		. SEND-MESSAGE-FUNC)
- (extract-post          . EXTRACT-POST-FUNC)
- (send-success-p	. SEND-MESSAGE-SUCCESS-P-FUNC)
- (error-string		. ERROR-STRING-FUNC)
- (board-update		. BOARD-UPDATE-FUNC)
- (board-get-file-name	. BOARD-GET-FILE-NAME-FUNC))
+FUNC-TABLE は以下の左側のシンボルを key に
+関数が格納される。
+bbs-p			BBS-P-FUNC
+subject-callback	SUBJECT-CALLBACK-FUNC
+article-update	ARTICLE-UPDATE-FUNC
+article-to-url	ARTICLE-TO-URL-FUNC
+url-to-board		URL-TO-BOARD-FUNC
+url-to-article	URL-TO-ARTICLE-FUNC
+send-message		SEND-MESSAGE-FUNC
+extract-post          EXTRACT-POST-FUNC
+send-success-p	SEND-MESSAGE-SUCCESS-P-FUNC
+error-string		ERROR-STRING-FUNC
+board-update		BOARD-UPDATE-FUNC
+board-get-file-name	BOARD-GET-FILE-NAME-FUNC
 
 BBS-P-FUNC(URI):
     URI がその BBS のものならば non-nil を返す。
@@ -120,14 +120,17 @@ VARIABLE-ALIST は以下の通り
 CODING-SYSTEM-VAR:
     その BBS のファイルの文字コード")
 
+(defvar navi2ch-2ch-board-file-name-cache nil)
+(defvar navi2ch-2ch-board-file-name-cache-limit 1000)
 
-(defun navi2ch-multibbs-get-bbstype-subr (uri list)
-  (if list
-      (let ((bbstype    (caar list))
-	    (func       (cdr (assq 'bbs-p (cdar list)))))
-	(if (and func (funcall func uri))
-	    bbstype
-	  (navi2ch-multibbs-get-bbstype-subr uri (cdr list))))))
+(defun navi2ch-multibbs-get-bbstype-subr (uri table)
+  (when (hash-table-p table)
+    (catch 'loop
+      (maphash (lambda (type func-table)
+		 (let ((func (gethash 'bbs-p func-table)))
+		   (when (and func (funcall func uri))
+		     (throw 'loop type))))
+	       table))))
 
 (defun navi2ch-multibbs-set-bbstype (board type)
   (when (consp board)
@@ -184,24 +187,27 @@ SPEC は (BBSTYPE [ARG]...)。
     (funcall func board article start)))
 
 (defun navi2ch-multibbs-regist (bbstype func-alist variable-alist)
-  (setq navi2ch-multibbs-func-alist
-	(cons (cons bbstype func-alist)
-	      navi2ch-multibbs-func-alist))
+  (unless navi2ch-multibbs-func-table
+    (setq navi2ch-multibbs-func-table
+	  (make-hash-table :size 6))) ;FIXME: 6 でたりると思うけどどうすかね。
+  (puthash bbstype
+	   (navi2ch-alist-to-hash func-alist)
+	   navi2ch-multibbs-func-table)
   (setq navi2ch-multibbs-variable-alist
 	(cons (cons bbstype variable-alist)
 	      navi2ch-multibbs-variable-alist)))
 
-(defun navi2ch-multibbs-get-func-from-board
+(defsubst navi2ch-multibbs-get-func-from-board
   (board func &optional default-func)
   (navi2ch-multibbs-get-func
    (navi2ch-multibbs-get-bbstype board)
    func default-func))
 
 (defun navi2ch-multibbs-get-func (bbstype func &optional default-func)
-  (or (cdr (assq func
-		 (cdr (assq bbstype
-			    navi2ch-multibbs-func-alist))))
-      default-func))
+  (let ((func-table (gethash bbstype navi2ch-multibbs-func-table)))
+    (or (and func-table
+	     (gethash func func-table))
+	default-func)))
 
 (defun navi2ch-multibbs-get-variable
   (bbstype variable &optional default-value)
@@ -213,7 +219,7 @@ SPEC は (BBSTYPE [ARG]...)。
 (defun navi2ch-multibbs-url-to-bbstype (url)
   (or
    (and url
-	(navi2ch-multibbs-get-bbstype-subr url navi2ch-multibbs-func-alist))
+	(navi2ch-multibbs-get-bbstype-subr url navi2ch-multibbs-func-table))
    'unknown))
 
 (defun navi2ch-multibbs-url-to-article (url)
@@ -488,16 +494,24 @@ START, END, NOFIRST で範囲を指定する"
       (navi2ch-net-update-file url file time func))))
 
 (defun navi2ch-2ch-board-get-file-name (board &optional file-name)
-  (let ((uri (navi2ch-board-get-uri board)))
+  (let ((uri (navi2ch-board-get-uri board))
+	(file-name (or file-name
+		       navi2ch-board-subject-file-name)))
     (when uri
-      (cond ((string-match "http://\\(.+\\)" uri)
-	     (navi2ch-expand-file-name
-	      (concat (match-string 1 uri)
-		      (or file-name navi2ch-board-subject-file-name))))
-	    ((string-match "file://\\(.+\\)" uri)
-	     (expand-file-name (or file-name
-				   navi2ch-board-subject-file-name)
-			       (match-string 1 uri)))))))
+      (or navi2ch-2ch-board-file-name-cache
+	  (setq navi2ch-2ch-board-file-name-cache
+		(navi2ch-make-cache navi2ch-2ch-board-file-name-cache-limit
+				    'equal)))
+      (navi2ch-cache-get
+       (cons uri file-name)
+       (cond ((string-match "http://\\(.+\\)" uri)
+	      (navi2ch-expand-file-name
+	       (concat (match-string 1 uri)
+		       file-name)))
+	     ((string-match "file://\\(.+\\)" uri)
+	      (expand-file-name file-name
+				(match-string 1 uri))))
+       navi2ch-2ch-board-file-name-cache))))
 
 (defun navi2ch-2ch-extract-post (old-post buffer)
   ;; Get hana and mogera from following string.

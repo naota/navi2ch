@@ -48,7 +48,6 @@
     (define-key map "w" 'navi2ch-board-write-message)
     (define-key map "\M-e" 'navi2ch-board-expire)
     (define-key map "md" 'navi2ch-board-hide-mark-article)
-    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
     (setq navi2ch-board-mode-map map)))
 
 (defvar navi2ch-board-mode-menu-spec
@@ -178,14 +177,14 @@
     (string-match "\\(.+\\)/[^/]+/$" uri)
     (concat (match-string 1 uri) (navi2ch-board-get-bbscgi-path board))))
 
-(defun navi2ch-board-equal (board1 board2)
+(defsubst navi2ch-board-equal (board1 board2)
   (string= (cdr (assq 'uri board1))
 	   (cdr (assq 'uri board2))))
 
-(defun navi2ch-board-get-file-name (board &optional file-name)
+(defsubst navi2ch-board-get-file-name (board &optional file-name)
   (navi2ch-multibbs-board-get-file-name board file-name))
 
-(defun navi2ch-board-from-file-p (board)
+(defsubst navi2ch-board-from-file-p (board)
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
 
 (defun navi2ch-board-get-matched-article ()

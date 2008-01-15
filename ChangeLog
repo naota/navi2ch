@@ -1,3 +1,53 @@
+2008-01-15  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-load-info)
+	(navi2ch-article-save-info): navi2ch-article-info-cache を使用。
+
+	* navi2ch-util.el (navi2ch-cache-get): 新マクロ。
+	(navi2ch-cache-put): 新関数。
+	(navi2ch-make-cache): Ditto.
+	(navi2ch-cache-limit, navi2ch-cache-hash-table): Ditto.
+	(navi2ch-cache-p): Ditto.
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
+
+	* navi2ch-board.el (navi2ch-board-mode-map): C-c C-l を
+	navi2ch-bm-mode-map に移動。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-get-func-from-board):
+	inline に。
+
+	* navi2ch-board.el (navi2ch-board-equal)
+	(navi2ch-board-get-file-name, navi2ch-board-from-file-p): inline に。
+
+	* navi2ch-article.el (navi2ch-article-get-file-name)
+	(navi2ch-article-get-info-file-name)
+	(navi2ch-article-file-name-to-artid): inline に。
+
+	* navi2ch-util.el (navi2ch-file-size, navi2ch-file-mtime): inline
+	に。
+
+	* navi2ch-article.el (navi2ch-article-info-cache): 新変数。
+
+	* navi2ch-multibbs.el (navi2ch-2ch-board-file-name-cache): 新変数。
+	(navi2ch-2ch-board-get-file-name): 上記変数を使用。 file-name を
+	キャッシュする。
+
+	* navi2ch-util.el (navi2ch-expand-file-name): ちょっと高速化。
+
+	* navi2ch-vars.el (navi2ch-file-name-reserved-char-regexp):
+	navi2ch-file-name-reserved-char-list に変更。p
+	(navi2ch-file-name-reserved-char-list):
+	navi2ch-file-name-reserved-char-regexp から変更。
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-func-alist): 削除。
+	(navi2ch-multibbs-func-table): navi2ch-multibbs-func-alist を hash
+	化。
+	(navi2ch-multibbs-get-bbstype-subr): navi2ch-multibbs-func-* の
+	hash 化に追随。
+	(navi2ch-multibbs-get-func): Ditto.
+
 2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-check): Remove debug

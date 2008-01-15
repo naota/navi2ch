@@ -222,15 +222,15 @@ last が最後からいくつ表示するか。
      (t
       nil))))
 
-(defun navi2ch-article-get-file-name (board article)
+(defsubst navi2ch-article-get-file-name (board article)
   (navi2ch-board-get-file-name board
                                (concat (cdr (assq 'artid article)) ".dat")))
 
-(defun navi2ch-article-get-info-file-name (board article)
+(defsubst navi2ch-article-get-info-file-name (board article)
   (navi2ch-board-get-file-name board
                                (concat "info/" (cdr (assq 'artid article)))))
 
-(defun navi2ch-article-file-name-to-artid (filename)
+(defsubst navi2ch-article-file-name-to-artid (filename)
   "*FILENAME をスレIDに変換する。"
   (file-name-sans-extension (file-name-nondirectory filename)))
 
@@ -1524,7 +1524,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (navi2ch-article-goto-number (or num 1)))))
 
 (defun navi2ch-article-save-info (&optional board article first)
-  (let (ignore alist)
+  (let (ignore)
     (when (eq major-mode 'navi2ch-article-mode)
       (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
 	  (setq ignore t)
@@ -1533,27 +1533,37 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	(or board (setq board navi2ch-article-current-board))
 	(or article (setq article navi2ch-article-current-article))))
     (when (and (not ignore) board article)
-      (let ((article-tmp (if navi2ch-article-save-info-wrapper-func
+      (let* ((article-tmp (if navi2ch-article-save-info-wrapper-func
 			     (funcall navi2ch-article-save-info-wrapper-func article)
-			   article)))
-	(setq alist (mapcar
+			   article))
+	     (alist (mapcar
 		     (lambda (x)
 		       (assq x article-tmp))
-		     navi2ch-article-save-info-keys)))
-      (navi2ch-save-info
-       (navi2ch-article-get-info-file-name board article)
-       alist)
-      (navi2ch-article-save-message-filter-cache board article))))
+		     navi2ch-article-save-info-keys))
+	     (info-file (navi2ch-article-get-info-file-name board article)))
+	(navi2ch-save-info info-file  alist)
+	(or navi2ch-article-info-cache
+	    (setq navi2ch-article-info-cache
+		  (navi2ch-make-cache navi2ch-article-info-cache-limit
+				      'equal)))
+	(navi2ch-cache-put info-file alist navi2ch-article-info-cache)
+	(navi2ch-article-save-message-filter-cache board article)))))
 
 (defun navi2ch-article-load-info (&optional board article)
-  (let (ignore alist)
+  (let (ignore alist info-file)
     (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
 	(setq ignore t)
       (or board (setq board navi2ch-article-current-board))
       (or article (setq article navi2ch-article-current-article)))
     (when (and (not ignore) board article)
-      (setq alist (navi2ch-load-info
-		   (navi2ch-article-get-info-file-name board article)))
+      (or navi2ch-article-info-cache
+	  (setq navi2ch-article-info-cache
+		(navi2ch-make-cache navi2ch-article-info-cache-limit
+				    'equal)))
+      (setq info-file (navi2ch-article-get-info-file-name board article))
+      (setq alist (navi2ch-cache-get info-file
+				     (navi2ch-load-info info-file)
+				     navi2ch-article-info-cache))
       (dolist (x alist)
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
@@ -2310,6 +2320,9 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
     navi2ch-article-select-current-link
     eval-expression)
   "このコマンドの後では minibuffer にリンク先を表示しない。")
+
+(defvar navi2ch-article-info-cache nil)
+(defvar navi2ch-article-info-cache-limit 100)
 
 (defun navi2ch-article-display-link-minibuffer (&optional point)
   "POINT (省略時はカレントポイント) のリンク先を minibuffer に表示。"
