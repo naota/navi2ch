@@ -689,7 +689,7 @@ ARG が non-nil なら移動方向を逆にする。"
 	    (discard-input))
 	(forward-line)))))
 
-(defun navi2ch-bm-display-mark-article ()
+(defsubst navi2ch-bm-display-mark-article ()
   (interactive)
   (navi2ch-bm-exec-subr 'navi2ch-bm-display-article))
 

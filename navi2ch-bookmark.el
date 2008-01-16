@@ -70,6 +70,7 @@
 KEY は (concat URI ARTID)")
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-current-bookmark-id nil)
+(defvar navi2ch-bookmark-fetch-mark-article-check-update nil)
 
 ;;; navi2ch-bm callbacks
 (defun navi2ch-bookmark-set-property (begin end item)
@@ -424,6 +425,38 @@ KEY は (concat URI ARTID)")
 (defun navi2ch-bookmark-fetch-mark-article (&optional force)
   (interactive "P")
   (unless navi2ch-offline
+    (when navi2ch-bookmark-fetch-mark-article-check-update
+      (save-excursion
+	(let ((board-data-cache (navi2ch-make-cache nil 'equal)))
+	  (goto-char (point-min))
+	  (while (not (eobp))
+	    (navi2ch-bm-goto-mark-column)
+	    (when (looking-at "\\*")
+	      (let* ((item (navi2ch-bm-get-property-internal (point)))
+		     (board (navi2ch-bm-get-board-internal item))
+		     (article (navi2ch-bm-get-article-internal item))
+		     (bbstype (cdr (assq 'bbstype board)))
+		     (board-uri (cdr (assq 'uri board)))
+		     (art-id (cdr (assq 'artid article)))
+		     (res (string-to-number
+			   (cdr (assq 'response
+				      (navi2ch-article-load-info board
+								 article)))))
+		     new-res board-data)
+		(when (eq bbstype 'unknown)
+		  (setq board-data
+			(navi2ch-cache-get board-uri
+					   (mapcar
+					    (lambda (x)
+					      (cons (cdr (assq 'artid x))
+						    (string-to-number (cdr (assq 'response x)))))
+					    (navi2ch-board-get-updated-subject-list board))
+					   board-data-cache))
+		  (when (or (null res)
+			    (null (setq new-res (cdr (assoc art-id board-data))))
+			    (<= new-res res))
+		    (navi2ch-bm-unmark)))))
+	    (forward-line)))))
     (navi2ch-bm-exec-subr #'navi2ch-bookmark-fetch-article force)))
 
 (defun navi2ch-bookmark-change (changed-list)

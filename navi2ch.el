@@ -259,14 +259,14 @@ SUSPEND が non-nil なら buffer を消さない。"
     (select-window (get-buffer-window buf))
     (set-window-start (selected-window) start)))
 
-(defun navi2ch-make-backup-file-name (file)
+(defsubst navi2ch-make-backup-file-name (file)
   "FILE で指定されるファイルからバックアップファイルの名前を返す。"
   ;; とりあえずは、OS ごとのバックアップ名の違いは Emacs にまかせる。
   ;; 後々変えたくなった時に変更し忘れるのを防ぐため。
   (make-backup-file-name file))
 
 ;; make-temp-file の方が安全だけど、存在しない環境では make-temp-name を使う。
-(defun navi2ch-make-temp-file (file)
+(defsubst navi2ch-make-temp-file (file)
   "テンポラリファイルを作る。"
   (funcall (if (fboundp 'make-temp-file)
 	       'make-temp-file
