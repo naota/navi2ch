@@ -1,5 +1,16 @@
 2008-01-17  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article-no-check-regexp):
+	新変数。
+	(navi2ch-bookmark-fetch-mark-article):
+	navi2ch-bookmark-fetch-mark-article-no-check-regexp が non-nil なら
+	ば、 board-uri がそれにマッチするものは unmark check をしない。
+
+	* navi2ch-article.el (navi2ch-article-save-info-keys): Also save
+	response.
+	(navi2ch-article-update-file): 更新後に article-info の response を
+	更新するように。
+
 	* navi2ch-board-misc.el (navi2ch-bm-display-mark-article): inline
 	に。
 

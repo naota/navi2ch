@@ -129,7 +129,7 @@ last が最後からいくつ表示するか。
 移動できたら 0、できなければ 0 以外の整数を返す関数であること。")
 
 (defvar navi2ch-article-save-info-keys
-  '(number name time hide important unfilter mail kako))
+  '(number name time hide important unfilter mail kako response))
 
 (defvar navi2ch-article-insert-message-separator-function
   (if (and window-system
@@ -1396,7 +1396,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (let ((navi2ch-net-force-update (or navi2ch-net-force-update
 					  force))
 	    (file (navi2ch-article-get-file-name board article))
-	    start)
+	    start new-res)
 	(when (and (file-exists-p file)
 		   navi2ch-article-enable-diff)
 	  (setq start (1+ (navi2ch-count-lines-file file))))
@@ -1411,7 +1411,16 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 							     header)))
 					     article)))
 	  (when (navi2ch-net-get-state 'kako header)
-	    (setq article (navi2ch-put-alist 'kako t article))))))
+	    (setq article (navi2ch-put-alist 'kako t article)))
+	  (when (and (file-exists-p file)
+		     (file-readable-p file))
+	    (with-temp-buffer
+	      (navi2ch-insert-file-contents file)
+	      (setq article 
+		    (navi2ch-put-alist
+		     'response
+		     (number-to-string (count-lines (point-min) (point-max)))
+		     article)))))))
     (list article header)))
 
 (defun navi2ch-article-sync-from-file ()

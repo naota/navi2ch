@@ -71,6 +71,7 @@ KEY は (concat URI ARTID)")
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-current-bookmark-id nil)
 (defvar navi2ch-bookmark-fetch-mark-article-check-update nil)
+(defvar navi2ch-bookmark-fetch-mark-article-no-check-regexp nil)
 
 ;;; navi2ch-bm callbacks
 (defun navi2ch-bookmark-set-property (begin end item)
@@ -443,7 +444,9 @@ KEY は (concat URI ARTID)")
 				      (navi2ch-article-load-info board
 								 article)))))
 		     new-res board-data)
-		(when (eq bbstype 'unknown)
+		(when (or (null navi2ch-bookmark-fetch-mark-article-no-check-regexp)
+			  (not (string-match navi2ch-bookmark-fetch-mark-article-no-check-regexp
+					     board-uri)))
 		  (setq board-data
 			(navi2ch-cache-get board-uri
 					   (mapcar
