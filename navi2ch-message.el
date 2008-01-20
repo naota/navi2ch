@@ -651,7 +651,7 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 		      navi2ch-message-samba24-send-time))
 	  (setq navi2ch-message-samba24-update-timer
 		(or navi2ch-message-samba24-update-timer
-		    (run-at-time 1 1 'navi2ch-message-samba24-timer))))))))
+		    (run-at-time 1 1 'navi2ch-message-samba24-modeline))))))))
 
 (defun navi2ch-message-samba24-board-conversion (src val dst)
   "板名、ID、URLなどの相互変換。
@@ -707,10 +707,13 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
 			    (navi2ch-message-samba24-board-conversion 'id id 'uri) 
 			    id))
 	       (tmp-time (current-time))
-	       (current-time (+ (lsh (car tmp-time) 16) (cadr tmp-time))))
-	  (yes-or-no-p (format "あと %d 秒待ったほうがいいと思うけど、本当に書きこむ? "
-			       (- (+ last-write-time samba-time)
-				  current-time)))))))
+	       (cur-time (+ (lsh (car tmp-time) 16) (cadr tmp-time)))
+	       (diff-time (- (+ last-write-time samba-time)
+			     cur-time)))
+	  (or (<= diff-time 0)
+	      (yes-or-no-p (format 
+			    "あと %d 秒待ったほうがいいと思うけど、本当に書きこむ? "
+			    diff-time)))))))
 
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

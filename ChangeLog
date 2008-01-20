@@ -1,3 +1,11 @@
+2008-01-20  Naohiro Aota  <nao.aota@gmail.com>
+
+	Part 18 の 246氏よりの報告
+	* navi2ch-message.el (navi2ch-message-samba24): timer で
+	navi2ch-message-samba24-modeline を呼び出すように。
+	(navi2ch-message-samba24-check): current-time を cur-time に改名。
+	待ち秒数が負になった時に対応。
+
 2008-01-17  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article-no-check-regexp):
