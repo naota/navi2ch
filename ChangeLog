@@ -1,3 +1,10 @@
+2008-01-22  Naohiro Aota  <nao.aota@gmail.com>
+
+	Part 18 の 249氏よりの報告
+	* navi2ch-board.el (navi2ch-board-insert-subjects):
+	navi2ch-article-get-last-read-number() に渡す article を copy-tree
+	するように。
+
 2008-01-20  Naohiro Aota  <nao.aota@gmail.com>
 
 	Part 18 の 246氏よりの報告

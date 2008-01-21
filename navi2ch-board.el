@@ -316,7 +316,7 @@
 		 (read (and navi2ch-board-insert-subject-with-unread
 			    (navi2ch-article-get-last-read-number
 			     navi2ch-board-current-board
-			     article))))
+			     (copy-tree article)))))
 	     (concat "("
 		     (format "%4s" res)
 		     (and navi2ch-board-insert-subject-with-diff
