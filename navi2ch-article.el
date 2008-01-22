@@ -3497,5 +3497,38 @@ PREFIX が与えられた場合は、
 	  ((eq type 'url)
 	   prop))))
 
+(defun navi2ch-article-show-sssp-icon ()
+  "sssp://のアイコンを表示。現状>>1のアイコンしか読まない"
+  (interactive)
+  (if (display-images-p)
+      (save-excursion
+	(goto-char (point-min))
+	(setq buffer-read-only nil)
+	(if (re-search-forward
+	     (concat "sssp://\\([^ \t\n\r]+\\.\\("
+		     (mapconcat (lambda (s) s)
+				navi2ch-browse-url-image-extentions "\\|")
+		     "\\)\\)") nil t)
+	    (let ((url (get-text-property (1- (point)) 'navi2ch-link)))
+	      (when url
+		(let* (image file current-point
+			     (sssp_dir (concat navi2ch-directory "/sssp_icon/")))
+		  (unless (file-directory-p sssp_dir)
+		    (make-directory sssp_dir))
+		  (store-substring url 0 "http")
+		  (string-match "/\\([^/]+\\)$" url)
+		  (setq file (match-string 1 url))
+		  ;;ファイルが既にローカルに存在してるのならアップデートしない(更新は無さそうだし)
+		  (unless (file-exists-p (concat sssp_dir file))
+		    (setq current-point (point))
+		    ;;navi2ch-net-update-fileでポイントずれる？
+		    (navi2ch-net-update-file url (concat sssp_dir file))
+		    (goto-char current-point))
+		  (forward-line)
+		  (insert-image (create-image (concat sssp_dir file)))
+		  (put-text-property (1- (point)) (point) 'help-echo (propertize "[image]" 'display image))
+		  (insert "\n"))))
+	  (setq buffer-read-only nil)))))
+
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

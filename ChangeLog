@@ -1,3 +1,29 @@
+2008-01-22  mizmiz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-samba24-modeline):
+	cancel-timerは変数をnilにしない仕様らしい。よって、タイマの変数
+	見てるところで期待どおりの動作をしない。自力でnilに。
+	(interactive)をnavi2ch-message-samba24-updateから
+	navi2ch-message-samba24-read-sambaに移動。ファイル取得しても読み込
+	んで展開しなければ意味が無いから。これで、M-x
+	navi2ch-message-samba24-read-sambaをすれば全てうまくいく。名前は分
+	かりづらいが。
+
+	* navi2ch-article.el (navi2ch-article-show-sssp-icon):新関数。
+	sssp:// なアイコンをインラインで表示させる。ディレクトリ掘って、画
+	像をそこにキャッシュ。今のところhookで呼んでやっている。
+	(add-hook 'navi2ch-article-mode-hook 'navi2ch-article-show-sssp-icon)
+	組み込む良い場所が見付からない。
+	emacs23のみでテスト済み。emacs側の仕様でアニメgifは動かない。
+
+	* navi2ch-vars.el (navi2ch-article-url-regexp): sssp:// でも
+	http:// みたいにリンクっぽいproperty。
+
+	* navi2ch-util.el (navi2ch-browse-url-internal): ブラウザを呼ぶ前に
+	ssspをhttpに置換。ブラウザを呼ぶ前にHEADして、ターゲットのデータが
+	取得できるかどうか確認。サブプロセス呼ぶコスト削減なのだが、厳しす
+	ぎるかも。
+
 2008-01-22  Naohiro Aota  <nao.aota@gmail.com>
 
 	Part 18 の 249氏よりの報告

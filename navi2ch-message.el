@@ -626,7 +626,8 @@ header field $B$X0\F0$7$J$$0J30$O(B `back-to-indentation' $B$HF1$8!#(B"
 	  (setq navi2ch-message-samba24-send-time
 		(delete x navi2ch-message-samba24-send-time))
 	  (unless navi2ch-message-samba24-send-time
-	    (cancel-timer navi2ch-message-samba24-update-timer)))))
+	    (cancel-timer navi2ch-message-samba24-update-timer)
+	    (setq navi2ch-message-samba24-update-timer nil)))))
     (force-mode-line-update t)))
 
 (defun navi2ch-message-samba24 ()
@@ -664,6 +665,7 @@ SRC=$BJQ4985$NO"A[%j%9%H:8B&(B VAL=$BJQ4985$NCM(B($B1&B&(B) DST=$BJQ49@h$
 (defun navi2ch-message-samba24-read-samba ()
   "samba.txt $B$+$i3F%5!<%P!"HD$4$H$NO"B3Ej9F5,@);~4V$rFI$_9~$_!"%j%9%H$H$7$FJ];}$9$k(B.
 samba.txt $B$O(B http://nullpo.s101.xrea.com/samba24/ $B$+$i<hF@(B."
+  (interactive)
   (let (navi2ch-message-samba24-file nnn)
     ;; $B:G?7$N(Bsamba.txt$B$r<hF@(B
     (navi2ch-message-samba24-update)
@@ -691,7 +693,6 @@ samba.txt $B$O(B http://nullpo.s101.xrea.com/samba24/ $B$+$i<hF@(B."
 
 (defun navi2ch-message-samba24-update ()
   "samba24 $B$N5,@)>pJs$r99?7(B."
-  (interactive)
   ;; $B%U%!%$%k$,F0E*@8@.$C$]$$$N$G(BIf-Modified-Since$B8+$J$$!)!J9bIi2Y!)!K(B
   (navi2ch-net-update-file navi2ch-message-samba24-sambatxt-url
 			   (navi2ch-expand-file-name navi2ch-message-samba24-file-name)

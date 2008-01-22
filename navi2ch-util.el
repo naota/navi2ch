@@ -540,9 +540,24 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	(new-window-flag (cond ((boundp 'browse-url-new-window-flag)
 				browse-url-new-window-flag)
 			       ((boundp 'browse-url-new-window-p)
-				browse-url-new-window-p))))
+				browse-url-new-window-p)))
+	proc status status)
     (if (eq browse-url-browser-function 'navi2ch-browse-url)
 	(error "Set navi2ch-browse-url-browser-function correctly"))
+
+    ;;ssspをhttpに書き換え
+    (store-substring url 0 "http")
+
+    ;;無駄を省くためブラウズする前にターゲットの状態確認する。
+    ;;ちょっと厳しいようだが、302だと大抵404に飛ばされるので。
+    (setq proc (navi2ch-net-send-request url "HEAD"))
+    (setq status (navi2ch-net-get-status proc))
+    (if (or (string= status "404")
+	    (string= status "403")
+	    (string= status "503")
+	    (string= status "302"))
+	(error "ブラウズするのやめました return code %s" status))
+
     (cond ((and navi2ch-browse-url-image-program ; images
 		(file-name-extension url)
 		(member (downcase (file-name-extension url))
