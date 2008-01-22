@@ -898,6 +898,15 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	 (navi2ch-article-get-current-subject)
        (cdr (assq 'subject alist))))))
 
+(defun navi2ch-article-message-filter-by-hostname (alist)
+  (let ((case-fold-search nil)
+	(date (cdr (assq 'date alist))))
+    (when (and navi2ch-article-message-filter-by-hostname-alist
+	       (string-match "\\[ \\([^ ]+\\) \\]" date))
+      (navi2ch-article-message-filter-subr
+       navi2ch-article-message-filter-by-hostname-alist
+       (match-string 1 date)))))
+
 (defun navi2ch-article-message-filter-subr (rules string)
   (let ((board-id (cdr (assq 'id navi2ch-article-current-board)))
 	(artid (cdr (assq 'artid navi2ch-article-current-article)))
@@ -2047,6 +2056,13 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
   (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
 					  navi2ch-article-message-list))))))
     (if (string-match " ID:\\([^ ]+\\)" date)
+	(match-string 1 date)
+      nil)))
+
+(defun navi2ch-article-get-current-hostname ()
+  (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
+					  navi2ch-article-message-list))))))
+    (if (string-match "\\[ \\([^ ]+\\) \\]" date)
 	(match-string 1 date)
       nil)))
 
@@ -3304,18 +3320,22 @@ PREFIX が与えられた場合は、
   "レスのフィルタ条件を対話的に追加する。"
   (interactive "P")
   (let* ((has-id (navi2ch-article-get-current-id))
+	 (has-hostname (navi2ch-article-get-current-hostname))
 	 (char (navi2ch-read-char-with-retry
-		(if has-id
-		    "Filter by: n)ame m)ail i)d b)ody s)ubject: "
-		  "Filter by: n)ame m)ail b)ody s)ubject: ")
+
+		(concat "Filter by: n)ame m)ail "
+			(and has-id "i)d ")
+			(and has-hostname "h)ostname ")
+			"b)ody s)ubject: ")
 		nil
-		(if has-id
-		    '(?n ?m ?i ?b ?s)
-		  '(?n ?m ?b ?s)))))
+		(append '(?n ?m ?b ?s)
+			(and has-id (list ?i))
+			(and has-hostname (list ?h))))))
     (cond
      ((eq char ?n) (navi2ch-article-add-message-filter-by-name prefix))
      ((eq char ?m) (navi2ch-article-add-message-filter-by-mail prefix))
      ((eq char ?i) (navi2ch-article-add-message-filter-by-id prefix))
+     ((eq char ?h) (navi2ch-article-add-message-filter-by-hostname prefix))
      ((eq char ?b) (navi2ch-article-add-message-filter-by-message prefix))
      ((eq char ?s) (navi2ch-article-add-message-filter-by-subject prefix)))))
 
@@ -3363,6 +3383,15 @@ PREFIX が与えられた場合は、
    (if prefix
        (buffer-substring-no-properties (region-beginning) (region-end))
      (navi2ch-article-get-current-subject))))
+
+(defun navi2ch-article-add-message-filter-by-hostname (&optional prefix)
+  (interactive "P")
+  (navi2ch-article-add-message-filter-rule-subr
+   'navi2ch-article-message-filter-by-hostname-alist
+   "Hostname: "
+   (if prefix
+       (buffer-substring-no-properties (region-beginning) (region-end))
+     (navi2ch-article-get-current-hostname))))
 
 (defun navi2ch-article-add-message-filter-rule-subr (variable
 						     prompt

@@ -1,3 +1,17 @@
+2008-01-22  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-list):
+	`navi2ch-article-message-filter-by-hostname' を追加。
+
+	* navi2ch-article.el (navi2ch-article-add-message-filter-by-hostname):
+	新関数。
+	(navi2ch-article-message-filter-by-hostname): Ditto.
+	(navi2ch-article-get-current-hostname): Ditto.
+	(navi2ch-article-add-message-filter-rule): hostname の選択肢を追加。
+
+	* navi2ch-vars.el (navi2ch-article-message-filter-by-hostname-alist):
+	新カスタマイズ変数。
+
 2008-01-22  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline):

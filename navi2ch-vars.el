@@ -888,7 +888,8 @@ nil の場合は同じスレの内容のみを得る。"
     navi2ch-article-message-filter-by-mail
     navi2ch-article-message-filter-by-id
     navi2ch-article-message-filter-by-message
-    navi2ch-article-message-filter-by-subject)
+    navi2ch-article-message-filter-by-subject
+    navi2ch-article-message-filter-by-hostname)
   "*レスをフィルタするための関数のリスト。
 リストの member となる関数としては、
 レスの alist を引き数に取り、
@@ -1508,6 +1509,141 @@ important	レスをブックマークに登録する
 
 '((\"ふが\" . 1000)
   ((\"ホゲ\" S) . -1000))"
+  :type (let ((plist '(set :inline t
+			   :format "%v"
+			   (list :tag "文字列一致の真偽を逆転"
+				 :inline t
+				 :format "%{%t%}\n"
+				 :value '(:invert t))
+			   (list :tag "板を指定"
+				 :inline t
+				 (const :format ""
+					:value :board-id)
+				 (string :tag "ID")
+				 (set :inline t
+				      :format "%v"
+				      (list :tag "スレッドも指定"
+					    :inline t
+					    (const :format ""
+						   :value :artid)
+					    (string :tag "ID"))))
+			   (list :tag "条件が一致したときのフィルタの位置"
+				 :inline t
+				 (const :format ""
+					:value :float)
+				 (choice :value 0
+					 (const :tag "そのまま"
+						:value 0)
+					 (const :tag "先頭へ"
+						:value 1))))))
+	  `(repeat (cons (choice :tag "条件"
+				 (string)
+				 (list :tag "部分一致"
+				       :value ("" S)
+				       (string)
+				       (choice :tag "大文字と小文字の区別"
+					       (const :tag "あり"
+						      :value S)
+					       (const :tag "なし"
+						      :value s))
+				       ,plist)
+				 (list :tag "完全一致"
+				       :value ("" E)
+				       (string)
+				       (choice :tag "大文字と小文字の区別"
+					       (const :tag "あり"
+						      :value E)
+					       (const :tag "なし"
+						      :value e))
+				       ,plist)
+				 (list :tag "あいまい一致"
+				       :value ("" f)
+				       (string)
+				       (choice :tag "大文字と小文字・ひらがなとカタカナの区別"
+					       (const :tag "あり"
+						      :value F)
+					       (const :tag "なし"
+						      :value f))
+				       ,plist)
+				 (list :tag "正規表現"
+				       :value ("" R)
+				       (regexp)
+				       (choice :tag "大文字と小文字の区別"
+					       (const :tag "あり"
+						      :value R)
+					       (const :tag "なし"
+						      :value r))
+				       ,plist))
+			 (choice :tag "処理"
+				 (string :tag "置き換える"
+					 :value "あぼぼーん")
+				 (const :tag "隠す"
+					:value hide)
+				 (const :tag "ブックマークに登録する"
+					:value important)
+				 (number :tag "点数を加える"
+					 :value 0)))))
+  :group 'navi2ch-article)
+
+(defcustom navi2ch-article-message-filter-by-hostname-alist nil
+  "*レスをフィルタするためのホスト名の条件と、フィルタ処理の alist。
+
+条件には文字列か、
+\(文字列 シンボル ...)の形式のリスト(拡張形式)を指定する。
+
+文字列を指定すると、
+ID がその文字列を含むときにフィルタ処理が実行される。
+
+拡張形式を指定すると、
+シンボルに合わせて下記の方法で ID を検査する。
+
+S,s	部分一致
+E,e	完全一致
+F,f	あいまい一致	(空白や改行の有無や多少を無視し、
+			また全角と半角を区別しない部分一致)
+R,r	正規表現
+
+大文字のシンボルを指定すると文字列の大文字と小文字を区別し、
+小文字のシンボルを指定すると文字列の大文字と小文字を区別しない。
+
+あいまい一致を小文字で指定した場合は、ひらがなとカタカナも区別しない。
+
+シンボルの後にはキーワードを追加し、
+値によってフィルタ条件を下記のように補足することができる。
+
+:invert		t (non-nil)を指定すると、文字列一致の真偽を逆転する
+
+:board-id	フィルタ対象となる板の ID を指定する
+:artid		フィルタ対象となるスレッドの ID も指定する
+
+:float		フィルタ条件が一致したとき、このフィルタ項目を
+		`navi2ch-article-sort-message-filter-rules'を無視して
+		常に alist の先頭に持ってくる場合は 1 (正数値)を指定し、
+		そのままにする場合は 0 (非正数値)を指定する
+
+
+フィルタ処理には、文字列・シンボル・数値のどれかを指定する。
+
+文字列を指定すると、レスがその文字列に置き換わる。
+
+フィルタ条件を拡張形式で指定していた場合、
+置換後の文字列中の \\1〜\\9 および \\& は、一致した文字列に展開される。
+\\1〜\\9 および \\& の意味については、`replace-match'を参照のこと。
+
+シンボルを指定すると、シンボルに合わせて下記の処理が行われる。
+
+hide		レスを隠す
+important	レスをブックマークに登録する
+
+数値を指定すると、レスの得点にその数値分の点数を加えて、
+残りのフィルタを実行する。
+
+例えば下記の値を設定すると、
+ホスト名に「example.jp」が含まれているとレスが「あぼぼーん」に置き換わり、
+ホスト名が「foo.example.jp」が含まれているとレスが隠される。
+
+'((\"example.jp\" . \"あぼぼーん\")
+  ((\"foo.example.jp\" S) . hide))"
   :type (let ((plist '(set :inline t
 			   :format "%v"
 			   (list :tag "文字列一致の真偽を逆転"
