@@ -1389,7 +1389,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 			    navi2ch-article-important-mode)
 			(cdr (assq 'number navi2ch-article-current-article))
 		      (navi2ch-article-get-current-number))))
-      (setq article (navi2ch-article-load-info board article))
+      (setq article (navi2ch-article-load-info board (copy-alist article)))
       (setq hide (cdr (assq 'hide article))
 	    num (cdr (assq 'number article))))
     (when num
