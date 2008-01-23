@@ -3531,33 +3531,30 @@ PREFIX が与えられた場合は、
   (interactive)
   (if (display-images-p)
       (save-excursion
-	(goto-char (point-min))
-	(setq buffer-read-only nil)
-	(if (re-search-forward
-	     (concat "sssp://\\([^ \t\n\r]+\\.\\("
-		     (mapconcat (lambda (s) s)
-				navi2ch-browse-url-image-extentions "\\|")
-		     "\\)\\)") nil t)
-	    (let ((url (get-text-property (1- (point)) 'navi2ch-link)))
-	      (when url
-		(let* (image file current-point
-			     (sssp_dir (concat navi2ch-directory "/sssp_icon/")))
-		  (unless (file-directory-p sssp_dir)
-		    (make-directory sssp_dir))
-		  (store-substring url 0 "http")
-		  (string-match "/\\([^/]+\\)$" url)
-		  (setq file (match-string 1 url))
-		  ;;ファイルが既にローカルに存在してるのならアップデートしない(更新は無さそうだし)
-		  (unless (file-exists-p (concat sssp_dir file))
-		    (setq current-point (point))
-		    ;;navi2ch-net-update-fileでポイントずれる？
-		    (navi2ch-net-update-file url (concat sssp_dir file))
-		    (goto-char current-point))
-		  (forward-line)
-		  (insert-image (create-image (concat sssp_dir file)))
-		  (put-text-property (1- (point)) (point) 'help-echo (propertize "[image]" 'display image))
-		  (insert "\n"))))
-	  (setq buffer-read-only nil)))))
+	(let ((buffer-read-only nil))
+	  (goto-char (point-min))
+	  (if (re-search-forward
+	       (concat "sssp://[^ \t\n\r]+\\.\\("
+		       (regexp-opt navi2ch-browse-url-image-extentions)
+		       "\\)") nil t)
+	      (let ((url (get-text-property (1- (point)) 'navi2ch-link)))
+		(when url
+		  (let (image file current-point
+			      (sssp_dir (expand-file-name "sssp_icon/" navi2ch-directory)))
+		    (unless (file-directory-p sssp_dir)
+		      (make-directory sssp_dir))
+		    (store-substring url 0 "http")
+		    (string-match "/\\([^/]+\\)$" url)
+		    (setq file (match-string 1 url))
+		    ;;ファイルが既にローカルに存在してるのならアップデートしない(更新は無さそうだし)
+		    (unless (file-exists-p (concat sssp_dir file))
+		      (save-excursion
+			(navi2ch-net-update-file url (concat sssp_dir file))))
+		    (forward-line)
+		    (insert-image (create-image (concat sssp_dir file)))
+		    (put-text-property (1- (point)) (point) 'help-echo (propertize "[image]" 'display image))
+		    (insert "\n"))))
+	    )))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here
