@@ -1523,6 +1523,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
   (interactive)
   (setq navi2ch-article-view-range
         (navi2ch-article-select-view-range-subr))
+  (sit-for 0)
   (navi2ch-article-redraw))
 
 (defun navi2ch-article-save-number ()
