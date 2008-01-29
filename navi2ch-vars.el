@@ -2369,6 +2369,7 @@ to force the image format."
     (define-key map "\C-c\C-o" 'navi2ch-message-jump-to-message-buffer)
     (define-key map "\C-c\C-n" 'navi2ch-article-forward-sticky-buffer)
     (define-key map "\C-c\C-p" 'navi2ch-article-backward-sticky-buffer)
+    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
     (setq navi2ch-global-map map)))
 
 (defvar navi2ch-global-view-map nil

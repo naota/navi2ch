@@ -1,3 +1,17 @@
+2008-01-30  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-vars.el (navi2ch-global-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
+
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l の map を移
+	動。
+
+	* navi2ch-message.el (navi2ch-message-mode-map): Ditto.
+
+	* navi2ch-list.el (navi2ch-list-mode-map): Ditto.
+
+	* navi2ch-article.el (navi2ch-article-mode-map): Ditto.
+
 2008-01-29  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24): id がかぶっていた時
@@ -142,7 +156,7 @@
 	* navi2ch-util.el (navi2ch-expand-file-name): ちょっと高速化。
 
 	* navi2ch-vars.el (navi2ch-file-name-reserved-char-regexp):
-	navi2ch-file-name-reserved-char-list に変更。p
+	navi2ch-file-name-reserved-char-list に変更。
 	(navi2ch-file-name-reserved-char-list):
 	navi2ch-file-name-reserved-char-regexp から変更。
 

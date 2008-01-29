@@ -1133,6 +1133,9 @@ non-nil であっても、指定した板でしかモナーフォントが使われないというこ
 @item C-c C-o
 @code{navi2ch-message-jump-to-message-buffer} レスを書いてる途中なら、
 レスを書くバッファと書き込むスレ/板のバッファに切り替え
+
+@item C-c C-l
+@code{navi2ch-be2ch-toggle-login} Be@@2chへのログイン状態の切り替え
 @end table
 
 Message モード以外では以下のキーバインドも使える。ただし、モードで上書

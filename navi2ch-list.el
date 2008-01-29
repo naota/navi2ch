@@ -54,7 +54,6 @@
     (define-key map "?" 'navi2ch-list-search)
     (define-key map "e" 'navi2ch-list-expire)
     (define-key map "U" 'navi2ch-list-show-url)
-    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
     (setq navi2ch-list-mode-map map)))
 
 (defvar navi2ch-list-mode-menu-spec

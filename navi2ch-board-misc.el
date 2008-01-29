@@ -61,7 +61,6 @@
     (define-key map "\C-c\C-r" 'navi2ch-bm-remove-article)
     (define-key map "\C-o" 'navi2ch-bm-save-dat-file)
     (define-key map "I" 'navi2ch-bm-fetch-maybe-new-articles)
-    (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
 
     ;; mark command
     (define-key map "*" 'navi2ch-bm-mark)
