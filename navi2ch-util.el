@@ -550,13 +550,14 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 
     ;;無駄を省くためブラウズする前にターゲットの状態確認する。
     ;;ちょっと厳しいようだが、302だと大抵404に飛ばされるので。
-    (setq proc (navi2ch-net-send-request url "HEAD"))
-    (setq status (navi2ch-net-get-status proc))
-    (if (or (string= status "404")
-	    (string= status "403")
-	    (string= status "503")
-	    (string= status "302"))
-	(error "ブラウズするのやめました return code %s" status))
+    (when navi2ch-enable-status-check
+      (setq proc (navi2ch-net-send-request url "HEAD"))
+      (setq status (navi2ch-net-get-status proc))
+      (if (or (string= status "404")
+	      (string= status "403")
+	      (string= status "503")
+	      (string= status "302"))
+	  (error "ブラウズするのやめました return code %s" status)))
 
     (cond ((and navi2ch-browse-url-image-program ; images
 		(file-name-extension url)

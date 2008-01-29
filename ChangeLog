@@ -1,3 +1,14 @@
+2008-01-29  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-message.el (navi2ch-message-samba24): id がかぶっていた時
+	の対策。
+	(navi2ch-message-samba24-search-samba): string 以外が url として入っ
+	てきた時の対策。
+
+	* navi2ch-vars.el (navi2ch-enable-status-check): 新カスタマイズ変数。
+
+	* navi2ch-util.el (navi2ch-browse-url-internal): Use it.
+
 2008-01-24  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-redraw-range): range を選んだ

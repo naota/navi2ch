@@ -641,8 +641,10 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 	     (last-write-time (+ (lsh (car tmp-time) 16) (cadr tmp-time)))
 	     (id (cdr (assq 'id navi2ch-message-current-board)))
 	     (id-list (assoc id navi2ch-message-samba24-send-time)))
+	(when (string-match "^\\([^:]*\\):" id)
+	  (setq id (match-string 1 id)))
 	(when (navi2ch-message-samba24-search-samba 
-	       (navi2ch-message-samba24-board-conversion 'id id 'uri) 
+	       (navi2ch-message-samba24-board-conversion 'id id 'uri)
 	       id)
 	  (when id-list
 	    (setq navi2ch-message-samba24-send-time
@@ -687,7 +689,8 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
 ;; FIXME: defsubst にしたい。
 (defun navi2ch-message-samba24-search-samba (url id)
   "サーバ名、板名から連続投稿規制時間を得る."
-  (when (string-match "http://\\([^/]+\\)" url)
+  (when (and (stringp url)
+	     (string-match "http://\\([^/]+\\)" url))
     (or (cdr (assoc id navi2ch-message-samba24-samba-data))
 	(cdr (assoc (match-string 1 url) navi2ch-message-samba24-samba-data)))))
 

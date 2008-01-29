@@ -189,6 +189,11 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
 		 (string :tag "指定"))
   :group 'navi2ch)
 
+(defcustom navi2ch-enable-status-check t
+  "non-nil ならばブラウザを開く前に HEAD で接続先を確認する。"
+  :type 'boolean
+  :group 'navi2ch)
+
 ;;; list variables
 (defcustom navi2ch-list-window-width 20
   "*板一覧ウィンドウの横幅。"
