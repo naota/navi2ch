@@ -1,6 +1,6 @@
 ;;; navi2ch-vars.el --- User variables for navi2ch.
 
-;; Copyright (C) 2001-2004, 2008 by Navi2ch Project
+;; Copyright (C) 2001-2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: www 2ch

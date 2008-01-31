@@ -1,6 +1,6 @@
 ;;; navi2ch-auto-modify.el --- auto file modification module for navi2ch
 
-;; Copyright (C) 2003 by Navi2ch Project
+;; Copyright (C) 2003, 2005, 2006 by Navi2ch Project
 
 ;; Author: extra <ekisutora@users.sourceforge.net>
 ;; Keywords: network, 2ch

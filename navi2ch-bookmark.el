@@ -1,6 +1,6 @@
 ;;; navi2ch-bookmark.el --- global bookmark module for navi2ch
 
-;; Copyright (C) 2001-2004 by Navi2ch Project
+;; Copyright (C) 2001-2006, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -77,26 +77,26 @@ KEY は (concat URI ARTID)")
 (defun navi2ch-bookmark-set-property (begin end item)
   (put-text-property begin end 'item item))
 
-(defun navi2ch-bookmark-get-property (point)
+(defsubst navi2ch-bookmark-get-property (point)
   (get-text-property
    (save-excursion (goto-char point)
 		   (beginning-of-line)
 		   (point))
    'item))
 
-(defun navi2ch-bookmark-get-article (item)
+(defsubst navi2ch-bookmark-get-article (item)
   (cdr (assq 'article
 	     (cdr (assoc item
 			 (cddr (assoc navi2ch-bookmark-current-bookmark-id
 				      navi2ch-bookmark-list)))))))
 
-(defun navi2ch-bookmark-get-board (item)
+(defsubst navi2ch-bookmark-get-board (item)
   (cdr (assq 'board
 	     (cdr (assoc item
 			 (cddr (assoc navi2ch-bookmark-current-bookmark-id
 				      navi2ch-bookmark-list)))))))
 
-(defun navi2ch-bookmark-exit ()
+(defsubst navi2ch-bookmark-exit ()
   (run-hooks 'navi2ch-bookmark-exit-hook))
 
 ;; regist board
@@ -440,9 +440,10 @@ KEY は (concat URI ARTID)")
 		     (board-uri (cdr (assq 'uri board)))
 		     (art-id (cdr (assq 'artid article)))
 		     (res (string-to-number
-			   (cdr (assq 'response
-				      (navi2ch-article-load-info board
-								 article)))))
+			   (or (cdr (assq 'response
+					  (navi2ch-article-load-info board
+								     article)))
+			       "0")))
 		     new-res board-data)
 		(when (or (null navi2ch-bookmark-fetch-mark-article-no-check-regexp)
 			  (not (string-match navi2ch-bookmark-fetch-mark-article-no-check-regexp

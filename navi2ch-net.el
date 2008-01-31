@@ -1,6 +1,6 @@
 ;;; navi2ch-net.el --- Network module for navi2ch
 
-;; Copyright (C) 2000-2004, 2008 by Navi2ch Project
+;; Copyright (C) 2000-2006, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -931,13 +931,13 @@ This is taken from RFC 2396.")
 	  (when (navi2ch-net-update-file url file 'file nil t)
 	    file))))))
 
-(defun navi2ch-net-add-state (state header)
+(defsubst navi2ch-net-add-state (state header)
   "HEADER に STATE を追加する。"
   (navi2ch-put-alist (gethash state navi2ch-net-state-header-table)
 		     "yes"
 		     header))
 
-(defun navi2ch-net-get-state (state header)
+(defsubst navi2ch-net-get-state (state header)
   "HEADER から STATE を取得する。"
   (cdr (assq (gethash state navi2ch-net-state-header-table)
 	     header)))

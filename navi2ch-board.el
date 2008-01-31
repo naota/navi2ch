@@ -1,6 +1,6 @@
 ;;; navi2ch-board.el --- subject list module for navi2ch
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2006, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -112,22 +112,21 @@
   (setq navi2ch-board-updated-mode-map (make-sparse-keymap)))
 
 ;;; navi2ch-bm callbacks
-(defun navi2ch-board-set-property (begin end item)
+(defsubst navi2ch-board-set-property (begin end item)
   (put-text-property begin end 'article item))
 
-(defun navi2ch-board-get-property (point)
+(defsubst navi2ch-board-get-property (point)
   (get-text-property (save-excursion (goto-char point)
 				     (beginning-of-line)
 				     (point))
 		     'article))
 
-(defun navi2ch-board-get-article (item)
-  item)
+(defalias 'navi2ch-board-get-article 'identity)
 
-(defun navi2ch-board-get-board (item)
+(defsubst navi2ch-board-get-board (item)
   navi2ch-board-current-board)
 
-(defun navi2ch-board-exit ()
+(defsubst navi2ch-board-exit ()
   (run-hooks 'navi2ch-board-exit-hook)
   (navi2ch-board-save-info))
 
@@ -138,7 +137,7 @@
 (add-hook 'navi2ch-save-status-hook 'navi2ch-board-save-info)
 
 ;;; navi2ch-board functions
-(defun navi2ch-board-get-uri (board)
+(defsubst navi2ch-board-get-uri (board)
   "後ろの / が付いた uri を返す。"
   (let ((uri (cdr (assq 'uri board))))
     (when uri
@@ -187,7 +186,7 @@
 (defsubst navi2ch-board-from-file-p (board)
   (string= (cdr (assq 'name board)) navi2ch-board-name-from-file))
 
-(defun navi2ch-board-get-matched-article ()
+(defsubst navi2ch-board-get-matched-article ()
   "match した結果から article を得る。"
   (let ((id (match-string 1))
 	(str (match-string 2))

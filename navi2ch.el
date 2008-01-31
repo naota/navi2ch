@@ -1,6 +1,6 @@
 ;;; navi2ch.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2006, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -272,73 +272,90 @@ SUSPEND が non-nil なら buffer を消さない。"
 	       'make-temp-file
 	     'make-temp-name) file))
 
+(defvar navi2ch-info-cache nil)
+(defvar navi2ch-info-cache-limit 1000)
+
 (defun navi2ch-save-info (file info &optional backup)
   "lisp-object INFO を FILE に保存する。
 BACKUP が non-nil の場合は元のファイルをバックアップする。"
-  (setq info (navi2ch-strip-properties info)
-	file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
-  (let ((dir (file-name-directory file)))
-    (unless (file-exists-p dir)
-      (make-directory dir t)))
-  (when (or (file-regular-p file)
-	    (not (file-exists-p file)))
-    (let ((coding-system-for-write navi2ch-coding-system)
-	  (backup-file (navi2ch-make-backup-file-name file))
-	  temp-file)
-      (unwind-protect
-	  (progn
-	    ;; ファイルが確実に消えるよう、下の setq は上の let に移動
-	    ;; してはダメ
-	    (setq temp-file (navi2ch-make-temp-file
-			     (file-name-directory file)))
-	    (with-temp-file temp-file
-	      (let ((standard-output (current-buffer))
-		    print-length print-level)
-		(princ ";;; -*- mode: emacs-lisp; -*-\n")
-		(prin1 info)))
-	    (if (and backup (file-exists-p file))
-		(rename-file file backup-file t))
-	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info
-	    ;; がバックアップファイルから読んでくれる。
-	    (condition-case err
-		(progn
-		  (unless (file-exists-p file)
-		    (with-temp-file file)) ; ファイルが作成可能かチェック
-		  (rename-file temp-file file t))
-	      (file-error
-	       (message "%s: %s"
-			(cadr err)
-			(mapconcat #'identity (cddr err) ", ")))))
-	(if (and temp-file (file-exists-p temp-file))
-	    (delete-file temp-file))))))
+  (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
+  (unless navi2ch-info-cache
+    (setq navi2ch-info-cache
+	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal)))
+  (let ((cached-info (navi2ch-cache-get
+		      file nil navi2ch-info-cache)))
+    (when (or (null cached-info)
+	      (not (equal info cached-info)))
+      (navi2ch-cache-put file info navi2ch-info-cache)
+      (let ((dir (file-name-directory file)))
+	(unless (file-exists-p dir)
+	  (make-directory dir t)))
+      (when (or (file-regular-p file)
+		(not (file-exists-p file)))
+	(let ((coding-system-for-write navi2ch-coding-system)
+	      (backup-file (navi2ch-make-backup-file-name file))
+	      temp-file)
+	  (unwind-protect
+	      (progn
+		;; ファイルが確実に消えるよう、下の setq は上の let に移動
+		;; してはダメ
+		(setq temp-file (navi2ch-make-temp-file
+				 (file-name-directory file)))
+		(with-temp-file temp-file
+		  (let ((standard-output (current-buffer))
+			print-length print-level)
+		    (princ ";;; -*- mode: emacs-lisp; -*-\n")
+		    (prin1 info)))
+		(if (and backup (file-exists-p file))
+		    (rename-file file backup-file t))
+		;; 上の rename が成功して下が失敗しても、navi2ch-load-info
+		;; がバックアップファイルから読んでくれる。
+		(condition-case err
+		    (progn
+		      (unless (file-exists-p file)
+			(with-temp-file file)) ; ファイルが作成可能かチェック
+		      (rename-file temp-file file t))
+		  (file-error
+		   (message "%s: %s"
+			    (cadr err)
+			    (mapconcat #'identity (cddr err) ", ")))))
+	    (if (and temp-file (file-exists-p temp-file))
+		(delete-file temp-file))))))))
 
 (defun navi2ch-load-info (file)
   "FILE から lisp-object を読み込み、それを返す。"
   (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
-  (let ((backup-file (navi2ch-make-backup-file-name file)))
-    (when (and (file-exists-p backup-file)
-	       (file-regular-p backup-file)
-	       (or (not (file-exists-p file))
-		   (not (file-regular-p file))
-		   (file-newer-than-file-p backup-file file))
-	       (yes-or-no-p
-		(format
-		 "%s の読み込みで問題発生。バックアップファイルから読み込みますか? "
-		 file)))
-      (setq file backup-file)))
-  (when (file-regular-p file)
-    (let ((coding-system-for-read navi2ch-coding-system))
-      (navi2ch-ifemacsce
-	  (with-temp-buffer
-	    (insert-file-contents file)
-	    (goto-char (point-min))
-	    (while (search-forward "..." nil t)
-	      (replace-match ""))
-	    (car (read-from-string (buffer-string))))
-	(with-temp-buffer
-	  (insert-file-contents file)
-	  (let ((standard-input (current-buffer)))
-	    (read)))))))
+  (unless navi2ch-info-cache
+    (setq navi2ch-info-cache
+	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal)))
+  (navi2ch-cache-get 
+   file
+   (progn
+     (let ((backup-file (navi2ch-make-backup-file-name file)))
+       (when (and (file-exists-p backup-file)
+		  (file-regular-p backup-file)
+		  (or (not (file-exists-p file))
+		      (not (file-regular-p file))
+		      (file-newer-than-file-p backup-file file))
+		  (yes-or-no-p
+		   (format
+		    "%s の読み込みで問題発生。バックアップファイルから読み込みますか? "
+		    file)))
+	 (setq file backup-file)))
+     (when (file-regular-p file)
+       (let ((coding-system-for-read navi2ch-coding-system))
+	 (navi2ch-ifemacsce
+	     (with-temp-buffer
+	       (insert-file-contents file)
+	       (goto-char (point-min))
+	       (while (search-forward "..." nil t)
+		 (replace-match ""))
+	       (car (read-from-string (buffer-string))))
+	   (with-temp-buffer
+	     (insert-file-contents file)
+	     (let ((standard-input (current-buffer)))
+	       (read)))))))
+   navi2ch-info-cache))
 
 (defun navi2ch-split-window (display)
   "window を分割する。

@@ -1,6 +1,6 @@
 ;;; navi2ch-be2ch.el --- View be@2ch module for Navi2ch.
 
-;; Copyright (C) 2005 by Navi2ch Project
+;; Copyright (C) 2005, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch

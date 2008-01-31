@@ -1,6 +1,6 @@
 ;;; navi2ch-util.el --- useful utilities for navi2ch
 
-;; Copyright (C) 2000-2004, 2008 by Navi2ch Project
+;; Copyright (C) 2000-2008 by Navi2ch Project
 ;; Copyright (C) 1993-2000 Free Software Foundation, Inc.
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
@@ -583,7 +583,7 @@ don't offer a form of remote control."
          (append navi2ch-browse-url-image-args (list url))))
 
 ;; from apel
-(defun navi2ch-put-alist (item value alist)
+(defsubst navi2ch-put-alist (item value alist)
   "Modify ALIST to set VALUE to ITEM.
 If there is a pair whose car is ITEM, replace its cdr by VALUE.
 If there is not such pair, create new pair (ITEM . VALUE) and
@@ -936,7 +936,7 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
 	       (cons regexp value))
   (navi2ch-update-html-tag-regexp))
 
-(defun navi2ch-filename-to-url (filename)
+(defsubst navi2ch-filename-to-url (filename)
   (concat "file://" (expand-file-name filename)))
 
 (defun navi2ch-chop-/ (dirname)
@@ -945,7 +945,7 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
 	(replace-match "" nil t dirname)
       dirname)))
 
-(defun navi2ch-rename-file (file newname &optional ok-if-already-exists)
+(defsubst navi2ch-rename-file (file newname &optional ok-if-already-exists)
   (rename-file (navi2ch-chop-/ file)
 	       (navi2ch-chop-/ newname) ok-if-already-exists))
 
@@ -1014,7 +1014,7 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
       #'point-at-eol
     #'line-end-position))
 
-(defun navi2ch-count-lines-file (file)
+(defsubst navi2ch-count-lines-file (file)
   "$B$=$N%U%!%$%k$N9T?t$r?t$($k!#(B"
   (with-temp-buffer
     (insert-file-contents file)
@@ -1376,7 +1376,7 @@ BOUND NOERROR COUNT $B$O(B `re-search-forward' $B$K$=$N$^$^EO$5$l$k!#(B"
 	(setq bol (1+ (navi2ch-line-end-position))))))
   (goto-char start))
 
-(defun navi2ch-read-only-string (string)
+(defsubst navi2ch-read-only-string (string)
   (propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
 
 (defsubst navi2ch-file-mtime (filename)
@@ -1385,13 +1385,16 @@ BOUND NOERROR COUNT $B$O(B `re-search-forward' $B$K$=$N$^$^EO$5$l$k!#(B"
 (defsubst navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
 
-(defun navi2ch-float-time (&optional specified-time)
-  "Return the current time, as a float number of seconds since the epoch.
+(defalias 'navi2ch-float-time
+  (if (fboundp 'float-time)
+      'float-time
+    (lambda (&optional specified-time)
+      "Return the current time, as a float number of seconds since the epoch.
 If an argument is given, it specifies a time to convert to float
 instead of the current time."
-  (apply (lambda (high low &optional usec)
-	   (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
-	 (or specified-time (current-time))))
+      (apply (lambda (high low &optional usec)
+	       (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
+	     (or specified-time (current-time))))))
 
 (defalias 'navi2ch-make-local-hook
   (if (>= emacs-major-version 22)

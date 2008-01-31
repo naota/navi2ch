@@ -1,6 +1,6 @@
 ;;; navi2ch-article.el --- article view module for navi2ch
 
-;; Copyright (C) 2000-2004 by Navi2ch Project
+;; Copyright (C) 2000-2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -234,18 +234,18 @@ last $B$,:G8e$+$i$$$/$DI=<($9$k$+!#(B
   (file-name-sans-extension (file-name-nondirectory filename)))
 
 
-(defun navi2ch-article-inside-range-p (num range len)
+(defsubst navi2ch-article-inside-range-p (num range len)
   "NUM $B$,(B RANGE $B$G<($9HO0O$KF~$C$F$k$+!#(B
 LEN $B$O(B RANGE $B$GHO0O$r;XDj$5$l$k(B list $B$ND9$5!#(B"
   (or (not range)
       (<= num (car range))
       (> num (- len (cdr range)))))
 
-(defun navi2ch-article-get-buffer-name (board article)
+(defsubst navi2ch-article-get-buffer-name (board article)
   (concat navi2ch-article-buffer-name-prefix
 	  (navi2ch-article-get-url board article 'no-kako)))
 
-(defun navi2ch-article-check-cached (board article)
+(defsubst navi2ch-article-check-cached (board article)
   "BOARD $B$H(B ARTICLE $B$G;XDj$5$l$k%9%l%C%I$,%-%c%C%7%e$5$l$F$k$+!#(B"
   (cond ((get-buffer (navi2ch-article-get-buffer-name board article))
          'view)
@@ -1046,16 +1046,19 @@ NUM $B$,(B -1 $B$N$H$-$O(B sticky $B%P%C%U%!$b4^$a$F$9$Y$F:o=|!#(B"
   (interactive "P")
   (when (not (numberp num)) ; C-u $B$N$_$N;~(B4$B8D$K$7$?$$$o$1$8$c$J$$$H;W$o$l(B
     (setq num navi2ch-article-max-buffers))
-  (let ((buffer-num (length (navi2ch-article-buffer-list)))
-	buffer-list)
+  (let* ((buffer-list (navi2ch-article-buffer-list))
+	 (buffer-num (length buffer-list)))
     (when (> buffer-num num)
-      (if (< num 0)
-	  (setq buffer-list (navi2ch-article-buffer-list))
+      (unless (< num 0)
 	(save-excursion
-	  (dolist (buf (navi2ch-article-buffer-list))
-	    (set-buffer buf)
-	    (unless navi2ch-article-sticky-mode
-	      (push buf buffer-list)))))
+	  (setq buffer-list
+		(nreverse
+		 (apply 'append
+			(mapcar (lambda (buf)
+				  (set-buffer buf)
+				  (and (not navi2ch-article-sticky-mode)
+				       (list buf)))
+				buffer-list))))))
       (catch 'loop
 	(dolist (buf buffer-list)
 	  (kill-buffer buf)
@@ -1177,9 +1180,14 @@ DONT-DISPLAY $B$,(B non-nil $B$N$H$-$O%9%l%P%C%U%!$rI=<($;$:$K<B9T!#(B"
   (run-hooks 'navi2ch-article-mode-hook))
 
 (defun navi2ch-article-kill-buffer-hook ()
-  (navi2ch-bm-update-article navi2ch-article-current-board
-			     navi2ch-article-current-article
-			     'cache)
+  ;; update $B$G$"$l$P(B cache $B$K$7$J$$(B
+  ;; view $B$G$"$C$?$b$N$,(B update $B$K$J$C$?8e$K(B kill $B$5$l$?;~$NBP:v(B
+  (unless (eq (navi2ch-bm-get-state-from-article navi2ch-article-current-board
+						 navi2ch-article-current-article)
+	      'update) 
+    (navi2ch-bm-update-article navi2ch-article-current-board
+			       navi2ch-article-current-article
+			       'cache))
   (navi2ch-article-save-info))
 
 (defun navi2ch-article-exit (&optional kill)
@@ -1557,14 +1565,8 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 	     (alist (mapcar
 		     (lambda (x)
 		       (assq x article-tmp))
-		     navi2ch-article-save-info-keys))
-	     (info-file (navi2ch-article-get-info-file-name board article)))
-	(navi2ch-save-info info-file  alist)
-	(or navi2ch-article-info-cache
-	    (setq navi2ch-article-info-cache
-		  (navi2ch-make-cache navi2ch-article-info-cache-limit
-				      'equal)))
-	(navi2ch-cache-put info-file alist navi2ch-article-info-cache)
+		     navi2ch-article-save-info-keys)))
+	(navi2ch-save-info (navi2ch-article-get-info-file-name board article) alist)
 	(navi2ch-article-save-message-filter-cache board article)))))
 
 (defun navi2ch-article-load-info (&optional board article)
@@ -1574,14 +1576,7 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
       (or board (setq board navi2ch-article-current-board))
       (or article (setq article navi2ch-article-current-article)))
     (when (and (not ignore) board article)
-      (or navi2ch-article-info-cache
-	  (setq navi2ch-article-info-cache
-		(navi2ch-make-cache navi2ch-article-info-cache-limit
-				    'equal)))
-      (setq info-file (navi2ch-article-get-info-file-name board article))
-      (setq alist (navi2ch-cache-get info-file
-				     (navi2ch-load-info info-file)
-				     navi2ch-article-info-cache))
+      (setq alist (navi2ch-load-info (navi2ch-article-get-info-file-name board article)))
       (dolist (x alist)
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
@@ -2024,7 +2019,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (interactive)
   (navi2ch-article-through-subr (interactive-p) -1))
 
-(defun navi2ch-article-get-message (num)
+(defsubst navi2ch-article-get-message (num)
   "NUM $BHVL\$N%l%9$rF@$k!#(B"
   (cdr (assq num navi2ch-article-message-list)))
 
@@ -2037,11 +2032,11 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
            'current-number))
     (error nil)))
 
-(defun navi2ch-article-get-current-name ()
+(defsubst navi2ch-article-get-current-name ()
   (cdr (assq 'name (cdr (assq (navi2ch-article-get-current-number)
 			      navi2ch-article-message-list)))))
 
-(defun navi2ch-article-get-current-mail ()
+(defsubst navi2ch-article-get-current-mail ()
   (cdr (assq 'mail (cdr (assq (navi2ch-article-get-current-number)
 			      navi2ch-article-message-list)))))
 
@@ -2831,12 +2826,12 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
                       (navi2ch-article-get-message
                        (navi2ch-article-get-current-number))))))
 
-(defun navi2ch-article-load-article-summary (board)
+(defsubst navi2ch-article-load-article-summary (board)
   (navi2ch-load-info (navi2ch-board-get-file-name
 		      board
 		      navi2ch-article-summary-file-name)))
 
-(defun navi2ch-article-save-article-summary (board summary)
+(defsubst navi2ch-article-save-article-summary (board summary)
   (navi2ch-save-info (navi2ch-board-get-file-name
 		      board
 		      navi2ch-article-summary-file-name)
@@ -2910,8 +2905,7 @@ STICKY $B$,(B non-nil $B$N$H$-$O<!$N(B sticky article buffer $B$K@Z$jBX$($k
   (interactive "P")
   (let (buf)
     (dolist (x (buffer-list))
-      (when (save-excursion
-              (set-buffer x)
+      (when (with-current-buffer x
               (and (eq major-mode 'navi2ch-article-mode)
 		   (or (not sticky)
 		       navi2ch-article-sticky-mode)))
@@ -3195,7 +3189,7 @@ FUNC $B$O(B (NUMBER, LIST) $B$r0z?t$K<h$k4X?t$G$"$k;v!#(B"
                         " Filter"
                         navi2ch-article-message-filter-mode-map)
 
-(defun navi2ch-article-get-message-filter-cache-file-name (board article)
+(defsubst navi2ch-article-get-message-filter-cache-file-name (board article)
   (concat (navi2ch-article-get-info-file-name board article) ".filter"))
 
 (defun navi2ch-article-save-message-filter-cache (&optional board article cache)

@@ -1,6 +1,6 @@
 ;;; navi2ch-http-date.el --- parser / generator of HTTP-date format
 
-;; Copyright (C) 2002, 2004  Navi2ch Project
+;; Copyright (C) 2002, 2003, 2008 by Navi2ch Project
 
 ;; Author: Nanashi San <nanashi@users.sourceforge.net>
 ;; Keywords: 2ch, network

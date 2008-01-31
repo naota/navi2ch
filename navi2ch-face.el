@@ -1,6 +1,6 @@
 ;;; navi2ch-face.el --- face definitions for navi2ch
 
-;; Copyright (C) 2001-2004 by Navi2ch Project
+;; Copyright (C) 2001-2006 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch

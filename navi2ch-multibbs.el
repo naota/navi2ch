@@ -1,6 +1,6 @@
 ;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch.
 
-;; Copyright (C) 2002-2004, 2008 by Navi2ch Project
+;; Copyright (C) 2002-2006, 2008 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -137,7 +137,7 @@ CODING-SYSTEM-VAR:
     (setcdr board
 	    (cons (cons 'bbstype type) (cdr board)))))
 
-(defun navi2ch-multibbs-get-bbstype (board)
+(defsubst navi2ch-multibbs-get-bbstype (board)
   (let ((type (cdr (assq 'bbstype board))))
     (unless type
       (setq type (navi2ch-multibbs-url-to-bbstype
@@ -203,7 +203,7 @@ SPEC は (BBSTYPE [ARG]...)。
    (navi2ch-multibbs-get-bbstype board)
    func default-func))
 
-(defun navi2ch-multibbs-get-func (bbstype func &optional default-func)
+(defsubst navi2ch-multibbs-get-func (bbstype func &optional default-func)
   (let ((func-table (gethash bbstype navi2ch-multibbs-func-table)))
     (or (and func-table
 	     (gethash func func-table))
@@ -326,19 +326,19 @@ START, END, NOFIRST で範囲を指定する"
 		   (message (concat message-str "failed"))))
 	       (return nil)))))))
 
-(defun navi2ch-multibbs-board-update (board)
+(defsubst navi2ch-multibbs-board-update (board)
   (let ((func (navi2ch-multibbs-get-func-from-board
 	       board 'board-update 'navi2ch-2ch-board-update)))
     (funcall func board)))
 
-(defun navi2ch-multibbs-board-get-file-name (board &optional file-name)
+(defsubst navi2ch-multibbs-board-get-file-name (board &optional file-name)
   (let ((func (navi2ch-multibbs-get-func-from-board
 	       board 'board-get-file-name 'navi2ch-2ch-board-get-file-name)))
     (funcall func board file-name)))
 
 ;;;-----------------------------------------------
 
-(defun navi2ch-2ch-subject-callback ()
+(defsubst navi2ch-2ch-subject-callback ()
   (when navi2ch-board-use-subback-html
     (navi2ch-board-make-subject-txt)))
 

@@ -1,6 +1,6 @@
 ;;; navi2ch-futaba.el --- View futaba module for Navi2ch.
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002-2004 by Navi2ch Project
 
 ;; Author:
 

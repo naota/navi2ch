@@ -1,6 +1,6 @@
 ;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode
 
-;; Copyright (C) 2001-2004 by Navi2ch Project
+;; Copyright (C) 2001-2006, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -296,16 +296,16 @@
 	(navi2ch-list)))))
 
 ;;; goto-*-column
-(defun navi2ch-bm-goto-updated-mark-column ()
+(defsubst navi2ch-bm-goto-updated-mark-column ()
   (beginning-of-line)
   (when (looking-at " *[0-9]+ ")
     (goto-char (match-end 0))))
 
-(defun navi2ch-bm-goto-state-column ()
+(defsubst navi2ch-bm-goto-state-column ()
   (when (navi2ch-bm-goto-updated-mark-column)
     (forward-char 1)))
 
-(defun navi2ch-bm-goto-mark-column ()
+(defsubst navi2ch-bm-goto-mark-column ()
   (when (navi2ch-bm-goto-updated-mark-column)
     (forward-char 2)))
 
@@ -336,11 +336,11 @@
 			       (navi2ch-line-end-position)
 			       item state updated))))
 
-(defun navi2ch-bm-get-state (&optional point)
+(defsubst navi2ch-bm-get-state (&optional point)
   "その位置の state を調べる。"
   (get-text-property (or point (point)) 'navi2ch-bm-state))
 
-(defun navi2ch-bm-get-updated-mark (&optional point)
+(defsubst navi2ch-bm-get-updated-mark (&optional point)
   "その位置の updated-mark を調べる。"
   (get-text-property (or point (point)) 'navi2ch-bm-updated))
 

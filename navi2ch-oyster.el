@@ -1,6 +1,6 @@
 ;;; navi2ch-oyster.el --- oyster module for Navi2ch.
 
-;; Copyright (C) 2002, 2004 by Navi2ch Project
+;; Copyright (C) 2002-2006 by Navi2ch Project
 
 ;; Author: MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 ;; Keywords: network 2ch

@@ -1,3 +1,92 @@
+2008-02-01  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch.el: Copyright の表記を更新。
+	(navi2ch-info-cache, navi2ch-info-cache-limit): 新変数。
+	(navi2ch-save-info, navi2ch-load-info): Use it.
+
+	* navi2ch-futaba.el: Copyright の表記を更新。
+
+	* navi2ch-history.el: Ditto.
+
+	* navi2ch-search.el: Ditto.
+
+	* navi2ch-articles.el: Ditto.
+
+	* navi2ch-localfile.el: Ditto.
+
+	* navi2ch-jbbs-shitaraba.el: Ditto.
+
+	* navi2ch-megabbs.el: Ditto.
+
+	* navi2ch-http-date.el: Ditto.
+
+	* navi2ch-directory.el: Ditto.
+
+	* navi2ch-face.el: Ditto.
+
+	* navi2ch-oyster.el: Ditto.
+
+	* navi2ch-message.el: Ditto.
+
+	* navi2ch-popup-article.el: Ditto.
+
+	* navi2ch-list.el: Ditto.
+
+	* navi2ch-jbbs-net.el: Ditto.
+
+	* navi2ch-vars.el: Ditto.
+
+	* navi2ch-article.el: Copyright の表記を更新。
+	(navi2ch-article-forward-buffer): save-excursion ではなく、
+	with-current-buffer を使う。
+	(navi2ch-article-get-message-filter-cache-file-name): inline に。
+	(navi2ch-article-expunge-buffers): sticky かどうかを mapcar で処理
+	するように。 navi2ch-article-buffer-list() の呼出し回数を減らした。
+	(navi2ch-article-load-article-summary)
+	(navi2ch-article-save-article-summary)
+	(navi2ch-article-get-message, navi2ch-article-get-current-name)
+	(navi2ch-article-get-current-mail)
+	(navi2ch-article-inside-range-p)
+	(navi2ch-article-get-buffer-name, navi2ch-article-check-cached):
+	inline に。
+	(navi2ch-article-kill-buffer-hook): updated だったスレは state を
+	cache に変更しない。
+	(navi2ch-article-load-info,navi2ch-article-save-info):
+	navi2ch-article-info-cache を廃止。
+
+	* navi2ch-util.el: Copyright の表記を更新。
+	(navi2ch-filename-to-url, navi2ch-rename-file)
+	(navi2ch-read-only-string, navi2ch-count-lines-file)
+	(navi2ch-put-alist): inline に。
+	(navi2ch-float-time): 定義されていれば、 built-in の float-time を
+	使用するように。
+
+	* navi2ch-multibbs.el: Copyright の表記を更新。
+	(navi2ch-multibbs-board-update)
+	(navi2ch-multibbs-board-get-file-name)
+	(navi2ch-2ch-subject-callback, navi2ch-multibbs-get-func)
+	(navi2ch-multibbs-get-bbstype): inline に。
+
+	* navi2ch-net.el: Copyright の表記を更新。
+	(navi2ch-net-add-state, navi2ch-net-get-state): inline に。
+
+	* navi2ch-board.el: Copyright の表記を更新。
+	(navi2ch-board-set-property)
+	(navi2ch-board-get-property, navi2ch-board-get-board)
+	(navi2ch-board-exit, navi2ch-board-get-uri)
+	(navi2ch-board-get-matched-article): inline に。
+	(navi2ch-board-get-article): alias に。
+
+	* navi2ch-bookmark.el: Copyright の表記を更新。
+	(navi2ch-bookmark-get-property)
+	(navi2ch-bookmark-get-article, navi2ch-bookmark-get-board)
+	(navi2ch-bookmark-exit): inline に。
+
+	* navi2ch-board-misc.el: Copyright の表記を更新。
+	(navi2ch-bm-goto-updated-mark-column)
+	(navi2ch-bm-goto-state-column, navi2ch-bm-goto-mark-column)
+	(navi2ch-bm-get-state,navi2ch-bm-get-updated-mark): inline に。
+
 2008-01-30  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-vars.el (navi2ch-global-map): C-c C-l に
@@ -921,7 +1010,7 @@
 
 2006-06-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* クレジット入れ忘れのため削除依頼に対応
+	クレジット入れ忘れのため削除依頼に対応
 
 2006-05-29  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
@@ -1519,7 +1608,7 @@
 
 2004-05-29  miz  <miz@users.sourceforge.net>
 
-	* navi2ch-oyster.el ●サーバ移転対応
+	* navi2ch-oyster.el: ●サーバ移転対応
 
 2004-05-09  Nanashi San  <nanashi@users.sourceforge.net>
 
@@ -1847,7 +1936,7 @@
 
 	* navi2ch-vars.el (navi2ch-global-view-map):
 	[del] [delete] [backspace] で "\d" が入力されるように。
-	* (上記の子 map): scrolldown 系のバインドは "\d" のみに。
+	(上記の子 map): scrolldown 系のバインドは "\d" のみに。
 
 	* navi2ch-board-misc.el (navi2ch-bm-get-state-from-article): 新関数。
 	(navi2ch-bm-insert-subject): 上記関数を使用。
@@ -2019,7 +2108,7 @@
 
 	* navi2ch.el: eval-last-sexp, shell-command に advice 追加。
 	  セキュリティ対策。
-	* 上記 commit を取消し。
+	上記 commit を取消し。
 
 2004-03-12  Nanashi San  <nanashi@users.sourceforge.net>
 

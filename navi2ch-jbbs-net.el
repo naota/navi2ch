@@ -1,6 +1,6 @@
 ;;; navi2ch-jbbs-net.el --- View jbbs.net module for Navi2ch.
 
-;; Copyright (C) 2002, 2004 by Navi2ch Project
+;; Copyright (C) 2002-2004 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
