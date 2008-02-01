@@ -282,45 +282,43 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
   (unless navi2ch-info-cache
     (setq navi2ch-info-cache
 	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal)))
-  (let ((cached-info (navi2ch-cache-get
-		      file nil navi2ch-info-cache)))
-    (when (or (null cached-info)
-	      (not (equal info cached-info)))
-      (navi2ch-cache-put file info navi2ch-info-cache)
-      (let ((dir (file-name-directory file)))
-	(unless (file-exists-p dir)
-	  (make-directory dir t)))
-      (when (or (file-regular-p file)
-		(not (file-exists-p file)))
-	(let ((coding-system-for-write navi2ch-coding-system)
-	      (backup-file (navi2ch-make-backup-file-name file))
-	      temp-file)
-	  (unwind-protect
-	      (progn
-		;; ファイルが確実に消えるよう、下の setq は上の let に移動
-		;; してはダメ
-		(setq temp-file (navi2ch-make-temp-file
-				 (file-name-directory file)))
-		(with-temp-file temp-file
-		  (let ((standard-output (current-buffer))
-			print-length print-level)
-		    (princ ";;; -*- mode: emacs-lisp; -*-\n")
-		    (prin1 info)))
-		(if (and backup (file-exists-p file))
-		    (rename-file file backup-file t))
-		;; 上の rename が成功して下が失敗しても、navi2ch-load-info
-		;; がバックアップファイルから読んでくれる。
-		(condition-case err
-		    (progn
-		      (unless (file-exists-p file)
-			(with-temp-file file)) ; ファイルが作成可能かチェック
-		      (rename-file temp-file file t))
-		  (file-error
-		   (message "%s: %s"
-			    (cadr err)
-			    (mapconcat #'identity (cddr err) ", ")))))
-	    (if (and temp-file (file-exists-p temp-file))
-		(delete-file temp-file))))))))
+    ;; FIXME:とりあえず、全て保存するようにしてある
+    ;; できれば内容が変わらない時には保存したくない
+  (navi2ch-cache-put file info navi2ch-info-cache)
+  (let ((dir (file-name-directory file)))
+    (unless (file-exists-p dir)
+      (make-directory dir t)))
+  (when (or (file-regular-p file)
+	    (not (file-exists-p file)))
+    (let ((coding-system-for-write navi2ch-coding-system)
+	  (backup-file (navi2ch-make-backup-file-name file))
+	  temp-file)
+      (unwind-protect
+	  (progn
+	    ;; ファイルが確実に消えるよう、下の setq は上の let に移動
+	    ;; してはダメ
+	    (setq temp-file (navi2ch-make-temp-file
+			     (file-name-directory file)))
+	    (with-temp-file temp-file
+	      (let ((standard-output (current-buffer))
+		    print-length print-level)
+		(princ ";;; -*- mode: emacs-lisp; -*-\n")
+		(prin1 info)))
+	    (if (and backup (file-exists-p file))
+		(rename-file file backup-file t))
+	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info
+	    ;; がバックアップファイルから読んでくれる。
+	    (condition-case err
+		(progn
+		  (unless (file-exists-p file)
+		    (with-temp-file file)) ; ファイルが作成可能かチェック
+		  (rename-file temp-file file t))
+	      (file-error
+	       (message "%s: %s"
+			(cadr err)
+			(mapconcat #'identity (cddr err) ", ")))))
+	(if (and temp-file (file-exists-p temp-file))
+	    (delete-file temp-file))))))
 
 (defun navi2ch-load-info (file)
   "FILE から lisp-object を読み込み、それを返す。"

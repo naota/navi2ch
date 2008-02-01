@@ -1,3 +1,18 @@
+2008-02-02  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-load-info): indent を修正。
+
+	* navi2ch-util.el (toplevel): Warnings 対策。
+	navi2ch-net-send-request() 、navi2ch-net-get-status() を defun。
+
+	* navi2ch-mona.el (toplevel): Warnings 対策。
+	navi2ch-popup-article-current-board,
+	navi2ch-article-current-board,
+	navi2ch-popup-article-current-article,
+	navi2ch-article-current-article を defvar。
+
+	* navi2ch.el (navi2ch-save-info): 常にファイルに保存するように。
+
 2008-02-01  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-popup-article.el (navi2ch-popup-number-list): 新変数。

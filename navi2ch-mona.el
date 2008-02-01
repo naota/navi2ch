@@ -334,6 +334,12 @@ nil の場合はデフォルトで有効になる。
 		   (member article-id (cdr elt)))))
       (return t))))
 
+(eval-when-compile
+  (defvar navi2ch-popup-article-current-board)
+  (defvar navi2ch-article-current-board)
+  (defvar navi2ch-popup-article-current-article)
+  (defvar navi2ch-article-current-article))
+
 (defun navi2ch-mona-arrange-message ()
   "モナーフォントを使う板ならそのための関数を呼ぶ。"
   (let ((id (cdr (assq 'id (if (eq major-mode 'navi2ch-popup-article-mode)

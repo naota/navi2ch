@@ -1576,7 +1576,8 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (or board (setq board navi2ch-article-current-board))
       (or article (setq article navi2ch-article-current-article)))
     (when (and (not ignore) board article)
-      (setq alist (navi2ch-load-info (navi2ch-article-get-info-file-name board article)))
+      (setq alist (navi2ch-load-info 
+		   (navi2ch-article-get-info-file-name board article)))
       (dolist (x alist)
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))

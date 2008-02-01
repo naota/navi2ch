@@ -532,7 +532,10 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 
 (eval-when-compile
   (defvar browse-url-new-window-flag)
-  (defvar browse-url-new-window-p))
+  (defvar browse-url-new-window-p)
+  (defun navi2ch-net-send-request
+    (url method &optional other-header content))
+  (defun navi2ch-net-get-status (proc)))
 
 (defun navi2ch-browse-url-internal (url &rest args)
   (let ((browse-url-browser-function (or navi2ch-browse-url-browser-function
