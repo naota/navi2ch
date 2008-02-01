@@ -2070,10 +2070,11 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		     (point))
 		   (next-single-property-change (point) 'navi2ch-link))
 		(current-word))))
-    (when (string-match
-	   (regexp-quote word)
-	   (navi2ch-article-get-message-string
-	    (navi2ch-article-get-current-number)))
+    (when (and word
+	       (string-match
+		(regexp-quote word)
+		(navi2ch-article-get-message-string
+		 (navi2ch-article-get-current-number))))
       word)))
 
 (defun navi2ch-article-get-current-subject ()

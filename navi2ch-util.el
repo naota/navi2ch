@@ -1422,6 +1422,9 @@ instead of the current time."
       (when (and limit
 		 (eq (hash-table-count table) limit))
 	(clrhash table)))))
+
+(defsubst navi2ch-cache-remove (key cache)
+  (remhash key (navi2ch-cache-hash-table cache)))
   
 (navi2ch-update-html-tag-regexp)
 

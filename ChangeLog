@@ -1,5 +1,13 @@
 2008-02-01  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-util.el (navi2ch-cache-remove): 新関数。
+
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): info の
+	backup も消す。 cache をクリアする。
+
+	* navi2ch-article.el (navi2ch-article-get-current-word-in-body):
+	word が nil の時に string-match() を実行しない。
+
 	* navi2ch.el: Copyright の表記を更新。
 	(navi2ch-info-cache, navi2ch-info-cache-limit): 新変数。
 	(navi2ch-save-info, navi2ch-load-info): Use it.
