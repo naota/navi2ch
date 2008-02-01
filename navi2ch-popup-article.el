@@ -74,6 +74,7 @@
 (defvar navi2ch-popup-article-current-board nil)
 (defvar navi2ch-popup-article-current-article nil)
 (defvar navi2ch-popup-article-exclude-stack nil)
+(defvar navi2ch-popup-number-list nil)
 
 (defun navi2ch-popup-article-exit ()
   "PopUp Article モードを抜ける。"
@@ -126,7 +127,8 @@ stack が空なら、PopUp Article モードを抜ける。"
 (defun navi2ch-popup-article (num-list)
   (let ((mlist navi2ch-article-message-list)
 	(sep navi2ch-article-separator)
-	(buf (get-buffer-create navi2ch-popup-article-buffer-name)))
+	(buf (get-buffer-create navi2ch-popup-article-buffer-name))
+	(popup-message-list navi2ch-article-message-list))
     (setq navi2ch-popup-article-window-configuration
 	  (current-window-configuration))
     (when (eq major-mode 'navi2ch-article-mode)
@@ -135,19 +137,29 @@ stack が空なら、PopUp Article モードを抜ける。"
 	    navi2ch-popup-article-current-article
 	    navi2ch-article-current-article))
     (pop-to-buffer buf)
-    (navi2ch-popup-article-mode)
-    (setq navi2ch-article-message-list mlist)
+    (navi2ch-popup-article-mode) ; ここで local-variable が全て消される
+    (setq navi2ch-popup-number-list num-list)
     (setq navi2ch-article-message-list
+	  (mapcar (lambda (x)
+		    (let ((item (cdr x)))
+		      (cons (car x)
+			    (cond ((stringp item)
+				   item)
+				  ((consp item)
+				   (copy-alist item))
+				  (t item)))))
+		  mlist))
+    (setq popup-message-list
 	  (mapcar (lambda (x)
 		    (let ((msg (navi2ch-article-get-message x)))
 		      (cond
 		       ((stringp msg) (cons x msg))
-		       (msg (cons x (copy-alist msg)))
+		       (msg (cons x (delq 'point (copy-alist msg))))
 		       (t nil))))
 		  num-list))
-    (setq navi2ch-article-message-list
-	  (delq nil navi2ch-article-message-list))
-    (if (null navi2ch-article-message-list)
+    (setq popup-message-list
+	  (delq nil popup-message-list))
+    (if (null popup-message-list)
 	(progn
 	  (navi2ch-popup-article-exit)
 	  (message "No responses found"))
@@ -162,17 +174,23 @@ stack が空なら、PopUp Article モードを抜ける。"
       (let ((buffer-read-only nil))
 	(erase-buffer)
 	(navi2ch-article-insert-messages
-	 navi2ch-article-message-list
+	 popup-message-list
 	 nil))
       (setq navi2ch-article-message-list
 	    (mapcar (lambda (x)
-		      (let* ((num (car x))
-			     (msg (navi2ch-article-get-message num)))
-			(cond
-			 ((stringp msg) (cons num msg))
-			 (msg (cons num (copy-alist msg)))
-			 (t x))))
-		    mlist))
+		      (let ((num (car x))
+			    item)
+			(if (setq item (assq num popup-message-list))
+			    (cons num
+				  (if (stringp (cdr x))
+				      (cdr x)
+				    (navi2ch-put-alist 'point (cdr (assq 'point item))
+						       (cdr x))))
+			  (cons num
+				(if (consp (setq item (cdr x)))
+				    (delete (assq 'point item) item)
+				  item)))))
+		    navi2ch-article-message-list))
       (goto-char (point-min)))))
 
 (defun navi2ch-popup-article-scroll-up ()
@@ -194,7 +212,7 @@ stack が空なら、PopUp Article モードを抜ける。"
      ((eq type 'number)
       (setq prop (navi2ch-article-str-to-num (japanese-hankaku prop)))
       (if (and (integerp prop)
-	       (listp (navi2ch-article-get-message prop))) ;; FIXME
+	       (memq prop navi2ch-popup-number-list))
 	  (navi2ch-article-goto-number prop t t)
 	(navi2ch-popup-article-exit)
 	(navi2ch-article-select-current-link-number prop browse-p)))

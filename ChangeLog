@@ -1,5 +1,12 @@
 2008-02-01  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-popup-article.el (navi2ch-popup-number-list): 新変数。
+	(navi2ch-popup-article): popup 中のレス番号を上記変数に保持するよう
+	に。 navi2ch-article-message-list はもとの article のもののコピーを
+	point だけ置き換えたものに。
+	(navi2ch-popup-article-select-current-link): リンク先レスが popup
+	中の時だけ、 navi2ch-article-goto-number() を呼び出す。
+
 	* navi2ch-util.el (navi2ch-cache-remove): 新関数。
 
 	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): info の
