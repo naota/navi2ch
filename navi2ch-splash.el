@@ -45,7 +45,7 @@
 (require 'navi2ch-version)
 
 (defconst navi2ch-splash-copyright-notice
-  (concat "Copyright (C) 2000-2004  Navi2ch Project.
+  (concat "Copyright (C) 2000-2008  Navi2ch Project.
 This software includes some fragments from other softwares;
 Copyright (C) 1993-2000 Free Software Foundation, Inc.
 Copyright (C) 1998-2001 Yuuichi Teranishi <teranisi@gohome.org>

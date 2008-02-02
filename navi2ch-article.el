@@ -901,7 +901,8 @@ BOARD non-nil ならば、その板の coding-system を使う。"
   (let ((case-fold-search nil)
 	(date (cdr (assq 'date alist))))
     (when (and navi2ch-article-message-filter-by-hostname-alist
-	       (string-match "\\[ \\([^ ]+\\) \\]" date))
+	       (or (string-match "\\[ \\([^ ]+\\) \\]" date)
+		   (string-match "発信元:\\([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\)" date)))
       (navi2ch-article-message-filter-subr
        navi2ch-article-message-filter-by-hostname-alist
        (match-string 1 date)))))
@@ -2058,7 +2059,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-get-current-hostname ()
   (let ((date (cdr (assq 'date (cdr (assq (navi2ch-article-get-current-number)
 					  navi2ch-article-message-list))))))
-    (if (string-match "\\[ \\([^ ]+\\) \\]" date)
+    (if (or (string-match "\\[ \\([^ ]+\\) \\]" date)
+	    (string-match "発信元:\\([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\)" date))
 	(match-string 1 date)
       nil)))
 
@@ -2084,7 +2086,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 		 (let ((msg (navi2ch-article-get-message 1)))
 		   (if (stringp msg)
 		       (navi2ch-article-parse-message msg)
-		     msg))))))
+		     msg))))
+      ""))
 
 (defun navi2ch-article-get-visible-numbers ()
   "表示中のレスの番号のリストを得る。"
@@ -3089,19 +3092,22 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 表示しておくこと。"
   (interactive)
   (let* ((has-id (navi2ch-article-get-current-id))
+	 (has-hostname (navi2ch-article-get-current-hostname))
 	 (ch (navi2ch-read-char-with-retry
-	      (if has-id
-		  "Search for: n)ame m)ail d)ate i)d b)ody: "
-		"Search for: n)ame m)ail d)ate b)ody: ")
+	      (concat "Search for: n)ame m)ail d)ate "
+		      (and has-id "i)d ")
+		      (and has-hostname "h)ostname ")
+		      "b)ody s)ubject: ")
 	      nil
-	      (if has-id
-		  '(?n ?m ?d ?i ?b)
-		'(?n ?m ?d ?b)))))
+	      (append '(?n ?m ?b ?s ?d)
+		      (and has-id (list ?i))
+		      (and has-hostname (list ?h))))))
     (cond
      ((eq ch ?n) (navi2ch-article-search-name))
      ((eq ch ?m) (navi2ch-article-search-mail))
      ((eq ch ?d) (navi2ch-article-search-date))
      ((eq ch ?i) (navi2ch-article-search-id))
+     ((eq ch ?h) (navi2ch-article-search-hostname))
      ((eq ch ?b) (navi2ch-article-search-body)))))
 
 (defun navi2ch-article-search-name (&optional name)
@@ -3139,6 +3145,16 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 				  'navi2ch-search-history)))
   (navi2ch-article-search-subr 'date
 			       (concat " ID:[^ ]*" (regexp-quote id))))
+
+(defun navi2ch-article-search-hostname (&optional host)
+  (interactive)
+  (unless host
+    (setq host (navi2ch-read-string "Host: "
+				    (navi2ch-article-get-current-hostname)
+				    'navi2ch-search-history)))
+  (navi2ch-article-search-subr 'date
+			       (concat "\\(?:\\[ \\|発信元:\\)" 
+				       (regexp-quote host))))
 
 (defun navi2ch-article-search-body (&optional body)
   (interactive)
@@ -3318,7 +3334,6 @@ PREFIX が与えられた場合は、
   (let* ((has-id (navi2ch-article-get-current-id))
 	 (has-hostname (navi2ch-article-get-current-hostname))
 	 (char (navi2ch-read-char-with-retry
-
 		(concat "Filter by: n)ame m)ail "
 			(and has-id "i)d ")
 			(and has-hostname "h)ostname ")

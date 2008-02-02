@@ -1,5 +1,17 @@
 2008-02-02  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-article.el (navi2ch-article-search): hostname でも検索で
+	きるように。
+	(navi2ch-article-message-filter-by-hostname): シベリアのホスト表示
+	形式に対応。
+	(navi2ch-article-get-current-hostname): Ditto.
+	(navi2ch-article-search-hostname): 新関数。
+	(navi2ch-article-get-current-subject): subject の解析に失敗したら
+	"" を返す。
+
+	* navi2ch-splash.el (navi2ch-splash-copyright-notice): Copyright を
+	更新。
+
 	* navi2ch-article.el (navi2ch-article-load-info): indent を修正。
 
 	* navi2ch-util.el (toplevel): Warnings 対策。
