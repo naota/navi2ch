@@ -1,6 +1,6 @@
 ;;; navi2ch-localfile.el --- View localfile for Navi2ch.
 
-;; Copyright (C) 2002-2005, 2007, 2008 by Navi2ch Project
+;; Copyright (C) 2002, 2003, 2004, 2005, 2007, 2008 by Navi2ch Project
 
 ;; Author: Nanashi San <nanashi@users.sourceforge.net>
 ;; Part6 スレの 427 の名無しさん

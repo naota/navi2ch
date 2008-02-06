@@ -1,6 +1,6 @@
 ;;; navi2ch-head.el --- View a local rule mode for navi2ch
 
-;; Copyright (C) 2001-2003, 2008 by Navi2ch Project
+;; Copyright (C) 2001, 2002, 2003, 2008 by Navi2ch Project
 
 ;; Author: 膝を打つ者
 ;; Keywords: www, 2ch

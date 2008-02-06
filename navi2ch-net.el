@@ -1,6 +1,7 @@
 ;;; navi2ch-net.el --- Network module for navi2ch
 
-;; Copyright (C) 2000-2006, 2008 by Navi2ch Project
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 by
+;; Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network 2ch
@@ -746,6 +747,7 @@ This is taken from RFC 2396.")
   (when proc
     (let ((str (decode-coding-string (navi2ch-net-get-content proc)
 				     coding-system)))
+      (message str)
       (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
 	     (match-string 1 str))
 	    ;; Samba24 http://age.s22.xrea.com/talk2ch/new.txt

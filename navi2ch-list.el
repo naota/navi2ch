@@ -1,6 +1,7 @@
 ;;; navi2ch-list.el --- board list module for navi2ch
 
-;; Copyright (C) 2000-2004, 2005, 2008 by Navi2ch Project
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2008 by Navi2ch
+;; Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch

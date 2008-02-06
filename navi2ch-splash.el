@@ -1,6 +1,7 @@
 ;;; navi2ch-splash.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2002-2004 by Navi2ch Project
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 by Navi2ch
+;; Project
 
 ;; Author: UEYAMA Rui <rui314159@users.sourceforge.net>
 ;; 110 の名無しさん http://pc.2ch.net/test/read.cgi/unix/1013457056/110

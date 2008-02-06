@@ -1,6 +1,7 @@
 ;;; navi2ch.el --- Navigator for 2ch for Emacsen
 
-;; Copyright (C) 2000-2006, 2008 by Navi2ch Project
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 by
+;; Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -342,17 +343,24 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 	 (setq file backup-file)))
      (when (file-regular-p file)
        (let ((coding-system-for-read navi2ch-coding-system))
-	 (navi2ch-ifemacsce
-	     (with-temp-buffer
-	       (insert-file-contents file)
-	       (goto-char (point-min))
-	       (while (search-forward "..." nil t)
-		 (replace-match ""))
-	       (car (read-from-string (buffer-string))))
-	   (with-temp-buffer
-	     (insert-file-contents file)
-	     (let ((standard-input (current-buffer)))
-	       (read)))))))
+	 (condition-case nil
+	     (navi2ch-ifemacsce
+		 (with-temp-buffer
+		   (insert-file-contents file)
+		   (goto-char (point-min))
+		   (while (search-forward "..." nil t)
+		     (replace-match ""))
+		   (car (read-from-string (buffer-string))))
+	       (with-temp-buffer
+		 (insert-file-contents file)
+		 (let ((standard-input (current-buffer)))
+		   (read))))
+	   (error
+	    (when (yes-or-no-p 
+		   (format "%s は正しく保存されていないようなのです。削除しますか? "
+			   file))
+	      (delete-file file))
+	    (navi2ch-load-info file))))))
    navi2ch-info-cache))
 
 (defun navi2ch-split-window (display)

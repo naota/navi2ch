@@ -1,6 +1,6 @@
 ;;; navi2ch-articles.el --- Article List Module for Navi2ch
 
-;; Copyright (C) 2001-2004, 2008 by Navi2ch Project
+;; Copyright (C) 2001, 2002, 2003, 2004, 2008 by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
