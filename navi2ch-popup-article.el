@@ -176,20 +176,16 @@ stack が空なら、PopUp Article モードを抜ける。"
 	(navi2ch-article-insert-messages
 	 popup-message-list
 	 nil))
-      (setq navi2ch-article-message-list
+      (setq navi2ch-article-current-article nil
+	    navi2ch-article-message-list
 	    (mapcar (lambda (x)
 		      (let ((num (car x))
 			    item)
-			(if (setq item (assq num popup-message-list))
+			(or (assq num popup-message-list)
 			    (cons num
-				  (if (stringp (cdr x))
-				      (cdr x)
-				    (navi2ch-put-alist 'point (cdr (assq 'point item))
-						       (cdr x))))
-			  (cons num
-				(if (consp (setq item (cdr x)))
-				    (delete (assq 'point item) item)
-				  item)))))
+				  (if (consp (setq item (cdr x)))
+				      (delete (assq 'point item) item)
+				    item)))))
 		    navi2ch-article-message-list))
       (goto-char (point-min)))))
 

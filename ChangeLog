@@ -1,5 +1,12 @@
 2008-02-06  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-popup-article.el (navi2ch-popup-article):
+	navi2ch-article-insert-messages() 後に
+	navi2ch-article-current-article を nil にする。
+	navi2ch-popup-article-current-article を隠蔽してしまうことの対策。
+	表示されている message が parse されないまま残ってしまうバグを直す
+	ため、 navi2ch-article-message-list の整形方法を修正。
+ 
 	* navi2ch.el (navi2ch-load-info): read() に失敗したファイルを削除す
 	るかどうか問い合わせる。
 
