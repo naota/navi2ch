@@ -1,5 +1,8 @@
 2008-02-11  Naohiro Aota  <nao.aota@gmail.com>
 
+	* batch-texi2info.el (batch-texi2info):
+	texinfo-every-node-update() を呼ぶ。
+
 	* navi2ch.texi: Copyright 表記を @copying 〜 @end copying の中に移
 	動。
 

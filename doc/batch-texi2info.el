@@ -78,6 +78,7 @@ For example, invoke
               (buffer-disable-undo (current-buffer))
               (set-buffer-modified-p nil)
               (texinfo-mode)
+	      (texinfo-every-node-update)
               (message "texinfo formatting %s..." file)
               (texi2info nil)
               (if (buffer-modified-p)
