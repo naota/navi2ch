@@ -1,9 +1,11 @@
 ;;; batch-texi2info.el --- run texi2info with emacs -batch
 
-;; Copyright (C) 2002 by Navi2ch Project
+;; Copyright (C) 2002, 2008 by Navi2ch Project
 ;; Copyright (C) 1985, 1986, 1988, 1990, 1991, 1992, 1993,
 ;;               1994, 1995, 1996, 1997, 1998, 2000, 2001
 ;;    Free Software Foundation, Inc.
+;; Copyright (C) 1999 Yoshiki Hayashi <yoshiki@xemacs.org>
+;; Copyright (C) 2000, 2001, 2002 TAKAHASHI Kaoru <kaoru@kaisei.org>
 
 ;; Author: 名無しさん＠お腹いっぱい
 ;; Keywords: network, 2ch
@@ -35,6 +37,40 @@
 (unless (symbol-plist 'ifnottex)
   (put 'ifnottex 'texinfo-format 'texinfo-discard-line)
   (put 'ifnottex 'texinfo-end 'texinfo-discard-command))
+
+;; From ptexinfmt.el
+;; @copying ... @end copying
+;; that Emacs 21.4 and lesser and XEmacs don't support.
+(if (fboundp 'texinfo-copying)
+    nil
+  (defvar texinfo-copying-text ""
+    "Text of the copyright notice and copying permissions.")
+
+  (defun texinfo-copying ()
+    "Copy the copyright notice and copying permissions from the Texinfo file,
+as indicated by the @copying ... @end copying command;
+insert the text with the @insertcopying command."
+    (let ((beg (progn (beginning-of-line) (point)))
+	  (end  (progn (re-search-forward "^@end copying[ \t]*\n") (point))))
+      (setq texinfo-copying-text
+	    (buffer-substring-no-properties
+	     (save-excursion (goto-char beg) (forward-line 1) (point))
+	     (save-excursion (goto-char end) (forward-line -1) (point))))
+      (delete-region beg end)))
+
+  (defun texinfo-insertcopying ()
+    "Insert the copyright notice and copying permissions from the Texinfo file,
+which are indicated by the @copying ... @end copying command."
+    (insert (concat "\n" texinfo-copying-text)))
+
+  (defadvice texinfo-format-scan (before expand-@copying-section activate)
+    "Extract @copying and replace @insertcopying with it."
+    (goto-char (point-min))
+    (when (search-forward "@copying" nil t)
+      (texinfo-copying))
+    (while (search-forward "@insertcopying" nil t)
+      (delete-region (match-beginning 0) (match-end 0))
+      (texinfo-insertcopying))))
 
 ;; batch-texinfo-format からほぼコピペ
 (defun batch-texi2info ()

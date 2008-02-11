@@ -2,6 +2,9 @@
 
 	* batch-texi2info.el (batch-texi2info):
 	texinfo-every-node-update() を呼ぶ。
+	(texinfo-copying-text): 新変数。
+	(texinfo-copying,texinfo-insertcopying): 新関数。
+	(texinfo-format-scan): @copying を処理する advice.
 
 	* navi2ch.texi: Copyright 表記を @copying 〜 @end copying の中に移
 	動。
