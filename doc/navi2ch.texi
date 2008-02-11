@@ -28,39 +28,8 @@
 @c % makeinfo navi2ch.texi
 @c とするか、Emacs でこのファイルを開き、@kbd{M-x texi2info} とする。
 
-@titlepage
-@title Navi2ch
-@subtitle Navigator for 2ch for Emacsen
-@subtitle @value{REVISION}
-@author Navi2ch Project
-
-@page
-@vskip 0pt plus 1filll
-
+@copying
 Copyright @copyright{} 2002, 2003, 2004, 2005, 2006, 2007, 2008 by
-Navi2ch Project
-
-Permission is granted to make and distribute verbatim copies of this
-manual provided the copyright notice and this permission notice are
-preserved on all copies.
-
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the
-entire resulting derived work is distributed under the terms of a
-permission notice identical to this one.
-
-Permission is granted to copy and distribute translations of this
-manual into another language, under the above conditions for modified
-versions, except that this permission notice may be stated in a
-translation approved by the Free Software Foundation.
-@end titlepage
-
-@contents
-
-@ifnottex
-@value{REVISION}
-
-Copyright @copyright{} 2002, 2003, 2004, 2005, 2006, 2007, 2008 by by
 Navi2ch Project
 
 Permission is granted to make and distribute verbatim copies of this
@@ -75,16 +44,34 @@ notice identical to this one except for the removal of this paragraph
 
 @end ignore
 Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided also that
-the sections entitled "Copying" and "GNU General Public License" are
-included exactly as in the original, and provided that the entire
-resulting derived work is distributed under the terms of a permission
-notice identical to this one.
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
 
 Permission is granted to copy and distribute translations of this
 manual into another language, under the above conditions for modified
 versions, except that this permission notice may be stated in a
 translation approved by the Free Software Foundation.
+@end copying
+
+@titlepage
+@title Navi2ch
+@subtitle Navigator for 2ch for Emacsen
+@subtitle @value{REVISION}
+@author Navi2ch Project
+
+@page
+@vskip 0pt plus 1filll
+
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@value{REVISION}
+
+@insertcopying
 
 @node Top
 @top Navi2ch

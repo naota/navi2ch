@@ -2398,8 +2398,9 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 	   (when article
 	     (and (get-text-property (point) 'help-echo)
 		  (let ((buffer-read-only nil))
-		    (navi2ch-article-change-help-echo-property (point)
-							       (function navi2ch-article-help-echo))))
+		    (navi2ch-article-change-help-echo-property 
+		     (point)
+		     (function navi2ch-article-help-echo))))
 	     (let (summary artid element seen)
 	       (when (and navi2ch-board-check-article-update-suppression-length
 			  (not (navi2ch-bm-fetched-article-p board article)))
@@ -2416,7 +2417,8 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 				    board
 				    article
 				    (1+ seen)
-				    (+ seen navi2ch-board-check-article-update-suppression-length))))
+				    (+ seen 
+				       navi2ch-board-check-article-update-suppression-length))))
 			(progn
 			  (navi2ch-article-summary-element-set-seen element seen)
 			  (navi2ch-article-save-article-summary board summary))

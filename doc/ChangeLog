@@ -1,3 +1,8 @@
+2008-02-11  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch.texi: Copyright 表記を @copying 〜 @end copying の中に移
+	動。
+
 2008-02-03  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch.texi: Copyright の表記を更新。
