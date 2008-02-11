@@ -3532,7 +3532,7 @@ PREFIX が与えられた場合は、
 
 (defun navi2ch-article-url-at-point (point)
   "POINT の下のリンクを指す URL を得る。"
-  (let ((type 'navi2ch-link-type)
+  (let ((type (get-text-property point 'navi2ch-link-type))
 	(prop (get-text-property point 'navi2ch-link)))
     (cond ((eq type 'number)
 	   (navi2ch-article-number-list-to-url
