@@ -1186,7 +1186,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   ;; view であったものが update になった後に kill された時の対策
   (unless (eq (navi2ch-bm-get-state-from-article navi2ch-article-current-board
 						 navi2ch-article-current-article)
-	      'update) 
+	      'update)
     (navi2ch-bm-update-article navi2ch-article-current-board
 			       navi2ch-article-current-article
 			       'cache))

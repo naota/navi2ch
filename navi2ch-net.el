@@ -529,7 +529,8 @@ OTHER-HEADER $B$,(B `non-nil' $B$J$i$P%j%/%(%9%H$K$3$N%X%C%@$rDI2C$9$k!#(B
 			      other-header)))
 
 
-(defun navi2ch-net-update-file (url file &optional time func location diff)
+(defun navi2ch-net-update-file (url file 
+				&optional time func location diff other-header)
   "FILE $B$r99?7$9$k!#(B
 TIME $B$,(B non-nil $B$J$i$P(B TIME $B$h$j?7$7$$;~$@$199?7$9$k!#(B
 TIME $B$,(B 'file $B$J$i$P%U%!%$%k$N99?7F|;~$r(B TIME $B$H$9$k!#(B
@@ -538,6 +539,7 @@ FUNC $B$O(B current-buffer $B$rA`:n$9$k4X?t$G$"$k;v!#(B
 LOCATION $B$,(B non-nil $B$J$i$P(B Location $B%X%C%@$,$"$C$?$i$=$3$K0\F0$9$k$h$&(B
 $B$K$9$k!#(B
 DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9$k!#(B
+OTHER-HEADER $B$O(B `navi2ch-net-download-file' $B$KEO$5$l$k!#(B
 $B99?7$G$-$l$P(B header $B$rJV$9(B"
   (when (eq time 'file)
     (setq time (and (file-exists-p file)
@@ -553,7 +555,8 @@ DIFF $B$,(B non-nil $B$J$i$P(B $B:9J,$H$7$F(B FILE $B$r>e=q$-$;$:$KDI2C$9
       (setq redo nil
 	    proc (navi2ch-net-download-file url time
 					    (list "200" "304"
-						  (and location "302")))
+						  (and location "302"))
+					    other-header)
 	    status (and proc
 			(navi2ch-net-get-status proc))
 	    header (and proc
