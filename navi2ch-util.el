@@ -552,7 +552,8 @@ PROMPT) を表示して再度 `read-char' を呼ぶ。"
 	(error "Set navi2ch-browse-url-browser-function correctly"))
 
     ;;ssspをhttpに書き換え
-    (store-substring url 0 "http")
+    (when (string= (substring url 0 4) "sssp")
+      (store-substring url 0 "http"))
 
     ;;無駄を省くためブラウズする前にターゲットの状態確認する。
     ;;ちょっと厳しいようだが、302だと大抵404に飛ばされるので。
