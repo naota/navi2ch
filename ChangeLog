@@ -10,8 +10,8 @@
 
 2008-02-27  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-util.el (navi2ch-browse-url-internal): http を sssp に置
-	換える前に http であるかを確認。
+	* navi2ch-util.el (navi2ch-browse-url-internal): sssp を http に置
+	換える前に sssp であるかを確認。
 
 2008-02-13  Naohiro Aota  <nao.aota@gmail.com>
 
