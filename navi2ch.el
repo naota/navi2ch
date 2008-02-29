@@ -86,6 +86,8 @@
   (run-hooks 'navi2ch-before-startup-hook)
   (unless navi2ch-init
     (if arg (setq navi2ch-offline (not navi2ch-offline)))
+    (setq navi2ch-info-cache
+	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal))
     (load (expand-file-name navi2ch-update-file navi2ch-directory) t)
     (load (expand-file-name navi2ch-init-file navi2ch-directory) t)
     (navi2ch-lock)
@@ -134,6 +136,7 @@ SUSPEND が non-nil なら buffer を消さない。"
 		(funcall navi2ch-ask-when-exit "Really exit navi2ch? ")
 	      (y-or-n-p "Really exit navi2ch? ")))
     (run-hooks 'navi2ch-exit-hook)
+    (navi2ch-save-status)
     (dolist (x (append
                 (list
                  (get-buffer navi2ch-list-buffer-name)
@@ -146,7 +149,6 @@ SUSPEND が non-nil なら buffer を消さない。"
         (if suspend
             (bury-buffer x)
           (kill-buffer x))))
-    (navi2ch-save-status)
     (unless suspend
       (setq navi2ch-init nil)
       (navi2ch-unlock)
@@ -280,11 +282,8 @@ SUSPEND が non-nil なら buffer を消さない。"
   "lisp-object INFO を FILE に保存する。
 BACKUP が non-nil の場合は元のファイルをバックアップする。"
   (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
-  (unless navi2ch-info-cache
-    (setq navi2ch-info-cache
-	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal)))
-    ;; FIXME:とりあえず、全て保存するようにしてある
-    ;; できれば内容が変わらない時には保存したくない
+  ;; FIXME:とりあえず、全て保存するようにしてある
+  ;; できれば内容が変わらない時には保存したくない
   (navi2ch-cache-put file info navi2ch-info-cache)
   (let ((dir (file-name-directory file)))
     (unless (file-exists-p dir)
@@ -324,9 +323,6 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 (defun navi2ch-load-info (file)
   "FILE から lisp-object を読み込み、それを返す。"
   (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
-  (unless navi2ch-info-cache
-    (setq navi2ch-info-cache
-	  (navi2ch-make-cache navi2ch-info-cache-limit 'equal)))
   (navi2ch-cache-get 
    file
    (progn

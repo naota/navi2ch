@@ -1,5 +1,10 @@
 2008-02-29  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch.el (navi2ch-load-info, navi2ch-save-info):
+	navi2ch-info-cache が初期化されているかどうかを確認しない。
+	(navi2ch): navi2ch-info-cache を初期化する。
+	(navi2ch-exit): 下の変更を戻す。
+
 	* navi2ch.el (navi2ch-exit): 全てのバッファを閉じてから
 	navi2ch-save-status() を呼ぶように。
 
