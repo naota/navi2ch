@@ -134,7 +134,6 @@ SUSPEND が non-nil なら buffer を消さない。"
 		(funcall navi2ch-ask-when-exit "Really exit navi2ch? ")
 	      (y-or-n-p "Really exit navi2ch? ")))
     (run-hooks 'navi2ch-exit-hook)
-    (navi2ch-save-status)
     (dolist (x (append
                 (list
                  (get-buffer navi2ch-list-buffer-name)
@@ -147,6 +146,7 @@ SUSPEND が non-nil なら buffer を消さない。"
         (if suspend
             (bury-buffer x)
           (kill-buffer x))))
+    (navi2ch-save-status)
     (unless suspend
       (setq navi2ch-init nil)
       (navi2ch-unlock)
