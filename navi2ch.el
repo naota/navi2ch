@@ -306,7 +306,7 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 		(prin1 info)))
 	    (if (and backup (file-exists-p file))
 		(rename-file file backup-file t))
-	    ;; 上の rename が成功して下が失敗しても、navi2ch-load-info
+	    ;; 上の rename が成功して下が失敗しても、 navi2ch-load-info
 	    ;; がバックアップファイルから読んでくれる。
 	    (condition-case err
 		(progn
@@ -323,7 +323,7 @@ BACKUP が non-nil の場合は元のファイルをバックアップする。"
 (defun navi2ch-load-info (file)
   "FILE から lisp-object を読み込み、それを返す。"
   (setq file (expand-file-name file navi2ch-directory))	; 絶対パスにしておく
-  (navi2ch-cache-get 
+  (navi2ch-cache-get
    file
    (progn
      (let ((backup-file (navi2ch-make-backup-file-name file)))

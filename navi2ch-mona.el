@@ -75,20 +75,27 @@ XEmacs では明示的にフォントセットを作る必要がないので、
     (navi2ch-ifxemacs
 	fontset-name
       (let* ((fields (x-decompose-font-name fontset-name))
-	     (foundry (aref fields 0))
-	     (family (aref fields 1))
-	     (slant (aref fields 3))
-	     (swidth (aref fields 4))
-	     (fontset-templ (format
+	     (new-decompose-p (= (length fields) 12))
+	     (slant (aref fields (if new-decompose-p 2 3)))
+	     (swidth (or (aref fields (if new-decompose-p 3 4)) "normal"))
+	     foundry family fontset-templ font-templ fontset)
+	(if new-decompose-p
+	    (let ((foundry-family (aref fields 0)))
+	      (when (string-match "\\([^-]*\\)-\\([^-]*\\)" foundry-family)
+		(setq foundry (match-string 1 foundry-family)
+		      family (match-string 2 foundry-family))))
+	  (setq foundry (aref fields 0)
+		family  (aref fields 1)))
+	(setq fontset-templ (format
 			     "-%s-%s-%%s-%s-%s--%d-*-*-*-p-*-fontset-mona%d"
-			     foundry family slant swidth height height))
-	     (font-templ (progn
-			   (string-match "^\\(.*\\)\\(fontset-mona[^-]+\\)$"
-					 fontset-templ)
-			   (concat (match-string 1 fontset-templ) "%s")))
-	     (fontset (format "-%s-%s-*-*-*--%d-*-*-*-*-*-%s"
-			      foundry family height
-			      (match-string 2 fontset-templ))))
+			     foundry family slant swidth height height)
+	     font-templ (progn
+			  (string-match "^\\(.*\\)\\(fontset-mona[^-]+\\)$"
+					fontset-templ)
+			  (concat (match-string 1 fontset-templ) "%s"))
+	     fontset (format "-%s-%s-*-*-*--%d-*-*-*-*-*-%s"
+			     foundry family height
+			     (match-string 2 fontset-templ)))
 	(setq fontset-name fontset)
 	(dolist (weight '("medium" "bold"))
 	  (let ((fontset (format fontset-templ weight))

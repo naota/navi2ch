@@ -1,3 +1,8 @@
+2008-03-02  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-mona.el (navi2ch-mona-create-fontset-from-family-name):
+	emacs-unicode-2 に対応。
+
 2008-02-29  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch.el (navi2ch-load-info, navi2ch-save-info):
