@@ -1,4 +1,4 @@
-\input texinfo @c -*- mode: texinfo; coding: euc-jp -*-
+\input texinfo @c -*- mode: texinfo; coding: iso-2022-jp -*-
 @comment %**start of header
 @setfilename navi2ch.info
 @settitle Navi2ch, Navigator for 2ch for Emacsen
@@ -20,13 +20,13 @@
 * Navi2ch: (navi2ch).           Navigator for 2ch for Emacsen
 @end direntry
 
-@c commit¤¹¤ëÁ°¤Ë¤¹¤ë¤³¤È:
-@c  * C-c C-u C-a ¤¹¤ë¡£ÀèÆ¬¤Ë C-u ¤ò¤Ä¤±¤Æ¤Ï@strong{¤¤¤±¤Ê¤¤}¡£
-@c  * make ¤·¤¿¸å¡¢navi2ch.info ¤ò³«¤¤¤Æ @kbd{M-x Info-validate} ¤¹¤ë¡£
+@c commit$B$9$kA0$K$9$k$3$H(B:
+@c  * C-c C-u C-a $B$9$k!#@hF,$K(B C-u $B$r$D$1$F$O(B@strong{$B$$$1$J$$(B}$B!#(B
+@c  * make $B$7$?8e!"(Bnavi2ch.info $B$r3+$$$F(B @kbd{M-x Info-validate} $B$9$k!#(B
 
-@c info¥Õ¥¡¥¤¥ë¤ËÊÑ´¹¤¹¤ë¤Ë¤Ï¡¢
+@c info$B%U%!%$%k$KJQ49$9$k$K$O!"(B
 @c % makeinfo navi2ch.texi
-@c ¤È¤¹¤ë¤«¡¢Emacs ¤Ç¤³¤Î¥Õ¥¡¥¤¥ë¤ò³«¤­¡¢@kbd{M-x texi2info} ¤È¤¹¤ë¡£
+@c $B$H$9$k$+!"(BEmacs $B$G$3$N%U%!%$%k$r3+$-!"(B@kbd{M-x texi2info} $B$H$9$k!#(B
 
 @copying
 Copyright @copyright{} 2002, 2003, 2004, 2005, 2006, 2007, 2008 by
@@ -76,90 +76,90 @@ translation approved by the Free Software Foundation.
 @node Top
 @top Navi2ch
 
-Navi2ch ¤Ï¡¢Emacs¡¢XEmacs¡¢Meadow ¤Ê¤É¤Î Emacsen ¤ÇÆ°ºî¤¹¤ë¡¢£²¤Á¤ã¤ó
-¤Í¤ë¥Ê¥Ó¥²¡¼¥¿¤Ç¤¢¤ë¡£
+Navi2ch $B$O!"(BEmacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B$GF0:n$9$k!"#2$A$c$s(B
+$B$M$k%J%S%2!<%?$G$"$k!#(B
 
 @menu
-* Install::                     ¥¤¥ó¥¹¥È¡¼¥ë
-* Usage::                       »È¤¤Êý
-* Customize::                   ¥«¥¹¥¿¥Þ¥¤¥º
-* Key Bindings::                ¥­¡¼¥Ð¥¤¥ó¥É
-* FAQ::                         ¤è¤¯¤¢¤ë¼ÁÌä¤È¤½¤ÎÅú¤¨
-* Thanks::                      ¼Õ¼­
+* Install::                     $B%$%s%9%H!<%k(B
+* Usage::                       $B;H$$J}(B
+* Customize::                   $B%+%9%?%^%$%:(B
+* Key Bindings::                $B%-!<%P%$%s%I(B
+* FAQ::                         $B$h$/$"$k<ALd$H$=$NEz$((B
+* Thanks::                      $B<U<-(B
 
 @detailmenu
  --- The Detailed Node Listing ---
 
-¥¤¥ó¥¹¥È¡¼¥ë
+$B%$%s%9%H!<%k(B
 
-* Getting::                     Æþ¼êÊýË¡
-* Compile::                     ¥³¥ó¥Ñ¥¤¥ëÊýË¡
-* Getting Develop Version::     ³«È¯ÈÇ¤ÎÆþ¼ê
+* Getting::                     $BF~<jJ}K!(B
+* Compile::                     $B%3%s%Q%$%kJ}K!(B
+* Getting Develop Version::     $B3+H/HG$NF~<j(B
 
-»È¤¤Êý
+$B;H$$J}(B
 
-* Start Navi2ch::               µ¯Æ°ÊýË¡
-* List Mode::                   List ¥â¡¼¥É
-* Board Mode::                  Board ¥â¡¼¥É
-* Bookmark Mode::               Bookmark ¥â¡¼¥É
-* Article Mode::                Article ¥â¡¼¥É
-* Message Mode::                Message ¥â¡¼¥É
+* Start Navi2ch::               $B5/F0J}K!(B
+* List Mode::                   List $B%b!<%I(B
+* Board Mode::                  Board $B%b!<%I(B
+* Bookmark Mode::               Bookmark $B%b!<%I(B
+* Article Mode::                Article $B%b!<%I(B
+* Message Mode::                Message $B%b!<%I(B
 
-Board ¥â¡¼¥É
+Board $B%b!<%I(B
 
-* Updated Flag::                ¹¹¿·¥Õ¥é¥°
-* State Flag::                  ¾õÂÖ¥Õ¥é¥°
-* Mark::                        ¥Þ¡¼¥¯
-* Hide Thread::                 ¥¹¥ì¤ò±£¤¹
-* Search Thread::               ¥¹¥ì¤Î¸¡º÷
+* Updated Flag::                $B99?7%U%i%0(B
+* State Flag::                  $B>uBV%U%i%0(B
+* Mark::                        $B%^!<%/(B
+* Hide Thread::                 $B%9%l$r1#$9(B
+* Search Thread::               $B%9%l$N8!:w(B
 
-Bookmark ¥â¡¼¥É
+Bookmark $B%b!<%I(B
 
-* Adding Bookmark::             ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÄÉ²Ã¤¹¤ë
-* Operating Bookmark::          ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÁàºî¤¹¤ë
-* Browsing Bookmark::           ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò±ÜÍ÷¤¹¤ë
+* Adding Bookmark::             $B%V%C%/%^!<%/$rDI2C$9$k(B
+* Operating Bookmark::          $B%V%C%/%^!<%/$rA`:n$9$k(B
+* Browsing Bookmark::           $B%V%C%/%^!<%/$r1\Mw$9$k(B
 
-Article ¥â¡¼¥É
+Article $B%b!<%I(B
 
-* Article View Range::          ¥¹¥ì¤ÎÉ½¼¨ÈÏ°Ï
-* Article Message Filter::      ¥ì¥¹¤Î¥Õ¥£¥ë¥¿½èÍý
+* Article View Range::          $B%9%l$NI=<(HO0O(B
+* Article Message Filter::      $B%l%9$N%U%#%k%?=hM}(B
 
-Message ¥â¡¼¥É
+Message $B%b!<%I(B
 
-* Saving Send Log::             Á÷¿®¹µ¤¨¤ò¤È¤ë
+* Saving Send Log::             $BAw?.95$($r$H$k(B
 
-¥«¥¹¥¿¥Þ¥¤¥º
+$B%+%9%?%^%$%:(B
 
-* Emacs Customization Interface::  Emacs ¤Î¥«¥¹¥¿¥Þ¥¤¥º¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹
-                                   ¤òÍøÍÑ¤¹¤ë
-* Init File::                   ½é´ü²½¥Õ¥¡¥¤¥ë
-* Other Boards File::           ¤½¤ÎÂ¾¤Î¥«¥Æ¥´¥ê¤ËÆþ¤ì¤ëÈÄ¤òÄÉ²Ã¤¹¤ë
-* Mona Font::                   ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦
+* Emacs Customization Interface::  Emacs $B$N%+%9%?%^%$%:%$%s%?!<%U%'%$%9(B
+                                   $B$rMxMQ$9$k(B
+* Init File::                   $B=i4|2=%U%!%$%k(B
+* Other Boards File::           $B$=$NB>$N%+%F%4%j$KF~$l$kHD$rDI2C$9$k(B
+* Mona Font::                   $B%b%J!<%U%)%s%H$r;H$&(B
 
-¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦
+$B%b%J!<%U%)%s%H$r;H$&(B
 
-* What is Mona Font::           ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ã¤Æ²¿¤è?
-* How to Use Mona Font::        ¤ó¤Ç¡¢¤É¤¦¤ä¤Ã¤Æ»È¤¦¤Î?
+* What is Mona Font::           $B%b%J!<%U%)%s%H$C$F2?$h(B?
+* How to Use Mona Font::        $B$s$G!"$I$&$d$C$F;H$&$N(B?
 
-¥­¡¼¥Ð¥¤¥ó¥É
+$B%-!<%P%$%s%I(B
 
-* Global Key Bindings::         ¤¹¤Ù¤Æ¤Î¥â¡¼¥É¤Ç¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* List Mode Key Bindings::      List ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Board Misc Mode Key Bindings::  Board ·Ï¥â¡¼¥É¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Board Mode Key Bindings::     Board ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Bookmark Mode Key Bindings::  Bookmark ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Article Mode Key Bindings::   Article ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Message Mode Key Bindings::   Message ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Message Mode AA List::        Message ¥â¡¼¥É¤Ç¤Î¥¢¥¹¥­¡¼¥¢¡¼¥È°ìÍ÷
+* Global Key Bindings::         $B$9$Y$F$N%b!<%I$G6&DL$N%-!<%P%$%s%I(B
+* List Mode Key Bindings::      List $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Board Misc Mode Key Bindings::  Board $B7O%b!<%I6&DL$N%-!<%P%$%s%I(B
+* Board Mode Key Bindings::     Board $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Bookmark Mode Key Bindings::  Bookmark $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Article Mode Key Bindings::   Article $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Message Mode Key Bindings::   Message $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Message Mode AA List::        Message $B%b!<%I$G$N%"%9%-!<%"!<%H0lMw(B
 
-¤è¤¯¤¢¤ë¼ÁÌä¤È¤½¤ÎÅú¤¨
+$B$h$/$"$k<ALd$H$=$NEz$((B
 
-* General Qestions::            Á´ÈÌ
-* How to Read::                 ÆÉ¤à
-* Can not Read::                ÆÉ¤á¤Ê¤¤
-* Board Questions::             ÈÄ´ØÏ¢
-* How to Write::                ½ñ¤­¹þ¤à
-* Misc Questions::              ¤½¤ÎÂ¾
+* General Qestions::            $BA4HL(B
+* How to Read::                 $BFI$`(B
+* Can not Read::                $BFI$a$J$$(B
+* Board Questions::             $BHD4XO"(B
+* How to Write::                $B=q$-9~$`(B
+* Misc Questions::              $B$=$NB>(B
 
 @end detailmenu
 @end menu
@@ -167,34 +167,36 @@ Message ¥â¡¼¥É
 @end ifnottex
 
 @node Install
-@chapter ¥¤¥ó¥¹¥È¡¼¥ë
+@chapter $B%$%s%9%H!<%k(B
 
 @menu
-* Getting::                     Æþ¼êÊýË¡
-* Compile::                     ¥³¥ó¥Ñ¥¤¥ëÊýË¡
-* Getting Develop Version::     ³«È¯ÈÇ¤ÎÆþ¼ê
+* Getting::                     $BF~<jJ}K!(B
+* Compile::                     $B%3%s%Q%$%kJ}K!(B
+* Getting Develop Version::     $B3+H/HG$NF~<j(B
 @end menu
 
 @node Getting
-@section Æþ¼êÊýË¡
+@section $BF~<jJ}K!(B
+@cindex $BF~<j(B
 
 @uref{http://sourceforge.net/project/showfiles.php?group_id=39552}
-¤«¤éºÇ¿·¤Î navi2ch-X.Y.Z.tar.gz ¤òÆþ¼ê¤¹¤ë¡£
+$B$+$i:G?7$N(B navi2ch-X.Y.Z.tar.gz $B$rF~<j$9$k!#(B
 
-Navi2ch Project Home Page
-@uref{http://navi2ch.sourceforge.net/}
-¤ä Navi2ch Project Summary Page
-@uref{http://sourceforge.net/projects/navi2ch/}
-¤âÍ×¥Á¥§¥Ã¥¯¡£
+@uref{http://navi2ch.sourceforge.net/, Navi2ch Project Home Page}$B$d(B
+@uref{http://sourceforge.net/projects/navi2ch/, Navi2ch Project
+Summary Page}$B$bMW%A%'%C%/!#(B
 
-@c °ÊÁ°¤Î¥ê¥ê¡¼¥¹¤Ïºî¼Ô¤Î (not 1) ¤µ¤ó¤Î¥Ú¡¼¥¸¤«¤éÆþ¼ê¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+@c $B0JA0$N%j%j!<%9$O:n<T$N(B (not 1) $B$5$s$N%Z!<%8$+$iF~<j$9$k$3$H$,$G$-$k!#(B
 @c @uref{http://www.geocities.co.jp/SiliconValley-Oakland/7673/}
-@c (Á´Éô sourceforge ¤Ë°Ü¤·¤¿Êý¤¬¤¤¤¤¤«¤Ê¡£)
+@c ($BA4It(B sourceforge $B$K0\$7$?J}$,$$$$$+$J!#(B)
 
-£²¤Á¤ã¤ó¤Í¤ë UNIX ÈÄ¡¢Navi2ch ¥¹¥ì¤â»²¾È¤Î¤³¤È¡£
+$B#2$A$c$s$M$k(B UNIX $BHD!"(B@uref{Navi2ch $B%9%l(B,
+http://h.u.la/dance/?P=1&kenken=Navi2ch}$B$b;2>H$N$3$H!#(B
 
 @node Compile
-@section ¥³¥ó¥Ñ¥¤¥ëÊýË¡
+@section $B%3%s%Q%$%kJ}K!(B
+@cindex $B%3%s%Q%$%k(B
+@cindex configure
 
 @example
 @group
@@ -206,38 +208,38 @@ Navi2ch Project Home Page
 @end example
 
 
-¤ª½ª¤¤@dots{} ¤À¤±¤¸¤ã¤¢¤ì¤Ê¤ó¤Ç°ì±þ½ÅÍ×¤Ê configure ¤Î¥ª¥×¥·¥ç¥ó¤ò¡£
+$B$*=*$$(B@dots{} $B$@$1$8$c$"$l$J$s$G0l1~=EMW$J(B configure $B$N%*%W%7%g%s$r!#(B
 
 @table @option
 @item --help
-configure ¤Î¥ª¥×¥·¥ç¥ó¤ò°ìÍ÷É½¼¨¡£
+configure $B$N%*%W%7%g%s$r0lMwI=<(!#(B
 
 @item --with-lispdir
-Navi2ch ¤ò¥¤¥ó¥¹¥È¡¼¥ë¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê¡£
+Navi2ch $B$r%$%s%9%H!<%k$9$k%G%#%l%/%H%j$r;XDj!#(B
 
 @item --with-icondir
-¥¢¥¤¥³¥ó¤Ê¤É¤Î²èÁü¥Õ¥¡¥¤¥ë¤ò¥¤¥ó¥¹¥È¡¼¥ë¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê¡£
+$B%"%$%3%s$J$I$N2hA|%U%!%$%k$r%$%s%9%H!<%k$9$k%G%#%l%/%H%j$r;XDj!#(B
 
 @item --infodir
-Info ¥Õ¥¡¥¤¥ë¤ò¥¤¥ó¥¹¥È¡¼¥ë¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê¡£
+Info $B%U%!%$%k$r%$%s%9%H!<%k$9$k%G%#%l%/%H%j$r;XDj!#(B
 
 @item --with-packagedir
-Navi2ch ¤ò¥¤¥ó¥¹¥È¡¼¥ë¤¹¤ë¥Ñ¥Ã¥±¡¼¥¸¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê¡£(XEmacs ¤Î¤ß)
+Navi2ch $B$r%$%s%9%H!<%k$9$k%Q%C%1!<%8%G%#%l%/%H%j$r;XDj!#(B(XEmacs $B$N$_(B)
 @end table
 
-configure ¤Ï°Ê²¼¤Î´Ä¶­ÊÑ¿ô¤â»ÈÍÑ¤¹¤ë¡£
-
+configure $B$O0J2<$N4D6-JQ?t$b;HMQ$9$k!#(B
+p
 @table @option
 
 @item EMACS
-emacs ¤Î¥³¥Þ¥ó¥ÉÌ¾
+emacs $B$N%3%^%s%IL>(B
 
 @item EMACSLOADPATH
-emacs ¤¬¥é¥¤¥Ö¥é¥ê¤ò¤µ¤¬¤¹¥Ñ¥¹
+emacs $B$,%i%$%V%i%j$r$5$,$9%Q%9(B
 
 @end table
 
-Îã¤¨¤Ð Meadow ¤À¤Ã¤¿¤é°Ê²¼¤Î¤È¤ª¤ê¡£
+$BNc$($P(B Meadow $B$@$C$?$i0J2<$N$H$*$j!#(B
 
 @example
 @group
@@ -245,8 +247,8 @@ emacs ¤¬¥é¥¤¥Ö¥é¥ê¤ò¤µ¤¬¤¹¥Ñ¥¹
 @end group
 @end example
 
-XEmacs ¤ò»È¤Ã¤Æ¤¤¤Æ¡¢¥Û¡¼¥à¥Ç¥£¥ì¥¯¥È¥ê¤Ë¥¤¥ó¥¹¥È¡¼¥ë¤·¤¿¤¤¾ì¹ç¤Ï°Ê²¼
-¤Î¤è¤¦¤Ë¤¹¤ë¤È¤¤¤¤¤«¤â¡£
+XEmacs $B$r;H$C$F$$$F!"%[!<%`%G%#%l%/%H%j$K%$%s%9%H!<%k$7$?$$>l9g$O0J2<(B
+$B$N$h$&$K$9$k$H$$$$$+$b!#(B
 
 @example
 @group
@@ -254,52 +256,56 @@ XEmacs ¤ò»È¤Ã¤Æ¤¤¤Æ¡¢¥Û¡¼¥à¥Ç¥£¥ì¥¯¥È¥ê¤Ë¥¤¥ó¥¹¥È¡¼¥ë¤·¤¿¤¤¾ì¹ç¤Ï°Ê²¼
 @end group
 @end example
 
-¥µ¥¤¥È¤Ë¤è¤Ã¤Æ¤Ï¡¢´ÉÍý¼Ô¤¬¥¤¥ó¥¹¥È¡¼¥ë¤·¤¿ Lisp ¥Ñ¥Ã¥±¡¼¥¸¤Ë¤è¤Ã¤Æ
-¥á¥Ã¥»¡¼¥¸¤¬É½¼¨¤µ¤ì¡¢configure ¤¬¤¦¤Þ¤¯Æ°ºî¤·¤Ê¤¤¾ì¹ç¤¬¤¢¤ë¡£
+$B%5%$%H$K$h$C$F$O!"4IM}<T$,%$%s%9%H!<%k$7$?(B Lisp $B%Q%C%1!<%8$K$h$C$F(B
+$B%a%C%;!<%8$,I=<($5$l!"(Bconfigure $B$,$&$^$/F0:n$7$J$$>l9g$,$"$k!#(B
 
-¤½¤ÎºÝ¤Ï @option{EMACS="xemacs -no-site-file"} ¤Ê¤É¤ò²Ã¤¨¤ë¤È
-¤¦¤Þ¤¯¥¤¥ó¥¹¥È¡¼¥ë¤Ç¤­¤ë¤«¤â¤·¤ì¤Ê¤¤¡£
+$B$=$N:]$O(B @option{EMACS="xemacs -no-site-file"} $B$J$I$r2C$($k$H(B
+$B$&$^$/%$%s%9%H!<%k$G$-$k$+$b$7$l$J$$!#(B
 
-@subsection configure ¤ò»ÈÍÑ¤·¤Ê¤¤¤Ç¥³¥ó¥Ñ¥¤¥ë¤¹¤ë
+@subsection configure $B$r;HMQ$7$J$$$G%3%s%Q%$%k$9$k(B
+@cindex configure $B$J$7$N%3%s%Q%$%k(B
+@cindex Windows $B$G$N%3%s%Q%$%k(B
 
-Cygwin ¤ò¥¤¥ó¥¹¥È¡¼¥ë¤·¤Æ¤Ê¤¤ Windows ¤Ê¤É¡¢configure ¤òÆ°ºî¤µ¤»¤ë¤³¤È
-¤¬¤Ç¤­¤Ê¤¤´Ä¶­¤Ç¤Ï¡¢°Ê²¼¤Î¤È¤ª¤ê¤¹¤ë¤È¥³¥ó¥Ñ¥¤¥ë¤Ç¤­¤ë¤«¤â¤·¤ì¤Ê¤¤¡£
+Cygwin $B$r%$%s%9%H!<%k$7$F$J$$(B Windows $B$J$I!"(Bconfigure $B$rF0:n$5$;$k$3$H(B
+$B$,$G$-$J$$4D6-$G$O!"0J2<$N$H$*$j$9$k$H%3%s%Q%$%k$G$-$k$+$b$7$l$J$$!#(B
 
 @enumerate
 @item
-@file{EMACS-TOP-DIR/site-lisp}@footnote{@file{EMACS-TOP-DIR} ¤Ï
-@file{C:/Meadow} ¤Ê¤É¡¢Emacs ¤ò¥¤¥ó¥¹¥È¡¼¥ë¤·¤¿¥Ç¥£¥ì¥¯¥È¥ê} ¤Î²¼¤Ë
-@file{navi2ch} ¤È¤¤¤¦¥Ç¥£¥ì¥¯¥È¥ê¤òºîÀ®¤¹¤ë¡£
+@file{EMACS-TOP-DIR/site-lisp}@footnote{@file{EMACS-TOP-DIR} $B$O(B
+@file{C:/Meadow} $B$J$I!"(BEmacs $B$r%$%s%9%H!<%k$7$?%G%#%l%/%H%j(B} $B$N2<$K(B
+@file{navi2ch} $B$H$$$&%G%#%l%/%H%j$r:n@.$9$k!#(B
 
 @item
-Navi2ch ¤ÎÇÛÉÛÊª¤òÁ´¤Æ¾åµ­¤Î¥Ç¥£¥ì¥¯¥È¥ê¤Ë¥³¥Ô¡¼¤¹¤ë¡£
+Navi2ch $B$NG[I[J*$rA4$F>e5-$N%G%#%l%/%H%j$K%3%T!<$9$k!#(B
 
 @item
-@kbd{C-x C-f @key{RET} @file{¾åµ­¥Ç¥£¥ì¥¯¥È¥ê/bcomp.el} @key{RET}}
-¤ÈÆþÎÏ¤·¤Æ @file{bcomp.el} ¤ò³«¤¯¡£
+@kbd{C-x C-f @key{RET} @file{$B>e5-%G%#%l%/%H%j(B/bcomp.el} @key{RET}}
+$B$HF~NO$7$F(B @file{bcomp.el} $B$r3+$/!#(B
 
 @item
-@kbd{M-x eval-current-buffer @key{RET}} ¤ÈÆþÎÏ¤·¤Æ¼Â¹Ô¤¹¤ë¡£
+@kbd{M-x eval-current-buffer @key{RET}} $B$HF~NO$7$F<B9T$9$k!#(B
 
 @item
-Emacs ¤òÎ©¤Á¾å¤²Ä¾¤¹¡£
+Emacs $B$rN)$A>e$2D>$9!#(B
 @end enumerate
 
 @node Getting Develop Version
-@section ³«È¯ÈÇ¤ÎÆþ¼ê
+@section $B3+H/HG$NF~<j(B
+@cindex $B3+H/HG(B
+@cindex CVS
 
-Navi2ch ¤Î³«È¯¤Ë¶½Ì£¤¬¤¢¤ë¤Ê¤é¡¢CVS ¤ò»È¤Ã¤Æ³«È¯ÈÇ¤òÆþ¼ê¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-@code{CVS password:} ¤ÈÊ¹¤¤¤Æ¤­¤¿¤é²¿¤âÆþÎÏ¤»¤º @kbd{@key{RET}} ¤ò²¡¤¹¤³¤È¡£
+Navi2ch $B$N3+H/$K6=L#$,$"$k$J$i!"(BCVS $B$r;H$C$F3+H/HG$rF~<j$9$k$3$H$,$G$-$k!#(B
+@code{CVS password:} $B$HJ9$$$F$-$?$i2?$bF~NO$;$:(B @kbd{@key{RET}} $B$r2!$9$3$H!#(B
 
 @example
 @group
 % cvs -d:pserver:anonymous@@navi2ch.cvs.sourceforge.net:/cvsroot/navi2ch login
 % cvs -z3 -d:pserver:anonymous@@navi2ch.cvs.sourceforge.net:/cvsroot/navi2ch co navi2ch
-@r{(¤½¤ì¤¾¤ì°ì¹Ô¤ÇÆþÎÏ)}
+@r{($B$=$l$>$l0l9T$GF~NO(B)}
 @end group
 @end example
 
-checkout ¤·¤¿¸å¤Ï @file{navi2ch} ¥Ç¥£¥ì¥¯¥È¥ê¤Ç
+checkout $B$7$?8e$O(B @file{navi2ch} $B%G%#%l%/%H%j$G(B
 
 @example
 @group
@@ -307,7 +313,7 @@ checkout ¤·¤¿¸å¤Ï @file{navi2ch} ¥Ç¥£¥ì¥¯¥È¥ê¤Ç
 @end group
 @end example
 
-¤È¤¹¤ë¤ÈºÇ¿·ÈÇ¤ËÆ±´ü¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£configure ¤·¤¿¸å¤Ç¤¢¤ì¤Ð
+$B$H$9$k$H:G?7HG$KF14|$9$k$3$H$,$G$-$k!#(Bconfigure $B$7$?8e$G$"$l$P(B
 
 @example
 @group
@@ -315,520 +321,595 @@ checkout ¤·¤¿¸å¤Ï @file{navi2ch} ¥Ç¥£¥ì¥¯¥È¥ê¤Ç
 @end group
 @end example
 
-¤³¤Î¤è¤¦¤Ë¤·¤Æ¤â¤¤¤¤¡£@footnote{GNU make °Ê³°¤Î make (Îã¤¨¤Ð FreeBSD
-¤ÎÉ¸½à make ¤Ê¤É) ¤Ç¤Ï¡¢Makefile ¥¿¡¼¥²¥Ã¥È¤¬¹¹¿·¤µ¤ì¤Æ¤â¡¢Makefile ¤ò
-ºÆÆÉ¤ß¹þ¤ß¤·¤Ê¤¤¤â¤Î¤¬¤¢¤ë¡£update ¥¿¡¼¥²¥Ã¥È¤Ï¡¢¤³¤Î¤è¤¦¤Ê¥·¥¹¥Æ¥à¤Ç
-¤â¤¦¤Þ¤¯Æ°¤¯¤è¤¦¡¢cvs update ¤Î¸å¤Ë Makefile ¤ò¹¹¿·¤¹¤ë¡£}
+$B$3$N$h$&$K$7$F$b$$$$!#(B@footnote{GNU make $B0J30$N(B make ($BNc$($P(B FreeBSD
+$B$NI8=`(B make $B$J$I(B) $B$G$O!"(BMakefile $B%?!<%2%C%H$,99?7$5$l$F$b!"(BMakefile $B$r(B
+$B:FFI$_9~$_$7$J$$$b$N$,$"$k!#(Bupdate $B%?!<%2%C%H$O!"$3$N$h$&$J%7%9%F%`$G(B
+$B$b$&$^$/F0$/$h$&!"(Bcvs update $B$N8e$K(B Makefile $B$r99?7$9$k!#(B}
 
-CVS ¤Ë¤Ä¤¤¤Æ¤Î¾Ü¤·¤¤ÀâÌÀ¤Ï
+CVS $B$K$D$$$F$N>\$7$$@bL@$O(B
 @uref{http://www.cvshome.org/}
-¤Ê¤É¤ò»²¾È¡£
+$B$J$I$r;2>H!#(B
 
-¤Ê¤ª¡¢³«È¯ÈÇ¤Ï¤¢¤¯¤Þ¤Ç¤â³«È¯Ãæ¤Î¤½¤Î»þÅÀ¤Ç¤Î¥¹¥Ê¥Ã¥×¥·¥ç¥Ã¥È¤Ç¤¢¤ê¡¢
-¥ê¥ê¡¼¥¹ÈÇ¤ÎÌäÂê¤ò²ò·è¤·¤¿ºÇ¿·ÈÇ¤È¤¤¤¦¤ï¤±¤Ç¤Ï¤Ê¤¤¡£
+$B$J$*!"3+H/HG$O$"$/$^$G$b3+H/Cf$N$=$N;~E@$G$N%9%J%C%W%7%g%C%H$G$"$j!"(B
+$B%j%j!<%9HG$NLdBj$r2r7h$7$?:G?7HG$H$$$&$o$1$G$O$J$$!#(B
 
-³«È¯¼Ô¤Ë¤Ê¤ë¤È CVS ¤Ë commit ¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ë¡£
-@uref{http://sourceforge.net/projects/navi2ch/}
-¤«¤é¡Ö¥×¥í¥¸¥§¥¯¥È´ÉÍý¼Ô¡×¤Ë¥³¥ó¥¿¥¯¥È¤ò¼è¤Ã¤Æ¡¢¤¼¤Ò Navi2ch ¤Î³«È¯¤Ë
-»²²Ã¤·¤Æ¤Û¤·¤¤¡£
+$B3+H/<T$K$J$k$H(B CVS $B$K(B commit $B$9$k$3$H$,$G$-$k$h$&$K$J$k!#(B
+@uref{http://sourceforge.net/projects/navi2ch/, Navi2ch Project
+Summary Page}$B$+$i!V%W%m%8%'%/%H4IM}<T!W$K%3%s%?%/%H$r<h$C$F!"$<$R(B
+Navi2ch $B$N3+H/$K;22C$7$F$[$7$$!#(B
 
 @node Usage
-@chapter »È¤¤Êý
+@chapter $B;H$$J}(B
 
 @menu
-* Start Navi2ch::               µ¯Æ°ÊýË¡
-* List Mode::                   List ¥â¡¼¥É
-* Board Mode::                  Board ¥â¡¼¥É
-* Bookmark Mode::               Bookmark ¥â¡¼¥É
-* Article Mode::                Article ¥â¡¼¥É
-* Message Mode::                Message ¥â¡¼¥É
+* Start Navi2ch::               $B5/F0J}K!(B
+* List Mode::                   List $B%b!<%I(B
+* Board Mode::                  Board $B%b!<%I(B
+* Bookmark Mode::               Bookmark $B%b!<%I(B
+* Article Mode::                Article $B%b!<%I(B
+* Message Mode::                Message $B%b!<%I(B
 @end menu
 
 @node Start Navi2ch
-@section µ¯Æ°ÊýË¡
+@section $B5/F0J}K!(B
+@cindex $B5/F0(B
+@findex navi2ch
 
-@file{~/.emacs} ¤Ë
+@file{~/.emacs} $B$K(B
 
 @lisp
 (autoload 'navi2ch "navi2ch" "Navigator for 2ch for Emacs" t)
 @end lisp
 
-¤È½ñ¤¯¡£
+$B$H=q$/!#(B
 
-@kbd{M-x navi2ch @key{RET}} ¤Çµ¯Æ°¡£
+@kbd{M-x navi2ch @key{RET}} $B$G5/F0!#(B
 
-Windows ¤Ç¤Ï ´Ä¶­ÊÑ¿ô @env{TZ} ¤ò @code{JST-9} ¤È¤·¤Æ¤ª¤¤¤¿Êý¤¬¤¤¤¤¤é¤·¤¤¡£
+Windows $B$G$O(B $B4D6-JQ?t(B @env{TZ} $B$r(B @code{JST-9} $B$H$7$F$*$$$?J}$,$$$$$i$7$$!#(B
 
 @node List Mode
-@section List ¥â¡¼¥É
+@section List $B%b!<%I(B
+@cindex List $B%b!<%I(B
+@cindex $BHD0lMw(B
+@cindex $B!V(BNavi2ch$B!W%+%F%4%j(B
+@cindex $B!V%U%!%$%k0lMw!WHD(B
+@cindex $B!VI=<(%9%l0lMw!WHD(B
+@cindex $B!V8!:w0lMw!WHD(B
+@cindex $B!VMzNr!WHD(B
+@cindex $B$*5$$K$$$j$NHD(B
+@cindex $B!V%V%C%/%^!<%/!W%+%F%4%j(B
+@cindex $B!V$=$NB>!W%+%F%4%j(B
+@cindex $B!VJQ$o$C$?HD!W%+%F%4%j(B
 
-Navi2ch ¤òµ¯Æ°¤¹¤ë¤È°Ê²¼¤Î¤è¤¦¤Ê²èÌÌ¤Ë¤Ê¤ë¡£
+Navi2ch $B$r5/F0$9$k$H0J2<$N$h$&$J2hLL$K$J$k!#(B
 
 @example
 @group
 [+]Navi2ch
-[+]¥Ö¥Ã¥¯¥Þ¡¼¥¯
-[+]¤½¤ÎÂ¾
-[+]ÊÑ¤ï¤Ã¤¿ÈÄ
+[+]$B%V%C%/%^!<%/(B
+[+]$B$=$NB>(B
+[+]$BJQ$o$C$?HD(B
         :
 @end group
 @end example
 
-¥«¡¼¥½¥ë¤ò @code{[+]£Ð£ÃÅù} ¤Î¹Ô¤Ë°ÜÆ°¤·¤Æ @kbd{@key{SPC}} ¤ò²¡¤¹¤È¡¢
-¥µ¥Ö¥á¥Ë¥å¡¼¤¬³«¤¤¤Æ°Ê²¼¤Î¤è¤¦¤Ë¤Ê¤ë¡£
+$B%+!<%=%k$r(B @code{[+]$B#P#CEy(B} $B$N9T$K0\F0$7$F(B @kbd{@key{SPC}} $B$r2!$9$H!"(B
+$B%5%V%a%K%e!<$,3+$$$F0J2<$N$h$&$K$J$k!#(B
 
 @example
 @group
-[-]£Ð£ÃÅù
+[-]$B#P#CEy(B
   Windows
   Mac
-  ¿·¡¦mac
+  $B?7!&(Bmac
         :
-  ÀÎ¤ÎPC
+  $B@N$N(BPC
 @end group
 @end example
 
-UNIX ÈÄ¤òÆÉ¤ß¤¿¤¤¤Ê¤é¡¢¥«¡¼¥½¥ë¤ò @code{UNIX} ¤Î¹Ô¤Ë°ÜÆ°¤·¤Æ
-@kbd{@key{SPC}} ¤ò²¡¤¹¡£
+UNIX $BHD$rFI$_$?$$$J$i!"%+!<%=%k$r(B @code{UNIX} $B$N9T$K0\F0$7$F(B
+@kbd{@key{SPC}} $B$r2!$9!#(B
 
-ÈÄ¤ÎÌ¾Á°¤Î¾å¤Ç @kbd{a} ¤ò²¡¤¹¤È¡¢¤½¤ÎÈÄ¤ò¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÄÉ²Ã¤¹¤ë¡£
-@kbd{b} ¤ÇÈÄ°ìÍ÷¤È¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ÎÉ½¼¨¤ò¸ò¸ß¤ËÀÚÂØ¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£(¥°
-¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯ (@ref{Bookmark Mode}) ¤È¤Ï°ã¤¦¤Î¤ÇÃí°Õ¡£)
+$BHD$NL>A0$N>e$G(B @kbd{a} $B$r2!$9$H!"$=$NHD$r%V%C%/%^!<%/$KDI2C$9$k!#(B
+@kbd{b} $B$GHD0lMw$H%V%C%/%^!<%/$NI=<($r8r8_$K@ZBX$($k$3$H$,$G$-$k!#(B($B%0(B
+$B%m!<%P%k%V%C%/%^!<%/(B (@ref{Bookmark Mode}) $B$H$O0c$&$N$GCm0U!#(B)
 
-List ¥â¡¼¥É¤Ç¤Ï¡¢´ðËÜÅª¤Ë£²¤Á¤ã¤ó¤Í¤ë¤ÎÈÄ¤¬¥«¥Æ¥´¥ê¤´¤È¤ËÊÂ¤ó¤Ç¤¤¤ë¤¬¡¢
-ÀèÆ¬¤Î4¤Ä¤Î¥«¥Æ¥´¥ê¤ËÂ°¤¹¤ëÈÄ¤ÏÆÃ¼ì¤ÊÈÄ¤Ç¤¢¤ë¡£
+List $B%b!<%I$G$O!"4pK\E*$K#2$A$c$s$M$k$NHD$,%+%F%4%j$4$H$KJB$s$G$$$k$,!"(B
+$B@hF,$N(B4$B$D$N%+%F%4%j$KB0$9$kHD$OFC<l$JHD$G$"$k!#(B
 
 @example
 @group
 [-]Navi2ch
-  ¥Õ¥¡¥¤¥ë°ìÍ÷
-  É½¼¨¥¹¥ì°ìÍ÷
-  ¸¡º÷°ìÍ÷
-  ÍúÎò
-[+]¥Ö¥Ã¥¯¥Þ¡¼¥¯
-[+]¤½¤ÎÂ¾
+  $B%U%!%$%k0lMw(B
+  $BI=<(%9%l0lMw(B
+  $B8!:w0lMw(B
+  $BMzNr(B
+[+]$B%V%C%/%^!<%/(B
+[+]$B$=$NB>(B
 @end group
 @end example
 
-¡ÖNavi2ch¡×¥«¥Æ¥´¥ê¤ÎÈÄ¤Ï°Ê²¼¤Î¤È¤ª¤ê¡£
+$B!V(BNavi2ch$B!W%+%F%4%j$NHD$O0J2<$N$H$*$j!#(B
 
 @itemize @bullet
 @item
-¡Ö¥Õ¥¡¥¤¥ë°ìÍ÷¡×¤Ë¤ÏºÇ¸å¤ËÉ½¼¨¤·¤¿¥Ç¥£¥ì¥¯¥È¥ê¤Î¥¹¥ì¤Î°ìÍ÷¤¬ÊÝÂ¸¤µ¤ì¤Æ¤¤
-¤ë¡£¥Ç¥£¥ì¥¯¥È¥ê¤Î¥¹¥ì¤Î°ìÍ÷¤Ï @kbd{C-c C-f} ¤ò²¡¤·¤¿¸å¡¢¥Ç¥£¥ì¥¯¥È¥ê¤ò
-»ØÄê¤¹¤ë»ö¤ÇÉ½¼¨¤Ç¤­¤ë¡£
+$B!V%U%!%$%k0lMw!W$K$O:G8e$KI=<($7$?%G%#%l%/%H%j$N%9%l$N0lMw$,J]B8$5$l$F$$(B
+$B$k!#%G%#%l%/%H%j$N%9%l$N0lMw$O(B @kbd{C-c C-f} $B$r2!$7$?8e!"%G%#%l%/%H%j$r(B
+$B;XDj$9$k;v$GI=<($G$-$k!#(B
 
 @item
-¡ÖÉ½¼¨¥¹¥ì°ìÍ÷¡×¤Ë¤Ï¸½ºß¤Î¥»¥Ã¥·¥ç¥ó¤ÇÉ½¼¨¤·¤¿¥¹¥ì¤Î°ìÍ÷¤¬ÄÉ²Ã¤µ¤ì¤ë¡£
+$B!VI=<(%9%l0lMw!W$K$O8=:_$N%;%C%7%g%s$GI=<($7$?%9%l$N0lMw$,DI2C$5$l$k!#(B
 
 @item
-¡Ö¸¡º÷°ìÍ÷¡×¤Ë¤ÏºÇ¸å¤Ë¹Ô¤Ã¤¿¸¡º÷¤Î·ë²Ì¤¬ÊÝÂ¸¤µ¤ì¤Æ¤¤¤ë¡£¸¡º÷¤Ë¤Ä¤¤¤Æ¤Ï
-Board ¥â¡¼¥É (@ref{Board Mode}) ¤ò»²¾È¤Î¤³¤È¡£
+$B!V8!:w0lMw!W$K$O:G8e$K9T$C$?8!:w$N7k2L$,J]B8$5$l$F$$$k!#8!:w$K$D$$$F$O(B
+Board $B%b!<%I(B (@ref{Board Mode}) $B$r;2>H$N$3$H!#(B
 
 @item
-¡ÖÍúÎò¡×¤Ë¤Ï (¸½ºß¤Î¥»¥Ã¥·¥ç¥ó¤Ë¸Â¤é¤º) É½¼¨¤·¤¿¥¹¥ì¤Î°ìÍ÷¤¬ÄÉ²Ã¤µ¤ì¤ë¡£
+$B!VMzNr!W$K$O(B ($B8=:_$N%;%C%7%g%s$K8B$i$:(B) $BI=<($7$?%9%l$N0lMw$,DI2C$5$l$k!#(B
 @end itemize
 
-°Ê¾å¤Î4¤Ä¤ÎÈÄ¤Ë¤Ï Navi2ch ¤¬¼«Æ°Åª¤Ë¥¹¥ì¤òÄÉ²Ã¤·¤Æ¤¤¤¯¤¬¡¢¤½¤ì°Ê³°¤Ï¥°
-¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ÈÆ±Åù¤Ç¤¢¤ë¡£@xref{Browsing Bookmark}.
+$B0J>e$N(B4$B$D$NHD$K$O(B Navi2ch $B$,<+F0E*$K%9%l$rDI2C$7$F$$$/$,!"$=$l0J30$O%0(B
+$B%m!<%P%k%V%C%/%^!<%/$HF1Ey$G$"$k!#(B@xref{Browsing Bookmark}.
 
-¡Ö¥Ö¥Ã¥¯¥Þ¡¼¥¯¡×¥«¥Æ¥´¥ê¤Ë¤Ï¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤¬´Þ¤Þ¤ì¤ë¡£
+$B!V%V%C%/%^!<%/!W%+%F%4%j$K$O%0%m!<%P%k%V%C%/%^!<%/$,4^$^$l$k!#(B
 @xref{Bookmark Mode}.
 
-¡Ö¤½¤ÎÂ¾¡×¥«¥Æ¥´¥ê¤Ë¤Ï¼«Ê¬¤ÇÄÉ²Ã¤·¤¿ÈÄ¤¬´Þ¤Þ¤ì¤ë¡£@xref{Other Boards
+$B!V$=$NB>!W%+%F%4%j$K$O<+J,$GDI2C$7$?HD$,4^$^$l$k!#(B@xref{Other Boards
 File}.
 
-¡ÖÊÑ¤ï¤Ã¤¿ÈÄ¡×¥«¥Æ¥´¥ê¤Ë¤ÏÁ°²ó Navi2ch µ¯Æ°¤·¤Æ¤«¤éÄÉ²Ã¤µ¤ì¤¿ÈÄ¡¢°ÜÅ¾
-¤·¤¿ÈÄ¤¬´Þ¤Þ¤ì¤ë¡£
+$B!VJQ$o$C$?HD!W%+%F%4%j$K$OA02s(B Navi2ch $B5/F0$7$F$+$iDI2C$5$l$?HD!"0\E>(B
+$B$7$?HD$,4^$^$l$k!#(B
 
 @node Board Mode
-@section Board ¥â¡¼¥É
+@section Board $B%b!<%I(B
+@cindex Board $B%b!<%I(B
+@cindex $B%9%l0lMw(B
+@cindex $BHDJL%V%C%/%^!<%/(B
 
-ÈÄ¤ò³«¤¯¤È¤½¤ÎÈÄ¤Ë¤¢¤ë¥¹¥ì¤Î°ìÍ÷¤¬°Ê²¼¤Î¤è¤¦¤Ê²èÌÌ¤ÇÉ½¼¨¤µ¤ì¤ë¡£
+$BHD$r3+$/$H$=$NHD$K$"$k%9%l$N0lMw$,0J2<$N$h$&$J2hLL$GI=<($5$l$k!#(B
 
-@c @TeX{} ¤Ç½èÍý¤¹¤ë¤È¤³¤Î¿Þ¤¬¤º¤ì¤ë¤ó¤À¤¬¡¢¤É¤¦¤Ë¤«¤Ê¤é¤ó¤«¤Ê¤¢¡£
-@c @multitable ¤ò»È¤Ã¤Æ¤ß¤¿¤¬¡¢º£ÅÙ¤ÏHTML¤Ç¤º¤ì¤ë¡£±µ»á¡£
+@c @TeX{} $B$G=hM}$9$k$H$3$N?^$,$:$l$k$s$@$,!"$I$&$K$+$J$i$s$+$J$"!#(B
+@c @multitable $B$r;H$C$F$_$?$,!":#EY$O(BHTML$B$G$:$l$k!#15;a!#(B
+
+@c @verbatim $B$r;H$&$H$$$$$+$b(B?
 @example
 @group
- 16 +C ¤¯¤À¤é¤Ê¤¤¼ÁÌä¤Ï¤³¤³¤Ë½ñ¤­¹þ¤á¡ª¤Ê¤ó¤Ç¤â¥¢¥ê4     ( 636)
+ 16 +C $B$/$@$i$J$$<ALd$O$3$3$K=q$-9~$a!*$J$s$G$b%"%j(B4     ( 636)
  17 =C*navi2ch for emacs (part 4)                        (  50)
- 18  U ¤ª¤¤¡¢¥¤¥Ö¤ÎÌë¤ËUnix¤¤¤¸¤Ã¤Æ¤ë¤¦¤ó¤³¤É¤â¡ª        ( 101)
+ 18  U $B$*$$!"%$%V$NLk$K(BUnix$B$$$8$C$F$k$&$s$3$I$b!*(B        ( 101)
   ^ ^^^                        :
-  | |||                     ¥¿¥¤¥È¥ë                     ¥ì¥¹¿ô
-  | ||+- ¥Þ¡¼¥¯
-  | |+-- ¾õÂÖ¥Õ¥é¥°
-  | +--- ¹¹¿·¥Õ¥é¥°
-  +----- ¥¹¥ìÈÖ¹æ
+  | |||                     $B%?%$%H%k(B                     $B%l%9?t(B
+  | ||+- $B%^!<%/(B
+  | |+-- $B>uBV%U%i%0(B
+  | +--- $B99?7%U%i%0(B
+  +----- $B%9%lHV9f(B
 @end group
 @end example
 
-ºÇ½é¤Î¹à¤«¤é¡¢¡Ö¥¹¥ìÈÖ¹æ¡×¡¢¡Ö¹¹¿·¥Õ¥é¥°¡×¡¢¡Ö¾õÂÖ¥Õ¥é¥°¡×¡¢¡Ö¥Þ¡¼¥¯¡×¡¢
-¡Ö¥¿¥¤¥È¥ë¡×¡¢¡Ö¥ì¥¹¿ô¡×¤È¤Ê¤ë¡£
+$B:G=i$N9`$+$i!"!V%9%lHV9f!W!"!V99?7%U%i%0!W!"!V>uBV%U%i%0!W!"!V%^!<%/!W!"(B
+$B!V%?%$%H%k!W!"!V%l%9?t!W$H$J$k!#(B
 
-ÆÉ¤ß¤¿¤¤¥¹¥ì¤Ë¥«¡¼¥½¥ë¤ò°ÜÆ°¤· @kbd{@key{SPC}} ¤ò²¡¤¹¤È¤½¤Î¥¹¥ì¤òÆÉ¤à
-¤³¤È¤¬¤Ç¤­¤ë¡£
+$BFI$_$?$$%9%l$K%+!<%=%k$r0\F0$7(B @kbd{@key{SPC}} $B$r2!$9$H$=$N%9%l$rFI$`(B
+$B$3$H$,$G$-$k!#(B
 
-¥¹¥ì¤Î¾å¤Ç @kbd{a} ¤ò²¡¤¹¤È¡¢¤½¤Î¥¹¥ì¤ò¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÄÉ²Ã¤¹¤ë¡£@kbd{b}
-¤Ç¥¹¥ì°ìÍ÷¤È¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ÎÉ½¼¨¤ò¸ò¸ß¤ËÀÚÂØ¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£(¥°¥í¡¼¥Ð
-¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯ (@ref{Bookmark Mode}) ¤È¤Ï°ã¤¦¤Î¤ÇÃí°Õ¡£)
+$B%9%l$N>e$G(B @kbd{a} $B$r2!$9$H!"$=$N%9%l$r%V%C%/%^!<%/$KDI2C$9$k!#(B@kbd{b}
+$B$G%9%l0lMw$H%V%C%/%^!<%/$NI=<($r8r8_$K@ZBX$($k$3$H$,$G$-$k!#(B($B%0%m!<%P(B
+$B%k%V%C%/%^!<%/(B (@ref{Bookmark Mode}) $B$H$O0c$&$N$GCm0U!#(B)
 
-@kbd{?} ¤ò²¡¤¹¤È¡¢¥¹¥ì¤ò¸¡º÷¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£@xref{Search Thread}.
+@kbd{?} $B$r2!$9$H!"%9%l$r8!:w$9$k$3$H$,$G$-$k!#(B@xref{Search Thread}.
 
 @menu
-* Updated Flag::                ¹¹¿·¥Õ¥é¥°
-* State Flag::                  ¾õÂÖ¥Õ¥é¥°
-* Mark::                        ¥Þ¡¼¥¯
-* Hide Thread::                 ¥¹¥ì¤ò±£¤¹
-* Search Thread::               ¥¹¥ì¤Î¸¡º÷
+* Updated Flag::                $B99?7%U%i%0(B
+* State Flag::                  $B>uBV%U%i%0(B
+* Mark::                        $B%^!<%/(B
+* Hide Thread::                 $B%9%l$r1#$9(B
+* Search Thread::               $B%9%l$N8!:w(B
 @end menu
 
 @node Updated Flag
-@subsection ¹¹¿·¥Õ¥é¥°
-¹¹¿·¥Õ¥é¥°¤Î°ÕÌ£¤Ï°Ê²¼¤Î¤È¤ª¤ê¡£
+@subsection $B99?7%U%i%0(B
+@cindex $B99?7%U%i%0(B
+@cindex `%'
+@cindex `+'
+@cindex `='
+
+$B99?7%U%i%0$N0UL#$O0J2<$N$H$*$j!#(B
 
 @table @code
 @item %
-¿·¤·¤¤¡¢°ÊÁ°¤½¤ÎÈÄ¤ò³«¤¤¤¿¤È¤­¤Ë¤Ï¤Ê¤«¤Ã¤¿¥¹¥ì¡£
+$B?7$7$$!"0JA0$=$NHD$r3+$$$?$H$-$K$O$J$+$C$?%9%l!#(B
 
 @item +
-°ÊÁ°¤½¤ÎÈÄ¤ò³«¤¤¤Æ¤«¤é¹¹¿·¤µ¤ì¤¿¥¹¥ì¡£@kbd{+} ¤ò²¡¤¹¤È¡¢¹¹¿·¤µ¤ì¤¿¥¹¥ì
-¤È¿·¤·¤¤¥¹¥ì¤Î¤ß¤Î°ìÍ÷¤òÉ½¼¨¤Ç¤­¤ë¡£
+$B0JA0$=$NHD$r3+$$$F$+$i99?7$5$l$?%9%l!#(B@kbd{+} $B$r2!$9$H!"99?7$5$l$?%9%l(B
+$B$H?7$7$$%9%l$N$_$N0lMw$rI=<($G$-$k!#(B
 
 @item =
-°ÊÁ°¤½¤ÎÈÄ¤ò³«¤¤¤Æ¤«¤é¹¹¿·¤µ¤ì¤Æ¤¤¤Ê¤¤¥¹¥ì¡£¤½¤ÎÂ¾¤Î¹¹¿·¥Õ¥é¥°¤Î¥¹¥ì¤ò
-³«¤¯¤È¤³¤ì¤ËÊÑ¤ï¤ë¡£
+$B0JA0$=$NHD$r3+$$$F$+$i99?7$5$l$F$$$J$$%9%l!#$=$NB>$N99?7%U%i%0$N%9%l$r(B
+$B3+$/$H$3$l$KJQ$o$k!#(B
 
-@item (¶õÇò)
-¤³¤Î¥Õ¥é¥°¤Ï (¶õÇò¤Ê¤ó¤À¤±¤É¤â) ¾õÂÖ¥Õ¥é¥° (@code{VCU}) ¤ÎÍ­Ìµ¤Ë¤è¤Ã¤Æ
-°ÕÌ£¤¬ÊÑ²½¤¹¤ë¡£
+@item ($B6uGr(B)
+$B$3$N%U%i%0$O(B ($B6uGr$J$s$@$1$I$b(B) $B>uBV%U%i%0(B (@code{VCU}) $B$NM-L5$K$h$C$F(B
+$B0UL#$,JQ2=$9$k!#(B
 
-@code{C} ¤Ê¤É¤Î¾õÂÖ¥Õ¥é¥°¤¬Î©¤Ã¤Æ¤¤¤ë¤È¤­¤Ï°ÊÁ°¤½¤ÎÈÄ¤ò³«¤¤¤¿¤È¤­¡¢¹¹
-¿·¤µ¤ì¤¿¤Î¤ËÆÉ¤Þ¤º¤Ë¤¤¤¿¥¹¥ì¤Ç¡¢¾õÂÖ¥Õ¥é¥°¤¬²¿¤âÎ©¤Ã¤Æ¤¤¤Ê¤¤¤È¤­¤Ï°ìÅÙ
-¤âÆÉ¤ó¤À¤³¤È¤Î¤Ê¤¤¥¹¥ì¤È¤¤¤¦°ÕÌ£¡£
+@code{C} $B$J$I$N>uBV%U%i%0$,N)$C$F$$$k$H$-$O0JA0$=$NHD$r3+$$$?$H$-!"99(B
+$B?7$5$l$?$N$KFI$^$:$K$$$?%9%l$G!">uBV%U%i%0$,2?$bN)$C$F$$$J$$$H$-$O0lEY(B
+$B$bFI$s$@$3$H$N$J$$%9%l$H$$$&0UL#!#(B
 @end table
 
 @node State Flag
-@subsection ¾õÂÖ¥Õ¥é¥°
-¾õÂÖ¥Õ¥é¥°¤Î°ÕÌ£¤Ï°Ê²¼¤Î¤È¤ª¤ê¡£
+@subsection $B>uBV%U%i%0(B
+@cindex $B>uBV%U%i%0(B
+@cindex `V'
+@cindex `C'
+@cindex `U'
+
+$B>uBV%U%i%0$N0UL#$O0J2<$N$H$*$j!#(B
 
 @table @code
 @item V
-¸½ºß Navi2ch ¤Ç buffer ¤ò»ý¤Ã¤Æ¤¤¤ë (É½¼¨¤µ¤ì¤Æ¤¤¤ë) ¥¹¥ì¡£
+$B8=:_(B Navi2ch $B$G(B buffer $B$r;}$C$F$$$k(B ($BI=<($5$l$F$$$k(B) $B%9%l!#(B
 
 @item C
-¥í¡¼¥«¥ë¤Ë¥­¥ã¥Ã¥·¥å¤¬¤¢¤ë¥¹¥ì¡£
+$B%m!<%+%k$K%-%c%C%7%e$,$"$k%9%l!#(B
 
 @item U
-@kbd{i} ¤ò²¡¤·¤Æ¹¹¿·¤µ¤ì¤¿ (buffer ¤ÏÌµ¤¤¤«¤â¤·¤ì¤Ê¤¤) ¥¹¥ì¡£
+@kbd{i} $B$r2!$7$F99?7$5$l$?(B (buffer $B$OL5$$$+$b$7$l$J$$(B) $B%9%l!#(B
 
-@item (¶õÇò)
-ÆÉ¤ó¤À¤³¤È¤â @kbd{i} ¤Ç¹¹¿·¤·¤¿¤³¤È¤â¤Ê¤¤¥¹¥ì¡£
+@item ($B6uGr(B)
+$BFI$s$@$3$H$b(B @kbd{i} $B$G99?7$7$?$3$H$b$J$$%9%l!#(B
 @end table
 
 @node Mark
-@subsection ¥Þ¡¼¥¯
-¥¹¥ì¤ò¥Þ¡¼¥¯¤¹¤ë¤³¤È¤Ç¡¢¤¤¤¯¤Ä¤â¤Î¥¹¥ì¤ò¤Þ¤È¤á¤Æ½èÍý¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤Ë¤Ï @code{*} ¤¬É½¼¨¤µ¤ì¤ë¡£
+@subsection $B%^!<%/(B
+@cindex $B%^!<%/(B
+@cindex `*'
+
+$B%9%l$r%^!<%/$9$k$3$H$G!"$$$/$D$b$N%9%l$r$^$H$a$F=hM}$9$k$3$H$,$G$-$k!#(B
+$B%^!<%/$7$?%9%l$K$O(B @code{*} $B$,I=<($5$l$k!#(B
 
 @example
 @group
- 16 +C ¤¯¤À¤é¤Ê¤¤¼ÁÌä¤Ï¤³¤³¤Ë½ñ¤­¹þ¤á¡ª¤Ê¤ó¤Ç¤â¥¢¥ê4     ( 636)
+ 16 +C $B$/$@$i$J$$<ALd$O$3$3$K=q$-9~$a!*$J$s$G$b%"%j(B4     ( 636)
  17 =C*navi2ch for emacs (part 4)                        (  50)
- 18  U ¤ª¤¤¡¢¥¤¥Ö¤ÎÌë¤ËUnix¤¤¤¸¤Ã¤Æ¤ë¤¦¤ó¤³¤É¤â¡ª        ( 101)
+ 18  U $B$*$$!"%$%V$NLk$K(BUnix$B$$$8$C$F$k$&$s$3$I$b!*(B        ( 101)
      ^^                        :
      ||
-     |+- ¥Þ¡¼¥¯
-     +-- ¾õÂÖ¥Õ¥é¥°
+     |+- $B%^!<%/(B
+     +-- $B>uBV%U%i%0(B
 @end group
 @end example
 
-@kbd{*} ¤ò²¡¤¹¤È¥«¡¼¥½¥ë¹Ô¤Î¥¹¥ì¤¬¥Þ¡¼¥¯¤µ¤ì¤ë¡£¤¹¤Ù¤Æ¤Î¥¹¥ì¤ò¥Þ¡¼¥¯¤·
-¤¿¤¤¤È¤­¤Ï @kbd{m a} ¤ò»È¤¦¡£¤Þ¤¿¡¢¥ê¡¼¥¸¥ç¥ó¤ò»ØÄê¤·¤¿¾å¤Ç @kbd{m r}
-¤ò²¡¤»¤Ð¥ê¡¼¥¸¥ç¥óÆâ¤Î¤¹¤Ù¤Æ¤Î¥¹¥ì¤ò¥Þ¡¼¥¯¤Ç¤­¤ë¡£
+@kbd{*} $B$r2!$9$H%+!<%=%k9T$N%9%l$,%^!<%/$5$l$k!#$9$Y$F$N%9%l$r%^!<%/$7(B
+$B$?$$$H$-$O(B @kbd{m a} $B$r;H$&!#$^$?!"%j!<%8%g%s$r;XDj$7$?>e$G(B @kbd{m r}
+$B$r2!$;$P%j!<%8%g%sFb$N$9$Y$F$N%9%l$r%^!<%/$G$-$k!#(B
 
-¥Þ¡¼¥¯¤ò²ò½ü¤·¤¿¤¤¤È¤­¤Ë¤ÏÌÜÅª¤Î¥¹¥ì¤Î¾å¤Ç @kbd{u} ¤ò²¡¤¹¡£
+$B%^!<%/$r2r=|$7$?$$$H$-$K$OL\E*$N%9%l$N>e$G(B @kbd{u} $B$r2!$9!#(B
 
-@kbd{m i} ¤ÈÆþÎÏ¤¹¤ë¤È¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¹¹¿·¤¹¤ë¡£¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ÇÅÐÏ¿¤·¤¿
-¥¹¥ì¤ò @kbd{m a} ¤ÇÁ´ÁªÂò¤·¤Æ¤«¤é¹¹¿·¤¹¤ë¤È¤È¤Æ¤â³Ú¤À¡£
+@kbd{m i} $B$HF~NO$9$k$H%^!<%/$7$?%9%l$r99?7$9$k!#%V%C%/%^!<%/$GEPO?$7$?(B
+$B%9%l$r(B @kbd{m a} $B$GA4A*Br$7$F$+$i99?7$9$k$H$H$F$b3Z$@!#(B
 
-@kbd{m i} ¤Ç¹¹¿·¤·¤Æ¡¢¥ì¥¹¤¬Áý¤¨¤Æ¤¤¤¿¥¹¥ì¤Ë¤Ï¾õÂÖ¥Õ¥é¥°¤Ë @code{U} ¤¬
-Î©¤Ä¡£¹¹¿·¤µ¤ì¤Æ¤¤¤Ê¤±¤ì¤ÐÉ½¼¨¤ÏÊÑ²½¤·¤Ê¤¤¡£
+@kbd{m i} $B$G99?7$7$F!"%l%9$,A}$($F$$$?%9%l$K$O>uBV%U%i%0$K(B @code{U} $B$,(B
+$BN)$D!#99?7$5$l$F$$$J$1$l$PI=<($OJQ2=$7$J$$!#(B
 
 @node Hide Thread
-@subsection ¥¹¥ì¤ò±£¤¹
-¤·¤ç¡¼¤â¤Ê¤¤¥¹¥ì¤Ï¸«¤¿¤¯¤Ê¤¤¡¢ÌÜ¤ËÆþ¤ë¤Î¤â¤¤¤ä¤À¡¢¤È¤¤¤¦»þ¤Ï¥¹¥ì¤ò±£¤¹µ¡
-Ç½¤¬ÊØÍø¡£
+@subsection $B%9%l$r1#$9(B
+@cindex $B%9%l$r1#$9(B
+@cindex $B%9%l%C%I$"$\!<$s(B
 
-@kbd{d} ¤ò²¡¤¹¤³¤È¤Ç¥«¡¼¥½¥ë¾å¤Î¥¹¥ì¤ò±£¤¹¤³¤È¤¬¤Ç¤­¤ë¡£°ìÅÙ±£¤·¤¿¥¹¥ì¤Ï
-µ­²±¤µ¤ì¡¢¼¡²ó¤Ëµ¯Æ°¤·¤¿»þ¤âÉ½¼¨¤µ¤ì¤Ê¤¤¡£
+$B$7$g!<$b$J$$%9%l$O8+$?$/$J$$!"L\$KF~$k$N$b$$$d$@!"$H$$$&;~$O%9%l$r1#$95!(B
+$BG=$,JXMx!#(B
 
-¸å¤Ë¤Ê¤Ã¤Æ±£¤·¤¿¥¹¥ì¤ò¤Þ¤¿¸«¤¿¤¯¤Ê¤Ã¤¿¤é¡¢@kbd{h} ¤ò²¡¤¹¤³¤È¤Ç±£¤·¤¿¥¹¥ì
-¤Î°ìÍ÷¤ò¸«¤ë¥â¡¼¥É¤Ë°Ü¹Ô¤Ç¤­¤ë¡£ºÆÅÙ @kbd{h} ¤ò²¡¤»¤Ð¸µ¤Î(É½¼¨¤·¤¿¤¤¥¹¥ì
-¤À¤±¤ò¸«¤ë)¥â¡¼¥É¤ËÌá¤ë¡£
+@kbd{d} $B$r2!$9$3$H$G%+!<%=%k>e$N%9%l$r1#$9$3$H$,$G$-$k!#0lEY1#$7$?%9%l$O(B
+$B5-21$5$l!"<!2s$K5/F0$7$?;~$bI=<($5$l$J$$!#(B
 
-±£¤·¤¿¥¹¥ì¤ò¸«¤ë¥â¡¼¥É¤Ç @kbd{d} ¤ò²¡¤»¤Ð¡¢¥«¡¼¥½¥ë¾å¤Î±£¤·¤¿¥¹¥ì¤òºÆÅÙ
-ÄÌ¾ï¥â¡¼¥É¤Ç¸«¤é¤ì¤ë¤è¤¦¤Ë¤Ç¤­¤ë¡£
+$B8e$K$J$C$F1#$7$?%9%l$r$^$?8+$?$/$J$C$?$i!"(B@kbd{h} $B$r2!$9$3$H$G1#$7$?%9%l(B
+$B$N0lMw$r8+$k%b!<%I$K0\9T$G$-$k!#:FEY(B @kbd{h} $B$r2!$;$P85$N(B($BI=<($7$?$$%9%l(B
+$B$@$1$r8+$k(B)$B%b!<%I$KLa$k!#(B
 
-¤³¤³¤Ëµó¤²¤¿°Ê³°¤Î¥­¡¼Áàºî¤ÏBoard ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É (@ref{Board
-Mode Key Bindings}) ¤ò»²¾È¤·¤Æ¤Á¤ç¡£
+$B1#$7$?%9%l$r8+$k%b!<%I$G(B @kbd{d} $B$r2!$;$P!"%+!<%=%k>e$N1#$7$?%9%l$r:FEY(B
+$BDL>o%b!<%I$G8+$i$l$k$h$&$K$G$-$k!#(B
 
+$B$3$3$K5s$2$?0J30$N%-!<A`:n$O(BBoard $B%b!<%I$G$N%-!<%P%$%s%I(B (@ref{Board
+Mode Key Bindings}) $B$r;2>H$7$F$A$g!#(B
 
 @node Search Thread
-@subsection ¥¹¥ì¤Î¸¡º÷
-Navi2ch ¤Ç¤Ï¥­¥ã¥Ã¥·¥å¤òÂÐ¾Ý¤Ë¥¹¥ì¸¡º÷¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+@subsection $B%9%l$N8!:w(B
+@cindex $B%9%l$N8!:w(B
+@cindex $B<hF@:Q$N%9%l0lMw(B
 
-¥Ü¡¼¥É¥â¡¼¥É¤Ç @kbd{?} ¤ò²¡¤¹¤È
+Navi2ch $B$G$O%-%c%C%7%e$rBP>]$K%9%l8!:w$9$k$3$H$,$G$-$k!#(B
+
+$B%\!<%I%b!<%I$G(B @kbd{?} $B$r2!$9$H(B
 @code{Search for: s)ubject a)rticle c)ache o)rphan}
-¤ÈÊ¹¤¤¤ÆÍè¤ë¤Î¤Ç¡¢¥¹¥ì¤Î¥¿¥¤¥È¥ë¤Î¤ß¤òÂÐ¾Ý¤Ë¸¡º÷¤ò¹Ô¤¦¤Ê¤é @kbd{s} ¤ò¡¢
-¥¹¥ì¤ÎÆâÍÆ¤òÂÐ¾Ý¤Ë¸¡º÷¤ò¹Ô¤¦¤Ê¤é @kbd{a} ¤ò²¡¤¹¡£@kbd{c} ¤ò²¡¤¹¤È¸¡º÷
-¤ò¹Ô¤ï¤º¡¢·ë²Ì¤Ï¥­¥ã¥Ã¥·¥å¤¬Â¸ºß¤¹¤ë¥¹¥ì¤¹¤Ù¤Æ¤Ë¤Ê¤ë¡£@kbd{o} ¤ò²¡¤¹¤È
-¥­¥ã¥Ã¥·¥å¤¬Â¸ºß¤¹¤ë¤¬¡¢ÈÄ¤«¤é¤â¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤«¤é¤â»²¾È¤µ¤ì¤Æ
-¤¤¤Ê¤¤¥¹¥ì¤¬·ë²Ì¤È¤Ê¤ë¡£
+$B$HJ9$$$FMh$k$N$G!"%9%l$N%?%$%H%k$N$_$rBP>]$K8!:w$r9T$&$J$i(B @kbd{s} $B$r!"(B
+$B%9%l$NFbMF$rBP>]$K8!:w$r9T$&$J$i(B @kbd{a} $B$r2!$9!#(B@kbd{c} $B$r2!$9$H8!:w(B
+$B$r9T$o$:!"7k2L$O%-%c%C%7%e$,B8:_$9$k%9%l$9$Y$F$K$J$k!#(B@kbd{o} $B$r2!$9$H(B
+$B%-%c%C%7%e$,B8:_$9$k$,!"HD$+$i$b%0%m!<%P%k%V%C%/%^!<%/$+$i$b;2>H$5$l$F(B
+$B$$$J$$%9%l$,7k2L$H$J$k!#(B
 
-¼¡¤Ë @code{Search from: b)oard a)ll} ¤ÈÊ¹¤¤¤ÆÍè¤ë¤Î¤Ç¡¢¸½ºß³«¤¤¤Æ¤¤¤ë
-ÈÄ (Board ¥â¡¼¥É¤Î¾ì¹ç) ¤ä¥«¡¼¥½¥ë¤Î¤¢¤ë¹Ô¤Î¥¹¥ì¤¬Â°¤¹¤ëÈÄ (Bookmark
-¥â¡¼¥ÉÅù¤Î¾ì¹ç) ¤òÂÐ¾Ý¤Ë¸¡º÷¤¹¤ë¤Ê¤é @kbd{b} ¤ò¡¢¤¹¤Ù¤Æ¤ÎÈÄ¤òÂÐ¾Ý¤Ë¸¡
-º÷¤¹¤ë¤Ê¤é @kbd{a} ¤ò²¡¤¹¡£¤¹¤Ù¤Æ¤ÎÈÄ¤òÂÐ¾Ý¤Ë¥¹¥ì¤ÎÆâÍÆ¤ò¸¡º÷¤¹¤ë¤Ë¤Ï
-¤«¤Ê¤ê»þ´Ö¤¬¤«¤«¤ë¤Î¤ÇÃí°Õ¡£
+$B<!$K(B @code{Search from: b)oard a)ll} $B$HJ9$$$FMh$k$N$G!"8=:_3+$$$F$$$k(B
+$BHD(B (Board $B%b!<%I$N>l9g(B) $B$d%+!<%=%k$N$"$k9T$N%9%l$,B0$9$kHD(B (Bookmark
+$B%b!<%IEy$N>l9g(B) $B$rBP>]$K8!:w$9$k$J$i(B @kbd{b} $B$r!"$9$Y$F$NHD$rBP>]$K8!(B
+$B:w$9$k$J$i(B @kbd{a} $B$r2!$9!#$9$Y$F$NHD$rBP>]$K%9%l$NFbMF$r8!:w$9$k$K$O(B
+$B$+$J$j;~4V$,$+$+$k$N$GCm0U!#(B
 
-¥¹¥ì¤ÎÆâÍÆ¤Î¸¡º÷¤Ï¥í¡¼¥«¥ë¤Î¥­¥ã¥Ã¥·¥å¤òÂÐ¾Ý¤È¤¹¤ë¤Î¤Ç¡¢¸¡º÷ÂÐ¾Ý¤È¤·¤¿
-¤¤¥¹¥ì¤ÎÆâÍÆ¤ò¤¢¤é¤«¤¸¤á¥­¥ã¥Ã¥·¥å¤Ë¼è¤ê¹þ¤ó¤Ç¤ª¤¯¤³¤È¡£
+$B%9%l$NFbMF$N8!:w$O%m!<%+%k$N%-%c%C%7%e$rBP>]$H$9$k$N$G!"8!:wBP>]$H$7$?(B
+$B$$%9%l$NFbMF$r$"$i$+$8$a%-%c%C%7%e$K<h$j9~$s$G$*$/$3$H!#(B
 
-¸¡º÷·ë²Ì¤Ï Bookmark ¥â¡¼¥É¤È¤è¤¯»÷¤¿ Search ¥â¡¼¥É¥Ð¥Ã¥Õ¥¡¤ËÉ½¼¨¤µ¤ì¤ë¡£
+$B8!:w7k2L$O(B Bookmark $B%b!<%I$H$h$/;w$?(B Search $B%b!<%I%P%C%U%!$KI=<($5$l$k!#(B
 @xref{List Mode}, @xref{Bookmark Mode}.
 
-
 @node Bookmark Mode
-@section Bookmark ¥â¡¼¥É
+@section Bookmark $B%b!<%I(B
+@cindex Bookmark $B%b!<%I(B
+@cindex $B%0%m!<%P%k%V%C%/%^!<%/(B
+@cindex $BFC<l$JHD(B
+@cindex $B2>A[E*$JHD(B
+@cindex Articles $B%b!<%I(B
+@cindex Search $B%b!<%I(B
+@cindex History $B%b!<%I(B
 
-¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤È¤Ï¡¢¤¤¤¯¤Ä¤«¤Î¥¹¥ì¤ò¤Þ¤È¤á¤¿¡¢²¾ÁÛÅª¤ÊÈÄ (¤Î¤è
-¤¦¤Ê¤â¤Î) ¤Ç¤¢¤ë¡£
+$B%0%m!<%P%k%V%C%/%^!<%/$H$O!"$$$/$D$+$N%9%l$r$^$H$a$?!"2>A[E*$JHD(B ($B$N$h(B
+$B$&$J$b$N(B) $B$G$"$k!#(B
 
-¤½¤ÎÂ¾¤ÎÆÃ¼ì¤ÊÈÄ (Articles ¥â¡¼¥É¡¢Search ¥â¡¼¥É¡¢History ¥â¡¼¥É) ¤Ë¤Ä
-¤¤¤Æ¤â Bookmark ¥â¡¼¥É¤ÈÆ±Åù¤Ç¤¢¤ë¤Î¤Ç¡¢¤³¤Î¾Ï¤ò»²¾È¤·¤Æ¤Û¤·¤¤¡£
+$B$=$NB>$NFC<l$JHD(B (Articles $B%b!<%I!"(BSearch $B%b!<%I!"(BHistory $B%b!<%I(B) $B$K$D(B
+$B$$$F$b(B Bookmark $B%b!<%I$HF1Ey$G$"$k$N$G!"$3$N>O$r;2>H$7$F$[$7$$!#(B
 @xref{List Mode}.
 
 @menu
-* Adding Bookmark::             ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÄÉ²Ã¤¹¤ë
-* Operating Bookmark::          ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÁàºî¤¹¤ë
-* Browsing Bookmark::           ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò±ÜÍ÷¤¹¤ë
+* Adding Bookmark::             $B%V%C%/%^!<%/$rDI2C$9$k(B
+* Operating Bookmark::          $B%V%C%/%^!<%/$rA`:n$9$k(B
+* Browsing Bookmark::           $B%V%C%/%^!<%/$r1\Mw$9$k(B
 @end menu
 
 @node Adding Bookmark
-@subsection ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÄÉ²Ã¤¹¤ë
+@subsection $B%V%C%/%^!<%/$rDI2C$9$k(B
+@cindex $B%V%C%/%^!<%/$NDI2C(B
 
-Board ¥â¡¼¥É (@ref{Board Mode}) ¤ä Article ¥â¡¼¥É(@ref{Article Mode})
-¤Ç @kbd{A} ¤ò²¡¤¹¤³¤È¤Ç¡¢¤½¤Î¥¹¥ì¤ò¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÄÉ²Ã¤¹¤ë¤³
-¤È¤¬¤Ç¤­¤ë¡£
+Board $B%b!<%I(B (@ref{Board Mode}) $B$d(B Article $B%b!<%I(B(@ref{Article Mode})
+$B$G(B @kbd{A} $B$r2!$9$3$H$G!"$=$N%9%l$r%0%m!<%P%k%V%C%/%^!<%/$KDI2C$9$k$3(B
+$B$H$,$G$-$k!#(B
 
-Board ¥â¡¼¥É¤Ç¤Ï¡¢@kbd{m A} ¤ò»ÈÍÑ¤¹¤ë¤³¤È¤Ç¥Þ¡¼¥¯¤òÉÕ¤±¤¿¥¹¥ì¤ò¤Þ¤È¤á
-¤ÆÄÉ²Ã¤¹¤ë¤³¤È¤â¤Ç¤­¤ë¡£@xref{Mark}.
+Board $B%b!<%I$G$O!"(B@kbd{m A} $B$r;HMQ$9$k$3$H$G%^!<%/$rIU$1$?%9%l$r$^$H$a(B
+$B$FDI2C$9$k$3$H$b$G$-$k!#(B@xref{Mark}.
 
-¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÄÉ²Ã¤¹¤ëºÝ¡¢@code{bookmark id:} ¤Ë¤ÏÄÉ²Ã¤·¤¿¤¤¥°¥í¡¼¥Ð¥ë
-¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯ ID ¤ò¡¢@code{Input bookmark name for
-[@var{BOOKMARK-ID}]:} ¤Ë¤Ï¤½¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯ ID ¤ÎÌ¾Á°¤òÆþÎÏ¤¹¤ë¡£
+$B%V%C%/%^!<%/$rDI2C$9$k:]!"(B@code{bookmark id:} $B$K$ODI2C$7$?$$%0%m!<%P%k(B
+$B%V%C%/%^!<%/$N%V%C%/%^!<%/(B ID $B$r!"(B@code{Input bookmark name for
+[@var{BOOKMARK-ID}]:} $B$K$O$=$N%V%C%/%^!<%/(B ID $B$NL>A0$rF~NO$9$k!#(B
+
+@c $BHD(BID$B$N@bL@$,$[$7$$(B
 
 @node Operating Bookmark
-@subsection ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÁàºî¤¹¤ë
+@subsection $B%V%C%/%^!<%/$rA`:n$9$k(B
+@cindex $B%0%m!<%P%k%V%C%/%^!<%/$NJT=8(B
+@cindex $B%0%m!<%P%k%V%C%/%^!<%/$N:o=|(B
 
-List ¥â¡¼¥É (@ref{List Mode}) ¤Ç¤Ï¡¢Æ±¤¸¥Ö¥Ã¥¯¥Þ¡¼¥¯ ID ¤ò»ý¤Ä¥¹¥ì¤ò¤Þ
-¤È¤á¤Æ¡¢¥Ö¥Ã¥¯¥Þ¡¼¥¯¥«¥Æ¥´¥ê¤ËÂ°¤¹¤ë°ì¤ÄÈÄ¤Î¤è¤¦¤ËÉ½¼¨¤µ¤ì¤ë¡£
+List $B%b!<%I(B (@ref{List Mode}) $B$G$O!"F1$8%V%C%/%^!<%/(B ID $B$r;}$D%9%l$r$^(B
+$B$H$a$F!"%V%C%/%^!<%/%+%F%4%j$KB0$9$k0l$DHD$N$h$&$KI=<($5$l$k!#(B
 
 @example
 @group
 [+]Navi2ch
-[-]¥Ö¥Ã¥¯¥Þ¡¼¥¯
+[-]$B%V%C%/%^!<%/(B
   navi2ch for emacs
-[+]¤½¤ÎÂ¾
+[+]$B$=$NB>(B
 @end group
 @end example
 
-¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Î¤¢¤ë¹Ô¤Ë¥«¡¼¥½¥ë¤òÃÖ¤¤¤Æ @kbd{C} ¤ò²¡¤¹¤È¤½¤Î¥Ö¥Ã¥¯¥Þ¡¼
-¥¯¤òÊÔ½¸¤Ç¤­¡¢@kbd{D} ¤ò²¡¤¹¤È¤½¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òºï½ü¤Ç¤­¤ë¡£
+$B%V%C%/%^!<%/$N$"$k9T$K%+!<%=%k$rCV$$$F(B @kbd{C} $B$r2!$9$H$=$N%V%C%/%^!<(B
+$B%/$rJT=8$G$-!"(B@kbd{D} $B$r2!$9$H$=$N%V%C%/%^!<%/$r:o=|$G$-$k!#(B
 
 @node Browsing Bookmark
-@subsection ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò±ÜÍ÷¤¹¤ë
+@subsection $B%V%C%/%^!<%/$r1\Mw$9$k(B
+@cindex $B%0%m!<%P%k%V%C%/%^!<%/$N1\Mw(B
+@cindex $B%0%m!<%P%k%V%C%/%^!<%/$NJB$Y$+$((B
 
-¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò³«¤¯¤È¡¢Board ¥â¡¼¥É (@ref{Board Mode}) ¤È¤è¤¯»÷¤¿
-Bookmark ¥â¡¼¥É¤Ë¤Ê¤ë¡£
+$B%V%C%/%^!<%/$r3+$/$H!"(BBoard $B%b!<%I(B (@ref{Board Mode}) $B$H$h$/;w$?(B
+Bookmark $B%b!<%I$K$J$k!#(B
 
 @example
 @group
   1  V navi2ch for emacs (part 4)                        [UNIX]
-  2  C 2chÀìÍÑ¥Ö¥é¥¦¥¶¡ÖNavi2ch¡×                        [UNIX]
-  3  U ¥Ê¥Ó·»¤Á¤ã¤ó                                      [UNIX]
+  2  C 2ch$B@lMQ%V%i%&%6!V(BNavi2ch$B!W(B                        [UNIX]
+  3  U $B%J%S7;$A$c$s(B                                      [UNIX]
   ^  ^^                        :
-  |  ||                     ¥¿¥¤¥È¥ë                       ÈÄ
-  |  |+- ¥Þ¡¼¥¯
-  |  +-- ¾õÂÖ¥Õ¥é¥°
-  +----- ¥¹¥ìÈÖ¹æ
+  |  ||                     $B%?%$%H%k(B                       $BHD(B
+  |  |+- $B%^!<%/(B
+  |  +-- $B>uBV%U%i%0(B
+  +----- $B%9%lHV9f(B
 @end group
 @end example
 
-Board ¥â¡¼¥É¤È¤Î°ã¤¤¤Ï°Ê²¼¤Î¤È¤ª¤ê¡£
+Board $B%b!<%I$H$N0c$$$O0J2<$N$H$*$j!#(B
 
 @itemize @bullet
 @item
-¥ì¥¹¿ô¤ÎÂå¤ï¤ê¤Ë¥¹¥ì¤¬Â°¤¹¤ëÈÄ¤¬É½¼¨¤µ¤ì¤ë¡£
+$B%l%9?t$NBe$o$j$K%9%l$,B0$9$kHD$,I=<($5$l$k!#(B
 
 @item
-Á°²ó³«¤¤¤¿»þÅÀ¤Ç¤Î¥ì¥¹¿ô¤ÈÈæ³Ó¤µ¤ì¤Ê¤¤¤¿¤á¡¢¹¹¿·¥Õ¥é¥°¤ÏÂ¸ºß¤·¤Ê¤¤¡£
+$BA02s3+$$$?;~E@$G$N%l%9?t$HHf3S$5$l$J$$$?$a!"99?7%U%i%0$OB8:_$7$J$$!#(B
 
 @item
-@kbd{C-k}¡¢@kbd{C-y} ¤ò»È¤Ã¤Æ¥«¥Ã¥È¥¢¥ó¥É¥Ú¡¼¥¹¥È¤¹¤ë¤³¤È¤ÇÉ½¼¨¤¹¤ë½ç
-ÈÖ¤òÊÑ¤¨¤é¤ì¤ë¡£
+@kbd{C-k}$B!"(B@kbd{C-y} $B$r;H$C$F%+%C%H%"%s%I%Z!<%9%H$9$k$3$H$GI=<($9$k=g(B
+$BHV$rJQ$($i$l$k!#(B
 @end itemize
 
-¤½¤ÎÂ¾¤Î¥­¡¼Áàºî¤Ï Bookmark ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É (@ref{Bookmark Mode
-Key Bindings}) ¤ò»²¾È¤Î¤³¤È¡£
+$B$=$NB>$N%-!<A`:n$O(B Bookmark $B%b!<%I$G$N%-!<%P%$%s%I(B (@ref{Bookmark Mode
+Key Bindings}) $B$r;2>H$N$3$H!#(B
 
 @node Article Mode
-@section Article ¥â¡¼¥É
+@section Article $B%b!<%I(B
+@cindex Article $B%b!<%I(B
+@cindex $B%9%l%C%II=<((B
+@cindex $B%"%s%+!<;2>H(B
+@cindex $B%8%c%s%W@h$+$iLa$k(B
 
-¥¹¥ì¤ò³«¤¯¤È¾å²¼2¤Ä¤Î¥Ú¥¤¥ó¤ËÊ¬¤«¤ì¡¢¾å¤Ë¤Ï¥¹¥ì°ìÍ÷¤¬¡¢²¼¤Ë¤Ï¤½¤Î¥¹¥ì
-¤ÎÆâÍÆ¤¬°Ê²¼¤Î¤è¤¦¤ËÉ½¼¨¤µ¤ì¤ë¡£
+$B%9%l$r3+$/$H>e2<(B2$B$D$N%Z%$%s$KJ,$+$l!">e$K$O%9%l0lMw$,!"2<$K$O$=$N%9%l(B
+$B$NFbMF$,0J2<$N$h$&$KI=<($5$l$k!#(B
 
 @example
 @group
-From: [1] Ì¾Ìµ¤·¤µ¤ó¡÷¤ªÊ¢¤¤¤Ã¤Ñ¤¤¡£ <>
+From: [1] $BL>L5$7$5$s!w$*J"$$$C$Q$$!#(B <>
 Date: 01/12/26 13:17
 
-Emacsen¤ÇÆ°¤¯2chÍÑ¥Ö¥é¥¦¥¶¡¢navi2ch¥¹¥ì¥Ã¥Épart 4¤Ç¤¹¡£
-¤Ï¤¿¤·¤Æsourceforge¤Ç¤Î¶¦Æ±³«È¯¤Ï¼Â¸½¤¹¤ë¤Î¤«¡£
+Emacsen$B$GF0$/(B2ch$BMQ%V%i%&%6!"(Bnavi2ch$B%9%l%C%I(Bpart 4$B$G$9!#(B
+$B$O$?$7$F(Bsourceforge$B$G$N6&F13+H/$O<B8=$9$k$N$+!#(B
 
-* ºî¼Ô¤Î(not 1)¤µ¤ó¤Î¥Ú¡¼¥¸
+* $B:n<T$N(B(not 1)$B$5$s$N%Z!<%8(B
  http://www.geocities.co.jp/SiliconValley-Oakland/7673/
 
->>2 ¥ê¥ó¥¯¡¢²áµî¥¹¥ì¥Ã¥É
->>3 ¥¤¥ó¥¹¥È¡¼¥ë¡¢µ¯Æ°¤Î¤·¤«¤¿(README¤«¤éÈ´¿è)
+>>2 $B%j%s%/!"2a5n%9%l%C%I(B
+>>3 $B%$%s%9%H!<%k!"5/F0$N$7$+$?(B(README$B$+$iH4?h(B)
 ________________________________________
 
-From: [2] Ì¾Ìµ¤·¤µ¤ó¡÷¤ªÊ¢¤¤¤Ã¤Ñ¤¤¡£ <>
+From: [2] $BL>L5$7$5$s!w$*J"$$$C$Q$$!#(B <>
 Date: 01/12/26 13:17
 
-¥ê¥ó¥¯
+$B%j%s%/(B
                         :
 @end group
 @end example
 
-@kbd{@key{SPC}}/@kbd{@key{DEL}} ¤Ç¼¡/Á°¤Î¥Ú¡¼¥¸¡¢@kbd{n}/@kbd{p} ¤Ç
-¼¡/Á°¤Î¥ì¥¹¤Ë°ÜÆ°¤¹¤ë¤Î¤Ç¡¢Å¬Åö¤ËÆÉ¤ß¿Ê¤á¤ë¡£
+@kbd{@key{SPC}}/@kbd{@key{DEL}} $B$G<!(B/$BA0$N%Z!<%8!"(B@kbd{n}/@kbd{p} $B$G(B
+$B<!(B/$BA0$N%l%9$K0\F0$9$k$N$G!"E,Ev$KFI$_?J$a$k!#(B
 
-¥¹¥ì¤ò±£¤¹(@ref{Hide Thread}) »þ¤ÈÆ±ÍÍ¤Ë¡¢ @kbd{d} ¤Ç¥ì¥¹¤ò±£¤¹¤³¤È¤¬¤Ç
-¤­¤ë¡£ÄÌ¾ï¤Î°ìÍ÷¥â¡¼¥É¤È±£¤·¤¿¥ì¥¹¤À¤±¤ò¸«¤ë¥â¡¼¥É¤Ø¤Î°Ü¹Ô @kbd{h} ¤Ç¤Ç
-¤­¡¢±£¤·¤¿¥ì¥¹¤ò¸«¤ë¥â¡¼¥É¤Ç @kbd{d} ¤ò²¡¤»¤Ð¤Þ¤¿ÄÌ¾ï¥â¡¼¥É¤Ç¤ß¤ë¤³¤È¤¬
-¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ë¡£
+$B%9%l$r1#$9(B(@ref{Hide Thread}) $B;~$HF1MM$K!"(B @kbd{d} $B$G%l%9$r1#$9$3$H$,$G(B
+$B$-$k!#DL>o$N0lMw%b!<%I$H1#$7$?%l%9$@$1$r8+$k%b!<%I$X$N0\9T(B @kbd{h} $B$G$G(B
+$B$-!"1#$7$?%l%9$r8+$k%b!<%I$G(B @kbd{d} $B$r2!$;$P$^$?DL>o%b!<%I$G$_$k$3$H$,(B
+$B$G$-$k$h$&$K$J$k!#(B
 
-ÆÃÄê¤Î¥ì¥¹¤ò¥Ö¥Ã¥¯¥Þ¡¼¥¯¤·¤¿¤¤¾ì¹ç¤Ï¡¢¥«¡¼¥½¥ë¤ò¤½¤Î¥ì¥¹¤Ë¹ç¤ï¤»¤¿¾å¤Ç
-@kbd{a} ¤ò²¡¤¹¡£¥Ö¥Ã¥¯¥Þ¡¼¥¯¤µ¤ì¤¿¥ì¥¹¤ò¸«¤ë¤Ë¤Ï @kbd{$} ¤ò²¡¤¹¡£ºÆÅÙ
-@kbd{$} ¤ò²¡¤»¤Ð¸µ¤Î¥ì¥¹°ìÍ÷¾õÂÖ¤ËÌá¤ë¡£
+$BFCDj$N%l%9$r%V%C%/%^!<%/$7$?$$>l9g$O!"%+!<%=%k$r$=$N%l%9$K9g$o$;$?>e$G(B
+@kbd{a} $B$r2!$9!#%V%C%/%^!<%/$5$l$?%l%9$r8+$k$K$O(B @kbd{$} $B$r2!$9!#:FEY(B
+@kbd{$} $B$r2!$;$P85$N%l%90lMw>uBV$KLa$k!#(B
 
-Navi2ch ¤Ë¤Ï¡¢@code{>>1} ¤Ê¤É¤Î¤è¤¦¤Ëµ­½Ò¤µ¤ì¤¿Â¾¤Î¥ì¥¹»²¾È¤ä¡¢
-@code{http://} ¤Ç»Ï¤Þ¤ë¥ê¥ó¥¯¤Ê¤É¤ò³Ú¤ËÄÉ¤¤¤«¤±¤é¤ì¤ëµ¡Ç½¤¬ÍÑ°Õ¤µ¤ì¤Æ¤¤
-¤ë¡£@kbd{@key{TAB}} ¤ò²¡¤¹¤³¤È¤Ç¡¢¥«¡¼¥½¥ë¤è¤ê¸å¤Ë¤¢¤ë¤½¤ì¤é¤Î¥ê¥ó¥¯¤Ë°ÜÆ°¤Ç¤­¡¢
-¤½¤Î¾õÂÖ¤Ç @kbd{@key{RET}} ¤ò²¡¤¹¤³¤È¤Ç³ºÅö¤¹¤ëÈÖ¹æ¤Î¥ì¥¹¤ËÈô¤ó¤À¤ê¡¢»²¾È¤·¤Æ
-¤¤¤ë URL ¤ò°ú¿ô¤Ë¥Ö¥é¥¦¥¶¤ò¸Æ¤Ó½Ð¤·¤¿¤ê¤Ç¤­¤ë¡£
-¥ì¥¹»²¾È¤·¤¿¤Î¤Á¡¢@kbd{l} ¤ò²¡¤¹¤³¤È¤Ç¸µ¤Î¥ì¥¹¤ËÌá¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-¤Þ¤¿¡¢Ìá¤ê¤¹¤®¤¿¤é @kbd{L} ¤ò²¡¤¹¤³¤È¤ÇµÕÊý¸þ¤ËÌá¤ë»ö¤¬¤Ç¤­¤ë¡£
+Navi2ch $B$K$O!"(B@code{>>1} $B$J$I$N$h$&$K5-=R$5$l$?B>$N%l%9;2>H$d!"(B
+@code{http://} $B$G;O$^$k%j%s%/$J$I$r3Z$KDI$$$+$1$i$l$k5!G=$,MQ0U$5$l$F$$(B
+$B$k!#(B@kbd{@key{TAB}} $B$r2!$9$3$H$G!"%+!<%=%k$h$j8e$K$"$k$=$l$i$N%j%s%/$K0\F0$G$-!"(B
+$B$=$N>uBV$G(B @kbd{@key{RET}} $B$r2!$9$3$H$G3:Ev$9$kHV9f$N%l%9$KHt$s$@$j!";2>H$7$F(B
+$B$$$k(B URL $B$r0z?t$K%V%i%&%6$r8F$S=P$7$?$j$G$-$k!#(B
+$B%l%9;2>H$7$?$N$A!"(B@kbd{l} $B$r2!$9$3$H$G85$N%l%9$KLa$k$3$H$,$G$-$k!#(B
+$B$^$?!"La$j$9$.$?$i(B @kbd{L} $B$r2!$9$3$H$G5UJ}8~$KLa$k;v$,$G$-$k!#(B
 
-¥ì¥¹¤ò½ñ¤­¤¿¤¤»þ¤Ï @kbd{w} (age ¤Ç½ñ¤¯»þ) ¤Þ¤¿¤Ï @kbd{W} (sage ¤Ç½ñ¤¯
-»þ) ¤ò²¡¤¹¡£
+$B%l%9$r=q$-$?$$;~$O(B @kbd{w} (age $B$G=q$/;~(B) $B$^$?$O(B @kbd{W} (sage $B$G=q$/(B
+$B;~(B) $B$r2!$9!#(B
 
-@kbd{?} ¤ò²¡¤¹¤È¡¢¥ì¥¹¤ò¸¡º÷¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-Ì¾Á° (name)¡¢¥á¡¼¥ë (mail)¡¢ÆüÉÕ (date)¡¢ID (id)¡¢ËÜÊ¸ (body) ¤«¤é
-¸¡º÷¾ò·ï¤òÁª¤Ó¡¢¸¡º÷¤·¤¿¤¤Ê¸»úÎó¤òÆþÎÏ¤¹¤ë¡£
-¥Ñ¡¼¥ººÑ¤ß¤Î¥á¥Ã¥»¡¼¥¸¤Î¤ß¤ò¸¡º÷ÂÐ¾Ý¤È¤¹¤ë¤Î¤Ç¡¢¤¢¤é¤«¤¸¤á
-¸¡º÷¤·¤¿¤¤ÈÏ°Ï¤Î¥á¥Ã¥»¡¼¥¸¤òÉ½¼¨¤·¤Æ¤ª¤¯¤³¤È¡£
+@kbd{?} $B$r2!$9$H!"%l%9$r8!:w$9$k$3$H$,$G$-$k!#(B
+$BL>A0(B (name)$B!"%a!<%k(B (mail)$B!"F|IU(B (date)$B!"(BID (id)$B!"K\J8(B (body) $B$+$i(B
+$B8!:w>r7o$rA*$S!"8!:w$7$?$$J8;zNs$rF~NO$9$k!#(B
+$B%Q!<%::Q$_$N%a%C%;!<%8$N$_$r8!:wBP>]$H$9$k$N$G!"$"$i$+$8$a(B
+$B8!:w$7$?$$HO0O$N%a%C%;!<%8$rI=<($7$F$*$/$3$H!#(B
 
-¸¡º÷·ë²Ì¤ÎÉ½¼¨¥Ð¥Ã¥Õ¥¡¤Ç¤Ï¡¢@kbd{D} ¤ò²¡¤¹¤ÈÉ½¼¨¤µ¤ì¤Æ¤¤¤ë¥ì¥¹¤ò¤Þ¤È¤á
-¤Æ±£¤¹¤³¤È¤¬¤Ç¤­¡¢@kbd{A} ¤ò²¡¤¹¤ÈÆ±ÍÍ¤Ë¤Þ¤È¤á¤Æ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤¹¤ë¤³¤È¤¬
-¤Ç¤­¤ë¡£¤Þ¤¿¡¢¤³¤ì¤é¤ÎÁàºî¤ÎÂÐ¾Ý¤Ë¤·¤¿¤¯¤Ê¤¤¥ì¥¹¤¬¤¢¤ë¤È¤­¤Ï¡¢@kbd{d}
-¤Ç¥«¡¼¥½¥ë°ÌÃÖ¤Î¥ì¥¹¤ò½ü³°¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£´Ö°ã¤Ã¤Æ½ü³°¤·¤Æ¤·¤Þ¤Ã¤¿¤È
-¤­¤Ï¡¢@kbd{C-u d} ¤Ç¥ì¥¹¤¬Éü³è¤¹¤ë¡£
+$B8!:w7k2L$NI=<(%P%C%U%!$G$O!"(B@kbd{D} $B$r2!$9$HI=<($5$l$F$$$k%l%9$r$^$H$a(B
+$B$F1#$9$3$H$,$G$-!"(B@kbd{A} $B$r2!$9$HF1MM$K$^$H$a$F%V%C%/%^!<%/$9$k$3$H$,(B
+$B$G$-$k!#$^$?!"$3$l$i$NA`:n$NBP>]$K$7$?$/$J$$%l%9$,$"$k$H$-$O!"(B@kbd{d}
+$B$G%+!<%=%k0LCV$N%l%9$r=|30$9$k$3$H$,$G$-$k!#4V0c$C$F=|30$7$F$7$^$C$?$H(B
+$B$-$O!"(B@kbd{C-u d} $B$G%l%9$,I|3h$9$k!#(B
 
 @menu
-* Article View Range::          ¥¹¥ì¤ÎÉ½¼¨ÈÏ°Ï
-* Article Message Filter::      ¥ì¥¹¤Î¥Õ¥£¥ë¥¿½èÍý
+* Article View Range::          $B%9%l$NI=<(HO0O(B
+* Article Message Filter::      $B%l%9$N%U%#%k%?=hM}(B
 @end menu
 
 @node Article View Range
-@subsection ¥¹¥ì¤ÎÉ½¼¨ÈÏ°Ï
+@subsection $B%9%l$NI=<(HO0O(B
+@cindex $B%9%l$NI=<(HO0O(B
+@vindex navi2ch-article-auto-range
+@vindex navi2ch-article-new-message-range
+@vindex navi2ch-article-exist-message-range
 
-Navi2ch ¤Ç¤Ï¡¢¥¹¥ìÃæ¤Î¤¹¤Ù¤Æ¤Î¥ì¥¹¤ò°ìÅÙ¤Ë½èÍý¤¹¤ë¤Î¤ÏÉé²Ù¤¬¹â¤¤¤¿¤á¡¢
-É½¼¨¤¹¤ë¥¹¥ì¤ò°ìÉô¤Î¥ì¥¹¤Î¤ß¤Ë¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+Navi2ch $B$G$O!"%9%lCf$N$9$Y$F$N%l%9$r0lEY$K=hM}$9$k$N$OIi2Y$,9b$$$?$a!"(B
+$BI=<($9$k%9%l$r0lIt$N%l%9$N$_$K$9$k$3$H$,$G$-$k!#(B
 
-¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¡¢¤½¤Î¥¹¥ì¤ò½é¤á¤Æ³«¤¤¤¿¾ì¹ç¤ÏÀèÆ¬¤Î 100 ¥ì¥¹¤ÈºÇ¸å¤Î¥ì
-¥¹¡¢°ÊÁ°³«¤¤¤¿»ö¤¬¤¢¤ë¾ì¹ç¤ÏÀèÆ¬¤Î¥ì¥¹¤ÈºÇ¸å¤Î 100 ¥ì¥¹¤¬É½¼¨¤µ¤ì¤ë¡£
-¤³¤ÎÆ°ºî¤òÊÑ¤¨¤¿¤¤¾ì¹ç¤Ï @code{navi2ch-article-auto-range}¡¢
-@code{navi2ch-article-new-message-range}¡¢
-@code{navi2ch-article-exist-message-range} ¤òÊÑ¹¹¤¹¤ë¡£@xref{Customize}.
+$B%G%U%)%k%H$G$O!"$=$N%9%l$r=i$a$F3+$$$?>l9g$O@hF,$N(B 100 $B%l%9$H:G8e$N%l(B
+$B%9!"0JA03+$$$?;v$,$"$k>l9g$O@hF,$N%l%9$H:G8e$N(B 100 $B%l%9$,I=<($5$l$k!#(B
+$B$3$NF0:n$rJQ$($?$$>l9g$O(B @code{navi2ch-article-auto-range}$B!"(B
+@code{navi2ch-article-new-message-range}$B!"(B
+@code{navi2ch-article-exist-message-range} $B$rJQ99$9$k!#(B@xref{Customize}.
 
-¸½ºßÉ½¼¨Ãæ¤Î¥¹¥ì¤ÎÉ½¼¨ÎÎ°è¤òÊÑ¤¨¤¿¤¤¾ì¹ç¤Ï @kbd{r} ¤ò²¡¤¹¡£
+$B8=:_I=<(Cf$N%9%l$NI=<(NN0h$rJQ$($?$$>l9g$O(B @kbd{r} $B$r2!$9!#(B
 
 @node Article Message Filter
-@subsection ¥ì¥¹¤Î¥Õ¥£¥ë¥¿½èÍý
+@subsection $B%l%9$N%U%#%k%?=hM}(B
+@cindex $B%l%9$N%U%#%k%?=hM}(B
+@cindex $B$"$\!<$s(B
+@cindex $B%U%#%k%?$NM-8z(B/$BL58z$N@Z$jBX$((B
+@cindex $BCV49$($NM-8z(B/$BL58z$N@Z$jBX$((B
+@vindex navi2ch-article-message-replace-below
+@vindex navi2ch-article-message-hide-below
+@vindex navi2ch-article-message-add-important-above
 
-Navi2ch ¤Ë¤Ï¡¢Ì¾Á°¤äËÜÊ¸Ãæ¤Î¸ì¶ç¤Ê¤É¡¢¥ì¥¹¤Ë´Þ¤Þ¤ì¤ëÆÃÄê¤ÎÊ¸»úÎó¤ò¾ò·ï
-¤È¤·¤Æ¥Õ¥£¥ë¥¿¤¹¤ëµ¡Ç½¤¬ÍÑ°Õ¤µ¤ì¤Æ¤¤¤ë¡£
+Navi2ch $B$K$O!"L>A0$dK\J8Cf$N8l6g$J$I!"%l%9$K4^$^$l$kFCDj$NJ8;zNs$r>r7o(B
+$B$H$7$F%U%#%k%?$9$k5!G=$,MQ0U$5$l$F$$$k!#(B
 
-¥¹¥ì±ÜÍ÷Ãæ¤Ë @kbd{!} ¤ò²¡¤¹¤È¡¢
+$B%9%l1\MwCf$K(B @kbd{!} $B$r2!$9$H!"(B
 
 @enumerate
 @item
-Ì¾Á° (name)¡¢¥á¡¼¥ëÍó (mail)¡¢ÆüÉÕ (date)¡¢ID (id)¡¢ËÜÊ¸ (body)¡¢¥¹¥ì
-¤Î¥¿¥¤¥È¥ë (subject) ¤Î¤¦¤Á¡¢¤É¤Î¹àÌÜ¤Ç¥Õ¥£¥ë¥¿¤¹¤ë¤«¡£
+$BL>A0(B (name)$B!"%a!<%kMs(B (mail)$B!"(BID (id)$B!"%[%9%HL>(B/IP (hostname)$B!"K\J8(B
+(body)$B!"%9%l$N%?%$%H%k(B (subject) $B$N$&$A!"$I$N9`L\$G%U%#%k%?$9$k$+!#(B
 
 @item
-¥ì¥¹¤ò¸¡ºº¤¹¤ëÊýË¡¤ò¡¢³ÈÄ¥·Á¼°¤Ë¤è¤Ã¤Æ¤¯¤ï¤·¤¯»ØÄê¤¹¤ë (Use extended
-matching) ¤«¡£
+$B%l%9$r8!::$9$kJ}K!$r!"3HD%7A<0$K$h$C$F$/$o$7$/;XDj$9$k(B (Use extended
+matching) $B$+!#(B
 
-³ÈÄ¥·Á¼°¤Ç»ØÄê¤¹¤ë¾ì¹ç¡¢ÉôÊ¬°ìÃ× (substring)¡¢¤¢¤¤¤Þ¤¤°ìÃ×(fuzzy)¡¢´°
-Á´°ìÃ× (exact)¡¢Àµµ¬É½¸½ (regexp) ¤Î¤¦¤Á¡¢¤É¤ÎÊýË¡¤ò»È¤¦¤«¡£
+$B3HD%7A<0$G;XDj$9$k>l9g!"ItJ,0lCW(B (substring)$B!"$"$$$^$$0lCW(B(fuzzy)$B!"40(B
+$BA40lCW(B (exact)$B!"@55,I=8=(B (regexp) $B$N$&$A!"$I$NJ}K!$r;H$&$+!#(B
 
-¤½¤ÎºÝ¡¢ÂçÊ¸»ú¤È¾®Ê¸»ú¤Î°ã¤¤¤ÏÌµ»ë¤¹¤ë (Ignore case) ¤«¡£
-Ê¸»úÎó°ìÃ×¤Î¿¿µ¶¤òµÕÅ¾¤·¤ÆÈ½Äê¤¹¤ë (Invert match) ¤«¡£
+$B$=$N:]!"BgJ8;z$H>.J8;z$N0c$$$OL5;k$9$k(B (Ignore case) $B$+!#(B
+$BJ8;zNs0lCW$N??56$r5UE>$7$FH=Dj$9$k(B (Invert match) $B$+!#(B
 
-¤½¤ÎÂ¾¤Î¥ª¥×¥·¥ç¥ó¤Ë¤Ä¤¤¤Æ¤Î»ØÄê¤Ï¤É¤¦¤¹¤ë¤«¡£
+$B$=$NB>$N%*%W%7%g%s(B($BH=Dj=g0L>e$2(B(float)$B$H!"%U%#%k%?M-8zHO0O(B(scope))$B$r;X(B
+$BDj$9$k$+!#(B
 
-@item
-¤É¤ó¤ÊÊ¸»úÎó¤ò¥Õ¥£¥ë¥¿ÂÐ¾Ý¤Ë¤¹¤ë¤«¡£
+$BH=Dj=g0L>e$2$r;XDj$9$k;~$O!"7h$7$F>e$2$J$$(B(never)$B$+!">o$K>e$2$k(B
+(always)$B$+!"%G%U%)%k%HF0:n(B(default)$B$+!#(B
 
-@item
-¾ò·ï¤¬°ìÃ×¤·¤¿¥ì¥¹¤ËÂÐ¤·¡¢ÃÖ¤­´¹¤¨¤ë (replace)¡¢±£¤¹ (hide)¡¢¥Ö¥Ã¥¯¥Þ¡¼
-¥¯¤¹¤ë (important)¡¢ÅÀ¿ô¤ò²Ã¤¨¤ë (score) ¤Î¤¦¤Á¡¢¤É¤Î½èÍý¤ò¤ª¤³¤Ê¤¦¤«¡£
-
-ÃÖ¤­´¹¤¨¤ë¾ì¹ç¤Ï¡¢¤É¤¦ÃÖ¤­´¹¤¨¤ë¤«¡£
-ÅÀ¿ô¤ò²Ã¤¨¤ë¾ì¹ç¤Ï¡¢²¿ÅÀ²Ã¤¨¤ë¤«¡£
+$B%U%#%k%?M-8zHO0O$r;XDj$9$k;~$O!"HDFb$N$_(B(board-local)$B$+!"%9%lFb$N$_(B
+(article-local)$B$+!"%G%U%)%k%HF0:n(B(default)$B$+!#(B
 
 @item
-ÀßÄê¤·¤¿¥Õ¥£¥ë¥¿¤ò±ÜÍ÷Ãæ¤Î¥¹¥ì¤Ëº£¤¹¤°È¿±Ç¤µ¤»¤ë¤«¡£
+$B$I$s$JJ8;zNs$r%U%#%k%?BP>]$K$9$k$+!#(B
+
+@item
+$B>r7o$,0lCW$7$?%l%9$KBP$7!"CV$-49$($k(B (replace)$B!"1#$9(B (hide)$B!"%V%C%/%^!<(B
+$B%/$9$k(B (important)$B!"E@?t$r2C$($k(B (score) $B$N$&$A!"$I$N=hM}$r$*$3$J$&$+!#(B
+
+$BCV$-49$($k>l9g$O!"$I$&CV$-49$($k$+!#(B
+$BE@?t$r2C$($k>l9g$O!"2?E@2C$($k$+!#(B
+
+@item
+$B@_Dj$7$?%U%#%k%?$r1\MwCf$N%9%l$K:#$9$0H?1G$5$;$k$+!#(B
 @end enumerate
 
-¤¬½çÈÖ¤Ë¼ÁÌä¤µ¤ì¡¢¤³¤ì¤ËÅú¤¨¤Æ¤¤¤¯¤È¡¢ÂÐ±þ¤¹¤ëÊÑ¿ô¤ÎÀßÄêÃÍ¤¬¼«Æ°Åª¤Ë¹¹
-¿·¤µ¤ì¤ë¡£
+$B$,=gHV$K<ALd$5$l!"$3$l$KEz$($F$$$/$H!"BP1~$9$kJQ?t$N@_DjCM$,<+F0E*$K99(B
+$B?7$5$l$k!#(B
 
-Ê£¿ô¤Î¹àÌÜ¡¢Îã¤¨¤Ð¥¹¥ì¤Î¥¿¥¤¥È¥ë¤È¥ì¥¹ËÜÊ¸¤ÎÎ¾Êý¤ò¾ò·ï¤È¤·¤Æ¥Õ¥£¥ë¥¿¤·
-¤¿¤¤¾ì¹ç¤Ï¡¢¤Þ¤º¥¹¥ì¥¿¥¤¤ÈËÜÊ¸¤Ë¤è¤Ã¤Æ¥ì¥¹¤ËÅÀ¿ô¤òÉÕ¤±¡¢¤Ä¤®¤Ë¹ç·×ÅÀ¿ô
-¤Ë¤è¤Ã¤Æ¥ì¥¹¤¬¤¦¤Þ¤¯¥Õ¥£¥ë¥¿¤µ¤ì¤ë¤è¤¦¤Ë¡¢
-@code{navi2ch-article-message-replace-below}¡¢
-@code{navi2ch-article-message-hide-below}¡¢
-@code{navi2ch-article-message-add-important-above} ¤òÀßÄê¤¹¤ë¤È¤è¤¤¡£
+$BJ#?t$N9`L\!"Nc$($P%9%l$N%?%$%H%k$H%l%9K\J8$NN>J}$r>r7o$H$7$F%U%#%k%?$7(B
+$B$?$$>l9g$O!"$^$:%9%l%?%$$HK\J8$K$h$C$F%l%9$KE@?t$rIU$1!"$D$.$K9g7WE@?t(B
+$B$K$h$C$F%l%9$,$&$^$/%U%#%k%?$5$l$k$h$&$K!"(B
+@code{navi2ch-article-message-replace-below}$B!"(B
+@code{navi2ch-article-message-hide-below}$B!"(B
+@code{navi2ch-article-message-add-important-above} $B$r@_Dj$9$k$H$h$$!#(B
 @xref{Customize}.
 
-¥¹¥ì±ÜÍ÷Ãæ¤Ë @kbd{F} ¤ò²¡¤¹¤È¡¢¥Õ¥£¥ë¥¿¤ÎÍ­¸ú¡¦Ìµ¸ú¤òÀÚ¤êÂØ¤¨¤ë¤³¤È¤¬
-¤Ç¤­¤ë¡£¤Þ¤¿¡¢¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¥Õ¥£¥ë¥¿½èÍý¤Î·ë²Ì¤Ï¥­¥ã¥Ã¥·¥å¤µ¤ì¡¢°ìÅÙ¸¡
-ºº¤µ¤ì¤¿¥ì¥¹¤ÏºÆÅÙ¸¡ºº¤µ¤ì¤Ê¤¤¤è¤¦¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤¬¡¢¥Õ¥£¥ë¥¿½èÍý¤Î¾ò·ï¤ò
-ÊÑ¹¹¤·¤¿¤È¤­¤Ê¤É¤¢¤é¤¿¤á¤Æ¥ì¥¹¤ò¸¡ºº¤·¤¿¤¤¾ì¹ç¤Ë¤Ï¡¢@kbd{C-u F} ¤ò²¡¤¹
-¤È¥­¥ã¥Ã¥·¥å¤¬¹¹¿·¤µ¤ì¤ë¡£
+$B%9%l1\MwCf$K(B @kbd{F} $B$r2!$9$H!"%U%#%k%?$NM-8z!&L58z$r@Z$jBX$($k$3$H$,(B
+$B$G$-$k!#$^$?!"%G%U%)%k%H$G$O%U%#%k%?=hM}$N7k2L$O%-%c%C%7%e$5$l!"0lEY8!(B
+$B::$5$l$?%l%9$O:FEY8!::$5$l$J$$$h$&$K$J$C$F$$$k$,!"%U%#%k%?=hM}$N>r7o$r(B
+$BJQ99$7$?$H$-$J$I$"$i$?$a$F%l%9$r8!::$7$?$$>l9g$K$O!"(B@kbd{C-u F} $B$r2!$9(B
+$B$H%-%c%C%7%e$,99?7$5$l$k!#(B
 
-¥«¡¼¥½¥ë°ÌÃÖ¤Î¥ì¥¹¤¬¥Õ¥£¥ë¥¿¤Ë¤è¤êÃÖ¤­´¹¤¨¤é¤ì¤Æ¤¤¤¿¾ì¹ç¡¢@kbd{x} ¤ò²¡
-¤¹¤È¤½¤Î¥ì¥¹¤ÎÃÖ¤­´¹¤¨¤ÎÍ­¸ú¡¦Ìµ¸ú¤òÀÚ¤êÂØ¤¨¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+$B%+!<%=%k0LCV$N%l%9$,%U%#%k%?$K$h$jCV$-49$($i$l$F$$$?>l9g!"(B@kbd{x} $B$r2!(B
+$B$9$H$=$N%l%9$NCV$-49$($NM-8z!&L58z$r@Z$jBX$($k$3$H$,$G$-$k!#(B
 
 @node Message Mode
-@section Message ¥â¡¼¥É
+@section Message $B%b!<%I(B
+@cindex Message $B%b!<%I(B
+@cindex $B%l%9$r=q$/(B
+@cindex $B%l%90zMQ(B
+@cindex AA$BF~NO(B
 
-¥ì¥¹¤ò½ñ¤¯ºÝ¤Ï²èÌÌ¤¬¾å²¼2¤Ä¤Î¥Ú¥¤¥ó¤ËÊ¬¤«¤ì¡¢¾å¤Ë¤Ï¤³¤ì¤Þ¤Ç¸«¤Æ¤¤¤¿¥¹
-¥ì¤¬¡¢²¼¤Ë¤Ï Message ¥â¡¼¥É ¤¬É½¼¨¤µ¤ì¤ë¡£
+$B%l%9$r=q$/:]$O2hLL$,>e2<(B2$B$D$N%Z%$%s$KJ,$+$l!">e$K$O$3$l$^$G8+$F$$$?%9(B
+$B%l$,!"2<$K$O(B Message $B%b!<%I(B $B$,I=<($5$l$k!#(B
 
 @example
 @group
@@ -839,44 +920,46 @@ Mail:
 @end group
 @end example
 
-@code{From:} ¤Î¸å¤Ë¥Ï¥ó¥É¥ë¤ò¡¢@code{Mail:} ¤Î¸å¤ËÉ¬Í×¤Ê¤é
-@code{sage} ¤òÆþÎÏ¤·¡¢@code{----------------} ¤Î¼¡¤Î¹Ô¤«¤é¥ì¥¹¤ò½ñ¤¯¡£
+@code{From:} $B$N8e$K%O%s%I%k$r!"(B@code{Mail:} $B$N8e$KI,MW$J$i(B
+@code{sage} $B$rF~NO$7!"(B@code{----------------} $B$N<!$N9T$+$i%l%9$r=q$/!#(B
 
-@kbd{C-c C-y} ¤ÈÆþÎÏ¤¹¤ë¤È¡¢¸«¤Æ¤¤¤¿¥ì¥¹¤ò°Ê²¼¤Î¤è¤¦¤Ë°úÍÑ¤¹¤ë¤³¤È¤¬¤Ç
-¤­¤ë¡£
+@kbd{C-c C-y} $B$HF~NO$9$k$H!"8+$F$$$?%l%9$r0J2<$N$h$&$K0zMQ$9$k$3$H$,$G(B
+$B$-$k!#(B
 
 @example
 @group
 >>5
-> ¤µ¤Ã¤½¤¯¤½¤ÎSR¤òmonitorÀßÄê¤·¤È¤­¤Þ¤·¤¿¡£
-> ¤Ï¤ä¤¯ÅÐÏ¿¤µ¤ì¤ë¤È¤¤¤¤¤Ç¤¹¤Í¡£
+> $B$5$C$=$/$=$N(BSR$B$r(Bmonitor$B@_Dj$7$H$-$^$7$?!#(B
+> $B$O$d$/EPO?$5$l$k$H$$$$$G$9$M!#(B
 @end group
 @end example
 
-@kbd{C-c C-a ±Ñ»ú¥­¡¼} ¤Ç¥¢¥¹¥­¡¼¥¢¡¼¥È¤òÆþÎÏ (@ref{Message Mode AA
-List}) ¤·¤¿¤ê¤·¤Æ¡¢»×¤¦Â¸Ê¬Àú¤êÊ¸¶ç¤ò½ñ¤¤¤¿¤é¡¢@kbd{C-c C-c} ¤Ç½ñ¤­¹þ
-¤ß¤ò´°Î»¤¹¤ë¡£
+@kbd{C-c C-a $B1Q;z%-!<(B} $B$G%"%9%-!<%"!<%H$rF~NO(B (@ref{Message Mode AA
+List}) $B$7$?$j$7$F!";W$&B8J,@z$jJ86g$r=q$$$?$i!"(B@kbd{C-c C-c} $B$G=q$-9~(B
+$B$_$r40N;$9$k!#(B
 
-½ñ¤­¹þ¤ß¤ò¥­¥ã¥ó¥»¥ë¤¹¤ë¤Ë¤Ï¡¢@kbd{C-c C-k} ¤ÈÆþÎÏ¤¹¤ë¡£
+$B=q$-9~$_$r%-%c%s%;%k$9$k$K$O!"(B@kbd{C-c C-k} $B$HF~NO$9$k!#(B
 
-½ñ¤­¹þ¤ßÃæ¤ËÂ¾¤Î¥¹¥ì¤ò¸«¤ë¤Ê¤É¤ÇÊÌ¤Ê (Navi2ch ¤Î)
-¥Ð¥Ã¥Õ¥¡¤Ë°ÜÆ°¤·¤¿¤È¤­¤Ï¡¢@kbd{C-c C-o}
-¤Ç¸µ¤Î¡Ö¾å¤Î¥Ð¥Ã¥Õ¥¡¤¬½ñ¤­¹þ¤à¥¹¥ì¡¢²¼¤Î¥Ð¥Ã¥Õ¥¡¤Ç¥ì¥¹¤ò½ñ¤¯¡×¤Î¾õÂÖ¤ËÌá¤»¤ë¡£
+$B=q$-9~$_Cf$KB>$N%9%l$r8+$k$J$I$GJL$J(B (Navi2ch $B$N(B)
+$B%P%C%U%!$K0\F0$7$?$H$-$O!"(B@kbd{C-c C-o}
+$B$G85$N!V>e$N%P%C%U%!$,=q$-9~$`%9%l!"2<$N%P%C%U%!$G%l%9$r=q$/!W$N>uBV$KLa$;$k!#(B
 
 @menu
-* Saving Send Log::             Á÷¿®¹µ¤¨¤ò¤È¤ë
+* Saving Send Log::             $BAw?.95$($r$H$k(B
 @end menu
 
 @node Saving Send Log
-@subsection Á÷¿®¹µ¤¨¤ò¤È¤ë
+@subsection $BAw?.95$($r$H$k(B
+@cindex $BAw?.95$((B
+@vindex navi2ch-message-save-sendlog
 
-¼«Ê¬¤Î½ñ¤¤¤¿¥ì¥¹¤òÊÝÂ¸¤·¤Æ¤ª¤¯¤³¤È¤¬¤Ç¤­¤ë¡£
-¤¿¤À¤·¡¢¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¹µ¤¨¤ò¤È¤é¤Ê¤¤¡£
+$B<+J,$N=q$$$?%l%9$rJ]B8$7$F$*$/$3$H$,$G$-$k!#(B
+$B$?$@$7!"%G%U%)%k%H$G$O95$($r$H$i$J$$!#(B
 
-¹µ¤¨¤ò¤È¤ë¤Ë¤Ï¡¢¥«¥¹¥¿¥Þ¥¤¥º¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹
-(@ref{Emacs Customization Interface}) ¤òÍøÍÑ¤·¤Æ
-@code{navi2ch-message-save-sendlog} ¤ò non-nil ¤Ë¤¹¤ë¤«¡¢
-½é´ü²½¥Õ¥¡¥¤¥ë (@ref{Init File}) ¤Ë°Ê²¼¤Î¤è¤¦¤Ë½ñ¤¤¤Æ¤ª¤¯¡£
+$B95$($r$H$k$K$O!"%+%9%?%^%$%:%$%s%?!<%U%'%$%9(B
+(@ref{Emacs Customization Interface}) $B$rMxMQ$7$F(B
+@code{navi2ch-message-save-sendlog} $B$r(B non-nil $B$K$9$k$+!"(B
+$B=i4|2=%U%!%$%k(B (@ref{Init File}) $B$K0J2<$N$h$&$K=q$$$F$*$/!#(B
 
 @lisp
 (setq navi2ch-message-save-sendlog t)
@@ -884,172 +967,191 @@ List}) ¤·¤¿¤ê¤·¤Æ¡¢»×¤¦Â¸Ê¬Àú¤êÊ¸¶ç¤ò½ñ¤¤¤¿¤é¡¢@kbd{C-c C-c} ¤Ç½ñ¤­¹þ
               navi2ch-message-sendlog-board)
 @end lisp
 
-¤³¤Î¤è¤¦¤Ë¤¹¤ë¤È¡¢¡ÖNavi2ch¡×¥«¥Æ¥´¥ê¤Ë¡ÖÁ÷¿®¹µ¤¨¡×ÈÄ¤¬ÄÉ²Ã¤µ¤ì¤ë¡£
+$B$3$N$h$&$K$9$k$H!"!V(BNavi2ch$B!W%+%F%4%j$K!VAw?.95$(!WHD$,DI2C$5$l$k!#(B
 @xref{List Mode}.
 
-@subsection Á÷¿®¹µ¤¨¤Î¥ì¥¹¤ÎÉ½¼¨
+@subsection $BAw?.95$($N%l%9$NI=<((B
+@vindex navi2ch-message-sendlog-message-format-function
 
-Á÷¿®¹µ¤¨¤Î¥ì¥¹¤ÎÉ½¼¨¤Ï¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï°Ê²¼¤Î¤è¤¦¤Ë¤Ê¤Ã¤Æ¤¤¤ë¡£
+$BAw?.95$($N%l%9$NI=<($O%G%U%)%k%H$G$O0J2<$N$h$&$K$J$C$F$$$k!#(B
 
 @example
 @group
 Subject: Navi2ch for Emacs (Part 14)
 URL: http://pc5.2ch.net/test/read.cgi/unix/1106152504/
 
-hide ¤µ¤ì¤¿¤ä¤Ä¤ÎÉ½¼¨¤ò¤Á¤ç¤Ã¤ÈÊÑ¤¨¤Æ¤ß¤Þ¤·¤¿¡£
-ÉÔËþ¤¬¤¢¤Ã¤¿¤é¤É¤¦¤¾¡£
+hide $B$5$l$?$d$D$NI=<($r$A$g$C$HJQ$($F$_$^$7$?!#(B
+$BITK~$,$"$C$?$i$I$&$>!#(B
 ____________________________________________________________
 @end group
 @end example
 
-ÈÄÌ¾¤âÉ½¼¨¤·¤¿¤¤¤È»×¤¦¤Ê¤é°Ê²¼¤Î¤è¤¦¤ËÀßÄê¤¹¤ì¤Ð¤¤¤¤¡£
+$BHDL>$bI=<($7$?$$$H;W$&$J$i0J2<$N$h$&$K@_Dj$9$l$P$$$$!#(B
 
 @lisp
 (setq navi2ch-message-sendlog-message-format-function
       'navi2ch-message-sendlog-message-format-with-board-name)
 @end lisp
 
-¤¹¤ë¤È¡¢Á÷¿®¹µ¤¨¤Î¥ì¥¹¤¬°Ê²¼¤Î¤è¤¦¤Ë¤Ê¤ë¡£
+$B$9$k$H!"Aw?.95$($N%l%9$,0J2<$N$h$&$K$J$k!#(B
 
 @example
 @group
 [UNIX]: Navi2ch for Emacs (Part 14)
 URL: http://pc5.2ch.net/test/read.cgi/unix/1106152504/
 
-hide ¤µ¤ì¤¿¤ä¤Ä¤ÎÉ½¼¨¤ò¤Á¤ç¤Ã¤ÈÊÑ¤¨¤Æ¤ß¤Þ¤·¤¿¡£
-ÉÔËþ¤¬¤¢¤Ã¤¿¤é¤É¤¦¤¾¡£
+hide $B$5$l$?$d$D$NI=<($r$A$g$C$HJQ$($F$_$^$7$?!#(B
+$BITK~$,$"$C$?$i$I$&$>!#(B
 ____________________________________________________________
 @end group
 @end example
 
 
 @node Customize
-@chapter ¥«¥¹¥¿¥Þ¥¤¥º
+@chapter $B%+%9%?%^%$%:(B
+@cindex $B%+%9%?%^%$%:(B
 
 @menu
-* Emacs Customization Interface::  Emacs ¤Î¥«¥¹¥¿¥Þ¥¤¥º¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹
-                                   ¤òÍøÍÑ¤¹¤ë
-* Init File::                   ½é´ü²½¥Õ¥¡¥¤¥ë
-* Other Boards File::           ¤½¤ÎÂ¾¤Î¥«¥Æ¥´¥ê¤ËÆþ¤ì¤ëÈÄ¤òÄÉ²Ã¤¹¤ë
-* Mona Font::                   ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦
+* Emacs Customization Interface::  Emacs $B$N%+%9%?%^%$%:%$%s%?!<%U%'%$%9(B
+                                   $B$rMxMQ$9$k(B
+* Init File::                   $B=i4|2=%U%!%$%k(B
+* Other Boards File::           $B$=$NB>$N%+%F%4%j$KF~$l$kHD$rDI2C$9$k(B
+* Mona Font::                   $B%b%J!<%U%)%s%H$r;H$&(B
 @end menu
 
 @node Emacs Customization Interface
-@section Emacs ¤Î¥«¥¹¥¿¥Þ¥¤¥º¥¤¥ó¥¿¡¼¥Õ¥§¥¤¥¹¤òÍøÍÑ¤¹¤ë¡£
+@section Emacs $B$N%+%9%?%^%$%:%$%s%?!<%U%'%$%9$rMxMQ$9$k!#(B
+@cindex Emacs $B$N%+%9%?%^%$%:%$%s%?!<%U%'%$%9(B
 
-Navi2ch ¤Î¥«¥¹¥¿¥Þ¥¤¥º¤ò¤·¤¿¤¤¾ì¹ç¤Ï¡¢@kbd{M-x customize-group
-@key{RET} navi2ch @key{RET}} ¤ÈÆþÎÏ¤¹¤ë¡£customization buffer ¤Î»È¤¤Êý
-¤Ë¤Ä¤¤¤Æ¤Ï Emacs ¤Î¥Þ¥Ë¥å¥¢¥ë¤ò»²¾È¤·¤Æ¤Í¡£
+Navi2ch $B$N%+%9%?%^%$%:$r$7$?$$>l9g$O!"(B@kbd{M-x customize-group
+@key{RET} navi2ch @key{RET}} $B$HF~NO$9$k!#(Bcustomization buffer $B$N;H$$J}(B
+$B$K$D$$$F$O(B Emacs $B$N%^%K%e%"%k$r;2>H$7$F$M!#(B
 
 @node Init File
-@section ½é´ü²½¥Õ¥¡¥¤¥ë
+@section $B=i4|2=%U%!%$%k(B
+@cindex $B=i4|2=%U%!%$%k(B
+@cindex @file{~/.navi2ch/init.el}
 
-Navi2ch ¤Ïµ¯Æ°»þ¤Ë @file{~/.navi2ch/init.el} ¤ò¥í¡¼¥É¤¹¤ë¡£
+Navi2ch $B$O5/F0;~$K(B @file{~/.navi2ch/init.el} $B$r%m!<%I$9$k!#(B
 
-Navi2ch ¤Îµ¯Æ°»þ¤Ë¿§¤ó¤Ê½èÍý¤ò¤·¤¿¤¤¾ì¹ç¤ä¡¢Emacs ¤Î¥«¥¹¥¿¥Þ¥¤¥º¥¤¥ó¥¿¡¼
-¥Õ¥§¥¤¥¹¤Ê¤ó¤«»È¤Ã¤Æ¤é¤ì¤ë¤«¥´¥ë¥¡¤È¤¤¤¦¿Í¤Ï¡¢¤³¤Î¥Õ¥¡¥¤¥ë¤òÊÔ½¸¤¹¤ë¡£
+Navi2ch $B$N5/F0;~$K?'$s$J=hM}$r$7$?$$>l9g$d!"(BEmacs $B$N%+%9%?%^%$%:%$%s%?!<(B
+$B%U%'%$%9$J$s$+;H$C$F$i$l$k$+%4%k%!$H$$$&?M$O!"$3$N%U%!%$%k$rJT=8$9$k!#(B
 
-Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ï¼«Ê¬¤ÇºîÀ®¤¹¤ë¤³¤È¡£
+$BB8:_$7$J$$>l9g$O<+J,$G:n@.$9$k$3$H!#(B
 
 @node Other Boards File
-@section ¤½¤ÎÂ¾¤Î¥«¥Æ¥´¥ê¤ËÆþ¤ì¤ëÈÄ¤òÄÉ²Ã¤¹¤ë
+@section $B$=$NB>$N%+%F%4%j$KF~$l$kHD$rDI2C$9$k(B
+@cindex $B30ItHD(B
+@cindex @file{~/.navi2ch/etc.txt}
 
-£²¤Á¤ã¤ó¤Í¤ë¤ËÈÄ¤¬ÄÉ²Ã¤µ¤ì¤¿¸å¤â List ¥â¡¼¥É¤ËÈÄ¤¬É½¼¨¤µ¤ì¤Ê¤¤¾ì¹ç¤ä¡¢
-£²¤Á¤ã¤ó¤Í¤ë¤È¸ß´¹À­¤Î¤¢¤ë BBS ¤ò Navi2ch ¤ÇÆÉ¤ß¤¿¤¤¾ì¹ç¤Ï¡¢
-@file{~/.navi2ch/etc.txt} ¤È¤¤¤¦¥Õ¥¡¥¤¥ë¤òºîÀ®¤¹¤ë¤È Navi2ch ¤«¤éÆÉ¤à
-¤³¤È¤¬¤Ç¤­¤ë¡£
+$B#2$A$c$s$M$k$KHD$,DI2C$5$l$?8e$b(B List $B%b!<%I$KHD$,I=<($5$l$J$$>l9g$d!"(B
+$B#2$A$c$s$M$k$H8_49@-$N$"$k(B BBS $B$r(B Navi2ch $B$GFI$_$?$$>l9g$O!"(B
+@file{~/.navi2ch/etc.txt} $B$H$$$&%U%!%$%k$r:n@.$9$k$H(B Navi2ch $B$+$iFI$`(B
+$B$3$H$,$G$-$k!#(B
 
-½ñ¼°¤Ï°Ê²¼¤Î¤È¤ª¤ê¡£
+$B=q<0$O0J2<$N$H$*$j!#(B
 
 @example
 @group
-ÈÄ¤ÎÌ¾Á°
-ÈÄ¤Î URL
-ÈÄ¤Î ID
-    :    (°Ê²¼3¹Ô¤º¤ÄÆ±ÍÍ¤ËÂ³¤±¤ë)
+$BHD$NL>A0(B
+$BHD$N(B URL
+$BHD$N(B ID
+    :    ($B0J2<(B3$B9T$:$DF1MM$KB3$1$k(B)
 @end group
 @end example
 
-¤¿¤È¤¨¤Ð¥Ë¥å¡¼¥¹Â®Êó¡ÜÈÄ¤òÄÉ²Ã¤¹¤ë¤Ë¤Ï¡¢@file{~/.navi2ch/etc.txt} ¤Ë°Ê
-²¼¤Î¤è¤¦¤Ë½ñ¤¯¡£
+$B$?$H$($P%K%e!<%9B.Js!\HD$rDI2C$9$k$K$O!"(B@file{~/.navi2ch/etc.txt} $B$K0J(B
+$B2<$N$h$&$K=q$/!#(B
 
 @example
 @group
-¥Ë¥å¡¼¥¹Â®Êó¡Ü
+$B%K%e!<%9B.Js!\(B
 http://news.2ch.net/newsplus/
 newsplus
 @end group
 @end example
 
-¡ÖÈÄ¤ÎÌ¾Á°¡×¤Ë¤Ï List ¥â¡¼¥É¤ÇÉ½¼¨¤·¤¿¤¤Ì¾Á°¤ò¡¢¡ÖÈÄ¤Î URL¡×¤Ë¤Ï¤½¤ÎÈÄ
-¤ò¥Ö¥é¥¦¥¶¤ÇÉ½¼¨¤·¤¿ºÝ¤Î URL ¤«¤éÀèÆ¬¤Î
-@code{http://@var{¥Û¥¹¥È}/@var{¥Ç¥£¥ì¥¯¥È¥ê}/} ¤ÎÉôÊ¬¤ò¡¢ÈÄ¤Î ID ¤Ë¤Ï
-¤½¤ÎÈÄ¤ò°ì°Õ¤Ë¼±ÊÌ¤Ç¤­¤ëÃ±¸ì (ÂçÄñ¤Ï @var{¥Ç¥£¥ì¥¯¥È¥ê} ¤Ç¤ª¤Ã¤±¡¼) ¤ò
-»ÈÍÑ¤¹¤ë¡£
+$B!VHD$NL>A0!W$K$O(B List $B%b!<%I$GI=<($7$?$$L>A0$r!"!VHD$N(B URL$B!W$K$O$=$NHD(B
+$B$r%V%i%&%6$GI=<($7$?:]$N(B URL $B$+$i@hF,$N(B
+@code{http://@var{$B%[%9%H(B}/@var{$B%G%#%l%/%H%j(B}/} $B$NItJ,$r!"HD$N(B ID $B$K$O(B
+$B$=$NHD$r0l0U$K<1JL$G$-$kC18l(B ($BBgDq$O(B @var{$B%G%#%l%/%H%j(B} $B$G$*$C$1!<(B) $B$r(B
+$B;HMQ$9$k!#(B
 
 @node Mona Font
-@section ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¦
+@section $B%b%J!<%U%)%s%H$r;H$&(B
+@cindex $B%b%J!<%U%)%s%H(B
 
-GNU Emacs 21 ¤ä XEmacs ¤Ç¤Ï¥ì¥¹¤òÉ½¼¨¤¹¤ëºÝ¡¢¥¢¥¹¥­¡¼¥¢¡¼¥È¥Õ¥ì¥ó¥É¥ê¡¼
-(ÏÎ) ¤Ê¥â¥Ê¡¼¥Õ¥©¥ó¥È¤È¤¤¤¦¥Õ¥©¥ó¥È¤ò»È¤¦¤³¤È¤¬¤Ç¤­¤ë¡£
+GNU Emacs 21 $B$d(B XEmacs $B$G$O%l%9$rI=<($9$k:]!"%"%9%-!<%"!<%H%U%l%s%I%j!<(B
+($BON(B) $B$J%b%J!<%U%)%s%H$H$$$&%U%)%s%H$r;H$&$3$H$,$G$-$k!#(B
 
 @menu
-* What is Mona Font::           ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ã¤Æ²¿¤è?
-* How to Use Mona Font::        ¤ó¤Ç¡¢¤É¤¦¤ä¤Ã¤Æ»È¤¦¤Î?
+* What is Mona Font::           $B%b%J!<%U%)%s%H$C$F2?$h(B?
+* How to Use Mona Font::        $B$s$G!"$I$&$d$C$F;H$&$N(B?
 @end menu
 
 @node What is Mona Font
-@subsection ¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ã¤Æ²¿¤è?
+@subsection $B%b%J!<%U%)%s%H$C$F2?$h(B?
 
-¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ï£²¤Á¤ã¤ó¤Í¤ë¤Î¥¢¥¹¥­¡¼¥¢¡¼¥È¤ò¸«¤ë¤¿¤á¤Ëºî¤é¤ì¤¿¥Õ¥ê¡¼
-¤Î¥Õ¥©¥ó¥È¤Ç¤¹¡£
+$B%b%J!<%U%)%s%H$O#2$A$c$s$M$k$N%"%9%-!<%"!<%H$r8+$k$?$a$K:n$i$l$?%U%j!<(B
+$B$N%U%)%s%H$G$9!#(B
 
-¾Ü¤·¤¯¤Ï @uref{http://monafont.sourceforge.net/} ¤ò»²¾È¤Î¤³¤È¡£
+$B>\$7$/$O(B @uref{http://monafont.sourceforge.net/} $B$r;2>H$N$3$H!#(B
+
+$BCm(B:IPA$B%b%J!<%U%)%s%H$H$OJL$N$b$N$G$9!#(B
 
 @node How to Use Mona Font
-@subsection ¤ó¤Ç¡¢¤É¤¦¤ä¤Ã¤Æ»È¤¦¤Î?
+@subsection $B$s$G!"$I$&$d$C$F;H$&$N(B?
+@cindex $BFCDj$N%9%l(B/$BHD$@$1$G%b%J!<%U%)%s%H$r;H$&(B
+@cindex $BFCDj$N%9%l(B/$BHD$G$O%b%J!<%U%)%s%H$r;H$o$J$$(B
+@vindex navi2ch-mona-enable
+@vindex navi2ch-mona-face-variable
+@vindex navi2ch-mona-enable-board-list
+@vindex navi2ch-mona-disable-board-list
+@vindex navi2ch-mona-enable-article-list
+@vindex navi2ch-mona-disable-article-list
 
-GNU Emacs 21 ¤ä XEmacs ¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¤¤¿¤¤¾ì¹ç¤Ï
-@file{~/.navi2ch/init.el} ¤Ë°Ê²¼¤Î¤è¤¦¤Ë½ñ¤¤¤Æ¤ª¤¯¡£@xref{Init File}.
+
+GNU Emacs 21 $B$d(B XEmacs $B$G%b%J!<%U%)%s%H$r;H$$$?$$>l9g$O(B
+@file{~/.navi2ch/init.el} $B$K0J2<$N$h$&$K=q$$$F$*$/!#(B@xref{Init File}.
 
 @lisp
 (setq navi2ch-mona-enable t)
 @end lisp
 
-¤³¤ì¤Ç¤¹¤Ù¤Æ¤ÎÈÄ¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤¬»È¤ï¤ì¤ë¡£
+$B$3$l$G$9$Y$F$NHD$G%b%J!<%U%)%s%H$,;H$o$l$k!#(B
 
-¤â¤·¡¢¤³¤ì¤Ç¤âÉ½¼¨¤µ¤ì¤Ê¤¤¾ì¹ç¤Ï
+$B$b$7!"$3$l$G$bI=<($5$l$J$$>l9g$O(B
 
 @lisp
 (setq navi2ch-mona-face-variable 'navi2ch-mona16-face)
 @end lisp
 
-¤òÄÉµ­¤¹¤ë¤ÈÉ½¼¨¤µ¤ì¤ë¤«¤â¤·¤ì¤Ê¤¤¡£
-@footnote{¤Á¤Ê¤ß¤Ë¡¢@code{navi2ch-mona16-face} ¤Î 16 ¤ÎÉôÊ¬¤Ï 12, 14
-¤ò»ØÄê¤¹¤ë»ö¤â¤Ç¤­¤ë¡£}
+$B$rDI5-$9$k$HI=<($5$l$k$+$b$7$l$J$$!#(B
+@footnote{$B$A$J$_$K!"(B@code{navi2ch-mona16-face} $B$N(B 16 $B$NItJ,$O(B 12, 14
+$B$r;XDj$9$k;v$b$G$-$k!#(B}
 
-ÆÃÄê¤ÎÈÄ¤Ç¤Î¤ß¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¤¤¿¤¤¤È¤­¤Ï¡¢¾åµ­¤Ë²Ã¤¨¤Æ
-°Ê²¼¤ÎÎã¤Î¤è¤¦¤Ë @code{navi2ch-mona-enable-board-list} ¤Ë
-ÈÄ¤Î ID ¤Î¥ê¥¹¥È¤òÆþ¤ì¤Æ¤ª¤¯¡£
-@footnote{¤Ä¤Þ¤ê¡¢°ÊÁ°¤Î¥Ð¡¼¥¸¥ç¥ó¤È¤Ï°Û¤Ê¤ê¡¢navi2ch-mona-enable ¤¬
-non-nil ¤Ç¤¢¤Ã¤Æ¤â¡¢»ØÄê¤·¤¿ÈÄ¤Ç¤·¤«¥â¥Ê¡¼¥Õ¥©¥ó¥È¤¬»È¤ï¤ì¤Ê¤¤¤È¤¤¤¦¤³
-¤È¤Ê¤Î¤ÇÃí°Õ¡£}
+$BFCDj$NHD$G$N$_%b%J!<%U%)%s%H$r;H$$$?$$$H$-$O!">e5-$K2C$($F(B
+$B0J2<$NNc$N$h$&$K(B @code{navi2ch-mona-enable-board-list} $B$K(B
+$BHD$N(B ID $B$N%j%9%H$rF~$l$F$*$/!#(B
+@footnote{$B$D$^$j!"0JA0$N%P!<%8%g%s$H$O0[$J$j!"(Bnavi2ch-mona-enable $B$,(B
+non-nil $B$G$"$C$F$b!";XDj$7$?HD$G$7$+%b%J!<%U%)%s%H$,;H$o$l$J$$$H$$$&$3(B
+$B$H$J$N$GCm0U!#(B}
 
 @lisp
 (setq navi2ch-mona-enable-board-list '("mona" "aastory" "kao"))
 @end lisp
 
-¤¤¤º¤ì¤Î¾ì¹ç¤â¡¢ÆÃÄê¤ÎÈÄ¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¤¤¿¤¯¤Ê¤¤¤È¤­¤Ï¡¢
-°Ê²¼¤ÎÎã¤Î¤è¤¦¤Ë @code{navi2ch-mona-disable-board-list} ¤Ë
-ÈÄ¤Î ID ¤Î¥ê¥¹¥È¤òÆþ¤ì¤Æ¤ª¤±¤Ð¡¢¤½¤ÎÈÄ¤Ç¤Ï¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ï»È¤ï¤ì¤Ê¤¤¡£
+$B$$$:$l$N>l9g$b!"FCDj$NHD$G%b%J!<%U%)%s%H$r;H$$$?$/$J$$$H$-$O!"(B
+$B0J2<$NNc$N$h$&$K(B @code{navi2ch-mona-disable-board-list} $B$K(B
+$BHD$N(B ID $B$N%j%9%H$rF~$l$F$*$1$P!"$=$NHD$G$O%b%J!<%U%)%s%H$O;H$o$l$J$$!#(B
 
 @lisp
 (setq navi2ch-mona-disable-board-list '("unix" "linux" "network"))
 @end lisp
 
-¤µ¤é¤Ë¡¢ÆÃÄê¤Î¥¹¥ì¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¤¤¿¤¤¤È¤­¤Ï
-°Ê²¼¤ÎÎã¤Î¤è¤¦¤Ë @code{navi2ch-mona-enable-article-list} ¤Ë
-ÈÄ¤Î ID ¤È¥¹¥ì¤Î ID ¤Î alist ¤òÆþ¤ì¤Æ¤ª¤¯¡£
+$B$5$i$K!"FCDj$N%9%l$G%b%J!<%U%)%s%H$r;H$$$?$$$H$-$O(B
+$B0J2<$NNc$N$h$&$K(B @code{navi2ch-mona-enable-article-list} $B$K(B
+$BHD$N(B ID $B$H%9%l$N(B ID $B$N(B alist $B$rF~$l$F$*$/!#(B
 
 @lisp
 ;; http://pc.2ch.net/test/read.cgi/unix/1037275862/
@@ -1058,9 +1160,9 @@ non-nil ¤Ç¤¢¤Ã¤Æ¤â¡¢»ØÄê¤·¤¿ÈÄ¤Ç¤·¤«¥â¥Ê¡¼¥Õ¥©¥ó¥È¤¬»È¤ï¤ì¤Ê¤¤¤È¤¤¤¦¤³
 					 ("linux" . "1037806127")))
 @end lisp
 
-¤Þ¤¿¡¢ÆÃÄê¤Î¥¹¥ì¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»È¤¤¤¿¤¯¤Ê¤¤¤È¤­¤Ï
-°Ê²¼¤ÎÎã¤Î¤è¤¦¤Ë @code{navi2ch-mona-disable-article-list} ¤Ë
-ÈÄ¤Î ID ¤È¥¹¥ì¤Î ID ¤Î alist ¤òÆþ¤ì¤Æ¤ª¤¯¡£
+$B$^$?!"FCDj$N%9%l$G%b%J!<%U%)%s%H$r;H$$$?$/$J$$$H$-$O(B
+$B0J2<$NNc$N$h$&$K(B @code{navi2ch-mona-disable-article-list} $B$K(B
+$BHD$N(B ID $B$H%9%l$N(B ID $B$N(B alist $B$rF~$l$F$*$/!#(B
 
 @lisp
 ;; http://aa.2ch.net/test/read.cgi/mona/1047715077/
@@ -1069,10 +1171,10 @@ non-nil ¤Ç¤¢¤Ã¤Æ¤â¡¢»ØÄê¤·¤¿ÈÄ¤Ç¤·¤«¥â¥Ê¡¼¥Õ¥©¥ó¥È¤¬»È¤ï¤ì¤Ê¤¤¤È¤¤¤¦¤³
 					  ("aastory" . "1032888547")))
 @end lisp
 
-¤³¤ì¤é¤Î¥¹¥ì¤´¤È¤ÎÀßÄê¤ÏÈÄ¤´¤È¤ÎÀßÄê¤è¤êÍ¥Àè¤µ¤ì¤ë¡£
+$B$3$l$i$N%9%l$4$H$N@_Dj$OHD$4$H$N@_Dj$h$jM%@h$5$l$k!#(B
 
-¤Ê¤ª¡¢Navi2ch 1.5.1 ¤«¤½¤ì°ÊÁ°¤Î¥Ð¡¼¥¸¥ç¥ó¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤ò»ÈÍÑ¤·¤¿¤¤¾ì¹ç¤Ï
-¼¡¤Î¤è¤¦¤Ë½ñ¤¯É¬Í×¤¬¤¢¤ë¡£
+$B$J$*!"(BNavi2ch 1.5.1 $B$+$=$l0JA0$N%P!<%8%g%s$G%b%J!<%U%)%s%H$r;HMQ$7$?$$>l9g$O(B
+$B<!$N$h$&$K=q$/I,MW$,$"$k!#(B
 
 @lisp
 (when (eq window-system 'x)
@@ -1082,710 +1184,710 @@ non-nil ¤Ç¤¢¤Ã¤Æ¤â¡¢»ØÄê¤·¤¿ÈÄ¤Ç¤·¤«¥â¥Ê¡¼¥Õ¥©¥ó¥È¤¬»È¤ï¤ì¤Ê¤¤¤È¤¤¤¦¤³
   (setq navi2ch-mona-enable t))
 @end lisp
 
-»ÄÇ°¤Ê¤¬¤é¡¢GNU Emacs 20 ¤Ç¤Ï²ÄÊÑÉý¥Õ¥©¥ó¥È¤ò»ÈÍÑ¤¹¤ë¤³¤È¤¬¤Ç¤­¤Ê¤¤¤Î
-¤Ç¥â¥Ê¡¼¥Õ¥©¥ó¥È¤Ï»ÈÍÑ¤Ç¤­¤Ê¤¤¡£
+$B;DG0$J$,$i!"(BGNU Emacs 20 $B$G$O2DJQI}%U%)%s%H$r;HMQ$9$k$3$H$,$G$-$J$$$N(B
+$B$G%b%J!<%U%)%s%H$O;HMQ$G$-$J$$!#(B
 
 @node Key Bindings
-@appendix ¥­¡¼¥Ð¥¤¥ó¥É
+@appendix $B%-!<%P%$%s%I(B
 
 @menu
-* Global Key Bindings::         ¤¹¤Ù¤Æ¤Î¥â¡¼¥É¤Ç¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* List Mode Key Bindings::      List ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Board Misc Mode Key Bindings::  Board ·Ï¥â¡¼¥É¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Board Mode Key Bindings::     Board ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Bookmark Mode Key Bindings::  Bookmark ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Article Mode Key Bindings::   Article ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Message Mode Key Bindings::   Message ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
-* Message Mode AA List::        Message ¥â¡¼¥É¤Ç¤Î¥¢¥¹¥­¡¼¥¢¡¼¥È°ìÍ÷
+* Global Key Bindings::         $B$9$Y$F$N%b!<%I$G6&DL$N%-!<%P%$%s%I(B
+* List Mode Key Bindings::      List $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Board Misc Mode Key Bindings::  Board $B7O%b!<%I6&DL$N%-!<%P%$%s%I(B
+* Board Mode Key Bindings::     Board $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Bookmark Mode Key Bindings::  Bookmark $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Article Mode Key Bindings::   Article $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Message Mode Key Bindings::   Message $B%b!<%I$G$N%-!<%P%$%s%I(B
+* Message Mode AA List::        Message $B%b!<%I$G$N%"%9%-!<%"!<%H0lMw(B
 @end menu
 
 @node Global Key Bindings
-@appendixsec ¤¹¤Ù¤Æ¤Î¥â¡¼¥É¤Ç¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec $B$9$Y$F$N%b!<%I$G6&DL$N%-!<%P%$%s%I(B
 
-°Ê²¼¤Î¥­¡¼¥Ð¥¤¥ó¥É¤Ï¤¹¤Ù¤Æ¤Î¥â¡¼¥É¤Ç»ÈÍÑ¤Ç¤­¤ë¡£¤¿¤À¤·¡¢¥â¡¼¥É¤Ç¾å½ñ¤­
-¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï¤½¤Á¤é¤Ë½¾¤¦¡£
+$B0J2<$N%-!<%P%$%s%I$O$9$Y$F$N%b!<%I$G;HMQ$G$-$k!#$?$@$7!"%b!<%I$G>e=q$-(B
+$B$5$l$F$$$k>l9g$O$=$A$i$K=>$&!#(B
 
 @table @kbd
 @item C-c C-f
-@code{navi2ch-find-file} ¥¹¥ì¤Î¥í¥°¥Õ¥¡¥¤¥ë¤Þ¤¿¤Ï¥í¥°¥Õ¥¡¥¤¥ë¤¬ÊÝÂ¸¤µ¤ì
-¤Æ¤¤¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»ØÄê
+@code{navi2ch-find-file} $B%9%l$N%m%0%U%!%$%k$^$?$O%m%0%U%!%$%k$,J]B8$5$l(B
+$B$F$$$k%G%#%l%/%H%j$r;XDj(B
 
 @item C-c C-t
-@code{navi2ch-toggle-offline} ¥ª¥Õ¥é¥¤¥ó¡¦¥ª¥ó¥é¥¤¥ó¤ÎÀÚ¤êÂØ¤¨
+@code{navi2ch-toggle-offline} $B%*%U%i%$%s!&%*%s%i%$%s$N@Z$jBX$((B
 
 @item C-c C-u
-@code{navi2ch-goto-url} »ØÄê¤·¤¿ URL ¤ÎÈÄ¡¦¥¹¥ì¤òÉ½¼¨
+@code{navi2ch-goto-url} $B;XDj$7$?(B URL $B$NHD!&%9%l$rI=<((B
 
 @item C-c C-v
-@code{navi2ch-version} Navi2ch ¤Î¥Ð¡¼¥¸¥ç¥ó¤ò¥ß¥Ë¥Ð¥Ã¥Õ¥¡¤ËÉ½¼¨
+@code{navi2ch-version} Navi2ch $B$N%P!<%8%g%s$r%_%K%P%C%U%!$KI=<((B
 
 @item C-c C-o
-@code{navi2ch-message-jump-to-message-buffer} ¥ì¥¹¤ò½ñ¤¤¤Æ¤ëÅÓÃæ¤Ê¤é¡¢
-¥ì¥¹¤ò½ñ¤¯¥Ð¥Ã¥Õ¥¡¤È½ñ¤­¹þ¤à¥¹¥ì/ÈÄ¤Î¥Ð¥Ã¥Õ¥¡¤ËÀÚ¤êÂØ¤¨
+@code{navi2ch-message-jump-to-message-buffer} $B%l%9$r=q$$$F$kESCf$J$i!"(B
+$B%l%9$r=q$/%P%C%U%!$H=q$-9~$`%9%l(B/$BHD$N%P%C%U%!$K@Z$jBX$((B
 
 @item C-c C-l
-@code{navi2ch-be2ch-toggle-login} Be@@2ch¤Ø¤Î¥í¥°¥¤¥ó¾õÂÖ¤ÎÀÚ¤êÂØ¤¨
+@code{navi2ch-be2ch-toggle-login} Be@@2ch$B$X$N%m%0%$%s>uBV$N@Z$jBX$((B
 @end table
 
-Message ¥â¡¼¥É°Ê³°¤Ç¤Ï°Ê²¼¤Î¥­¡¼¥Ð¥¤¥ó¥É¤â»È¤¨¤ë¡£¤¿¤À¤·¡¢¥â¡¼¥É¤Ç¾å½ñ
-¤­¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï¤½¤Á¤é¤Ë½¾¤¦¡£
+Message $B%b!<%I0J30$G$O0J2<$N%-!<%P%$%s%I$b;H$($k!#$?$@$7!"%b!<%I$G>e=q(B
+$B$-$5$l$F$$$k>l9g$O$=$A$i$K=>$&!#(B
 
 @table @kbd
 @item 1
-@code{navi2ch-one-pane} 1¥Ú¥¤¥óÉ½¼¨¤ËÀÚ¤êÂØ¤¨
+@code{navi2ch-one-pane} 1$B%Z%$%sI=<($K@Z$jBX$((B
 
 @item 2
-@code{navi2ch-two-pane} 2¥Ú¥¤¥óÉ½¼¨¤ËÀÚ¤êÂØ¤¨
+@code{navi2ch-two-pane} 2$B%Z%$%sI=<($K@Z$jBX$((B
 
 @item 3
-@code{navi2ch-three-pane} 3¥Ú¥¤¥óÉ½¼¨¤ËÀÚ¤êÂØ¤¨
+@code{navi2ch-three-pane} 3$B%Z%$%sI=<($K@Z$jBX$((B
 
 @item <
-@code{beginning-of-buffer} ¥Ð¥Ã¥Õ¥¡¤ÎºÇ½é¤Ë°ÜÆ°
+@code{beginning-of-buffer} $B%P%C%U%!$N:G=i$K0\F0(B
 
 @item >
-@code{navi2ch-end-of-buffer} ¥Ð¥Ã¥Õ¥¡¤ÎºÇ¸å¤Ë°ÜÆ°
+@code{navi2ch-end-of-buffer} $B%P%C%U%!$N:G8e$K0\F0(B
 
 @item B
-@code{navi2ch-bookmark-goto-bookmark} Bookmark ¥â¡¼¥É¤òÉ½¼¨
+@code{navi2ch-bookmark-goto-bookmark} Bookmark $B%b!<%I$rI=<((B
 
 @item g
-@code{navi2ch-goto-board} »ØÄê¤·¤¿ÈÄ¤òÉ½¼¨
+@code{navi2ch-goto-board} $B;XDj$7$?HD$rI=<((B
 
 @item G
-@code{navi2ch-goto-board} »ØÄê¤·¤¿ÈÄ¤òÉ½¼¨
+@code{navi2ch-goto-board} $B;XDj$7$?HD$rI=<((B
 
 @item n
-@code{next-line} ¼¡¤Î¹Ô¤Ë°ÜÆ°
+@code{next-line} $B<!$N9T$K0\F0(B
 
 @item p
-@code{previous-line} Á°¤Î¹Ô¤Ë°ÜÆ°
+@code{previous-line} $BA0$N9T$K0\F0(B
 
 @item t
-@code{navi2ch-toggle-offline} ¥ª¥Õ¥é¥¤¥ó¡¦¥ª¥ó¥é¥¤¥ó¤ÎÀÚ¤êÂØ¤¨
+@code{navi2ch-toggle-offline} $B%*%U%i%$%s!&%*%s%i%$%s$N@Z$jBX$((B
 
 @item V
-@code{navi2ch-version} Navi2ch ¤Î¥Ð¡¼¥¸¥ç¥ó¤ò¥ß¥Ë¥Ð¥Ã¥Õ¥¡¤ËÉ½¼¨
+@code{navi2ch-version} Navi2ch $B$N%P!<%8%g%s$r%_%K%P%C%U%!$KI=<((B
 @end table
 
 @node List Mode Key Bindings
-@appendixsec List ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec List $B%b!<%I$G$N%-!<%P%$%s%I(B
 
 @table @kbd
 @item @key{RET}
-@code{navi2ch-list-select-current-board} ÈÄ¤òÉ½¼¨
+@code{navi2ch-list-select-current-board} $BHD$rI=<((B
 
 @item q
-@code{navi2ch-exit} Navi2ch ¤ò½ªÎ»
+@code{navi2ch-exit} Navi2ch $B$r=*N;(B
 
 @item z
-@code{navi2ch-suspend} Navi2ch ¤òÃæÃÇ
+@code{navi2ch-suspend} Navi2ch $B$rCfCG(B
 
 @item s
-@code{navi2ch-list-sync} ÈÄ¥ê¥¹¥È¤òºÆÆÉ¤ß¹þ¤ß
+@code{navi2ch-list-sync} $BHD%j%9%H$r:FFI$_9~$_(B
 
 @item @key{SPC}
-@code{navi2ch-list-select-current-board} ÈÄ¤òÉ½¼¨
+@code{navi2ch-list-select-current-board} $BHD$rI=<((B
 
 @item @key{DEL}
-@code{scroll-down} ²¼¤Ë¥¹¥¯¥í¡¼¥ë
+@code{scroll-down} $B2<$K%9%/%m!<%k(B
 
 @item @key{BS}
-@code{scroll-down} ²¼¤Ë¥¹¥¯¥í¡¼¥ë
+@code{scroll-down} $B2<$K%9%/%m!<%k(B
 
 @item a
-@code{navi2ch-list-add-bookmark} ÈÄ¤ò¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-list-add-bookmark} $BHD$r%V%C%/%^!<%/$KEPO?(B
 
 @item b
-@code{navi2ch-list-toggle-bookmark} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ÈÈÄ¥ê¥¹¥È¤ÎÉ½¼¨¤òÀÚ¤êÂØ¤¨
+@code{navi2ch-list-toggle-bookmark} $B%V%C%/%^!<%/$HHD%j%9%H$NI=<($r@Z$jBX$((B
 
 @item [mouse-2]
-@code{navi2ch-list-mouse-select} ÈÄ¤òÉ½¼¨
+@code{navi2ch-list-mouse-select} $BHD$rI=<((B
 
 @item /
-@code{navi2ch-list-toggle-open} ÈÄ¥ê¥¹¥È¤Î³«ÊÄ
+@code{navi2ch-list-toggle-open} $BHD%j%9%H$N3+JD(B
 
 @item [
-@code{navi2ch-list-open-all-category} ¤¹¤Ù¤Æ¤ÎÈÄ¥ê¥¹¥È¤ò³«¤¯
+@code{navi2ch-list-open-all-category} $B$9$Y$F$NHD%j%9%H$r3+$/(B
 
 @item ]
-@code{navi2ch-list-close-all-category} ¤¹¤Ù¤Æ¤ÎÈÄ¥ê¥¹¥È¤òÊÄ¤¸¤ë
+@code{navi2ch-list-close-all-category} $B$9$Y$F$NHD%j%9%H$rJD$8$k(B
 
 @item D
-@code{navi2ch-list-delete-global-bookmark} ¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òºï½ü
+@code{navi2ch-list-delete-global-bookmark} $B%0%m!<%P%k%V%C%/%^!<%/$r:o=|(B
 
 @item C
-@code{navi2ch-list-change-global-bookmark} ¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÊÔ½¸
+@code{navi2ch-list-change-global-bookmark} $B%0%m!<%P%k%V%C%/%^!<%/$rJT=8(B
 
 @item ?
-@code{navi2ch-list-search} ¸¡º÷
+@code{navi2ch-list-search} $B8!:w(B
 
 @item e
-@code{navi2ch-list-expire} ¸Å¤¤¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë
+@code{navi2ch-list-expire} $B8E$$%-%c%C%7%e%U%!%$%k$r:o=|$9$k(B
 @end table
 
 @node Board Misc Mode Key Bindings
-@appendixsec Board ·Ï¥â¡¼¥É¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec Board $B7O%b!<%I6&DL$N%-!<%P%$%s%I(B
 
 @table @kbd
 @item @kbd{RET}
-@code{navi2ch-bm-select-article} ¥¹¥ì¤òÉ½¼¨
+@code{navi2ch-bm-select-article} $B%9%l$rI=<((B
 
 @item [mouse-2]
-@code{navi2ch-bm-select-article} ¥¹¥ì¤òÉ½¼¨
+@code{navi2ch-bm-select-article} $B%9%l$rI=<((B
 
 @item @kbd{SPC}
-@code{navi2ch-bm-select-article-or-scroll-up} ¥¹¥ì¤òÉ½¼¨ (¤¹¤Ç¤ËÉ½¼¨¤·
-¤Æ¤¤¤ë¥¹¥ì¤Ê¤é¤Ð¥¹¥ì²èÌÌ¤ò¾å¤Ë¥¹¥¯¥í¡¼¥ë)
+@code{navi2ch-bm-select-article-or-scroll-up} $B%9%l$rI=<((B ($B$9$G$KI=<($7(B
+$B$F$$$k%9%l$J$i$P%9%l2hLL$r>e$K%9%/%m!<%k(B)
 
 @item .
-@code{navi2ch-bm-display-article} ¥¹¥ì¤òÉ½¼¨ (¥«¡¼¥½¥ë¤Ï¥¹¥ì¤Ë°ÜÆ°¤·¤Ê
-¤¤)
+@code{navi2ch-bm-display-article} $B%9%l$rI=<((B ($B%+!<%=%k$O%9%l$K0\F0$7$J(B
+$B$$(B)
 
 @item i
-@code{navi2ch-bm-fetch-article} ¥¹¥ì¤ò¹¹¿·
+@code{navi2ch-bm-fetch-article} $B%9%l$r99?7(B
 
 @item e
-@code{navi2ch-bm-textize-article} ¥¹¥ì¤ò¥Æ¥­¥¹¥È¤ÇÊÝÂ¸
+@code{navi2ch-bm-textize-article} $B%9%l$r%F%-%9%H$GJ]B8(B
 
 @item @key{DEL}
-@code{navi2ch-bm-select-article-or-scroll-down} ¥¹¥ì¤òÉ½¼¨ (¤¹¤Ç¤ËÉ½¼¨
-¤·¤Æ¤¤¤ë¥¹¥ì¤Ê¤é¤Ð¥¹¥ì²èÌÌ¤ò²¼¤Ë¥¹¥¯¥í¡¼¥ë)
+@code{navi2ch-bm-select-article-or-scroll-down} $B%9%l$rI=<((B ($B$9$G$KI=<((B
+$B$7$F$$$k%9%l$J$i$P%9%l2hLL$r2<$K%9%/%m!<%k(B)
 
 @item @key{BS}
-@code{navi2ch-bm-select-article-or-scroll-down} ¥¹¥ì¤òÉ½¼¨ (¤¹¤Ç¤ËÉ½¼¨
-¤·¤Æ¤¤¤ë¥¹¥ì¤Ê¤é¤Ð¥¹¥ì²èÌÌ¤ò²¼¤Ë¥¹¥¯¥í¡¼¥ë)
+@code{navi2ch-bm-select-article-or-scroll-down} $B%9%l$rI=<((B ($B$9$G$KI=<((B
+$B$7$F$$$k%9%l$J$i$P%9%l2hLL$r2<$K%9%/%m!<%k(B)
 
 @item n
-@code{navi2ch-bm-next-line} ¼¡¤Î¹Ô¤Ë°ÜÆ°
+@code{navi2ch-bm-next-line} $B<!$N9T$K0\F0(B
 
 @item p
-@code{navi2ch-bm-previous-line} Á°¤Î¹Ô¤Ë°ÜÆ°
+@code{navi2ch-bm-previous-line} $BA0$N9T$K0\F0(B
 
 @item U
-@code{navi2ch-board-show-url} ÈÄ¤Þ¤¿¤Ï¥¹¥ì¤Î URL ¤ò¥³¥Ô¡¼¡¢¤Þ¤¿¤ÏÈÄ¤ò
-¥Ö¥é¥¦¥¶¤ÇÉ½¼¨
+@code{navi2ch-board-show-url} $BHD$^$?$O%9%l$N(B URL $B$r%3%T!<!"$^$?$OHD$r(B
+$B%V%i%&%6$GI=<((B
 
 @item l
-@code{navi2ch-bm-view-logo} ÈÄ¤Î¥í¥´¤òÉ½¼¨
+@code{navi2ch-bm-view-logo} $BHD$N%m%4$rI=<((B
 
 @item A
-@code{navi2ch-board-add-global-bookmark} ¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-board-add-global-bookmark} $B%0%m!<%P%k%V%C%/%^!<%/$KEPO?(B
 
 @item q
-@code{navi2ch-bm-exit} ÈÄ¤òÊÄ¤¸¤ë
+@code{navi2ch-bm-exit} $BHD$rJD$8$k(B
 
 @item S
-@code{navi2ch-bm-sort} ¥¹¥ì¤ò¥½¡¼¥È
+@code{navi2ch-bm-sort} $B%9%l$r%=!<%H(B
 
 @item ?
-@code{navi2ch-bm-search} ¸¡º÷
+@code{navi2ch-bm-search} $B8!:w(B
 
 @item C-c C-m
-@code{navi2ch-message-pop-message-buffer} ½ñ¤­¹þ¤ß¤Î¤È¤­½ñ¤­¹þ¤ß²èÌÌ¤Ë
-Ìá¤ë
+@code{navi2ch-message-pop-message-buffer} $B=q$-9~$_$N$H$-=q$-9~$_2hLL$K(B
+$BLa$k(B
 
 @item R
 @item C-c C-r
-@code{navi2ch-bm-remove-article} ¥¹¥ì¤Î¾ðÊó (¼èÆÀ¤·¤¿ .dat ¥Õ¥¡¥¤¥ë¤ä´ûÆÉ¾ðÊó¤Ê¤É) ¤ò¾Ã¤¹
+@code{navi2ch-bm-remove-article} $B%9%l$N>pJs(B ($B<hF@$7$?(B .dat $B%U%!%$%k$d4{FI>pJs$J$I(B) $B$r>C$9(B
 
 @item C-o
-@code{navi2ch-bm-save-dat-file} .dat ¥Õ¥¡¥¤¥ë¤òÊÝÂ¸
+@code{navi2ch-bm-save-dat-file} .dat $B%U%!%$%k$rJ]B8(B
 
 @item I
-@code{navi2ch-bm-fetch-maybe-new-articles} ¹¹¿·¤µ¤ì¤Æ¤¤¤ë²ÄÇ½À­¤Î¤¢¤ë¥¹¥ì¤ò¤¹¤Ù¤Æ¹¹¿·
+@code{navi2ch-bm-fetch-maybe-new-articles} $B99?7$5$l$F$$$k2DG=@-$N$"$k%9%l$r$9$Y$F99?7(B
 
 @item *
-@code{navi2ch-bm-mark} ¥¹¥ì¤Ë¥Þ¡¼¥¯¤ò¤Ä¤±¤ë
+@code{navi2ch-bm-mark} $B%9%l$K%^!<%/$r$D$1$k(B
 
 @item u
-@code{navi2ch-bm-unmark} ¥¹¥ì¤Î¥Þ¡¼¥¯¤ò²ò½ü
+@code{navi2ch-bm-unmark} $B%9%l$N%^!<%/$r2r=|(B
 
 @item m r
-@code{navi2ch-bm-mark-region} ÁªÂòÎÎ°è¤Î¥¹¥ì¤Ë¥Þ¡¼¥¯¤ò¤Ä¤±¤ë
+@code{navi2ch-bm-mark-region} $BA*BrNN0h$N%9%l$K%^!<%/$r$D$1$k(B
 
 @item m a
-@code{navi2ch-bm-mark-all} ¤¹¤Ù¤Æ¤Î¥¹¥ì¤Ë¥Þ¡¼¥¯¤ò¤Ä¤±¤ë
+@code{navi2ch-bm-mark-all} $B$9$Y$F$N%9%l$K%^!<%/$r$D$1$k(B
 
 @item m A
-@code{navi2ch-bm-add-global-bookmark-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¥°
-¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-bm-add-global-bookmark-mark-article} $B%^!<%/$7$?%9%l$r%0(B
+$B%m!<%P%k%V%C%/%^!<%/$KEPO?(B
 
 @item m .
-@code{navi2ch-bm-display-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤òÉ½¼¨
+@code{navi2ch-bm-display-mark-article} $B%^!<%/$7$?%9%l$rI=<((B
 
 @item m i
-@code{navi2ch-bm-fetch-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¹¹¿·
+@code{navi2ch-bm-fetch-mark-article} $B%^!<%/$7$?%9%l$r99?7(B
 
 @item m e
-@code{navi2ch-bm-textize-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¥Æ¥­¥¹¥È¤ÇÊÝÂ¸
+@code{navi2ch-bm-textize-mark-article} $B%^!<%/$7$?%9%l$r%F%-%9%H$GJ]B8(B
 
 @item m m
-@code{navi2ch-bm-mark-marks} ¤¢¤ë¾õÂÖ (VCU) ¤Ë¤Ê¤Ã¤Æ¤¤¤ë¥¹¥ì¤ò¥Þ¡¼¥¯
+@code{navi2ch-bm-mark-marks} $B$"$k>uBV(B (VCU) $B$K$J$C$F$$$k%9%l$r%^!<%/(B
 
 @item m ?
-@code{navi2ch-bm-mark-by-query} Àµµ¬É½¸½¤Ë¥Þ¥Ã¥Á¤¹¤ë¥¹¥ì¤òÌä¤¤¹ç¤ï¤»¤Ä
-¤Ä¥Þ¡¼¥¯ (¤È¤¤¤¦Æ°ºî¤À¤È»×¤¦)
+@code{navi2ch-bm-mark-by-query} $B@55,I=8=$K%^%C%A$9$k%9%l$rLd$$9g$o$;$D(B
+$B$D%^!<%/(B ($B$H$$$&F0:n$@$H;W$&(B)
 
 @item m b
-@code{navi2ch-bm-add-bookmark-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¥í¡¼¥«¥ë¥Ö¥Ã
-¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-bm-add-bookmark-mark-article} $B%^!<%/$7$?%9%l$r%m!<%+%k%V%C(B
+$B%/%^!<%/$KEPO?(B
 
 @item m R
-@code{navi2ch-bm-remove-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤Î¾ðÊó
-(¼èÆÀ¤·¤¿ .dat ¥Õ¥¡¥¤¥ë¤ä´ûÆÉ¾ðÊó¤Ê¤É) ¤ò¾Ã¤¹
+@code{navi2ch-bm-remove-mark-article} $B%^!<%/$7$?%9%l$N>pJs(B
+($B<hF@$7$?(B .dat $B%U%!%$%k$d4{FI>pJs$J$I(B) $B$r>C$9(B
 
 @end table
 
 @node Board Mode Key Bindings
-@appendixsec Board ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec Board $B%b!<%I$G$N%-!<%P%$%s%I(B
 
-Board ·Ï¥â¡¼¥É¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É¤â»²¾È¡£@xref{Board Misc Mode Key Bindings}.
+Board $B7O%b!<%I6&DL$N%-!<%P%$%s%I$b;2>H!#(B@xref{Board Misc Mode Key Bindings}.
 
 @table @kbd
 @item s
-@code{navi2ch-board-sync} ÈÄ¤òºÆÆÉ¤ß¹þ¤ß
+@code{navi2ch-board-sync} $BHD$r:FFI$_9~$_(B
 
 @item r
-@code{navi2ch-board-select-view-range} ¥¹¥ì¤ÎÉ½¼¨¿ô¤òÊÑ¹¹
+@code{navi2ch-board-select-view-range} $B%9%l$NI=<(?t$rJQ99(B
 
 @item a
-@code{navi2ch-board-add-bookmark} ÈÄ¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Ë¥¹¥ì¤òÅÐÏ¿
+@code{navi2ch-board-add-bookmark} $BHD$N%V%C%/%^!<%/$K%9%l$rEPO?(B
 
 @item d
-@code{navi2ch-board-hide-article} ¥¹¥ì¤ò±£¤¹
+@code{navi2ch-board-hide-article} $B%9%l$r1#$9(B
 
 @item h
-@code{navi2ch-board-toggle-hide} ±£¤·¤¿¥¹¥ì¤òÉ½¼¨
+@code{navi2ch-board-toggle-hide} $B1#$7$?%9%l$rI=<((B
 
 @item +
-@code{navi2ch-board-toggle-updated} ¹¹¿·¤µ¤ì¤¿¥¹¥ì¤Î¤ßÉ½¼¨
+@code{navi2ch-board-toggle-updated} $B99?7$5$l$?%9%l$N$_I=<((B
 
 @item b
-@code{navi2ch-board-toggle-bookmark} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÉ½¼¨
+@code{navi2ch-board-toggle-bookmark} $B%V%C%/%^!<%/$rI=<((B
 
 @item w
-@code{navi2ch-board-write-message} ¥¹¥ì¤òÎ©¤Æ¤ë
+@code{navi2ch-board-write-message} $B%9%l$rN)$F$k(B
 
 @item @key{ESC} e
-@code{navi2ch-board-expire} ¸Å¤¤¥­¥ã¥Ã¥·¥å¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë
+@code{navi2ch-board-expire} $B8E$$%-%c%C%7%e%U%!%$%k$r:o=|$9$k(B
 
 @item m d
-@code{navi2ch-board-hide-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò±£¤¹
+@code{navi2ch-board-hide-mark-article} $B%^!<%/$7$?%9%l$r1#$9(B
 @end table
 
 @node Bookmark Mode Key Bindings
-@appendixsec Bookmark ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec Bookmark $B%b!<%I$G$N%-!<%P%$%s%I(B
 
-Board ·Ï¥â¡¼¥É¶¦ÄÌ¤Î¥­¡¼¥Ð¥¤¥ó¥É¤â»²¾È¡£@xref{Board Misc Mode Key Bindings}.
+Board $B7O%b!<%I6&DL$N%-!<%P%$%s%I$b;2>H!#(B@xref{Board Misc Mode Key Bindings}.
 
 @table @kbd
 @item D
-@code{navi2ch-bookmark-delete} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òºï½ü
+@code{navi2ch-bookmark-delete} $B%V%C%/%^!<%/$r:o=|(B
 
 @item d
-@code{navi2ch-bookmark-cut} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò¥«¥Ã¥È¤·¡¢¥­¥ë¥ê¥ó¥°¤ËÄÉ²Ã
+@code{navi2ch-bookmark-cut} $B%V%C%/%^!<%/$r%+%C%H$7!"%-%k%j%s%0$KDI2C(B
 
 @item C-k
-@code{navi2ch-bookmark-cut} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò¥«¥Ã¥È¤·¡¢¥­¥ë¥ê¥ó¥°¤ËÄÉ²Ã
+@code{navi2ch-bookmark-cut} $B%V%C%/%^!<%/$r%+%C%H$7!"%-%k%j%s%0$KDI2C(B
 
 @item C-y
-@code{navi2ch-bookmark-yank} ¥­¥ë¥ê¥ó¥°¤«¤é¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÄ¥¤êÉÕ¤±
+@code{navi2ch-bookmark-yank} $B%-%k%j%s%0$+$i%V%C%/%^!<%/$rD%$jIU$1(B
 
 @item o
-@code{navi2ch-bookmark-move} ÊÌ¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Ë°ÜÆ°
+@code{navi2ch-bookmark-move} $BJL$N%V%C%/%^!<%/$K0\F0(B
 
 @item O
-@code{navi2ch-bookmark-copy} ÊÌ¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Ë¥³¥Ô¡¼
+@code{navi2ch-bookmark-copy} $BJL$N%V%C%/%^!<%/$K%3%T!<(B
 
 @item m d
-@code{navi2ch-bookmark-cut-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤ò¥«¥Ã¥È¤·¡¢¥­¥ë¥ê¥ó¥°¤ËÄÉ²Ã
+@code{navi2ch-bookmark-cut-mark-article} $B%^!<%/$7$?%9%l$r%+%C%H$7!"%-%k%j%s%0$KDI2C(B
 
 @item m o
-@code{navi2ch-bookmark-move-mark-article} ¥Þ¡¼¥¯¤·¤¿¥¹¥ì¤òÊÌ¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Ë°ÜÆ°
+@code{navi2ch-bookmark-move-mark-article} $B%^!<%/$7$?%9%l$rJL$N%V%C%/%^!<%/$K0\F0(B
 
 @item s
-@code{navi2ch-bookmark-sync} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¥Ð¥Ã¥Õ¥¡¤òºÇ¿·¤Î¾ðÊó¤Ë¹¹¿·
+@code{navi2ch-bookmark-sync} $B%V%C%/%^!<%/%P%C%U%!$r:G?7$N>pJs$K99?7(B
 
 @item X
-@code{navi2ch-bookmark-remember-order} ¥Ö¥Ã¥¯¥Þ¡¼¥¯¤Î¸½ºß¤Î¥¹¥ì¤ÎÊÂ¤Ó½ç¤òµ­²±
+@code{navi2ch-bookmark-remember-order} $B%V%C%/%^!<%/$N8=:_$N%9%l$NJB$S=g$r5-21(B
 
 @item S
-@code{navi2ch-bookmark-sort} ¥¹¥ì¤ò¥½¡¼¥È
+@code{navi2ch-bookmark-sort} $B%9%l$r%=!<%H(B
 @end table
 
 @node Article Mode Key Bindings
-@appendixsec Article ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec Article $B%b!<%I$G$N%-!<%P%$%s%I(B
 
 @table @kbd
 @item q
-@code{navi2ch-article-exit} ¥¹¥ì¤òÊÄ¤¸¤ë
+@code{navi2ch-article-exit} $B%9%l$rJD$8$k(B
 
 @item Q
-@code{navi2ch-article-goto-current-board} ¤½¤Î¥¹¥ì¤Î¤¢¤ëÈÄ¤òÉ½¼¨
+@code{navi2ch-article-goto-current-board} $B$=$N%9%l$N$"$kHD$rI=<((B
 
 @item s
-@code{navi2ch-article-sync} ¥¹¥ì¤òºÆÆÉ¤ß¹þ¤ß
+@code{navi2ch-article-sync} $B%9%l$r:FFI$_9~$_(B
 
 @item S
-@code{navi2ch-article-sync-disable-diff} ¥¹¥ì¤òº¹Ê¬¤Ê¤·¤ÇÆÉ¤ß¹þ¤ß
+@code{navi2ch-article-sync-disable-diff} $B%9%l$r:9J,$J$7$GFI$_9~$_(B
 
 @item r
-@code{navi2ch-article-redraw-range} ¥ì¥¹¤ÎÉ½¼¨¿ô¤òÊÑ¹¹
+@code{navi2ch-article-redraw-range} $B%l%9$NI=<(?t$rJQ99(B
 
 @item j
-@code{navi2ch-article-few-scroll-up} °ì¹Ô¾å¤Ø¥¹¥¯¥í¡¼¥ë
+@code{navi2ch-article-few-scroll-up} $B0l9T>e$X%9%/%m!<%k(B
 
 @item k
-@code{navi2ch-article-few-scroll-down} °ì¹Ô²¼¤Ø¥¹¥¯¥í¡¼¥ë
+@code{navi2ch-article-few-scroll-down} $B0l9T2<$X%9%/%m!<%k(B
 
 @item @key{SPC}
-@code{navi2ch-article-scroll-up} °ì²èÌÌ¾å¤Ø¥¹¥¯¥í¡¼¥ë
+@code{navi2ch-article-scroll-up} $B0l2hLL>e$X%9%/%m!<%k(B
 
 @item @key{DEL}
-@code{navi2ch-article-scroll-down} °ì²èÌÌ²¼¤Ø¥¹¥¯¥í¡¼¥ë
+@code{navi2ch-article-scroll-down} $B0l2hLL2<$X%9%/%m!<%k(B
 
 @item @key{BS}
-@code{navi2ch-article-scroll-down} °ì²èÌÌ²¼¤Ø¥¹¥¯¥í¡¼¥ë
+@code{navi2ch-article-scroll-down} $B0l2hLL2<$X%9%/%m!<%k(B
 
 @item w
-@code{navi2ch-article-write-message} ¥ì¥¹¤ò½ñ¤­¹þ¤à
+@code{navi2ch-article-write-message} $B%l%9$r=q$-9~$`(B
 
 @item W
-@code{navi2ch-article-write-sage-message} ¥ì¥¹¤ò sage ¤Ç½ñ¤­¹þ¤à
+@code{navi2ch-article-write-sage-message} $B%l%9$r(B sage $B$G=q$-9~$`(B
 
 @item @key{RET}
-@code{navi2ch-article-select-current-link} ¥ê¥ó¥¯¤òÉ½¼¨
+@code{navi2ch-article-select-current-link} $B%j%s%/$rI=<((B
 
 @item [mouse-2]
-@code{navi2ch-article-mouse-select} ¥ê¥ó¥¯¤ò¥Þ¥¦¥¹¤ÇÁªÂò
+@code{navi2ch-article-mouse-select} $B%j%s%/$r%^%&%9$GA*Br(B
 
 @item g
-@code{navi2ch-article-goto-number-or-board} »ØÄê¤·¤¿¥ì¥¹¤«ÈÄ¤Ë¥¸¥ã¥ó¥×
+@code{navi2ch-article-goto-number-or-board} $B;XDj$7$?%l%9$+HD$K%8%c%s%W(B
 
 @item l
-@code{navi2ch-article-pop-point} µ­²±¤µ¤ì¤¿¥«¡¼¥½¥ë°ÌÃÖ¤Ë¥¸¥ã¥ó¥×
+@code{navi2ch-article-pop-point} $B5-21$5$l$?%+!<%=%k0LCV$K%8%c%s%W(B
 
 @item L
-@code{navi2ch-article-pop-poped-point} µ­²±¤·¤¿¥«¡¼¥½¥ë°ÌÃÖ¤ËµÕÊý¸þ¤Ë
-¥¸¥ã¥ó¥×
+@code{navi2ch-article-pop-poped-point} $B5-21$7$?%+!<%=%k0LCV$K5UJ}8~$K(B
+$B%8%c%s%W(B
 
 @item m
-@code{navi2ch-article-push-point} ¸½ºß¤Î¥«¡¼¥½¥ë°ÌÃÖ¤òµ­²±
+@code{navi2ch-article-push-point} $B8=:_$N%+!<%=%k0LCV$r5-21(B
 
 @item U
-@code{navi2ch-article-show-url} ¥¹¥ì¡¦ÆÃÄê¤Î¥ì¥¹¡¦ÈÄ¤Î URL ¤ò¥³¥Ô¡¼¡¢
-¤¢¤ë¤¤¤Ï¥Ö¥é¥¦¥¶¤ÇÉ½¼¨
+@code{navi2ch-article-show-url} $B%9%l!&FCDj$N%l%9!&HD$N(B URL $B$r%3%T!<!"(B
+$B$"$k$$$O%V%i%&%6$GI=<((B
 
 @item .
-@code{navi2ch-article-redisplay-current-message} ¥«¡¼¥½¥ë¤Î¤¢¤ë¥ì¥¹¤ò
-¥Ð¥Ã¥Õ¥¡¤Î°ìÈÖ¾å¤Ë°ÜÆ°
+@code{navi2ch-article-redisplay-current-message} $B%+!<%=%k$N$"$k%l%9$r(B
+$B%P%C%U%!$N0lHV>e$K0\F0(B
 
 @item p
-@code{navi2ch-article-previous-message} ¤Ò¤È¤ÄÁ°¤Î¥ì¥¹¤Ë°ÜÆ°
+@code{navi2ch-article-previous-message} $B$R$H$DA0$N%l%9$K0\F0(B
 
 @item n
-@code{navi2ch-article-next-message} ¼¡¤Î¥ì¥¹¤Ë°ÜÆ°
+@code{navi2ch-article-next-message} $B<!$N%l%9$K0\F0(B
 
 @item P
-@code{navi2ch-article-through-previous} ¤Ò¤È¤Ä¾å¤Î¥¹¥ì¤Ë°ÜÆ°
+@code{navi2ch-article-through-previous} $B$R$H$D>e$N%9%l$K0\F0(B
 
 @item N
-@code{navi2ch-article-through-next} ¤Ò¤È¤Ä²¼¤Î¥¹¥ì¤Ë°ÜÆ°
+@code{navi2ch-article-through-next} $B$R$H$D2<$N%9%l$K0\F0(B
 
 @item @key{SHIFT} @key{TAB}
-@code{navi2ch-article-previous-link} ¤Ò¤È¤ÄÁ°¤Î¥ê¥ó¥¯¤Ë°ÜÆ°
+@code{navi2ch-article-previous-link} $B$R$H$DA0$N%j%s%/$K0\F0(B
 
 @item @key{ESC} @key{TAB}
-@code{navi2ch-article-previous-link} ¤Ò¤È¤ÄÁ°¤Î¥ê¥ó¥¯¤Ë°ÜÆ°
+@code{navi2ch-article-previous-link} $B$R$H$DA0$N%j%s%/$K0\F0(B
 
 @item @key{TAB}
-@code{navi2ch-article-next-link} ¼¡¤Î¥ê¥ó¥¯¤Ë°ÜÆ°
+@code{navi2ch-article-next-link} $B<!$N%j%s%/$K0\F0(B
 
 @item >
-@code{navi2ch-article-goto-last-message} ºÇ¸å¤Î¥ì¥¹¤Ë°ÜÆ°
+@code{navi2ch-article-goto-last-message} $B:G8e$N%l%9$K0\F0(B
 
 @item <
-@code{navi2ch-article-goto-first-message} ºÇ½é¤Î¥ì¥¹¤Ë°ÜÆ°
+@code{navi2ch-article-goto-first-message} $B:G=i$N%l%9$K0\F0(B
 
 @item @key{ESC} d
-@code{navi2ch-article-decode-message} µ­»ö¤ò¥Ç¥³¡¼¥É¤¹¤ë¡£
+@code{navi2ch-article-decode-message} $B5-;v$r%G%3!<%I$9$k!#(B
 
 @item @key{ESC} i
-@code{navi2ch-article-auto-decode-toggle-text} ¼«Æ°¥Ç¥³¡¼¥É¤·¤¿ÆâÍÆ¤ÎÉ½¼¨¤ò
-ÀÚ¤ê´¹¤¨¤ë¡£
+@code{navi2ch-article-auto-decode-toggle-text} $B<+F0%G%3!<%I$7$?FbMF$NI=<($r(B
+$B@Z$j49$($k!#(B
 
 @item v
-@code{navi2ch-article-view-aa} ¥¢¥¹¥­¡¼¥¢¡¼¥È¤òÉ½¼¨ (Í× aadisplay)
+@code{navi2ch-article-view-aa} $B%"%9%-!<%"!<%H$rI=<((B ($BMW(B aadisplay)
 
 @item f
-@code{navi2ch-article-forward-buffer} ¼¡¤Î¥Ð¥Ã¥Õ¥¡¤Ë°ÜÆ°
+@code{navi2ch-article-forward-buffer} $B<!$N%P%C%U%!$K0\F0(B
 
 @item b
-@code{navi2ch-article-backward-buffer} Á°¤Î¥Ð¥Ã¥Õ¥¡¤Ë°ÜÆ°
+@code{navi2ch-article-backward-buffer} $BA0$N%P%C%U%!$K0\F0(B
 
 @item d
-@code{navi2ch-article-hide-message} ¥«¡¼¥½¥ë¤Î¤¢¤ë¥ì¥¹¤ò±£¤¹¡¦(@kbd{h}
-¤Î¤¢¤È) ±£¤·¤¿¥ì¥¹¤òÌá¤¹¡¦(@kbd{$} ¤Î¤¢¤È) ¥ì¥¹¤ò¥Ö¥Ã¥¯¥Þ¡¼¥¯¤«¤éºï½ü
+@code{navi2ch-article-hide-message} $B%+!<%=%k$N$"$k%l%9$r1#$9!&(B(@kbd{h}
+$B$N$"$H(B) $B1#$7$?%l%9$rLa$9!&(B(@kbd{$} $B$N$"$H(B) $B%l%9$r%V%C%/%^!<%/$+$i:o=|(B
 
 @item a
-@code{navi2ch-article-add-important-message} ¥«¡¼¥½¥ë¤Î¤¢¤ë¥ì¥¹¤ò¥Ö¥Ã
-¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-article-add-important-message} $B%+!<%=%k$N$"$k%l%9$r%V%C(B
+$B%/%^!<%/$KEPO?(B
 
 @item h
-@code{navi2ch-article-toggle-hide} ±£¤·¤¿¥ì¥¹¤ÎÉ½¼¨¤È¥¹¥ì¤ÎÉ½¼¨¤ÎÀÚ¤ê
-ÂØ¤¨
+@code{navi2ch-article-toggle-hide} $B1#$7$?%l%9$NI=<($H%9%l$NI=<($N@Z$j(B
+$BBX$((B
 
 @item $
-@code{navi2ch-article-toggle-important} ¥¹¥ì¤Î¥Ö¥Ã¥¯¥Þ¡¼¥¯¤òÉ½¼¨
+@code{navi2ch-article-toggle-important} $B%9%l$N%V%C%/%^!<%/$rI=<((B
 
 @item A
-@code{navi2ch-article-add-global-bookmark} ¥¹¥ì¤ò¥°¥í¡¼¥Ð¥ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ËÅÐÏ¿
+@code{navi2ch-article-add-global-bookmark} $B%9%l$r%0%m!<%P%k%V%C%/%^!<%/$KEPO?(B
 
 @item C-c C-m
-@code{navi2ch-message-pop-message-buffer} ½ñ¤­¹þ¤ß¤Î¤È¤­½ñ¤­¹þ¤ß²èÌÌ¤Ë
-Ìá¤ë
+@code{navi2ch-message-pop-message-buffer} $B=q$-9~$_$N$H$-=q$-9~$_2hLL$K(B
+$BLa$k(B
 
 @item i
-@code{navi2ch-article-fetch-link} ¥ê¥ó¥¯Àè¤Î¥¹¥ì¤ò¹¹¿·
+@code{navi2ch-article-fetch-link} $B%j%s%/@h$N%9%l$r99?7(B
 
 @item G
-@code{navi2ch-article-goto-board} »ØÄê¤·¤¿ÈÄ¤Ë°ÜÆ°
+@code{navi2ch-article-goto-board} $B;XDj$7$?HD$K0\F0(B
 
 @item e
-@code{navi2ch-article-textize-article} ¥¹¥ì¤ò¥Æ¥­¥¹¥È¤ÇÊÝÂ¸
+@code{navi2ch-article-textize-article} $B%9%l$r%F%-%9%H$GJ]B8(B
 
 @item ?
-@code{navi2ch-article-search} ¥ì¥¹¤ò¸¡º÷
+@code{navi2ch-article-search} $B%l%9$r8!:w(B
 
 @item C-o
-@code{navi2ch-article-save-dat-file} .dat ¥Õ¥¡¥¤¥ë¤òÊÝÂ¸
+@code{navi2ch-article-save-dat-file} .dat $B%U%!%$%k$rJ]B8(B
 
 @item F
-@code{navi2ch-article-toggle-message-filter} ¥ì¥¹¤ËÂÐ¤¹¤ë¥Õ¥£¥ë¥¿½èÍý¤Î
-Í­¸ú¡¦Ìµ¸ú¤òÀÚ¤êÂØ¤¨¤ë
+@code{navi2ch-article-toggle-message-filter} $B%l%9$KBP$9$k%U%#%k%?=hM}$N(B
+$BM-8z!&L58z$r@Z$jBX$($k(B
 
 @item x
-@code{navi2ch-article-toggle-message-filter} ¥«¡¼¥½¥ë¤Î¤¢¤ë¥ì¥¹¤ËÂÐ¤¹¤ë
-¥ì¥¹ÃÖ´¹¤ÎÍ­¸ú¡¦Ìµ¸ú¤òÀÚ¤êÂØ¤¨¤ë
+@code{navi2ch-article-toggle-message-filter} $B%+!<%=%k$N$"$k%l%9$KBP$9$k(B
+$B%l%9CV49$NM-8z!&L58z$r@Z$jBX$($k(B
 
 @item !
-@code{navi2ch-article-add-message-filter-rule} ¥ì¥¹¤ËÂÐ¤¹¤ë
-¥Õ¥£¥ë¥¿½èÍý¤Î¾ò·ï¤òÂÐÏÃÅª¤ËÄÉ²Ã¤¹¤ë
+@code{navi2ch-article-add-message-filter-rule} $B%l%9$KBP$9$k(B
+$B%U%#%k%?=hM}$N>r7o$rBPOCE*$KDI2C$9$k(B
 
 @item C-c C-r
-@code{navi2ch-article-remove-article} ¥¹¥ì¤Î¾ðÊó (¼èÆÀ¤·¤¿ .dat ¥Õ¥¡¥¤¥ë¤ä´ûÆÉ¾ðÊó¤Ê¤É) ¤ò¾Ã¤¹
+@code{navi2ch-article-remove-article} $B%9%l$N>pJs(B ($B<hF@$7$?(B .dat $B%U%!%$%k$d4{FI>pJs$J$I(B) $B$r>C$9(B
 
 @item u
-@code{navi2ch-article-show-url-at-point} ¥«¡¼¥½¥ë¤Î²¼¤Î URL ¤òÉ½¼¨¤·¡¢
-¥­¥ë¥ê¥ó¥°¤Ë¥³¥Ô¡¼¤¹¤ë¡£
+@code{navi2ch-article-show-url-at-point} $B%+!<%=%k$N2<$N(B URL $B$rI=<($7!"(B
+$B%-%k%j%s%0$K%3%T!<$9$k!#(B
 
 @end table
 
 @node Message Mode Key Bindings
-@appendixsec Message ¥â¡¼¥É¤Ç¤Î¥­¡¼¥Ð¥¤¥ó¥É
+@appendixsec Message $B%b!<%I$G$N%-!<%P%$%s%I(B
 
 @table @kbd
 @item C-c C-c
-@code{navi2ch-message-send-message} ½ñ¤­¹þ¤ß¤òÁ÷¿®
+@code{navi2ch-message-send-message} $B=q$-9~$_$rAw?.(B
 
 @item C-c C-k
-@code{navi2ch-message-exit} ½ñ¤­¹þ¤ß¤ò¥­¥ã¥ó¥»¥ë
+@code{navi2ch-message-exit} $B=q$-9~$_$r%-%c%s%;%k(B
 
 @item C-c C-y
-@code{navi2ch-message-cite-original} ¥«¡¼¥½¥ë¤Î¤¢¤ë¥ì¥¹¤ò°úÍÑ
+@code{navi2ch-message-cite-original} $B%+!<%=%k$N$"$k%l%9$r0zMQ(B
 
 @item C-c y
-@code{navi2ch-message-cite-original-from-number} ÈÖ¹æ¤Ç»ØÄê¤·¤¿¥ì¥¹¤ò
-°úÍÑ
+@code{navi2ch-message-cite-original-from-number} $BHV9f$G;XDj$7$?%l%9$r(B
+$B0zMQ(B
 
 @item C-c C-i
-@code{navi2ch-message-insert-backup} Á°²ó½ñ¤¤¤¿¥ì¥¹¤òÁÞÆþ
+@code{navi2ch-message-insert-backup} $BA02s=q$$$?%l%9$rA^F~(B
 
 @item C-c C-b
-@code{navi2ch-base64-insert-file} ¥Õ¥¡¥¤¥ë¤ò base64 ¥¨¥ó¥³¡¼¥É¤·¤ÆÁÞÆþ
+@code{navi2ch-base64-insert-file} $B%U%!%$%k$r(B base64 $B%(%s%3!<%I$7$FA^F~(B
 
 @item @key{ESC} t
-@code{navi2ch-toggle-offline} ¥ª¥Õ¥é¥¤¥ó¡¦¥ª¥ó¥é¥¤¥ó¤ÎÀÚ¤êÂØ¤¨
+@code{navi2ch-toggle-offline} $B%*%U%i%$%s!&%*%s%i%$%s$N@Z$jBX$((B
 
 @item C-c C-a ?
-@code{navi2ch-message-insert-aa} ¥¢¥¹¥­¡¼¥¢¡¼¥È¤Î¥ê¥¹¥È¤òÉ½¼¨¤·¤ÆÆþÎÏ
+@code{navi2ch-message-insert-aa} $B%"%9%-!<%"!<%H$N%j%9%H$rI=<($7$FF~NO(B
 @end table
 
 @node Message Mode AA List
-@appendixsec Message ¥â¡¼¥É¤Ç¤Î¥¢¥¹¥­¡¼¥¢¡¼¥È°ìÍ÷
+@appendixsec Message $B%b!<%I$G$N%"%9%-!<%"!<%H0lMw(B
 
-Message ¥â¡¼¥É¤Ç¡¢@kbd{C-c C-a} ¤ËÂ³¤¤¤Æ²¼µ­¤Î¥­¡¼¤ò²¡¤¹¤³¤È¤Ç£²¤Á¤ã¤ó
-¤Í¤ëÆÃÍ­¤Î¥¢¥¹¥­¡¼¥¢¡¼¥È¤òÆþÎÏ¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£@kbd{C-c C-a ?} ¤ò²¡¤¹
-¤È¡¢¥¢¥¹¥­¡¼¥¢¡¼¥È¤Î¥ê¥¹¥È¤òÉ½¼¨¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+Message $B%b!<%I$G!"(B@kbd{C-c C-a} $B$KB3$$$F2<5-$N%-!<$r2!$9$3$H$G#2$A$c$s(B
+$B$M$kFCM-$N%"%9%-!<%"!<%H$rF~NO$9$k$3$H$,$G$-$k!#(B@kbd{C-c C-a ?} $B$r2!$9(B
+$B$H!"%"%9%-!<%"!<%H$N%j%9%H$rI=<($9$k$3$H$,$G$-$k!#(B
 
-(¥Û¥ó¥È¤ÏÈ¾³Ñ¥«¥Ê (¤Ã¤Æ²¿¤Ç¤¹¤«?) ¤¬»È¤ï¤ì¤Æ¤ë¤ó¤À¤±¤É¡¢¿§¡¹ÉÔÅÔ¹ç¤¬¤¢
-¤ë¤Î¤Ç¤³¤³¤Ç¤ÏÁ´³Ñ¤Í¡£)
+($B%[%s%H$OH>3Q%+%J(B ($B$C$F2?$G$9$+(B?) $B$,;H$o$l$F$k$s$@$1$I!"?'!9ITET9g$,$"(B
+$B$k$N$G$3$3$G$OA43Q$M!#(B)
 
 @table @kbd
 @comment START-OF-AA-LIST
 @item a
-@samp{(¡­§¥¡®)}
+@samp{($B!-'%!.(B)}
 
 @item b
-@samp{¡³(`§¥¡­)¥Î}
+@samp{$B!3(B(`$B'%!-(B)$B%N(B}
 
 @item B
-@samp{(((¡¨¡¬§¥¡¬))¥¬¥¯¥¬¥¯¥Ö¥ë¥Ö¥ë}
+@samp{((($B!(!,'%!,(B))$B%,%/%,%/%V%k%V%k(B}
 
 @item f
-@samp{( ¡­_¡µ`)¥Õ¡¼¥ó}
+@samp{( $B!-(B_$B!5(B`)$B%U!<%s(B}
 
 @item e
-@samp{(¢¿§Õ`)}
+@samp{($B"?'U(B`)}
 
 @item F
-@samp{(¡­¡¼¡®)}
+@samp{($B!-!<!.(B)}
 
 @item g
-@samp{(¡¬§¥¡¬)¥´¥ë¥¡}
+@samp{($B!,'%!,(B)$B%4%k%!(B}
 
 @item G
-@samp{¥¬¨¬¨¬(¡¬§¥¡¬;)¨¬¨¬¥½!}
+@samp{$B%,(,(,(B($B!,'%!,(B;)$B(,(,%=(B!}
 
 @item h
-@samp{(¡¬§¥¡¬)¥Ï¥¡?}
+@samp{($B!,'%!,(B)$B%O%!(B?}
 
 @item H
-@samp{(;¡­§¥¡®)¥Ï¥¡¥Ï¥¡}
+@samp{(;$B!-'%!.(B)$B%O%!%O%!(B}
 
 @item i
-@samp{(¡¦¢Ï¡¦)¥¤¥¤!!}
+@samp{($B!&"O!&(B)$B%$%$(B!!}
 
 @item I
-@samp{(¡¦£Á¡¦)¥¤¥¯¥Ê¥¤!!}
+@samp{($B!&#A!&(B)$B%$%/%J%$(B!!}
 
 @item j
-@samp{(¡¦¢Ï¡¦)¥¸¥µ¥¯¥¸¥¨¥ó¥Ç¥·¥¿}
+@samp{($B!&"O!&(B)$B%8%5%/%8%(%s%G%7%?(B}
 
 @item k
-@samp{¥­¥¿¨¬¨¬¨¬¨¬¨¬¨¬(¡¬¢Ï¡¬)¨¬¨¬¨¬¨¬¨¬¨¬ !!!!!}
+@samp{$B%-%?(,(,(,(,(,(,(B($B!,"O!,(B)$B(,(,(,(,(,(,(B !!!!!}
 
 @item K
-@samp{¥­¥¿¨¬(¡¬¢Ï¡¬)¨¬( ¡¬¢Ï)¨¬( ¡¡¡¬)¨¬(¡¡¡¡)¨¬(¡¬ ¡¡)¨¬(¢Ï¡¬ )¨¬(¡¬¢Ï¡¬)¨¬!!!!}
+@samp{$B%-%?(,(B($B!,"O!,(B)$B(,(B( $B!,"O(B)$B(,(B( $B!!!,(B)$B(,(B($B!!!!(B)$B(,(B($B!,(B $B!!(B)$B(,(B($B"O!,(B )$B(,(B($B!,"O!,(B)$B(,(B!!!!}
 
 @item m
-@samp{(¡­¢Ï¡®)}
+@samp{($B!-"O!.(B)}
 
 @item M
-@samp{¡³(¡­¢¦¡®)¥Î}
+@samp{$B!3(B($B!-"&!.(B)$B%N(B}
 
 @item n
-@samp{(¡±¡¼¡±)¥Ë¥ä¥ê¥Ã}
+@samp{($B!1!<!1(B)$B%K%d%j%C(B}
 
 @item N
-@samp{(¡­-`).¡££ï£Ï(¤Ê¤ó¤Ç¤À¤í¤¦¡©)}
+@samp{($B!-(B-`).$B!##o#O(B($B$J$s$G$@$m$&!)(B)}
 
 @item p
-@samp{¡Ê¡¡¡¬§Õ¡¬¡Ë¥Ý¥«¡¼¥ó}
+@samp{$B!J!!!,'U!,!K%]%+!<%s(B}
 
 @item s
-@samp{¦²¡Ê¡¬§Õ¡¬lll¡Ë¥¬¡¼¥ó}
+@samp{$B&2!J!,'U!,(Blll$B!K%,!<%s(B}
 
 @item S
-@samp{(¡­¡¦¦Ø¡¦`)¥·¥ç¥Ü¡¼¥ó}
+@samp{($B!-!&&X!&(B`)$B%7%g%\!<%s(B}
 
 @item t
-@samp{y=¡¼( ¡¬§Õ¡¬)¡¦¢è.¡¡¥¿¡¼¥ó}
+@samp{y=$B!<(B( $B!,'U!,(B)$B!&"h(B.$B!!%?!<%s(B}
 
 @item u
-@samp{(¡¬§Õ¡¬)¥¦¥Þ¡¼}
+@samp{($B!,'U!,(B)$B%&%^!<(B}
 
 @item U
-@samp{(-¡²-)¥¦¥Ä¥À}
+@samp{(-$B!2(B-)$B%&%D%@(B}
 
 @comment END-OF-AA-LIST
 @end table
 
 @node FAQ
-@appendix ¤è¤¯¤¢¤ë¼ÁÌä¤È¤½¤ÎÅú¤¨
+@appendix $B$h$/$"$k<ALd$H$=$NEz$((B
 
 @menu
-* General Qestions::            Á´ÈÌ
-* How to Read::                 ÆÉ¤à
-* Can not Read::                ÆÉ¤á¤Ê¤¤
-* Board Questions::             ÈÄ´ØÏ¢
-* How to Write::                ½ñ¤­¹þ¤à
-* Misc Questions::              ¤½¤ÎÂ¾
+* General Qestions::            $BA4HL(B
+* How to Read::                 $BFI$`(B
+* Can not Read::                $BFI$a$J$$(B
+* Board Questions::             $BHD4XO"(B
+* How to Write::                $B=q$-9~$`(B
+* Misc Questions::              $B$=$NB>(B
 @end menu
 
 @node General Qestions
-@appendixsec Á´ÈÌ
+@appendixsec $BA4HL(B
 
 @table @asis
 
 @item Q.
-Navi2ch ¤Ã¤Æ²¿¡©
+Navi2ch $B$C$F2?!)(B
 
 @item A.
-£²¤Á¤ã¤ó¤Í¤ëÀìÍÑ¥Ö¥é¥¦¥¶¤Ç¤¹¡£Emacs¡¢XEmacs¡¢Meadow ¤Ê¤É¤Î Emacsen ¤Ç
-Æ°ºî¤·¤Þ¤¹¡£
+$B#2$A$c$s$M$k@lMQ%V%i%&%6$G$9!#(BEmacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B$G(B
+$BF0:n$7$^$9!#(B
 
 @item Q.
-Emacs ¤Îµ¯Æ°¤ÈÆ±»þ¤Ë Navi2ch ¤òµ¯Æ°¤·¤¿¤¤¤ó¤À¤±¤É¡£
+Emacs $B$N5/F0$HF1;~$K(B Navi2ch $B$r5/F0$7$?$$$s$@$1$I!#(B
 
 @item A.
-@code{emacs -e navi2ch} ¤¢¤ë¤¤¤Ï @code{emacs -f navi2ch} ¤Ç¤É¤¦¤¾¡£
+@code{emacs -e navi2ch} $B$"$k$$$O(B @code{emacs -f navi2ch} $B$G$I$&$>!#(B
 
 @item Q.
-¥ª¥Õ¥é¥¤¥ó¤Çµ¯Æ°¤·¤¿¤¤¤ó¤À¤±¤É¡£
+$B%*%U%i%$%s$G5/F0$7$?$$$s$@$1$I!#(B
 
 @item A.
-@kbd{C-u M-x navi2ch @key{RET}} ¤Ç¤É¤¦¤¾¡£
+@kbd{C-u M-x navi2ch @key{RET}} $B$G$I$&$>!#(B
 
 @item Q.
-@code{Cannot open load file} ¤¬½Ð¤Æµ¯Æ°¤Ç¤­¤Ê¤¤¤ó¤À¤±¤É¡£
+@code{Cannot open load file} $B$,=P$F5/F0$G$-$J$$$s$@$1$I!#(B
 
 @item A.
-¥í¡¼¥É¥Ñ¥¹¤¬Àµ¤·¤¯ÀßÄê¤µ¤ì¤Æ¤Ê¤¤¤«¤â¡£@file{~/.emacs} ¤ò³ÎÇ§¤·¤Æ¤Í¡£
+$B%m!<%I%Q%9$,@5$7$/@_Dj$5$l$F$J$$$+$b!#(B@file{~/.emacs} $B$r3NG'$7$F$M!#(B
 
 @item Q.
-¡û¡û¤ò¢¤¢¤¤Ë¤·¤¿¤¤¤ó¤À¤±¤É¡£
+$B!{!{$r"$"$$K$7$?$$$s$@$1$I!#(B
 
 @item A.
-¤È¤ê¤¢¤¨¤º @file{navi2ch-vars.el} ¤Ã¤Æ¤¤¤¦¥Õ¥¡¥¤¥ë¤ò¸«¤Æ¤ß¤Æ¤Í¡£
-¤½¤ì¤« @kbd{M-x customize-group @key{RET} navi2ch @key{RET}} ¤¹¤ë¤«¡£@xref{Customize}.
+$B$H$j$"$($:(B @file{navi2ch-vars.el} $B$C$F$$$&%U%!%$%k$r8+$F$_$F$M!#(B
+$B$=$l$+(B @kbd{M-x customize-group @key{RET} navi2ch @key{RET}} $B$9$k$+!#(B@xref{Customize}.
 
 @item Q.
-²¿¡¹¤·¤è¤¦¤È¤·¤¿¤é¤Û¤Ë¤ã¤é¤é¤Ã¤Æ¥¨¥é¡¼¤¬½Ð¤ë¤ó¤À¤±¤É¡£
+$B2?!9$7$h$&$H$7$?$i$[$K$c$i$i$C$F%(%i!<$,=P$k$s$@$1$I!#(B
 
 @item A.
-¤Þ¤º¡¢°ìÅÙ Emacs ¤ò½ªÎ»¤·¡¢ºÆÅÙÎ©¤Á¾å¤²Ä¾¤·¤Æ¤«¤é Navi2ch ¤òµ¯Æ°¤·¤Æ¤ß
-¤Æ¤Á¤ç¡£¤½¤ì¤Ç¤â¥¨¥é¡¼¤¬½Ð¤ë¤è¤¦¤Ê¤é¡¢
+$B$^$:!"0lEY(B Emacs $B$r=*N;$7!":FEYN)$A>e$2D>$7$F$+$i(B Navi2ch $B$r5/F0$7$F$_(B
+$B$F$A$g!#$=$l$G$b%(%i!<$,=P$k$h$&$J$i!"(B
 
 @kbd{M-x set-variable @key{RET} debug-on-error @key{RET} t @key{RET}}
 
-¤·¤Æ¡¢¥¨¥é¡¼¤¬µ¯¤­¤¿»þ¤Î @code{*Backtrace*} ¥Ð¥Ã¥Õ¥¡¤ÎÆâÍÆ¤ò£²¤Á¤ã¤ó¤Í
-¤ë¤Î Navi2ch ¥¹¥ì¤ÇÊó¹ð¤·¤Æ¤Í¡£¤½¤ÎºÝ¡¢»È¤Ã¤Æ¤ë Emacs ¤Î¼ïÎà¤ä¥Ð¡¼¥¸¥ç
-¥ó¡¢Navi2ch ¤Î¥Ð¡¼¥¸¥ç¥ó (CVS ÈÇ¤ò»È¤Ã¤Æ¤ë»þ¤Ï ChangeLog ¤Î°ìÈÖºÇ¸å¤Ë
-¤¢¤ë¥ê¥Ó¥¸¥ç¥ó) ¤â¶µ¤¨¤Æ¤¯¤ì¤ë¤ÈÂÐ±þ¤¬Áá¤¤¤«¤â¡£
+$B$7$F!"%(%i!<$,5/$-$?;~$N(B @code{*Backtrace*} $B%P%C%U%!$NFbMF$r#2$A$c$s$M(B
+$B$k$N(B Navi2ch $B%9%l$GJs9p$7$F$M!#$=$N:]!";H$C$F$k(B Emacs $B$N<oN`$d%P!<%8%g(B
+$B%s!"(BNavi2ch $B$N%P!<%8%g%s(B (CVS $BHG$r;H$C$F$k;~$O(B ChangeLog $B$N0lHV:G8e$K(B
+$B$"$k%j%S%8%g%s(B) $B$b65$($F$/$l$k$HBP1~$,Aa$$$+$b!#(B
 
 @item Q.
-¡Ö¥Ç¥£¥ì¥¯¥È¥ê¤Î¥í¥Ã¥¯¤Ë¼ºÇÔ¤·¤Þ¤·¤¿¡£¡×¤Ã¤Æ¸À¤ï¤ì¤ë¤ó¤À¤±¤É¤³¤ì²¿?
+$B!V%G%#%l%/%H%j$N%m%C%/$K<:GT$7$^$7$?!#!W$C$F8@$o$l$k$s$@$1$I$3$l2?(B?
 
 @item A.
-Navi2ch ¤òÆ±»þ¤ËÊ£¿ôµ¯Æ°¤¹¤ë¤È¡¢@file{~/.navi2ch/} ¤ÎÀ°¹çÀ­¤¬¼è¤ì¤Ê¤¯
-¤Ê¤Ã¤Á¤ã¤¦¤Î¤Ç¡¢¥í¥Ã¥¯¥Õ¥¡¥¤¥ë¤òºîÀ®¤·¤Æ¤¤¤Þ¤¹¡£¥í¥Ã¥¯¥Õ¥¡¥¤¥ë¤ÎºîÀ®¤Ë
-¼ºÇÔ¤¹¤ë¤È¡¢Â¾¤Ë Navi2ch ¤òµ¯Æ°¤·¤Æ¤¤¤ë²ÄÇ½À­¤¬¤¢¤ë¤Î¤Ç¤³¤Î¥á¥Ã¥»¡¼¥¸
-¤¬É½¼¨¤µ¤ì¤Þ¤¹¡£
+Navi2ch $B$rF1;~$KJ#?t5/F0$9$k$H!"(B@file{~/.navi2ch/} $B$N@09g@-$,<h$l$J$/(B
+$B$J$C$A$c$&$N$G!"%m%C%/%U%!%$%k$r:n@.$7$F$$$^$9!#%m%C%/%U%!%$%k$N:n@.$K(B
+$B<:GT$9$k$H!"B>$K(B Navi2ch $B$r5/F0$7$F$$$k2DG=@-$,$"$k$N$G$3$N%a%C%;!<%8(B
+$B$,I=<($5$l$^$9!#(B
 
-¤¿¤À¡¢Navi2ch ¤Îµ¯Æ°Ãæ¤Ë Emacs ¤ò¶¯À©½ªÎ»¤·¤¿¤ê¤¹¤ë¤È¥í¥Ã¥¯¥Õ¥¡¥¤¥ë¤¬
-»Ä¤Ã¤Æ¤·¤Þ¤¤¡¢¤³¤Î·Ù¹ð¤¬É½¼¨¤µ¤ì¤ë¾ì¹ç¤¬¤¢¤ê¤Þ¤¹¡£¤½¤ÎºÝ¤Ï Navi2ch ¤ò
-Ê£¿ôµ¯Æ°¤·¤è¤¦¤È¤·¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤·¤¿¸å¡¢¡Ö¤â¤¦°ìÅÙ»î¤·¤Þ¤¹¤«?¡×¤Î
-Ìä¤¤¤Ë @code{n} (¤³¤ÎÌä¤¤¤Ï¥Ð¡¼¥¸¥ç¥ó¤Ë¤è¤Ã¤Æ¤Ïºï½ü¤µ¤ì¤Æ¤¤¤Þ¤¹)¡¢
-¡Ö´í¸±¤ò¾µÃÎ¤ÇÂ³¤±¤Þ¤¹¤«?¡×¤ÎÌä¤¤¤Ë @code{yes} ¤ÈÅú¤¨¤Æ¤¯¤À¤µ¤¤¡£
+$B$?$@!"(BNavi2ch $B$N5/F0Cf$K(B Emacs $B$r6/@)=*N;$7$?$j$9$k$H%m%C%/%U%!%$%k$,(B
+$B;D$C$F$7$^$$!"$3$N7Y9p$,I=<($5$l$k>l9g$,$"$j$^$9!#$=$N:]$O(B Navi2ch $B$r(B
+$BJ#?t5/F0$7$h$&$H$7$F$$$J$$$3$H$r3NG'$7$?8e!"!V$b$&0lEY;n$7$^$9$+(B?$B!W$N(B
+$BLd$$$K(B @code{n} ($B$3$NLd$$$O%P!<%8%g%s$K$h$C$F$O:o=|$5$l$F$$$^$9(B)$B!"(B
+$B!V4m81$r>5CN$GB3$1$^$9$+(B?$B!W$NLd$$$K(B @code{yes} $B$HEz$($F$/$@$5$$!#(B
 
 @item Q.
 @code{connection failed: operation already in progress, navi2ch.sourcefoge.net, navi2ch connection}
-¤Ã¤Æ½Ð¤Æµ¯Æ°¤Ç¤­¤Ê¤¤¤ó¤À¤±¤É¡Ä¡£
+$B$C$F=P$F5/F0$G$-$J$$$s$@$1$I!D!#(B
 
 @item A.
-¤È¤ê¤¢¤¨¤º¤³¤¦¤·¤È¤±¤Ð¡©
+$B$H$j$"$($:$3$&$7$H$1$P!)(B
 @lisp
 (setq navi2ch-open-network-stream-function
       #'navi2ch-open-network-stream-with-retry)
@@ -1794,96 +1896,96 @@ Navi2ch ¤òÆ±»þ¤ËÊ£¿ôµ¯Æ°¤¹¤ë¤È¡¢@file{~/.navi2ch/} ¤ÎÀ°¹çÀ­¤¬¼è¤ì¤Ê¤¯
 @end table
 
 @node How to Read
-@appendixsec ÆÉ¤à
+@appendixsec $BFI$`(B
 
 @table @asis
 
 @item Q.
-@code{>>1} ¤ß¤¿¤¤¤Ê¥ê¥ó¥¯¤ÇÈô¤ó¤Ç¤Ã¤¿¤¢¤È¤Ë¸µ¤Î¥ì¥¹¤ËÌá¤ê¤¿¤¤¤ó¤À¤±¤É¡£
+@code{>>1} $B$_$?$$$J%j%s%/$GHt$s$G$C$?$"$H$K85$N%l%9$KLa$j$?$$$s$@$1$I!#(B
 
 @item A.
-@kbd{l} ¤ÇÌá¤ì¤Þ¤¹¡£
+@kbd{l} $B$GLa$l$^$9!#(B
 
 @item Q.
-¥¹¥ì¤ò³«¤¯¤È°ìÉô¤Î¥ì¥¹¤·¤«É½¼¨¤µ¤ì¤Ê¤¤¤è¡£Á´ÉôÆÉ¤ß¤¿¤¤¤ó¤À¤±¤É¡£
+$B%9%l$r3+$/$H0lIt$N%l%9$7$+I=<($5$l$J$$$h!#A4ItFI$_$?$$$s$@$1$I!#(B
 
 @item A.
-@kbd{r 0} ¤Ç¤É¤¦¤è¡£¾Ü¤·¤¯¤Ï @ref{Article View Range} ¤ò¸«¤Æ¤Í¡£
+@kbd{r 0} $B$G$I$&$h!#>\$7$/$O(B @ref{Article View Range} $B$r8+$F$M!#(B
 
 @item Q.
-¥¹¥ì¤ò³«¤¤¤¿¤È¤­¤Ë¥Ç¥Õ¥©¥ë¥È¤ÇÁ´·ïÉ½¼¨¤µ¤»¤¿¤¤¤ó¤À¤±¤É¡£
+$B%9%l$r3+$$$?$H$-$K%G%U%)%k%H$GA47oI=<($5$;$?$$$s$@$1$I!#(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-article-auto-range} ¤ÎÃÍ¤ò @code{nil} ¤ËÀßÄê¤·¤Þ¤¹¡£
+$BJQ?t(B @code{navi2ch-article-auto-range} $B$NCM$r(B @code{nil} $B$K@_Dj$7$^$9!#(B
 @xref{Customize}.
 
 @item Q.
-Ê£¿ô¤Î¥¹¥ì¤ò½ä²ó¤·¤¿¤¤¤ó¤À¤±¤É¡£
+$BJ#?t$N%9%l$r=d2s$7$?$$$s$@$1$I!#(B
 
 @item A.
-@kbd{*} ¤È¤« @kbd{m a} ¤È¤« @kbd{m r} ¤Ç¥¹¥ì¤Ë¥Þ¡¼¥¯¤ò¤Ä¤±¤Æ¡¢@kbd{m i}
-¤Ç¤ª¤Ã¤±¡¼¡£@xref{Mark}.
+@kbd{*} $B$H$+(B @kbd{m a} $B$H$+(B @kbd{m r} $B$G%9%l$K%^!<%/$r$D$1$F!"(B@kbd{m i}
+$B$G$*$C$1!<!#(B@xref{Mark}.
 
 @item Q.
-URL ¤ò»ØÄê¤·¤Æ¥¹¥ì¤ò³«¤­¤¿¤¤¤ó¤À¤±¤É¡£
+URL $B$r;XDj$7$F%9%l$r3+$-$?$$$s$@$1$I!#(B
 
 @item A.
-@kbd{C-c C-u} ¤Ç¤É¤¦¤¾¡£
+@kbd{C-c C-u} $B$G$I$&$>!#(B
 
 @item Q.
-article ¤ò³«¤¯¤È¤­¤Ë°ì²èÌÌ¤Ç³«¤¤¤ÆÍß¤·¤¤¤ó¤À¤±¤É¡£
+article $B$r3+$/$H$-$K0l2hLL$G3+$$$FM_$7$$$s$@$1$I!#(B
 
 @item A.
-°Ê²¼¤ÎÀßÄê¤ò¤·¤Æ²¼¤µ¤¤¡£
+$B0J2<$N@_Dj$r$7$F2<$5$$!#(B
 @lisp
 (setq navi2ch-bm-stay-board-window nil)
 @end lisp
 
 @item Q.
-Navi2ch ¤ò¤º¤Ã¤È»È¤Ã¤Æ¤ë¤È Emacs ¤Î¥á¥â¥ê»ÈÍÑÎÌ¤¬¤È¤ó¤Ç¤â¤Ê¤¤¤³¤È¤Ë¤Ê
-¤ë¤ó¤À¤±¤É¡£
+Navi2ch $B$r$:$C$H;H$C$F$k$H(B Emacs $B$N%a%b%j;HMQNL$,$H$s$G$b$J$$$3$H$K$J(B
+$B$k$s$@$1$I!#(B
 
 @item A.
-¤¿¤Ö¤ó¥¹¥ì¤Î¥Ð¥Ã¥Õ¥¡¤¬¤É¤ó¤É¤óÁý¤¨¤Æ¤¤¤ë¤Î¤¬¸¶°ø¡£
-@kbd{M-x navi2ch-article-expunge-buffers @key{RET}} ¤È¤¹¤ë¤È¡¢
-¥¹¥ì¤Î¥Ð¥Ã¥Õ¥¡¤Î¿ô¤¬ÊÑ¿ô @code{navi2ch-article-max-buffers}
-¤ÎÃÍ¤ò±Û¤¨¤Æ¤¤¤¿¤È¤­¤Ë¥Ð¥Ã¥Õ¥¡¤¬ºï½ü¤µ¤ì¤ë¡£
-¤Þ¤¿¡¢ÊÑ¿ô @code{navi2ch-article-auto-expunge} ¤ò
-@code{nil} °Ê³° (@code{t} ¤È¤«) ¤ËÀßÄê¤¹¤ë¤È
-¥¹¥ì¤ò³«¤¤¤¿¤È¤­¤Ë¼«Æ°Åª¤Ë¥Ð¥Ã¥Õ¥¡¤ÎºÇÂç¿ô¤¬¾åµ­¤ÎÃÍ¤ËÀ©¸Â¤µ¤ì¤ë¡£@xref{Customize}.
+$B$?$V$s%9%l$N%P%C%U%!$,$I$s$I$sA}$($F$$$k$N$,860x!#(B
+@kbd{M-x navi2ch-article-expunge-buffers @key{RET}} $B$H$9$k$H!"(B
+$B%9%l$N%P%C%U%!$N?t$,JQ?t(B @code{navi2ch-article-max-buffers}
+$B$NCM$r1[$($F$$$?$H$-$K%P%C%U%!$,:o=|$5$l$k!#(B
+$B$^$?!"JQ?t(B @code{navi2ch-article-auto-expunge} $B$r(B
+@code{nil} $B0J30(B (@code{t} $B$H$+(B) $B$K@_Dj$9$k$H(B
+$B%9%l$r3+$$$?$H$-$K<+F0E*$K%P%C%U%!$N:GBg?t$,>e5-$NCM$K@)8B$5$l$k!#(B@xref{Customize}.
 
 @end table
 
 @node Can not Read
-@appendixsec ÆÉ¤á¤Ê¤¤
+@appendixsec $BFI$a$J$$(B
 
 @table @asis
 
 @item Q.
-»ª¤¬¤´µ¡·ù¼Ð¤á¤ß¤¿¤¤¤Ç @code{now connect...} ¤Î¤Þ¤Þ»ß¤Þ¤Ã¤Æ¤ó¤À¤±¤É¡¢
-¤É¤¦¤Ë¤«¤Ê¤é¤Ê¤¤?
+$B;*$,$45!7y<P$a$_$?$$$G(B @code{now connect...} $B$N$^$^;_$^$C$F$s$@$1$I!"(B
+$B$I$&$K$+$J$i$J$$(B?
 
 @item A.
-@kbd{C-g} ¤ÇÃæ»ß¤Ç¤­¤Þ¤¹¡£
+@kbd{C-g} $B$GCf;_$G$-$^$9!#(B
 
 @item Q.
-¥¹¥ì¤òÆÉ¤ß¹þ¤ó¤Ç¤â @code{file is not updated} ¤È½Ð¤ÆÉ½¼¨¤µ¤ì¤Ê¤¤¤ó¤À¤±
-¤É¡£ÉáÄÌ¤Î¥Ö¥é¥¦¥¶¤À¤È¸«¤ì¤ë¡£¤É¡¼¤·¤Æ¤¯¤ì¤ë¤ó¡©
+$B%9%l$rFI$_9~$s$G$b(B @code{file is not updated} $B$H=P$FI=<($5$l$J$$$s$@$1(B
+$B$I!#IaDL$N%V%i%&%6$@$H8+$l$k!#$I!<$7$F$/$l$k$s!)(B
 
 @item A.
-@kbd{C-u S} ¤Ç¶¯À©ÆÉ¤ß¹þ¤ß¤·¤Æ¤ß¤Æ¤Í¡£
+@kbd{C-u S} $B$G6/@)FI$_9~$_$7$F$_$F$M!#(B
 
 @item Q.
-¥¹¥ì³«¤­Ãæ C-g ¤·¤Æ¥Ë¥Ã¥Á¤â¥µ¥Ã¥Á¤â¤¤¤«¤Ê¤¯¤Ê¤Ã¤¿¤é¤É¤¦¤¹¤ë¤Î?
+$B%9%l3+$-Cf(B C-g $B$7$F%K%C%A$b%5%C%A$b$$$+$J$/$J$C$?$i$I$&$9$k$N(B?
 
 @item A.
-@kbd{C-u s} ¤Ç¶¯À©Åª¤Ë¹¹¿·¤¹¤ë¡£
+@kbd{C-u s} $B$G6/@)E*$K99?7$9$k!#(B
 
 @item Q.
-¤¢¤ëÈÄ¤Ç @code{checking file...moved} ¤È½Ð¤Æ¡¢¥¹¥ì°ìÍ÷¤¬¹¹¿·¤µ¤ì¤Ê¤¤¡£
+$B$"$kHD$G(B @code{checking file...moved} $B$H=P$F!"%9%l0lMw$,99?7$5$l$J$$!#(B
 
 @item A.
-°Ê²¼3¤Ä¤Î¤É¤ì¤«¤Ç¤É¤¦¤¹¤«?
+$B0J2<(B3$B$D$N$I$l$+$G$I$&$9$+(B?
 @lisp
 (setq navi2ch-board-enable-readcgi nil
       navi2ch-board-use-subback-html nil)
@@ -1895,67 +1997,67 @@ Navi2ch ¤ò¤º¤Ã¤È»È¤Ã¤Æ¤ë¤È Emacs ¤Î¥á¥â¥ê»ÈÍÑÎÌ¤¬¤È¤ó¤Ç¤â¤Ê¤¤¤³¤È¤Ë¤Ê
 @lisp
 (setq navi2ch-board-enable-readcgi t)
 @end lisp
-¤½¤ì¤«ÈÄ°ÜÅ¾¤¬¤¢¤Ã¤¿¤Î¤«¤â¡£@xref{Board Questions}.
+$B$=$l$+HD0\E>$,$"$C$?$N$+$b!#(B@xref{Board Questions}.
 
 @item Q.
-¤¢¤ëÈÄ¤Ç¥¹¥ì¤òÆÉ¤à¤È @code{checking file...moved} ¤È½Ð¤Æ¡¢¥¹¥ì¤¬¹¹¿·¤µ¤ì¤Ê¤¤¡£
+$B$"$kHD$G%9%l$rFI$`$H(B @code{checking file...moved} $B$H=P$F!"%9%l$,99?7$5$l$J$$!#(B
 
 @item A.
-°Ê²¼2¤Ä¤Î¤É¤Ã¤Á¤«¤Ç¤É¤¦¤¹¤«?
+$B0J2<(B2$B$D$N$I$C$A$+$G$I$&$9$+(B?
 @lisp
 (setq navi2ch-enable-readcgi nil)
 @end lisp
 @lisp
 (setq navi2ch-enable-readcgi t)
 @end lisp
-¤½¤ì¤«ÈÄ°ÜÅ¾¤¬¤¢¤Ã¤¿¤Î¤«¤â¡£@xref{Board Questions}.
+$B$=$l$+HD0\E>$,$"$C$?$N$+$b!#(B@xref{Board Questions}.
 
 @end table
 
 @node Board Questions
-@appendixsec ÈÄ´ØÏ¢
+@appendixsec $BHD4XO"(B
 
 @table @asis
 
 @item Q.
-Æ±¤¸ 2ch ¥¿¥¤¥×¤ÎÂ¾¤Î·Ç¼¨ÈÄ¤â Navi2ch ¤ÇÆÉ¤ß¤¿¤¤¤ó¤À¤±¤É¡£
+$BF1$8(B 2ch $B%?%$%W$NB>$N7G<(HD$b(B Navi2ch $B$GFI$_$?$$$s$@$1$I!#(B
 
 @item A.
-@file{~/.navi2ch/etc.txt} ¤È¤¤¤¦¥Õ¥¡¥¤¥ë¤òºî¤Ã¤Æ¡¢°Ê²¼¤Î¤è¤¦¤Ë½ñ¤­¤Þ¤¹¡£
+@file{~/.navi2ch/etc.txt} $B$H$$$&%U%!%$%k$r:n$C$F!"0J2<$N$h$&$K=q$-$^$9!#(B
 
 @example
 @group
----------- ¤³¤³¤«¤é -----------
-ÈÄ¤ÎÌ¾Á°
+---------- $B$3$3$+$i(B -----------
+$BHD$NL>A0(B
 http://hoge.2ch.net/fuga/
 fuga
----------- ¤³¤³¤Þ¤Ç -----------
+---------- $B$3$3$^$G(B -----------
 @end group
 @end example
 
-¤³¤ì¤Ç¤½¤ÎÈÄ¤¬ÈÄ°ìÍ÷¤Î¡Ö¤½¤ÎÂ¾¡×¤ËÄÉ²Ã¤µ¤ì¤Þ¤¹¡£¥µ¡¼¥Ð°ÜÅ¾¤Ê¤éËÜ²È¤ÎÈÄ
-¥ê¥¹¥È (@code{bbstable}) ¤¬¹¹¿·¤µ¤ì¤ë¤Þ¤Ç¤Î¿ÉÊú¤Ç¤¹¡£@xref{Other
+$B$3$l$G$=$NHD$,HD0lMw$N!V$=$NB>!W$KDI2C$5$l$^$9!#%5!<%P0\E>$J$iK\2H$NHD(B
+$B%j%9%H(B (@code{bbstable}) $B$,99?7$5$l$k$^$G$N?IJz$G$9!#(B@xref{Other
 Boards File}.
 
 @item Q.
-ÆÍÁ³¤È¤¢¤ëÈÄ¤¬¹¹¿·¤µ¤ì¤Ê¤¯¤Ê¤Ã¤¿¤ß¤¿¤¤¤Ê¤ó¤À¤±¤É¡£
+$BFMA3$H$"$kHD$,99?7$5$l$J$/$J$C$?$_$?$$$J$s$@$1$I!#(B
 
 @item A.
-£²¤Á¤ã¤ó¤Í¤ë¤ÇÈÄ¤Î°ÜÅ¾¤¬¤¢¤Ã¤¿¤Î¤«¤â¡£
-¤Þ¤º¤Ï
-±¿ÍÑ¾ðÊóÈÄ (@uref{http://qb5.2ch.net/operate/}) ¤Î
-¡Ö¿·ÀßÈÄ¡¦ÈÄ°ÜÆ°¾ðÊó¡×¥¹¥ì¤ä
-¿·¡¦¤«¤Á¤å¡Á¤·¤ãÈÄ (@uref{http://azlucky.s31.xrea.com/katjusha/}) ¤Ç
-°ÜÅ¾¾ðÊó¤ò¥Á¥§¥Ã¥¯¤·¤è¤¦¡£
+$B#2$A$c$s$M$k$GHD$N0\E>$,$"$C$?$N$+$b!#(B
+$B$^$:$O(B
+$B1?MQ>pJsHD(B (@uref{http://qb5.2ch.net/operate/}) $B$N(B
+$B!V?7@_HD!&HD0\F0>pJs!W%9%l$d(B
+$B?7!&$+$A$e!A$7$cHD(B (@uref{http://azlucky.s31.xrea.com/katjusha/}) $B$G(B
+$B0\E>>pJs$r%A%'%C%/$7$h$&!#(B
 
-°ÜÅ¾¤À¤Ã¤¿¤é¡¢List ¥â¡¼¥É¤Ç @kbd{s} ¤·¤Æ¤ß¤è¤¦¡£
-°ÜÅ¾¾ðÊó¤¬ÈÄ¥ê¥¹¥È (@code{bbstable}) ¤ËÈ¿±Ç¤µ¤ì¤Æ¤¤¤ì¤Ð¤³¤ì¤ÇÆÉ¤á¤ë¤Ï¤º¡£
-È¿±Ç¤µ¤ì¤Æ¤Ê¤«¤Ã¤¿¤é¡¢È¿±Ç¤µ¤ì¤ë¤Þ¤Ç¤Î´Ö¤Ï
-@kbd{C-c C-u} ¤Ç¿·¤·¤¤ÈÄ¤Î URL ¤òÆþÎÏ¤·¤ÆÆÉ¤ó¤Ç¤Í¡£
+$B0\E>$@$C$?$i!"(BList $B%b!<%I$G(B @kbd{s} $B$7$F$_$h$&!#(B
+$B0\E>>pJs$,HD%j%9%H(B (@code{bbstable}) $B$KH?1G$5$l$F$$$l$P$3$l$GFI$a$k$O$:!#(B
+$BH?1G$5$l$F$J$+$C$?$i!"H?1G$5$l$k$^$G$N4V$O(B
+@kbd{C-c C-u} $B$G?7$7$$HD$N(B URL $B$rF~NO$7$FFI$s$G$M!#(B
 
-¤¤¤Á¤¤¤Á URL ¤òÆþ¤ì¤ë¤Î¤¬¤á¤ó¤É¤¦¤Ê¤È¤­¤Ï¡¢
-Navi2ch 1.7.3 °Ê¹ß¤Ê¤é
-ÊÑ¿ô @code{navi2ch-list-moved-board-alist} ¤Ç¿·µì URL ¤òÊÑ´¹¤Ç¤­¤ë¤è¡£
+$B$$$A$$$A(B URL $B$rF~$l$k$N$,$a$s$I$&$J$H$-$O!"(B
+Navi2ch 1.7.3 $B0J9_$J$i(B
+$BJQ?t(B @code{navi2ch-list-moved-board-alist} $B$G?75l(B URL $B$rJQ49$G$-$k$h!#(B
 
 @lisp
 (setq navi2ch-list-moved-board-alist
@@ -1963,150 +2065,150 @@ Navi2ch 1.7.3 °Ê¹ß¤Ê¤é
         ("http://pc.2ch.net/linux/" . "http://pc3.2ch.net/linux/")))
 @end lisp
 
-¤Ê¤É¤È¤·¤Æ¡¢List ¥â¡¼¥É¤Ç @kbd{C-u s}¡£
-¥­¡¼¤ÎÉôÊ¬¤ÏÈÄ URL ¤È´°Á´¥Þ¥Ã¥Á¤Ê¤Î¤Ç¡¢@file{~/.navi2ch/board.txt} ¤ò
-¸«¤Æ¤½¤ì¤ÈÆ±¤¸¤è¤¦¤Ë½ñ¤¤¤Æ¤Í¡£
+$B$J$I$H$7$F!"(BList $B%b!<%I$G(B @kbd{C-u s}$B!#(B
+$B%-!<$NItJ,$OHD(B URL $B$H40A4%^%C%A$J$N$G!"(B@file{~/.navi2ch/board.txt} $B$r(B
+$B8+$F$=$l$HF1$8$h$&$K=q$$$F$M!#(B
 
-Navi2ch 1.7.3 ¤è¤ê¸Å¤¤¥Ð¡¼¥¸¥ç¥ó¤ò»È¤Ã¤Æ¤ë¾ì¹ç¡¢¤³¤ÎÊýË¡¤Ï»È¤¨¤Ê¤¤¤Î¤Ç
-@file{~/.navi2ch/etc.txt} ¤ò¶î»È¤·¤Æ¤¬¤ó¤Ð¤ì¡£
+Navi2ch 1.7.3 $B$h$j8E$$%P!<%8%g%s$r;H$C$F$k>l9g!"$3$NJ}K!$O;H$($J$$$N$G(B
+@file{~/.navi2ch/etc.txt} $B$r6n;H$7$F$,$s$P$l!#(B
 
 @item Q.
-°ã¤¦ÈÄ¥ê¥¹¥È (@code{bbstable}) ¤ò¸«¤ë¤è¤¦¤Ë¤·¤¿¤¤¤ó¤À¤±¤É¡£
+$B0c$&HD%j%9%H(B (@code{bbstable}) $B$r8+$k$h$&$K$7$?$$$s$@$1$I!#(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-list-bbstable-url} ¤ÎÃÍ¤òÈÄ¥ê¥¹¥È¤Î URL ¤ËÀßÄê¤·¤Þ
-¤¹¡£@code{nil} ¤ËÀßÄê¤¹¤ë¤ÈËÜ²È¤Î¤â¤Î¤ò»ÈÍÑ¤·¤Þ¤¹¡£@xref{Customize}.
+$BJQ?t(B @code{navi2ch-list-bbstable-url} $B$NCM$rHD%j%9%H$N(B URL $B$K@_Dj$7$^(B
+$B$9!#(B@code{nil} $B$K@_Dj$9$k$HK\2H$N$b$N$r;HMQ$7$^$9!#(B@xref{Customize}.
 
-ËÜ²È¤ÎÂ¾¡¢Í­»Ö¤¬¥á¥ó¥Æ¥Ê¥ó¥¹¤·¤Æ¤¤¤ëÈÄ¥ê¥¹¥È¤¬
-AzLucky ¤µ¤ó¤Î
-¡Ö£²¤Á¤ã¤ó¤Í¤ë±ÜÍ÷¥½¥Õ¥ÈÍÑ ¥Ü¡¼¥É°ìÍ÷¡×
+$BK\2H$NB>!"M-;V$,%a%s%F%J%s%9$7$F$$$kHD%j%9%H$,(B
+AzLucky $B$5$s$N(B
+$B!V#2$A$c$s$M$k1\Mw%=%U%HMQ(B $B%\!<%I0lMw!W(B
 (@uref{http://azlucky.s25.xrea.com/})
-¤Î¥Ú¡¼¥¸¤Ë¤¤¤í¤¤¤í¤¢¤ë¤è¡£
+$B$N%Z!<%8$K$$$m$$$m$"$k$h!#(B
 
 @end table
 
 @node How to Write
-@appendixsec ½ñ¤­¹þ¤à
+@appendixsec $B=q$-9~$`(B
 
 @table @asis
 
 @item Q.
-¤»¤Ã¤«¤¯Ä¹Ê¸¤Î¥ì¥¹¤ò½ñ¤¤¤¿¤Î¤Ë¡¢½ñ¤­¹þ¤ß¤Ë¼ºÇÔ¤·¤Æ½ñ¤¤¤¿¥ì¥¹¤Î¥Ð¥Ã¥Õ¥¡¤¬
-¾Ã¤¨¤Á¤ã¤Ã¤¿¡£
-¤µ¤Ã¤­½ñ¤¤¤¿¥ì¥¹¤ò¤Ê¤ó¤È¤«¤·¤ÆÌá¤»¤Ê¤¤?
+$B$;$C$+$/D9J8$N%l%9$r=q$$$?$N$K!"=q$-9~$_$K<:GT$7$F=q$$$?%l%9$N%P%C%U%!$,(B
+$B>C$($A$c$C$?!#(B
+$B$5$C$-=q$$$?%l%9$r$J$s$H$+$7$FLa$;$J$$(B?
 
 @item A.
-@kbd{w} ¤Ç Message ¥â¡¼¥É¤ËÆþ¤Ã¤Æ @kbd{C-c C-i} ¤Ç¤ª¤Ã¤±¡¼¡£
+@kbd{w} $B$G(B Message $B%b!<%I$KF~$C$F(B @kbd{C-c C-i} $B$G$*$C$1!<!#(B
 
 @item Q.
-¥ì¥¹¤ò½ñ¤­¹þ¤à¤È¤­¤ÎÌ¾Á°¤òÀßÄê¤·¤¿¤¤¡£
+$B%l%9$r=q$-9~$`$H$-$NL>A0$r@_Dj$7$?$$!#(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-message-user-name} ¤ËÌ¾Á°¤ÎÊ¸»úÎó¤òÀßÄê¤¹¤ë¡£
+$BJQ?t(B @code{navi2ch-message-user-name} $B$KL>A0$NJ8;zNs$r@_Dj$9$k!#(B
 @xref{Customize}.
-ÈÄ¤´¤È¤Ë°ã¤¦Ì¾Á°¤ò»È¤¤¤¿¤¤¤È¤­¤Ï¤³¤ó¤Ê´¶¤¸¤Ç¡£
+$BHD$4$H$K0c$&L>A0$r;H$$$?$$$H$-$O$3$s$J46$8$G!#(B
 @lisp
 (setq navi2ch-message-user-name-alist
       '(("network" . "anonymous")
-        ("tv" . "Ì¾Ìµ¤·¤µ¤ó")))
+        ("tv" . "$BL>L5$7$5$s(B")))
 @end lisp
 
-ÈÄ¤Î¥Ç¥Õ¥©¥ë¥È¤Î¡ÖÌ¾Ìµ¤·¤µ¤ó¡×¤ò»È¤¤¤¿¤¤¤È¤­¤Ï¶õÊ¸»úÎó @code{""} ¤òÀßÄê¤¹¤ë¡£
-(Navi2ch 1.7 °Ê¹ß¤Ç¤Ï¥Ç¥Õ¥©¥ë¥È¤Ç¶õÊ¸»úÎó)
-¤³¤ì¤À¤ÈÈÄ¤Ë¤è¤Ã¤Æ½ñ¤­¹þ¤á¤Ê¤«¤Ã¤¿¤êÌ¾Á°¤¬ fusianasan ¤Ë¤Ê¤Ã¤¿¤ê¤¹¤ë¤Î¤ÇÃí°Õ¡£
+$BHD$N%G%U%)%k%H$N!VL>L5$7$5$s!W$r;H$$$?$$$H$-$O6uJ8;zNs(B @code{""} $B$r@_Dj$9$k!#(B
+(Navi2ch 1.7 $B0J9_$G$O%G%U%)%k%H$G6uJ8;zNs(B)
+$B$3$l$@$HHD$K$h$C$F=q$-9~$a$J$+$C$?$jL>A0$,(B fusianasan $B$K$J$C$?$j$9$k$N$GCm0U!#(B
 
 @item Q.
-Á°¤Ë¥ì¥¹¤ò½ñ¤¤¤¿¤È¤­¤ÎÌ¾Á°¤ò³Ð¤¨¤Æ¤¤¤Æ¤Û¤·¤¯¤Ê¤¤¤ó¤À¤±¤É¡£
+$BA0$K%l%9$r=q$$$?$H$-$NL>A0$r3P$($F$$$F$[$7$/$J$$$s$@$1$I!#(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-message-remember-user-name} ¤ÎÃÍ¤ò @code{nil} ¤ËÀß
-Äê¤·¤Þ¤¹¡£@xref{Customize}.
+$BJQ?t(B @code{navi2ch-message-remember-user-name} $B$NCM$r(B @code{nil} $B$K@_(B
+$BDj$7$^$9!#(B@xref{Customize}.
 
 @item Q.
-¥¹¥ìÎ©¤Æ¤¿¤¤¤ó¤À¤±¤É¡£
+$B%9%lN)$F$?$$$s$@$1$I!#(B
 
 @item A.
-Board ¥â¡¼¥É¤Ç @kbd{w} ¤ÇÎ©¤Æ¤é¤ì¤ë¤±¤É¡¢ÈÄ¤Ë¤è¤Ã¤Æ¤Ï¤À¤á¤«¤â¡£
-¤½¤Î¤È¤­¤Ï¥Ö¥é¥¦¥¶¤ÇÎ©¤Æ¤Æ¤¯¤À¤µ¤¤¡£¥¹¥Þ¥½¡£
+Board $B%b!<%I$G(B @kbd{w} $B$GN)$F$i$l$k$1$I!"HD$K$h$C$F$O$@$a$+$b!#(B
+$B$=$N$H$-$O%V%i%&%6$GN)$F$F$/$@$5$$!#%9%^%=!#(B
 
 @item Q.
-¡Ö£Å£Ò£Ò£Ï£Ò¡§¤â¤¦¤Á¤ç¤Ã¤ÈÍî¤ÁÃå¤¤¤Æ½ñ¤­¤³¤ß¤·¤Æ¤¯¤À¤µ¤¤¡£¡×¤Ã¤ÆÅÜ¤é¤ì
-¤Á¤ã¤¦¡£
+$B!V#E#R#R#O#R!'$b$&$A$g$C$HMn$ACe$$$F=q$-$3$_$7$F$/$@$5$$!#!W$C$FE\$i$l(B
+$B$A$c$&!#(B
 
 @item A.
-»þ·×¤ò¹ç¤ï¤»¤Þ¤·¤ç¤¦¡£
+$B;~7W$r9g$o$;$^$7$g$&!#(B
 
 @end table
 
 @node Misc Questions
-@appendixsec ¤½¤ÎÂ¾
-@c Ì¤Ê¬Îà¡¢´Ä¶­°ÍÂ¸¡¢ºÙ¤«¤¤ÏÃ¡¢¤Ê¤É
+@appendixsec $B$=$NB>(B
+@c $BL$J,N`!"4D6-0MB8!":Y$+$$OC!"$J$I(B
 
 @table @asis
 
 @item Q.
-»È¤Ã¤Æ¤ë¤È @file{~/.navi2ch/} ¤¬¤É¤ó¤É¤óÂç¤­¤¯¤Ê¤ë¤ó¤À¤±¤É¡£
+$B;H$C$F$k$H(B @file{~/.navi2ch/} $B$,$I$s$I$sBg$-$/$J$k$s$@$1$I!#(B
 
 @item A.
-List ¥â¡¼¥É¤Ç @kbd{e} ¤« Board ¥â¡¼¥É¤Ç @kbd{M-e} ¤¹¤ë¤È°ìÄê´ü´Ö¤è¤ê¸Å¤¤
-¥Õ¥¡¥¤¥ë¤òºï½ü¤Ç¤­¤ë¤è¡£
+List $B%b!<%I$G(B @kbd{e} $B$+(B Board $B%b!<%I$G(B @kbd{M-e} $B$9$k$H0lDj4|4V$h$j8E$$(B
+$B%U%!%$%k$r:o=|$G$-$k$h!#(B
 
 @item Q.
-¤¢¤Ü¡¼¤ó¤ò¤¤¤Á¤¤¤ÁÊ¹¤«¤ó¤Ç¤¯¤ì¤ä
+$B$"$\!<$s$r$$$A$$$AJ9$+$s$G$/$l$d(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-net-save-old-file-when-aborn} ¤ÎÃÍ¤ò @code{nil} ¤Ë
-¤·¤Þ¤¹¡£@xref{Customize}.
+$BJQ?t(B @code{navi2ch-net-save-old-file-when-aborn} $B$NCM$r(B @code{nil} $B$K(B
+$B$7$^$9!#(B@xref{Customize}.
 
 @item Q.
-¥×¥í¥¯¥·ÄÌ¤·¤¿¤¤¤ó¤À¤±¤É¡£
+$B%W%m%/%7DL$7$?$$$s$@$1$I!#(B
 
 @item A.
-ÊÑ¿ô @code{navi2ch-net-http-proxy} ¤ÎÃÍ¤ò @code{"127.0.0.1:8080"} ¤Î¤è
-¤¦¤Ë¤·¤Þ¤¹¡£
+$BJQ?t(B @code{navi2ch-net-http-proxy} $B$NCM$r(B @code{"127.0.0.1:8080"} $B$N$h(B
+$B$&$K$7$^$9!#(B
 
-Ç§¾Ú¤¬É¬Í×¤Ê¥×¥í¥¯¥·¤ò»È¤¦»þ¤Ë¤Ï¡¢¤µ¤é¤Ë
-@code{navi2ch-net-http-proxy-userid}¡¢
-@code{navi2ch-net-http-proxy-password} ¤âÄÉ²Ã¡£
+$BG'>Z$,I,MW$J%W%m%/%7$r;H$&;~$K$O!"$5$i$K(B
+@code{navi2ch-net-http-proxy-userid}$B!"(B
+@code{navi2ch-net-http-proxy-password} $B$bDI2C!#(B
 
-´Ä¶­ÊÑ¿ô @env{HTTP_PROXY} ¤òÀßÄê¤¹¤ë¤³¤È¤Ç¤â¥×¥í¥¯¥·¤òÍøÍÑ¤Ç¤­¤Þ¤¹¡£ÂçÊ¸
-»ú¤Ç¤¢¤ëÅÀ¤ËÃí°Õ¡£¤³¤ÎÊÑ¿ô¤Ë¤Ï¡¢URL ¤Î¤è¤¦¤Ê½ñ¼°¤òÀßÄê¤·¤Þ¤¹¡£Îã¤¨¤ÐÁ°½Ò
-¤ÈÆ±¤¸ÀßÄê¤ò¹Ô¤Ê¤¦¤Î¤Ç¤¢¤ì¤Ð¡¢@code{http://127.0.0.1:8080/} ¤È¤¤¤¦ÃÍ¤òÀß
-Äê¤·¤Þ¤¹¡£@xref{Customize}.
+$B4D6-JQ?t(B @env{HTTP_PROXY} $B$r@_Dj$9$k$3$H$G$b%W%m%/%7$rMxMQ$G$-$^$9!#BgJ8(B
+$B;z$G$"$kE@$KCm0U!#$3$NJQ?t$K$O!"(BURL $B$N$h$&$J=q<0$r@_Dj$7$^$9!#Nc$($PA0=R(B
+$B$HF1$8@_Dj$r9T$J$&$N$G$"$l$P!"(B@code{http://127.0.0.1:8080/} $B$H$$$&CM$r@_(B
+$BDj$7$^$9!#(B@xref{Customize}.
 
 @item Q.
-proxy ¤ò»È¤Ã¤Æ½ñ¤­¤³¤ó¤Ç¤ë¤È¡¢»þ´ÖÂÓ¤Ë¤è¤Ã¤ÆÁ÷¿®¤Ë¼ºÇÔ¤¹¤ë¤³¤È¤¬
-¤¢¤ë¤ß¤¿¤¤¤À¤±¤É?
+proxy $B$r;H$C$F=q$-$3$s$G$k$H!";~4VBS$K$h$C$FAw?.$K<:GT$9$k$3$H$,(B
+$B$"$k$_$?$$$@$1$I(B?
 
 @item A.
-£²¤Á¤ã¤ó¤Í¤ëÂ¦¤Îµ¬À©¤Ç¡¢80ÈÖ¥Ý¡¼¥È¤¬ listen ¤µ¤ì¤Æ¤¤¤¿¤ê¤¹¤ë¤È
-ÉÔÀµ proxy ¤È¤ß¤Ê¤µ¤ì¤ë¤³¤È¤¬¤¢¤ë¤Î¤Ç¡¢web ¥µ¡¼¥Ð¤òÍî¤È¤¹¤Ê¤ê
-¥Ñ¥±¥Ã¥È¥Õ¥£¥ë¥¿¥ê¥ó¥°¤Ç£²¤Á¤ã¤ó¤Í¤ë¤«¤é¤ÎÀÜÂ³¤Î¤ß¤òÍî¤È¤¹¤Ê¤ê
-¤¹¤ë¤ÈÆ°¤¯¤«¤â¡£
+$B#2$A$c$s$M$kB&$N5,@)$G!"(B80$BHV%]!<%H$,(B listen $B$5$l$F$$$?$j$9$k$H(B
+$BIT@5(B proxy $B$H$_$J$5$l$k$3$H$,$"$k$N$G!"(Bweb $B%5!<%P$rMn$H$9$J$j(B
+$B%Q%1%C%H%U%#%k%?%j%s%0$G#2$A$c$s$M$k$+$i$N@\B3$N$_$rMn$H$9$J$j(B
+$B$9$k$HF0$/$+$b!#(B
 
 @item Q.
-Meadow + Cygwin ¤Ç¤¦¤Þ¤¯Æ°¤«¤Ê¤¤¤³¤È¤¬¤¢¤ë¤ó¤À¤±¤É¡£
+Meadow + Cygwin $B$G$&$^$/F0$+$J$$$3$H$,$"$k$s$@$1$I!#(B
 
 @item A.
-¸Å¤¤ gzip ¤Ç¤ÏÌäÂê¤¬¤¢¤ë¤Î¤Ç¡¢gzip ¤ò¹¹¿·¤¹¤ë¤ÈÄ¾¤ë¤«¤â¡£
-¤â¤·¤¯¤Ï
+$B8E$$(B gzip $B$G$OLdBj$,$"$k$N$G!"(Bgzip $B$r99?7$9$k$HD>$k$+$b!#(B
+$B$b$7$/$O(B
 @lisp
 (setq navi2ch-enable-readcgi nil)
 (setq navi2ch-net-accept-gzip nil)
 @end lisp
-¤È¤·¤Æ gzip ¤ò»È¤ï¤Ê¤¤¤È¤¤¤¦ÊýË¡¤â¤¢¤ë¤±¤É¡¢£²¤Á¤ã¤ó¤Í¤ë¤Ë¥Í¥Ã¥È¥ï¡¼¥¯Åª
-Éé²Ù¤¬¤«¤«¤ë¤Î¤ÇÁÇ¿Í¤Ë¤Ï¤ª´«¤á¤Ç¤­¤Ê¤¤¡£
+$B$H$7$F(B gzip $B$r;H$o$J$$$H$$$&J}K!$b$"$k$1$I!"#2$A$c$s$M$k$K%M%C%H%o!<%/E*(B
+$BIi2Y$,$+$+$k$N$GAG?M$K$O$*4+$a$G$-$J$$!#(B
 
 @item Q.
-¡ÖÊÑ¤ï¤Ã¤¿ÈÄ¡×¤Ã¤Æ²¿?
+$B!VJQ$o$C$?HD!W$C$F2?(B?
 
 @item A.
-Á°²ó Navi2ch ¤ò¼Â¹Ô¤·¤Æ¤«¤éÊÑ¹¹¤¬¤¢¤Ã¤¿ÈÄ¤Î¤³¤È¤Ç¤¹¡£¿·¤¿¤ËÄÉ²Ã¤µ¤ì¤¿
-¤ê¡¢¥µ¡¼¥Ð¤¬°ÜÅ¾¤Ë¤Ê¤Ã¤¿ÈÄ¤¬¤³¤Î¥«¥Æ¥´¥ê¤Ë´Þ¤Þ¤ì¤Þ¤¹¡£ÊÑ¤ÊÈÄ¤Î¤³¤È¤Ç¤Ï
-¤¢¤ê¤Þ¤»¤ó¡£
+$BA02s(B Navi2ch $B$r<B9T$7$F$+$iJQ99$,$"$C$?HD$N$3$H$G$9!#?7$?$KDI2C$5$l$?(B
+$B$j!"%5!<%P$,0\E>$K$J$C$?HD$,$3$N%+%F%4%j$K4^$^$l$^$9!#JQ$JHD$N$3$H$G$O(B
+$B$"$j$^$;$s!#(B
 
 @item Q.
-URL ¤ò w3m.el ¤Ç³«¤­¤¿¤¤¤ó¤À¤±¤É¡£
+URL $B$r(B w3m.el $B$G3+$-$?$$$s$@$1$I!#(B
 
 @item A.
 @lisp
@@ -2114,71 +2216,74 @@ URL ¤ò w3m.el ¤Ç³«¤­¤¿¤¤¤ó¤À¤±¤É¡£
 @end lisp
 
 @item Q.
-board mode ¤Ç + ¤ò¤¹¤ë¤È hide ¤·¤¿¥¹¥ì¥Ã¥É¤â½Ð¤Æ¤¯¤ë¤ó¤À¤±¤É¡£
+board mode $B$G(B + $B$r$9$k$H(B hide $B$7$?%9%l%C%I$b=P$F$/$k$s$@$1$I!#(B
 
 @item A.
 @lisp
 (setq navi2ch-board-hide-updated-article t)
 @end lisp
-¤¹¤ì¤Ð½Ð¤Æ¤³¤Ê¤¯¤Ê¤ë¡£
+$B$9$l$P=P$F$3$J$/$J$k!#(B
 
 @item Q.
-¥¹¥ì¥Ð¥Ã¥Õ¥¡¤Ç TAB ²¡¤·¤Æ¥ê¥ó¥¯¤ËÈô¤Ö¤È¤¹¤Ã¤²¡¼½Å¤¤¤ó¤À¤±¤É¡£
+$B%9%l%P%C%U%!$G(B TAB $B2!$7$F%j%s%/$KHt$V$H$9$C$2!<=E$$$s$@$1$I!#(B
 
 @item A.
 @lisp
 (setq navi2ch-article-get-url-text nil)
 @end lisp
-¤¹¤ì¤Ð·Ú¤¯¤Ê¤ë¤«¤â¡£(Navi2ch 1.6 °Ê¹ß)
+$B$9$l$P7Z$/$J$k$+$b!#(B(Navi2ch 1.6 $B0J9_(B)
 
 @item Q.
-bookmark ¥â¡¼¥É¤Ç sort ¤·¤Æ¤â¡¢¼¡¤Ë¥Ö¥Ã¥¯¥Þ¡¼¥¯¤ò³«¤¯¤È¸µ¤ÎÊÂ¤Ó½ç¤ËÌá¤Ã
-¤Æ¤ë¡£
-¤Ê¤ó¤È¤«¤Ê¤é¤ó?
+bookmark $B%b!<%I$G(B sort $B$7$F$b!"<!$K%V%C%/%^!<%/$r3+$/$H85$NJB$S=g$KLa$C(B
+$B$F$k!#(B
+$B$J$s$H$+$J$i$s(B?
 
 @item A.
-sort ¸å¤Ë @kbd{X} ¤Ç¸½ºß¤ÎÊÂ¤Ó½ç¤òµ­²±¤¹¤ë¡£
-¤½¤ì¤â¤á¤ó¤É¤¦¤Ê¤é¡¢
+sort $B8e$K(B @kbd{X} $B$G8=:_$NJB$S=g$r5-21$9$k!#(B
+$B$=$l$b$a$s$I$&$J$i!"(B
 @lisp
 (setq navi2ch-bookmark-remember-order-after-sort t)
 @end lisp
-¤·¤Æ¤ª¤¯¤È sort ¸å¤ÎÊÂ¤Ó½ç¤ò¤¤¤Ä¤Ç¤âµ­²±¤¹¤ë¤è¤¦¤Ë¤Ê¤ë¡£
+$B$7$F$*$/$H(B sort $B8e$NJB$S=g$r$$$D$G$b5-21$9$k$h$&$K$J$k!#(B
 
 @item Q.
-ÈÄ¤Î¥í¡¼¥«¥ë¥ë¡¼¥ë¤Ã¤Æ¸«¤ì¤Ê¤¤?
+$BHD$N%m!<%+%k%k!<%k$C$F8+$l$J$$(B?
 
 @item A.
 @lisp
 (require 'navi2ch-head)
 @end lisp
-¤·¤È¤¤¤Æ @kbd{H} ¤Ç¤É¤¦¤è¡£
+$B$7$H$$$F(B @kbd{H} $B$G$I$&$h!#(B
 
 @ignore
 @item Q.
-¤Õ¡¼¤ó¡¢Navi2ch ¤Ã¤ÆÊØÍø¤Ê¤ó¤À¤Í¡£¤È¤³¤í¤Ç£²¤Á¤ã¤ó¤Í¤ë¤Ã¤Æ²¿¡©
+$B$U!<$s!"(BNavi2ch $B$C$FJXMx$J$s$@$M!#$H$3$m$G#2$A$c$s$M$k$C$F2?!)(B
 
 @item A.
-¤¢¤Ê¤¿¤Ë¤Ï Navi2ch ¤ÏÉ¬Í×¤Ê¤¤¤«¤â¤Ç¤¹¡£
+$B$"$J$?$K$O(B Navi2ch $B$OI,MW$J$$$+$b$G$9!#(B
 @end ignore
 @end table
 
+@c @node Concept Index        
+@c @unnumbered $B35G0:w0z(B
+@c @printindex cp             
 
 @node Thanks
-@appendix ¼Õ¼­
+@appendix $B<U<-(B
 
-@c Author ¤¬ Navi2ch Project ¤Ë¤Ê¤Ã¤¿¤«¤é¤³¤ì¤Ï¤¤¤é¤Ê¤¤¤è¤Í¡£
+@c Author $B$,(B Navi2ch Project $B$K$J$C$?$+$i$3$l$O$$$i$J$$$h$M!#(B
 @ignore
-Navi2ch ¤òºî¤Ã¤Æ¤¯¤ì¤¿ (not 1) ¤µ¤ó¡¢¤É¤¦¤â¤¢¤ê¤¬¤È¤¦¡£
+Navi2ch $B$r:n$C$F$/$l$?(B (not 1) $B$5$s!"$I$&$b$"$j$,$H$&!#(B
 @end ignore
 
-ºÇ½é¤Ë perl ÈÇ¤òºî¤Ã¤¿ hc2ivan ¤µ¤ó¤Ë´¶¼Õ¤Ç¤¹¡£
+$B:G=i$K(B perl $BHG$r:n$C$?(B hc2ivan $B$5$s$K46<U$G$9!#(B
 
-Navi2ch ¤Ï APEL¡¢Wanderlust ¤Î°ìÉô¤ò»ÈÍÑ¤·¤Æ¤¤¤Þ¤¹¡£ºî¼Ô¤ÎÊý¡¹¤Ë´¶¼Õ¡£
+Navi2ch $B$O(B APEL$B!"(BWanderlust $B$N0lIt$r;HMQ$7$F$$$^$9!#:n<T$NJ}!9$K46<U!#(B
 
 @bye
-¥«¡¼¥½¥ë¤ò°Ê²¼¤Î´Ø¿ô¤Î¾å¤ËÃÖ¤¤¤Æ
+$B%+!<%=%k$r0J2<$N4X?t$N>e$KCV$$$F(B
 M-x eval-defun RET M-x navi2ch-doc-update-aa-list RET
-¤¹¤ë¤È¡¢AA ¥ê¥¹¥È¤Î¥¢¥Ã¥×¥Ç¡¼¥È¤¬³Ú¤Ë¤Ê¤ë¤è¡£
+$B$9$k$H!"(BAA $B%j%9%H$N%"%C%W%G!<%H$,3Z$K$J$k$h!#(B
 @lisp
 (defun navi2ch-doc-update-aa-list ()
   (interactive)
