@@ -1,3 +1,8 @@
+2008-03-03  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch.texi: @cindex の追加。@uref にタイトルを追加。 表記の正規
+	化。
+
 2008-02-11  Naohiro Aota  <nao.aota@gmail.com>
 
 	* batch-texi2info.el (batch-texi2info):
