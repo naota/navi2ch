@@ -2225,7 +2225,7 @@ nil なら、`customize'を利用して`custom-file'に保存する。
 					    (or navi2ch-on-emacs21
 						navi2ch-on-xemacs)
 					    nil)
-  "If it is T, show graphic logo in the startup screen.
+  "If it is non-nil, show graphic logo in the startup screen.
 You can set it to a symbol `bitmap', `xbm' or `xpm' in order
 to force the image format."
   :type '(radio (const :tag "Off" nil)

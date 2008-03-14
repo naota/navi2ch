@@ -1,3 +1,8 @@
+2008-03-14  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-article)
+	(navi2ch-machibbs-url-to-board): machibbs のPATH INFO形式に対応。
+
 2008-03-02  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-mona.el (navi2ch-mona-create-fontset-from-family-name):

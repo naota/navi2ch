@@ -121,6 +121,14 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B" ; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 			     (match-string 1 url)
 			     (match-string 2 url)))
 	  (cons 'id  (match-string 2 url))))
+   ;; http://hokkaido.machi.to/bbs/read.cgi/hokkaidou/
+   ((string-match
+     "http://\\([^/]+\\)/bbs/read.cgi/\\([^/]+\\)/"
+     url)
+    (list (cons 'uri (format "http://%s/%s/"
+			     (match-string 1 url)
+			     (match-string 2 url)))
+	  (cons 'id  (match-string 2 url))))
    ;; http://www.machi.to/tawara/
    ;; http://tohoku.machi.to/touhoku/
    ((string-match
@@ -134,6 +142,10 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B" ; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 (defun navi2ch-machibbs-url-to-article (url)
   (cond ((string-match
 	  "http://.+/bbs/read\\..*KEY=\\([0-9]+\\)"
+	  url)
+	 (list (cons 'artid (match-string 1 url))))
+	((string-match
+	  "http://[^/]+/bbs/read.cgi/[^/]+/\\([0-9]+\\)"
 	  url)
 	 (list (cons 'artid (match-string 1 url))))))
 

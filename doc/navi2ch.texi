@@ -353,6 +353,7 @@ Navi2ch $B$N3+H/$K;22C$7$F$[$7$$!#(B
 @node Start Navi2ch
 @section $B5/F0J}K!(B
 @cindex $B5/F0(B
+@cindex $B%9%W%i%C%7%e(B
 @findex navi2ch
 
 @file{~/.emacs} $B$K(B
@@ -366,6 +367,8 @@ Navi2ch $B$N3+H/$K;22C$7$F$[$7$$!#(B
 @kbd{M-x navi2ch @key{RET}} $B$G5/F0!#(B
 
 Windows $B$G$O(B $B4D6-JQ?t(B @env{TZ} $B$r(B @code{JST-9} $B$H$7$F$*$$$?J}$,$$$$$i$7$$!#(B
+
+$B5/F0;~$N%9%W%i%C%7%e$O(B `navi2ch-display-splash-screen' $B$G@)8f$G$-$k!#(B
 
 @node List Mode
 @section List $B%b!<%I(B
@@ -924,7 +927,7 @@ Mail:
 @code{sage} $B$rF~NO$7!"(B@code{----------------} $B$N<!$N9T$+$i%l%9$r=q$/!#(B
 
 @kbd{C-c C-y} $B$HF~NO$9$k$H!"8+$F$$$?%l%9$r0J2<$N$h$&$K0zMQ$9$k$3$H$,$G(B
-$B$-$k!#(B
+$B$-$k!#(B@kbd{C-u C-c C-y} $B$HF~NO$9$k$H!"8+$F$$$?%l%9$NHV9f$@$1$r0zMQ$9$k!#(B
 
 @example
 @group
@@ -943,6 +946,9 @@ List}) $B$7$?$j$7$F!";W$&B8J,@z$jJ86g$r=q$$$?$i!"(B@kbd{C-c C-c} $B$G=q$-9~(
 $B=q$-9~$_Cf$KB>$N%9%l$r8+$k$J$I$GJL$J(B (Navi2ch $B$N(B)
 $B%P%C%U%!$K0\F0$7$?$H$-$O!"(B@kbd{C-c C-o}
 $B$G85$N!V>e$N%P%C%U%!$,=q$-9~$`%9%l!"2<$N%P%C%U%!$G%l%9$r=q$/!W$N>uBV$KLa$;$k!#(B
+
+`navi2ch-message-samba24-show' $B$,(B t $B$J$i$P!"(B samba24 $B$,2r=|$5$l$k$^$G$K(B
+$B$"$H2?IC$+$+$k$+$r(B mode-line $B$KI=<($7$F$/$l$k!#(B
 
 @menu
 * Saving Send Log::             $BAw?.95$($r$H$k(B
