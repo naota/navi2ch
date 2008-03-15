@@ -19,6 +19,7 @@ expire 関連のバグ修正。
 Samba24 の残り秒数が表示されるようになった。
 navi2ch-file-name-reserved-char-regexp が廃止され、
 navi2ch-file-name-reserved-char-list になった。
+ホスト名・IPアドレスをフィルタ/検索の条件にできるようになった。
 
 * navi2ch 1.7.4 -> 1.7.5
 JBBS@したらばの jbbs.livedoor.jp への移転に対応。

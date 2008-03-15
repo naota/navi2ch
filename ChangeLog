@@ -1,3 +1,8 @@
+2008-03-15  Naohiro Aota  <nao.aota@gmail.com>
+
+	* NEWS: ホスト名・IPアドレスをフィルタ/検索の条件にできるようになっ
+	たことを記載。
+
 2008-03-14  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-article)
