@@ -750,7 +750,6 @@ This is taken from RFC 2396.")
   (when proc
     (let ((str (decode-coding-string (navi2ch-net-get-content proc)
 				     coding-system)))
-      (message str)
       (cond ((string-match "ＥＲＲＯＲ：\\([^<]+\\)" str)
 	     (match-string 1 str))
 	    ;; Samba24 http://age.s22.xrea.com/talk2ch/new.txt
