@@ -604,6 +604,9 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
   "送信控えのレスの板名付きのフォーマット。"
   (format "[%s]: %s\nURL: %s\n\n%s" (cdr (assq 'name board)) subject url message))
 
+;; TODO: 2ch 内においては板IDが重複しないことを前提としている。今のとこ
+;; ろは有効だが将来のことも考えると直すべき。
+
 (defun navi2ch-message-samba24-modeline ()
   "書き込み経過時間をカウントダウンする."
   (let* ((tmp-time (current-time))
@@ -611,23 +614,27 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
 	 samba-time time-diff)
     (setq navi2ch-message-samba24-mode-string "")
     (dolist (x navi2ch-message-samba24-send-time)
-      (setq time-diff (- now-time (cdr x)))
-      (setq samba-time
-	    (navi2ch-message-samba24-search-samba 
-	     (navi2ch-message-samba24-board-conversion 'id (car x) 'uri) 
-	     (car x)))
-      (when samba-time
-	(if (<= time-diff samba-time)
-	    (setq navi2ch-message-samba24-mode-string
-		  (format "%s:%d %s"
-			  (navi2ch-message-samba24-board-conversion 'id (car x) 'name) 
-			  (- samba-time time-diff)
-			  navi2ch-message-samba24-mode-string))
-	  (setq navi2ch-message-samba24-send-time
-		(delete x navi2ch-message-samba24-send-time))
-	  (unless navi2ch-message-samba24-send-time
-	    (cancel-timer navi2ch-message-samba24-update-timer)
-	    (setq navi2ch-message-samba24-update-timer nil)))))
+      (let* ((id (car x))
+	     (id-normalized (if (string-match "^\\([^:]*\\):" id)
+				(match-string 1 id)
+			      id)))
+	(setq time-diff (- now-time (cdr x)))
+	(setq samba-time
+	      (navi2ch-message-samba24-search-samba 
+	       (navi2ch-message-samba24-board-conversion 'id id-normalized 'uri) 
+	       id-normalized))
+	(when samba-time
+	  (if (<= time-diff samba-time)
+	      (setq navi2ch-message-samba24-mode-string
+		    (format "%s:%d %s"
+			    (navi2ch-message-samba24-board-conversion 'id id 'name) 
+			    (- samba-time time-diff)
+			    navi2ch-message-samba24-mode-string))
+	    (setq navi2ch-message-samba24-send-time
+		  (delete x navi2ch-message-samba24-send-time))
+	    (unless navi2ch-message-samba24-send-time
+	      (cancel-timer navi2ch-message-samba24-update-timer)
+	      (setq navi2ch-message-samba24-update-timer nil))))))
     (force-mode-line-update t)))
 
 (defun navi2ch-message-samba24 ()
@@ -640,12 +647,13 @@ header field へ移動しない以外は `back-to-indentation' と同じ。"
       (let* ((tmp-time (current-time))
 	     (last-write-time (+ (lsh (car tmp-time) 16) (cadr tmp-time)))
 	     (id (cdr (assq 'id navi2ch-message-current-board)))
-	     (id-list (assoc id navi2ch-message-samba24-send-time)))
-	(when (string-match "^\\([^:]*\\):" id)
-	  (setq id (match-string 1 id)))
+	     (id-list (assoc id navi2ch-message-samba24-send-time))
+	     (id-normalized (if (string-match "^\\([^:]*\\):" id)
+				(match-string 1 id)
+			      id)))
 	(when (navi2ch-message-samba24-search-samba 
-	       (navi2ch-message-samba24-board-conversion 'id id 'uri)
-	       id)
+	       (navi2ch-message-samba24-board-conversion 'id id-normalized 'uri)
+	       id-normalized)
 	  (when id-list
 	    (setq navi2ch-message-samba24-send-time
 		  (delete id-list navi2ch-message-samba24-send-time)))

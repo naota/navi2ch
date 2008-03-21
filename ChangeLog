@@ -1,3 +1,9 @@
+2008-03-21  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-message.el (navi2ch-message-samba24-modeline)
+	(navi2ch-message-samba24): 板ID が重複していた時に、別の板名が表示
+	されてしまうバグを修正。板ID の : 以下を外す処理を追加。
+
 2008-03-15  Naohiro Aota  <nao.aota@gmail.com>
 
 	* NEWS: ホスト名・IPアドレスをフィルタ/検索の条件にできるようになっ
