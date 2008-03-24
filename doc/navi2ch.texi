@@ -2314,6 +2314,17 @@ Be を使いたい。
 @end lisp
 しておくと、接続を持続してくれる。
 
+@item Q.
+Emacs 23 で「〜」が投稿できない気がするんだけど。
+
+@item A.
+@lisp
+(define-translation-table 'my-cp932-encode (list (cons 12316 65374)))
+(coding-system-put 'cp932 :encode-translation-table 
+		   'my-cp932-encode)
+@end lisp
+としておくといいかも。
+
 @ignore
 @item Q.
 ふーん、Navi2ch って便利なんだね。ところで２ちゃんねるって何？

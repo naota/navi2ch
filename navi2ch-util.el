@@ -1413,7 +1413,7 @@ instead of the current time."
 (defsubst navi2ch-make-cache (&optional limit test)
   (vector limit
 	  (apply #'make-hash-table
-		 (append (list :rehash-threshold 1.0)
+		 (append (list :rehash-threshold 0.9)
 			 (and limit
 			      (integerp limit)
 			      (not (zerop limit))
@@ -1427,7 +1427,7 @@ instead of the current time."
     (prog1
 	(puthash key val table)
       (when (and limit
-		 (eq (hash-table-count table) limit))
+		 (<= (hash-table-count table) limit))
 	(clrhash table)))))
 
 (defsubst navi2ch-cache-remove (key cache)

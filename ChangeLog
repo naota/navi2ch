@@ -1,3 +1,8 @@
+2008-03-24  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-util.el (navi2ch-make-cache, navi2ch-cache-put): XEmacs
+	の hash の仕様に対応。
+
 2008-03-21  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline)
