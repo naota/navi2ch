@@ -120,7 +120,8 @@
        (delq nil
 	     (mapcar (lambda (file)
 		       (funcall article-func board file))
-		     (and (file-directory-p default-directory)
+		     (and default-directory
+			  (file-directory-p default-directory)
 			  (sort (directory-files default-directory
 						 nil navi2ch-article-local-dat-regexp)
 				#'navi2ch-right-aligned-string<))))))
@@ -130,7 +131,8 @@
   (navi2ch-search-for-each-board
    (lambda (board)
      (let* ((file (navi2ch-board-get-file-name board))
-	    (subject-list (navi2ch-board-get-subject-list file))
+	    (subject-list (and file
+			       (navi2ch-board-get-subject-list file)))
 	    alist)
        (dolist (article subject-list)
 	 (let ((subject (cdr (assq 'subject article))))

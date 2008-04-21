@@ -819,10 +819,12 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 
 (defun navi2ch-list-search ()
   (interactive)
-  (let ((ch (navi2ch-read-char-with-retry
-	     "Search for: s)ubject a)rticle c)ache o)rphan: "
-	     nil '(?s ?a ?c ?o)))
-	(ch2 (if (get-text-property (point) 'board)
+  (let* ((ch (navi2ch-read-char-with-retry
+	      "Search for: s)ubject a)rticle c)ache o)rphan: "
+	      nil '(?s ?a ?c ?o)))
+	 (board (get-text-property (point) 'board))
+	 (ch2 (if (and board
+		       (navi2ch-board-get-file-name board))
 		 (navi2ch-read-char-with-retry
 		  "Search from: b)oard c)ategory a)ll: " nil '(?b ?c ?a))
 	       (navi2ch-read-char-with-retry

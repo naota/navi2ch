@@ -1,3 +1,11 @@
+2008-04-21  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-list.el (navi2ch-list-search): 検索可能な板かどうかをチェッ
+	ク。
+
+	* navi2ch-search.el (navi2ch-search-for-each-article):
+	default-directory が nil でないかチェック。
+
 2008-03-24  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-util.el (navi2ch-make-cache, navi2ch-cache-put): XEmacs
