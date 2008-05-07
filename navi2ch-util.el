@@ -1383,8 +1383,21 @@ BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
 	(setq bol (1+ (navi2ch-line-end-position))))))
   (goto-char start))
 
+(if (fboundp 'propertize)
+    (defalias 'navi2ch-propertize 'propertize)
+  (defun navi2ch-propertize (string &rest properties)
+      "Return a copy of STRING with text properties added.
+First argument is the string to copy.
+Remaining arguments form a sequence of PROPERTY VALUE pairs for text
+properties to add to the result."
+      (let ((str (copy-sequence string)))
+	(add-text-properties 0 (length str)
+			     properties
+			     str)
+	str)))
+
 (defsubst navi2ch-read-only-string (string)
-  (propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
+  (navi2ch-propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
 
 (defsubst navi2ch-file-mtime (filename)
   (nth 5 (file-attributes filename)))

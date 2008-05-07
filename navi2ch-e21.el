@@ -66,15 +66,15 @@
 						    :file ,navi2ch-offline-icon
 						    :ascent center))))))
 	  (setq navi2ch-modeline-online
-		(apply 'propertize navi2ch-online-indicator
+		(apply 'navi2ch-propertize navi2ch-online-indicator
 		       `(display ,navi2ch-online-image ,@props))
                 navi2ch-modeline-offline
-		(apply 'propertize navi2ch-offline-indicator
+		(apply 'navi2ch-propertize navi2ch-offline-indicator
 		       `(display ,navi2ch-offline-image ,@props))))
       (when props
         (setq navi2ch-modeline-online
-              (apply 'propertize navi2ch-online-indicator props)
+              (apply 'navi2ch-propertize navi2ch-online-indicator props)
               navi2ch-modeline-offline
-              (apply 'propertize navi2ch-offline-indicator props))))))
+              (apply 'navi2ch-propertize navi2ch-offline-indicator props))))))
 
 ;;; navi2ch-e21.el ends here

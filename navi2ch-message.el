@@ -192,8 +192,8 @@
 	      navi2ch-message-mail-address "")
 	  "\n"
 	  (navi2ch-read-only-string
-	   (propertize navi2ch-message-header-separator
-		       'navi2ch-message-header-separator t)))
+	   (navi2ch-propertize navi2ch-message-header-separator
+			       'navi2ch-message-header-separator t)))
   (setq buffer-undo-list nil)
   (set-buffer-modified-p nil))
 

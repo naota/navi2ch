@@ -361,8 +361,8 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B"
 	    (goto-char start)
 	    (while (re-search-forward "\\(</b>[^<]+<b>\\)\\|\\(<font[^>]+>[^<]+</font>\\)" end t)
 	      ;; fusianasan $B$d%H%j%C%W$J$I(B
-	      (replace-match (propertize (match-string 0)
-					 'navi2ch-fusianasan-flag t)
+	      (replace-match (navi2ch-propertize (match-string 0)
+						 'navi2ch-fusianasan-flag t)
 			     t t))))
 	(navi2ch-replace-html-tag-with-buffer)
 	(dolist (x alist)
@@ -998,17 +998,17 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 					    'number
 					    (match-string 0 name)
 					    name))
-  (let ((from-header (propertize "From: "
-				 'face 'navi2ch-article-header-face))
-        (from (propertize (concat (format "[%d] " number)
-				  name
-				  (format " <%s>\n" mail))
-			  'face 'navi2ch-article-header-contents-face))
-        (date-header (propertize "Date: "
-				 'face 'navi2ch-article-header-face))
-	(date (propertize (funcall navi2ch-article-date-format-function date)
-			  'face
-			  'navi2ch-article-header-contents-face))
+  (let ((from-header (navi2ch-propertize "From: "
+					 'face 'navi2ch-article-header-face))
+        (from (navi2ch-propertize (concat (format "[%d] " number)
+					  name
+					  (format " <%s>\n" mail))
+				  'face 'navi2ch-article-header-contents-face))
+        (date-header (navi2ch-propertize "Date: "
+					 'face 'navi2ch-article-header-face))
+	(date (navi2ch-propertize (funcall navi2ch-article-date-format-function date)
+				  'face
+				  'navi2ch-article-header-contents-face))
 	(start 0) next)
     (while start
       (setq next
@@ -2594,9 +2594,9 @@ PREFIX $B$r;XDj$7$?>l9g$O!"(Bmark $B$N$"$k%l%9$H8=:_$N%l%9$N4V$NHO0O$,BP>]$K$
 	      part-begin)
 	  (delete-region begin end)
 	  (goto-char begin)
-	  (insert (propertize
+	  (insert (navi2ch-propertize
 		   "> " 'face 'navi2ch-article-auto-decode-face)
-		  (propertize
+		  (navi2ch-propertize
 		   (format "%s" (or fname "$BL>L5$7%U%!%$%k$5$s(B"))
 		   'face '(navi2ch-article-url-face
 			   navi2ch-article-auto-decode-face)
@@ -3566,7 +3566,7 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
 			(navi2ch-net-update-file url (concat sssp_dir file))))
 		    (forward-line)
 		    (insert-image (create-image (concat sssp_dir file)))
-		    (put-text-property (1- (point)) (point) 'help-echo (propertize "[image]" 'display image))
+		    (put-text-property (1- (point)) (point) 'help-echo (navi2ch-propertize "[image]" 'display image))
 		    (insert "\n"))))
 	    )))))
 

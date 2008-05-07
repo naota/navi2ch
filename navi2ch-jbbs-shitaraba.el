@@ -33,9 +33,14 @@
 (defconst navi2ch-jbbs-shitaraba-ident
   "$Id$")
 
-(eval-when-compile (require 'cl))
+(eval-when-compile 
+  (require 'cl))
+
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
+
+(eval-when-compile
+  (navi2ch-defalias-maybe 'coding-system-list 'ignore))
 
 (defvar navi2ch-js-func-alist
   '((bbs-p		. navi2ch-js-p)

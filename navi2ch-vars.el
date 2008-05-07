@@ -27,6 +27,11 @@
 
 ;;; Code:
 (provide 'navi2ch-vars)
+
+(eval-when-compile
+  (unless (fboundp 'coding-system-list)
+    (defalias 'coding-system-list 'ignore)))
+
 (defconst navi2ch-vars-ident
   "$Id$")
 
@@ -190,7 +195,7 @@ GNU Emacs 21, XEmacs 21.5 以降であればデフォルトで表示できますが、
 		 (string :tag "指定"))
   :group 'navi2ch)
 
-(defcustom navi2ch-enable-status-check t
+(defcustom navi2ch-enable-status-check nil
   "non-nil ならばブラウザを開く前に HEAD で接続先を確認する。"
   :type 'boolean
   :group 'navi2ch)

@@ -201,11 +201,11 @@ Return a number of lines that an image occupies in the buffer."
 		       (plist-put (cdr image) ':background bg))
 		     (when (stringp fg)
 		       (plist-put (cdr image) ':foreground fg))))
-		 (insert (propertize " " 'display
-				     (list 'space ':align-to
-					   (max 0 (round (- (window-width)
-							    width)
-							 2)))))
+		 (insert (navi2ch-propertize " " 'display
+					     (list 'space ':align-to
+						   (max 0 (round (- (window-width)
+								    width)
+								 2)))))
 		 (insert-image image)
 		 (insert "\n")
 		 (round height))
@@ -295,12 +295,12 @@ HEIGHT should be a number of lines that an image occupies in the buffer."
     (if navi2ch-on-emacs21
 	(let ((bg (face-background 'navi2ch-splash-screen-face))
 	      (fg (face-foreground 'navi2ch-splash-screen-face)))
-	  (insert (propertize text
-			      'face (nconc '(variable-pitch :slant oblique)
-					   (when (stringp bg)
-					     (list ':background bg))
-					   (when (stringp fg)
-					     (list ':foreground fg))))))
+	  (insert (navi2ch-propertize text
+				      'face (nconc '(variable-pitch :slant oblique)
+						   (when (stringp bg)
+						     (list ':background bg))
+						   (when (stringp fg)
+						     (list ':foreground fg))))))
       (insert text)
       (put-text-property start (point) 'face 'navi2ch-splash-screen-face))
     (let ((fill-column (window-width)))
