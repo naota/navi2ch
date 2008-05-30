@@ -1,3 +1,7 @@
+2008-05-31  Naohiro Aota  <nao.aota@gmail.com>
+
+	* Makefile.in: Specify -no-site-file.
+
 2008-03-03  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch.texi: @cindex の追加。@uref にタイトルを追加。 表記の正規

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (C) 1995, 2000, 2003, 2004, 2005  Free Software Foundation, Inc.
 
-scriptversion=2005-05-14.22
+scriptversion=2008-05-31.01
 
 # Franc,ois Pinard <pinard@iro.umontreal.ca>, 1995.
 #
@@ -73,7 +73,8 @@ cp "$@" $tempdir
 (
   cd $tempdir
   echo "(setq load-path (cons nil load-path))" > script
-  $EMACS -batch -q -l script -f batch-byte-compile *.el || exit $?
+#  $EMACS -batch -q -l script -f batch-byte-compile *.el || exit $?
+  $EMACS -batch -q -l script -l ../bcomp.el || exit $?
   mv *.elc ..
 ) || exit $?
 

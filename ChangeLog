@@ -1,3 +1,9 @@
+2008-05-31  Naohiro Aota  <nao.aota@gmail.com>
+
+	* elisp-comp: Use bcomp.el.
+
+	* bcomp.el: force to read files as iso-2022-7bit.
+
 2008-05-07  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-util.el (navi2ch-propertize): navi2ch-propertize を復活。

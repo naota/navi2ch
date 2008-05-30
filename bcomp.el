@@ -18,6 +18,6 @@
   (message "compiling...")
   (dolist (elt bcomp-files)
     (setq file (concat dir elt))
-    (byte-compile-file file t))
-
+    (let ((coding-system-for-read 'iso-2022-7bit))
+      (byte-compile-file file t)))
   (message "done"))
