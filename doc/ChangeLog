@@ -1,3 +1,7 @@
+2008-07-20  Naohiro Aota  <nao.aota@gmail.com>
+
+	* releng.txt: Update.
+
 2008-05-31  Naohiro Aota  <nao.aota@gmail.com>
 
 	* Makefile.in: Specify -no-site-file.

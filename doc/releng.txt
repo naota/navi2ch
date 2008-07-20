@@ -4,9 +4,9 @@ $Id$
 リリースエンジニアリングについて
 
 * 使っている道具
-  GNU Automake 1.5
-  GNU Autoconf 2.53
-  GNU Emacs 20.7
+  GNU Automake 1.9.6
+  GNU Autoconf 2.62
+  GNU Emacs 23.0.60
 
 * 作業用ディレクトリ
   configure.in の変更を伴うので、作業用ディレクトリでは

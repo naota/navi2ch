@@ -1,3 +1,7 @@
+2008-07-20  Naohiro Aota  <nao.aota@gmail.com>
+
+	* configure.in: cv_icondir を _cv_icondir に変更。
+
 2008-05-31  Naohiro Aota  <nao.aota@gmail.com>
 
 	* elisp-comp: Use bcomp.el.

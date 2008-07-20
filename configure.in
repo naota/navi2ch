@@ -1,5 +1,5 @@
 AC_INIT(navi2ch.el)
-AM_INIT_AUTOMAKE(navi2ch, 1.7.5-DEV)
+AM_INIT_AUTOMAKE(navi2ch, 1.8.0-BETA)
 AM_MAINTAINER_MODE
 
 AC_PREREQ(2.53)
@@ -49,14 +49,14 @@ AC_MSG_CHECKING([where icon files should go])
 AC_MSG_RESULT([$icondir])],
 [
 if test -z "${icondir}"; then
-  AC_CACHE_CHECK([where icon files should go], [cv_icondir], [dnl
-    AC_EMACS_LISP(cv_icondir,[dnl
+  AC_CACHE_CHECK([where icon files should go], [_cv_icondir], [dnl
+    AC_EMACS_LISP(_cv_icondir,[dnl
 (princ (expand-file-name "navi2ch/icons" data-directory))])
-    if test -z "$cv_icondir"; then
-      cv_icondir='${datadir}/pixmaps/navi2ch'
+    if test -z "$_cv_icondir"; then
+      _cv_icondir='${datadir}/pixmaps/navi2ch'
     fi
   ])
-  icondir="$cv_icondir"
+  icondir="$_cv_icondir"
 fi
 ])
 
