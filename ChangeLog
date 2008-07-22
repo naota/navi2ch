@@ -1,3 +1,29 @@
+2008-07-23  Naohiro Aota  <nao.aota@gmail.com>
+
+	* bcomp.el: XEmacs のコンパイル時メッセージレベルを変更。
+
+	* navi2ch-message.el: Shutup compile-time warnings;
+	navi2ch-localfile-default-file-modes の設定法を XEmacs でも処理でき
+	る形に。
+
+	* navi2ch-localfile.el: Ditto.
+
+	* navi2ch.el: Shutup compile-time warnings.
+
+	* navi2ch-util.el: Ditto.
+
+	* navi2ch-net.el: Ditto.
+
+	* navi2ch-multibbs.el: Ditto.
+
+	* navi2ch-list.el: Ditto.
+
+	* navi2ch-bookmark.el: Ditto.
+
+	* navi2ch-board-misc.el: Ditto.
+
+	* navi2ch-article.el: Ditto.
+
 2008-07-20  Naohiro Aota  <nao.aota@gmail.com>
 
 	* configure.in: cv_icondir を _cv_icondir に変更。

@@ -229,17 +229,18 @@ Expanded at compilation time."
 (put 'navi2ch-ifemacsce 'lisp-indent-function 1)
 
 ;; from apel
-(defmacro navi2ch-defalias-maybe (symbol definition)
-  "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
+(eval-and-compile
+  (defmacro navi2ch-defalias-maybe (symbol definition)
+    "Define SYMBOL as an alias for DEFINITION if SYMBOL is not defined.
 See also the function `defalias'."
-  (setq symbol (eval symbol))
-  (or (and (fboundp symbol)
-           (not (get symbol 'defalias-maybe)))
-      `(or (fboundp (quote ,symbol))
-	   (prog1
-	       (defalias (quote ,symbol) ,definition)
-	     ;; `defalias' updates `load-history' internally.
-	     (put (quote ,symbol) 'defalias-maybe t)))))
+    (setq symbol (eval symbol))
+    (or (and (fboundp symbol)
+	     (not (get symbol 'defalias-maybe)))
+	`(or (fboundp (quote ,symbol))
+	     (prog1
+		 (defalias (quote ,symbol) ,definition)
+	       ;; `defalias' updates `load-history' internally.
+	       (put (quote ,symbol) 'defalias-maybe t))))))
 
 (defmacro navi2ch-with-default-file-modes (mode &rest body)
   "default-file-modes $B$r(B MODE $B$K$7$F(B BODY $B$r<B9T$9$k!#(B"
@@ -288,15 +289,16 @@ See also the function `defalias'."
   (dolist (key navi2ch-delete-keys)
     (define-key map key command)))
 
-(defalias 'navi2ch-set-buffer-multibyte
-  (if (fboundp 'set-buffer-multibyte)
-      #'set-buffer-multibyte
-    #'identity))
-
-(defalias 'navi2ch-match-string-no-properties
-  (if (fboundp 'match-string-no-properties)
-      #'match-string-no-properties
-    #'match-string))
+(eval-and-compile
+  (defalias 'navi2ch-set-buffer-multibyte
+    (if (fboundp 'set-buffer-multibyte)
+	#'set-buffer-multibyte
+      #'identity))
+  
+  (defalias 'navi2ch-match-string-no-properties
+    (if (fboundp 'match-string-no-properties)
+	#'match-string-no-properties
+      #'match-string)))
 
 (defun navi2ch-no-logging-message (fmt &rest args)
   (navi2ch-ifxemacs
@@ -415,7 +417,7 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 	result
       (error "Wrong file name"))))
 
-(eval-when-compile
+(eval-and-compile
   (navi2ch-defalias-maybe 'assoc-string 'ignore))
 
 (defun navi2ch-replace-html-tag (str)
@@ -461,10 +463,12 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
       ref)))
 
 ;; shut up byte-compile warnings
-(eval-when-compile
+(eval-and-compile
   (autoload 'ucs-to-char "unicode")
   (navi2ch-defalias-maybe 'unicode-to-char 'ignore)
-  (navi2ch-defalias-maybe 'decode-char 'ignore))
+  (navi2ch-defalias-maybe 'decode-char 'ignore)
+  (defalias 'navi2ch-char-valid-p
+    (if (fboundp 'characterp) #'characterp #'char-valid-p)))
 
 (defun navi2ch-ucs-to-str (code)
   (let ((c (cond
@@ -547,7 +551,7 @@ PROMPT) $B$rI=<($7$F:FEY(B `read-char' $B$r8F$V!#(B"
 				browse-url-new-window-flag)
 			       ((boundp 'browse-url-new-window-p)
 				browse-url-new-window-p)))
-	proc status status)
+	proc status)
     (if (eq browse-url-browser-function 'navi2ch-browse-url)
 	(error "Set navi2ch-browse-url-browser-function correctly"))
 
@@ -717,6 +721,17 @@ FILENAME $B$,;XDj$5$l$k$H!"(BFILENAME $B$K$b=q$-=P$9!#(B"
       (ignore-errors (unless filename (delete-file file))))
     (when (not (= rc 0))
       (error "uudecode error"))))
+
+(eval-and-compile
+  (defalias 'navi2ch-line-beginning-position
+    (if (fboundp 'point-at-bol)
+	#'point-at-bol
+      #'line-beginning-position))
+  
+  (defalias 'navi2ch-line-end-position
+    (if (fboundp 'point-at-eol)
+	#'point-at-eol
+      #'line-end-position)))
 
 (defun navi2ch-uudecode-write-region (start end &optional filename)
   "START $B$H(B END $B$N4V$N%j!<%8%g%s$r(B uudecode $B$7!"(BFILENAME $B$K=q$-=P$9!#(B
@@ -956,15 +971,13 @@ base64$B%G%3!<%I$9$Y$-FbMF$,$J$$>l9g$O%(%i!<$K$J$k!#(B"
   (rename-file (navi2ch-chop-/ file)
 	       (navi2ch-chop-/ newname) ok-if-already-exists))
 
-(defalias 'navi2ch-set-keymap-default-binding
-  (if (fboundp 'set-keymap-default-binding)
-      #'set-keymap-default-binding
-    (lambda (map command)
-      "$B%-!<%^%C%W$N%G%U%)%k%H%P%$%s%I$r@_Dj$9$k!#(B"
-      (define-key map [t] command))))
-
-(defalias 'navi2ch-char-valid-p
-  (if (fboundp 'characterp) #'characterp #'char-valid-p))
+(eval-and-compile
+  (defalias 'navi2ch-set-keymap-default-binding
+    (if (fboundp 'set-keymap-default-binding)
+	#'set-keymap-default-binding
+      (lambda (map command)
+	"$B%-!<%^%C%W$N%G%U%)%k%H%P%$%s%I$r@_Dj$9$k!#(B"
+	(define-key map [t] command)))))
 
 ;;; $B%m%C%/(B
 ;; $B:G$bHFMQE*$J(B mkdir $B%m%C%/$r<BAu$7$F$_$?!#(B
@@ -1011,21 +1024,28 @@ LOCKNAME $B$,@dBP%Q%9$G$O$J$$>l9g!"(BDIRECTORY $B$+$i$NAjBP%Q%9$H$7$F07$&!#(
     (delete-directory lockname))
   (not (file-exists-p lockname)))
 
-(defalias 'navi2ch-line-beginning-position
-  (if (fboundp 'point-at-bol)
-	#'point-at-bol
-      #'line-beginning-position))
-
-(defalias 'navi2ch-line-end-position
-  (if (fboundp 'point-at-eol)
-      #'point-at-eol
-    #'line-end-position))
-
 (defsubst navi2ch-count-lines-file (file)
   "$B$=$N%U%!%$%k$N9T?t$r?t$($k!#(B"
   (with-temp-buffer
     (insert-file-contents file)
     (count-lines (point-min) (point-max))))
+
+(eval-and-compile
+  (defalias 'navi2ch-float-time
+    (if (fboundp 'float-time)
+	'float-time
+      (lambda (&optional specified-time)
+	"Return the current time, as a float number of seconds since the epoch.
+If an argument is given, it specifies a time to convert to float
+instead of the current time."
+	(apply (lambda (high low &optional usec)
+		 (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
+	       (or specified-time (current-time))))))
+(defalias 'navi2ch-make-local-hook
+  (if (>= emacs-major-version 22)
+      #'ignore
+    #'make-local-hook))
+(defalias 'navi2ch-cache-p #'vectorp))
 
 (defun navi2ch-compare-times (t1 t2)
   "T1 $B$,(B T2 $B$h$j?7$7$1$l$P(B non-nil $B$rJV$9!#(B"
@@ -1213,7 +1233,7 @@ REGEXP $B$r;XDj$9$k$H!"@55,I=8=$N@8@.$K@hN)$A(B REGEXP $B$K%^%C%A$7$?J8;zNs(
       (funcall filter))))
 
 ;; shut up byte-compile warnings
-(eval-when-compile
+(eval-and-compile
   (navi2ch-defalias-maybe 'keywordp 'ignore)
   (navi2ch-defalias-maybe 'characterp 'ignore))
 
@@ -1251,7 +1271,8 @@ REGEXP $B$r;XDj$9$k$H!"@55,I=8=$N@8@.$K@hN)$A(B REGEXP $B$K%^%C%A$7$?J8;zNs(
   regexp
   table)
 
-(defalias 'navi2ch-regexp-internal-p #'vectorp)
+(eval-and-compile
+  (defalias 'navi2ch-regexp-internal-p #'vectorp))
 
 (defun navi2ch-regexp-alist-to-internal (regexp-alist)
   (if (navi2ch-regexp-internal-p regexp-alist)
@@ -1383,9 +1404,10 @@ BOUND NOERROR COUNT $B$O(B `re-search-forward' $B$K$=$N$^$^EO$5$l$k!#(B"
 	(setq bol (1+ (navi2ch-line-end-position))))))
   (goto-char start))
 
-(if (fboundp 'propertize)
-    (defalias 'navi2ch-propertize 'propertize)
-  (defun navi2ch-propertize (string &rest properties)
+(eval-and-compile
+  (if (fboundp 'propertize)
+      (defalias 'navi2ch-propertize 'propertize)
+    (defun navi2ch-propertize (string &rest properties)
       "Return a copy of STRING with text properties added.
 First argument is the string to copy.
 Remaining arguments form a sequence of PROPERTY VALUE pairs for text
@@ -1394,7 +1416,7 @@ properties to add to the result."
 	(add-text-properties 0 (length str)
 			     properties
 			     str)
-	str)))
+	str))))
 
 (defsubst navi2ch-read-only-string (string)
   (navi2ch-propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
@@ -1404,24 +1426,6 @@ properties to add to the result."
 
 (defsubst navi2ch-file-size (filename)
   (nth 7 (file-attributes filename)))
-
-(defalias 'navi2ch-float-time
-  (if (fboundp 'float-time)
-      'float-time
-    (lambda (&optional specified-time)
-      "Return the current time, as a float number of seconds since the epoch.
-If an argument is given, it specifies a time to convert to float
-instead of the current time."
-      (apply (lambda (high low &optional usec)
-	       (+ (* high 65536.0) low (/ (or usec 0) 1000000.0)))
-	     (or specified-time (current-time))))))
-
-(defalias 'navi2ch-make-local-hook
-  (if (>= emacs-major-version 22)
-      #'ignore
-    #'make-local-hook))
-
-(defalias 'navi2ch-cache-p #'vectorp)
 
 (defsubst navi2ch-make-cache (&optional limit test)
   (vector limit

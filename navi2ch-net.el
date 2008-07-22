@@ -30,7 +30,8 @@
 (defconst navi2ch-net-ident
   "$Id$")
 
-(eval-when-compile (require 'cl))
+(eval-when-compile 
+  (require 'cl))
 (require 'timezone)
 (require 'base64)
 
@@ -375,10 +376,11 @@ nil なら常に再接続する。")
 	(unless (and (numberp status) (zerop status))
 	  (error "Failed to execute gzip")))))
 
-(defalias 'navi2ch-net-get-content-subr
-  (navi2ch-ifemacsce
-      'navi2ch-net-get-content-subr-with-temp-file
-    'navi2ch-net-get-content-subr-region))
+(eval-and-compile
+  (defalias 'navi2ch-net-get-content-subr
+    (navi2ch-ifemacsce
+	'navi2ch-net-get-content-subr-with-temp-file
+      'navi2ch-net-get-content-subr-region)))
 
 (defun navi2ch-net-get-chunk (proc)
   "カレントバッファの PROC の point 以降を chunk とみなして chunk を得る。
@@ -528,6 +530,11 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 			      (list (cons "Range" (concat "bytes=" range)))
 			      other-header)))
 
+(defsubst navi2ch-net-add-state (state header)
+  "HEADER に STATE を追加する。"
+  (navi2ch-put-alist (gethash state navi2ch-net-state-header-table)
+		     "yes"
+		     header))
 
 (defun navi2ch-net-update-file (url file 
 				&optional time func location diff other-header)
@@ -934,12 +941,6 @@ This is taken from RFC 2396.")
 	  (setq file (navi2ch-board-get-file-name board file))
 	  (when (navi2ch-net-update-file url file 'file nil t)
 	    file))))))
-
-(defsubst navi2ch-net-add-state (state header)
-  "HEADER に STATE を追加する。"
-  (navi2ch-put-alist (gethash state navi2ch-net-state-header-table)
-		     "yes"
-		     header))
 
 (defsubst navi2ch-net-get-state (state header)
   "HEADER から STATE を取得する。"

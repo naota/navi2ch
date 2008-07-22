@@ -36,6 +36,10 @@
 
 (require 'navi2ch)
 
+(eval-and-compile
+  (when (featurep 'xemacs)
+    (require 'timer)))
+
 (defvar navi2ch-message-aa-map nil)
 (unless navi2ch-message-aa-map
   (let ((map (make-sparse-keymap "Type ? for further options")))
@@ -570,7 +574,7 @@ header field $B$X0\F0$7$J$$0J30$O(B `back-to-indentation' $B$HF1$8!#(B"
     subject))
 
 (defun navi2ch-message-add-sendlog (from mail message subject board article)
-  (let ((navi2ch-localfile-default-file-modes ?\700)
+  (let ((navi2ch-localfile-default-file-modes (* 64 7))
 	;; $BAw?.95$((B $B$N%9%l%?%$$K(B &hearts; $B$H$+$r;H$($k$h$&$K!#(B
 	(navi2ch-decode-character-references nil)
 	(url (navi2ch-article-to-url board article))
@@ -676,7 +680,7 @@ SRC=$BJQ4985$NO"A[%j%9%H:8B&(B VAL=$BJQ4985$NCM(B($B1&B&(B) DST=$BJQ49@h$
   "samba.txt $B$+$i3F%5!<%P!"HD$4$H$NO"B3Ej9F5,@);~4V$rFI$_9~$_!"%j%9%H$H$7$FJ];}$9$k(B.
 samba.txt $B$O(B http://nullpo.s101.xrea.com/samba24/ $B$+$i<hF@(B."
   (interactive)
-  (let (navi2ch-message-samba24-file nnn)
+  (let (navi2ch-message-samba24-file)
     ;; $B:G?7$N(Bsamba.txt$B$r<hF@(B
     (navi2ch-message-samba24-update)
     (setq navi2ch-message-samba24-samba-data nil)

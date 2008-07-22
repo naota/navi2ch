@@ -437,7 +437,7 @@ KEY は (concat URI ARTID)")
 	      (let* ((item (navi2ch-bm-get-property-internal (point)))
 		     (board (navi2ch-bm-get-board-internal item))
 		     (article (navi2ch-bm-get-article-internal item))
-		     (bbstype (cdr (assq 'bbstype board)))
+		     ;; (bbstype (cdr (assq 'bbstype board)))
 		     (board-uri (cdr (assq 'uri board)))
 		     (art-id (cdr (assq 'artid article)))
 		     (res (string-to-number

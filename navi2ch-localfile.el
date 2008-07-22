@@ -56,13 +56,13 @@
   :type 'string
   :group 'navi2ch-localfile)
 
-(defcustom navi2ch-localfile-default-file-modes ?\775
+(defcustom navi2ch-localfile-default-file-modes (+ (* 64 7) (* 8 7) 5)
   "*ローカル BBS にファイルを書き込む際に使用する `default-file-modes'。
 意味があるのは8進数なので生で操作する時は注意。"
-  :type '(choice (const :tag "特定グループの奴らのみが書きこめる" ?\775)
-		 (const :tag "自分のみが書きこめる" ?\755)
-		 (const :tag "特定グループの奴らのみが読み書きできる" ?\770)
-		 (const :tag "自分のみが読み書きできる" ?\700))
+  :type '(choice (const :tag "特定グループの奴らのみが書きこめる" (+ (* 64 7) (* 8 7) 5))
+		 (const :tag "自分のみが書きこめる" (+ (* 64 7) (* 8 5) 5))
+		 (const :tag "特定グループの奴らのみが読み書きできる" (+ (* 64 7) (* 8 5)))
+		 (const :tag "自分のみが読み書きできる" (* 64 7)))
   :group 'navi2ch-localfile)
 
 (defcustom navi2ch-localfile-default-user-name "名無しさん"

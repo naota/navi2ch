@@ -79,6 +79,8 @@
   (navi2ch-save-status)
   (navi2ch-unlock))
 
+(defvar navi2ch-mona-enable)
+
 ;;;###autoload
 (defun navi2ch (&optional arg)
   "Navigator for 2ch for Emacs."

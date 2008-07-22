@@ -30,7 +30,15 @@
 (defconst navi2ch-article-ident
   "$Id$")
 
-(eval-when-compile (require 'cl))
+(eval-when-compile 
+  (require 'cl)
+  (defvar navi2ch-board-buffer-name)
+  (defvar navi2ch-board-current-board)
+  (defvar navi2ch-board-subject-list)
+  (defvar navi2ch-board-last-seen-alist)
+  (defvar navi2ch-popup-article-current-board)
+  (defvar navi2ch-popup-article-current-article))
+  
 (require 'base64)
 
 (require 'navi2ch)
@@ -718,6 +726,10 @@ BOARD non-nil $B$J$i$P!"$=$NHD$N(B coding-system $B$r;H$&!#(B"
 	     (navi2ch-no-logging-message
 	      "%s%d%%" msg (setq percent (/ progress len))))))
     (message "%sdone" msg)))
+
+(defsubst navi2ch-article-get-message (num)
+  "NUM $BHVL\$N%l%9$rF@$k!#(B"
+  (cdr (assq num navi2ch-article-message-list)))
 
 (defun navi2ch-article-reinsert-partial-messages (start &optional end)
   "START $BHVL\$+$i!":G8e$^$?$O(B END $BHVL\$^$G$N%l%9$rA^F~$7$J$*$9!#(B"
@@ -1414,7 +1426,7 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
       (let ((navi2ch-net-force-update (or navi2ch-net-force-update
 					  force))
 	    (file (navi2ch-article-get-file-name board article))
-	    start new-res)
+	    start)
 	(when (and (file-exists-p file)
 		   navi2ch-article-enable-diff)
 	  (setq start (1+ (navi2ch-count-lines-file file))))
@@ -1572,7 +1584,7 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 	(navi2ch-article-save-message-filter-cache board article)))))
 
 (defun navi2ch-article-load-info (&optional board article)
-  (let (ignore alist info-file)
+  (let (ignore alist)
     (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
 	(setq ignore t)
       (or board (setq board navi2ch-article-current-board))
@@ -2022,10 +2034,6 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (interactive)
   (navi2ch-article-through-subr (interactive-p) -1))
 
-(defsubst navi2ch-article-get-message (num)
-  "NUM $BHVL\$N%l%9$rF@$k!#(B"
-  (cdr (assq num navi2ch-article-message-list)))
-
 (defun navi2ch-article-get-current-number ()
   "$B:#$N0LCV$N%l%9$NHV9f$rF@$k!#(B"
   (condition-case nil
@@ -2371,6 +2379,17 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
       (when (buffer-live-p object)
 	(with-current-buffer object
 	  (navi2ch-article-get-link-text position))))))
+
+(defsubst navi2ch-article-load-article-summary (board)
+  (navi2ch-load-info (navi2ch-board-get-file-name
+		      board
+		      navi2ch-article-summary-file-name)))
+
+(defsubst navi2ch-article-save-article-summary (board summary)
+  (navi2ch-save-info (navi2ch-board-get-file-name
+		      board
+		      navi2ch-article-summary-file-name)
+		     summary))
 
 (defun navi2ch-article-next-link ()
   "$B<!$N%j%s%/$X0\F0!#(B"
@@ -2833,17 +2852,6 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
            (cdr (assq 'data
                       (navi2ch-article-get-message
                        (navi2ch-article-get-current-number))))))
-
-(defsubst navi2ch-article-load-article-summary (board)
-  (navi2ch-load-info (navi2ch-board-get-file-name
-		      board
-		      navi2ch-article-summary-file-name)))
-
-(defsubst navi2ch-article-save-article-summary (board summary)
-  (navi2ch-save-info (navi2ch-board-get-file-name
-		      board
-		      navi2ch-article-summary-file-name)
-		     summary))
 
 (defun navi2ch-article-set-summary-element (board article remove-seen)
   "BOARD, ARTICLE $B$KBP1~$7$?>pJs$r(B article-summary $B$KJ]B8$9$k!#(B"
@@ -3553,8 +3561,8 @@ PREFIX $B$,M?$($i$l$?>l9g$O!"(B
 		       "\\)") nil t)
 	      (let ((url (get-text-property (1- (point)) 'navi2ch-link)))
 		(when url
-		  (let (image file current-point
-			      (sssp_dir (expand-file-name "sssp_icon/" navi2ch-directory)))
+		  (let ((sssp_dir (expand-file-name "sssp_icon/" navi2ch-directory))
+			image file)
 		    (unless (file-directory-p sssp_dir)
 		      (make-directory sssp_dir))
 		    (store-substring url 0 "http")

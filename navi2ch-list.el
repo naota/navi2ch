@@ -30,7 +30,12 @@
 (defconst navi2ch-list-ident
   "$Id$")
 
-(eval-when-compile (require 'cl))
+(eval-when-compile 
+  (require 'cl)
+  (defvar navi2ch-bookmark-list)
+  (defvar navi2ch-list-bookmark-mode)
+  (defvar navi2ch-board-buffer-name)
+  (defvar navi2ch-board-current-board))
 
 (require 'navi2ch)
 

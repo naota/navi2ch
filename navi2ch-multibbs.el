@@ -145,6 +145,12 @@ CODING-SYSTEM-VAR:
       (navi2ch-multibbs-set-bbstype board type))
     type))
 
+(defsubst navi2ch-multibbs-get-func (bbstype func &optional default-func)
+  (let ((func-table (gethash bbstype navi2ch-multibbs-func-table)))
+    (or (and func-table
+	     (gethash func func-table))
+	default-func)))
+
 (defun navi2ch-multibbs-subject-callback (board)
   (navi2ch-multibbs-get-func
    (navi2ch-multibbs-get-bbstype board)
@@ -202,12 +208,6 @@ SPEC は (BBSTYPE [ARG]...)。
   (navi2ch-multibbs-get-func
    (navi2ch-multibbs-get-bbstype board)
    func default-func))
-
-(defsubst navi2ch-multibbs-get-func (bbstype func &optional default-func)
-  (let ((func-table (gethash bbstype navi2ch-multibbs-func-table)))
-    (or (and func-table
-	     (gethash func func-table))
-	default-func)))
 
 (defun navi2ch-multibbs-get-variable
   (bbstype variable &optional default-value)

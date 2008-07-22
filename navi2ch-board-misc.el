@@ -30,7 +30,11 @@
 (defconst navi2ch-board-misc-ident
   "$Id$")
 
-(eval-when-compile (require 'cl))
+(eval-when-compile 
+  (require 'cl)
+  (defvar navi2ch-board-last-seen-alist)
+  (defvar navi2ch-board-subject-alist)
+  (defvar navi2ch-board-current-board))
 
 ;; Avoid byte-compile warnings (contrib/izonmoji-mode.el).
 (eval-when-compile (defvar izonmoji-mode nil))
@@ -119,35 +123,36 @@
    :test 'eq))
   
 
-(let ((state-list '(view cache update nil))
-      (update-list '(nil new updated seen)))
-  (let ((func (lambda (f)
-		(navi2ch-alist-to-hash
-		 (mapcar (lambda (state)
-			   (cons state
-				 (navi2ch-alist-to-hash
-				  (mapcar (lambda (update)
-					    (cons update
-						  (funcall f state update)))
-					  update-list)
-				  :test 'eq)))
-			 state-list)
-		 :test 'eq))))
-  (defconst navi2ch-bm-state-face-table
-    (funcall func
-	     (lambda (state update)
-	       (intern (format "navi2ch-bm%s-%s-face"
-			       (if update
-				   (format "-%s" update)
-				 "")
-			       (or state 'unread))))))
-  (defconst navi2ch-bm-state-mark-face-table
-    (funcall func
-	     (lambda (state update)
-	       (intern (format "navi2ch-bm%s-mark-face"
-			       (if update
-				   (format "-%s" update)
-				 ""))))))))
+(eval-and-compile
+  (let ((state-list '(view cache update nil))
+	(update-list '(nil new updated seen)))
+    (let ((func (lambda (f)
+		  (navi2ch-alist-to-hash
+		   (mapcar (lambda (state)
+			     (cons state
+				   (navi2ch-alist-to-hash
+				    (mapcar (lambda (update)
+					      (cons update
+						    (funcall f state update)))
+					    update-list)
+				    :test 'eq)))
+			   state-list)
+		   :test 'eq))))
+      (defconst navi2ch-bm-state-face-table
+	(funcall func
+		 (lambda (state update)
+		   (intern (format "navi2ch-bm%s-%s-face"
+				   (if update
+				       (format "-%s" update)
+				     "")
+				   (or state 'unread))))))
+      (defconst navi2ch-bm-state-mark-face-table
+	(funcall func
+		 (lambda (state update)
+		   (intern (format "navi2ch-bm%s-mark-face"
+				   (if update
+				       (format "-%s" update)
+				     "")))))))))
 
 (defconst navi2ch-bm-updated-mark-table
   (navi2ch-alist-to-hash '((new     . ?%)
