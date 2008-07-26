@@ -1,3 +1,10 @@
+2008-07-26  Naohiro Aota  <nao.aota@gmail.com>
+
+	* configure.in: packagedir, icondir が prefix に従うように。
+
+	* acinclude.m4 (ac_output): 第三引数が argv として Lisp 関数にわた
+	るように。
+
 2008-07-23  Naohiro Aota  <nao.aota@gmail.com>
 
 	* bcomp.el: XEmacs のコンパイル時メッセージレベルを変更。

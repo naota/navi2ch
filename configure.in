@@ -26,8 +26,18 @@ AC_ARG_WITH(packagedir,
 [ AC_MSG_CHECKING([where package files should go])
 test "$emacstype" != xemacs && AC_MSG_ERROR(packagedir only works with XEmacs)
 case "$withval" in
-yes) AC_EMACS_LISP(packagedir, [dnl
-(princ (expand-file-name "../site-packages" data-directory))])
+yes) AC_EMACS_LISP(packagedir,[
+(let ((prefix argv)
+      (default data-directory))
+  (princ
+   (if (and prefix
+	    (not (string= prefix "NONE"))
+	    (string-match "/\\(xemacs[[^/]]*/.*$\\)" default))
+       (expand-file-name "site-packages"
+			 (expand-file-name (match-string 1 default)
+					   prefix))
+       (expand-file-name "../site-packages" default))))],
+\"${prefix}\")
 ;;
 no)  unset packagedir ;;
 *)   packagedir="$withval" ;;
@@ -50,8 +60,17 @@ AC_MSG_RESULT([$icondir])],
 [
 if test -z "${icondir}"; then
   AC_CACHE_CHECK([where icon files should go], [_cv_icondir], [dnl
-    AC_EMACS_LISP(_cv_icondir,[dnl
-(princ (expand-file-name "navi2ch/icons" data-directory))])
+    AC_EMACS_LISP(_cv_icondir,[
+(let ((prefix argv)
+      (default data-directory))
+  (princ (expand-file-name "navi2ch/icons"
+			   (if (and prefix
+				    (not (string= prefix "NONE"))
+				    (string-match "/\\(x?emacs[[^/]]*/.*$\\)" default))
+			       (expand-file-name (match-string 1 default)
+						 prefix)
+			     default))))],
+\"${prefix}\")
     if test -z "$_cv_icondir"; then
       _cv_icondir='${datadir}/pixmaps/navi2ch'
     fi

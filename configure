@@ -2360,8 +2360,8 @@ $as_echo_n "checking detecting your emacs type... " >&6; }
 { ac_temp=./conftemp.$$
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
-cat >$ac_temp <<\_ACEOF
-(defun ac-temp-func ()
+cat >>$ac_temp <<\_ACEOF
+(defun ac-temp-func (&optional argv)
 (princ (cond ((featurep 'xemacs) 'xemacs)
              ((>= emacs-major-version 21) 'emacs21)
              ((= emacs-major-version 20) 'emacs20)
@@ -2369,7 +2369,7 @@ cat >$ac_temp <<\_ACEOF
 (princ "\n") ; make sure the output has trailing newline.
 )
 _ACEOF
-$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -eval "(ac-temp-func )" | sed -e '/^ *$/d' > $ac_output
 emacstype=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
 { $as_echo "$as_me:$LINENO: result: $emacstype" >&5
@@ -2394,13 +2394,23 @@ case "$withval" in
 yes) { ac_temp=./conftemp.$$
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
-cat >$ac_temp <<\_ACEOF
-(defun ac-temp-func ()
-(princ (expand-file-name "../site-packages" data-directory))
+cat >>$ac_temp <<\_ACEOF
+(defun ac-temp-func (&optional argv)
+
+(let ((prefix argv)
+      (default data-directory))
+  (princ
+   (if (and prefix
+	    (not (string= prefix "NONE"))
+	    (string-match "/\\(xemacs[^/]*/.*$\\)" default))
+       (expand-file-name "site-packages"
+			 (expand-file-name (match-string 1 default)
+					   prefix))
+       (expand-file-name "../site-packages" default))))
 (princ "\n") ; make sure the output has trailing newline.
 )
 _ACEOF
-$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -eval "(ac-temp-func \"${prefix}\")" | sed -e '/^ *$/d' > $ac_output
 packagedir=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
 ;;
@@ -2439,13 +2449,22 @@ else
       { ac_temp=./conftemp.$$
 ac_output=confout.$$
 rm -f $ac_temp $ac_output
-cat >$ac_temp <<\_ACEOF
-(defun ac-temp-func ()
-(princ (expand-file-name "navi2ch/icons" data-directory))
+cat >>$ac_temp <<\_ACEOF
+(defun ac-temp-func (&optional argv)
+
+(let ((prefix argv)
+      (default data-directory))
+  (princ (expand-file-name "navi2ch/icons"
+			   (if (and prefix
+				    (not (string= prefix "NONE"))
+				    (string-match "/\\(x?emacs[^/]*/.*$\\)" default))
+			       (expand-file-name (match-string 1 default)
+						 prefix)
+			     default))))
 (princ "\n") ; make sure the output has trailing newline.
 )
 _ACEOF
-$EMACS -batch -q -l $ac_temp -f ac-temp-func | sed -e '/^ *$/d' > $ac_output
+$EMACS -batch -q -l $ac_temp -eval "(ac-temp-func \"${prefix}\")" | sed -e '/^ *$/d' > $ac_output
 _cv_icondir=`cat $ac_output`
 rm -f $ac_temp $ac_output; }
     if test -z "$_cv_icondir"; then
