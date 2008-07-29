@@ -1,17 +1,21 @@
+2008-07-29  Naohiro Aota  <nao.aota@gmail.com>
+
+	* configure.in: Fix previous change.
+
 2008-07-26  Naohiro Aota  <nao.aota@gmail.com>
 
-	* configure.in: packagedir, icondir $B$,(B prefix $B$K=>$&$h$&$K!#(B
+	* configure.in: packagedir, icondir が prefix に従うように。
 
-	* acinclude.m4 (ac_output): $BBh;00z?t$,(B argv $B$H$7$F(B Lisp $B4X?t$K$o$?(B
-	$B$k$h$&$K!#(B
+	* acinclude.m4 (ac_output): 第三引数が argv として Lisp 関数にわた
+	るように。
 
 2008-07-23  Naohiro Aota  <nao.aota@gmail.com>
 
-	* bcomp.el: XEmacs $B$N%3%s%Q%$%k;~%a%C%;!<%8%l%Y%k$rJQ99!#(B
+	* bcomp.el: XEmacs のコンパイル時メッセージレベルを変更。
 
 	* navi2ch-message.el: Shutup compile-time warnings;
-	navi2ch-localfile-default-file-modes $B$N@_DjK!$r(B XEmacs $B$G$b=hM}$G$-(B
-	$B$k7A$K!#(B
+	navi2ch-localfile-default-file-modes の設定法を XEmacs でも処理でき
+	る形に。
 
 	* navi2ch-localfile.el: Ditto.
 
@@ -33,7 +37,7 @@
 
 2008-07-20  Naohiro Aota  <nao.aota@gmail.com>
 
-	* configure.in: cv_icondir $B$r(B _cv_icondir $B$KJQ99!#(B
+	* configure.in: cv_icondir を _cv_icondir に変更。
 
 2008-05-31  Naohiro Aota  <nao.aota@gmail.com>
 
@@ -43,8 +47,8 @@
 
 2008-05-07  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-util.el (navi2ch-propertize): navi2ch-propertize $B$rI|3h!#(B
-	(navi2ch-read-only-string): propertize $B$r(B navi2ch-propertize $B$K!#(B
+	* navi2ch-util.el (navi2ch-propertize): navi2ch-propertize を復活。
+	(navi2ch-read-only-string): propertize を navi2ch-propertize に。
 
 	* navi2ch-splash.el (navi2ch-splash-insert-image)
 	(navi2ch-splash-insert-text): Ditto.
@@ -58,132 +62,132 @@
 	(navi2ch-article-auto-decode-encoded-section)
 	(navi2ch-article-show-sssp-icon): Ditto.
 
-	* navi2ch-vars.el (navi2ch-enable-status-check): $B%G%U%)%k%H$r(B nil $B$K!#(B
+	* navi2ch-vars.el (navi2ch-enable-status-check): デフォルトを nil に。
 
 2008-04-21  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-list.el (navi2ch-list-search): $B8!:w2DG=$JHD$+$I$&$+$r%A%'%C(B
-	$B%/!#(B
+	* navi2ch-list.el (navi2ch-list-search): 検索可能な板かどうかをチェッ
+	ク。
 
 	* navi2ch-search.el (navi2ch-search-for-each-article):
-	default-directory $B$,(B nil $B$G$J$$$+%A%'%C%/!#(B
+	default-directory が nil でないかチェック。
 
 2008-03-24  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-util.el (navi2ch-make-cache, navi2ch-cache-put): XEmacs
-	$B$N(B hash $B$N;EMM$KBP1~!#(B
+	の hash の仕様に対応。
 
 2008-03-21  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline)
-	(navi2ch-message-samba24): $BHD(BID $B$,=EJ#$7$F$$$?;~$K!"JL$NHDL>$,I=<((B
-	$B$5$l$F$7$^$&%P%0$r=$@5!#HD(BID $B$N(B : $B0J2<$r30$9=hM}$rDI2C!#(B
+	(navi2ch-message-samba24): 板ID が重複していた時に、別の板名が表示
+	されてしまうバグを修正。板ID の : 以下を外す処理を追加。
 
 2008-03-15  Naohiro Aota  <nao.aota@gmail.com>
 
-	* NEWS: $B%[%9%HL>!&(BIP$B%"%I%l%9$r%U%#%k%?(B/$B8!:w$N>r7o$K$G$-$k$h$&$K$J$C(B
-	$B$?$3$H$r5-:\!#(B
+	* NEWS: ホスト名・IPアドレスをフィルタ/検索の条件にできるようになっ
+	たことを記載。
 
 2008-03-14  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-url-to-article)
-	(navi2ch-machibbs-url-to-board): machibbs $B$N(BPATH INFO$B7A<0$KBP1~!#(B
+	(navi2ch-machibbs-url-to-board): machibbs のPATH INFO形式に対応。
 
 2008-03-02  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-mona.el (navi2ch-mona-create-fontset-from-family-name):
-	emacs-unicode-2 $B$KBP1~!#(B
+	emacs-unicode-2 に対応。
 
 2008-02-29  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch.el (navi2ch-load-info, navi2ch-save-info):
-	navi2ch-info-cache $B$,=i4|2=$5$l$F$$$k$+$I$&$+$r3NG'$7$J$$!#(B
-	(navi2ch): navi2ch-info-cache $B$r=i4|2=$9$k!#(B
-	(navi2ch-exit): $B2<$NJQ99$rLa$9!#(B
+	navi2ch-info-cache が初期化されているかどうかを確認しない。
+	(navi2ch): navi2ch-info-cache を初期化する。
+	(navi2ch-exit): 下の変更を戻す。
 
-	* navi2ch.el (navi2ch-exit): $BA4$F$N%P%C%U%!$rJD$8$F$+$i(B
-	navi2ch-save-status() $B$r8F$V$h$&$K!#(B
+	* navi2ch.el (navi2ch-exit): 全てのバッファを閉じてから
+	navi2ch-save-status() を呼ぶように。
 
 2008-02-27  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-util.el (navi2ch-browse-url-internal): sssp $B$r(B http $B$KCV(B
-	$B49$($kA0$K(B sssp $B$G$"$k$+$r3NG'!#(B
+	* navi2ch-util.el (navi2ch-browse-url-internal): sssp を http に置
+	換える前に sssp であるかを確認。
 
 2008-02-13  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-net.el (navi2ch-net-update-file): other-header $B$r0z?t$KDI(B
-	$B2C!#(B
+	* navi2ch-net.el (navi2ch-net-update-file): other-header を引数に追
+	加。
 
 2008-02-11  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-article.el (navi2ch-article-url-at-point): type $B$,@5$7$/(B
-	$B$H$l$F$$$J$+$C$?(B bug $B$r=$@5!#(B
+	* navi2ch-article.el (navi2ch-article-url-at-point): type が正しく
+	とれていなかった bug を修正。
 
 2008-02-06  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-popup-article.el (navi2ch-popup-article):
-	navi2ch-article-insert-messages() $B8e$K(B
-	navi2ch-article-current-article $B$r(B nil $B$K$9$k!#(B
-	navi2ch-popup-article-current-article $B$r1#JC$7$F$7$^$&$3$H$NBP:v!#(B
-	$BI=<($5$l$F$$$k(B message $B$,(B parse $B$5$l$J$$$^$^;D$C$F$7$^$&%P%0$rD>$9(B
-	$B$?$a!"(B navi2ch-article-message-list $B$N@07AJ}K!$r=$@5!#(B
+	navi2ch-article-insert-messages() 後に
+	navi2ch-article-current-article を nil にする。
+	navi2ch-popup-article-current-article を隠蔽してしまうことの対策。
+	表示されている message が parse されないまま残ってしまうバグを直す
+	ため、 navi2ch-article-message-list の整形方法を修正。
 
-	* navi2ch.el (navi2ch-load-info): read() $B$K<:GT$7$?%U%!%$%k$r:o=|$9(B
-	$B$k$+$I$&$+Ld$$9g$o$;$k!#(B
+	* navi2ch.el (navi2ch-load-info): read() に失敗したファイルを削除す
+	るかどうか問い合わせる。
 
 2008-02-03  Naohiro Aota  <nao.aota@gmail.com>
 
-	* *.el: Copyright $B$N7A<0$rJQ99!#(B
+	* *.el: Copyright の形式を変更。
 
 2008-02-02  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-article.el (navi2ch-article-search): hostname $B$G$b8!:w$G(B
-	$B$-$k$h$&$K!#(B
-	(navi2ch-article-message-filter-by-hostname): $B%7%Y%j%"$N%[%9%HI=<((B
-	$B7A<0$KBP1~!#(B
+	* navi2ch-article.el (navi2ch-article-search): hostname でも検索で
+	きるように。
+	(navi2ch-article-message-filter-by-hostname): シベリアのホスト表示
+	形式に対応。
 	(navi2ch-article-get-current-hostname): Ditto.
-	(navi2ch-article-search-hostname): $B?74X?t!#(B
-	(navi2ch-article-get-current-subject): subject $B$N2r@O$K<:GT$7$?$i(B
-	"" $B$rJV$9!#(B
+	(navi2ch-article-search-hostname): 新関数。
+	(navi2ch-article-get-current-subject): subject の解析に失敗したら
+	"" を返す。
 
-	* navi2ch-splash.el (navi2ch-splash-copyright-notice): Copyright $B$r(B
-	$B99?7!#(B
+	* navi2ch-splash.el (navi2ch-splash-copyright-notice): Copyright を
+	更新。
 
-	* navi2ch-article.el (navi2ch-article-load-info): indent $B$r=$@5!#(B
+	* navi2ch-article.el (navi2ch-article-load-info): indent を修正。
 
-	* navi2ch-util.el (toplevel): Warnings $BBP:v!#(B
-	navi2ch-net-send-request() $B!"(Bnavi2ch-net-get-status() $B$r(B defun$B!#(B
+	* navi2ch-util.el (toplevel): Warnings 対策。
+	navi2ch-net-send-request() 、navi2ch-net-get-status() を defun。
 
-	* navi2ch-mona.el (toplevel): Warnings $BBP:v!#(B
+	* navi2ch-mona.el (toplevel): Warnings 対策。
 	navi2ch-popup-article-current-board,
 	navi2ch-article-current-board,
 	navi2ch-popup-article-current-article,
-	navi2ch-article-current-article $B$r(B defvar$B!#(B
+	navi2ch-article-current-article を defvar。
 
-	* navi2ch.el (navi2ch-save-info): $B>o$K%U%!%$%k$KJ]B8$9$k$h$&$K!#(B
+	* navi2ch.el (navi2ch-save-info): 常にファイルに保存するように。
 
 2008-02-01  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-popup-article.el (navi2ch-popup-number-list): $B?7JQ?t!#(B
-	(navi2ch-popup-article): popup $BCf$N%l%9HV9f$r>e5-JQ?t$KJ];}$9$k$h$&(B
-	$B$K!#(B navi2ch-article-message-list $B$O$b$H$N(B article $B$N$b$N$N%3%T!<$r(B
-	point $B$@$1CV$-49$($?$b$N$K!#(B
-	(navi2ch-popup-article-select-current-link): $B%j%s%/@h%l%9$,(B popup
-	$BCf$N;~$@$1!"(B navi2ch-article-goto-number() $B$r8F$S=P$9!#(B
+	* navi2ch-popup-article.el (navi2ch-popup-number-list): 新変数。
+	(navi2ch-popup-article): popup 中のレス番号を上記変数に保持するよう
+	に。 navi2ch-article-message-list はもとの article のもののコピーを
+	point だけ置き換えたものに。
+	(navi2ch-popup-article-select-current-link): リンク先レスが popup
+	中の時だけ、 navi2ch-article-goto-number() を呼び出す。
 
-	* navi2ch-util.el (navi2ch-cache-remove): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-cache-remove): 新関数。
 
-	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): info $B$N(B
-	backup $B$b>C$9!#(B cache $B$r%/%j%"$9$k!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-remove-article-subr): info の
+	backup も消す。 cache をクリアする。
 
 	* navi2ch-article.el (navi2ch-article-get-current-word-in-body):
-	word $B$,(B nil $B$N;~$K(B string-match() $B$r<B9T$7$J$$!#(B
+	word が nil の時に string-match() を実行しない。
 
-	* navi2ch.el: Copyright $B$NI=5-$r99?7!#(B
-	(navi2ch-info-cache, navi2ch-info-cache-limit): $B?7JQ?t!#(B
+	* navi2ch.el: Copyright の表記を更新。
+	(navi2ch-info-cache, navi2ch-info-cache-limit): 新変数。
 	(navi2ch-save-info, navi2ch-load-info): Use it.
 
-	* navi2ch-futaba.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-futaba.el: Copyright の表記を更新。
 
 	* navi2ch-history.el: Ditto.
 
@@ -215,64 +219,64 @@
 
 	* navi2ch-vars.el: Ditto.
 
-	* navi2ch-article.el: Copyright $B$NI=5-$r99?7!#(B
-	(navi2ch-article-forward-buffer): save-excursion $B$G$O$J$/!"(B
-	with-current-buffer $B$r;H$&!#(B
-	(navi2ch-article-get-message-filter-cache-file-name): inline $B$K!#(B
-	(navi2ch-article-expunge-buffers): sticky $B$+$I$&$+$r(B mapcar $B$G=hM}(B
-	$B$9$k$h$&$K!#(B navi2ch-article-buffer-list() $B$N8F=P$72s?t$r8:$i$7$?!#(B
+	* navi2ch-article.el: Copyright の表記を更新。
+	(navi2ch-article-forward-buffer): save-excursion ではなく、
+	with-current-buffer を使う。
+	(navi2ch-article-get-message-filter-cache-file-name): inline に。
+	(navi2ch-article-expunge-buffers): sticky かどうかを mapcar で処理
+	するように。 navi2ch-article-buffer-list() の呼出し回数を減らした。
 	(navi2ch-article-load-article-summary)
 	(navi2ch-article-save-article-summary)
 	(navi2ch-article-get-message, navi2ch-article-get-current-name)
 	(navi2ch-article-get-current-mail)
 	(navi2ch-article-inside-range-p)
 	(navi2ch-article-get-buffer-name, navi2ch-article-check-cached):
-	inline $B$K!#(B
-	(navi2ch-article-kill-buffer-hook): updated $B$@$C$?%9%l$O(B state $B$r(B
-	cache $B$KJQ99$7$J$$!#(B
+	inline に。
+	(navi2ch-article-kill-buffer-hook): updated だったスレは state を
+	cache に変更しない。
 	(navi2ch-article-load-info,navi2ch-article-save-info):
-	navi2ch-article-info-cache $B$rGQ;_!#(B
+	navi2ch-article-info-cache を廃止。
 
-	* navi2ch-util.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-util.el: Copyright の表記を更新。
 	(navi2ch-filename-to-url, navi2ch-rename-file)
 	(navi2ch-read-only-string, navi2ch-count-lines-file)
-	(navi2ch-put-alist): inline $B$K!#(B
-	(navi2ch-float-time): $BDj5A$5$l$F$$$l$P!"(B built-in $B$N(B float-time $B$r(B
-	$B;HMQ$9$k$h$&$K!#(B
+	(navi2ch-put-alist): inline に。
+	(navi2ch-float-time): 定義されていれば、 built-in の float-time を
+	使用するように。
 
-	* navi2ch-multibbs.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-multibbs.el: Copyright の表記を更新。
 	(navi2ch-multibbs-board-update)
 	(navi2ch-multibbs-board-get-file-name)
 	(navi2ch-2ch-subject-callback, navi2ch-multibbs-get-func)
-	(navi2ch-multibbs-get-bbstype): inline $B$K!#(B
+	(navi2ch-multibbs-get-bbstype): inline に。
 
-	* navi2ch-net.el: Copyright $B$NI=5-$r99?7!#(B
-	(navi2ch-net-add-state, navi2ch-net-get-state): inline $B$K!#(B
+	* navi2ch-net.el: Copyright の表記を更新。
+	(navi2ch-net-add-state, navi2ch-net-get-state): inline に。
 
-	* navi2ch-board.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-board.el: Copyright の表記を更新。
 	(navi2ch-board-set-property)
 	(navi2ch-board-get-property, navi2ch-board-get-board)
 	(navi2ch-board-exit, navi2ch-board-get-uri)
-	(navi2ch-board-get-matched-article): inline $B$K!#(B
-	(navi2ch-board-get-article): alias $B$K!#(B
+	(navi2ch-board-get-matched-article): inline に。
+	(navi2ch-board-get-article): alias に。
 
-	* navi2ch-bookmark.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-bookmark.el: Copyright の表記を更新。
 	(navi2ch-bookmark-get-property)
 	(navi2ch-bookmark-get-article, navi2ch-bookmark-get-board)
-	(navi2ch-bookmark-exit): inline $B$K!#(B
+	(navi2ch-bookmark-exit): inline に。
 
-	* navi2ch-board-misc.el: Copyright $B$NI=5-$r99?7!#(B
+	* navi2ch-board-misc.el: Copyright の表記を更新。
 	(navi2ch-bm-goto-updated-mark-column)
 	(navi2ch-bm-goto-state-column, navi2ch-bm-goto-mark-column)
-	(navi2ch-bm-get-state,navi2ch-bm-get-updated-mark): inline $B$K!#(B
+	(navi2ch-bm-get-state,navi2ch-bm-get-updated-mark): inline に。
 
 2008-01-30  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-vars.el (navi2ch-global-map): C-c C-l $B$K(B
-	navi2ch-be2ch-toggle-login $B$r%^%C%W!#(B
+	* navi2ch-vars.el (navi2ch-global-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
 
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l $B$N(B map $B$r0\(B
-	$BF0!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l の map を移
+	動。
 
 	* navi2ch-message.el (navi2ch-message-mode-map): Ditto.
 
@@ -282,25 +286,25 @@
 
 2008-01-29  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-message.el (navi2ch-message-samba24): id $B$,$+$V$C$F$$$?;~(B
-	$B$NBP:v!#(B
-	(navi2ch-message-samba24-search-samba): string $B0J30$,(B url $B$H$7$FF~$C(B
-	$B$F$-$?;~$NBP:v!#(B
+	* navi2ch-message.el (navi2ch-message-samba24): id がかぶっていた時
+	の対策。
+	(navi2ch-message-samba24-search-samba): string 以外が url として入っ
+	てきた時の対策。
 
-	* navi2ch-vars.el (navi2ch-enable-status-check): $B?7%+%9%?%^%$%:JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-enable-status-check): 新カスタマイズ変数。
 
 	* navi2ch-util.el (navi2ch-browse-url-internal): Use it.
 
 2008-01-24  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-article.el (navi2ch-article-redraw-range): range $B$rA*$s$@(B
-	$B$"$H(B $B:FIA2h!#(B
+	* navi2ch-article.el (navi2ch-article-redraw-range): range を選んだ
+	あと 再描画。
 
 2008-01-23  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-get-last-read-number):
-	article $B$=$N$b$N$G$O$J$/!"(B article $B$N%3%T!<$r(B
-	navi2ch-article-load-info() $B$KEO$9$h$&$K!#(B
+	article そのものではなく、 article のコピーを
+	navi2ch-article-load-info() に渡すように。
 
 	* navi2ch-board.el (navi2ch-board-insert-subjects): Revert the
 	last change.
@@ -308,213 +312,213 @@
 2008-01-22  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-vars.el (navi2ch-article-message-filter-list):
-	`navi2ch-article-message-filter-by-hostname' $B$rDI2C!#(B
+	`navi2ch-article-message-filter-by-hostname' を追加。
 
 	* navi2ch-article.el (navi2ch-article-add-message-filter-by-hostname):
-	$B?74X?t!#(B
+	新関数。
 	(navi2ch-article-message-filter-by-hostname): Ditto.
 	(navi2ch-article-get-current-hostname): Ditto.
-	(navi2ch-article-add-message-filter-rule): hostname $B$NA*Br;h$rDI2C!#(B
+	(navi2ch-article-add-message-filter-rule): hostname の選択肢を追加。
 
 	* navi2ch-vars.el (navi2ch-article-message-filter-by-hostname-alist):
-	$B?7%+%9%?%^%$%:JQ?t!#(B
+	新カスタマイズ変数。
 
 2008-01-22  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline):
-	cancel-timer$B$OJQ?t$r(Bnil$B$K$7$J$$;EMM$i$7$$!#$h$C$F!"%?%$%^$NJQ?t(B
-	$B8+$F$k$H$3$m$G4|BT$I$*$j$NF0:n$r$7$J$$!#<+NO$G(Bnil$B$K!#(B
-	(interactive)$B$r(Bnavi2ch-message-samba24-update$B$+$i(B
-	navi2ch-message-samba24-read-samba$B$K0\F0!#%U%!%$%k<hF@$7$F$bFI$_9~(B
-	$B$s$GE83+$7$J$1$l$P0UL#$,L5$$$+$i!#$3$l$G!"(BM-x
-	navi2ch-message-samba24-read-samba$B$r$9$l$PA4$F$&$^$/$$$/!#L>A0$OJ,(B
-	$B$+$j$E$i$$$,!#(B
+	cancel-timerは変数をnilにしない仕様らしい。よって、タイマの変数
+	見てるところで期待どおりの動作をしない。自力でnilに。
+	(interactive)をnavi2ch-message-samba24-updateから
+	navi2ch-message-samba24-read-sambaに移動。ファイル取得しても読み込
+	んで展開しなければ意味が無いから。これで、M-x
+	navi2ch-message-samba24-read-sambaをすれば全てうまくいく。名前は分
+	かりづらいが。
 
-	* navi2ch-article.el (navi2ch-article-show-sssp-icon):$B?74X?t!#(B
-	sssp:// $B$J%"%$%3%s$r%$%s%i%$%s$GI=<($5$;$k!#%G%#%l%/%H%j7!$C$F!"2h(B
-	$BA|$r$=$3$K%-%c%C%7%e!#:#$N$H$3$m(Bhook$B$G8F$s$G$d$C$F$$$k!#(B
+	* navi2ch-article.el (navi2ch-article-show-sssp-icon):新関数。
+	sssp:// なアイコンをインラインで表示させる。ディレクトリ掘って、画
+	像をそこにキャッシュ。今のところhookで呼んでやっている。
 	(add-hook 'navi2ch-article-mode-hook 'navi2ch-article-show-sssp-icon)
-	$BAH$_9~$`NI$$>l=j$,8+IU$+$i$J$$!#(B
-	emacs23$B$N$_$G%F%9%H:Q$_!#(Bemacs$BB&$N;EMM$G%"%K%a(Bgif$B$OF0$+$J$$!#(B
+	組み込む良い場所が見付からない。
+	emacs23のみでテスト済み。emacs側の仕様でアニメgifは動かない。
 
-	* navi2ch-vars.el (navi2ch-article-url-regexp): sssp:// $B$G$b(B
-	http:// $B$_$?$$$K%j%s%/$C$]$$(Bproperty$B!#(B
+	* navi2ch-vars.el (navi2ch-article-url-regexp): sssp:// でも
+	http:// みたいにリンクっぽいproperty。
 
-	* navi2ch-util.el (navi2ch-browse-url-internal): $B%V%i%&%6$r8F$VA0$K(B
-	sssp$B$r(Bhttp$B$KCV49!#%V%i%&%6$r8F$VA0$K(BHEAD$B$7$F!"%?!<%2%C%H$N%G!<%?$,(B
-	$B<hF@$G$-$k$+$I$&$+3NG'!#%5%V%W%m%;%98F$V%3%9%H:o8:$J$N$@$,!"87$7$9(B
-	$B$.$k$+$b!#(B
+	* navi2ch-util.el (navi2ch-browse-url-internal): ブラウザを呼ぶ前に
+	ssspをhttpに置換。ブラウザを呼ぶ前にHEADして、ターゲットのデータが
+	取得できるかどうか確認。サブプロセス呼ぶコスト削減なのだが、厳しす
+	ぎるかも。
 
 2008-01-22  Naohiro Aota  <nao.aota@gmail.com>
 
-	Part 18 $B$N(B 249$B;a$h$j$NJs9p(B
+	Part 18 の 249氏よりの報告
 	* navi2ch-board.el (navi2ch-board-insert-subjects):
-	navi2ch-article-get-last-read-number() $B$KEO$9(B article $B$r(B copy-tree
-	$B$9$k$h$&$K!#(B
+	navi2ch-article-get-last-read-number() に渡す article を copy-tree
+	するように。
 
 2008-01-20  Naohiro Aota  <nao.aota@gmail.com>
 
-	Part 18 $B$N(B 246$B;a$h$j$NJs9p(B
-	* navi2ch-message.el (navi2ch-message-samba24): timer $B$G(B
-	navi2ch-message-samba24-modeline $B$r8F$S=P$9$h$&$K!#(B
-	(navi2ch-message-samba24-check): current-time $B$r(B cur-time $B$K2~L>!#(B
-	$BBT$AIC?t$,Ii$K$J$C$?;~$KBP1~!#(B
+	Part 18 の 246氏よりの報告
+	* navi2ch-message.el (navi2ch-message-samba24): timer で
+	navi2ch-message-samba24-modeline を呼び出すように。
+	(navi2ch-message-samba24-check): current-time を cur-time に改名。
+	待ち秒数が負になった時に対応。
 
 2008-01-17  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article-no-check-regexp):
-	$B?7JQ?t!#(B
+	新変数。
 	(navi2ch-bookmark-fetch-mark-article):
-	navi2ch-bookmark-fetch-mark-article-no-check-regexp $B$,(B non-nil $B$J$i(B
-	$B$P!"(B board-uri $B$,$=$l$K%^%C%A$9$k$b$N$O(B unmark check $B$r$7$J$$!#(B
+	navi2ch-bookmark-fetch-mark-article-no-check-regexp が non-nil なら
+	ば、 board-uri がそれにマッチするものは unmark check をしない。
 
 	* navi2ch-article.el (navi2ch-article-save-info-keys): Also save
 	response.
-	(navi2ch-article-update-file): $B99?78e$K(B article-info $B$N(B response $B$r(B
-	$B99?7$9$k$h$&$K!#(B
+	(navi2ch-article-update-file): 更新後に article-info の response を
+	更新するように。
 
 	* navi2ch-board-misc.el (navi2ch-bm-display-mark-article): inline
-	$B$K!#(B
+	に。
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article-check-update):
-	$B?7JQ?t!#(B
+	新変数。
 	(navi2ch-bookmark-fetch-mark-article):
-	navi2ch-bookmark-fetch-mark-article-check-update $B$,(B non-nil $B$J$i$P(B
-	update $B$5$l$F$$$J$$$b$N$O(B mark $B$r30$9!#(B
+	navi2ch-bookmark-fetch-mark-article-check-update が non-nil ならば
+	update されていないものは mark を外す。
 
 	* navi2ch.el (navi2ch-make-temp-file)
-	(navi2ch-make-backup-file-name): inline $B$K!#(B
+	(navi2ch-make-backup-file-name): inline に。
 
 2008-01-15  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-load-info)
-	(navi2ch-article-save-info): navi2ch-article-info-cache $B$r;HMQ!#(B
+	(navi2ch-article-save-info): navi2ch-article-info-cache を使用。
 
-	* navi2ch-util.el (navi2ch-cache-get): $B?7%^%/%m!#(B
-	(navi2ch-cache-put): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-cache-get): 新マクロ。
+	(navi2ch-cache-put): 新関数。
 	(navi2ch-make-cache): Ditto.
 	(navi2ch-cache-limit, navi2ch-cache-hash-table): Ditto.
 	(navi2ch-cache-p): Ditto.
 
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l $B$K(B
-	navi2ch-be2ch-toggle-login $B$r%^%C%W!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
 
-	* navi2ch-board.el (navi2ch-board-mode-map): C-c C-l $B$r(B
-	navi2ch-bm-mode-map $B$K0\F0!#(B
+	* navi2ch-board.el (navi2ch-board-mode-map): C-c C-l を
+	navi2ch-bm-mode-map に移動。
 
 	* navi2ch-multibbs.el (navi2ch-multibbs-get-func-from-board):
-	inline $B$K!#(B
+	inline に。
 
 	* navi2ch-board.el (navi2ch-board-equal)
-	(navi2ch-board-get-file-name, navi2ch-board-from-file-p): inline $B$K!#(B
+	(navi2ch-board-get-file-name, navi2ch-board-from-file-p): inline に。
 
 	* navi2ch-article.el (navi2ch-article-get-file-name)
 	(navi2ch-article-get-info-file-name)
-	(navi2ch-article-file-name-to-artid): inline $B$K!#(B
+	(navi2ch-article-file-name-to-artid): inline に。
 
 	* navi2ch-util.el (navi2ch-file-size, navi2ch-file-mtime): inline
-	$B$K!#(B
+	に。
 
-	* navi2ch-article.el (navi2ch-article-info-cache): $B?7JQ?t!#(B
+	* navi2ch-article.el (navi2ch-article-info-cache): 新変数。
 
-	* navi2ch-multibbs.el (navi2ch-2ch-board-file-name-cache): $B?7JQ?t!#(B
-	(navi2ch-2ch-board-get-file-name): $B>e5-JQ?t$r;HMQ!#(B file-name $B$r(B
-	$B%-%c%C%7%e$9$k!#(B
+	* navi2ch-multibbs.el (navi2ch-2ch-board-file-name-cache): 新変数。
+	(navi2ch-2ch-board-get-file-name): 上記変数を使用。 file-name を
+	キャッシュする。
 
-	* navi2ch-util.el (navi2ch-expand-file-name): $B$A$g$C$H9bB.2=!#(B
+	* navi2ch-util.el (navi2ch-expand-file-name): ちょっと高速化。
 
 	* navi2ch-vars.el (navi2ch-file-name-reserved-char-regexp):
-	navi2ch-file-name-reserved-char-list $B$KJQ99!#(B
+	navi2ch-file-name-reserved-char-list に変更。
 	(navi2ch-file-name-reserved-char-list):
-	navi2ch-file-name-reserved-char-regexp $B$+$iJQ99!#(B
+	navi2ch-file-name-reserved-char-regexp から変更。
 
-	* navi2ch-multibbs.el (navi2ch-multibbs-func-alist): $B:o=|!#(B
-	(navi2ch-multibbs-func-table): navi2ch-multibbs-func-alist $B$r(B hash
-	$B2=!#(B
-	(navi2ch-multibbs-get-bbstype-subr): navi2ch-multibbs-func-* $B$N(B
-	hash $B2=$KDI?o!#(B
+	* navi2ch-multibbs.el (navi2ch-multibbs-func-alist): 削除。
+	(navi2ch-multibbs-func-table): navi2ch-multibbs-func-alist を hash
+	化。
+	(navi2ch-multibbs-get-bbstype-subr): navi2ch-multibbs-func-* の
+	hash 化に追随。
 	(navi2ch-multibbs-get-func): Ditto.
 
 2008-01-14  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-check): Remove debug
 	message.
-	(navi2ch-message-samba24): 2ch $B0J30$NHD$K=q$-$3$s$G$$$?;~$K$b(B
-	navi2ch-message-samba24-send-time $B$K=q$-$3$_;~4V$,5-O?$5$l$F$$$?%P(B
-	$B%0$r=$@5!#$9$G$K(B timer $B8F$S=P$7$,$"$C$F$b!"(B timer $B$r@8@.$7$F$$$?%P(B
-	$B%0$r=$@5!#(B
-	(navi2ch-message-samba24-timer): $B:o=|!#(B
+	(navi2ch-message-samba24): 2ch 以外の板に書きこんでいた時にも
+	navi2ch-message-samba24-send-time に書きこみ時間が記録されていたバ
+	グを修正。すでに timer 呼び出しがあっても、 timer を生成していたバ
+	グを修正。
+	(navi2ch-message-samba24-timer): 削除。
 	(navi2ch-message-samba24-modeline):
-	navi2ch-message-samba24-send-time $B$,(B nil $B$K$J$C$?$i!"(B timer $B$r2r=|!#(B
-	(navi2ch-message-samba24-update-timer): $B?7JQ?t!#(B
+	navi2ch-message-samba24-send-time が nil になったら、 timer を解除。
+	(navi2ch-message-samba24-update-timer): 新変数。
 
 	* navi2ch-localfile.el (navi2ch-localfile-board-update): encode mtime.
 	(navi2ch-localfile-article-update): Ditto.
 
-	* NEWS: Samba24$B$K$D$$$F5-:\!#(B
+	* NEWS: Samba24について記載。
 
 	* navi2ch-localfile.el (navi2ch-localfile-board-update)
-	(navi2ch-localfile-article-update): time $B$,(B nil $B$N;~$O(B file $B$N99?7(B
-	$B;~4V$r;HMQ!#(B
+	(navi2ch-localfile-article-update): time が nil の時は file の更新
+	時間を使用。
 
 	* navi2ch-util.el (navi2ch-set-mode-line-identification): Samba24
-	$B$NBT$A;~4V$r(B mode-line $B$KI=<(!#(B
+	の待ち時間を mode-line に表示。
 
-	* navi2ch-message.el (navi2ch-message-samba24-check): $B?74X?t!#(B
-	(navi2ch-message-samba24-sambatxt-url): $B?7Dj?t!#(B
+	* navi2ch-message.el (navi2ch-message-samba24-check): 新関数。
+	(navi2ch-message-samba24-sambatxt-url): 新定数。
 	(navi2ch-message-samba24-send-time)
-	(navi2ch-message-samba24-show): docstring $B$rDI2C!#(B
-	(navi2ch-message-samba24-file-name): $B?7JQ?t(B
-	(navi2ch-message-samba24-update): $B>e5-Dj?t!"JQ?t$r;HMQ!#(B
-	navi2ch-expand-file-name() $B$r;HMQ$9$k$h$&$K!#(B
+	(navi2ch-message-samba24-show): docstring を追加。
+	(navi2ch-message-samba24-file-name): 新変数
+	(navi2ch-message-samba24-update): 上記定数、変数を使用。
+	navi2ch-expand-file-name() を使用するように。
 	(navi2ch-message-samba24-search-samba):
-	navi2ch-message-samba24-samba-data $B$N;EMMJQ99$KDI?o!#(B
-	(navi2ch-message-samba24-read-samba): $BF1>e!#(B
-	(navi2ch-message-samba24): $BF1>e!#(B
-	(navi2ch-message-samba24-modeline): global-mode-line $B$G$O$J$/!"(B
-	navi2ch-message-samba24-mode-string $B$@$1$rJQ99$9$k$h$&$K!#(B
-	(navi2ch-message-samba24-timer): timer $B$rJ];}$7$J$$!#(B
+	navi2ch-message-samba24-samba-data の仕様変更に追随。
+	(navi2ch-message-samba24-read-samba): 同上。
+	(navi2ch-message-samba24): 同上。
+	(navi2ch-message-samba24-modeline): global-mode-line ではなく、
+	navi2ch-message-samba24-mode-string だけを変更するように。
+	(navi2ch-message-samba24-timer): timer を保持しない。
 
-	* navi2ch-multibbs.el (navi2ch-2ch-send-message): $B>e5-4X?t$r;HMQ!#(B
+	* navi2ch-multibbs.el (navi2ch-2ch-send-message): 上記関数を使用。
 
 	* navi2ch-net.el (navi2ch-net-send-message-error-string)
-	(navi2ch-net-send-message-success-p): proc $B$,(B nil $B$@$C$?;~$KBP=h!#(B
+	(navi2ch-net-send-message-success-p): proc が nil だった時に対処。
 
 2008-01-13  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-message.el (navi2ch-message-samba24-modeline): time-diff
-	$B$r94B+!#(B
+	を拘束。
 
-	* navi2ch-popup-article.el (navi2ch-popup-article): num $B$r94B+!#(B
+	* navi2ch-popup-article.el (navi2ch-popup-article): num を拘束。
 
-	* navi2ch-message.el (navi2ch-message-samba24-modeline): () $B$NBP1~(B
-	$B$r=$@5!#(B
+	* navi2ch-message.el (navi2ch-message-samba24-modeline): () の対応
+	を修正。
 
 	* navi2ch-vars.el: fixed coding-system problem.
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-select-current-link):
-	adhoc $B$@$1$I!"(B patch#1733433 $B$H!"(B >>nn $B$N%j%s%/@h$r$5$i$K(B popup $B$9(B
-	$B$k$3$H$,$G$-$k$h$&$K!#(B
+	adhoc だけど、 patch#1733433 と、 >>nn のリンク先をさらに popup す
+	ることができるように。
 
 2008-01-13  mizmiz  <mizmiz@users.sourceforge.net>
 
-	* navi2ch-message.el: $BO"B3Ej9F5,@)(B(samba24)$B$NBT$A;~4VI=<(DI2C(B
-	* navi2ch-vars.el: $B%Q%i%a!<%?(B navi2ch-message-samba24-show $BDI2C(B
+	* navi2ch-message.el: 連続投稿規制(samba24)の待ち時間表示追加
+	* navi2ch-vars.el: パラメータ navi2ch-message-samba24-show 追加
 
 2008-01-13  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-select-current-link):
-	$B%j%s%/$K;HMQ$5$l$k(B text property $B$NJQ99$KDI?o!#(B
-	(navi2ch-popup-article): patch#1733433 $B$r%^!<%8!#(Bpopup $B$NHO0OFb$K$J(B
-	$B$$!"(B >>nn $B$K%+!<%=%k$,$"$C$F$b$=$NFbMF$,(B minibuffer $B$K$G$J$$%P%0$r(B
-	$B=$@5!#(B
+	リンクに使用される text property の変更に追随。
+	(navi2ch-popup-article): patch#1733433 をマージ。popup の範囲内にな
+	い、 >>nn にカーソルがあってもその内容が minibuffer にでないバグを
+	修正。
 
 2008-01-12  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-config.el.in: $BI|3h!#(B
+	* navi2ch-config.el.in: 復活。
 
-	* navi2ch-article.el (navi2ch-article-mode-map): C-c C-l $B$K(B
-	navi2ch-be2ch-toggle-login $B$r%^%C%W!#(B
+	* navi2ch-article.el (navi2ch-article-mode-map): C-c C-l に
+	navi2ch-be2ch-toggle-login をマップ。
 
 	* navi2ch-list.el (navi2ch-list-mode-map): Ditto.
 
@@ -522,44 +526,44 @@
 
 	* navi2ch-message.el (navi2ch-message-mode-map): Ditto.
 
-	* navi2ch-be2ch.el (navi2ch-be2ch-toggle-login): $B?74X?t!#(B
-	(navi2ch-be2ch-logout): $B%*%W%7%g%s0z?t(B no-msg $BDI2C!#(B t $B$J$i!"%m%0%"(B
-	$B%&%H$N%a%C%;!<%8$rI=<($7$J$$!#(B
-	(navi2ch-be2ch-login): navi2ch-be2ch-logout() $B$r(B no-msg $B$r(B t $B$K$7$F(B
-	$B8F$V!#(B
+	* navi2ch-be2ch.el (navi2ch-be2ch-toggle-login): 新関数。
+	(navi2ch-be2ch-logout): オプション引数 no-msg 追加。 t なら、ログア
+	ウトのメッセージを表示しない。
+	(navi2ch-be2ch-login): navi2ch-be2ch-logout() を no-msg を t にして
+	呼ぶ。
 
-	* navi2ch-board.el (navi2ch-board-get-subject-list): $B%$%s%G%s%H$r@0(B
-	$B7A!#(B
+	* navi2ch-board.el (navi2ch-board-get-subject-list): インデントを整
+	形。
 
 2008-01-08  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-util.el (navi2ch-defalias-maybe): quote $B$r?77A<0$K!#(B
+	* navi2ch-util.el (navi2ch-defalias-maybe): quote を新形式に。
 
-	* navi2ch-article.el (navi2ch-article-mode-map): iso-left-tab $B$r(B
-	`navi2ch-article-previous-link' $B$K(B bind.
+	* navi2ch-article.el (navi2ch-article-mode-map): iso-left-tab を
+	`navi2ch-article-previous-link' に bind.
 
-	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): $BF1>e!#(B
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 同上。
 
-	* navi2ch.el (navi2ch): Be $B$K%m%0%$%s$7$F$$$k$+$I$&$+$r3NG'!#(B
+	* navi2ch.el (navi2ch): Be にログインしているかどうかを確認。
 
 	* navi2ch-util.el (navi2ch-next-property)
-	(navi2ch-previous-property): $B%W%m%Q%F%#$,O"B3$9$k;~$N%P%0=$@5!#(B
-	(navi2ch-modeline-be2ch-login, navi2ch-modeline-be2ch-logout): $B?7JQ(B
-	$B?t!#(B
-	(navi2ch-set-mode-line-identification): modeline $B$K(B Be $B$K%m%0%$%s$7(B
-	$B$F$$$k$+$I$&$+$rI=<(!#(B
+	(navi2ch-previous-property): プロパティが連続する時のバグ修正。
+	(navi2ch-modeline-be2ch-login, navi2ch-modeline-be2ch-logout): 新変
+	数。
+	(navi2ch-set-mode-line-identification): modeline に Be にログインし
+	ているかどうかを表示。
 
-	* navi2ch-net.el (navi2ch-net-cookie-domains): $B?74X?t!#(B
-	(navi2ch-net-cookie-paths): $B?74X?t!#(B
-	(navi2ch-net-match-cookies): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-net-update-cookies): $BF1>e!#(B
+	* navi2ch-net.el (navi2ch-net-cookie-domains): 新関数。
+	(navi2ch-net-cookie-paths): 新関数。
+	(navi2ch-net-match-cookies): 上記関数を使用。
+	(navi2ch-net-update-cookies): 同上。
 
 	* navi2ch-article.el (navi2ch-article-insert-messages):
-	garbage-collect $B$7$J$$!#(B
-	(navi2ch-article-check-message-suppression): $BF1>e!#(B
+	garbage-collect しない。
+	(navi2ch-article-check-message-suppression): 同上。
 
-	* navi2ch-vars.el (navi2ch-board-coding-system-alist): "Be" $BHD$N(B
-	coding-system $B$NJQ99$KDI?o!#(B
+	* navi2ch-vars.el (navi2ch-board-coding-system-alist): "Be" 板の
+	coding-system の変更に追随。
 
 	* navi2ch-article.el (navi2ch-article-set-link-property-subr)
 	(navi2ch-article-select-current-link)
@@ -571,202 +575,202 @@
 	(navi2ch-article-auto-decode-encoded-section)
 	(navi2ch-article-auto-decode-text-on)
 	(navi2ch-article-save-content, navi2ch-article-url-at-point):
-	link-head,link,url,number $B%W%m%Q%F%#$rGQ;_$7!"(B
-	navi2ch-link,navi2ch-link-type $B$r;HMQ!#(B
+	link-head,link,url,number プロパティを廃止し、
+	navi2ch-link,navi2ch-link-type を使用。
 
 	* navi2ch-vars.el (navi2ch-article-date-format-function):
-	`navi2ch-article-dispweek' $B$rA*Br;h$+$i:o=|!#(B
-	`navi2ch-article-date-format-be2ch' $B$rA*Br;h$KDI2C!#(B
+	`navi2ch-article-dispweek' を選択肢から削除。
+	`navi2ch-article-date-format-be2ch' を選択肢に追加。
 
 	* navi2ch-be2ch.el (navi2ch-be2ch-coding-system)
 	(navi2ch-be2ch-cookie-names, navi2ch-be2ch-cookie-domain)
-	(navi2ch-be2ch-cookie-path): $B?7Dj?t!#(B
-	(navi2ch-be2ch-mdmd, navi2ch-be2ch-dmdm): $B:o=|!#(B
-	(navi2ch-be2ch-login-flag): $B?7JQ?t!#(B
+	(navi2ch-be2ch-cookie-path): 新定数。
+	(navi2ch-be2ch-mdmd, navi2ch-be2ch-dmdm): 削除。
+	(navi2ch-be2ch-login-flag): 新変数。
 	(navi2ch-be2ch-logout, navi2ch-be2ch-login)
-	(navi2ch-be2ch-login-p): cookie $B$r;H$&$h$&$K!#(B
+	(navi2ch-be2ch-login-p): cookie を使うように。
 
-	* navi2ch-multibbs.el (navi2ch-2ch-send-message): be2ch $B$N(B cookie
-	$B$NFCJL=hM}$r30$9!#(B
+	* navi2ch-multibbs.el (navi2ch-2ch-send-message): be2ch の cookie
+	の特別処理を外す。
 
-	* navi2ch-net.el (navi2ch-net-match-cookies): .domain.tld $B$@$1$G$J(B
-	$B$/(B domain.tld $B$K$b%^%C%A$9$k$h$&$K!#(B
+	* navi2ch-net.el (navi2ch-net-match-cookies): .domain.tld だけでな
+	く domain.tld にもマッチするように。
 
-	* .cvsignore: elc-stamp,navi2ch-condig.el $B$rDI2C!#(B
+	* .cvsignore: elc-stamp,navi2ch-condig.el を追加。
 
-	* navi2ch-article.el (toplevel): `navi2ch-article-separator' $B$r%P%C(B
-	$B%U%!%m!<%+%k$K$7$J$$!#(B
-	(navi2ch-article-separator): const $B2=!#(B
-	(navi2ch-article-parse-message): $B0z?t(B sep $B$r:o=|!#>o$K(B
-	`navi2ch-article-separator' $B$r;HMQ!#(B
-	(navi2ch-article-separator-filter): $B?74X?t!#(B
+	* navi2ch-article.el (toplevel): `navi2ch-article-separator' をバッ
+	ファローカルにしない。
+	(navi2ch-article-separator): const 化。
+	(navi2ch-article-parse-message): 引数 sep を削除。常に
+	`navi2ch-article-separator' を使用。
+	(navi2ch-article-separator-filter): 新関数。
 	(navi2ch-article-get-first-message):
-	`navi2ch-article-get-separator' $B$r;HMQ$7$J$$!#(B
+	`navi2ch-article-get-separator' を使用しない。
 	(navi2ch-article-get-first-message-from-file):
-	`navi2ch-article-filter-list' $B$rE,MQ!#(B
+	`navi2ch-article-filter-list' を適用。
 	(navi2ch-article-get-message-list):
-	`navi2ch-article-get-separator' $B$r;HMQ$7$J$$!#(B
+	`navi2ch-article-get-separator' を使用しない。
 
-	* NEWS: $B5l7A<0(B dat $B$N%5%]!<%H$,%G%U%)%k%H$G$OL58z$K$J$C$?$3$H!"$*$h(B
-	$B$SM-8z$K$9$kJ}K!$r5-:\!#(B
+	* NEWS: 旧形式 dat のサポートがデフォルトでは無効になったこと、およ
+	び有効にする方法を記載。
 
 	* navi2ch-search.el (navi2ch-search-article-regexp):
-	`navi2ch-article-filter-list' $B$rE,MQ!#(B
+	`navi2ch-article-filter-list' を適用。
 
-	* navi2ch-util.el (navi2ch-replace-html-tag-alist): $B5l(B dat $B$N$_$G;H(B
-	$B$o$l$F$$$k(B "$B!w!.(B" $B$r:o=|!#(B
+	* navi2ch-util.el (navi2ch-replace-html-tag-alist): 旧 dat のみで使
+	われている "＠｀" を削除。
 
-	* navi2ch-vars.el (navi2ch-list-filter-list): DOCSTRING $B$H%+%9%?%^(B
-	$B%$%:%F%s%W%l!<%H$N=$@5!#(B
+	* navi2ch-vars.el (navi2ch-list-filter-list): DOCSTRING とカスタマ
+	イズテンプレートの修正。
 
-	* navi2ch-board-misc.el (navi2ch-bm-mark-subr): mark $B$rIU$1$k;~$O!"(B
-	`navi2ch-bm-state-mark-face-table' $B$r;HMQ!#(B
-	(navi2ch-bm-mark): `navi2ch-bm-mark-subr' $B$N;EMMJQ99$KDI?o!#(B
-	(navi2ch-bm-unmark): $BF1>e!#(B
-	(navi2ch-bm-mark-region): $BF1>e!#(B
-	(navi2ch-bm-mark-states): $BF1>e!#(B
-	(navi2ch-bm-mark-by-query): $BF1>e!#(B
-	(navi2ch-bm-format-subject): $B?74X?t!#(B
-	(navi2ch-bm-insert-subject): patch#1632181 $B$KBP1~$9$k$?$a!">e5-4X?t(B
-	$B$KJ,3d!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-mark-subr): mark を付ける時は、
+	`navi2ch-bm-state-mark-face-table' を使用。
+	(navi2ch-bm-mark): `navi2ch-bm-mark-subr' の仕様変更に追随。
+	(navi2ch-bm-unmark): 同上。
+	(navi2ch-bm-mark-region): 同上。
+	(navi2ch-bm-mark-states): 同上。
+	(navi2ch-bm-mark-by-query): 同上。
+	(navi2ch-bm-format-subject): 新関数。
+	(navi2ch-bm-insert-subject): patch#1632181 に対応するため、上記関数
+	に分割。
 
-	* navi2ch-http-date.el (navi2ch-http-date-wkday-list): $B:o=|!#(B
-	(navi2ch-http-date-month-list): $B:o=|!#(B
+	* navi2ch-http-date.el (navi2ch-http-date-wkday-list): 削除。
+	(navi2ch-http-date-month-list): 削除。
 	(navi2ch-http-date-encode): bug fix.
 
-	* navi2ch-article.el (navi2ch-article-link-internal): $B?7JQ?t!#(B
-	(navi2ch-article-link-regexp-alist-to-internal): $B?74X?t!#(B
-	(navi2ch-article-set-link-property): $B>e5-4X?t!"JQ?t$r;HMQ!#(B
-	(navi2ch-article-insert-messages): $B%l%9Kh$K(B
-	`navi2ch-article-link-regexp-alist-to-internal' $B$r8F$P$J$/$F$9$`$h(B
-	$B$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-link-internal): 新変数。
+	(navi2ch-article-link-regexp-alist-to-internal): 新関数。
+	(navi2ch-article-set-link-property): 上記関数、変数を使用。
+	(navi2ch-article-insert-messages): レス毎に
+	`navi2ch-article-link-regexp-alist-to-internal' を呼ばなくてすむよ
+	うに。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): URL $BCf$N3g8L(B
-	$B$K$"$kDxEYBP1~!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): URL 中の括弧
+	にある程度対応。
 
-	* navi2ch-util.el (navi2ch-propertize): $B:o=|!#(B
-	(navi2ch-read-only-string): navi2ch-propertize $B$r(B propertize $B$K=q$-$+$(!#(B
+	* navi2ch-util.el (navi2ch-propertize): 削除。
+	(navi2ch-read-only-string): navi2ch-propertize を propertize に書きかえ。
 
 	* navi2ch-article.el (navi2ch-article-parse-message)
 	(navi2ch-article-default-header-format-function)
-	(navi2ch-article-auto-decode-encoded-section): $BF1>e!#(B
+	(navi2ch-article-auto-decode-encoded-section): 同上。
 
-	* navi2ch-message.el (navi2ch-message-insert-header): $BF1>e!#(B
+	* navi2ch-message.el (navi2ch-message-insert-header): 同上。
 
 	* navi2ch-splash.el (navi2ch-splash-insert-image)
-	(navi2ch-splash-insert-text): $BF1>e!#(B
+	(navi2ch-splash-insert-text): 同上。
 
-	* navi2ch-net.el (navi2ch-net-update-cookies): header $B$N;EMMJQ99$KDI?o!#(B
+	* navi2ch-net.el (navi2ch-net-update-cookies): header の仕様変更に追随。
 
 2008-01-07  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-vars.el (navi2ch-on-emacs20): $B:o=|!#(B
+	* navi2ch-vars.el (navi2ch-on-emacs20): 削除。
 
-	* navi2ch-board-misc.el (navi2ch-bm-state-alist): $B:o=|!#(B
-	(navi2ch-bm-state-char-table): `navi2ch-bm-state-alist' $B$rJ,3d$7$F(B
-	hash $B2=!#(B
-	(navi2ch-bm-state-face-table): $BF1>e!#(B
-	(navi2ch-bm-state-mark-face-table): $BF1>e!#(B
-	(navi2ch-bm-updated-mark-alist): $B:o=|!#(B
-	(navi2ch-bm-updated-mark-table): `navi2ch-bm-updated-mark-alist' $B$N(B
-	hash $B2=!#(B
-	(navi2ch-bm-set-property): $BJ#?t$N(B put-text-property $B$r(B
-	add-text-properties $B$KCV49$(!#(B hash $B$N;HMQ!#(B
-	(navi2ch-bm-insert-subject): hash $B$r;HMQ!#(B
-	(navi2ch-bm-insert-state): $BF1>e!#(B
-	(navi2ch-bm-get-state): text-property $B$+$i<hF@$9$k$h$&$K!#(B
-	(navi2ch-bm-get-updated-mark): $BF1>e!#(B
-	(navi2ch-bm-mark-subr): `navi2ch-bm-get-state' $B$r;HMQ!#(B
-	(navi2ch-bm-update-article): `navi2ch-bm-get-updated-mark' $B$r;HMQ!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-state-alist): 削除。
+	(navi2ch-bm-state-char-table): `navi2ch-bm-state-alist' を分割して
+	hash 化。
+	(navi2ch-bm-state-face-table): 同上。
+	(navi2ch-bm-state-mark-face-table): 同上。
+	(navi2ch-bm-updated-mark-alist): 削除。
+	(navi2ch-bm-updated-mark-table): `navi2ch-bm-updated-mark-alist' の
+	hash 化。
+	(navi2ch-bm-set-property): 複数の put-text-property を
+	add-text-properties に置換え。 hash の使用。
+	(navi2ch-bm-insert-subject): hash を使用。
+	(navi2ch-bm-insert-state): 同上。
+	(navi2ch-bm-get-state): text-property から取得するように。
+	(navi2ch-bm-get-updated-mark): 同上。
+	(navi2ch-bm-mark-subr): `navi2ch-bm-get-state' を使用。
+	(navi2ch-bm-update-article): `navi2ch-bm-get-updated-mark' を使用。
 
-	* navi2ch-localfile.el (navi2ch-localfile-update-file): header $B$N;EMMJQ99$KDI?o!#(B
+	* navi2ch-localfile.el (navi2ch-localfile-update-file): header の仕様変更に追随。
 
-	* navi2ch-list.el (navi2ch-list-sync): $BF1>e!#(B
+	* navi2ch-list.el (navi2ch-list-sync): 同上。
 
-	* navi2ch-head.el (navi2ch-head-get-head-txt): $BF1>e!#(B
+	* navi2ch-head.el (navi2ch-head-get-head-txt): 同上。
 
-	* navi2ch-article.el (navi2ch-article-update-file): $BF1>e!#(B
+	* navi2ch-article.el (navi2ch-article-update-file): 同上。
 
-	* navi2ch-board.el (navi2ch-board-sync): $BF1>e!#(B
+	* navi2ch-board.el (navi2ch-board-sync): 同上。
 
-	* navi2ch-net.el (navi2ch-net-state-header-alist): $B:o=|!#(B
+	* navi2ch-net.el (navi2ch-net-state-header-alist): 削除。
 	(navi2ch-net-state-header-table): `navi2ch-net-state-header-alist'
-	$B$r(B hash $B2=!#(B
-	(navi2ch-net-add-state): hash $B$r;HMQ!#(B
-	(navi2ch-net-get-state): $BF1>e!#(B
-	(navi2ch-net-get-header): $B%X%C%@L>$r(B downcase $B$7$F(B intern$B!#(B
-	(navi2ch-net-get-content): header $B$N;EMMJQ99$KDI?o!#(B
-	(navi2ch-net-update-file): $BF1>e!#(B
-	(navi2ch-net-get-length-from-header): $BF1>e!#(B
+	を hash 化。
+	(navi2ch-net-add-state): hash を使用。
+	(navi2ch-net-get-state): 同上。
+	(navi2ch-net-get-header): ヘッダ名を downcase して intern。
+	(navi2ch-net-get-content): header の仕様変更に追随。
+	(navi2ch-net-update-file): 同上。
+	(navi2ch-net-get-length-from-header): 同上。
 
-	* navi2ch-util.el (navi2ch-regexp-internal-p): $B?74X?t!#(B
-	(navi2ch-assoc-ignore-case): $B:o=|!#(B
+	* navi2ch-util.el (navi2ch-regexp-internal-p): 新関数。
+	(navi2ch-assoc-ignore-case): 削除。
 
-	* README: UNIX $BHD$N%"%I%l%9$r99?7!#%5%]!<%H$9$k(B Emacsen $B$r99?7!#(B
+	* README: UNIX 板のアドレスを更新。サポートする Emacsen を更新。
 
-	* TODO: $B99?7!#(B
+	* TODO: 更新。
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): alist $B$r(B
-	regexp-internal $B7A<0$KJQ99!#(B
+	* navi2ch-article.el (navi2ch-article-set-link-property): alist を
+	regexp-internal 形式に変更。
 
-	* navi2ch-list.el (navi2ch-list-state-alist): $B:o=|!#(B
-	(navi2ch-list-state-table): `navi2ch-list-state-alist' $B$r(B hash $B2=!#(B
-	(navi2ch-list-insert-board-names-subr): hash $B$r;HMQ!#(B
-	(navi2ch-list-make-board-txt): hash $B$r;HMQ!#(B
+	* navi2ch-list.el (navi2ch-list-state-alist): 削除。
+	(navi2ch-list-state-table): `navi2ch-list-state-alist' を hash 化。
+	(navi2ch-list-insert-board-names-subr): hash を使用。
+	(navi2ch-list-make-board-txt): hash を使用。
 
-	* navi2ch-util.el (navi2ch-replace-string-regexp-alist): $B?74X?t!#(B
-	(toplevel): $B%m!<%I;~$K!"(B`navi2ch-update-html-tag-regexp' $B$r8F=P$7!#(B
+	* navi2ch-util.el (navi2ch-replace-string-regexp-alist): 新関数。
+	(toplevel): ロード時に、`navi2ch-update-html-tag-regexp' を呼出し。
 	(navi2ch-update-html-tag-regexp):
-	`navi2ch-replace-html-tag-regexp-internal' $B$r99?7$9$k$h$&$K!#(B
-	(navi2ch-entity-reference-to-str): `navi2ch-entity-table' $B$r;HMQ!#(B
-	(navi2ch-re-search-forward-regexp-alist): bound,noerror,count $B$r(B
-	lexical-let $B$K!#(B
+	`navi2ch-replace-html-tag-regexp-internal' を更新するように。
+	(navi2ch-entity-reference-to-str): `navi2ch-entity-table' を使用。
+	(navi2ch-re-search-forward-regexp-alist): bound,noerror,count を
+	lexical-let に。
 	(navi2ch-replace-html-tag-with-buffer):
-	`navi2ch-re-search-forward-regexp-alist' $B$r;HMQ$9$k$h$&$K!#(B
+	`navi2ch-re-search-forward-regexp-alist' を使用するように。
 
 2008-01-06  Naohiro Aota  <nao.aota@gmail.com>
 
-	* navi2ch-util.el (navi2ch-regexp-internal): $B?79=B$BN!#(B
-	(navi2ch-regexp-alist-to-number-alist): $B:o=|!#(B
+	* navi2ch-util.el (navi2ch-regexp-internal): 新構造体。
+	(navi2ch-regexp-alist-to-number-alist): 削除。
 	(navi2ch-regexp-alist-to-internal):
-	navi2ch-regexp-alist-to-number-alist $B$rCV49$($k4X?t!#(B
+	navi2ch-regexp-alist-to-number-alist を置換える関数。
 	(navi2ch-match-regexp-alist-subr):
-	navi2ch-regexp-alist-to-internal $B$r;HMQ$9$k$h$&$KJQ99!#(B
-	(navi2ch-replace-html-tag-regexp): $B:o=|!#(B
-	(navi2ch-replace-html-tag-regexp-internal): $B?7JQ?t!#(B
-	(navi2ch-entity-alist): $B:o=|!#(B
-	(navi2ch-entity-table): navi2ch-entity-alist $B$+$i2~L>!#%O%C%7%e$K$7(B
-	$B$?!#(B
-	(navi2ch-alist-to-hash): $B?74X?t!#(B
-	(navi2ch-replace-html-tag-to-string): $B:o=|!#(B
+	navi2ch-regexp-alist-to-internal を使用するように変更。
+	(navi2ch-replace-html-tag-regexp): 削除。
+	(navi2ch-replace-html-tag-regexp-internal): 新変数。
+	(navi2ch-entity-alist): 削除。
+	(navi2ch-entity-table): navi2ch-entity-alist から改名。ハッシュにし
+	た。
+	(navi2ch-alist-to-hash): 新関数。
+	(navi2ch-replace-html-tag-to-string): 削除。
 	(navi2ch-replace-html-tag): `navi2ch-replace-string-regexp-alist'
-	$B$r;H$&$h$&$K$7$?!#(B
+	を使うようにした。
 
 	* navi2ch-article.el (navi2ch-article-default-header-format-function):
-	$BF|IU$r(B navi2ch-article-date-format-function $B$K$h$jM?$($i$l$k%U%#%k(B
-	$B%?4X?t$rDL$7$?$b$N$rI=<($9$k$h$&$KJQ99!#(B
+	日付を navi2ch-article-date-format-function により与えられるフィル
+	タ関数を通したものを表示するように変更。
 
-	* navi2ch-vars.el (navi2ch-article-date-format-function): $B?7JQ?t!#(B
-	(navi2ch-article-dispweek): $B:o=|!#(B
+	* navi2ch-vars.el (navi2ch-article-date-format-function): 新変数。
+	(navi2ch-article-dispweek): 削除。
 
-	* navi2ch-list.el (navi2ch-list-ignore-category-list): "$BFCJL4k2h(B"$B%+(B
-	$B%F%4%j$bL5;k!#(B
+	* navi2ch-list.el (navi2ch-list-ignore-category-list): "特別企画"カ
+	テゴリも無視。
 
-	* NEWS: $B2>A[HD$K(B '#' $B$r$D$1$?$3$H$r5-:\(B
+	* NEWS: 仮想板に '#' をつけたことを記載
 
-	* navi2ch-search.el (navi2ch-search-board): $B2>A[HD$NL>A0$K(B '#' $B$rDI(B
-	$B2C!#(B
+	* navi2ch-search.el (navi2ch-search-board): 仮想板の名前に '#' を追
+	加。
 
-	* navi2ch-articles.el (navi2ch-articles-board): $BF1>e!#(B
+	* navi2ch-articles.el (navi2ch-articles-board): 同上。
 
-	* navi2ch-directory.el (navi2ch-directory-board): $BF1>e!#(B
+	* navi2ch-directory.el (navi2ch-directory-board): 同上。
 
-	* navi2ch-history.el (navi2ch-history-board): $BF1>e!#(B
+	* navi2ch-history.el (navi2ch-history-board): 同上。
 
 2007-02-06  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-message-filter-subr):
-	$B%U%#%k%?>r7o$,3HD%7A<0$G$J$$>l9g%(%i!<$K$J$C$F$$$?$N$r=$@5!#(B
+	フィルタ条件が拡張形式でない場合エラーになっていたのを修正。
 
 2007-01-13  extra  <ekisutora@users.sourceforge.net>
 
@@ -779,296 +783,296 @@
 	(navi2ch-article-message-filter-by-id-alist)
 	(navi2ch-article-message-filter-by-mail-alist)
 	(navi2ch-article-message-filter-by-subject-alist):
-	$B%U%#%k%?>r7o$N3HD%!#(B
+	フィルタ条件の拡張。
 
-	* navi2ch-util.el (navi2ch-fuzzy-regexp): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-fuzzy-regexp): 新関数。
 
 	* navi2ch-localfile.el (navi2ch-localfile-update-file):
-	$B%U%!%$%k$N?75,:n@.$,$G$-$J$/$J$C$F$$$?$N$KBP=h!#(B
+	ファイルの新規作成ができなくなっていたのに対処。
 
 	* navi2ch-article.el
-	(navi2ch-article-save-message-filter-cache-keys): aborn $BGQ;_!#(B
+	(navi2ch-article-save-message-filter-cache-keys): aborn 廃止。
 	(navi2ch-article-insert-messages):
-	$B%U%#%k%?=hM}$NItJ,$r(B navi2ch-article-apply-message-filters() $B$K0\(B
-	$B$7!"7k2L$@$1<u$1$H$k$h$&$K!#(B
-	Article / Hide / Important / Message Filter $B%b!<%I@Z$jBX$($G:FIA2h(B
-	$B$r7+$jJV$9$H(B navi2ch-article-header-format-function() $B$K$h$C$F(B
-	alist $B$NCf?H$K2?=E$K$b(B text-property $B$,IU$/$3$H$,$"$C$?$N$G!"$$$C(B
-	$B$?$s(B text-property $B$r(B nil $B$K$9$k$h$&$K!#(B
-	(navi2ch-article-apply-message-filters): $B%U%#%k%?=hM}$NItJ,$r(B
-	navi2ch-article-insert-messages() $B$+$i0\$7!"7k2L$@$1JV$9$h$&$K!#(B
+	フィルタ処理の部分を navi2ch-article-apply-message-filters() に移
+	し、結果だけ受けとるように。
+	Article / Hide / Important / Message Filter モード切り替えで再描画
+	を繰り返すと navi2ch-article-header-format-function() によって
+	alist の中身に何重にも text-property が付くことがあったので、いっ
+	たん text-property を nil にするように。
+	(navi2ch-article-apply-message-filters): フィルタ処理の部分を
+	navi2ch-article-insert-messages() から移し、結果だけ返すように。
 	(navi2ch-article-message-filter-by-subject):
-	subject $BMs$NFCJL07$$$r$d$a$k!#(B
-	(navi2ch-article-message-filter-subr): $B%U%#%k%?>r7o$N3HD%$KBP1~!#(B
-	(navi2ch-article-check-message-suppression): $B%U%#%k%?=hM}$NItJ,$r(B
-	navi2ch-article-apply-message-filters() $B$K0\F0!&=8Ls!#(B
-	(navi2ch-article-delete-message): $BHy=$@5!#(B
+	subject 欄の特別扱いをやめる。
+	(navi2ch-article-message-filter-subr): フィルタ条件の拡張に対応。
+	(navi2ch-article-check-message-suppression): フィルタ処理の部分を
+	navi2ch-article-apply-message-filters() に移動・集約。
+	(navi2ch-article-delete-message): 微修正。
 	(navi2ch-article-save-message-filter-cache):
-	replace $B>pJs$N;}$AJ}$rJQ$($?$N$G!"%;!<%V;~$N7A<0JQ49$r$d$a$k!#(B
+	replace 情報の持ち方を変えたので、セーブ時の形式変換をやめる。
 	(navi2ch-article-load-message-filter-cache):
-	$BF1>e$K$h$j!"%m!<%I;~$NJQ49$r$d$a$k!#(B
+	同上により、ロード時の変換をやめる。
 	(navi2ch-article-toggle-replace-message):
-	$BF1>e$K$h$j!"(Breplace $B>pJs$N07$$$NJQ99!#(B
-	(navi2ch-article-toggle-message-filter): $BF1>e!#(B
+	同上により、replace 情報の扱いの変更。
+	(navi2ch-article-toggle-message-filter): 同上。
 	(navi2ch-article-add-message-filter-rule-subr):
-	$B%U%#%k%?$r$9$0E,MQ$7$J$$>l9g$N%a%C%;!<%8$rI=<($9$k$h$&$K!#(B
+	フィルタをすぐ適用しない場合のメッセージを表示するように。
 	(navi2ch-article-read-message-filter-match):
-	$B%U%#%k%?>r7o$N3HD%$KBP1~!#(B
-	(navi2ch-article-read-message-filter-result): $BHy=$@5!#(B
+	フィルタ条件の拡張に対応。
+	(navi2ch-article-read-message-filter-result): 微修正。
 
 2006-11-12  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* acinclude.m4 (AM_PATH_LISPDIR): $B:o=|(B
+	* acinclude.m4 (AM_PATH_LISPDIR): 削除
 
-	* configure.in: lispdir $B$N07$$$r(B automake $B$K$^$+$;$k(B
-	$B$9$G$KITMW$@$C$?$N$G(B cygwin $B$NFCJL07$$$r$d$a$k(B
-	$B;H$C$F$$$J$$%W%m%0%i%`$N8!=P$r$d$a$k(B
+	* configure.in: lispdir の扱いを automake にまかせる
+	すでに不要だったので cygwin の特別扱いをやめる
+	使っていないプログラムの検出をやめる
 
 2006-11-06  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-vars.el (navi2ch-icon-directory): $B$3$3$G(B cl $B%^%/%m$r(B
-	$B;H$C$A$c%@%a$@$C$?(B
-	(navi2ch-splash-display-logo): $BEvLL(B nil $B$K$7$F$*$/(B
+	* navi2ch-vars.el (navi2ch-icon-directory): ここで cl マクロを
+	使っちゃダメだった
+	(navi2ch-splash-display-logo): 当面 nil にしておく
 
 2006-11-04  Nanashi San  <nanashi@users.sourceforge.net>
 
-	splash $B$K;H$C$F$$$k2hA|$O(B GPL $BE*%U%j!<$G$O$J$$$i$7$$!#(B
+	splash に使っている画像は GPL 的フリーではないらしい。
 
-	* icons/Makefile.am (icon_DATA): $B%m%4:o=|(B
+	* icons/Makefile.am (icon_DATA): ロゴ削除
 
-	* icons/navi2ch-logo.img (Tag): $BF1>e(B
+	* icons/navi2ch-logo.img (Tag): 同上
 
-	* icons/navi2ch-logo.xbm (Tag): $BF1>e(B
+	* icons/navi2ch-logo.xbm (Tag): 同上
 
-	* icons/navi2ch-logo.xpm (Tag): $BF1>e(B
-
-2006-11-02  Nanashi San  <nanashi@users.sourceforge.net>
-
-	defsubst $B$r(B defun $B$K(B
-	$B0JA0:GE,2=$7$?;~$HHf$Y$k$H!"(Bfilter $BEy$N=hM}$,A}$($?$3$H$G!"4X?t8F$S(B
-	$B=P$7$N%3%9%H$OAjBPE*$KDc2<(B
-	hotspot $B$r8+IU$1$d$9$/$9$k$?$a$K$b0lC6(B inline function $B$r$d$a$F$_$k(B
-
-	* navi2ch-article.el (navi2ch-article-inside-range-p): defun $B$K(B
-	(navi2ch-article-get-buffer-name): $BF1>e(B
-	(navi2ch-article-check-cached): $BF1>e(B
-	(navi2ch-article-cleanup-message): $BF1>e(B
-	(navi2ch-article-parse-message): $BF1>e(B
-	(navi2ch-article-get-first-message): $BF1>e(B
-	(navi2ch-article-get-first-message-from-file): $BF1>e(B
-	(navi2ch-article-set-link-property-subr): $BF1>e(B
-	(navi2ch-article-set-link-property): $BF1>e(B
-	(navi2ch-article-put-cite-face): $BF1>e(B
-	(navi2ch-article-arrange-message): $BF1>e(B
-	(navi2ch-article-insert-message): $BF1>e(B
-
-	* navi2ch-board.el (navi2ch-board-from-file-p): $BF1>e(B
-	(navi2ch-board-get-matched-article): $BF1>e(B
-	(navi2ch-board-updated-article-p): $BF1>e(B
-	(navi2ch-board-expire-date-p): $BF1>e(B
-
-	* navi2ch-multibbs.el (navi2ch-multibbs-get-func-from-board): $BF1>e(B
-
-	* navi2ch-util.el (navi2ch-no-logging-message): $BF1>e(B
-	(navi2ch-replace-string): $BF1>e(B
-	(navi2ch-replace-html-tag-to-string): $BF1>e(B
-	(navi2ch-replace-html-tag): $BF1>e(B
-	(navi2ch-replace-html-tag-with-buffer): $BF1>e(B
-	(navi2ch-replace-html-tag-with-temp-buffer): $BF1>e(B
-	(navi2ch-put-alist): $BF1>e(B
-	(navi2ch-right-align-strings): $BF1>e(B
-	(navi2ch-regexp-alist-to-number-alist): $BF1>e(B
-	(navi2ch-match-regexp-alist-subr): $BF1>e(B
+	* icons/navi2ch-logo.xpm (Tag): 同上
 
 2006-11-02  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-vars.el (navi2ch-global-view-map): self-insert $B$OITMW(B
+	defsubst を defun に
+	以前最適化した時と比べると、filter 等の処理が増えたことで、関数呼び
+	出しのコストは相対的に低下
+	hotspot を見付けやすくするためにも一旦 inline function をやめてみる
 
-	* navi2ch-util.el (navi2ch-set-buffer-multibyte): xemacs $B$+$I$&$+$G(B
-	$B$O$J$/!"(Bset-buffer-multibyte() $B$,B+G{$5$l$F$$$k$+$G=hM}$rJQ$($k(B
-	(navi2ch-match-string-no-properties): defalias $B$K(B
+	* navi2ch-article.el (navi2ch-article-inside-range-p): defun に
+	(navi2ch-article-get-buffer-name): 同上
+	(navi2ch-article-check-cached): 同上
+	(navi2ch-article-cleanup-message): 同上
+	(navi2ch-article-parse-message): 同上
+	(navi2ch-article-get-first-message): 同上
+	(navi2ch-article-get-first-message-from-file): 同上
+	(navi2ch-article-set-link-property-subr): 同上
+	(navi2ch-article-set-link-property): 同上
+	(navi2ch-article-put-cite-face): 同上
+	(navi2ch-article-arrange-message): 同上
+	(navi2ch-article-insert-message): 同上
 
-	* navi2ch-multibbs.el (navi2ch-2ch-article-to-url): start $B$,(B nil $B$G(B
-	$B$b(B number $B$G$b$J$$;~$N=hM}$,$*$+$7$+$C$?$N$r=$@5(B
+	* navi2ch-board.el (navi2ch-board-from-file-p): 同上
+	(navi2ch-board-get-matched-article): 同上
+	(navi2ch-board-updated-article-p): 同上
+	(navi2ch-board-expire-date-p): 同上
 
-	* navi2ch-board.el (navi2ch-board-insert-subjects): emacs $B$H(B
-	xemacs $B$G6&DL$N=hM}$K(B
+	* navi2ch-multibbs.el (navi2ch-multibbs-get-func-from-board): 同上
+
+	* navi2ch-util.el (navi2ch-no-logging-message): 同上
+	(navi2ch-replace-string): 同上
+	(navi2ch-replace-html-tag-to-string): 同上
+	(navi2ch-replace-html-tag): 同上
+	(navi2ch-replace-html-tag-with-buffer): 同上
+	(navi2ch-replace-html-tag-with-temp-buffer): 同上
+	(navi2ch-put-alist): 同上
+	(navi2ch-right-align-strings): 同上
+	(navi2ch-regexp-alist-to-number-alist): 同上
+	(navi2ch-match-regexp-alist-subr): 同上
+
+2006-11-02  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-vars.el (navi2ch-global-view-map): self-insert は不要
+
+	* navi2ch-util.el (navi2ch-set-buffer-multibyte): xemacs かどうかで
+	はなく、set-buffer-multibyte() が束縛されているかで処理を変える
+	(navi2ch-match-string-no-properties): defalias に
+
+	* navi2ch-multibbs.el (navi2ch-2ch-article-to-url): start が nil で
+	も number でもない時の処理がおかしかったのを修正
+
+	* navi2ch-board.el (navi2ch-board-insert-subjects): emacs と
+	xemacs で共通の処理に
 
 2006-11-01  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-megabbs.el (navi2ch-megabbs-with-board): id $B$,(B nil $B$N>l9g(B
-	$BB+G{$7$J$$$h$&$K(B
-	(navi2ch-megabbs-board-get-file-name): id $B$r;HMQ$7$J$$$N$G(B nil $B$K(B
+	* navi2ch-megabbs.el (navi2ch-megabbs-with-board): id が nil の場合
+	束縛しないように
+	(navi2ch-megabbs-board-get-file-name): id を使用しないので nil に
 
 2006-11-01  Nanashi San  <nanashi@users.sourceforge.net>
 
-	read.cgi $B$N(B raw $B%b!<%I$r:o=|(B
+	read.cgi の raw モードを削除
 
-	* navi2ch-article.el (navi2ch-article-get-readcgi-raw-url): $B:o=|(B
+	* navi2ch-article.el (navi2ch-article-get-readcgi-raw-url): 削除
 
-	* navi2ch-board.el (navi2ch-board-enable-readcgi): $B:o=|(B
-	(navi2ch-board-get-readcgi-url): $B:o=|(B
-	(navi2ch-board-get-readcgi-raw-url): $B:o=|(B
+	* navi2ch-board.el (navi2ch-board-enable-readcgi): 削除
+	(navi2ch-board-get-readcgi-url): 削除
+	(navi2ch-board-get-readcgi-raw-url): 削除
 
-	* navi2ch-multibbs.el (navi2ch-2ch-article-update): read.cgi $B;HMQIt(B
-	$B$r:o=|(B
-	(navi2ch-2ch-article-to-url): navi2ch-board-get-readcgi-url $B$r;HMQ(B
-	$B$7$J$$(B
-	(navi2ch-2ch-board-update): read.cgi $B;HMQIt$r:o=|(B
+	* navi2ch-multibbs.el (navi2ch-2ch-article-update): read.cgi 使用部
+	を削除
+	(navi2ch-2ch-article-to-url): navi2ch-board-get-readcgi-url を使用
+	しない
+	(navi2ch-2ch-board-update): read.cgi 使用部を削除
 
-	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi): $B:o=|(B
+	* navi2ch-net.el (navi2ch-net-update-file-with-readcgi): 削除
 
-	* navi2ch-util.el (navi2ch-enable-readcgi-p): $B:o=|(B
+	* navi2ch-util.el (navi2ch-enable-readcgi-p): 削除
 
-	* navi2ch-vars.el (navi2ch-enable-readcgi): $B:o=|(B
-	(navi2ch-enable-readcgi-host-list): $B:o=|(B
-	(navi2ch-disable-readcgi-host-list): $B:o=|(B
-
-2006-10-31  Nanashi San  <nanashi@users.sourceforge.net>
-
-	* navi2ch-config.el.in: $B?7%U%!%$%k(B
-	configure $B$N7k2L$rJ]B8(B ($B:#$N$H$3$m(B icondir $B$N$_(B)
-
-	* Makefile.am (AUTOMAKE_OPTIONS): $BMW(B automake 1.8
-	(lisp_DATA): $B?7JQ?t(B
-
-	* configure.in: navi2ch-config.el $B$r=PNO(B
-
-	* navi2ch-vars.el (navi2ch-icon-directory): navi2ch-config $B$,$"$l$P(B
-	$B$=$NJQ?t$r;HMQ(B
+	* navi2ch-vars.el (navi2ch-enable-readcgi): 削除
+	(navi2ch-enable-readcgi-host-list): 削除
+	(navi2ch-disable-readcgi-host-list): 削除
 
 2006-10-31  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-window-configuretion): $B:o=|(B
+	* navi2ch-config.el.in: 新ファイル
+	configure の結果を保存 (今のところ icondir のみ)
+
+	* Makefile.am (AUTOMAKE_OPTIONS): 要 automake 1.8
+	(lisp_DATA): 新変数
+
+	* configure.in: navi2ch-config.el を出力
+
+	* navi2ch-vars.el (navi2ch-icon-directory): navi2ch-config があれば
+	その変数を使用
+
+2006-10-31  Nanashi San  <nanashi@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-window-configuretion): 削除
 
 	* navi2ch-util.el (navi2ch-string-as-unibyte)
-	(navi2ch-string-as-multibyte): $B:o=|(B
-	(navi2ch-assoc-ignore-case): lambda $B$,%P%$%H%3%s%Q%$%k$5$l$k$h$&$K(B
-	(navi2ch-boundp, navi2ch-fboundp): $B:o=|(B
-	(navi2ch-browse-url-internal): browse-url-new-window-{flag,p} $B$NA*(B
-	$BBrK!$rJQ99(B
+	(navi2ch-string-as-multibyte): 削除
+	(navi2ch-assoc-ignore-case): lambda がバイトコンパイルされるように
+	(navi2ch-boundp, navi2ch-fboundp): 削除
+	(navi2ch-browse-url-internal): browse-url-new-window-{flag,p} の選
+	択法を変更
 	(navi2ch-propertize, navi2ch-set-keymap-default-binding)
-	(navi2ch-char-valid-p): defalias $B$K(B
-	(navi2ch-lock-directory): fboundp $B$r;HMQ(B
+	(navi2ch-char-valid-p): defalias に
+	(navi2ch-lock-directory): fboundp を使用
 	(navi2ch-line-beginning-position, navi2ch-line-end-position):
-	navi2ch-ifxemacs $B$G$O$J$/(B fboundp $B$r;HMQ(B
+	navi2ch-ifxemacs ではなく fboundp を使用
 	(navi2ch-compare-number-list, navi2ch-lists-to-list-of-list)
-	(navi2ch-add-number-lists): $B:o=|(B
-	(navi2ch-compare-times): navi2ch-float-time $B$r;HMQ(B
+	(navi2ch-add-number-lists): 削除
+	(navi2ch-compare-times): navi2ch-float-time を使用
 	(navi2ch-right-aligned-string=, navi2ch-string-match-regexp-alist)
 	(navi2ch-replace-regexp-alist, navi2ch-caller-p)
-	(navi2ch-compare-version-string): $B:o=|(B
+	(navi2ch-compare-version-string): 削除
 
-	* navi2ch-net.el (navi2ch-net-send-message-get-spid): $B:o=|(B
+	* navi2ch-net.el (navi2ch-net-send-message-get-spid): 削除
 
 2006-10-30  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-net.el (navi2ch-net-send-request): C-g $B$G;_$a$?>l9g$O(B
-	navi2ch-net-add-down-host $B$r8F$S=P$5$J$$(B
-	(navi2ch-net-download-file): navi2ch-net-send-request $B$,(B nil $B$rJV$7(B
-	$B$?>l9g$O(B nil $B$rJV$9$h$&$K(B
+	* navi2ch-net.el (navi2ch-net-send-request): C-g で止めた場合は
+	navi2ch-net-add-down-host を呼び出さない
+	(navi2ch-net-download-file): navi2ch-net-send-request が nil を返し
+	た場合は nil を返すように
 
 2006-10-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-multibbs.el
 	(navi2ch-multibbs-send-message-retry-confirm-function)
-	(navi2ch-multibbs-send-message-retry-confirm): $B:o=|(B
-	(navi2ch-multibbs-send-message): $B>e5-4X?t$r;HMQ$7$J$$(B
-	navi2ch-multibbs-send-message-retry-confirm-function $B$r(B
-	$B;H$C$F$??M$O(B around advice $B$7$F(B flet $B$7$F$/$@$5$$(B
+	(navi2ch-multibbs-send-message-retry-confirm): 削除
+	(navi2ch-multibbs-send-message): 上記関数を使用しない
+	navi2ch-multibbs-send-message-retry-confirm-function を
+	使ってた人は around advice して flet してください
 
 	* navi2ch-article.el
-	(navi2ch-article-default-message-filter-by-message-alist): $B:o=|(B
-	(navi2ch-article-message-filter-by-message): $B>e5-JQ?t$r;HMQ$7$J$$(B
+	(navi2ch-article-default-message-filter-by-message-alist): 削除
+	(navi2ch-article-message-filter-by-message): 上記変数を使用しない
 
 	* navi2ch-message.el (navi2ch-message-font-lock-keywords)
 	(navi2ch-message-link-face, navi2ch-message-url-face)
-	(navi2ch-message-citation-face): $B?7JQ?t(B
-	(navi2ch-message-mode): define-drived-mode $B$r;HMQ(B
-	$B>e5-JQ?t$r(B font-lock-defaults $B$K(B
+	(navi2ch-message-citation-face): 新変数
+	(navi2ch-message-mode): define-drived-mode を使用
+	上記変数を font-lock-defaults に
 
 	* navi2ch-face.el (navi2ch-message-link-face)
-	(navi2ch-message-url-face ,navi2ch-message-citation-face): $B?7(B face
+	(navi2ch-message-url-face ,navi2ch-message-citation-face): 新 face
 
 2006-10-27  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch-save-info): $BCY$$$h$&$J$N$G85$KLa$9(B
+	* navi2ch.el (navi2ch-save-info): 遅いようなので元に戻す
 
 2006-10-25  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-megabbs.el (navi2ch-megabbs-send-message): $BITMW$JJQ?tB+G{(B
-	$B$r:o=|(B
+	* navi2ch-megabbs.el (navi2ch-megabbs-send-message): 不要な変数束縛
+	を削除
 
 	* navi2ch-oyster.el (navi2ch-oyster-send-message):
-	navi2ch-2ch-send-message $B$r;HMQ!#(B
+	navi2ch-2ch-send-message を使用。
 
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-megabbs.el: $B?7%U%!%$%k(B
+	* navi2ch-megabbs.el: 新ファイル
 
-	* Makefile.am (lisp_LISP): $B>e5-%U%!%$%k$rDI2C(B
+	* Makefile.am (lisp_LISP): 上記ファイルを追加
 
 	patch#1153242
 
 	* Makefile.in, aclocal.m4, */Makefile.in:
-	$B:F:n@.(B (automake 1.9.6)
+	再作成 (automake 1.9.6)
 
 	* config.guess, config.sub, elisp-comp, install-sh, missing
 	* mkinstalldirs, doc/texinfo.tex:
-	automake 1.9.6 $BIUB0$N$b$N$K99?7(B
+	automake 1.9.6 付属のものに更新
 
-	* navi2ch-net.el (navi2ch-net-down-host-alist): $B?7JQ?t(B
-	(navi2ch-net-retry-down-host): $B?7JQ?t(B
-	(navi2ch-net-add-down-host): $B?74X?t(B
-	(navi2ch-net-down-p): $B?74X?t(B
-	(navi2ch-net-send-request): $B>e5-JQ?t!&4X?t$r;HMQ$7$FMn$A$F$$$k%[%9(B
-	$B%H$O(B `navi2ch-net-retry-down-host' $B$N4V%9%-%C%W$9$k$h$&$K(B
-	patch#1432266 ($B%"%$%G%#%"$N$_(B)
+	* navi2ch-net.el (navi2ch-net-down-host-alist): 新変数
+	(navi2ch-net-retry-down-host): 新変数
+	(navi2ch-net-add-down-host): 新関数
+	(navi2ch-net-down-p): 新関数
+	(navi2ch-net-send-request): 上記変数・関数を使用して落ちているホス
+	トは `navi2ch-net-retry-down-host' の間スキップするように
+	patch#1432266 (アイディアのみ)
 
-	* navi2ch-net.el (navi2ch-net-cookies): $B?7JQ?t(B
-	(navi2ch-net-store-cookie): $B?74X?t(B
-	(navi2ch-net-match-cookies): $B?74X?t(B
-	(navi2ch-net-cookie-file): $B?7JQ?t(B
-	(navi2ch-net-save-cookies): $B?74X?t(B
-	(navi2ch-net-load-cookies): $B?74X?t(B
-	(navi2ch-net-update-cookies): $B?74X?t(B
-	(navi2ch-net-expire-cookies): $B?74X?t(B
-	(navi2ch-net-cookie-string): $B?74X?t(B
+	* navi2ch-net.el (navi2ch-net-cookies): 新変数
+	(navi2ch-net-store-cookie): 新関数
+	(navi2ch-net-match-cookies): 新関数
+	(navi2ch-net-cookie-file): 新変数
+	(navi2ch-net-save-cookies): 新関数
+	(navi2ch-net-load-cookies): 新関数
+	(navi2ch-net-update-cookies): 新関数
+	(navi2ch-net-expire-cookies): 新関数
+	(navi2ch-net-cookie-string): 新関数
 
 	* navi2ch-multibbs.el (navi2ch-multibbs-send-message-retry-confirm):
-	$B$A$c$s$H$7$?%?%$%_%s%0$G(B Set-Cookie $B$5$l$k$h$&$K$J$C$?$N$G%-%c%s%;(B
-	$B%k;~$N(B hack $B$r:o=|(B
-	(navi2ch-2ch-send-message): $B0z?t(B post $B$r(B (cons key value) $B$J(B alist
-	$B$H$7$F07$&$h$&$K(B
-	navi2ch-net-cookie-* $B$r;HMQ$7$F(B Cookie $B$r07$&(B
-	(navi2ch-2ch-extract-post): post $B$9$Y$-%G!<%?$H$7$F!":G8e$N0l$D$@$1(B
-	$B$G$O$J$/!"J#?t<h$j=P$9$h$&$K(B
+	ちゃんとしたタイミングで Set-Cookie されるようになったのでキャンセ
+	ル時の hack を削除
+	(navi2ch-2ch-send-message): 引数 post を (cons key value) な alist
+	として扱うように
+	navi2ch-net-cookie-* を使用して Cookie を扱う
+	(navi2ch-2ch-extract-post): post すべきデータとして、最後の一つだけ
+	ではなく、複数取り出すように
 
-	* navi2ch.el (navi2ch-save-info): $BJT=8$7$d$9$$$h$&$KJ]B8(B
+	* navi2ch.el (navi2ch-save-info): 編集しやすいように保存
 
 2006-10-23  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file $B$N(B
-	load $B$N;EJ}$rJQ99(B
+	* navi2ch.el (navi2ch): navi2ch-update-file navi2ch-init-file の
+	load の仕方を変更
 
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): prefix key ("m") $B$K(B
-	nil $B$r3d$jEv$F$F$*$/(B
-	(navi2ch-bm-fetch-mark-article): navi2ch-net-connect-wait $B$G%&%'%$(B
-	$B%H$rF~$l$k$h$&$K$7$?$N$G(B navi2ch-bm-fetch-wait $B$r;HMQ$7$J$$(B
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): prefix key ("m") に
+	nil を割り当てておく
+	(navi2ch-bm-fetch-mark-article): navi2ch-net-connect-wait でウェイ
+	トを入れるようにしたので navi2ch-bm-fetch-wait を使用しない
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): $BF1>e(B
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上
 
-	* navi2ch-vars.el (navi2ch-bm-fetch-wait): $B:o=|(B
+	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 削除
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-assoc-ignore-case): $B?74X?t(B
+	* navi2ch-util.el (navi2ch-assoc-ignore-case): 新関数
 	(navi2ch-replace-html-tag-to-string):
 	assoc-ignore-case -> navi2ch-assoc-ignore-case
 	(navi2ch-numeric-reference-to-str):
 	string-to-int -> string-to-number
 	(navi2ch-end-of-buffer): call-interactively 'end-of-buffer
-	(navi2ch-make-local-hook): $B?74X?t(B
+	(navi2ch-make-local-hook): 新関数
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-mode):
 	make-local-hook -> navi2ch-make-local-hook
@@ -1081,10 +1085,10 @@
 
 	* navi2ch-message.el (navi2ch-message-insert-backup):
 	insert-buffer -> insert-buffer-substring
-	(navi2ch-message-send-message): $BF1>e(B
+	(navi2ch-message-send-message): 同上
 
 	* navi2ch-article.el (navi2ch-article-mode): make-local-hook
-	$B$G$O$J$/(B navi2ch-make-local-hook $B$r;H$&(B
+	ではなく navi2ch-make-local-hook を使う
 
 	emacs-22 cleanup
 
@@ -1096,1268 +1100,1268 @@
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-message-sendlog-message-format-function):
-	$B%0%k!<%W$rDI2C(B
+	グループを追加
 
-	* navi2ch-util.el (navi2ch-float-time): $B?74X?t(B
+	* navi2ch-util.el (navi2ch-float-time): 新関数
 
-	* navi2ch-net.el (navi2ch-net-connect-wait-power): $B?7JQ?t(B
-	(navi2ch-net-connect-time-list): $B?7JQ?t(B
-	(navi2ch-net-connect-wait): $B>e5-JQ?t$r;HMQ$7$FBT5!;~4V$r7W;;(B
-	(navi2ch-net-send-request): $B>e5-;~4V$rA^F~(B
+	* navi2ch-net.el (navi2ch-net-connect-wait-power): 新変数
+	(navi2ch-net-connect-time-list): 新変数
+	(navi2ch-net-connect-wait): 上記変数を使用して待機時間を計算
+	(navi2ch-net-send-request): 上記時間を挿入
 
 	patch#1187825,1188245
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-history.el (navi2ch-history-add): history $B$KI,MW$J>pJs$N(B
-	$B$_$r5-O?(B
+	* navi2ch-history.el (navi2ch-history-add): history に必要な情報の
+	みを記録
 
 	patch#1166324
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch): $BF1>e(B
-	(navi2ch-save-info): $BF1>e(B
-	(navi2ch-load-info): $BF1>e(B
-	(navi2ch-update): $BF1>e(B
+	* navi2ch.el (navi2ch): 同上
+	(navi2ch-save-info): 同上
+	(navi2ch-load-info): 同上
+	(navi2ch-update): 同上
 
-	* navi2ch-auto-modify.el (navi2ch-auto-modify-save): $BF1>e(B
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-save): 同上
 
-	* navi2ch-vars.el (navi2ch-init-file): navi2ch-directory $B$+$i$NAjBP(B
-	$B%Q%9$K(B
-	(navi2ch-bm-fetched-info-file): $BF1>e(B
-	(navi2ch-bookmark-file): $BF1>e(B
-	(navi2ch-history-file): $BF1>e(B
-	(navi2ch-update-file): $BF1>e(B
-	(navi2ch-auto-modify-file): $BF1>e(B
+	* navi2ch-vars.el (navi2ch-init-file): navi2ch-directory からの相対
+	パスに
+	(navi2ch-bm-fetched-info-file): 同上
+	(navi2ch-bookmark-file): 同上
+	(navi2ch-history-file): 同上
+	(navi2ch-update-file): 同上
+	(navi2ch-auto-modify-file): 同上
 
 	patch#1146248
 
 2006-10-22  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-coding-system): navi2ch-vars.el $B$K0\F0(B
+	* navi2ch-util.el (navi2ch-coding-system): navi2ch-vars.el に移動
 
-	* navi2ch-vars.el (navi2ch-coding-system): navi2ch-util.el $B$+$i0\F0(B
-	(navi2ch-board-coding-system-alist): $B>e5-JQ?t$r;HMQ(B
+	* navi2ch-vars.el (navi2ch-coding-system): navi2ch-util.el から移動
+	(navi2ch-board-coding-system-alist): 上記変数を使用
 
 	patch#1124650
 
 2006-09-14  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* doc/navi2ch.texi (How to Write): FAQ$B$K=q$-9~$_;~$N3NG'$r2sHr(B
-	  $B$9$kJ}K!$KIU$$$F8@5Z(B
+	* doc/navi2ch.texi (How to Write): FAQに書き込み時の確認を回避
+	  する方法に付いて言及
 
 2006-07-06  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-oyster.el (navi2ch-oyster-send-message): hanamogera-cookie
-	  $BBP1~=hM}$rDI2C(B
-	  (navi2ch-oyster-func-alist): extract-post$B$rDI2C(B
+	  対応処理を追加
+	  (navi2ch-oyster-func-alist): extract-postを追加
 
 2006-07-03  Masatake YAMATO  <jet@gyve.org>
 
         * navi2ch-multibbs.el (navi2ch-multibbs-func-alist): extract-post
-	 $B$rDI2C!#(B
-        (navi2ch-multibbs-func-alist): SEND-MESSAGE-FUNC$B$K(BPOST$B0z?t$rDI2C!#(B
-        (navi2ch-multibbs-send-message): extract-post$B$r<hF@$7$F!":FAwA0$K(B
-         $B8F$S=P$9$3$H$G!"%P%C%U%!$r%9%-%c%s$9$k$7$F:FAw$KI,MW$J>pJs$rF@$k$3$H(B
-         $B$,$G$-$k$h$&$K$7$?!#Aw?.;n9T$N:GBg2s?t$r85$K6<$7$?!#(Bhanamogera-cookie
-         $B$r(Bpost-data$B$H$7$F0lHL2=$7$?!#(B
-        (navi2ch-2ch-extract-post): navi2ch-multibbs-get-hanamogera-cookie$B$+$i(B
-         $BL>A0$rJQ99$7$?!#(B
-        (navi2ch-2ch-send-message): $B%@%$%J%_%C%/%9%3!<%W$+$i(Bhanamogera-cookie$B$r(B
-         $BA\$9$N$G$O$J$/!"(BPOST$B$H$$$&0z?t$rDI2C$7$F!"$=$3$+$i(Bhanamogera-cookie$B$r(B
-	 $B%-!<$H$7$F(Bassq$B$7$F!"(Bhanamogera-cookie$B$NCM$r<h$j=P$;$k$h$&$K$7$?!#(B
-        * navi2ch-jbbs-net.el (navi2ch-jbbs-get-writecgi-url): $B0z?t(BPOST$B$rDI2C(B
-	 $B$7$?!#(B
-        * navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message): $B0z?t(BPOST$B$rDI2C(B
-	 $B$7$?!#(B
-        * navi2ch-localfile.el (navi2ch-localfile-send-message): $B0z?t(BPOST$B$rDI2C(B
-	 $B$7$?!#(B
-        * navi2ch-machibbs.el (navi2ch-machibbs-send-message): $B0z?t(BPOST$B$rDI2C(B
-	 $B$7$?!#(B
-        * navi2ch-oyster.el (navi2ch-oyster-send-message): $B0z?t(BPOST$B$rDI2C$7$?!#(B
+	 を追加。
+        (navi2ch-multibbs-func-alist): SEND-MESSAGE-FUNCにPOST引数を追加。
+        (navi2ch-multibbs-send-message): extract-postを取得して、再送前に
+         呼び出すことで、バッファをスキャンするして再送に必要な情報を得ること
+         ができるようにした。送信試行の最大回数を元に脅した。hanamogera-cookie
+         をpost-dataとして一般化した。
+        (navi2ch-2ch-extract-post): navi2ch-multibbs-get-hanamogera-cookieから
+         名前を変更した。
+        (navi2ch-2ch-send-message): ダイナミックスコープからhanamogera-cookieを
+         捜すのではなく、POSTという引数を追加して、そこからhanamogera-cookieを
+	 キーとしてassqして、hanamogera-cookieの値を取り出せるようにした。
+        * navi2ch-jbbs-net.el (navi2ch-jbbs-get-writecgi-url): 引数POSTを追加
+	 した。
+        * navi2ch-jbbs-shitaraba.el (navi2ch-js-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-localfile.el (navi2ch-localfile-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-machibbs.el (navi2ch-machibbs-send-message): 引数POSTを追加
+	 した。
+        * navi2ch-oyster.el (navi2ch-oyster-send-message): 引数POSTを追加した。
 
 2006-07-02  Masatake YAMATO  <jet@gyve.org>
 
        * navi2ch-multibbs.el (navi2ch-multibbs-send-message): hana mogera
-	 cookie$B$KBP1~!#(B
-       (navi2ch-multibbs-get-hanamogera-cookie): $B%P%C%U%!$+$i(Bhana mogera
-	 cookie$B$rDI2C$9$k!#(B
-       (navi2ch-2ch-send-message): hanamogera-cookie$B$,Dj5A$5$l$F$$$l$P!"(B
-       param-alist$B$KDI2C$9$k!#(B
-       (navi2ch-multibbs-send-message): hanamogera-cookie$B$r%;%C%H!#(B
+	 cookieに対応。
+       (navi2ch-multibbs-get-hanamogera-cookie): バッファからhana mogera
+	 cookieを追加する。
+       (navi2ch-2ch-send-message): hanamogera-cookieが定義されていれば、
+       param-alistに追加する。
+       (navi2ch-multibbs-send-message): hanamogera-cookieをセット。
 
 2006-06-10  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	$B%/%l%8%C%HF~$lK:$l$N$?$a:o=|0MMj$KBP1~(B
+	クレジット入れ忘れのため削除依頼に対応
 
 2006-05-29  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* navi2ch-multibbs.el: 2ch$BB&$N?7$7$$=q$-9~$_%A%'%C%/$KBP1~(B
+	* navi2ch-multibbs.el: 2ch側の新しい書き込みチェックに対応
 	  (hana patch)
 
 2005-09-20  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* navi2ch-list.el (navi2ch-list-bbstable-default-url): bbsmenu URL
-	  $B$rJQ99(B
+	  を変更
 
 2005-04-20  mami  <mami@users.sourceforge.net>
 
-	$B%P!<%\%sBP:v$G%&%'%$%H$rF~$l$k$h$&$K!#(B
+	バーボン対策でウェイトを入れるように。
 	http://pc8.2ch.net/test/read.cgi/unix/1106152504/841-847n
 
-	* navi2ch-vars.el (navi2ch-bm-fetch-wait): $B?7JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-bm-fetch-wait): 新変数。
 
-	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): $B>e5-JQ?t(B
-	$B$r;H$&$h$&$K!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): 上記変数
+	を使うように。
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): $BF1>e!#(B
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。
 
 2005-03-16  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el
-	(navi2ch-article-update-previous-message-separator): $B%9%l$N(B1$B%l%9L\(B
-	$B$,(Bhide$B$5$l$?$H$-$K%(%i!<$K$J$i$J$$$h$&$K!#(B
+	(navi2ch-article-update-previous-message-separator): スレの1レス目
+	がhideされたときにエラーにならないように。
 
 2005-02-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-fetch-mark-article): offline
-	$B$N$H$-$O$9$0=*N;$9$k$h$&$K!#(B
-	(navi2ch-bm-fetch-maybe-new-articles): $BF1>e!#(B
+	のときはすぐ終了するように。
+	(navi2ch-bm-fetch-maybe-new-articles): 同上。
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): $BF1>e!#(B
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 同上。
 
 2005-02-18  mami  <mami@users.sourceforge.net>
 
-	* NEWS: $B99?7!#(B
+	* NEWS: 更新。
 
 2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-message.el (navi2ch-message-mode-map):
-	C-a, M-m $B$r(B navi2ch-message-substitute-key-definitions() $B$K0\$9!#(B
-	(navi2ch-message-substitute-key-definitions): $B?74X?t!#(B
-	(navi2ch-message-mode): $B>e5-4X?t$r8F$V$h$&$K!#(B
+	C-a, M-m を navi2ch-message-substitute-key-definitions() に移す。
+	(navi2ch-message-substitute-key-definitions): 新関数。
+	(navi2ch-message-mode): 上記関数を呼ぶように。
 
 2005-02-14  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
 	(navi2ch-article-update-previous-message-separator):
-	$B8=:_0LCV$,(Bbuffer $B$N:G8e$N>l9g(B end $B$r(B point-max() $B$H$9$k$h$&$K!#(B
-	$B8=:_0LCV$r$=$l$J$j$KJ]B8$9$k$h$&$K!#(B
+	現在位置がbuffer の最後の場合 end を point-max() とするように。
+	現在位置をそれなりに保存するように。
 	(navi2ch-article-insert-messages):
-	$B8e$G%l%9$N@hF,$KJ8;zNs$rA^F~$9$k$H$-$N0Y$K!"(Bmessage $B$rA^F~$7$?>l9g(B
-	$B$O!"(Bpoint $B$G<($5$l$k(B marker $B$N(B insertion-type $B$r(B t $B$K$9$k$h$&$K!#(B
-	(navi2ch-article-reinsert-partial-messages): $B>e5-JQ99$N0Y!"$3$3$G(B
-	$B0l;~E*$K(B insertion-type $B$r(B t $B$K$9$k$N$r$d$a$k!#(B
+	後でレスの先頭に文字列を挿入するときの為に、message を挿入した場合
+	は、point で示される marker の insertion-type を t にするように。
+	(navi2ch-article-reinsert-partial-messages): 上記変更の為、ここで
+	一時的に insertion-type を t にするのをやめる。
 
 2005-02-11  mami  <mami@users.sourceforge.net>
 
-	XEmacs $B$N(B forward-comment $B$O%P%C%U%!$N:G8e$G(B t $B$rJV$9LOMM!#(B
+	XEmacs の forward-comment はバッファの最後で t を返す模様。
 	http://list-archive.xemacs.org/xemacs-beta/200210/msg00522.html
-	* navi2ch-auto-modify.el (navi2ch-auto-modify-skip-comments): $B?74X(B
-	$B?t!#(B
-	(navi2ch-auto-modify-narrow): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-auto-modify-save-variables): $BF1>e!#(B
+	* navi2ch-auto-modify.el (navi2ch-auto-modify-skip-comments): 新関
+	数。
+	(navi2ch-auto-modify-narrow): 上記関数を使用。
+	(navi2ch-auto-modify-save-variables): 同上。
 
 2005-02-10  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
-	(navi2ch-article-insert-message-separator-by-char): face $B$rIU$1$k(B
-	$B$h$&$K!#(B
+	(navi2ch-article-insert-message-separator-by-char): face を付ける
+	ように。
 
-	* navi2ch-face.el (navi2ch-article-message-separator-face): $B?7(B face$B!#(B
+	* navi2ch-face.el (navi2ch-article-message-separator-face): 新 face。
 
 2005-02-08  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
 	(navi2ch-article-update-previous-message-separator):
-	previous-single-property-change $B$G$$$-$J$j%;%Q%l!<%?$N:G=i$K$$$C$A$c(B
-	$B$&>l9g$,$"$C$?$N$GBP=h!#(B
+	previous-single-property-change でいきなりセパレータの最初にいっちゃ
+	う場合があったので対処。
 	(navi2ch-article-insert-message-separator):
 	navi2ch-article-message-separator-insert-hide-number-p,
 	navi2ch-article-message-separator-insert-trailing-newline-p
-	$B$r8+$k$h$&$K!#(B
-	(navi2ch-article-insert-message): $B:G8e$N2~9TF~$l$k$N$r(B
-	navi2ch-article-insert-message-separator() $B$K0\$9!#(B
+	を見るように。
+	(navi2ch-article-insert-message): 最後の改行入れるのを
+	navi2ch-article-insert-message-separator() に移す。
 
 	* navi2ch-vars.el
-	(navi2ch-article-message-separator-insert-hide-number-p): $B?7JQ?t!#(B
-	(navi2ch-article-message-separator-insert-trailing-newline-p): $BF1>e!#(B
+	(navi2ch-article-message-separator-insert-hide-number-p): 新変数。
+	(navi2ch-article-message-separator-insert-trailing-newline-p): 同上。
 
 2005-02-06  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	http://pc5.2ch.net/test/read.cgi/unix/1106152504/68 $B$NMWK>$r$+$J$((B
-	$B$k0Y$N=$@5!#(B
-	- navi2ch-bm.el $B$N$$$/$D$+$N(B defsubst $B$J4X?t$r(B defun $B$K!#(B
-	- navi2ch-file-mtime, navi2ch-file-size $B$NDI2C!#(B
+	http://pc5.2ch.net/test/read.cgi/unix/1106152504/68 の要望をかなえ
+	る為の修正。
+	- navi2ch-bm.el のいくつかの defsubst な関数を defun に。
+	- navi2ch-file-mtime, navi2ch-file-size の追加。
 	- navi2ch-article-local-dat-regexp,
-	navi2ch-article-file-name-to-artid $B$NDI2C!#(B
+	navi2ch-article-file-name-to-artid の追加。
 
-	navi2ch-localfile $B$G$O(B navi2ch-article-local-dat-regexp,
-	navi2ch-article-file-name-to-artid $B$r(B**$B$o$6$H(B**$B;H$&$h$&$K$7$F$J$$!#(B
-	$BM}M3$O2<$N%Q%C%A$,$=$&$J$C$F$$$J$+$C$?0Y!#$J$s$G$=$&$7$F$J$+$C$?$+(B
-	$B$rJ9$$$H$/;v!#(B
+	navi2ch-localfile では navi2ch-article-local-dat-regexp,
+	navi2ch-article-file-name-to-artid を**わざと**使うようにしてない。
+	理由は下のパッチがそうなっていなかった為。なんでそうしてなかったか
+	を聞いとく事。
 
-	* navi2ch-util.el (navi2ch-file-mtime, navi2ch-file-size): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-file-mtime, navi2ch-file-size): 新関数。
 
-	* navi2ch-article.el (navi2ch-article-local-dat-regexp): $B?7JQ?t!#(B
-	(navi2ch-article-file-name-to-artid): $B?74X?t!#(B
+	* navi2ch-article.el (navi2ch-article-local-dat-regexp): 新変数。
+	(navi2ch-article-file-name-to-artid): 新関数。
 
 	* navi2ch-board-misc.el
 	(navi2ch-bm-set-property, navi2ch-bm-get-state-from-article)
 	(navi2ch-bm-insert-subject): defsubst -> defun.
 
 	* navi2ch.el (navi2ch-update): navi2ch-file-mtime,
-	navi2ch-file-size $B$r;H$&$h$&$K!#(B
+	navi2ch-file-size を使うように。
 
-	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): $BF1>e!#(B
+	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): 同上。
 
 	* navi2ch-net.el (navi2ch-net-update-file)
-	(navi2ch-net-update-file-diff): $BF1>e!#(B
+	(navi2ch-net-update-file-diff): 同上。
 
-	* navi2ch-localfile.el (navi2ch-localfile-update-file): $BF1>e!#(B
+	* navi2ch-localfile.el (navi2ch-localfile-update-file): 同上。
 
 	* navi2ch-article.el (navi2ch-article-sync)
-	(navi2ch-article-get-readcgi-raw-url): $BF1>e!#(B
+	(navi2ch-article-get-readcgi-raw-url): 同上。
 
-	* navi2ch-board.el (navi2ch-board-expire-date-p): $BF1>e!#(B
+	* navi2ch-board.el (navi2ch-board-expire-date-p): 同上。
 
 	* navi2ch-search.el (navi2ch-search-for-each-article):
 	navi2ch-article-file-name-to-artid,
-	navi2ch-article-local-dat-regexp $B$r;H$&$h$&$K!#(B
+	navi2ch-article-local-dat-regexp を使うように。
 	(navi2ch-search-article-regexp, navi2ch-search-cache)
-	(navi2ch-search-orphan): $BF1>e!#(B
+	(navi2ch-search-orphan): 同上。
 
-	* navi2ch-directory.el (navi2ch-directory-set-subject-list): $BF1>e!#(B
+	* navi2ch-directory.el (navi2ch-directory-set-subject-list): 同上。
 
-	* navi2ch-board.el (navi2ch-board-expire): $BF1>e!#(B
+	* navi2ch-board.el (navi2ch-board-expire): 同上。
 
-	* navi2ch-article.el (navi2ch-article-view-article-from-file): $BF1>e!#(B
-
-2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
-
-	* navi2ch-util.el (navi2ch-read-only-string): $B$^$:$C$F$?!#!#(B
+	* navi2ch-article.el (navi2ch-article-view-article-from-file): 同上。
 
 2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	header field $B$N(B read-only $B2=!#(B
-	* navi2ch-message.el (navi2ch-message-insert-header): Subject $B$H$+(B
-	$B$r(B read-only $B$K$7$F$_$k!#(B
-	header $B$,=*$o$k2U=j$K(B navi2ch-message-header-separator $B$H$$$&(B
-	property $B$rIU$1$k!#(B
-	(navi2ch-message-header-end): navi2ch-message-header-separator $B$r(B
-	$B;H$&$h$&$K!#(B
-	(navi2ch-message-beginning-of-line): $B?74X?t!#(B
-	(navi2ch-message-back-to-indentation): $BF1>e!#(B
+	* navi2ch-util.el (navi2ch-read-only-string): まずってた。。
+
+2005-02-05  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
+
+	header field の read-only 化。
+	* navi2ch-message.el (navi2ch-message-insert-header): Subject とか
+	を read-only にしてみる。
+	header が終わる箇所に navi2ch-message-header-separator という
+	property を付ける。
+	(navi2ch-message-header-end): navi2ch-message-header-separator を
+	使うように。
+	(navi2ch-message-beginning-of-line): 新関数。
+	(navi2ch-message-back-to-indentation): 同上。
 	(navi2ch-message-mode-map):
 	navi2ch-message-beginning-of-line,
-	navi2ch-message-back-to-indentation $B$rDI2C!#(B
+	navi2ch-message-back-to-indentation を追加。
 
-	* navi2ch-util.el (navi2ch-read-only-string): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-read-only-string): 新関数。
 
 	<http://pc5.2ch.net/test/read.cgi/unix/1106152504/136>
 	<http://sourceforge.net/tracker/index.php?func=detail&aid=1115437&group_id=39552&atid=435774>
 
 2005-02-02  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	sendlog $B$r=q$/$H$-$N(B message $B$N(B format $B$9$k4X?t$r;XDj$G$-$k$h$&$K!#(B
-	message separator $B$N=q<0$r$A$g$C$HJQ99!#(B
+	sendlog を書くときの message の format する関数を指定できるように。
+	message separator の書式をちょっと変更。
 	* navi2ch-message.el (navi2ch-message-add-sendlog):
-	navi2ch-message-sendlog-message-format-function $B$r(B funcall $B$9$k$h(B
-	$B$&$K!#(B
-	(navi2ch-message-sendlog-simple-message-format): $B?74X?t!#(B
-	(navi2ch-message-sendlog-message-format-with-board-name): $BF1>e!#(B
+	navi2ch-message-sendlog-message-format-function を funcall するよ
+	うに。
+	(navi2ch-message-sendlog-simple-message-format): 新関数。
+	(navi2ch-message-sendlog-message-format-with-board-name): 同上。
 
 	* navi2ch-vars.el
 	(navi2ch-message-sendlog-message-format-function):
-	$B?7JQ?t!#(B
+	新変数。
 
 	* navi2ch-article.el (navi2ch-article-insert-message-separator):
-	navi2ch-article-insert-hide-number-following $B$r$3$3$G8F$V$h$&$K$7$?!#(B
-	(navi2ch-article-insert-hide-number-following): $BF,$N%;%Q%l!<%?$O$d$a!#(B
-	$BA^F~$7$?$H$-$K(B non-nil $B$rJV$9$h$&$K!#(B
+	navi2ch-article-insert-hide-number-following をここで呼ぶようにした。
+	(navi2ch-article-insert-hide-number-following): 頭のセパレータはやめ。
+	挿入したときに non-nil を返すように。
 	(navi2ch-article-insert-message-separator-by-face):
-	$B0z?t$N(B number $B$r:o=|!#(B
-	navi2ch-article-insert-hide-number-following $B$r8F$V$N$r$d$a$?!#(B
-	(navi2ch-article-insert-message-separator-by-char): $BF1>e!#(B
+	引数の number を削除。
+	navi2ch-article-insert-hide-number-following を呼ぶのをやめた。
+	(navi2ch-article-insert-message-separator-by-char): 同上。
 
-	(navi2ch-article-delete-message): $B%3%a%s%HIU$1$?!#(B
+	(navi2ch-article-delete-message): コメント付けた。
 
 2005-02-01  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
 	(navi2ch-article-insert-hide-number-following):
-	number $B$r(B $BI,?\$K$7$?!#(B
-	hide $B>pJs$N<hF@$r(B navi2ch-article-message-filter-mode $B$G@Z$jBX$($k(B
-	$B$h$&$K!#(B
-	$BF,$K$A$g$C$H$@$1%;%Q%l!<%?$rF~$l$F$_$k!#(B
+	number を 必須にした。
+	hide 情報の取得を navi2ch-article-message-filter-mode で切り替える
+	ように。
+	頭にちょっとだけセパレータを入れてみる。
 	hide -> hidden (^^;
-	(navi2ch-article-update-previous-message-separator): $B?74X?t!#(B
-	(navi2ch-article-insert-message-separator): $BF1>e!#(B
+	(navi2ch-article-update-previous-message-separator): 新関数。
+	(navi2ch-article-insert-message-separator): 同上。
 	(navi2ch-article-insert-message):
-	navi2ch-article-insert-message-separator-function $B$X$N(B funcall $B$r(B
-	navi2ch-article-insert-message-separator$B$KCV$-49$(!#(B
-	suppress $B$5$l$F$$$?$H$-$K!"(B
-	navi2ch-article-update-previous-message-separator $B$r8F$V$h$&$K!#(B
+	navi2ch-article-insert-message-separator-function への funcall を
+	navi2ch-article-insert-message-separatorに置き換え。
+	suppress されていたときに、
+	navi2ch-article-update-previous-message-separator を呼ぶように。
 	(navi2ch-article-hide-message):
-	navi2ch-article-update-previous-message-separator $B$r8F$V$h$&$K!#(B
+	navi2ch-article-update-previous-message-separator を呼ぶように。
 
 2005-01-30  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
-	(navi2ch-article-insert-message-separator-by-char): $B6h@Z$jJ8;z$NJ8(B
-	$B;z?t$,Ii$K$J$k$3$H$,$"$C$?$N$GBP=h!#(B
+	(navi2ch-article-insert-message-separator-by-char): 区切り文字の文
+	字数が負になることがあったので対処。
 
 2005-01-28  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-article.el
-	(navi2ch-article-insert-hide-number-following): $B?74X?t!#(B
+	(navi2ch-article-insert-hide-number-following): 新関数。
 	(navi2ch-article-insert-message-separator-by-face):
-	navi2ch-article-insert-hide-number-following $B$r8F$V$h$&$K!#(B
-	(navi2ch-article-insert-message-separator-by-char): $BF1>e!#(B
+	navi2ch-article-insert-hide-number-following を呼ぶように。
+	(navi2ch-article-insert-message-separator-by-char): 同上。
 
 2005-01-26  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* navi2ch-list.el (navi2ch-list-insert-board-names-subr):
-	navi2ch-list-display-board-id-p $B$,(B non-nil $B$@$C$?$i!"HD(BID$B$rI=<($7(B
-	$B$F$_$k$h$&$K!#(B
+	navi2ch-list-display-board-id-p が non-nil だったら、板IDを表示し
+	てみるように。
 
-	* navi2ch-vars.el (navi2ch-list-invalid-host-regexp): $B%3%a%s%H$N(B
-	typo $B=$@5!#(B
-	(navi2ch-list-display-board-id-p): $B?7JQ?t!#(B
-	(navi2ch-list-board-id-column): $BF1>e!#(B
+	* navi2ch-vars.el (navi2ch-list-invalid-host-regexp): コメントの
+	typo 修正。
+	(navi2ch-list-display-board-id-p): 新変数。
+	(navi2ch-list-board-id-column): 同上。
 
 2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	BE $B$X$N=q$-9~$_$GJ8;z$P$1$J$$$h$&$K$9$k=$@5!#(B
+	BE への書き込みで文字ばけないようにする修正。
 	* navi2ch-multibbs.el (navi2ch-2ch-send-message):
-	navi2ch-board-get-coding-system $B$N7k2L$r(B
-	navi2ch-net-get-param-string $B$KEO$9$h$&$K!#(B
+	navi2ch-board-get-coding-system の結果を
+	navi2ch-net-get-param-string に渡すように。
 
 	* navi2ch-net.el (navi2ch-net-url-hexify-string):
-	$B0z?t$N(B coding-system $B$,$"$k>l9g$O!"$=$l$G(B encode $B$9$k$h$&$K!#(B
-	(navi2ch-net-get-param-string): coding-system $B$r(B
-	navi2ch-net-url-hexify-string $B$KEO$9$h$&$K!#(B
+	引数の coding-system がある場合は、それで encode するように。
+	(navi2ch-net-get-param-string): coding-system を
+	navi2ch-net-url-hexify-string に渡すように。
 
 2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	BE $B$N%m%0%$%s!"=q$-9~$_BP1~!#(B
-	multibbs module $B$H$7$F$O:n$C$F$J$$!#(B
-	$BB>$N(B multibbs module $B$KJQ99$r2C$($J$$$?$a$K!"(B
-	navi2ch-2ch-send-message, navi2ch-2ch-send-message-success-p $B$G$N(B
-	coding-system $B$NH=JL$K(B navi2ch-2ch-send-message-last-board $B$r;H$C(B
-	$B$F$k!#(B
-	$B$3$l$i$N4X?t$K(B board $B$rEO$9$h$&$K$7$?$[$&$,$$$$$N$+$J!)(B
+	BE のログイン、書き込み対応。
+	multibbs module としては作ってない。
+	他の multibbs module に変更を加えないために、
+	navi2ch-2ch-send-message, navi2ch-2ch-send-message-success-p での
+	coding-system の判別に navi2ch-2ch-send-message-last-board を使っ
+	てる。
+	これらの関数に board を渡すようにしたほうがいいのかな？
 
-	* Makefile.am (lisp_LISP): navi2ch-be2ch.el $B$rDI2C!#(B
+	* Makefile.am (lisp_LISP): navi2ch-be2ch.el を追加。
 
-	* navi2ch.el (toplevel): navi2ch-be2ch $B$r(B rquire $B$9$k$h$&$K!#(B
+	* navi2ch.el (toplevel): navi2ch-be2ch を rquire するように。
 
 	* navi2ch-multibbs.el
-	(navi2ch-multibbs-send-message-error-string): $B?74X?t!#(B
-	(navi2ch-multibbs-send-message): navi2ch-coding-system $B$N$+$o$j$K(B
-	navi2ch-board-get-coding-system $B$r;H$&$h$&$K!#(B
-	$B%(%i!<J8;zNs$N<hF@$K(B navi2ch-multibbs-send-message-error-string $B$r(B
-	$B;H$&$h$&$K!#(B
-	(navi2ch-2ch-send-message-last-board): $B?7JQ?t!#(B
-	(navi2ch-2ch-send-message): navi2ch-2ch-send-message-last-board $B$K(B
-	$BCM$r@_Dj$9$k$h$&$K!#(B
-	cookie $B$K(B navi2ch-be2ch-mdmd, navi2ch-be2ch-dmdm $B$r@_Dj$9$k$h$&$K!#(B
+	(navi2ch-multibbs-send-message-error-string): 新関数。
+	(navi2ch-multibbs-send-message): navi2ch-coding-system のかわりに
+	navi2ch-board-get-coding-system を使うように。
+	エラー文字列の取得に navi2ch-multibbs-send-message-error-string を
+	使うように。
+	(navi2ch-2ch-send-message-last-board): 新変数。
+	(navi2ch-2ch-send-message): navi2ch-2ch-send-message-last-board に
+	値を設定するように。
+	cookie に navi2ch-be2ch-mdmd, navi2ch-be2ch-dmdm を設定するように。
 	(navi2ch-2ch-send-message-success-p):
-	navi2ch-2ch-send-message-last-board $B$NCM$r;H$C$F!"(Bcoding-system $B$r(B
-	$BFCDj$9$k$h$&$K!#(B
-	(navi2ch-2ch-send-message-error-string): $BF1>e!#(B
+	navi2ch-2ch-send-message-last-board の値を使って、coding-system を
+	特定するように。
+	(navi2ch-2ch-send-message-error-string): 同上。
 
 	* navi2ch-net.el
 	(navi2ch-net-send-message-success-p):
-	$B0z?t$K(B coding-system $B$r$b$i$($k$h$&$K!#(B
-	$B0z?t$N(B coding-system $B$GJ8;zNs$r(B decode $B$9$k$h$&$K!#(B
-	(navi2ch-net-send-message-error-string): $BF1>e!#(B
-	$B!V%m%0%$%s%(%i!<!W$r%A%'%C%/$9$kJ8;zNs$KDI2C!#(B
-	http status $B$K$h$k%A%'%C%/$r(B navi2ch-multibbs-send-message-error-string $B$K0\F0!#(B
+	引数に coding-system をもらえるように。
+	引数の coding-system で文字列を decode するように。
+	(navi2ch-net-send-message-error-string): 同上。
+	「ログインエラー」をチェックする文字列に追加。
+	http status によるチェックを navi2ch-multibbs-send-message-error-string に移動。
 
 	* navi2ch-be2ch.el:
-	$B?7%U%!%$%k!#(Bbe@2ch $B$N%m%0%$%s$^$o$j$rC4Ev$9$k!#(B
+	新ファイル。be@2ch のログインまわりを担当する。
 
 2005-01-25  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
 	* Makefile.am, configure.in:
-	$B%P%$%H%3%s%Q%$%k$r#22s$d$i$J$$$h$&$K!#(B
+	バイトコンパイルを２回やらないように。
 	http://sourceforge.net/tracker/index.php?func=detail&aid=1107635&group_id=39552&atid=435774
 
 	* config.guess, config.sub, elisp-comp, install-sh, missing,
-	* mkinstalldirs: automake 1.9.2, autoconf 2.59 $B$KIUB0$N$b$N$K99?7(B
+	* mkinstalldirs: automake 1.9.2, autoconf 2.59 に付属のものに更新
 
 2005-01-23  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	* navi2ch-multibbs.el (toplevel): cl $B$r(B require$B!#(B
+	* navi2ch-multibbs.el (toplevel): cl を require。
 
 2005-01-22  extra  <ekisutora@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-get-number-list):
-	$B?t;zItJ,$,(B8$BJ8;z0J>e$N%l%9%"%s%+!<$G!"@5$7$/%l%9HV$r;X$;$J$$%P%0$r=$@5!#(B
+	数字部分が8文字以上のレスアンカーで、正しくレス番を指せないバグを修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/929
 
 2005-01-22  Taiki SUGAWARA  <taiki.s@cityfujisawa.ne.jp>
 
-	$BI|3h5-G0$H$$$&;v$G!#(B
-	$B$H$j$"$($:$N(B BE $BBP1~!#$H$$$&$+!"J8;z%3!<%I;XDjBP1~!#(B
-	navi2ch-board-coding-system-alist $B$KHD(BID $B$H(B coding-system $B$rEPO?$9(B
-	$B$k$3$H$GHD$KBP$9$kJ8;z%3!<%I$r;XDj$G$-$k!#(B
+	復活記念という事で。
+	とりあえずの BE 対応。というか、文字コード指定対応。
+	navi2ch-board-coding-system-alist に板ID と coding-system を登録す
+	ることで板に対する文字コードを指定できる。
 
-	$BJ]B8$9$k$H$-$KJ8;z%3!<%I$rJQ49$9$k$s$@$H!":9J,99?7$KBP1~$9$k$N$,LL(B
-	$BE]$J$N$G!"3+$/$H$-$K;XDj$G$-$k$h$&$K$9$k!#(B
-	$B$?$@!"8=>u(B navi2ch-multibbs-defcallback $B$5$l$F$$$k(B BBS $B$r(B
-	navi2ch-board-coding-system-alist $B$KEPO?$9$k$HJ8;z2=$1$7$A$c$&$O$:!#(B
+	保存するときに文字コードを変換するんだと、差分更新に対応するのが面
+	倒なので、開くときに指定できるようにする。
+	ただ、現状 navi2ch-multibbs-defcallback されている BBS を
+	navi2ch-board-coding-system-alist に登録すると文字化けしちゃうはず。
 
 	* navi2ch-search.el (navi2ch-search-article-regexp):
-	navi2ch-board-insert-file-contents $B$r;H$&$h$&$K!#(B
+	navi2ch-board-insert-file-contents を使うように。
 	(navi2ch-search-cache):
-	navi2ch-article-get-first-message-from-file $B$K(B board $B$rEO$9$h$&$K!#(B
-	(navi2ch-search-orphan): $BF1>e!#(B
+	navi2ch-article-get-first-message-from-file に board を渡すように。
+	(navi2ch-search-orphan): 同上。
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-article):
-	navi2ch-article-get-first-message-from-file $B$K(B board $B$rEO$9$h$&$K!#(B
+	navi2ch-article-get-first-message-from-file に board を渡すように。
 
 	* navi2ch-article.el
 	(navi2ch-article-get-first-message-from-file):
-	$B0z?t$K(B board $B$rLc$($k$h$&$K!#(B
+	引数に board を貰えるように。
 	(navi2ch-article-get-message-list):
-	navi2ch-board-insert-file-contents $B$r;H$&$h$&$K!#(B
+	navi2ch-board-insert-file-contents を使うように。
 
 	(navi2ch-article-cached-subject-minimum-size):
-	board $B$H(B article $B$r0z?t$KLc$&$h$&$K!#(B
-	navi2ch-board-insert-file-contents $B$r;H$&$h$&$K!#(B
-	(navi2ch-article-cached-subject): $B>e5-4X?t$NJQ99$KBP1~!#(B
+	board と article を引数に貰うように。
+	navi2ch-board-insert-file-contents を使うように。
+	(navi2ch-article-cached-subject): 上記関数の変更に対応。
 
-	* navi2ch-board.el (navi2ch-board-get-coding-system): $B?74X?t!#(B
-	(navi2ch-board-insert-file-contents): $B?74X?t!#(B
+	* navi2ch-board.el (navi2ch-board-get-coding-system): 新関数。
+	(navi2ch-board-insert-file-contents): 新関数。
 	(navi2ch-board-get-subject-list):
-	navi2ch-board-insert-file-contents $B$r;H$&$h$&$K!#(B
+	navi2ch-board-insert-file-contents を使うように。
 	(navi2ch-board-save-old-subject-file):
 	navi2ch-board-get-coding-system,
-	navi2ch-board-insert-file-contents $B$r;H$&$h$&$K!#(B
+	navi2ch-board-insert-file-contents を使うように。
 
 	* navi2ch-util.el (navi2ch-insert-file-contents):
-	coding-system $B$r;XDj$G$-$k$h$&$K!#(B
-	$B;XDj$5$l$F$$$J$$>l9g$O:#$^$GDL$j!"(Bnavi2ch-coding-system $B$r;H$&!#(B
+	coding-system を指定できるように。
+	指定されていない場合は今まで通り、navi2ch-coding-system を使う。
 
-	* navi2ch-vars.el (navi2ch-board-coding-system-alist): $B?7JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-board-coding-system-alist): 新変数。
 
 2004-12-13  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-expire):
-	navi2ch-board-expire-date $B$r0z$/$Y$-$H$3$m$rB-$7$F$$$?$N$r=$@5!#(B
+	navi2ch-board-expire-date を引くべきところを足していたのを修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/845
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
-	(navi2ch-article-make-mode-line-identification): $B?74X?t$H$7$FJ,N%!#(B
-	(navi2ch-article-set-mode-line): $B>e5-4X?t$r;H$&$h$&$K!#(B
+	(navi2ch-article-make-mode-line-identification): 新関数として分離。
+	(navi2ch-article-set-mode-line): 上記関数を使うように。
 
 	* navi2ch-message.el
-	(navi2ch-message-make-mode-line-identification): $B?74X?t$H$7$FJ,N%!#(B
-	(navi2ch-message-write-message): $B>e5-4X?t$r;H$&$h$&$K!#(B
+	(navi2ch-message-make-mode-line-identification): 新関数として分離。
+	(navi2ch-message-write-message): 上記関数を使うように。
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-net.el (navi2ch-net-send-message-error-string): $BJ8;zNs$,(B
-	$B<hF@$G$-$J$+$C$?$H$-$O(B HTTP status $B$rJV$9$h$&$K!#(B
+	* navi2ch-net.el (navi2ch-net-send-message-error-string): 文字列が
+	取得できなかったときは HTTP status を返すように。
 
 2004-12-12  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-board.el (navi2ch-board-expire):
-	navi2ch-board-expire-orphan-only $B$,(B nil $B$N$H$-(B expire $B$5$l$J$$%P%0(B
-	$B$r=$@5!#(B
+	navi2ch-board-expire-orphan-only が nil のとき expire されないバグ
+	を修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/748
 
 2004-11-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-list.el (navi2ch-list-get-etc-category):
-	navi2ch-list-etc-file-name $B$K(B navi2ch-directory $B$N30$N%U%!%$%k$r;X(B
-	$BDj$7$?$H$-$K@5$7$/F0:n$9$k$h$&$K!#(B
+	navi2ch-list-etc-file-name に navi2ch-directory の外のファイルを指
+	定したときに正しく動作するように。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/744-746n
 
 2004-11-21  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-cite-original-from-number):
-	$B%W%m%s%W%H$NJ8F,$rBgJ8;z$K!#(B
+	プロンプトの文頭を大文字に。
 
-	* navi2ch-board-misc.el (navi2ch-bm-textize-mark-article): $BF1>e!#(B
-	(navi2ch-bm-mark-by-query): $BF1>e!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-textize-mark-article): 同上。
+	(navi2ch-bm-mark-by-query): 同上。
 
-	* navi2ch-article.el (navi2ch-article-select-view-range-subr): $BF1(B
-	$B>e!#(B
-	(navi2ch-article-goto-number): $BF1>e!#(B
-
-2004-10-26  mami  <mami@users.sourceforge.net>
-
-	* navi2ch-articles.el (navi2ch-articles-remove-article): $B?74X?t!#(B
-	(navi2ch-articles-remove-mark-article): $BF1>e!#(B
-	(navi2ch-articles-mode-map): $B>e5-4X?t$r%P%$%s%I!#(B
+	* navi2ch-article.el (navi2ch-article-select-view-range-subr): 同
+	上。
+	(navi2ch-article-goto-number): 同上。
 
 2004-10-26  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-articles.el (navi2ch-articles-get-article): $B%P%C%U%!$,:o(B
-	$B=|$5$l$F$$$?$H$-%(%i!<$H$J$i$J$$$h$&$K!#(B
-	(navi2ch-articles-get-board): $BF1>e!#(B
+	* navi2ch-articles.el (navi2ch-articles-remove-article): 新関数。
+	(navi2ch-articles-remove-mark-article): 同上。
+	(navi2ch-articles-mode-map): 上記関数をバインド。
+
+2004-10-26  mami  <mami@users.sourceforge.net>
+
+	* navi2ch-articles.el (navi2ch-articles-get-article): バッファが削
+	除されていたときエラーとならないように。
+	(navi2ch-articles-get-board): 同上。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/671
 
 2004-10-18  mami  <mami@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch-update): $B%a%C%;!<%8D4@0!#(B
-	(navi2ch-toggle-offline): $BF1>e!#(B
-	(navi2ch-lock): $BF1>e!#(B
+	* navi2ch.el (navi2ch-update): メッセージ調整。
+	(navi2ch-toggle-offline): 同上。
+	(navi2ch-lock): 同上。
 
 2004-10-17  mami  <mami@users.sourceforge.net>
 
-	* navi2ch*.el: checkdoc $B$HL\;k$G%a%C%;!<%8D4@0!"(Bdocstring $BD4@0!"%3(B
-	$B%a%s%HD4@0!#(B
+	* navi2ch*.el: checkdoc と目視でメッセージ調整、docstring 調整、コ
+	メント調整。
 
-	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): $B0z$-?t$NJQ?t(B
-	$BL>$rJQ99!#(B
-
-2004-10-12  mami  <mami@users.sourceforge.net>
-
-	* configure.in: 1.7.5-DEV $B$K%"%C%W%G!<%H!#(B
+	* navi2ch-oyster.el (navi2ch-oyster-get-offlaw-url): 引き数の変数
+	名を変更。
 
 2004-10-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch: 1.7.5 $B%j%j!<%9!#(B
-	* configure.in: 1.7.5 $B$K%"%C%W%G!<%H!#(B
+	* configure.in: 1.7.5-DEV にアップデート。
+
+2004-10-12  mami  <mami@users.sourceforge.net>
+
+	* navi2ch: 1.7.5 リリース。
+	* configure.in: 1.7.5 にアップデート。
 
 2004-10-10  mami  <mami@users.sourceforge.net>
 
-	* NEWS: $B99?7!#(B
+	* NEWS: 更新。
 
 2004-10-09  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-expand-file-name): expand $B$7$?7k2L$,(B
-	navi2ch-directory $B$N30$N$H$-$O%(%i!<$K!#(B
-	/../ $B$J$I$r4^$`(B URL $BBP:v!#(B
+	* navi2ch-util.el (navi2ch-expand-file-name): expand した結果が
+	navi2ch-directory の外のときはエラーに。
+	/../ などを含む URL 対策。
 
-	* navi2ch.el (navi2ch-2ch-url-p): $B%[%9%HL>$,$J$$$H$-$O(B nil $B$K!#(B
-	http:///$B!A(B $B$J$I$N(B URL $BBP:v!#(B
+	* navi2ch.el (navi2ch-2ch-url-p): ホスト名がないときは nil に。
+	http:///〜 などの URL 対策。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/555
 
 2004-10-08  mami  <mami@users.sourceforge.net>
 
-	* NEWS: $B99?7!#(B
+	* NEWS: 更新。
 
 2004-10-06  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-host-list): $B?7JQ?t!#(B
-	(navi2ch-js-p): $B>e5-JQ?t$r;H$&$h$&$K!#(B
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-host-list): 新変数。
+	(navi2ch-js-p): 上記変数を使うように。
 
-	* navi2ch-history.el (navi2ch-history-cut-mark-article): $B?74X?t!#(B
-	(navi2ch-history-mode-map): $B>e5-4X?t$r%P%$%s%I!#(B
+	* navi2ch-history.el (navi2ch-history-cut-mark-article): 新関数。
+	(navi2ch-history-mode-map): 上記関数をバインド。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/550
 
-	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): $B?74X(B
-	$B?t!#(B
-	(navi2ch-bookmark-mode-map): $B>e5-4X?t$r%P%$%s%I!#(B
+	* navi2ch-bookmark.el (navi2ch-bookmark-delete-mark-article): 新関
+	数。
+	(navi2ch-bookmark-mode-map): 上記関数をバインド。
 
 2004-09-28  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p):
-	http://jbbs.livedoor.jp/ $B$KBP1~!#(B
+	http://jbbs.livedoor.jp/ に対応。
 	http://jbbs.livedoor.jp/bbs/read.cgi/computer/351/1040452916/181
 
-	* navi2ch-history.el (navi2ch-history-mode-map): $B%-!<%P%$%s%IJQ99!#(B
+	* navi2ch-history.el (navi2ch-history-mode-map): キーバインド変更。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/506-511n
 
 2004-09-12  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-decode-coding-region-linewise): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-decode-coding-region-linewise): 新関数。
 
-	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): XEmacs $B$G$O(B
-	$B>e5-4X?t$r;H$&$h$&$K!#(B
+	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): XEmacs では
+	上記関数を使うように。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/461-463n
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/487
 
 2004-08-26  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-link-regexp-alist):
-	amazon.co.jp $B$X$N(B URL $B$N:G8e$K(B / $B$r4^$a$k$h$&$K!#(B
+	amazon.co.jp への URL の最後に / を含めるように。
 
 2004-08-25  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-parse-message): JBBS@$B$7$?$i(B
-	$B$P$N%-%c%C%W$d%H%j%C%W$b%U%)%s%HJQ99$9$k$h$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-parse-message): JBBS@したら
+	ばのキャップやトリップもフォント変更するように。
 
 2004-08-19  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-goto-number-or-board):
-	$B%G%U%)%k%HCM$bF~NOCM$b$J$+$C$?>l9g$O%a%C%;!<%8$r=P$5$J$$$h$&$K!#(B
-	$BB8:_$7$J$$HD$,F~NO$5$l$?$H$-$N%a%C%;!<%8$rJQ99!#(B
+	デフォルト値も入力値もなかった場合はメッセージを出さないように。
+	存在しない板が入力されたときのメッセージを変更。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/410-414n
 
 2004-08-18  mami  <mami@users.sourceforge.net>
 
-	* configure.in: 1.7.4-DEV $B$K%"%C%W%G!<%H!#(B
+	* configure.in: 1.7.4-DEV にアップデート。
 
 2004-08-18  mami  <mami@users.sourceforge.net>
 
-	* navi2ch: 1.7.4 $B%j%j!<%9!#(B
-	* configure.in: 1.7.4 $B$K%"%C%W%G!<%H!#(B
+	* navi2ch: 1.7.4 リリース。
+	* configure.in: 1.7.4 にアップデート。
 
 2004-08-08  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-vars.el (navi2ch-list-invalid-host-regexp): $B?7JQ?t(B
+	* navi2ch-vars.el (navi2ch-list-invalid-host-regexp): 新変数
 
-	* navi2ch-list.el (navi2ch-list-valid-board): $B>e5-JQ?t$r;HMQ!#(B
+	* navi2ch-list.el (navi2ch-list-valid-board): 上記変数を使用。
 
 2004-08-06  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): h?t?tps?
-	$B0J30$N>l9g!"%j%s%/$,E=$i$l$J$$$N$r=$@5!#(B
+	以外の場合、リンクが貼られないのを修正。
 	(navi2ch-article-disable-display-link-commands):
-	navi2ch-article-select-current-link $B$rDI2C!#(B
+	navi2ch-article-select-current-link を追加。
 
 	* navi2ch-multibbs.el
-	(navi2ch-multibbs-send-message-retry-confirm-function): typo $B=$@5!#(B
-	(navi2ch-multibbs-send-message-retry-confirm): $B?74X?t!#(B
-	(navi2ch-multibbs-send-message): $B>e5-4X?t$r;HMQ!#(B
+	(navi2ch-multibbs-send-message-retry-confirm-function): typo 修正。
+	(navi2ch-multibbs-send-message-retry-confirm): 新関数。
+	(navi2ch-multibbs-send-message): 上記関数を使用。
 
-	* navi2ch-net.el (navi2ch-net-get-content): Connection $B%X%C%@$,(B
-	"close" $B$+$r8!::!#(B
-	(navi2ch-net-update-file-diff): last $B$+$i(B substring $B$r<h$k$N$O(B
-	cont $B$NJ}$,C;$$>l9g$N$_$K!#(B
+	* navi2ch-net.el (navi2ch-net-get-content): Connection ヘッダが
+	"close" かを検査。
+	(navi2ch-net-update-file-diff): last から substring を取るのは
+	cont の方が短い場合のみに。
 
-	* navi2ch-util.el (navi2ch-add-days-to-time): $B2F;~4V$G$bF0$/$h$&$K!#(B
+	* navi2ch-util.el (navi2ch-add-days-to-time): 夏時間でも動くように。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): ASIN $B$O(B
-	[0-9A-Z]$B!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): ASIN は
+	[0-9A-Z]。
 
-	* navi2ch-vars.el (navi2ch-article-url-regexp): "(" ")" $B$r(B URL $B$N(B
-	$B0lIt$H8+$J$5$J$$$h$&$K!#(B
-	(navi2ch-article-link-regexp-alist): $BF1>e!#(B
+	* navi2ch-vars.el (navi2ch-article-url-regexp): "(" ")" を URL の
+	一部と見なさないように。
+	(navi2ch-article-link-regexp-alist): 同上。
 
 2004-08-05  mami  <mami@users.sourceforge.net>
 
-	* NEWS: $B99?7!#(B
+	* NEWS: 更新。
 
 2004-08-04  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
-	[(shift iso-lefttab)] $B$K(B navi2ch-article-previous-link $B$r%P%$%s%I!#(B
+	[(shift iso-lefttab)] に navi2ch-article-previous-link をバインド。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/325
 
 2004-08-03  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-select-current-link-number):
-	navi2ch-article-select-current-link-number-style $B$,(B 'jump $B$G(B
-	navi2ch-article-redraw-when-goto-number $B$,(B nil $B$N>l9g!"%j%s%/@h%l(B
-	$B%9$,I=<($5$l$F$J$$$H$-$K(B popup $B$;$:I=<(HO0O$r9-$2$k$h$&$K!#(B
+	navi2ch-article-select-current-link-number-style が 'jump で
+	navi2ch-article-redraw-when-goto-number が nil の場合、リンク先レ
+	スが表示されてないときに popup せず表示範囲を広げるように。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/154
 
 2004-07-23  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-article.el
-	(navi2ch-article-get-article-length): $B?74X?t!#(B
-	(navi2ch-article-str-to-num): $B>e5-4X?t$r;H$C$F%l%9?t$rF@$k$h$&$K!#(B
-	popup $B$+$i(B popup $B$9$k$H$-%l%9?t$,>/$J$/$J$C$F$7$^$&%P%0$N=$@5!#(B
+	(navi2ch-article-get-article-length): 新関数。
+	(navi2ch-article-str-to-num): 上記関数を使ってレス数を得るように。
+	popup から popup するときレス数が少なくなってしまうバグの修正。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/155
 
 2004-07-16  mami  <mami@users.sourceforge.net>
 
-	board $B7O%b!<%I$G!"%9%l$N$J$$:G2<9T$G$N(B U $B$N5sF0$r=$@5!#(B
+	board 系モードで、スレのない最下行での U の挙動を修正。
 
-	* navi2ch-board-misc.el (navi2ch-bm-show-url-subr): a $B$H(B l $B$G(B
-	article $B$,B8:_$7$J$$9T$N$H$-$O(B nil $B$rJV$9$h$&$K!#(B
-	(navi2ch-bm-show-url): $B>e5-$G(B nil $B$,JV$C$F$-$?$H$-$O%a%C%;!<%8$r=P(B
-	$B$7$F=*N;$9$k$h$&$K!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-show-url-subr): a と l で
+	article が存在しない行のときは nil を返すように。
+	(navi2ch-bm-show-url): 上記で nil が返ってきたときはメッセージを出
+	して終了するように。
 
-	* navi2ch-article.el (navi2ch-article-copy-title): a $B$H(B A $B$G(B
-	article $B$,B8:_$7$J$$9T$N$H$-$O%a%C%;!<%8$r=P$7$F=*N;$9$k$h$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-copy-title): a と A で
+	article が存在しない行のときはメッセージを出して終了するように。
 
 2004-07-13  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el (navi2ch-js-p):
-	http://jbbs.livedoor.com/ $B$KBP1~!#(B
+	http://jbbs.livedoor.com/ に対応。
 	http://pc5.2ch.net/test/read.cgi/unix/1085940686/259
 
 2004-05-30  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-delete-bookmark):
-	save-excursion $B$r(B save-current-buffer $B$KJQ99!#(B
-	navi2ch-list-delete-global-bookmark $B$7$?$H$-$K%+!<%=%k0LCV$,0\F0$7(B
-	$B$J$$$h$&$K!#(B
+	save-excursion を save-current-buffer に変更。
+	navi2ch-list-delete-global-bookmark したときにカーソル位置が移動し
+	ないように。
 
 2004-05-29  miz  <miz@users.sourceforge.net>
 
-	* navi2ch-oyster.el: $B!|%5!<%P0\E>BP1~(B
+	* navi2ch-oyster.el: ●サーバ移転対応
 
 2004-05-09  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* README: UNIX $BHD$N(B URL $B$r99?7!#(B
+	* README: UNIX 板の URL を更新。
 
 2004-05-05  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* configure.in: 1.7.3-DEV $B$K%"%C%W%G!<%H!#(B
+	* configure.in: 1.7.3-DEV にアップデート。
 
 2004-05-05  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch: 1.7.3 $B%j%j!<%9!#(B
-	* configure.in: 1.7.3 $B$K%"%C%W%G!<%H!#(B
+	* navi2ch: 1.7.3 リリース。
+	* configure.in: 1.7.3 にアップデート。
 
 	* navi2ch-util.el (navi2ch-set-mode-line-identification):
-	navi2ch-mode-line-identification $B$rCM$G$O$J$/%7%s%\%k$H$7$F(B
-	mode-line-buffer-identification $B$K@_Dj!#(B
+	navi2ch-mode-line-identification を値ではなくシンボルとして
+	mode-line-buffer-identification に設定。
 	http://pc3.2ch.net/test/read.cgi/unix/1075905430/813
 
 	* navi2ch-multibbs.el
-	(navi2ch-multibbs-send-message-retry-comfirm-function): $B?7JQ?t!#(B
-	(navi2ch-multibbs-send-message): $B>e5-JQ?t$r;HMQ!#(B
+	(navi2ch-multibbs-send-message-retry-comfirm-function): 新変数。
+	(navi2ch-multibbs-send-message): 上記変数を使用。
 
 2004-05-02  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* NEWS: $B99?7!#(B
+	* NEWS: 更新。
 
 	* *.el: (defvar *-ident ...) -> (defconst *-ident ...)
 
-	* $B3F<o%U%!%$%k(B: Copyright $B99?7!#(B
+	* 各種ファイル: Copyright 更新。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): $B%P%0;}$A$N(B
-	regexp-opt-depth() $B$N>l9g$O(B nil $B$K!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): バグ持ちの
+	regexp-opt-depth() の場合は nil に。
 
-	* navi2ch-net.el (navi2ch-net-update-file-diff-size): $B?7JQ?t!#(B
-	(navi2ch-net-update-file-diff): 1 $B%P%$%H$+$D(B \n $B8GDj$G$O$J$/!">e5-(B
-	$BJQ?t$N%5%$%:$K=>$$85$N%U%!%$%k$K%*!<%P!<%i%C%W$5$;$F<hF@!#(B
-	$B$"$\!<$s8e$K$?$^$?$^A02s<hF@$N=*C<0LCV$,(B "\n" $B$K$J$C$?$N$G!"@:EY$r(B
-	$B>e$2$F$_$?!#(B
+	* navi2ch-net.el (navi2ch-net-update-file-diff-size): 新変数。
+	(navi2ch-net-update-file-diff): 1 バイトかつ \n 固定ではなく、上記
+	変数のサイズに従い元のファイルにオーバーラップさせて取得。
+	あぼーん後にたまたま前回取得の終端位置が "\n" になったので、精度を
+	上げてみた。
 
 	* navi2ch-article.el (navi2ch-article-set-link-property): literal
-	$B$r=i4|2=$9$k$h$&$K!#(B
-	(navi2ch-article-view-article): $B%(%i!<$N8e;OKv$r$9$k!#(B
+	を初期化するように。
+	(navi2ch-article-view-article): エラーの後始末をする。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): URL $B$NF,$N(B
-	ime.nu $B$r:o=|!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): URL の頭の
+	ime.nu を削除。
 
 2004-04-30  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-link-regexp-alist):
-	amazon.co.jp $B$X$N(B URL $B$r@55,2=!#(B
+	amazon.co.jp への URL を正規化。
 
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-face.el (navi2ch-article-header-fusianasan-face):
-	$B?7(B face$B!#(B
+	新 face。
 
-	* navi2ch-article.el (navi2ch-article-parse-message): $B$U$7$"$J$5$s(B
-	$B$i$7$-ItJ,$K0u$rIU$1$F$*$/!#(B
-	(navi2ch-article-default-header-format-function): $B0u$NIU$$$?ItJ,$K(B
-	navi2ch-article-header-fusianasan-face $B$rIU$1$k!#(B
+	* navi2ch-article.el (navi2ch-article-parse-message): ふしあなさん
+	らしき部分に印を付けておく。
+	(navi2ch-article-default-header-format-function): 印の付いた部分に
+	navi2ch-article-header-fusianasan-face を付ける。
 
-	* Makefile.am ($(srcdir)/navi2ch-version.el): maintainer mode $B$,M-(B
-	$B8z$J;~$N$_99?7!#(B
-	($(srcdir)/bcomp.el): $BF1>e!#(B
+	* Makefile.am ($(srcdir)/navi2ch-version.el): maintainer mode が有
+	効な時のみ更新。
+	($(srcdir)/bcomp.el): 同上。
 
-	* navi2ch.el (navi2ch-update): pgp $BEy$,MxMQ$G$-$k>l9g$O8!>Z$9$k!#(B
+	* navi2ch.el (navi2ch-update): pgp 等が利用できる場合は検証する。
 
-	* navi2ch-util.el (navi2ch-verify-signature-file): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-verify-signature-file): 新関数。
 
-	* navi2ch-vars.el (navi2ch-pgp-verify-command-line): $B?7JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-pgp-verify-command-line): 新変数。
 
-	* navi2ch-net.el (navi2ch-net-download-file): time $B$KJ8;zNs$@$1$G(B
-	$B$O$J$/(B current-time() $B7A<0$b5v$9!#(B
-	(navi2ch-net-update-file): time $B$,(B 'file $B$J$i99?7$9$k%U%!%$%k$N99(B
-	$B?7F|;~$rMQ$$$k!#(B
-	(navi2ch-net-download-logo): SETTING.TXT $B$bJ]B8$7$F$*$/!#(B
+	* navi2ch-net.el (navi2ch-net-download-file): time に文字列だけで
+	はなく current-time() 形式も許す。
+	(navi2ch-net-update-file): time が 'file なら更新するファイルの更
+	新日時を用いる。
+	(navi2ch-net-download-logo): SETTING.TXT も保存しておく。
 
-	* navi2ch-util.el (navi2ch-coding-system): $B2DG=$G$"$l$P(B cp932 $B$r;H(B
-	$BMQ!#(B
-	* navi2ch-futaba.el (navi2ch-futaba-variable-alist): 'shift_jis $B$G(B
-	$B$O$J$/(B navi2ch-coding-system $B$r;HMQ!#(B
+	* navi2ch-util.el (navi2ch-coding-system): 可能であれば cp932 を使
+	用。
+	* navi2ch-futaba.el (navi2ch-futaba-variable-alist): 'shift_jis で
+	はなく navi2ch-coding-system を使用。
 
-	* navi2ch-jbbs-net.el (navi2ch-jbbs-variable-alist): $BF1>e!#(B
+	* navi2ch-jbbs-net.el (navi2ch-jbbs-variable-alist): 同上。
 
-	* navi2ch-localfile.el (navi2ch-localfile-variable-alist): $BF1>e!#(B
-	(navi2ch-localfile-coding-system): $BF1>e!#(B
+	* navi2ch-localfile.el (navi2ch-localfile-variable-alist): 同上。
+	(navi2ch-localfile-coding-system): 同上。
 
-	* navi2ch-machibbs.el (navi2ch-machibbs-variable-alist): $BF1>e!#(B
+	* navi2ch-machibbs.el (navi2ch-machibbs-variable-alist): 同上。
 
-	* navi2ch-oyster.el (navi2ch-oyster-variable-alist): $BF1>e!#(B
+	* navi2ch-oyster.el (navi2ch-oyster-variable-alist): 同上。
 
-	* navi2ch-jbbs-shitaraba.el (navi2ch-js-coding-system): $B?7JQ?t!#(B
-	$B2DG=$G$"$l$P(B eucjp-ms $B$r;HMQ!#(B
-	(navi2ch-js-variable-alist): 'euc-japan $B$G$O$J$/>e5-JQ?t$r;HMQ!#(B
-	(navi2ch-js-send-message): $BF1>e!#(B
-	(navi2ch-js-send-message-error-string): $BF1>e!#(B
+	* navi2ch-jbbs-shitaraba.el (navi2ch-js-coding-system): 新変数。
+	可能であれば eucjp-ms を使用。
+	(navi2ch-js-variable-alist): 'euc-japan ではなく上記変数を使用。
+	(navi2ch-js-send-message): 同上。
+	(navi2ch-js-send-message-error-string): 同上。
 
 	* navi2ch-oyster.el (navi2ch-oyster-update-file-with-offlaw):
-	navi2ch-net-get-content() $B$N7k2L$r(B unibyte $B$N$^$^07$&$h$&$K!#(B
+	navi2ch-net-get-content() の結果を unibyte のまま扱うように。
 
-	* navi2ch-net.el (navi2ch-net-get-content): $B7k2L$r(B unibyte $B$N$^$^(B
-	$BJV$9$h$&$K!#(B
-	(navi2ch-net-update-file): navi2ch-net-get-content() $B$N7k2L$r(B
-	unibyte $B$N$^$^07$&$h$&$K!#(B
-	(navi2ch-net-update-file-with-readcgi): $BF1>e!#(B
-	(navi2ch-net-update-file-diff): $BF1>e!#(B
-	$B:9J,99?7$H4X?t$G$NJQ49$ON>N)$7$J$$$N$G!"(Bfunc $B0z?t$r:o=|!#(B
+	* navi2ch-net.el (navi2ch-net-get-content): 結果を unibyte のまま
+	返すように。
+	(navi2ch-net-update-file): navi2ch-net-get-content() の結果を
+	unibyte のまま扱うように。
+	(navi2ch-net-update-file-with-readcgi): 同上。
+	(navi2ch-net-update-file-diff): 同上。
+	差分更新と関数での変換は両立しないので、func 引数を削除。
 
-	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): $BJQ4985%P%C%U%!(B
-	$B$r(B unibyte $B$H$7$F07$$!"(B{decode,encode}-coding-region() $B$K1~$8$FE,59(B
-	navi2ch-set-buffer-multibyte() $B$r8F$S=P$9$h$&$K!#(B
+	* navi2ch-multibbs.el (navi2ch-multibbs-defcallback): 変換元バッファ
+	を unibyte として扱い、{decode,encode}-coding-region() に応じて適宜
+	navi2ch-set-buffer-multibyte() を呼び出すように。
 
 2004-04-29  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-caller-p): $B?74X?t!#(B
-	(navi2ch-compare-version-string): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-caller-p): 新関数。
+	(navi2ch-compare-version-string): 新関数。
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): $BCV49@h$,(B
-	$B4X?t$@$C$?>l9g$O$=$NJV5QCM$N(B \ $B$rFCJL07$$$7$J$$!#(B
+	* navi2ch-article.el (navi2ch-article-set-link-property): 置換先が
+	関数だった場合はその返却値の \ を特別扱いしない。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): docstring$B!"(B
-	custom $B$N@_Dj$r=$@5!#(B
-	(navi2ch-article-url-regexp): RFC 2396 $B$K=`5r!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): docstring、
+	custom の設定を修正。
+	(navi2ch-article-url-regexp): RFC 2396 に準拠。
 
 2004-04-25  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el
 	(navi2ch-article-disable-display-link-commands):
-	navi2ch-article-show-url-at-point $B"*(B navi2ch-show-url-at-point
+	navi2ch-article-show-url-at-point → navi2ch-show-url-at-point
 
-	* navi2ch-util.el (navi2ch-disabled-key): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-disabled-key): 新関数。
 
-	* navi2ch-vars.el (navi2ch-global-map): "C-xC-e" $B$K(B ignore $B$G$O$J(B
-	$B$/!">e5-4X?t$r%P%$%s%I!#(B
+	* navi2ch-vars.el (navi2ch-global-map): "C-xC-e" に ignore ではな
+	く、上記関数をバインド。
 
-	* navi2ch.el (navi2ch-url-at-point): $B?74X?t!#(B
-	(navi2ch-show-url-at-point): $B?74X?t!#(B
+	* navi2ch.el (navi2ch-url-at-point): 新関数。
+	(navi2ch-show-url-at-point): 新関数。
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): "u"
-	$B$r(B navi2ch-show-url-at-point $B$KJQ99!#(B
-	(navi2ch-popup-article-url-at-point): $B?74X?t!#(B
-	(navi2ch-popup-article-show-url-at-point): $B:o=|!#(B
+	を navi2ch-show-url-at-point に変更。
+	(navi2ch-popup-article-url-at-point): 新関数。
+	(navi2ch-popup-article-show-url-at-point): 削除。
 
-	* navi2ch-list.el (navi2ch-list-url-at-point): $B?74X?t!#(B
+	* navi2ch-list.el (navi2ch-list-url-at-point): 新関数。
 
-	* navi2ch-board-misc.el (navi2ch-bm-url-at-point): $B?74X?t!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-url-at-point): 新関数。
 
-	* navi2ch-article.el (navi2ch-article-cleanup-message): $B:o$k9TF,$N(B
-	$B6uGr$O0l$D$@$1$K!#(B
-	(navi2ch-article-mode-map): u $B$r(B navi2ch-show-url-at-point $B$KJQ99!#(B
+	* navi2ch-article.el (navi2ch-article-cleanup-message): 削る行頭の
+	空白は一つだけに。
+	(navi2ch-article-mode-map): u を navi2ch-show-url-at-point に変更。
 	(navi2ch-article-url-at-point): docfix
-	(navi2ch-article-show-url-at-point): $B:o=|!#(B
+	(navi2ch-article-show-url-at-point): 削除。
 
 	* navi2ch-net.el (navi2ch-open-network-stream-via-command):
-	navi2ch-open-network-stream-command $B$N<+M3EY$r>e$2$?!#(B
+	navi2ch-open-network-stream-command の自由度を上げた。
 
-	* navi2ch-vars.el (navi2ch-open-network-stream-command): $B>e5-JQ99(B
-	$B$K$D$$$F(B docstring $B$*$h$S(B custom type $B$rJQ99!#(B
+	* navi2ch-vars.el (navi2ch-open-network-stream-command): 上記変更
+	について docstring および custom type を変更。
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): cdr $B$,4X(B
-	$B?t$@$C$?>l9g$O$=$NJV5QCM$rMxMQ$9$k$h$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-set-link-property): cdr が関
+	数だった場合はその返却値を利用するように。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): $B>e5-JQ99$K(B
-	$B$D$$$F(B docstring $BJQ99!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): 上記変更に
+	ついて docstring 変更。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/740>
 
 2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
 
-	$B%M%C%H%o!<%/@\B3$K30It%3%^%s%I$d<+A04X?t$r;H$($k$h$&$K$7$F$_$?!#(B
+	ネットワーク接続に外部コマンドや自前関数を使えるようにしてみた。
 
-	* navi2ch-message.el (navi2ch-message-send-message): $B%l%9$r%]%9%H(B
-	$B$9$kA08e$G@\B3$rJD$8$k!#(B
+	* navi2ch-message.el (navi2ch-message-send-message): レスをポスト
+	する前後で接続を閉じる。
 
 	* navi2ch-net.el (navi2ch-open-network-stream-with-retry):
-	navi2ch-open-network-stream $B$+$iL>>NJQ99!#(B
-	(navi2ch-open-network-stream-via-command): $B?74X?t!#(B
-	(navi2ch-net-send-request): process-status $B$,(B run $B$N;~$b<B9T!#(B
-	(navi2ch-net-send-request): process-status $B$,(B run $B$N;~$b=|30!#(B
-	navi2ch-open-network-stream-function $B$r;HMQ!#(B
-	(navi2ch-net-get-status): process-status $B$,(B run $B$N;~$b%k!<%W!#(B
-	(navi2ch-net-get-header): $BF1>e!#(B
-	(navi2ch-net-get-chunk): $BF1>e!#(B
-	(navi2ch-net-get-content): $BF1>e!#(B
+	navi2ch-open-network-stream から名称変更。
+	(navi2ch-open-network-stream-via-command): 新関数。
+	(navi2ch-net-send-request): process-status が run の時も実行。
+	(navi2ch-net-send-request): process-status が run の時も除外。
+	navi2ch-open-network-stream-function を使用。
+	(navi2ch-net-get-status): process-status が run の時もループ。
+	(navi2ch-net-get-header): 同上。
+	(navi2ch-net-get-chunk): 同上。
+	(navi2ch-net-get-content): 同上。
 
-	* navi2ch-vars.el (navi2ch-open-network-stream-function): $B?7JQ?t!#(B
-	(navi2ch-open-network-stream-command): $B?7JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-open-network-stream-function): 新変数。
+	(navi2ch-open-network-stream-command): 新変数。
 
 2004-04-24  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-net.el (navi2ch-open-network-stream): $B?74X?t!#(B
-	EINPROGRESS$B!"(BEALREADY $B$N>l9g$O:F;n9T$9$k!#(B
-	(navi2ch-net-send-request): $B>e5-4X?t$r;HMQ!#(B
+	* navi2ch-net.el (navi2ch-open-network-stream): 新関数。
+	EINPROGRESS、EALREADY の場合は再試行する。
+	(navi2ch-net-send-request): 上記関数を使用。
 
 2004-04-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el
 	(navi2ch-article-disable-display-link-commands): eval-expression
-	$B$rDI2C!#(B
+	を追加。
 
-	* navi2ch-board-misc.el (navi2ch-bm-select-article-or-scroll): $B$3(B
-	$B$3$G$O%(%i!<$rL5;k$9$Y$-$G$O$J$$!#(B
-	(navi2ch-bm-remove-article-subr): file-error $B$N$_$rL5;k!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-select-article-or-scroll): こ
+	こではエラーを無視すべきではない。
+	(navi2ch-bm-remove-article-subr): file-error のみを無視。
 
 	* navi2ch-board.el (navi2ch-board-expire-date-p): current-time()
-	$B7A<0$GHf3S!#(B
-	(navi2ch-board-expire): $BF1>e!#(B
+	形式で比較。
+	(navi2ch-board-expire): 同上。
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist): <?...>
-	$B$d(B <!...> $B$b6uJ8;zNs$K!#(B
-	(navi2ch-make-sortable-date): $B:o=|!#(B
-	(navi2ch-make-datevec): $B:o=|!#(B
-	(navi2ch-get-offset-datevec): $B:o=|!#(B
-	(navi2ch-compare-number-list): $B?74X?t!#(B
-	(navi2ch-lists-to-list-of-list): $B?74X?t!#(B
-	(navi2ch-add-number-lists): $B?74X?t!#(B
-	(navi2ch-compare-times): navi2ch-compare-number-list() $B$r;HMQ!#(B
-	(navi2ch-add-days-to-time): $B?74X?t!#(B
+	や <!...> も空文字列に。
+	(navi2ch-make-sortable-date): 削除。
+	(navi2ch-make-datevec): 削除。
+	(navi2ch-get-offset-datevec): 削除。
+	(navi2ch-compare-number-list): 新関数。
+	(navi2ch-lists-to-list-of-list): 新関数。
+	(navi2ch-add-number-lists): 新関数。
+	(navi2ch-compare-times): navi2ch-compare-number-list() を使用。
+	(navi2ch-add-days-to-time): 新関数。
 
 2004-04-21  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): cookie $BMW5a(B
-	$B$N%a%C%;!<%8$rI=<($7!"F10U$r5a$a$k!#(B($B7k9=IT2:$J;v=q$$$F$"$j$^$9(B)
-	(navi2ch-2ch-send-message): cookie $B$N(B expire $B$r3NG'!#(B
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message): cookie 要求
+	のメッセージを表示し、同意を求める。(結構不穏な事書いてあります)
+	(navi2ch-2ch-send-message): cookie の expire を確認。
 
-	* navi2ch-oyster.el (navi2ch-oyster-send-message): $BF1>e!#(B
+	* navi2ch-oyster.el (navi2ch-oyster-send-message): 同上。
 
-	* navi2ch-net.el (navi2ch-net-send-message-get-spid): cookie $B$N(B
-	expire $BF|;~$bJV$9!#(B
+	* navi2ch-net.el (navi2ch-net-send-message-get-spid): cookie の
+	expire 日時も返す。
 
-	* navi2ch.el (navi2ch): navi2ch-auto-update $B$,(B nil $B$N;~!"(Block $B$,9T(B
-	$B$o$l$J$+$C$?$N$r=$@5!#(B
+	* navi2ch.el (navi2ch): navi2ch-auto-update が nil の時、lock が行
+	われなかったのを修正。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/667>
 
 2004-04-17  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-truncate-string-to-width): $B?74X?t!#(B
-	XEmacs $B$N(B truncate-string-to-width $B$,2u$l$F$$$k$N$G!#(B
+	* navi2ch-util.el (navi2ch-truncate-string-to-width): 新関数。
+	XEmacs の truncate-string-to-width が壊れているので。
 
-	* navi2ch-message.el (navi2ch-message-insert-aa-list): $B>e5-4X?t$r(B
-	$B;HMQ!#(B
+	* navi2ch-message.el (navi2ch-message-insert-aa-list): 上記関数を
+	使用。
 
-	* README: UNIX $BHD$N(B URL $B$r99?7!#(B
+	* README: UNIX 板の URL を更新。
 
 2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-popup-dialog): "" $B$@$H%;%Q%l!<(B
-	$B%?$K$J$C$F$7$^$&$=$&$J$N$G!#(B
+	* navi2ch-article.el (navi2ch-article-popup-dialog): "" だとセパレー
+	タになってしまうそうなので。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/465>
 
 	* navi2ch-splash.el (navi2ch-splash-copyright-notice): Navi2ch
-	Project $B0J30$N(B Copyright holder $B$K$D$$$F$N@bL@J8$rA^F~!#(B
-	(navi2ch-splash-insert-text): $B=D%;%s%?%j%s%0$N7W;;J}K!$rJQ99!#(B
+	Project 以外の Copyright holder についての説明文を挿入。
+	(navi2ch-splash-insert-text): 縦センタリングの計算方法を変更。
 
-	* navi2ch-vars.el (navi2ch-global-view-map): delete $B7O$N%-!<$r%-!<(B
-	$B%\!<%I%^%/%m$H$7$FEPO?$9$k$N$r$d$a$k!#(B
+	* navi2ch-vars.el (navi2ch-global-view-map): delete 系のキーをキー
+	ボードマクロとして登録するのをやめる。
 
-	* navi2ch-util.el (navi2ch-delete-keys): $B?7JQ?t!#(B
-	(navi2ch-define-delete-keys): $B?74X?t!#(B
-	(navi2ch-read-char): $BF~NO$5$l$?%-!<$rI=<($G$-$k$+8!::!#(B
+	* navi2ch-util.el (navi2ch-delete-keys): 新変数。
+	(navi2ch-define-delete-keys): 新関数。
+	(navi2ch-read-char): 入力されたキーを表示できるか検査。
 
-	* navi2ch-article.el (navi2ch-article-mode-map): $B>e5-4X?t$r;HMQ!#(B
+	* navi2ch-article.el (navi2ch-article-mode-map): 上記関数を使用。
 
-	* navi2ch-board-misc.el (navi2ch-bm-mode-map): $BF1>e!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-mode-map): 同上。
 
-	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): $BF1>e!#(B
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): 同上。
 
-	* navi2ch-list.el (navi2ch-list-mode-map): $BF1>e!#(B
+	* navi2ch-list.el (navi2ch-list-mode-map): 同上。
 
 2004-04-14  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map):
-	`navi2ch-article-show-url-at-point' $B$r%P%$%s%I!#(B
-	(navi2ch-article-get-number-list): $B?74X?t!#(B
-	(navi2ch-article-select-current-link): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-article-get-link-text-subr): $BF1>e!#(B
-	(navi2ch-article-number-list-to-url): $B?74X?t!#(B
-	(navi2ch-article-select-current-link-number): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-article-disable-display-link-commands): $B?7JQ?t!#(B
-	(navi2ch-article-display-link-minibuffer): $B>e5-JQ?t$K4^$^$l$k%3%^(B
-	$B%s%I$N8e$O%_%K%P%C%U%!$r99?7$7$J$$$h$&$K!#(B
-	(navi2ch-article-url-at-point): $B?74X?t!#(B
-	(navi2ch-article-show-url-at-point): $B?74X?t!#(B
+	`navi2ch-article-show-url-at-point' をバインド。
+	(navi2ch-article-get-number-list): 新関数。
+	(navi2ch-article-select-current-link): 上記関数を使用。
+	(navi2ch-article-get-link-text-subr): 同上。
+	(navi2ch-article-number-list-to-url): 新関数。
+	(navi2ch-article-select-current-link-number): 上記関数を使用。
+	(navi2ch-article-disable-display-link-commands): 新変数。
+	(navi2ch-article-display-link-minibuffer): 上記変数に含まれるコマ
+	ンドの後はミニバッファを更新しないように。
+	(navi2ch-article-url-at-point): 新関数。
+	(navi2ch-article-show-url-at-point): 新関数。
 
 	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map):
-	`navi2ch-popup-article-show-url-at-point' $B$r%P%$%s%I!#(B
-	(navi2ch-popup-article-show-url): $B?74X?t!#(B
+	`navi2ch-popup-article-show-url-at-point' をバインド。
+	(navi2ch-popup-article-show-url): 新関数。
 
 2004-04-11  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-set-keymap-default-binding): GNU Emacs
-	$B$G$N%G%U%)%k%HF0:n;XDj$r(B (define-key map [t] command) $B$K!#(B
+	でのデフォルト動作指定を (define-key map [t] command) に。
 
 	* navi2ch-article.el (navi2ch-article-message-filter-by-message):
-	append $BKvHx$N(B nil $B$OITMW!#(B
+	append 末尾の nil は不要。
 
 2004-04-09  Nanashi San  <nanashi@users.sourceforge.net>
 
-	$B%^%/%m$N;HMQ$rL$I>2A$N0z?t$,I,MW$J>l9g$N$_$K@)8B!#(B
+	マクロの使用を未評価の引数が必要な場合のみに制限。
 
-	* navi2ch-util.el (navi2ch-mouse-key): $B?74X?t!#(B
-	(navi2ch-define-mouse-key): $B>e5-4X?t$r;H$&$h$&$K!#(B
-	$B%^%/%m"*4X?t!#(B
-	(navi2ch-set-buffer-multibyte): $B%^%/%m"*%(%$%j%"%9(B
-	(navi2ch-string-as-unibyte): $BF1>e(B
-	(navi2ch-string-as-multibyte): $BF1>e(B
-	(navi2ch-make-sortable-date): $B%^%/%m"*4X?t(B
-	(navi2ch-match-string-no-properties): $B%^%/%m"*%$%s%i%$%s4X?t(B
+	* navi2ch-util.el (navi2ch-mouse-key): 新関数。
+	(navi2ch-define-mouse-key): 上記関数を使うように。
+	マクロ→関数。
+	(navi2ch-set-buffer-multibyte): マクロ→エイリアス
+	(navi2ch-string-as-unibyte): 同上
+	(navi2ch-string-as-multibyte): 同上
+	(navi2ch-make-sortable-date): マクロ→関数
+	(navi2ch-match-string-no-properties): マクロ→インライン関数
 
-	* navi2ch-mona.el (navi2ch-find-face): $B%^%/%m"*%(%$%j%"%9(B
-	(navi2ch-mona-char-height): $B%^%/%m"*4X?t(B
-	(navi2ch-set-face-parent): $BF1>e(B
+	* navi2ch-mona.el (navi2ch-find-face): マクロ→エイリアス
+	(navi2ch-mona-char-height): マクロ→関数
+	(navi2ch-set-face-parent): 同上
 
 2004-04-09  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch.el (navi2ch): condition-case $B$7$F(B signal $B$9$k$H(B
-	debug-on-* $B$,(B signal $B$NItJ,$K$J$k$N$G(B unwind-protect $B$r;HMQ!#(B
+	* navi2ch.el (navi2ch): condition-case して signal すると
+	debug-on-* が signal の部分になるので unwind-protect を使用。
 
-	* navi2ch-util.el (navi2ch-add-replace-html-tag): regexp-opt $B$N%P(B
-	$B%0$X$K:F$SBP=h!#$3$N4X?t$N<B9T;~4V$O$=$l$[$I=EMW$G$O$J$$$N$G!"$^$:(B
-	regexp-opt $B$,%(%i!<$r5/$3$9$+$I$&$+$r;n$7!"(Bregexp-opt $B$r;H$&$+(B
-	regexp-quote $B$r;H$&$+$rH=JL$9$k!#(B
+	* navi2ch-util.el (navi2ch-add-replace-html-tag): regexp-opt のバ
+	グへに再び対処。この関数の実行時間はそれほど重要ではないので、まず
+	regexp-opt がエラーを起こすかどうかを試し、regexp-opt を使うか
+	regexp-quote を使うかを判別する。
 
 2004-04-08  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-global-view-map):
-	[del] [delete] [backspace] $B$G(B "\d" $B$,F~NO$5$l$k$h$&$K!#(B
-	($B>e5-$N;R(B map): scrolldown $B7O$N%P%$%s%I$O(B "\d" $B$N$_$K!#(B
+	[del] [delete] [backspace] で "\d" が入力されるように。
+	(上記の子 map): scrolldown 系のバインドは "\d" のみに。
 
-	* navi2ch-board-misc.el (navi2ch-bm-get-state-from-article): $B?74X?t!#(B
-	(navi2ch-bm-insert-subject): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-bm-update-article): $B?74X?t!#(B
-	(navi2ch-bm-remove-article-subr): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-bm-remove-article): $BITMW$J99?7$r:o=|!#(B
+	* navi2ch-board-misc.el (navi2ch-bm-get-state-from-article): 新関数。
+	(navi2ch-bm-insert-subject): 上記関数を使用。
+	(navi2ch-bm-update-article): 新関数。
+	(navi2ch-bm-remove-article-subr): 上記関数を使用。
+	(navi2ch-bm-remove-article): 不要な更新を削除。
 
 	* navi2ch-article.el (navi2ch-article-view-article):
-	navi2ch-bm-update-article $B$r;HMQ!#(B
-	(navi2ch-article-kill-buffer-hook): $BF1>e!#(B
-	(navi2ch-article-remove-article): $BITMW$J99?7$r:o=|!#(B
+	navi2ch-bm-update-article を使用。
+	(navi2ch-article-kill-buffer-hook): 同上。
+	(navi2ch-article-remove-article): 不要な更新を削除。
 
-	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): key $B$O@0?t$J(B
-	$B$N$G(B assq $B$r;HMQ!#(B
-	(navi2ch-update-html-tag-regexp): $B?74X?t!#(B
-	(navi2ch-add-replace-html-tag-regexp): $B>e5-4X?t$r;H$&$h$&$K!#(B
-	(navi2ch-add-replace-html-tag): $BF1>e!#(B
-	regexp-opt $B$N%P%0$KM3Mh$9$k(B work around $B$r:o=|!#(B
+	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): key は整数な
+	ので assq を使用。
+	(navi2ch-update-html-tag-regexp): 新関数。
+	(navi2ch-add-replace-html-tag-regexp): 上記関数を使うように。
+	(navi2ch-add-replace-html-tag): 同上。
+	regexp-opt のバグに由来する work around を削除。
 
-	* navi2ch-net.el (navi2ch-net-ignore-errors): make-symbol $B$7$?%7%s(B
-	$B%\%k$r;HMQ!#$A$g$C$H=q$-D>$7!#(B
-	(navi2ch-net-url-unreserved-chars): $B=`5r;EMM$r(B RFC 2396 $B$K!#(B
-	(navi2ch-net-url-hexify-string): $B$A$g$C$H=q$-D>$7!#(B
-	(navi2ch-net-get-param-string): $B!V(B=$B!W$N:8JU$b%(%9%1!<%W!#(B
+	* navi2ch-net.el (navi2ch-net-ignore-errors): make-symbol したシン
+	ボルを使用。ちょっと書き直し。
+	(navi2ch-net-url-unreserved-chars): 準拠仕様を RFC 2396 に。
+	(navi2ch-net-url-hexify-string): ちょっと書き直し。
+	(navi2ch-net-get-param-string): 「=」の左辺もエスケープ。
 
 2004-04-05  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-re-search-forward-regexp-alist): $B:F%^%C(B
-	$B%A;~!"%]%$%s%H$N0\F0$r8:$i$9!#(B
-	(navi2ch-string-match-regexp-alist): $BF1>e!#(B
-	(navi2ch-replace-regexp-alist): $B4X?t$r8F$S=P$9>l9g!"%^%C%A$7$?J8;z(B
-	$BNs$r0z?t$H$7$FEO$9$h$&$K!#(B
+	* navi2ch-util.el (navi2ch-re-search-forward-regexp-alist): 再マッ
+	チ時、ポイントの移動を減らす。
+	(navi2ch-string-match-regexp-alist): 同上。
+	(navi2ch-replace-regexp-alist): 関数を呼び出す場合、マッチした文字
+	列を引数として渡すように。
 
-	* navi2ch-message.el (navi2ch-message-mode-map): C-c y $B"*(B C-c C-j
-	$B%f!<%6!<M=Ls%-!<$rHr$1$k!#(B
+	* navi2ch-message.el (navi2ch-message-mode-map): C-c y → C-c C-j
+	ユーザー予約キーを避ける。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/528>
 
 2004-04-04  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): $B%^%C%A$7(B
-	$B$?8e!">/$J$/$H$b(B 1 $BJ8;z$O?J$a$k$h$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-set-link-property): マッチし
+	た後、少なくとも 1 文字は進めるように。
 
-	* navi2ch.el (navi2ch-goto-url): $B%G%U%)%k%HCM$H$7$F!"%+!<%=%k2<$N(B
-	URL $B%W%m%Q%F%#$r;HMQ!#(B
+	* navi2ch.el (navi2ch-goto-url): デフォルト値として、カーソル下の
+	URL プロパティを使用。
 
 	* navi2ch-article.el (navi2ch-article-set-link-property):
-	regexp-alist $B$r$"$i$+$8$aFbIt7A<0$KJQ49$7$F$*$/!#(B
-	$BCV49@h$,(B nil $B$N>l9g$O2?$b$7$J$$!#(B
+	regexp-alist をあらかじめ内部形式に変換しておく。
+	置換先が nil の場合は何もしない。
 
-	* navi2ch-util.el (navi2ch-regexp-alist-to-number-alist): $B?74X?t!#(B
-	(navi2ch-match-regexp-alist-subr): $B>e5-4X?t$r;HMQ!#(B
-	(navi2ch-replace-regexp-alist): regexp-alist $B$r$"$i$+$8$aFbIt7A<0(B
-	$B$KJQ49$7$F$*$/!#(B
+	* navi2ch-util.el (navi2ch-regexp-alist-to-number-alist): 新関数。
+	(navi2ch-match-regexp-alist-subr): 上記関数を使用。
+	(navi2ch-replace-regexp-alist): regexp-alist をあらかじめ内部形式
+	に変換しておく。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): <> $B$N4V$K(B
-	$B!V(B:$B!W$r4^$^$J$$J8;zNs$O(B URL $B$H8+$J$5$J$$!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): <> の間に
+	「:」を含まない文字列は URL と見なさない。
 
 2004-04-03  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-article.el (navi2ch-article-set-link-property): $BJ#?t$N@5(B
-	$B5,I=8=$r$^$H$a$F8!:w$9$k$h$&$K!#(Bnavi2ch-article-link-regexp-alist
-	$B$r;HMQ$7$F(B URL $B$G$O$J$$J*$K$b%j%s%/$rE=$l$k$h$&$K!#(B
+	* navi2ch-article.el (navi2ch-article-set-link-property): 複数の正
+	規表現をまとめて検索するように。navi2ch-article-link-regexp-alist
+	を使用して URL ではない物にもリンクを貼れるように。
 
-	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): $B?7JQ?t!#(B
+	* navi2ch-vars.el (navi2ch-article-link-regexp-alist): 新変数。
 
-	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): $B?74X?t!#(B
-	(navi2ch-re-search-forward-regexp-alist): $B?74X?t!#(B
-	(navi2ch-string-match-regexp-alist): $B?74X?t!#(B
-	(navi2ch-replace-regexp-alist): $B?74X?t!#(B
+	* navi2ch-util.el (navi2ch-match-regexp-alist-subr): 新関数。
+	(navi2ch-re-search-forward-regexp-alist): 新関数。
+	(navi2ch-string-match-regexp-alist): 新関数。
+	(navi2ch-replace-regexp-alist): 新関数。
 
 2004-03-30  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-2ch-host-list):
-	pc.2ch.net pc2.2ch.net $BDI2C!#(B
+	pc.2ch.net pc2.2ch.net 追加。
 
 	* navi2ch-board.el (navi2ch-board-url-to-board):
-	navi2ch-list-board-name-list $B$r;H$C$F$=$l$C$]$$L>A0$rIU$1$k$h$&$K!#(B
+	navi2ch-list-board-name-list を使ってそれっぽい名前を付けるように。
 
 2004-03-28  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-net.el
-	(navi2ch-jbbs-url-regexp): $B?7JQ?t!#(B
-	(navi2ch-jbbs-get-writecgi-url): $B?74X?t!#(B
-	(navi2ch-jbbs-send-message): $B>e5-$r;H$&$h$&$K!#(B
+	(navi2ch-jbbs-url-regexp): 新変数。
+	(navi2ch-jbbs-get-writecgi-url): 新関数。
+	(navi2ch-jbbs-send-message): 上記を使うように。
 	http://pc3.2ch.net/test/read.cgi/unix/1075905430/452
 
-	(navi2ch-jbbs-func-alist): error-string $B$r:o=|!#(B
-	(navi2ch-jbbs-send-message): Cookie $B$K(B NAME $B$H(B MAIL $B$rDI2C!#(B
-	MESSAGE $B$,Fs=E$K$J$C$F$$$?$N$GJRJ}$r:o=|!#(B
+	(navi2ch-jbbs-func-alist): error-string を削除。
+	(navi2ch-jbbs-send-message): Cookie に NAME と MAIL を追加。
+	MESSAGE が二重になっていたので片方を削除。
 
 2004-03-28  mami  <mami@users.sourceforge.net>
 
-	* ChangeLog: ChangeLog.1, ChangeLog.2 $B$KJ,3d!#(B
+	* ChangeLog: ChangeLog.1, ChangeLog.2 に分割。
 
 2004-03-28  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-jbbs-shitaraba.el
-	$BF)L@$"$\!<$s$N8!=P$r2~NI!#(B
-	$B?77A<0(B URL $B$KBP1~!#(Brawmode.cgi $B$KBP1~!#(BID $B$rI=<($9$k$h$&$K!#(B
+	透明あぼーんの検出を改良。
+	新形式 URL に対応。rawmode.cgi に対応。ID を表示するように。
 	http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452916/126-140n
 
-	(navi2ch-js-get-writecgi-url): $BGQ;_!#(B
-	(navi2ch-js-get-cgi-url): $B?74X?t!#(B
-	(navi2ch-js-send-message): $B>e5-$r;H$$!"0z$-?t$rEO$9$h$&$K!#(B
+	(navi2ch-js-get-writecgi-url): 廃止。
+	(navi2ch-js-get-cgi-url): 新関数。
+	(navi2ch-js-send-message): 上記を使い、引き数を渡すように。
 	http://jbbs.shitaraba.com/bbs/read.cgi/computer/351/1040452916/129-133n
 
-	(navi2ch-js-article-to-url-subr): $B?74X?t!#?77A<0(B URL $B$KBP1~!#(B
-	(navi2ch-js-article-to-url): $B>e5-$r;H$&$h$&$K!#(B
-	(navi2ch-js-article-to-rawmode-url): $B?74X?t!#(B
+	(navi2ch-js-article-to-url-subr): 新関数。新形式 URL に対応。
+	(navi2ch-js-article-to-url): 上記を使うように。
+	(navi2ch-js-article-to-rawmode-url): 新関数。
 
-	(navi2ch-js-parse-regexp): rawmode.cgi $B$N=PNO$KBP1~!#(B
-	(navi2ch-js-article-callback): 2$BHVL\$N0z$-?t$r<hF@3+;O%l%9HV$KJQ99(B
-	$B$7!"F)L@$"$\!<$s$N8!=P$r2~NI!#(B
-	rawmode.cgi $B$N=PNO$KBP1~!#(BID $B$rI=<($9$k$h$&$K!#(B
-	(navi2ch-js-article-callback-diff): $B>e5-JQ99$K$H$b$J$$GQ;_!#(B
-	(navi2ch-js-article-update): navi2ch-js-article-to-rawmode-url $B$r(B
-	$B;H$&$h$&$K!#:9J,<hF@$N$H$-(B navi2ch-js-article-callback $B$K(B start $B$r(B
-	$B$D$1$F8F$V$h$&$K!#(B
-	(navi2ch-js-parse-subject-regexp): $BGQ;_!#(B
-	(navi2ch-js-parse-subject): $BF1>e!#(B
-	(navi2ch-js-make-article): $BF1>e!#(B
+	(navi2ch-js-parse-regexp): rawmode.cgi の出力に対応。
+	(navi2ch-js-article-callback): 2番目の引き数を取得開始レス番に変更
+	し、透明あぼーんの検出を改良。
+	rawmode.cgi の出力に対応。ID を表示するように。
+	(navi2ch-js-article-callback-diff): 上記変更にともない廃止。
+	(navi2ch-js-article-update): navi2ch-js-article-to-rawmode-url を
+	使うように。差分取得のとき navi2ch-js-article-callback に start を
+	つけて呼ぶように。
+	(navi2ch-js-parse-subject-regexp): 廃止。
+	(navi2ch-js-parse-subject): 同上。
+	(navi2ch-js-make-article): 同上。
 
 2004-03-25  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-vars.el (navi2ch-list-moved-board-alist): $B?7JQ?t!#(B
-	$B%-!<$,5l(B URL$B!"CM$,?7(B URL $B$N(B alist$B!#(B
+	* navi2ch-vars.el (navi2ch-list-moved-board-alist): 新変数。
+	キーが旧 URL、値が新 URL の alist。
 
-	* navi2ch-list.el (navi2ch-list-make-board-txt): $B>e5-JQ?t$r;HMQ$7(B
-	$B$F0\E>$7$?HD$N(B URL $B$rJQ99$G$-$k$h$&$K!#(B
+	* navi2ch-list.el (navi2ch-list-make-board-txt): 上記変数を使用し
+	て移転した板の URL を変更できるように。
 
 2004-03-24  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-splash.el (navi2ch-splash-copyright-notice):
-	$BCx:n8"I=<($HL5J]>Z>r9`$rDI2C!#(B
+	著作権表示と無保証条項を追加。
 	(navi2ch-splash-logo-ascii):
-	24 $B9T$NC<Kv$G$b>e5-$,A4$FI=<($5$l$k$h$&$K!#(B
+	24 行の端末でも上記が全て表示されるように。
 
 2004-03-23  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el (navi2ch-article-message-filter-by-message):
-	navi2ch-article-message-filter-subr() $B$N0z?t$,I{:nMQ$GJB$Y$+$($i$l(B
-	$B$k$N$G$H$j$"$($:=$@5!#(B
+	navi2ch-article-message-filter-subr() の引数が副作用で並べかえられ
+	るのでとりあえず修正。
 	<http://pc3.2ch.net/test/read.cgi/unix/1075905430/349>
 
 2004-03-21  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* configure.in: 1.7.2-DEV $B$K%"%C%W%G!<%H!#(B
+	* configure.in: 1.7.2-DEV にアップデート。
 
 2004-03-21  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch: 1.7.2 $B%j%j!<%9!#(B
-	* configure.in: 1.7.2 $B$K%"%C%W%G!<%H!#(B
+	* navi2ch: 1.7.2 リリース。
+	* configure.in: 1.7.2 にアップデート。
 
 2004-03-19  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* $B:#G/$KF~$C$F$+$i99?7$5$l$F$k%U%!%$%k(B: Copyright $B99?7(B
-	* NEWS: $B99?7(B
+	* 今年に入ってから更新されてるファイル: Copyright 更新
+	* NEWS: 更新
 
 2004-03-18  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-article.el
-	(navi2ch-article-default-message-filter-by-message-alist): $B?7JQ?t!#(B
-	(navi2ch-article-message-filter-by-message): $B>e5-JQ?t$r;H$&$h$&$K!#(B
+	(navi2ch-article-default-message-filter-by-message-alist): 新変数。
+	(navi2ch-article-message-filter-by-message): 上記変数を使うように。
 
-	* navi2ch-vars.el (navi2ch-global-map): Navi2ch $BFb$G$O(B C-xC-e $B$r(B
-	unbound$B!#(B
+	* navi2ch-vars.el (navi2ch-global-map): Navi2ch 内では C-xC-e を
+	unbound。
 
 2004-03-18  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
-	* navi2ch.el: eval-last-sexp, shell-command $B$K(B advice $BDI2C!#(B
-	  $B%;%-%e%j%F%#BP:v!#(B
-	$B>e5-(B commit $B$r<h>C$7!#(B
+	* navi2ch.el: eval-last-sexp, shell-command に advice 追加。
+	  セキュリティ対策。
+	上記 commit を取消し。
 
 2004-03-12  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-right-align-strings): $B?74X?t!#(B
-	(navi2ch-right-aligned-string<): $B?74X?t!#(B
-	(navi2ch-right-aligned-string=): $B?74X?t!#(B
-	(navi2ch-compare-strings): $B:o=|!#(B
+	* navi2ch-util.el (navi2ch-right-align-strings): 新関数。
+	(navi2ch-right-aligned-string<): 新関数。
+	(navi2ch-right-aligned-string=): 新関数。
+	(navi2ch-compare-strings): 削除。
 	* navi2ch-directory.el (navi2ch-directory-set-subject-list):
-	$B>e5-4X?t$r;H$&$h$&$K!#(B
-	* navi2ch-search.el (navi2ch-search-for-each-article): $BF1>e!#(B
+	上記関数を使うように。
+	* navi2ch-search.el (navi2ch-search-for-each-article): 同上。
 
 2004-03-10  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-util.el (navi2ch-compare-strings): $B?74X?t!#(B
-	$BJ8;zNs$r1&4s$;$K$7$FHf3S!#(B
+	* navi2ch-util.el (navi2ch-compare-strings): 新関数。
+	文字列を右寄せにして比較。
 
 	* navi2ch-directory.el (navi2ch-directory-set-subject-list):
-	$BHD(B ID $B$,?t;z$G$"$k$H2>Dj$7$F$$$?$N$G!">e5-4X?t$r;H$&$h$&$K!#(B
+	板 ID が数字であると仮定していたので、上記関数を使うように。
 
-	* navi2ch-search.el (navi2ch-search-for-each-article): $BHDCf$N%9%l(B
-	$B$r%9%l$NN)$C$?F|;~$,?7$7$$=g$K%=!<%H!#(B
+	* navi2ch-search.el (navi2ch-search-for-each-article): 板中のスレ
+	をスレの立った日時が新しい順にソート。
 
 2004-03-05  mami  <mami@users.sourceforge.net>
 
-	* navi2ch-list.el (navi2ch-list-ignore-category-list): $BHD%+%F%4%j(B
-	$B:FJT$K$H$b$J$$!V1?1D!W$r!V1?1D0FFb!W$KJQ99!#(B
+	* navi2ch-list.el (navi2ch-list-ignore-category-list): 板カテゴリ
+	再編にともない「運営」を「運営案内」に変更。
 	http://qb3.2ch.net/test/read.cgi/operate/1077986839/105
 
 2004-02-29  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* configure.in (AC_PREREQ): Autoconf 2.53 $B0J9_$rMW5a!#(B
+	* configure.in (AC_PREREQ): Autoconf 2.53 以降を要求。
 
-	* Makefile.am (AUTOMAKE_OPTIONS): Automake 1.5 $B0J9_$rMW5a!#(B
+	* Makefile.am (AUTOMAKE_OPTIONS): Automake 1.5 以降を要求。
 
 2004-02-28  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-mona.el (navi2ch-mona-enable-list): $B?7JQ?t!#(B
-	(navi2ch-mona-disable-list): $B?7JQ?t!#(B
-	(navi2ch-mona-match-p): $B?74X?t!#(B
-	(navi2ch-mona-arrange-message): $B>e5-$r;HMQ$7!"(B
-	navi2ch-mona-{enable,disable}-{board,article}-list $B$h$j0lHL2=$7$?(B
-	$B>r7o$G%b%J!<%U%)%s%H$rM-8z$K$9$k$+$I$&$+$rH=CG!#(B
+	* navi2ch-mona.el (navi2ch-mona-enable-list): 新変数。
+	(navi2ch-mona-disable-list): 新変数。
+	(navi2ch-mona-match-p): 新関数。
+	(navi2ch-mona-arrange-message): 上記を使用し、
+	navi2ch-mona-{enable,disable}-{board,article}-list より一般化した
+	条件でモナーフォントを有効にするかどうかを判断。
 
 	* navi2ch-article.el (navi2ch-article-display-link-minibuffer):
-	isearch $BCf$O%j%s%/@h$rI=<($7$J$$!#(B
+	isearch 中はリンク先を表示しない。
 
 	* navi2ch-util.el (navi2ch-replace-html-tag-regexp-alist):
-	$B1Q;z$+$i;O$^$k>l9g$N$_(B HTML $B%?%0$H$_$J$9!#(B
-	$BEl%"%8%"(Bnews+ <http://news2.2ch.net/news4plus/> $B$NL>L5$7$5$s$KBP1~!#(B
+	英字から始まる場合のみ HTML タグとみなす。
+	東アジアnews+ <http://news2.2ch.net/news4plus/> の名無しさんに対応。
 
-	* navi2ch-search.el (navi2ch-search-all-board-list): $B7k2L$r5U=g$K!#(B
+	* navi2ch-search.el (navi2ch-search-all-board-list): 結果を逆順に。
 
 2004-02-15  Nanashi San  <nanashi@users.sourceforge.net>
 
-	* navi2ch-search.el (navi2ch-search-subject-subr): $B0z?t$KHD%j%9%H(B
-	$B$rF@$k4X?t$rEO$;$k$h$&$K!#(B
-	(navi2ch-search-article-subr): $BF1>e!#(B
-	(navi2ch-search-all-subject): $B>e5-4X?t$r;H$&$h$&$K!#(B
-	(navi2ch-search-all-article): $BF1>e!#(B
-	$BA4$F$NHD$G8!:w$9$k>l9g!"(B"a" $B$r2!$7$F$+$i(B "regexp:" $B$N%W%m%s%W%H$,(B
-	$B=P$k$^$G$K%i%0$,$"$k$N$r7Z8:!#(B
+	* navi2ch-search.el (navi2ch-search-subject-subr): 引数に板リスト
+	を得る関数を渡せるように。
+	(navi2ch-search-article-subr): 同上。
+	(navi2ch-search-all-subject): 上記関数を使うように。
+	(navi2ch-search-all-article): 同上。
+	全ての板で検索する場合、"a" を押してから "regexp:" のプロンプトが
+	出るまでにラグがあるのを軽減。
 
 2004-01-17  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-vars.el (navi2ch-article-url-regexp):
-	ftp:// $B$K$b%^%C%A$9$k$h$&$K!#(B
+	ftp:// にもマッチするように。
 
 2004-01-13  Nanashi San  <nanashi@users.sourceforge.net>
 
 	* navi2ch-util.el (navi2ch-set-mode-line-identification):
-	navi2ch-mode-line-identification $BCf$N(B % $B$r%(%9%1!<%W$9$k$h$&$K!#(B
+	navi2ch-mode-line-identification 中の % をエスケープするように。
 
 $Id$
