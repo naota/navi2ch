@@ -2402,7 +2402,7 @@ cat >>$ac_temp <<\_ACEOF
   (princ
    (if (and prefix
 	    (not (string= prefix "NONE"))
-	    (string-match "/\\(xemacs[^/]*/.*$\\)" default))
+	    (string-match "/\\(\\(?:lib\\|share\\)/xemacs[^/]*/.*$\\)" default))
        (expand-file-name "site-packages"
 			 (expand-file-name (match-string 1 default)
 					   prefix))
@@ -2457,7 +2457,7 @@ cat >>$ac_temp <<\_ACEOF
   (princ (expand-file-name "navi2ch/icons"
 			   (if (and prefix
 				    (not (string= prefix "NONE"))
-				    (string-match "/\\(x?emacs[^/]*/.*$\\)" default))
+				    (string-match "/\\(\\(?:lib\\|share\\)/x?emacs[^/]*/.*$\\)" default))
 			       (expand-file-name (match-string 1 default)
 						 prefix)
 			     default))))
