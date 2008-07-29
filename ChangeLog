@@ -1,5 +1,8 @@
 2008-07-29  Naohiro Aota  <nao.aota@gmail.com>
 
+	* Makefile.am (EXTRA_DIST): ChangeLog.1 ChangeLog.2 が配布 tgz にも
+	含まれるように。
+
 	* configure.in: Fix previous change.
 	1.8.0 にアップデート。
 

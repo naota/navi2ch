@@ -16,7 +16,7 @@ lisp_LISP = navi2ch-version.el \
 lisp_DATA = navi2ch-config.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
-	bcomp.el.in navi2ch-version.el.in
+	bcomp.el.in navi2ch-version.el.in ChangeLog.1 ChangeLog.2
 BUILT_SOURCES = $(srcdir)/navi2ch-version.el $(srcdir)/bcomp.el
 SUBDIRS = contrib doc icons
 
