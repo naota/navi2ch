@@ -1,10 +1,5 @@
 ;;; -*- Emacs-Lisp -*-
-
 (require 'cl)
-
-(when (featurep 'xemacs)
-  (setq log-warning-minimum-level 'info)
-  (setenv "XEMACSDEBUG" nil))
 
 (setq bcomp-files
       '(
@@ -17,11 +12,12 @@
   (message "deleting old .elc files...")
   (dolist (elt bcomp-files)
     (setq file (concat dir elt "c"))
-    (when (file-exists-p file)
-      (delete-file file)))
+    (if (file-exists-p file)
+	(delete-file file)))
+
   (message "compiling...")
   (dolist (elt bcomp-files)
     (setq file (concat dir elt))
-    (let ((coding-system-for-read 'iso-2022-7bit))
-      (byte-compile-file file t)))
+    (byte-compile-file file t))
+
   (message "done"))
