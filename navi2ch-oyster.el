@@ -34,11 +34,11 @@
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
 
-;; wl とか xemacs の w3 とかから持ってくる。
-;; OpenSSL も必要っぽい。
-;; (require 'ssl)
-;; 使わない場合でもバイトコンパイルできるように。
-(autoload 'open-ssl-stream "ssl")
+(eval-and-compile
+  (if (or (< 21 emacs-major-version)
+	  (featurep 'xemacs))
+      (require 'tls)
+    (autoload 'open-ssl-stream "ssl")))
 
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
@@ -247,7 +247,7 @@ DIFF が non-nil ならば差分を取得する。
     (save-excursion
       (set-buffer buf)
       (erase-buffer))
-    (setq proc (open-ssl-stream "ssl" buf navi2ch-oyster-server 443))
+    (setq proc (open-tls-stream "ssl" buf navi2ch-oyster-server 443))
     (let ((contents (concat "ID=" navi2ch-oyster-id
 			    "&PW=" navi2ch-oyster-password)))
       (process-send-string proc
@@ -259,7 +259,7 @@ DIFF が non-nil ならば差分を取得する。
 			    "Content-Length: "
 			    (number-to-string (length contents)) "\n"
 			    "\n"
-			    contents)))
+			    contents "\n")))
     (setq navi2ch-oyster-session-id (navi2ch-oyster-get-status proc))
     (message "IDを取得しますた ID= %s" navi2ch-oyster-session-id)
     (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)

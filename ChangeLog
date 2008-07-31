@@ -1,3 +1,10 @@
+2008-07-31  Hiroshi Fujishima  <hirobo@tonteki.org>
+
+	* navi2ch-oyster.el (navi2ch-oyster-login): ssl.el のかわりに、
+	Emacs 22.1 に付いてくる、tls.el を使うように。また、
+	http://pc11.2ch.net/test/read.cgi/unix/1185807398/739 ID 取得に失敗
+	する件のも修正。
+
 2008-07-29  Naohiro Aota  <nao.aota@gmail.com>
 
 	* Makefile.am (EXTRA_DIST): ChangeLog.1 ChangeLog.2 が配布 tgz にも
