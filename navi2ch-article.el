@@ -1558,9 +1558,25 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
                                  navi2ch-article-current-article))))))
 
 (defun navi2ch-article-load-number ()
-  (unless (or navi2ch-article-hide-mode
-              navi2ch-article-important-mode)
-    (let ((num (cdr (assq 'number navi2ch-article-current-article))))
+  (let ((num (cdr (assq 'number navi2ch-article-current-article)))
+	(list (cond 
+	       (navi2ch-article-hide-mode
+		(cdr (assq 'hide navi2ch-article-current-article)))
+	       (navi2ch-article-important-mode
+		(cdr (assq 'important navi2ch-article-current-article)))
+	       (t nil))))
+    (when list
+      (let (nearest_len nearest_n)
+	(dolist (n list)
+	  (let ((len (abs (- n num))))
+	    (when (or (null nearest_len)
+		      (< len nearest_len))
+	      (setq nearest_len len
+		    nearest_n n))))
+	(setq num nearest_n)))
+    (when (or list
+	      (not (or navi2ch-article-hide-mode
+		       navi2ch-article-important-mode)))
       (navi2ch-article-goto-number (or num 1)))))
 
 (defun navi2ch-article-save-info (&optional board article first)
@@ -1804,7 +1820,9 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	    (first (caar navi2ch-article-message-list))
 	    (last (caar (last navi2ch-article-message-list))))
 	(setq num (max first (min last num)))
-	(unless (navi2ch-article-inside-range-p num range len)
+	(unless (or navi2ch-article-hide-mode 
+		    navi2ch-article-important-mode
+		    (navi2ch-article-inside-range-p num range len))
 	  (if navi2ch-article-redraw-when-goto-number
 	      (progn
 		(navi2ch-article-fix-range num)
@@ -1823,6 +1841,8 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
     (force-mode-line-update t)))
 
 (defun navi2ch-article-goto-board (&optional board)
+  "BOARD で指定された板に移動。
+BOARD が nil ならば、現在開いているスレの板に移動。"
   (interactive)
   (navi2ch-list-goto-board (or board
 			       navi2ch-article-current-board)))
@@ -3046,8 +3066,7 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
       (navi2ch-article-insert-messages
        navi2ch-article-message-list
        navi2ch-article-view-range)))
-  (unless navi2ch-article-hide-mode
-    (navi2ch-article-load-number)))
+  (navi2ch-article-load-number))
 
 ;;; important mode
 (navi2ch-set-minor-mode 'navi2ch-article-important-mode
@@ -3090,8 +3109,7 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
       (navi2ch-article-insert-messages
        navi2ch-article-message-list
        navi2ch-article-view-range)))
-  (unless navi2ch-article-important-mode
-    (navi2ch-article-load-number)))
+  (navi2ch-article-load-number))
 
 (defun navi2ch-article-search ()
   "メッセージを検索する。

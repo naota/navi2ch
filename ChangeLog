@@ -1,3 +1,19 @@
+2008-08-02  Naohiro Aota  <nao.aota@gmail.com>
+
+	* configure.in: 2.0.0-DEV に変更。
+
+	* navi2ch-article.el (navi2ch-article-goto-number): hide,
+	important モードの時は range をチェックする必要がない。
+	(navi2ch-article-goto-board): docstring を更新。
+	(navi2ch-article-load-number): hide, important モードの時はなるべく
+	近くに復帰するように。
+	(navi2ch-article-toggle-hide): hide モードでも
+	navi2ch-article-load-number() を呼ぶように。
+	(navi2ch-article-toggle-important): important モードでも
+	navi2ch-article-load-number() を呼ぶように。
+
+	* navi2ch-oyster.el: 常に tls.el を使うように。
+
 2008-07-31  Hiroshi Fujishima  <hirobo@tonteki.org>
 
 	* navi2ch-oyster.el (navi2ch-oyster-login): ssl.el のかわりに、
