@@ -1804,7 +1804,9 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	    (first (caar navi2ch-article-message-list))
 	    (last (caar (last navi2ch-article-message-list))))
 	(setq num (max first (min last num)))
-	(unless (navi2ch-article-inside-range-p num range len)
+	(unless (or navi2ch-article-hide-mode 
+		    navi2ch-article-important-mode
+		    (navi2ch-article-inside-range-p num range len))
 	  (if navi2ch-article-redraw-when-goto-number
 	      (progn
 		(navi2ch-article-fix-range num)
@@ -1823,6 +1825,8 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
     (force-mode-line-update t)))
 
 (defun navi2ch-article-goto-board (&optional board)
+  "BOARD で指定された板に移動。
+BOARD が nil ならば、現在開いているスレの板に移動。"
   (interactive)
   (navi2ch-list-goto-board (or board
 			       navi2ch-article-current-board)))

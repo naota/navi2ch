@@ -34,11 +34,7 @@
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
 
-(eval-and-compile
-  (if (or (< 21 emacs-major-version)
-	  (featurep 'xemacs))
-      (require 'tls)
-    (autoload 'open-ssl-stream "ssl")))
+(require 'tls)
 
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
