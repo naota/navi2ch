@@ -1,3 +1,7 @@
+2008-08-09  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-oyster.el (open-tls-stream): require から autoload に変更。
+
 2008-08-02  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-goto-number): hide,

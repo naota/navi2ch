@@ -34,7 +34,7 @@
 (require 'navi2ch-util)
 (require 'navi2ch-multibbs)
 
-(require 'tls)
+(autoload 'open-tls-stream "tls")
 
 (defvar navi2ch-oyster-func-alist
   '((bbs-p		. navi2ch-oyster-p)
