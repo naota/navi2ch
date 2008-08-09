@@ -1,5 +1,8 @@
 2008-08-09  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch-vars.el (navi2ch-coding-system): cp932, shift_jis-2004,
+	shift_jis の順にコーディング判定をするように。
+
 	* navi2ch-oyster.el (open-tls-stream): require から autoload に変更。
 
 2008-08-02  Naohiro Aota  <nao.aota@gmail.com>
