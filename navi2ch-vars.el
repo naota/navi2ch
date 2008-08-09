@@ -41,6 +41,7 @@
 
 (defvar navi2ch-coding-system
   (or (car (memq 'cp932 (coding-system-list)))
+      (car (memq 'shift_jis-2004 (coding-system-list)))
       'shift_jis))
 
 (defgroup navi2ch nil
