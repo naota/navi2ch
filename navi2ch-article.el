@@ -1484,15 +1484,36 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
           (navi2ch-article-make-mode-line-identification article)))
   (navi2ch-set-mode-line-identification))
 
+(defvar navi2ch-article-mode-line-format "%a (%n/%N) [%b]"
+  "スレ表示バッファの mode-line のフォーマット
+
+以下のものが置き換えられる。
+%a - スレッド名
+%b - 板名
+%n - 実際のレス数
+%N - スレ一覧から取得したレス数
+%% - %")
 (defun navi2ch-article-make-mode-line-identification (article)
-  (format "%s (%s/%s) [%s]"
-	  (or (cdr (assq 'subject article))
-	      navi2ch-bm-empty-subject)
-	  (let ((l (length navi2ch-article-message-list)))
-	    (if (= l 0) "-"
-	      (number-to-string l)))
-	  (or (cdr (assq 'response article)) "-")
-	  (cdr (assq 'name navi2ch-article-current-board))))
+  (replace-regexp-in-string
+   "%."
+   (lambda (str)
+     (let ((char (aref str 1)))
+       (cond
+	((eq char ?a)
+	 (or (cdr (assq 'subject article))
+	      navi2ch-bm-empty-subject))
+	((eq char ?b)
+	 (cdr (assq 'name navi2ch-article-current-board)))
+	((eq char ?n)
+	 (let ((l (length navi2ch-article-message-list)))
+	    (if (zerop l )
+		"-"
+	      (number-to-string l))))
+	((eq char ?N)
+	 (or (cdr (assq 'response article)) "-"))
+	((eq char ?%) "%")
+	(t ""))))
+   navi2ch-article-mode-line-format t t))
 
 (defun navi2ch-article-sync-disable-diff (&optional force)
   (interactive "P")

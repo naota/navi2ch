@@ -808,6 +808,23 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 でカーソル位置のレスを除外することができる。間違って除外してしまったと
 きは、@kbd{C-u d} でレスが復活する。
 
+スレ表示バッファの mode-line は navi2ch-article-mode-line-format によっ
+て設定される。普通の文字はそのまま出力され、'%' に続く文字は以下のよう
+に置換される。
+
+@table
+@item %a
+スレッド名
+@item %b
+板名
+@item %n
+実際のレス数
+@item %N
+スレ一覧から取得したレス数
+@item %%
+%
+@end table
+
 @menu
 * Article View Range::          スレの表示範囲
 * Article Message Filter::      レスのフィルタ処理
