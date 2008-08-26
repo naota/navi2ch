@@ -1,4 +1,4 @@
-;;; navi2ch-megabbs.el --- View megabbs.net module for Navi2ch.
+;;; navi2ch-megabbs.el --- View megabbs.net module for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2002, 2004, 2006 by Navi2ch Project
 

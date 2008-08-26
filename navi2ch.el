@@ -1,4 +1,4 @@
-;;; navi2ch.el --- Navigator for 2ch for Emacsen
+;;; navi2ch.el --- Navigator for 2ch for Emacsen -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 by
 ;; Navi2ch Project

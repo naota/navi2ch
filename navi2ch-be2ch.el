@@ -1,4 +1,4 @@
-;;; navi2ch-be2ch.el --- View be@2ch module for Navi2ch.
+;;; navi2ch-be2ch.el --- View be@2ch module for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2005, 2008 by Navi2ch Project
 

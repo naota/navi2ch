@@ -1,4 +1,4 @@
-;;; navi2ch-localfile.el --- View localfile for Navi2ch.
+;;; navi2ch-localfile.el --- View localfile for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2002, 2003, 2004, 2005, 2007, 2008 by Navi2ch Project
 

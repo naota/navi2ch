@@ -1,4 +1,4 @@
-;;; navi2ch-auto-modify.el --- auto file modification module for navi2ch
+;;; navi2ch-auto-modify.el --- auto file modification module for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2003, 2005, 2006 by Navi2ch Project
 

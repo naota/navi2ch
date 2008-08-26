@@ -1,4 +1,4 @@
-;;; navi2ch-futaba.el --- View futaba module for Navi2ch.
+;;; navi2ch-futaba.el --- View futaba module for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
 
@@ -47,7 +47,7 @@
 ;;-------------
 
 (defun navi2ch-futaba-p (uri)
-  "URI §¨§’§ø§–§¡§„§Û§Õ§Î§ §È§– non-nil§Ú ÷§π°£"
+  "URI $B$,$U$?$P$A$c$s$M$k$J$i$P(B non-nil$B$rJV$9!#(B"
   (string-match "http://www.2chan.net/" uri))
 
 (defun navi2ch-futaba-send-message-success-p (proc)

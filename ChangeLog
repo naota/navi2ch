@@ -1,3 +1,7 @@
+2008-08-26  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch*.el: Add coding cookie.
+
 2008-08-25  Naohiro Aota  <nao.aota@gmail.com>
 
 	* bcomp.el.in, bcomp.el : coding-system を指定してコンパイルするよ

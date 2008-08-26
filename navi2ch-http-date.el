@@ -1,4 +1,4 @@
-;;; navi2ch-http-date.el --- parser / generator of HTTP-date format
+;;; navi2ch-http-date.el --- parser / generator of HTTP-date format -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2002, 2003, 2008 by Navi2ch Project
 
