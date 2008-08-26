@@ -1,4 +1,4 @@
-;;; navi2ch-xmas.el --- XEmacs module for navi2ch
+;;; navi2ch-xmas.el --- XEmacs module for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2003 by Navi2ch Project
 

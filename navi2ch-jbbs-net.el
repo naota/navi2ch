@@ -1,4 +1,4 @@
-;;; navi2ch-jbbs-net.el --- View jbbs.net module for Navi2ch.
+;;; navi2ch-jbbs-net.el --- View jbbs.net module for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
 

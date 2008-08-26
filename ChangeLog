@@ -1,5 +1,7 @@
 2008-08-26  Naohiro Aota  <nao.aota@gmail.com>
 
+	* navi2ch*.el: Add coding cookie.
+
 	* navi2ch-article.el (navi2ch-article-mode-line-format): 新変数。
 	(navi2ch-article-make-mode-line-identification): Use it.
 

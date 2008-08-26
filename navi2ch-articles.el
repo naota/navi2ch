@@ -1,4 +1,4 @@
-;;; navi2ch-articles.el --- Article List Module for Navi2ch
+;;; navi2ch-articles.el --- Article List Module for Navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2001, 2002, 2003, 2004, 2008 by Navi2ch Project
 

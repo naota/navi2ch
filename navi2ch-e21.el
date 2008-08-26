@@ -1,4 +1,4 @@
-;;; navi2ch-e21.el --- GNU Emacs 21 module for navi2ch
+;;; navi2ch-e21.el --- GNU Emacs 21 module for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2001, 2002, 2004 by Navi2ch Project
 ;; Copyright (C) 2000,2001 Katsumi Yamaoka <yamaoka@jpl.org>

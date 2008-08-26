@@ -1,4 +1,4 @@
-;;; navi2ch-util.el --- useful utilities for navi2ch
+;;; navi2ch-util.el --- useful utilities for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;; by Navi2ch Project 

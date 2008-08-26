@@ -1,4 +1,4 @@
-;;; navi2ch-article.el --- article view module for navi2ch
+;;; navi2ch-article.el --- article view module for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;; by Navi2ch Project
@@ -1503,7 +1503,8 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	 (or (cdr (assq 'subject article))
 	      navi2ch-bm-empty-subject))
 	((eq char ?b)
-	 (cdr (assq 'name navi2ch-article-current-board)))
+	 (or (cdr (assq 'name navi2ch-article-current-board))
+	     "-"))
 	((eq char ?n)
 	 (let ((l (length navi2ch-article-message-list)))
 	    (if (zerop l )
