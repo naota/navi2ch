@@ -258,10 +258,11 @@ Otherwise, FACE-OR-NAME should be a symbol.  If there is no such face,
 nil is returned.  Otherwise the associated face object is returned."
   (car (memq face-or-name (face-list))))
 
-(defalias 'navi2ch-find-face
-  (if (fboundp 'find-face)
-      #'find-face
-    #'navi2ch-find-face-subr))
+(eval-and-compile 
+  (defalias 'navi2ch-find-face
+    (if (fboundp 'find-face)
+	#'find-face
+      #'navi2ch-find-face-subr)))
 
 (defun navi2ch-mona-char-height ()
   (navi2ch-ifxemacs

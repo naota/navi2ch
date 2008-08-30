@@ -74,7 +74,7 @@ Navi2ch comes with ABSOLUTELY NO WARRANTY; type \\[describe-no-warranty] for ful
                             Navi2ch"
   "Ascii picture used to splash the startup screen.")
 
-(eval-and-compile
+(eval-when-compile
   (when navi2ch-on-emacs21
     ;; `display-images-p' has not been available in Emacs versions
     ;; prior to Emacs 21.0.105.

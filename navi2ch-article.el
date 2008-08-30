@@ -37,9 +37,11 @@
   (defvar navi2ch-board-subject-list)
   (defvar navi2ch-board-last-seen-alist)
   (defvar navi2ch-popup-article-current-board)
-  (defvar navi2ch-popup-article-current-article))
+  (defvar navi2ch-popup-article-current-article)
+  (require 'wid-edit))
   
 (require 'base64)
+(require 'widget)
 
 (require 'navi2ch)
 
@@ -97,7 +99,7 @@
     (define-key map "\C-o" 'navi2ch-article-save-dat-file)
     (define-key map "F" 'navi2ch-article-toggle-message-filter)
     (define-key map "x" 'undefined)
-    (define-key map "!" 'navi2ch-article-add-message-filter-rule)
+    (define-key map "!" 'navi2ch-article-add-message-filter-cus)
     (define-key map "\C-c\C-r" 'navi2ch-article-remove-article)
     (navi2ch-ifxemacs
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
@@ -188,6 +190,42 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-sticky-mode)
 (add-to-list 'minor-mode-alist '(navi2ch-article-sticky-mode " Sticky"))
 
+(defvar navi2ch-article-message-filter-default-rule-alist
+  '((?n
+     :var navi2ch-article-message-filter-by-name-alist
+     :string navi2ch-article-get-current-name
+     :match-method "s")
+    (?m 
+     :var navi2ch-article-message-filter-by-mail-alist
+     :string navi2ch-article-get-current-mail
+     :match-method "s")
+    (?i 
+     :var navi2ch-article-message-filter-by-id-alist
+     :string navi2ch-article-get-current-id
+     :match-method "e"
+     :scope board-local)
+    (?h 
+     :var navi2ch-article-message-filter-by-hostname-alist
+     :string navi2ch-article-get-current-hostname
+     :match-method "s")
+    (?b 
+     :var navi2ch-article-message-filter-by-message-alist
+     :string navi2ch-article-get-current-word-in-body
+     :match-method "s")
+    (?s 
+     :var navi2ch-article-message-filter-by-subject-alist
+     :string navi2ch-article-get-current-subject
+     :match-method "s")))
+(defvar navi2ch-article-message-filter-wid-string)
+(defvar navi2ch-article-message-filter-wid-rule)
+(defvar navi2ch-article-message-filter-wid-method)
+(defvar navi2ch-article-message-filter-wid-case)
+(defvar navi2ch-article-message-filter-wid-invert)
+(defvar navi2ch-article-message-filter-wid-scope)
+(defvar navi2ch-article-message-filter-wid-float)
+(defvar navi2ch-article-message-filter-wid-var)
+(defvar navi2ch-article-message-filter-wid-window-configuration)
+
 ;; local variables
 (make-variable-buffer-local 'navi2ch-article-current-article)
 (make-variable-buffer-local 'navi2ch-article-current-board)
@@ -198,6 +236,15 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-view-range)
 (make-variable-buffer-local 'navi2ch-article-through-next-function)
 (make-variable-buffer-local 'navi2ch-article-through-previous-function)
+
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-string)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-rule)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-method)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-case)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-invert)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-scope)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-float)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-var)
 
 ;; add hook
 (defun navi2ch-article-kill-emacs-hook ()
@@ -3401,6 +3448,129 @@ PREFIX が与えられた場合は、
      ((eq char ?b) (navi2ch-article-add-message-filter-by-message prefix))
      ((eq char ?s) (navi2ch-article-add-message-filter-by-subject prefix)))))
 
+(defun navi2ch-article-add-message-filter-cus (&optional prefix)
+  "レスのフィルタ条件をカスタムエディタ形式で追加する。"
+  (interactive "P")
+  (let* ((has-id (navi2ch-article-get-current-id))
+	 (has-hostname (navi2ch-article-get-current-hostname))
+	 (char (navi2ch-read-char-with-retry
+		(concat "Filter by: n)ame m)ail "
+			(and has-id "i)d ")
+			(and has-hostname "h)ostname ")
+			"b)ody s)ubject: ")
+		nil
+		(append '(?n ?m ?b ?s)
+			(and has-id (list ?i))
+			(and has-hostname (list ?h)))))
+	 (rule (cdr (assq char navi2ch-article-message-filter-default-rule-alist)))
+	 (str (if prefix
+		  (buffer-substring-no-properties (region-beginning) (region-end))
+		(plist-get rule :string)))
+	 (article navi2ch-article-current-article)
+	 (board navi2ch-article-current-board))
+    (setq str (cond
+	       ((stringp str) str)
+	       ((functionp str) (funcall str))
+	       (t (error "rule type missmatch: string")))
+	  navi2ch-article-message-filter-wid-window-configuration
+	  (current-window-configuration))
+    (kill-buffer (get-buffer-create "*navi2ch Add filter*"))    
+    (pop-to-buffer (get-buffer-create "*navi2ch Add filter*"))
+    (kill-all-local-variables)
+    (setq navi2ch-article-message-filter-wid-var (plist-get rule :var)
+	  navi2ch-article-current-article article
+	  navi2ch-article-current-board board)
+    (widget-insert "navi2ch Filter Editor\n\nString: ")
+    (setq navi2ch-article-message-filter-wid-string 
+	  (widget-create 'editable-field str))
+    (widget-insert "\nRule:\n")
+    (setq navi2ch-article-message-filter-wid-rule
+	  (widget-create 'radio-button-choice
+			 '(editable-field :tag "replace" :format "%t: %v" "あぼぼーん")
+			 '(item :tag "hide"      :value hide)
+			 '(item :tag "important" :value important)
+			 '(editable-field :tag "score" :format "%t: %v" "0")))
+    (widget-insert "\n")
+    (widget-create 'push-button
+		   :notify 'navi2ch-article-add-message-filter-cus-done
+		   "Done")
+    (widget-insert "\n\nMatch method:\n")
+    (setq navi2ch-article-message-filter-wid-method
+	  (widget-create 'radio-button-choice
+			 :value (plist-get rule :match-method)
+			 '(item :tag "substring" :value "s")
+			 '(item :tag "fuzzy"     :value "f")
+			 '(item :tag "exact"     :value "e")
+			 '(item :tag "regexp"    :value "r")))
+    (widget-insert "\nIgnore case: ")
+    (setq navi2ch-article-message-filter-wid-case (widget-create 'toggle))
+    (widget-insert "Invert match: ")
+    (setq navi2ch-article-message-filter-wid-invert (widget-create 'toggle))
+    (widget-insert "\nScope:\n")
+    (setq navi2ch-article-message-filter-wid-scope
+	  (widget-create 'radio-button-choice
+			 :value (plist-get rule :scope)
+			 '(item :tag "board local"   :value board-local)
+			 '(item :tag "article local" :value article-local)
+			 '(item :tag "global"        :value nil)))
+    (widget-insert "\nFloating:\n")
+    (setq navi2ch-article-message-filter-wid-float
+	  (widget-create 'radio-button-choice
+			 :value nil
+			 '(item :tag "never"   :value 0)
+			 '(item :tag "always"  :value 1)
+			 '(item :tag "default" :value nil)))
+    (widget-insert "\n")
+    (widget-create 'push-button
+		   :notify 'navi2ch-article-add-message-filter-cus-done
+		   "Done")
+    (widget-insert "\n")
+    (use-local-map widget-keymap)
+    (widget-setup)
+    (goto-char (point-min))))
+
+(defun navi2ch-article-add-message-filter-cus-done (widget &rest ignore)
+  (let* ((variable navi2ch-article-message-filter-wid-var)
+	 (char (widget-value navi2ch-article-message-filter-wid-method))
+	 (scope (widget-value navi2ch-article-message-filter-wid-scope))
+	 (match (list 
+		 (widget-value navi2ch-article-message-filter-wid-string)
+		 (intern
+		  (if (widget-value navi2ch-article-message-filter-wid-case)
+		      char
+		    (upcase char)))
+		 :invert (widget-value navi2ch-article-message-filter-wid-invert)
+		 :board-id (and (or (eq scope 'board-local)
+				    (eq scope 'article-local))
+				(cdr (assq 'id navi2ch-article-current-board)))
+		 :artid (and (eq scope 'article-local)
+			     (cdr (assq 'artid
+					navi2ch-article-current-article)))
+		 :float (widget-value navi2ch-article-message-filter-wid-float)))
+	 (res (widget-value navi2ch-article-message-filter-wid-rule))
+	 (rule-children (widget-get 
+			 navi2ch-article-message-filter-wid-rule
+			 :children))
+	 (result (cond ((or (eq res 'hide)
+			    (eq res 'important)
+			    (widget-apply
+			     (nth 0 rule-children)
+			     :active))
+			res)
+		       ((widget-apply (nth 3 rule-children) :active)
+			(string-to-number res))
+		       (t (error "You should select rule."))))
+	 (current (assoc match (symbol-value variable))))
+     (set variable (cons (cons match result)
+			 (delq current (symbol-value variable))))
+     (navi2ch-auto-modify-variables (list variable))
+     (bury-buffer)
+     (set-window-configuration 
+      navi2ch-article-message-filter-wid-window-configuration)
+     (if (y-or-n-p "Apply new rules to current messages now? ")
+	 (navi2ch-article-toggle-message-filter t)
+       (message "Don't apply now"))))
+  
 (defun navi2ch-article-add-message-filter-by-name (&optional prefix)
   (interactive "P")
   (navi2ch-article-add-message-filter-rule-subr

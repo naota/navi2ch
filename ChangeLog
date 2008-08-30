@@ -1,3 +1,22 @@
+2008-08-30  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-wid-string)
+	(navi2ch-article-message-filter-wid-rule)
+	(navi2ch-article-message-filter-wid-method)
+	(navi2ch-article-message-filter-wid-case)
+	(navi2ch-article-message-filter-wid-invert)
+	(navi2ch-article-message-filter-wid-scope)
+	(navi2ch-article-message-filter-wid-float)
+	(navi2ch-article-message-filter-wid-var)
+	(navi2ch-article-message-filter-wid-window-configuration): New
+	variable.
+	(navi2ch-article-add-message-filter-cus)
+	(navi2ch-article-add-message-filter-cus-done): New function.
+	(navi2ch-article-mode-map): Use it.
+
+	* navi2ch-util.el : keywordp, characterp の alias を compile 時だけ
+	に。
+
 2008-08-26  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch*.el: Add coding cookie.
