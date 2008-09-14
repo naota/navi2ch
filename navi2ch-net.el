@@ -253,8 +253,9 @@ nil なら常に再接続する。")
 		     ""
 		   "Connection: close\r\n")
 		 (or (navi2ch-net-make-request-header
-		      (cons (cons "Proxy-Authorization" credentials)
-			    other-header))
+		      (append (list (cons "Proxy-Authorization" credentials)
+				    (cons "User-Agent" navi2ch-net-user-agent))
+			      other-header))
 		     "")
 		 (if content
 		     (format "Content-length: %d\r\n\r\n%s"
@@ -488,9 +489,7 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 			    ;; regexp は変数にした方がいいのかな。いい変数名が思いつかない。
 			    (not (string-match "\\.gz$" url))
 			    (not (assoc "Range" other-header))
-			    '("Accept-Encoding" . "gzip"))
-		       (and navi2ch-net-user-agent
-			    (cons "User-Agent" navi2ch-net-user-agent)))
+			    '("Accept-Encoding" . "gzip")))
 		 other-header)))
 	 (unless proc
 	   (throw 'ret nil))

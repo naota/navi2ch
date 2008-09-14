@@ -210,7 +210,9 @@ last が最後からいくつ表示するか。
      :match-method "s")
     (?b 
      :var navi2ch-article-message-filter-by-message-alist
-     :string navi2ch-article-get-current-word-in-body
+     :string (lambda () 
+	       (or (navi2ch-article-get-current-word-in-body)
+		   ""))
      :match-method "s")
     (?s 
      :var navi2ch-article-message-filter-by-subject-alist
@@ -3474,27 +3476,27 @@ PREFIX が与えられた場合は、
 	       (t (error "rule type missmatch: string")))
 	  navi2ch-article-message-filter-wid-window-configuration
 	  (current-window-configuration))
-    (kill-buffer (get-buffer-create "*navi2ch Add filter*"))    
+    (kill-buffer (get-buffer-create "*navi2ch Add filter*"))
     (pop-to-buffer (get-buffer-create "*navi2ch Add filter*"))
     (kill-all-local-variables)
     (setq navi2ch-article-message-filter-wid-var (plist-get rule :var)
 	  navi2ch-article-current-article article
 	  navi2ch-article-current-board board)
-    (widget-insert "navi2ch Filter Editor\n\nString: ")
+    (insert "navi2ch Filter Editor\n\nString: ")
     (setq navi2ch-article-message-filter-wid-string 
 	  (widget-create 'editable-field str))
-    (widget-insert "\nRule:\n")
+    (insert "\nRule:\n")
     (setq navi2ch-article-message-filter-wid-rule
 	  (widget-create 'radio-button-choice
 			 '(editable-field :tag "replace" :format "%t: %v" "あぼぼーん")
 			 '(item :tag "hide"      :value hide)
 			 '(item :tag "important" :value important)
 			 '(editable-field :tag "score" :format "%t: %v" "0")))
-    (widget-insert "\n")
+    (insert "\n")
     (widget-create 'push-button
 		   :notify 'navi2ch-article-add-message-filter-cus-done
 		   "Done")
-    (widget-insert "\n\nMatch method:\n")
+    (insert "\n\nMatch method:\n")
     (setq navi2ch-article-message-filter-wid-method
 	  (widget-create 'radio-button-choice
 			 :value (plist-get rule :match-method)
@@ -3502,29 +3504,39 @@ PREFIX が与えられた場合は、
 			 '(item :tag "fuzzy"     :value "f")
 			 '(item :tag "exact"     :value "e")
 			 '(item :tag "regexp"    :value "r")))
-    (widget-insert "\nIgnore case: ")
-    (setq navi2ch-article-message-filter-wid-case (widget-create 'toggle))
-    (widget-insert "Invert match: ")
-    (setq navi2ch-article-message-filter-wid-invert (widget-create 'toggle))
-    (widget-insert "\nScope:\n")
+    (insert "\nIgnore case: ")
+    (setq navi2ch-article-message-filter-wid-case 
+ 	  (widget-create 'toggle))
+;;; 	  (widget-create 'radio-button-choice
+;;; 			 :value nil
+;;; 			 '(item :tag "On" :value t)
+;;; 			 '(item :tag "Off" :value nil)))
+    (insert "Invert match: ")
+    (setq navi2ch-article-message-filter-wid-invert 
+;;; 	  (widget-create 'radio-button-choice
+;;; 			 :value nil
+;;; 			 '(item :tag "On" :value t)
+;;; 			 '(item :tag "Off" :value nil)))
+	  (widget-create 'toggle))
+    (insert "\nScope:\n")
     (setq navi2ch-article-message-filter-wid-scope
 	  (widget-create 'radio-button-choice
 			 :value (plist-get rule :scope)
 			 '(item :tag "board local"   :value board-local)
 			 '(item :tag "article local" :value article-local)
 			 '(item :tag "global"        :value nil)))
-    (widget-insert "\nFloating:\n")
+    (insert "\nFloating:\n")
     (setq navi2ch-article-message-filter-wid-float
 	  (widget-create 'radio-button-choice
 			 :value nil
 			 '(item :tag "never"   :value 0)
 			 '(item :tag "always"  :value 1)
 			 '(item :tag "default" :value nil)))
-    (widget-insert "\n")
+    (insert "\n")
     (widget-create 'push-button
 		   :notify 'navi2ch-article-add-message-filter-cus-done
 		   "Done")
-    (widget-insert "\n")
+    (insert "\n")
     (use-local-map widget-keymap)
     (widget-setup)
     (goto-char (point-min))))
