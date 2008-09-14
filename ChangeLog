@@ -1,3 +1,21 @@
+2008-09-11  ARISAWA Akihiro  <ari@mbf.sphere.ne.jp>
+
+	2ch の仕様変更に伴い、書き込み時 User-Agent が設定されていないと
+	fusianasan になることへの対応。
+	http://qb5.2ch.net/test/read.cgi/sec2chd/1220971610/31-
+
+	* navi2ch-net.el (navi2ch-net-send-request): User-Agent を送信する。
+	(navi2ch-net-download-file): navi2ch-net-send-request に
+	User-Agent を渡さない。
+
+	* navi2ch-be2ch.el (navi2ch-be2ch-login): navi2ch-net-send-request に
+	User-Agent を渡さない。
+
+2008-09-01  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-default-rule-alist):
+	navi2ch-article-get-current-word-in-body() が nil の時に対処
+
 2008-08-26  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch*.el: Add coding cookie.

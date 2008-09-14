@@ -65,7 +65,6 @@
 	       "POST"
 	       (list
 		(cons "Referer" navi2ch-be2ch-login-url)
-		(cons "User-Agent" navi2ch-net-user-agent)
 		(cons "Content-Type" "application/x-www-form-urlencoded"))
 	       (navi2ch-net-get-param-string 
 		(list 
