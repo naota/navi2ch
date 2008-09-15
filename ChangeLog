@@ -1,3 +1,9 @@
+2008-09-16  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-message-filter-default-rule-alist):
+	全てのフィルタ条件に共通するルールを t で書けるように。
+	(navi2ch-article-add-message-filter-cus): Ditto.
+
 2008-09-11  ARISAWA Akihiro  <ari@mbf.sphere.ne.jp>
 
 	2ch の仕様変更に伴い、書き込み時 User-Agent が設定されていないと

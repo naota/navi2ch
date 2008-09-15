@@ -193,31 +193,27 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-message-filter-default-rule-alist
   '((?n
      :var navi2ch-article-message-filter-by-name-alist
-     :string navi2ch-article-get-current-name
-     :match-method "s")
+     :string navi2ch-article-get-current-name)
     (?m 
      :var navi2ch-article-message-filter-by-mail-alist
-     :string navi2ch-article-get-current-mail
-     :match-method "s")
+     :string navi2ch-article-get-current-mail)
     (?i 
      :var navi2ch-article-message-filter-by-id-alist
      :string navi2ch-article-get-current-id
-     :match-method "e"
      :scope board-local)
     (?h 
      :var navi2ch-article-message-filter-by-hostname-alist
-     :string navi2ch-article-get-current-hostname
-     :match-method "s")
+     :string navi2ch-article-get-current-hostname)
     (?b 
      :var navi2ch-article-message-filter-by-message-alist
      :string (lambda () 
 	       (or (navi2ch-article-get-current-word-in-body)
-		   ""))
-     :match-method "s")
+		   "")))
     (?s 
      :var navi2ch-article-message-filter-by-subject-alist
-     :string navi2ch-article-get-current-subject
-     :match-method "s")))
+     :string navi2ch-article-get-current-subject)
+    (t :match-method "s")))
+     
 (defvar navi2ch-article-message-filter-wid-string)
 (defvar navi2ch-article-message-filter-wid-rule)
 (defvar navi2ch-article-message-filter-wid-method)
@@ -3465,9 +3461,11 @@ PREFIX が与えられた場合は、
 			(and has-id (list ?i))
 			(and has-hostname (list ?h)))))
 	 (rule (cdr (assq char navi2ch-article-message-filter-default-rule-alist)))
+	 (default-rule (cdr (assq t navi2ch-article-message-filter-default-rule-alist)))
 	 (str (if prefix
 		  (buffer-substring-no-properties (region-beginning) (region-end))
-		(plist-get rule :string)))
+		(or (plist-get rule :string)
+		    (plist-get default-rule :string))))
 	 (article navi2ch-article-current-article)
 	 (board navi2ch-article-current-board))
     (setq str (cond
@@ -3479,7 +3477,8 @@ PREFIX が与えられた場合は、
     (kill-buffer (get-buffer-create "*navi2ch Add filter*"))
     (pop-to-buffer (get-buffer-create "*navi2ch Add filter*"))
     (kill-all-local-variables)
-    (setq navi2ch-article-message-filter-wid-var (plist-get rule :var)
+    (setq navi2ch-article-message-filter-wid-var (or (plist-get rule :var)
+						     (plist-get default-rule :var))
 	  navi2ch-article-current-article article
 	  navi2ch-article-current-board board)
     (insert "navi2ch Filter Editor\n\nString: ")
@@ -3488,6 +3487,8 @@ PREFIX が与えられた場合は、
     (insert "\nRule:\n")
     (setq navi2ch-article-message-filter-wid-rule
 	  (widget-create 'radio-button-choice
+			 :value (or (plist-get rule :rule)
+				    (plist-get default-rule :rule))
 			 '(editable-field :tag "replace" :format "%t: %v" "あぼぼーん")
 			 '(item :tag "hide"      :value hide)
 			 '(item :tag "important" :value important)
@@ -3499,14 +3500,17 @@ PREFIX が与えられた場合は、
     (insert "\n\nMatch method:\n")
     (setq navi2ch-article-message-filter-wid-method
 	  (widget-create 'radio-button-choice
-			 :value (plist-get rule :match-method)
+			 :value (or (plist-get rule :match-method)
+				    (plist-get default-rule :match-method))
 			 '(item :tag "substring" :value "s")
 			 '(item :tag "fuzzy"     :value "f")
 			 '(item :tag "exact"     :value "e")
 			 '(item :tag "regexp"    :value "r")))
     (insert "\nIgnore case: ")
     (setq navi2ch-article-message-filter-wid-case 
- 	  (widget-create 'toggle))
+ 	  (widget-create 'toggle
+			 :value (or (plist-get rule :ignore-case)
+				    (plist-get default-rule :ignore-case))))
 ;;; 	  (widget-create 'radio-button-choice
 ;;; 			 :value nil
 ;;; 			 '(item :tag "On" :value t)
@@ -3517,18 +3521,22 @@ PREFIX が与えられた場合は、
 ;;; 			 :value nil
 ;;; 			 '(item :tag "On" :value t)
 ;;; 			 '(item :tag "Off" :value nil)))
-	  (widget-create 'toggle))
+	  (widget-create 'toggle
+			 :value (or (plist-get rule :invert-match)
+				    (plist-get default-rule :invert-match))))
     (insert "\nScope:\n")
     (setq navi2ch-article-message-filter-wid-scope
 	  (widget-create 'radio-button-choice
-			 :value (plist-get rule :scope)
+			 :value (or (plist-get rule :scope)
+				    (plist-get default-rule :scope))
 			 '(item :tag "board local"   :value board-local)
 			 '(item :tag "article local" :value article-local)
 			 '(item :tag "global"        :value nil)))
     (insert "\nFloating:\n")
     (setq navi2ch-article-message-filter-wid-float
 	  (widget-create 'radio-button-choice
-			 :value nil
+			 :value (or (plist-get rule :floating)
+				    (plist-get default-rule :floating))
 			 '(item :tag "never"   :value 0)
 			 '(item :tag "always"  :value 1)
 			 '(item :tag "default" :value nil)))
