@@ -57,7 +57,6 @@
     (define-key map "\C-c\C-j" 'navi2ch-message-cite-original-from-number)
     (define-key map "\C-c\C-i" 'navi2ch-message-insert-backup)
     (define-key map "\C-c\C-b" 'navi2ch-base64-insert-file)
-    (define-key map "\et" 'navi2ch-toggle-offline)
     (define-key map navi2ch-message-aa-prefix-key navi2ch-message-aa-map)
     (setq navi2ch-message-mode-map map)))
 

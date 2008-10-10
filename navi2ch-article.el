@@ -3779,34 +3779,39 @@ PREFIX が与えられた場合は、
 	   prop))))
 
 (defun navi2ch-article-show-sssp-icon ()
-  "sssp://のアイコンを表示。現状>>1のアイコンしか読まない"
+  "sssp://のアイコンを表示。"
   (interactive)
   (if (display-images-p)
-      (save-excursion
-	(let ((buffer-read-only nil))
+      (let ((buffer-read-only nil)
+	    (sssp_dir (expand-file-name "sssp_icon/" navi2ch-directory))
+	    url image file)
+	(unless (file-directory-p sssp_dir)
+	  (make-directory sssp_dir))
+	(save-excursion
 	  (goto-char (point-min))
-	  (if (re-search-forward
-	       (concat "sssp://[^ \t\n\r]+\\.\\("
-		       (regexp-opt navi2ch-browse-url-image-extentions)
-		       "\\)") nil t)
-	      (let ((url (get-text-property (1- (point)) 'navi2ch-link)))
-		(when url
-		  (let ((sssp_dir (expand-file-name "sssp_icon/" navi2ch-directory))
-			image file)
-		    (unless (file-directory-p sssp_dir)
-		      (make-directory sssp_dir))
-		    (store-substring url 0 "http")
-		    (string-match "/\\([^/]+\\)$" url)
-		    (setq file (match-string 1 url))
-		    ;;ファイルが既にローカルに存在してるのならアップデートしない(更新は無さそうだし)
-		    (unless (file-exists-p (concat sssp_dir file))
-		      (save-excursion
-			(navi2ch-net-update-file url (concat sssp_dir file))))
-		    (forward-line)
-		    (insert-image (create-image (concat sssp_dir file)))
-		    (put-text-property (1- (point)) (point) 'help-echo (navi2ch-propertize "[image]" 'display image))
-		    (insert "\n"))))
-	    )))))
+	  (while (re-search-forward 
+		  (concat "sssp://\\([^ \t\n\r]+\\.\\("
+			  (regexp-opt navi2ch-browse-url-image-extentions)
+			  "\\)\\)") 
+		  nil t)
+	    (setq url (concat "http://" (match-string 1)))
+	    (when (string-match "/\\([^/]+\\)$" url)
+	      (setq file (expand-file-name (match-string 1 url) sssp_dir))
+	      ;; ファイルが既にローカルに存在してるのならアップデートしない
+	      ;; (更新は無さそうだし)
+	      (unless (file-exists-p file)
+		(save-excursion
+		  (navi2ch-net-update-file url file)))
+	      (forward-line)
+	      (if (featurep 'xemacs)
+		  (set-extent-end-glyph
+		   (make-overlay (point) (point))
+		   (make-glyph (vector 'gif :file file)))
+		(insert-image (create-image file)))
+	      (put-text-property (1- (point)) (point) 
+				 'help-echo 
+				 (navi2ch-propertize "[image]" 'display image))
+	      (insert "\n")))))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

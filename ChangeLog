@@ -1,3 +1,11 @@
+2008-10-11  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-show-sssp-icon): buffer 内全
+	ての icon を置換。
+
+	* navi2ch-message.el (navi2ch-message-mode-map): message モードで
+	M-t の binding を削除。
+
 2008-09-16  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-message-filter-default-rule-alist):
