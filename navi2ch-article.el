@@ -1539,7 +1539,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 %N - スレ一覧から取得したレス数
 %% - %")
 (defun navi2ch-article-make-mode-line-identification (article)
-  (replace-regexp-in-string
+  (navi2ch-replace-string
    "%."
    (lambda (str)
      (let ((char (aref str 1)))

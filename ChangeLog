@@ -1,3 +1,8 @@
+2008-10-15  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-make-mode-line-identification):
+	replace-regexp-in-string を navi2ch-replace-string に置換え。
+
 2008-10-11  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-show-sssp-icon): buffer 内全
