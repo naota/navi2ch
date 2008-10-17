@@ -1559,7 +1559,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	 (or (cdr (assq 'response article)) "-"))
 	((eq char ?%) "%")
 	(t ""))))
-   navi2ch-article-mode-line-format t t))
+   navi2ch-article-mode-line-format t t t))
 
 (defun navi2ch-article-sync-disable-diff (&optional force)
   (interactive "P")

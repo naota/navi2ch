@@ -1,4 +1,16 @@
+2008-10-18  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-article.el (navi2ch-article-make-mode-line-identification):
+	LITERAL を t にして呼び出すように。
+
 2008-10-15  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-multibbs.el (navi2ch-2ch-board-get-file-name): ファイル名
+	に認証情報がはいらないように。
+
+	* navi2ch-net.el (navi2ch-net-split-url): 認証情報を取得できるよう
+	に正規表現を改善。
+	(navi2ch-net-http-basic-credentials): 改名。 docstring を訂正。
 
 	* navi2ch-article.el (navi2ch-article-make-mode-line-identification):
 	replace-regexp-in-string を navi2ch-replace-string に置換え。

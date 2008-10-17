@@ -504,7 +504,7 @@ START, END, NOFIRST で範囲を指定する"
 				    'equal)))
       (navi2ch-cache-get
        (cons uri file-name)
-       (cond ((string-match "http://\\(.+\\)" uri)
+       (cond ((string-match "http://\\(?:[^@/]+@\\)?\\(.+\\)" uri)
 	      (navi2ch-expand-file-name
 	       (concat (match-string 1 uri)
 		       file-name)))

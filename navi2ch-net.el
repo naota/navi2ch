@@ -189,17 +189,22 @@ nil なら常に再接続する。")
         (process-connection-type nil)
 	(inherit-process-coding-system
 	 navi2ch-net-inherit-process-coding-system)
-        host file port host2ch credentials)
+        user pass host file port host2ch credentials auth)
     (let ((list (navi2ch-net-split-url url navi2ch-net-http-proxy)))
-      (setq host (cdr (assq 'host list))
+      (setq user (cdr (assq 'user list))
+	    pass (cdr (assq 'pass list))
+	    host (cdr (assq 'host list))
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
     (navi2ch-net-connect-wait host)
     (when navi2ch-net-http-proxy
-      (setq credentials (navi2ch-net-http-proxy-basic-credentials
+      (setq credentials (navi2ch-net-http-basic-credentials
 			 navi2ch-net-http-proxy-userid
 			 navi2ch-net-http-proxy-password)))
+    (when (and user pass)
+      (setq auth (navi2ch-net-http-basic-credentials
+		  user pass)))
     (let ((proc navi2ch-net-process))
       (condition-case nil
 	  (if (and navi2ch-net-enable-http11
@@ -254,7 +259,8 @@ nil なら常に再接続する。")
 		   "Connection: close\r\n")
 		 (or (navi2ch-net-make-request-header
 		      (append (list (cons "Proxy-Authorization" credentials)
-				    (cons "User-Agent" navi2ch-net-user-agent))
+				    (cons "User-Agent" navi2ch-net-user-agent)
+				    (cons "Authorization" auth))
 			      other-header))
 		     "")
 		 (if content
@@ -266,8 +272,8 @@ nil なら常に再接続する。")
       (setq navi2ch-net-process proc))))
 
 (defun navi2ch-net-split-url (url &optional proxy)
-  (let (host2ch)
-    (string-match "http://\\([^/]+\\)" url)
+  (let (host2ch authinfo user pass)
+    (string-match "http://\\(?:[^@/]+@\\)?\\([^/]+\\)" url)
     (setq host2ch (match-string 1 url))
     (if proxy
         (progn
@@ -277,16 +283,25 @@ nil なら常に再接続する。")
            (cons 'file url)
            (cons 'port (string-to-number (match-string 3 proxy)))
            (cons 'host2ch host2ch)))
-      (string-match "http://\\([^/:]+\\):?\\([0-9]+\\)?\\(.*\\)" url)
+      (string-match "http://\\(?:\\([^@/]+\\)@\\)?\\([^/:]+\\)\\(?::\\([0-9]+\\)\\)?\\(.*\\)" url)
+      (when (setq authinfo (match-string 1 url))
+	(save-match-data
+	  (string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)" authinfo)
+	  (if (match-beginning 1)
+	      (setq user (match-string 1 authinfo)
+		    pass (match-string 2 authinfo))
+	    (setq user (match-string 2 authinfo)))))
       (list
-       (cons 'host (match-string 1 url))
-       (cons 'port (string-to-number (or (match-string 2 url)
+       (cons 'user user)
+       (cons 'pass pass)
+       (cons 'host (match-string 2 url))
+       (cons 'port (string-to-number (or (match-string 3 url)
 					 "80")))
-       (cons 'file (match-string 3 url))
+       (cons 'file (match-string 4 url))
        (cons 'host2ch host2ch)))))
 
-(defun navi2ch-net-http-proxy-basic-credentials (user pass)
-  "USER と PASS から Proxy 認証の証明書 (?) 部分を返す。"
+(defun navi2ch-net-http-basic-credentials (user pass)
+  "USER と PASS から Basic 認証の証明書 (?) 部分を返す。"
   (when (and user pass)
     (concat "Basic "
 	    (base64-encode-string
