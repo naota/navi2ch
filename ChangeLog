@@ -1,3 +1,22 @@
+2008-10-30  mizmiz  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-search.el (navi2ch-search-insert-subjects): レス数情報が
+	あれば表示するように。
+	(navi2ch-search-find-2ch-last-search-word)
+	(navi2ch-search-find-2ch-last-search-offset)
+	(navi2ch-search-find-2ch-search-num)
+	(navi2ch-search-find-2ch-total-hit)
+	(navi2ch-search-find-2ch-thread-regexp)
+	(navi2ch-search-find-2ch-coding): 新変数。
+	(navi2ch-search-set-mode-line, navi2ch-search-find-2ch)
+	(navi2ch-search-find-2ch-subr)
+	(navi2ch-search-find-2ch-make-list): 新関数。
+
+2008-10-30  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-list.el (navi2ch-list-search): find.2ch.net を追加。 all
+	を local に変更。
+
 2008-10-18  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-article.el (navi2ch-article-make-mode-line-identification):
