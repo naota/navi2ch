@@ -1,3 +1,10 @@
+2008-11-12  Naohiro Aota  <nao.aota@gmail.com>
+
+	* navi2ch-search.el (navi2ch-search-mode-line-info): 新変数。
+	(navi2ch-search-subject-subr, navi2ch-search-article-subr)
+	(navi2ch-search-orphan-subr, navi2ch-search-all-cache): #serch 板の
+	mode-line が適切な情報を表示するように。
+
 2008-10-30  mizmiz  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-search.el (navi2ch-search-insert-subjects): レス数情報が

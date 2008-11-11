@@ -1,6 +1,9 @@
 -*-outline-*-
 主な変更点。詳細は ChangeLog を参照してください。
 
+* navi2ch 1.8.0 -> 2.0.0
+find.2ch.net による検索に対応。
+
 * navi2ch 1.7.5 -> 1.8.0
 configure のオプション変更。emacs の指定は --with-emacs オプションでは
 なく環境変数 EMACS で行う。--with-lispdir を指定しない場合のデフォルト

@@ -68,6 +68,7 @@
     (id . "#search")))
 
 (defvar navi2ch-search-history nil)
+(defvar navi2ch-search-mode-line-info nil)
 
 ;;; navi2ch-bm callbacks
 (defun navi2ch-search-set-property (begin end item)
@@ -200,6 +201,9 @@
   (setq buffer-read-only t)
   (buffer-disable-undo)
   (use-local-map navi2ch-search-mode-map)
+  (setq navi2ch-mode-line-identification 
+	'navi2ch-search-mode-line-info)
+  (navi2ch-set-mode-line-identification)
   (navi2ch-search-setup-menu)
   (run-hooks 'navi2ch-bm-mode-hook 'navi2ch-search-mode-hook))
 
@@ -231,7 +235,9 @@
 			(funcall board-list-or-function)
 		      board-list-or-function)))
     (setq navi2ch-search-searched-subject-list
-	  (navi2ch-search-board-subject-regexp board-list regexp)))
+	  (navi2ch-search-board-subject-regexp board-list regexp)
+	  navi2ch-search-mode-line-info
+	  (format "Search subject %s" regexp)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-for-each-directory-recursive (function directory)
@@ -280,7 +286,9 @@
 			(funcall board-list-or-function)
 		      board-list-or-function)))
     (setq navi2ch-search-searched-subject-list
-	  (navi2ch-search-article-regexp board-list regexp)))
+	  (navi2ch-search-article-regexp board-list regexp)
+	  navi2ch-search-mode-line-info
+	  (format "Search article %s" regexp)))
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-article ()
@@ -289,7 +297,8 @@
 
 (defun navi2ch-search-cache-subr (board-list)
   (setq navi2ch-search-searched-subject-list
-	(navi2ch-search-cache board-list))
+	(navi2ch-search-cache board-list)
+	navi2ch-search-mode-line-info "Search cache")
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-cache ()
@@ -298,16 +307,19 @@
 
 (defun navi2ch-search-orphan-subr (board-list)
   (setq navi2ch-search-searched-subject-list
-	(navi2ch-search-orphan board-list))
+	(navi2ch-search-orphan board-list)
+	navi2ch-search-mode-line-info "Search orphan")
   (navi2ch-bm-select-board navi2ch-search-board))
 
 (defun navi2ch-search-all-orphan ()
   (interactive)
   (navi2ch-search-orphan-subr (navi2ch-search-all-board-list)))
 
-(defun navi2ch-search-set-mode-line (str)
-    (setq navi2ch-mode-line-identification str)
-    (navi2ch-set-mode-line-identification))
+
+(defun navi2ch-search-set-mode-line (&optional str)
+  
+  (setq navi2ch-mode-line-identification str)
+  (navi2ch-set-mode-line-identification))
 
 ;;; navi2ch find.2ch.net
 (defvar navi2ch-search-find-2ch-last-search-word nil
@@ -343,11 +355,11 @@ offsetは「次の10件」等の相対位置指定に使う(デフォルトは0)
     (setq navi2ch-search-searched-subject-list
 	  (navi2ch-search-find-2ch-subr keyword navi2ch-search-find-2ch-last-search-num))
     (navi2ch-bm-select-board navi2ch-search-board)
-    (navi2ch-search-set-mode-line
-     (format "Search: %s [%s/%s]"
-	     navi2ch-search-find-2ch-last-search-word 
-	     navi2ch-search-find-2ch-last-search-num 
-	     navi2ch-search-find-2ch-total-hit))))
+    (setq navi2ch-search-mode-line-info
+	  (format "Search: %s [%s/%s]"
+		  navi2ch-search-find-2ch-last-search-word 
+		  navi2ch-search-find-2ch-last-search-num 
+		  navi2ch-search-find-2ch-total-hit))))
 
 (defun navi2ch-search-find-2ch-subr (query offset)
   "find.2ch.netに文字列queryでリクエスト。offsetは「次の10件」とか表示させたいときに使う"
