@@ -119,12 +119,13 @@
    '((view   . ?V)
      (cache  . ?C)
      (update . ?U)
+     (down   . ?D)
      (nil    . ? ))
    :test 'eq))
   
 
 (eval-and-compile
-  (let ((state-list '(view cache update nil))
+  (let ((state-list '(view cache update down nil))
 	(update-list '(nil new updated seen)))
     (let ((func (lambda (f)
 		  (navi2ch-alist-to-hash

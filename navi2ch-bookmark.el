@@ -447,20 +447,30 @@ KEY は (concat URI ARTID)")
 			       "0")))
 		     new-res board-data)
 		(when (or (null navi2ch-bookmark-fetch-mark-article-no-check-regexp)
-			  (not (string-match navi2ch-bookmark-fetch-mark-article-no-check-regexp
-					     board-uri)))
+			  (not (string-match 
+				navi2ch-bookmark-fetch-mark-article-no-check-regexp
+				board-uri)))
 		  (setq board-data
-			(navi2ch-cache-get board-uri
-					   (mapcar
-					    (lambda (x)
-					      (cons (cdr (assq 'artid x))
-						    (string-to-number (cdr (assq 'response x)))))
-					    (navi2ch-board-get-updated-subject-list board))
-					   board-data-cache))
-		  (when (and res
-			     (setq new-res (cdr (assoc art-id board-data)))
-			     (<= new-res res))
-		    (navi2ch-bm-unmark)))))
+			(navi2ch-cache-get 
+			 board-uri
+			 (mapcar
+			  (lambda (x)
+			    (cons (cdr (assq 'artid x))
+				  (string-to-number (cdr (assq 'response x)))))
+			  (navi2ch-board-get-updated-subject-list board))
+			 board-data-cache))
+		  (setq new-res (cdr (assoc art-id board-data)))
+		  (cond
+		   ;; おちてる
+		   ((not new-res)
+		    (navi2ch-bm-insert-state
+		     (navi2ch-bm-get-property-internal (point))
+		     'down)
+		    (navi2ch-bm-unmark))
+		   ((and res
+			 new-res
+			 (<= new-res res))
+		    (navi2ch-bm-unmark))))))
 	    (forward-line)))))
     (navi2ch-bm-exec-subr #'navi2ch-bookmark-fetch-article force)))
 

@@ -1,3 +1,15 @@
+2008-12-15  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-vars.el (navi2ch-bm-sort-by-state-order): down マークの
+	sort-order を定義。
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): おちて
+	るスレを down でマーク。
+
+	* navi2ch-board-misc.el (navi2ch-bm-state-char-table): down マーク
+	を追加。
+	(toplevel): Ditto.
+
 2008-11-12  Naohiro Aota  <nao.aota@gmail.com>
 
 	* navi2ch-search.el (navi2ch-search-mode-line-info): 新変数。
