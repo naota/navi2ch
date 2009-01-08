@@ -337,7 +337,7 @@
 
 (defun navi2ch-search-find-2ch (&optional offset)
   "2ちゃんねる検索(http://find.2ch.net)でスレッドタイトル検索。
-offsetは「次の10件」等の相対位置指定に使う(デフォルトは0)
+`offset' は「次の10件」等の相対位置指定に使う(デフォルトは0)
 表示には navi2ch-search- のフレームワークを使用"
   (interactive)
   (let (keyword)
@@ -362,7 +362,8 @@ offsetは「次の10件」等の相対位置指定に使う(デフォルトは0)
 		  navi2ch-search-find-2ch-total-hit))))
 
 (defun navi2ch-search-find-2ch-subr (query offset)
-  "find.2ch.netに文字列queryでリクエスト。offsetは「次の10件」とか表示させたいときに使う"
+  "find.2ch.netに文字列queryでリクエスト。
+`offset' は「次の10件」とか表示させたいときに使う。"
   (let* ((query (navi2ch-replace-string 
 		 " " 
 		 "\+" 
@@ -392,10 +393,10 @@ offsetは「次の10件」等の相対位置指定に使う(デフォルトは0)
 		(push (navi2ch-search-find-2ch-make-list url title num ita) subject-list))))
 	(setq navi2ch-search-find-2ch-total-hit "0")
 	(message "No match")))
-    subject-list))
+    (nreverse subject-list)))
 
 (defun navi2ch-search-find-2ch-make-list (url title num ita)
-  "((board) (subject))というnavi2ch内部仕様なスレ情報を擬似的に作成"
+  "((board) (subject)) のような navi2ch 内部のスレ情報を擬似的に作成。"
   (when (string-match 
 	 "\\(http://[-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+/\\)test/read.cgi/\\(.+\\)/\\([0-9]+\\)/.+" 
 	 url)

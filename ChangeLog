@@ -1,3 +1,13 @@
+2009-01-09  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-article): article を開け
+	なかった時は window-configuration を元に戻すように。
+
+	* navi2ch-search.el (navi2ch-search-find-2ch-subr): 検索結果の順番
+	が逆になっていたのを修正。 docstring を修正。
+	(navi2ch-search-find-2ch-make-list): docstring を修正。
+	(navi2ch-search-find-2ch): Ditto.
+
 2008-12-15  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-vars.el (navi2ch-bm-sort-by-state-order): down マークの

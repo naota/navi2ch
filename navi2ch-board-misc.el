@@ -377,8 +377,9 @@
 		    (navi2ch-bm-remove-fetched-article board article)
 		    (if (eq major-mode 'navi2ch-board-mode)
 			(navi2ch-bm-insert-state item 'view 'seen)
-		      (navi2ch-bm-insert-state item 'view)))))
-	      (setq window-configuration (current-window-configuration)))
+		      (navi2ch-bm-insert-state item 'view))))
+		(when (eq major-mode 'navi2ch-article-mode)
+		  (setq window-configuration (current-window-configuration)))))
 	  (message "Can't select this line!"))
       (set-window-configuration window-configuration))))
 
