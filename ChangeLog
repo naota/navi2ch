@@ -1,3 +1,14 @@
+2009-01-13  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-search.el (navi2ch-search-find-2ch): interactive が
+	prefix-arg を数字として解釈するように。
+	(navi2ch-search-find-2ch-next, navi2ch-search-find-2ch-prev): New
+	function.
+	(navi2ch-search-find-2ch-search-num): docstring に最大値について明
+	記。
+	(navi2ch-search-find-2ch-last-search-num): Rename.
+	(navi2ch-search-find-2ch-subr): 上記変更に追随。
+
 2009-01-09  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-board-misc.el (navi2ch-bm-select-article): article を開け
