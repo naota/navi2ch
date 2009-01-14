@@ -426,9 +426,9 @@
 (defun navi2ch-message-self-insert-aa ()
   "最後入力したキーにしたがって AA を入力する。"
   (interactive)
-  (let ((char last-command-char) aa)
+  (let ((char last-command-event) aa)
     (if (and (navi2ch-char-valid-p char)
-	     (setq aa (cdr (assoc (string last-command-char)
+	     (setq aa (cdr (assoc (string last-command-event)
 				  (append navi2ch-message-aa-alist
 					  navi2ch-message-aa-default-alist)))))
 	(insert aa)

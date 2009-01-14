@@ -42,6 +42,7 @@
     (define-key map " " 'navi2ch-article-scroll-up)
     (navi2ch-define-delete-keys map 'navi2ch-article-scroll-down)
     (define-key map "\r" 'navi2ch-popup-article-select-current-link)
+    (navi2ch-define-mouse-key map 1 'navi2ch-popup-article-mouse-select)
     (navi2ch-define-mouse-key map 2 'navi2ch-popup-article-mouse-select)
     (define-key map "g" 'navi2ch-article-goto-number)
     (define-key map "q" 'navi2ch-popup-article-exit)
