@@ -47,7 +47,7 @@
     (set-keymap-parent map navi2ch-global-view-map)
     (define-key map "\r" 'navi2ch-bm-select-article)
     (unless (featurep 'xemacs)
-      (define-key map [follow-link] 'navi2ch-bm-mouse-select))
+      (define-key map [follow-link] 'mouse-face))
     (navi2ch-define-mouse-key map 2 'navi2ch-bm-mouse-select)
     (define-key map " " 'navi2ch-bm-select-article-or-scroll-up)
     (define-key map "." 'navi2ch-bm-display-article)

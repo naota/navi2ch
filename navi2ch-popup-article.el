@@ -43,7 +43,7 @@
     (navi2ch-define-delete-keys map 'navi2ch-article-scroll-down)
     (define-key map "\r" 'navi2ch-popup-article-select-current-link)
     (unless (featurep 'xemacs)
-      (define-key map [follow-link] 'navi2ch-popup-article-mouse-select))
+      (define-key map [follow-link] 'mouse-face))
     (navi2ch-define-mouse-key map 2 'navi2ch-popup-article-mouse-select)
     (define-key map "g" 'navi2ch-article-goto-number)
     (define-key map "q" 'navi2ch-popup-article-exit)

@@ -52,7 +52,7 @@
     (define-key map "a" 'navi2ch-list-add-bookmark)
     (define-key map "b" 'navi2ch-list-toggle-bookmark)
     (unless (featurep 'xemacs)
-      (define-key map [follow-link] 'navi2ch-list-mouse-select))
+      (define-key map [follow-link] 'mouse-face))
     (navi2ch-define-mouse-key map 2 'navi2ch-list-mouse-select)
     (define-key map "/" 'navi2ch-list-toggle-open)
     (define-key map "[" 'navi2ch-list-open-all-category)

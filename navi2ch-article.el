@@ -62,7 +62,7 @@
     (define-key map "W" 'navi2ch-article-write-sage-message)
     (define-key map "\r" 'navi2ch-article-select-current-link)
     (unless (featurep 'xemacs)
-      (define-key map [follow-link] 'navi2ch-article-mouse-select))
+      (define-key map [follow-link] 'mouse-face))
     (navi2ch-define-mouse-key map 2 'navi2ch-article-mouse-select)
     (define-key map "g" 'navi2ch-article-goto-number-or-board)
     ;; (define-key map "g" 'navi2ch-article-goto-number)
