@@ -324,12 +324,13 @@
 ;;; navi2ch find.2ch.net
 (defvar navi2ch-search-find-2ch-last-search-word nil
   "最後に検索した文字列")
-(defvar navi2ch-search-find-2ch-last-search-offset nil)
-(defvar navi2ch-search-find-2ch-last-search-num 30
-  "一度に表示する検索結果
-find.2ch.net の仕様上、最大は50件")
+(defvar navi2ch-search-find-2ch-last-search-num nil)
 (defvar navi2ch-search-find-2ch-total-hit nil
   "検索総ヒット数")
+
+(defvar navi2ch-search-find-2ch-search-num 30
+  "一度に表示する検索結果
+find.2ch.net の仕様上、最大は50件")
 (defvar navi2ch-search-find-2ch-coding 'euc-japan-dos
   "find.2ch.net で使われるコーディング")
 (defvar navi2ch-search-find-2ch-thread-regexp
@@ -340,7 +341,7 @@ find.2ch.net の仕様上、最大は50件")
   "2ちゃんねる検索(http://find.2ch.net)でスレッドタイトル検索。
 `offset' は「次の10件」等の相対位置指定に使う(デフォルトは0)
 表示には navi2ch-search- のフレームワークを使用"
-  (interactive "p")
+  (interactive "P")
   (let (keyword)
     (if (and navi2ch-search-find-2ch-last-search-word offset)
 	(setq keyword navi2ch-search-find-2ch-last-search-word)
@@ -349,9 +350,9 @@ find.2ch.net の仕様上、最大は50件")
 					'navi2ch-search-history))
       (setq navi2ch-search-find-2ch-last-search-word keyword
 	    navi2ch-search-find-2ch-last-search-num 0))
-    (unless offset
-      (setq offset 0))
-    (setq navi2ch-search-find-2ch-last-search-num (+ offset navi2ch-search-find-2ch-last-search-num))
+    (setq navi2ch-search-find-2ch-last-search-num
+	  (+ navi2ch-search-find-2ch-last-search-num
+	     (or offset 0)))
     ;; board mode に渡すスレタイのリスト作成
     (setq navi2ch-search-searched-subject-list
 	  (navi2ch-search-find-2ch-subr keyword navi2ch-search-find-2ch-last-search-num))
@@ -359,7 +360,7 @@ find.2ch.net の仕様上、最大は50件")
     (setq navi2ch-search-mode-line-info
 	  (format "Search: %s [%s/%s]"
 		  navi2ch-search-find-2ch-last-search-word 
-		  navi2ch-search-find-2ch-last-search-num 
+		  navi2ch-search-find-2ch-last-search-num
 		  navi2ch-search-find-2ch-total-hit))))
 
 (defun navi2ch-search-find-2ch-subr (query offset)
@@ -372,7 +373,7 @@ find.2ch.net の仕様上、最大は50件")
 	 ;; 意味も分からず使ってるパラメータ多し。内部仕様が分かり次第改善予定
 	 (url (format 
 	       "http://find.2ch.net/?STR=%s&SCEND=A&SORT=MODIFIED&COUNT=%s&TYPE=TITLE&BBS=ALL&OFFSET=%s" 
-	       query navi2ch-search-find-2ch-last-search-num offset))
+	       query navi2ch-search-find-2ch-search-num offset))
 	 (proc (navi2ch-net-download-file url))
 	 (cont (decode-coding-string (navi2ch-net-get-content proc) 
 				     navi2ch-search-find-2ch-coding))
@@ -399,19 +400,21 @@ find.2ch.net の仕様上、最大は50件")
 ;; 次のページ
 (defun navi2ch-search-find-2ch-next ()
   (interactive)
-  (navi2ch-search-find-2ch 30))
+  (navi2ch-search-find-2ch 
+   navi2ch-search-find-2ch-search-num))
 
 ;; 前のページ
 (defun navi2ch-search-find-2ch-prev ()
   (interactive)
-  (navi2ch-search-find-2ch -30))
+  (navi2ch-search-find-2ch 
+   (- navi2ch-search-find-2ch-search-num)))
 
 (defun navi2ch-search-find-2ch-make-list (url title num ita)
   "((board) (subject)) のような navi2ch 内部のスレ情報を擬似的に作成。"
   (when (string-match 
 	 "\\(http://[-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+/\\)test/read.cgi/\\(.+\\)/\\([0-9]+\\)/.+" 
 	 url)
-    (let* ((uri (cons 'uri  (concat (match-string 1 url) (match-string 2 url))))
+    (let* ((uri (cons 'uri (concat (match-string 1 url) (match-string 2 url) "/")))
 	   (id (cons 'id  (match-string 2 url)))
 	   (name (cons 'name ita))
 	   (board (list name uri id '(type . board)))

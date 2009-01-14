@@ -1,3 +1,11 @@
+2009-01-14  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-search.el (navi2ch-search-find-2ch-make-list): uri の末尾
+	に "/" をつけるように。
+	(navi2ch-search-find-2ch-subr): Revert before change.
+	(navi2ch-search-find-2ch-last-search-offset): Remove.
+	(navi2ch-search-find-2ch): interactive の引数を "P" に。
+
 2009-01-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-search.el (navi2ch-search-find-2ch): interactive が
