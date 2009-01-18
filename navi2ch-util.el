@@ -1450,6 +1450,28 @@ properties to add to the result."
 
 (defsubst navi2ch-cache-remove (key cache)
   (remhash key (navi2ch-cache-hash-table cache)))
+
+;; from emacs-w3m
+(defun navi2ch-url-encode-string (str &optional coding encode-space)
+  (apply (function concat)
+	 (mapcar
+	  (lambda (ch)
+	    (cond
+	     ((eq ch ?\n)		; newline
+	      "%0D%0A")
+	     ((string-match "[-a-zA-Z0-9_:/.]" (char-to-string ch)) ; xxx?
+	      (char-to-string ch))	; printable
+	     ((and (char-equal ch ?\x20); space
+		   encode-space)
+	      "+")
+	     (t
+	      (format "%%%02X" ch))))	; escape
+	  ;; Coerce a string into a list of chars.
+	  (append (encode-coding-string (or str "")
+					(or coding
+					    navi2ch-coding-system
+					    'shift_jis))
+		  nil))))
   
 (navi2ch-update-html-tag-regexp)
 

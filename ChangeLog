@@ -1,3 +1,18 @@
+2009-01-19  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-search.el
+	navi2ch-search-web-* を追加。  navi2ch-search-find-2ch-* を上記変更
+	にあわせて変更。navi2ch-search-hula-* を追加。
+	navi2ch-search-union-* を追加。
+	(navi2ch-search-find-2ch-thread-regexp): 定数に。
+	(navi2ch-search-find-2ch-next): navi2ch-search-find-2ch-search-num
+	と 50 との小さいほうを navi2ch-search-find-2ch に渡すように。
+	(navi2ch-search-web-make-list): navi2ch-search-find-2ch-make-list
+	から改名。 board を navi2ch-board-url-to-board() で取得するように。
+
+	* navi2ch-vars.el (navi2ch-global-view-map): C-c C-s を
+	navi2ch-search-web に割り当て。
+
 2009-01-15  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-map):

@@ -1,7 +1,7 @@
 ;;; navi2ch-vars.el --- User variables for navi2ch. -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 by
-;; Navi2ch Project
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+;; by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: www 2ch
@@ -2405,6 +2405,7 @@ to force the image format."
     (define-key map "t" 'navi2ch-toggle-offline)
     (define-key map "V" 'navi2ch-version)
     (define-key map "\C-x\C-s" 'navi2ch-save-status)
+    (define-key map "\C-c\C-s" 'navi2ch-search-web)
     (setq navi2ch-global-view-map map)))
 
 (run-hooks 'navi2ch-vars-load-hook)

@@ -1,7 +1,7 @@
 ;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008 by Navi2ch
-;; Project
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009 by
+;; Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network

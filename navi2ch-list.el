@@ -1,7 +1,7 @@
 ;;; navi2ch-list.el --- board list module for navi2ch -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2008 by Navi2ch
-;; Project
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2008, 2009 by
+;; Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -834,10 +834,10 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 		  (if (and board
 			   (navi2ch-board-get-file-name board))
 		      (navi2ch-read-char-with-retry
-		       "Search from: b)oard c)ategory l)ocal f)ind.2ch.net: " 
-		       nil '(?b ?c ?l ?f))
+		       "Search from: b)oard c)ategory l)ocal w)eb: " 
+		       nil '(?b ?c ?l ?w))
 		    (navi2ch-read-char-with-retry
-		     "Search from: c)ategory l)ocal f)ind.2ch.net: " nil '(?c ?l ?f)))
+		     "Search from: c)ategory l)ocal w)eb: " nil '(?c ?l ?w)))
 		  (if (and board
 			   (navi2ch-board-get-file-name board))
 		      (navi2ch-read-char-with-retry
@@ -848,7 +848,7 @@ changed-list $B$O(B '((board-id old-board new-board) ...) $B$J(B alist$B!#
 	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-subject))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-subject))
 		 ((eq ch2 ?l) (navi2ch-search-all-subject))
-		 ((eq ch2 ?f) (navi2ch-search-find-2ch))))
+		 ((eq ch2 ?w) (navi2ch-search-web))))
 	  ((eq ch ?a)
 	   (cond ((eq ch2 ?b) (navi2ch-list-search-current-board-article))
 		 ((eq ch2 ?c) (navi2ch-list-search-current-category-article))

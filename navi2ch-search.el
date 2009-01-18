@@ -1,6 +1,7 @@
 ;;; navi2ch-search.el --- Search Module for Navi2ch -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2008 by Navi2ch Project
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2008, 2009 by Navi2ch
+;; Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -321,55 +322,97 @@
   (setq navi2ch-mode-line-identification str)
   (navi2ch-set-mode-line-identification))
 
-;;; navi2ch find.2ch.net
-(defvar navi2ch-search-find-2ch-last-search-word nil
+;;; navi2ch web subject search
+(defvar navi2ch-search-web-last-search-word nil
   "最後に検索した文字列")
-(defvar navi2ch-search-find-2ch-last-search-num nil)
-(defvar navi2ch-search-find-2ch-total-hit nil
+(defvar navi2ch-search-web-current-start 0
+  "現在、表示しているスレのオフセット")
+(defvar navi2ch-search-web-current-end 0)
+(defvar navi2ch-search-web-total-hit 0
   "検索総ヒット数")
+(defvar navi2ch-search-web-search-method 'navi2ch-search-find-2ch-method)
+(defsubst navi2ch-search-web-method ()
+  (if (symbolp navi2ch-search-web-search-method)
+      (symbol-value navi2ch-search-web-search-method)
+    navi2ch-search-web-search-method))
+(defsubst navi2ch-search-web-subject-list (keyword arg)
+  (funcall (nth 0 (navi2ch-search-web-method)) keyword arg))
+(defun navi2ch-search-web-next (&optional args)
+  (interactive "P")
+  (let ((item (nth 1 (navi2ch-search-web-method))))
+    (navi2ch-search-web
+     (if (functionp item) 
+	 (apply item args)
+       item))))
+(defun navi2ch-search-web-previous (&optional args)
+  (interactive "P")
+  (let ((item (nth 2 (navi2ch-search-web-method))))
+    (navi2ch-search-web
+     (if (functionp item) 
+	 (apply item args)
+       item))))
 
+(defun navi2ch-search-web (&optional arg)
+  "web の検索システムを使って 2ch をスレタイで検索する。
+`arg' は backend により解釈が異なるが、 `arg' が `nil' の場合は必
+ず新しい検索を開始する。"
+  (interactive "P")
+  (let (keyword)
+    (if (and navi2ch-search-web-last-search-word arg)
+	(setq keyword navi2ch-search-web-last-search-word)
+      (setq keyword (navi2ch-read-string "Subject search from web: " 
+					nil
+					'navi2ch-search-history)))
+    (setq navi2ch-search-web-last-search-word keyword
+	  navi2ch-search-web-current-start 0
+	  navi2ch-search-web-current-end 0
+	  navi2ch-search-web-total-hit 0)
+    ;; board mode に渡すスレタイのリスト作成
+    (setq navi2ch-search-searched-subject-list
+	  (navi2ch-search-web-subject-list keyword arg))
+    (navi2ch-bm-select-board navi2ch-search-board)
+    (setq navi2ch-search-mode-line-info
+	  (format "Search: %s [%d-%d/%d]"
+		  navi2ch-search-web-last-search-word
+		  navi2ch-search-web-current-start
+		  navi2ch-search-web-current-end
+		  navi2ch-search-web-total-hit))))
+
+(defun navi2ch-search-web-make-list (url title num)
+  "((board) (subject)) のような navi2ch 内部のスレ情報を擬似的に作成。"
+  (when (string-match 
+	 "\\(http://[-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+/\\)test/read.cgi/\\(.+\\)/\\([0-9]+\\)/.*" 
+	 url)
+    (let ((subject (cons 'subject title))
+	  (response (cons 'response num))
+	  (artid (cons 'artid (match-string 3 url))))
+      (list (navi2ch-board-url-to-board url) subject artid response))))
+
+;;; navi2ch find.2ch.net
+(defvar navi2ch-search-find-2ch-method
+    '(navi2ch-search-find-2ch-subject-list
+      navi2ch-search-find-2ch-next
+      navi2ch-search-find-2ch-previous))
+(defvar navi2ch-search-find-2ch-last-search-num nil)
 (defvar navi2ch-search-find-2ch-search-num 30
   "一度に表示する検索結果
 find.2ch.net の仕様上、最大は50件")
 (defvar navi2ch-search-find-2ch-coding 'euc-japan-dos
   "find.2ch.net で使われるコーディング")
-(defvar navi2ch-search-find-2ch-thread-regexp
+(defconst navi2ch-search-find-2ch-thread-regexp
   "<dt><a href=\"\\(http://[-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+\\)\">\\(.*\\)</a> (\\([0-9]+\\)) - <font size=[-0-9]+><a href=.+/>\\(.+\\)板</a>.+</font></dt><dd>"
   "find.2ch.net で検索する regexp")
 
-(defun navi2ch-search-find-2ch (&optional offset)
-  "2ちゃんねる検索(http://find.2ch.net)でスレッドタイトル検索。
-`offset' は「次の10件」等の相対位置指定に使う(デフォルトは0)
-表示には navi2ch-search- のフレームワークを使用"
-  (interactive "P")
-  (let (keyword)
-    (if (and navi2ch-search-find-2ch-last-search-word offset)
-	(setq keyword navi2ch-search-find-2ch-last-search-word)
-      (setq keyword (navi2ch-read-string "Subject search at find.2ch.net: " 
-					nil
-					'navi2ch-search-history))
-      (setq navi2ch-search-find-2ch-last-search-word keyword
-	    navi2ch-search-find-2ch-last-search-num 0))
-    (setq navi2ch-search-find-2ch-last-search-num
-	  (+ navi2ch-search-find-2ch-last-search-num
-	     (or offset 0)))
-    ;; board mode に渡すスレタイのリスト作成
-    (setq navi2ch-search-searched-subject-list
-	  (navi2ch-search-find-2ch-subr keyword navi2ch-search-find-2ch-last-search-num))
-    (navi2ch-bm-select-board navi2ch-search-board)
-    (setq navi2ch-search-mode-line-info
-	  (format "Search: %s [%s/%s]"
-		  navi2ch-search-find-2ch-last-search-word 
-		  navi2ch-search-find-2ch-last-search-num
-		  navi2ch-search-find-2ch-total-hit))))
-
-(defun navi2ch-search-find-2ch-subr (query offset)
-  "find.2ch.netに文字列queryでリクエスト。
+(defun navi2ch-search-find-2ch-subject-list (query offset)
+  "find.2ch.net に文字列 `query' でリクエスト。
 `offset' は「次の10件」とか表示させたいときに使う。"
-  (let* ((query (navi2ch-replace-string 
-		 " " 
-		 "\+" 
-		 (encode-coding-string query navi2ch-search-find-2ch-coding)))
+  (setq offset
+	(if offset
+	    (+ (or navi2ch-search-find-2ch-last-search-num 0) offset)
+	  0))
+  (setq navi2ch-search-find-2ch-last-search-num offset)
+  (let* ((query (navi2ch-url-encode-string query 
+					   navi2ch-search-find-2ch-coding t))
 	 ;; 意味も分からず使ってるパラメータ多し。内部仕様が分かり次第改善予定
 	 (url (format 
 	       "http://find.2ch.net/?STR=%s&SCEND=A&SORT=MODIFIED&COUNT=%s&TYPE=TITLE&BBS=ALL&OFFSET=%s" 
@@ -384,44 +427,120 @@ find.2ch.net の仕様上、最大は50件")
       ;; まず総ヒット件数を探す
       (if (re-search-forward "<font color=white size=-1>\\([0-9]+\\)スレ中.*秒</font>" nil t)
 	  (progn
-	    (setq navi2ch-search-find-2ch-total-hit (match-string 1))
+	    (setq navi2ch-search-web-total-hit (string-to-number (match-string 1)))
 	    (while (re-search-forward 
 		    navi2ch-search-find-2ch-thread-regexp
 		    nil t)
 	      (let ((url (match-string 1))
 		    (title (navi2ch-replace-html-tag (match-string 2)))
-		    (num  (match-string 3))
-		    (ita (match-string 4)))
-		(push (navi2ch-search-find-2ch-make-list url title num ita) subject-list))))
-	(setq navi2ch-search-find-2ch-total-hit "0")
+		    (num  (match-string 3)))
+		(push (navi2ch-search-web-make-list url title num)
+		      subject-list))))
+	(setq navi2ch-search-web-total-hit 0)
 	(message "No match")))
+    (setq navi2ch-search-web-current-start
+	  (min (1+ navi2ch-search-find-2ch-last-search-num)
+	       navi2ch-search-web-total-hit)
+	  navi2ch-search-web-current-end
+	  (min (+ navi2ch-search-find-2ch-last-search-num 
+		  (min navi2ch-search-find-2ch-search-num 50))
+	       navi2ch-search-web-total-hit))
     (nreverse subject-list)))
 
 ;; 次のページ
 (defun navi2ch-search-find-2ch-next ()
-  (interactive)
-  (navi2ch-search-find-2ch 
-   navi2ch-search-find-2ch-search-num))
+   (min navi2ch-search-find-2ch-search-num 50))
 
 ;; 前のページ
-(defun navi2ch-search-find-2ch-prev ()
-  (interactive)
-  (navi2ch-search-find-2ch 
-   (- navi2ch-search-find-2ch-search-num)))
+(defun navi2ch-search-find-2ch-previous ()
+  (- (min navi2ch-search-find-2ch-search-num 50)))
 
-(defun navi2ch-search-find-2ch-make-list (url title num ita)
-  "((board) (subject)) のような navi2ch 内部のスレ情報を擬似的に作成。"
-  (when (string-match 
-	 "\\(http://[-a-zA-Z0-9_.!~*';/?:@&=+$,%#]+/\\)test/read.cgi/\\(.+\\)/\\([0-9]+\\)/.+" 
-	 url)
-    (let* ((uri (cons 'uri (concat (match-string 1 url) (match-string 2 url) "/")))
-	   (id (cons 'id  (match-string 2 url)))
-	   (name (cons 'name ita))
-	   (board (list name uri id '(type . board)))
-	   (subject (cons 'subject title))
-	   (response (cons 'response num))
-	   (artid (cons 'artid (match-string 3 url))))
-      (list board subject artid response))))
+;;; navi2ch h.ula.cc
+(defvar navi2ch-search-hula-method
+    '(navi2ch-search-hula-subject-list 1 -1))
+(defvar navi2ch-search-hula-current-page nil)
+(defvar navi2ch-search-hula-coding 'shift_jis)
+(defconst navi2ch-search-hula-thread-regexp 
+  "<nobr>[^<]+<a href=\"http://same.ula.cc/test/r.so/\\([^/]+\\)/\\([^/]+\\)/\\([0-9]+\\)/\\?guid=ON\" target=\"_blank\">\\([^<]*\\) (\\([0-9]+\\))</a></nobr>")
+
+(defun navi2ch-search-hula-subject-list (query arg)
+  "h.ula.cc に文字列 `query' でリクエスト。"
+  (setq navi2ch-search-hula-current-page
+	(if arg
+	    (+ navi2ch-search-hula-current-page
+	       (if (< arg 0) -1 1))
+	  1))
+  (let* ((query (navi2ch-url-encode-string query 
+					   navi2ch-search-hula-coding t))
+	 (url (format 
+	       "http://h.ula.cc/dance/?P=%d&kenken=%s"
+	       navi2ch-search-hula-current-page query))
+	 (proc (navi2ch-net-download-file url))
+	 (cont (decode-coding-string (navi2ch-net-get-content proc) 
+				     navi2ch-search-hula-coding))
+	 subject-list)
+    (with-temp-buffer
+      (insert cont)
+      (goto-char (point-min))
+      (if (re-search-forward "<font color=red face=\"Arial\"><b>\\([0-9,]+\\)</b></font>"
+			     nil t)
+	  (progn
+	    (setq navi2ch-search-web-total-hit
+		  (string-to-number (navi2ch-replace-string "," "" 
+							    (match-string 1))))
+	    (while (re-search-forward
+		    navi2ch-search-hula-thread-regexp
+		    nil t)
+	      (let ((url (format "http://%s/test/read.cgi/%s/%s/"
+				 (match-string 1)
+				 (match-string 2)
+				 (match-string 3)))
+		    (title (navi2ch-replace-html-tag (match-string 4)))
+		    (num  (match-string 5)))
+		(push (navi2ch-search-web-make-list url title num) 
+		      subject-list))))
+	(setq navi2ch-search-web-total-hit 0)
+	(message "No match")))
+    (setq navi2ch-search-web-current-start
+	  (min (1+ (* (1- navi2ch-search-hula-current-page) 50))
+	       navi2ch-search-web-total-hit)
+	  navi2ch-search-web-current-end
+	  (min (* navi2ch-search-hula-current-page 50)
+	       navi2ch-search-web-total-hit))
+    (nreverse subject-list)))
+
+;; navi2ch union
+(defvar navi2ch-search-union-method
+    '(navi2ch-search-union-subject-list 1 -1))
+(defvar navi2ch-search-union-method-list
+  '(navi2ch-search-find-2ch-method
+    navi2ch-search-hula-method))
+(defvar navi2ch-search-union-last-search-num 0)
+
+(defun navi2ch-search-union-subject-list (keyword arg)
+  (unless arg (setq navi2ch-search-union-last-search-num 0))
+  (let ((all 0) (current 0) method-list url-list result)
+    (dolist (m navi2ch-search-union-method-list)
+      (let ((navi2ch-search-web-search-method m))
+	(setq method-list (navi2ch-search-web-subject-list keyword arg)))
+      (setq all (+ all navi2ch-search-web-total-hit)
+	    current (+ current 
+		       (- navi2ch-search-web-current-end
+			  navi2ch-search-web-current-start)
+		       1))
+      (dolist (l method-list)
+	(let ((url (navi2ch-article-to-url (car l) (cdr l))))
+	  (unless (member url url-list)
+	    (push url url-list)
+	    (push l result)))))
+    (setq navi2ch-search-web-total-hit all
+	  navi2ch-search-web-current-start 
+	  (1+ navi2ch-search-union-last-search-num)
+	  navi2ch-search-web-current-end 
+	  (+ current navi2ch-search-union-last-search-num)
+	  navi2ch-search-union-last-search-num
+	  (+ current navi2ch-search-union-last-search-num))
+    (nreverse result)))
 
 (run-hooks 'navi2ch-search-load-hook)
 ;;; navi2ch-search.el ends here
