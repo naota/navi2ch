@@ -2384,6 +2384,7 @@ to force the image format."
     (define-key map "\C-c\C-n" 'navi2ch-article-forward-sticky-buffer)
     (define-key map "\C-c\C-p" 'navi2ch-article-backward-sticky-buffer)
     (define-key map "\C-c\C-l" 'navi2ch-be2ch-toggle-login)
+    (define-key map "\C-c\C-s" 'navi2ch-search-web)
     (setq navi2ch-global-map map)))
 
 (defvar navi2ch-global-view-map nil
@@ -2405,7 +2406,6 @@ to force the image format."
     (define-key map "t" 'navi2ch-toggle-offline)
     (define-key map "V" 'navi2ch-version)
     (define-key map "\C-x\C-s" 'navi2ch-save-status)
-    (define-key map "\C-c\C-s" 'navi2ch-search-web)
     (setq navi2ch-global-view-map map)))
 
 (run-hooks 'navi2ch-vars-load-hook)

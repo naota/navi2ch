@@ -1,5 +1,8 @@
 2009-01-20  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-vars.el (navi2ch-global-map, navi2ch-global-view-map):
+	Move C-c C-l from navi2ch-global-view-map to navi2ch-global-map.
+
 	* navi2ch-search.el (navi2ch-search-union-prev-num): New variable.
 	(navi2ch-search-union-subject-list): Use it.
 
