@@ -516,13 +516,29 @@ find.2ch.net の仕様上、最大は50件")
   '(navi2ch-search-find-2ch-method
     navi2ch-search-hula-method))
 (defvar navi2ch-search-union-last-search-num 0)
+(defvar navi2ch-search-union-prev-num nil)
 
 (defun navi2ch-search-union-subject-list (keyword arg)
-  (unless arg (setq navi2ch-search-union-last-search-num 0))
+  (unless arg 
+    (setq navi2ch-search-union-last-search-num 0
+	  navi2ch-search-union-prev-num nil))
   (let ((all 0) (current 0) method-list url-list result)
     (dolist (m navi2ch-search-union-method-list)
       (let ((navi2ch-search-web-search-method m))
-	(setq method-list (navi2ch-search-web-subject-list keyword arg)))
+	(setq method-list (navi2ch-search-web-subject-list 
+			   keyword
+			   (cond
+			    ((eq arg 1)
+			     (let ((item (nth 1 (navi2ch-search-web-method))))
+			       (if (functionp item) 
+				   (apply item args)
+				 item)))
+			    ((eq arg -1)
+			     (let ((item (nth 2 (navi2ch-search-web-method))))
+			       (if (functionp item) 
+				   (apply item args)
+				 item)))
+			    (t arg)))))
       (setq all (+ all navi2ch-search-web-total-hit)
 	    current (+ current 
 		       (- navi2ch-search-web-current-end
@@ -533,13 +549,21 @@ find.2ch.net の仕様上、最大は50件")
 	  (unless (member url url-list)
 	    (push url url-list)
 	    (push l result)))))
-    (setq navi2ch-search-web-total-hit all
-	  navi2ch-search-web-current-start 
-	  (1+ navi2ch-search-union-last-search-num)
-	  navi2ch-search-web-current-end 
-	  (+ current navi2ch-search-union-last-search-num)
-	  navi2ch-search-union-last-search-num
-	  (+ current navi2ch-search-union-last-search-num))
+    (setq navi2ch-search-web-total-hit all)
+    (setq navi2ch-search-web-current-start
+	  (if (eq arg -1)
+	      (or (cadr navi2ch-search-union-prev-num)
+		  1)
+	    (1+ navi2ch-search-union-last-search-num)))
+    (setq navi2ch-search-web-current-end
+	  (+ current navi2ch-search-web-current-start -1))
+    (setq navi2ch-search-union-last-search-num
+	  navi2ch-search-web-current-end)
+    (setq navi2ch-search-union-prev-num
+	  (if (eq arg -1)
+	      (or (cdr navi2ch-search-union-prev-num) '(1))
+	    (cons navi2ch-search-web-current-start
+		  navi2ch-search-union-prev-num)))
     (nreverse result)))
 
 (run-hooks 'navi2ch-search-load-hook)
