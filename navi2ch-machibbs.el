@@ -1,6 +1,6 @@
 ;;; navi2ch-machibbs.el --- View machiBBS module for Navi2ch. -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2002, 2003, 2004 by Navi2ch Project
+;; Copyright (C) 2002, 2003, 2004, 2009 by Navi2ch Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
@@ -76,8 +76,8 @@
 (navi2ch-multibbs-defcallback navi2ch-machibbs-subject-callback (machibbs)
   "subject.txt を取得するとき navi2ch-net-update-file
 で使われるコールバック関数"
-  (while (re-search-forward "\\([0-9]+\\.\\)cgi\\([^\n]+\n\\)" nil t)
-    (replace-match "\\1dat\\2")))
+  (while (re-search-forward "[0-9]+<>\\([0-9]+\\)<>\\([^\n]+\n\\)" nil t)
+    (replace-match "\\1.dat<>\\2")))
 
 (defun navi2ch-machibbs-article-update (board article start)
   "BOARD ARTICLE の記事を更新する。
@@ -88,26 +88,26 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 	(url  (navi2ch-machibbs-article-to-url board article start nil start))
 	(func (if start 'navi2ch-machibbs-article-callback-diff
 		'navi2ch-machibbs-article-callback)))
+    (message "URL %s" url)
     (navi2ch-net-update-file url file time func nil start)))
 
 (defun navi2ch-machibbs-article-to-url (board article &optional start end nofirst)
   "BOARD, ARTICLE から url に変換。
-START, END, NOFIRST で範囲を指定する" ; 効かなかったら教えてください。
-  (let ((uri   (cdr (assq 'uri board)))
-	(artid (cdr (assq 'artid article))))
-    (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri) ; \\/ --> / ?
-    (concat
-     (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
-	     (match-string 1 uri) (match-string 2 uri) artid)
-     (if (and (stringp start)
-	      (string-match "l\\([0-9]+\\)" start))
-	 (format "&LAST=%s" (match-string 1 start))
-       (concat
-	(and start (format "&START=%d" start))
-	(and end (format "&END=%d" end))))
-     (and nofirst
-	  (not (eq start 1))
-	  "&NOFIRST=TRUE"))))
+START, END, NOFIRST で範囲を指定する"
+  (let ((uri (navi2ch-board-get-uri board))
+	(start (if (numberp start)
+		   (number-to-string start)
+		 start))
+	(end (if (numberp end)
+		 (number-to-string end)
+	       end)))
+    (if (string-match "\\(.+\\)/\\([^/]+\\)/$" uri)
+	(format "%s/bbs/read.cgi/%s/%s/%s"
+		(match-string 1 uri) (match-string 2 uri)
+		(cdr (assq 'artid article))
+		(if (equal start end)
+		    (or start "")
+		  (concat start (and (or start end) "-") end))))))
 
 (defun navi2ch-machibbs-url-to-board (url)
   "url から BOARD に変換。"
@@ -228,10 +228,14 @@ START, END, NOFIRST で範囲を指定する" ; 効かなかったら教えてください。
   (navi2ch-machibbs-article-callback t))
 
 (defun navi2ch-machibbs-board-update (board)
-  (let ((url (navi2ch-board-get-url board))
-	(file (navi2ch-board-get-file-name board))
-	(time (cdr (assq 'time board)))
-	(func (navi2ch-multibbs-subject-callback board)))
-    (navi2ch-net-update-file url file time func)))
+  (let ((uri (navi2ch-board-get-uri board)))
+    (when (string-match "\\(.+\\)/\\([^/]+\\)/$" uri)
+      (let ((url (format "%s/bbs/offlaw.cgi/%s/"
+			 (match-string 1 uri)
+			 (cdr (assq 'id board))))
+	    (file (navi2ch-board-get-file-name board))
+	    (time (cdr (assq 'time board)))
+	    (func (navi2ch-multibbs-subject-callback board)))
+	(navi2ch-net-update-file url file time func)))))
 
 ;;; navi2ch-machibbs.el ends here

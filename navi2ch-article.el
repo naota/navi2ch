@@ -1805,9 +1805,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 
 (defun navi2ch-article-select-current-link-url (url browse-p popup)
   (if (and (not browse-p)
-	   (navi2ch-2ch-url-p url)
-	   (or (navi2ch-board-url-to-board url)
-	       (navi2ch-article-url-to-article url)))
+	   (navi2ch-2ch-url-p url))
       (progn
 	(if popup
 	    (navi2ch-popup-article-exit)
