@@ -97,7 +97,7 @@ START, END, NOFIRST $B$GHO0O$r;XDj$9$k(B" ; $B8z$+$J$+$C$?$i65$($F$/$@$5$$!#
 	(artid (cdr (assq 'artid article))))
     (string-match "\\(.*\\)\\/\\([^/]*\\)\\/" uri) ; \\/ --> / ?
     (concat
-     (format "%s/bbs/read.pl?BBS=%s&KEY=%s"
+     (format "%s/bbs/read.cgi?BBS=%s&KEY=%s"
 	     (match-string 1 uri) (match-string 2 uri) artid)
      (if (and (stringp start)
 	      (string-match "l\\([0-9]+\\)" start))

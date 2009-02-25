@@ -1,3 +1,10 @@
+2009-02-25  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): Change
+	"read.pl" to "read.cgi"
+
+	* navi2ch-face.el (navi2ch-bm-down-face): Add new face.
+
 2009-01-20  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-vars.el (navi2ch-global-map, navi2ch-global-view-map):

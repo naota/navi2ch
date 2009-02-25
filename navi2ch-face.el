@@ -82,6 +82,12 @@
   "更新したスレの face"
   :group 'navi2ch-face)
 
+(defface navi2ch-bm-down-face
+  '((((class color) (background light)) (:foreground "Black" :bold t))
+    (((class color) (background dark)) (:foreground "White" :bold t)))
+  "dat落ちしたスレの face"
+  :group 'navi2ch-face)
+
 (defface navi2ch-bm-mark-face
   '((((class color) (background light)) (:foreground "Tomato3"))
     (((class color) (background dark)) (:foreground "tomato")))
