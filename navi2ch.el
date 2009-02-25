@@ -390,9 +390,12 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 
 (defun navi2ch-goto-url (url &optional force)
   "URL からスレまたは板を選ぶ。"
-  (interactive (list (navi2ch-read-string "URL: "
-					  (get-text-property (point) 'url))
-		     current-prefix-arg))
+  (interactive (list (navi2ch-read-string 
+		      "URL: "
+		      (when (eq (get-text-property (point) 'navi2ch-link-type)
+				'url)
+			(get-text-property (point) 'navi2ch-link))
+		      current-prefix-arg)))
   (let ((article (navi2ch-article-url-to-article url))
 	(board (navi2ch-board-url-to-board url)))
     (cond (article
