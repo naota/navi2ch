@@ -1,6 +1,9 @@
 -*-outline-*-
 主な変更点。詳細は ChangeLog を参照してください。
 
+* navi2ch 1.8.1 -> 1.8.2
+machibbs の仕様変更に追随。
+
 * navi2ch 1.8.0 -> 1.8.1
 2ch の仕様変更に追随。
 oyster が ssl.el のかわりに、 Emacs 22.1 に付いてくる、tls.el を使うように。
