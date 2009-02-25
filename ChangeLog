@@ -3,6 +3,9 @@
 	* navi2ch.el (navi2ch-goto-url): Use navi2ch-link,
 	navi2ch-link-type properties instead of url property.
 
+	* navi2ch-article.el (navi2ch-article-select-current-link-url):
+	Remove duplicated condition check.
+
 2009-02-25  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-article-to-url): Change
