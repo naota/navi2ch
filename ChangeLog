@@ -1,3 +1,7 @@
+2009-02-27  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch.el (navi2ch-2ch-url-p): Weaken host check.
+
 2009-02-26  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch.el (navi2ch-goto-url): Use navi2ch-link,

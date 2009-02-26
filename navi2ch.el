@@ -425,6 +425,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
   (let ((host (navi2ch-url-to-host url)))
     (and host
 	 (or (member host navi2ch-2ch-host-list)
+	     (string-match "^[a-z]+[0-9]*\\.2ch\\.net$" host)
 	     (let (list)
 	       (setq list
 		     (mapcar (lambda (x)
