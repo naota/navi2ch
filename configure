@@ -2088,7 +2088,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=navi2ch
- VERSION=1.8.2-BETA
+ VERSION=1.8.2
 
 
 cat >>confdefs.h <<_ACEOF
