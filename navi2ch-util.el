@@ -417,7 +417,7 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
 	result
       (error "Wrong file name"))))
 
-(eval-and-compile
+(eval-when-compile
   (navi2ch-defalias-maybe 'assoc-string 'ignore))
 
 (defun navi2ch-replace-html-tag (str)
@@ -463,10 +463,11 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
       ref)))
 
 ;; shut up byte-compile warnings
-(eval-and-compile
-  (autoload 'ucs-to-char "unicode")
+(eval-when-compile
   (navi2ch-defalias-maybe 'unicode-to-char 'ignore)
   (navi2ch-defalias-maybe 'decode-char 'ignore)
+(eval-and-compile
+  (autoload 'ucs-to-char "unicode")
   (defalias 'navi2ch-char-valid-p
     (if (fboundp 'characterp) #'characterp #'char-valid-p)))
 
@@ -1233,7 +1234,7 @@ REGEXP $B$r;XDj$9$k$H!"@55,I=8=$N@8@.$K@hN)$A(B REGEXP $B$K%^%C%A$7$?J8;zNs(
       (funcall filter))))
 
 ;; shut up byte-compile warnings
-(eval-and-compile
+(eval-when-compile
   (navi2ch-defalias-maybe 'keywordp 'ignore)
   (navi2ch-defalias-maybe 'characterp 'ignore))
 

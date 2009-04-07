@@ -1,3 +1,8 @@
+2009-04-08  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-util.el (toplevel): keywordp, characterp の alias を
+	compile 時だけに。
+
 2009-03-02  Naohiro Aota  <naota@elisp.net>
 
 	1.8.2 リリース
