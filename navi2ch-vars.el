@@ -1809,6 +1809,15 @@ important	レスをブックマークに登録する
   :type 'function
   :group 'navi2ch-article)
 
+(defcustom navi2ch-2ch-mimizun nil
+  "*non-nil なら、2chから取得不能な過去ログを みみずん検索 http://mimizun.com
+から取得する。"
+  :type 'boolean
+  :group 'navi2ch-article)
+
+(defvar navi2ch-2ch-mimizun-negative-list '("livebase" "livetbs" "livnhk" "livecx")
+  "みみずんから取得しない板のリスト")
+
 ;;; message variables
 (defcustom navi2ch-message-user-name ""
   "*デフォルトの名前。"
@@ -2257,6 +2266,22 @@ to force the image format."
   "* non-nil なら 連続投稿規制(通称SAMBA24)の経過時間カウントダウンを表示する"
   :type 'boolean
   :group 'navi2ch-message)
+
+;; p2
+(defcustom navi2ch-p2-use-p2 nil
+  "* non-nil ならp2利用"
+  :type 'boolean
+  :group 'navi2ch)
+
+(defcustom navi2ch-p2-mail-address ""
+  "* p2のメールアドレス(ID)"
+  :type 'string
+  :group 'navi2ch)
+
+(defcustom navi2ch-p2-password ""
+  "* p2のパスワード"
+  :type 'string
+  :group 'navi2ch)
 
 ;; Mona fonts.
 (defgroup navi2ch-mona nil

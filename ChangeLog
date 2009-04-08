@@ -1,3 +1,23 @@
+2009-04-08  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
+
+	* navi2ch-p2.el : new file
+	http://p2.2ch.net 経由で書き込み機能
+	* bcomp.el : add navi2ch-p2.el
+	* navi2ch.el :  add navi2ch-p2.el
+	* navi2ch-vars.el :
+	変数 navi2ch-p2-use-p2 navi2ch-p2-mail-address navi2ch-p2-password 追加
+
+	* navi2ch-multibbs.el (navi2ch-multibbs-send-message) :
+	エラーメッセージからsamba秒数取得
+	call navi2ch-message-samba24-modify-by-error (呼んでる場所が良くないが）
+	* navi2ch-message.el :
+	samba24関連関数　navi2ch-message-samba24-modify-by-error　
+	navi2ch-message-samba24-modify 追加
+
+	* navi2ch-multibbs.el (navi2ch-2ch-article-update) :
+	みみずん検索から過去ログ取得
+	* navi2ch-vars.el : add var navi2ch-2ch-mimizun navi2ch-2ch-mimizun-negative-list
+	
 2009-02-27  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch.el (navi2ch-2ch-url-p): Weaken host check.

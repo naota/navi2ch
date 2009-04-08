@@ -730,5 +730,17 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
 			    "あと %d 秒待ったほうがいいと思うけど、本当に書きこむ? "
 			    diff-time)))))))
 
+(defun navi2ch-message-samba24-modify-by-error (id error)
+  "サーバから受け取ったエラーメッセージからsamba秒数を設定"
+  (when (string-match "593 \\([0-9]+\\) sec たたないと書けません。" error)
+    (navi2ch-message-samba24-modify id (string-to-number (match-string 1 error)))))
+
+(defun navi2ch-message-samba24-modify (id samba-time)
+  (when (assoc id navi2ch-message-samba24-samba-data)
+    (setq navi2ch-message-samba24-samba-data
+	  (delq (assoc id navi2ch-message-samba24-samba-data) navi2ch-message-samba24-samba-data)))
+  (setq navi2ch-message-samba24-samba-data
+	(cons (cons id samba-time) navi2ch-message-samba24-samba-data)))
+
 (run-hooks 'navi2ch-message-load-hook)
 ;;; navi2ch-message.el ends here

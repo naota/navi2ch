@@ -323,7 +323,12 @@ START, END, NOFIRST で範囲を指定する"
 	       (let ((err (navi2ch-multibbs-send-message-error-string board proc)))
 		 (if (stringp err)
 		     (message (concat message-str "failed: %s") err)
-		   (message (concat message-str "failed"))))
+		   (message (concat message-str "failed")))
+		 ;;エラーメッセージからsamba秒数取得
+		 ;;(2ch依存のnavi2ch-multibbs-send-message-error-stringの奥の方で呼ぶ方が美しい気が)
+		 (if (and (stringp err) navi2ch-message-samba24-show)
+		     (navi2ch-message-samba24-modify-by-error bbs err))
+		 )
 	       (return nil)))))))
 
 (defsubst navi2ch-multibbs-board-update (board)
@@ -357,6 +362,23 @@ START が non-nil ならばレス番号 START からの差分を取得する。
     (when kako-p
       (setq url (navi2ch-article-get-kako-url board article))
       (setq header (navi2ch-net-update-file url file))
+      
+      ;;mimizunから過去ログ取得
+      (when (and (navi2ch-net-get-state 'error header)
+		 (not (member (cdr (assq 'id board)) navi2ch-2ch-mimizun-negative-list))
+		 navi2ch-2ch-mimizun
+		 (y-or-n-p "みみずんからdatを取得しますか？"))
+	(let* ((boardid (cdr (assq 'id board)))
+	       (artid (cdr (assq 'artid article)))
+	       (server (cdr (assq 'uri board)))
+	       (id4 (substring artid 0 4))
+	       (id5 (substring artid 0 5)))
+	  (setq url (concat "http://mimizun.com/log/2ch/" boardid "/" (substring server 7) "kako/" id4 "/" id5 "/" artid ".dat"))
+	  (message "mimizun url:%s" url)
+	  (setq header (navi2ch-net-update-file url file))
+	  (if (navi2ch-net-get-state 'error header)
+	      (message "みみずんからも取得できませんでした"))))
+	
       (unless (navi2ch-net-get-state 'error header)
 	(setq header (navi2ch-net-add-state 'kako header))))
     header))
