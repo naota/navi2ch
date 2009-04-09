@@ -1,3 +1,7 @@
+2009-04-10  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
+
+	* Makefile.in : add navi2ch-p2.el 
+
 2009-04-08  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 
 	* navi2ch-p2.el : new file
