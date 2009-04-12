@@ -2,7 +2,8 @@
 
 ;; Copyright (C) 2008 by Navi2ch Project
 
-;; Author: Naohiro Aota <naota@namazu.org>
+;; Authors: Naohiro Aota <naota@namazu.org>
+;;          MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 ;; Keywords: network 2ch
 
 ;; This file is free software; you can redistribute it and/or modify
@@ -64,7 +65,6 @@
 ;; するといいでしょう。
 
 ;; 機能追加
-;; Author: MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 
 ;; 2ch公式P2(http://p2.2ch.net)を経由して書き込みが出来るようにする機能追加です。
 ;; 主な目的はプロバイダのアク禁に巻き込まれた際の回避策です。
@@ -153,7 +153,7 @@
 	    ((or (string-match "Cookie認証時にIPの同一性をチェックしない" str)
 		 (string-match "<b>書きこみ＆クッキー確認</b>" str))
 	     ;;再取得
-;;	     (message "reget-csrfid")
+	     ;;	     (message "reget-csrfid")
 	     (navi2ch-p2-get-csrfid)
 	     'retry)
 	    ((or  (string-match "p2 error: 引数の指定が変です" str))
@@ -192,8 +192,8 @@
 			   (cons "key"    key))))
 	   (coding-system (navi2ch-board-get-coding-system board))
 	   (cookies (navi2ch-net-match-cookies url)))
-;;      (message "p2:not expired cookie:%s" (navi2ch-net-expire-cookies (navi2ch-net-match-cookies url)))
-;;      (message "p2:sending cookie:%s" (navi2ch-net-cookie-string cookies coding-system))
+    ;;      (message "p2:not expired cookie:%s" (navi2ch-net-expire-cookies (navi2ch-net-match-cookies url)))
+    ;;      (message "p2:sending cookie:%s" (navi2ch-net-cookie-string cookies coding-system))
       (dolist (param post)
 	(unless (assoc (car param) param-alist)
 	  (push param param-alist)))
