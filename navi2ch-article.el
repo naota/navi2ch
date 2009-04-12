@@ -1979,13 +1979,13 @@ BOARD が nil ならば、現在開いているスレの板に移動。"
      (goto-char (point-min))
      (navi2ch-article-get-current-number)) t))
 
-(defun navi2ch-article-few-scroll-up ()
-  (interactive)
-  (scroll-up 1))
+(defun navi2ch-article-few-scroll-up (n)
+  (interactive "P")
+  (scroll-up (or n 1)))
 
-(defun navi2ch-article-few-scroll-down ()
-  (interactive)
-  (scroll-down 1))
+(defun navi2ch-article-few-scroll-down (n)
+  (interactive "P")
+  (scroll-down (or n 1)))
 
 (defun navi2ch-article-scroll-up ()
   (interactive)
