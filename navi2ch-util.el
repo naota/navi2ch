@@ -465,7 +465,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 ;; shut up byte-compile warnings
 (eval-when-compile
   (navi2ch-defalias-maybe 'unicode-to-char 'ignore)
-  (navi2ch-defalias-maybe 'decode-char 'ignore)
+  (navi2ch-defalias-maybe 'decode-char 'ignore))
 (eval-and-compile
   (autoload 'ucs-to-char "unicode")
   (defalias 'navi2ch-char-valid-p
