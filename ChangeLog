@@ -1,7 +1,11 @@
 2009-05-10  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-article.el (navi2ch-article-search-reference): 範囲指定型
+	の引用をうまく処理していなかったのを修正。
+
 	* navi2ch-util.el (navi2ch-hexadecimal-reference-to-str):
 	string-to-int ではなく string-to-number を使うように。
+	(navi2ch-eq-or-memq): New function.
 
 	* navi2ch-article.el (navi2ch-article-search-reference): New function.
 	(navi2ch-article-search): 参照を検索できるように。

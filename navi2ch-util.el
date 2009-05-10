@@ -1495,6 +1495,11 @@ properties to add to the result."
 	    (setq result (cons n result))
 	    (setq n (1+ n)))
 	  (nreverse result))))))
+
+(defsubst navi2ch-eq-or-memq (item maybe-list)
+  (if (listp maybe-list)
+      (memq item maybe-list)
+    (eq item maybe-list)))
   
 (navi2ch-update-html-tag-regexp)
 

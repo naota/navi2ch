@@ -3272,8 +3272,30 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
     (dolist (msg navi2ch-article-message-list)
       (when (and (listp (cdr msg))
 		 (or (string-match num-regexp (or (cdr (assq 'name (cdr msg))) ""))
-		     (string-match (concat navi2ch-article-number-prefix-regexp num-regexp) 
-				   (or (cdr (assq 'data (cdr msg))) ""))))
+		     (catch 'result
+		       (with-temp-buffer
+			 (insert (or (cdr (assq 'data (cdr msg))) ""))
+			 (goto-char (point-min))
+			 (while (re-search-forward 
+				 (concat navi2ch-article-number-prefix-regexp
+					 navi2ch-article-number-number-regexp)
+				 nil t)
+			   (when (navi2ch-eq-or-memq
+				  num 
+				  (navi2ch-article-str-to-num
+				   (japanese-hankaku (match-string 1))))
+			     (throw 'result t))
+			   (while (looking-at (concat
+					       navi2ch-article-number-separator-regexp
+					       navi2ch-article-number-number-regexp))
+			     (when (navi2ch-eq-or-memq
+				    num 
+				    (navi2ch-article-str-to-num 
+				     (japanese-hankaku (match-string 1))))
+			       (throw 'result t))
+			     (goto-char (max (1+ (match-beginning 0))
+					     (match-end 0))))))
+		       nil)))
 	(setq num-list (cons (car msg) num-list))))
     (setq len (length num-list))
     (if (= len 0)
