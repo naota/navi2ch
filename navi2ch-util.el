@@ -469,7 +469,7 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (if (and navi2ch-decode-character-references
 	     (string-match "&#[xX]\\([^;]+\\)" ref))
 	(let ((num))
-	  (setq num (string-to-int (match-string 1 ref) 16))
+	  (setq num (string-to-number (match-string 1 ref) 16))
 	  (if num (navi2ch-ucs-to-str num) "〓"))
       ref)))
 
