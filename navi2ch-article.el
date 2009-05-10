@@ -3097,8 +3097,8 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 
 (defun navi2ch-article-search ()
   "メッセージを検索する。
-名前 (name)、メール (mail)、日付 (date)、ID (id)、本文 (body) から
-検索条件を選ぶことができます。
+名前 (name)、メール (mail)、日付 (date)、ID (id)、ホスト
+名(hostname)、本文 (body) から検索条件を選ぶことができます。
 
 パーズ済みのメッセージのみを検索対象とするので、あらかじめ
 `navi2ch-article-redraw-range' を使うなどして検索したいメッセージを

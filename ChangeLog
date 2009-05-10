@@ -1,3 +1,7 @@
+2009-05-10  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-search): Fix docstring.
+
 2009-04-08  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-util.el (toplevel): keywordp, characterp の alias を
