@@ -323,11 +323,30 @@
 (defun navi2ch-message-cite-original (&optional arg)
   "引用する。"
   (interactive "P")
-  (navi2ch-message-cite-original-from-number
-   (save-excursion
-     (set-buffer (navi2ch-article-current-buffer))
-     (navi2ch-article-get-current-number))
-   arg))
+  (let (nums from to)
+    (setq nums
+	  (save-excursion
+	    (set-buffer (navi2ch-article-current-buffer))
+	    (if (region-active-p)
+		(progn
+		  (setq from (save-excursion
+			       (goto-char (region-beginning))
+			       (navi2ch-article-get-current-number))
+			to (save-excursion
+			     (goto-char (region-end))
+			     (navi2ch-article-get-current-number)))
+		  (navi2ch-number-sequence from to))
+	      `(,(navi2ch-article-get-current-number)))))
+    (if arg
+	(progn
+	  (navi2ch-message-cite-original-from-number (or from (car nums))
+						     arg)
+	  (when to
+	    (goto-char (1- (point)))
+	    (insert "-" (number-to-string to))
+	    (goto-char (1+ (point)))))
+      (dolist (n nums)
+	(navi2ch-message-cite-original-from-number n)))))
 
 (defun navi2ch-message-cite-original-from-number (num &optional arg)
   "番号を選んで、引用する。"

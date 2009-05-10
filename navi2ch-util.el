@@ -1483,6 +1483,18 @@ properties to add to the result."
 					    navi2ch-coding-system
 					    'shift_jis))
 		  nil))))
+
+(eval-and-compile
+  (defalias 'navi2ch-number-sequence
+    (if (fboundp 'number-sequence)
+	#'number-sequence
+      (lambda (from to)
+	(let ((n from)
+	      result)
+	  (while (<= n to)
+	    (setq result (cons n result))
+	    (setq n (1+ n)))
+	  (nreverse result))))))
   
 (navi2ch-update-html-tag-regexp)
 
