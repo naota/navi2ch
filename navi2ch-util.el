@@ -61,7 +61,8 @@
 (defvar navi2ch-replace-html-tag-regexp-alist 
   '(("</?[?!a-zA-Z][^<>]*>" . "")
     ("&[a-z][a-z0-9]*;?" . navi2ch-entity-reference-to-str)
-    ("&#[0-9]+;?" . navi2ch-numeric-reference-to-str))
+    ("&#[0-9]+;?" . navi2ch-numeric-reference-to-str)
+    ("&#[xX][0-9a-fA-f]+;?" . navi2ch-hexadecimal-reference-to-str))
   "置換する html のタグの連想リスト(正規表現)
 置換先が関数だと、置換元を引数としてその関数を呼びだしたもので置き替える。
 正規表現が必要ない場合は `navi2ch-replace-html-tag-alist' に入れる")
@@ -460,6 +461,16 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
     (if (and navi2ch-decode-character-references
 	     (string-match "&#\\([^;]+\\)" ref))
 	(or (navi2ch-ucs-to-str (string-to-number (match-string 1 ref))) "〓")
+      ref)))
+
+(defun navi2ch-hexadecimal-reference-to-str (ref)
+  "16進数値文字参照をデコード。"
+  (save-match-data
+    (if (and navi2ch-decode-character-references
+	     (string-match "&#[xX]\\([^;]+\\)" ref))
+	(let ((num))
+	  (setq num (string-to-int (match-string 1 ref) 16))
+	  (if num (navi2ch-ucs-to-str num) "〓"))
       ref)))
 
 ;; shut up byte-compile warnings
