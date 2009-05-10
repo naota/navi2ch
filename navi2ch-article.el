@@ -3180,8 +3180,9 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 
 (defun navi2ch-article-search ()
   "メッセージを検索する。
-名前 (name)、メール (mail)、日付 (date)、ID (id)、本文 (body) から
-検索条件を選ぶことができます。
+名前 (name)、メール (mail)、日付 (date)、ID (id)、ホスト
+名(hostname)、本文 (body)、参照(reference) から検索条件を選ぶこと
+ができます。
 
 パーズ済みのメッセージのみを検索対象とするので、あらかじめ
 `navi2ch-article-redraw-range' を使うなどして検索したいメッセージを
@@ -3193,9 +3194,9 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 	      (concat "Search for: n)ame m)ail d)ate "
 		      (and has-id "i)d ")
 		      (and has-hostname "h)ostname ")
-		      "b)ody s)ubject: ")
+		      "b)ody s)ubject r)eferece: ")
 	      nil
-	      (append '(?n ?m ?b ?s ?d)
+	      (append '(?n ?m ?b ?s ?d ?r)
 		      (and has-id (list ?i))
 		      (and has-hostname (list ?h))))))
     (cond
@@ -3204,7 +3205,8 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
      ((eq ch ?d) (navi2ch-article-search-date))
      ((eq ch ?i) (navi2ch-article-search-id))
      ((eq ch ?h) (navi2ch-article-search-hostname))
-     ((eq ch ?b) (navi2ch-article-search-body)))))
+     ((eq ch ?b) (navi2ch-article-search-body))
+     ((eq ch ?r) (navi2ch-article-search-reference)))))
 
 (defun navi2ch-article-search-name (&optional name)
   (interactive)
@@ -3259,6 +3261,27 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 				    (navi2ch-article-get-current-word-in-body)
 				    'navi2ch-search-history)))
   (navi2ch-article-search-subr 'data (regexp-quote body)))
+
+(defun navi2ch-article-search-reference (&optional num)
+  (interactive)
+  (unless (and num (numberp num))
+    (setq num (read-number "Reference: "
+			   (navi2ch-article-get-current-number))))
+  (let ((num-regexp (navi2ch-fuzzy-regexp (number-to-string num)))
+	num-list len)
+    (dolist (msg navi2ch-article-message-list)
+      (when (and (listp (cdr msg))
+		 (or (string-match num-regexp (or (cdr (assq 'name (cdr msg))) ""))
+		     (string-match (concat navi2ch-article-number-prefix-regexp num-regexp) 
+				   (or (cdr (assq 'data (cdr msg))) ""))))
+	(setq num-list (cons (car msg) num-list))))
+    (setq len (length num-list))
+    (if (= len 0)
+	(message "No message found")
+      (navi2ch-popup-article (nreverse num-list))
+      (message (format "%d message%s found"
+		       len
+		       (if (= len 1) "" "s"))))))
 
 (defun navi2ch-article-search-subr (field regexp)
   (let (num-list len)
