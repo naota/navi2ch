@@ -3268,12 +3268,16 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
     (setq num (read-number "Reference: "
 			   (navi2ch-article-get-current-number))))
   (let ((num-regexp (navi2ch-fuzzy-regexp (number-to-string num)))
+	(board navi2ch-article-current-board)
+	(article navi2ch-article-current-article)
 	num-list len)
     (dolist (msg navi2ch-article-message-list)
       (when (and (listp (cdr msg))
 		 (or (string-match num-regexp (or (cdr (assq 'name (cdr msg))) ""))
 		     (catch 'result
 		       (with-temp-buffer
+			 (setq navi2ch-article-current-board board
+			       navi2ch-article-current-article article)
 			 (insert (or (cdr (assq 'data (cdr msg))) ""))
 			 (goto-char (point-min))
 			 (while (re-search-forward 
