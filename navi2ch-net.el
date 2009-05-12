@@ -140,25 +140,56 @@ BODY の評価中にエラーが起こると nil を返す。"
 (defvar navi2ch-net-connect-wait-power 1.00925)
 (defvar navi2ch-net-connect-time-list '())
 
-(defun navi2ch-net-connect-wait (host)
-  (let* ((host (intern host))
-	 (now (navi2ch-float-time))
-	 (limit (- now 3600.0))
-	 (list (delq nil (mapcar (lambda (x) (if (> (cdr x) limit) x))
-				 navi2ch-net-connect-time-list)))
-	 (len (length (delq nil (mapcar (lambda (x)
-					  (if (eq host (car x)) x))
-					list))))
-	 (wait (floor (- (+ (expt navi2ch-net-connect-wait-power len)
-			    (or (cdr (assq host list)) now))
-			 1
-			 now))))
-    (when (> wait 0)
-      (message "waiting for %dsec..." wait)
-      (sleep-for wait)
-      (message "waiting for %dsec...done" wait))
-    (setq navi2ch-net-connect-time-list
-	  (cons (cons host (navi2ch-float-time)) list))))
+(defvar navi2ch-net-fall-back-host "bg20.2ch.net")
+(defun navi2ch-net-connect-check (connection-data)
+  (let ((host2ch (cdr (assq 'host2ch connection-data)))
+	(file (cdr (assq 'file connection-data))))
+    (when (string-match "2ch\\.net\\|bbspink\\.com\\|machi\\.to" host2ch)
+      (let* ((host (intern host2ch))
+	     (now (navi2ch-float-time))
+	     (limit (- now 3600.0))
+	     (list (delq nil (mapcar (lambda (x) (if (> (cdr x) limit) x))
+				     navi2ch-net-connect-time-list)))
+	     (len (length (delq nil (mapcar (lambda (x)
+					      (if (eq host (car x)) x))
+					    list))))
+	     (wait (floor (- (+ (expt navi2ch-net-connect-wait-power len)
+				(or (cdr (assq host list)) now))
+			     1
+			     now))))
+	(if (> wait 0)
+	    (if (and (string-match "2ch\\.net" host2ch)
+		     (string-match "/\\([^/]+\\)/dat/\\([0-9]+\\).dat" file))
+		(progn
+		  (message "falling back to %s" navi2ch-net-fall-back-host)
+		  (setq navi2ch-net-connect-time-list list)
+		  (if (string= host2ch (cdr (assq 'host connection-data)))
+		      (progn
+			(navi2ch-put-alist 'host navi2ch-net-fall-back-host connection-data)
+			(navi2ch-put-alist 'port 80 connection-data)
+			(navi2ch-put-alist 'file 
+					   (format "/test/r.so/%s/%s/%s/"
+						   host2ch
+						   (match-string 1 file)
+						   (match-string 2 file))
+					   connection-data)
+			(navi2ch-put-alist 'host2ch navi2ch-net-fall-back-host 
+					   connection-data))
+		    (navi2ch-put-alist 'file 
+				       (format "http://%s/test/r.so/%s/%s/%s/"
+					       navi2ch-net-fall-back-host
+					       host2ch
+					       (match-string 1 file)
+					       (match-string 2 file))
+				       connection-data)
+		    (navi2ch-put-alist 'host2ch navi2ch-net-fall-back-host 
+				       connection-data)))
+	      (message "waiting for %dsec..." wait)
+	      (sleep-for wait)
+	      (message "waiting for %dsec...done" wait))
+	  (setq navi2ch-net-connect-time-list
+		(cons (cons host (navi2ch-float-time)) list)))))
+    connection-data))
 
 (defvar navi2ch-net-down-host-alist nil)
 
@@ -191,13 +222,13 @@ nil なら常に再接続する。")
 	 navi2ch-net-inherit-process-coding-system)
         user pass host file port host2ch credentials auth)
     (let ((list (navi2ch-net-split-url url navi2ch-net-http-proxy)))
+      (setq list (navi2ch-net-connect-check list))
       (setq user (cdr (assq 'user list))
 	    pass (cdr (assq 'pass list))
 	    host (cdr (assq 'host list))
             file (cdr (assq 'file list))
             port (cdr (assq 'port list))
             host2ch (cdr (assq 'host2ch list))))
-    (navi2ch-net-connect-wait host)
     (when navi2ch-net-http-proxy
       (setq credentials (navi2ch-net-http-basic-credentials
 			 navi2ch-net-http-proxy-userid
@@ -273,31 +304,33 @@ nil なら常に再接続する。")
 
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host2ch authinfo user pass)
-    (string-match "http://\\(?:[^@/]+@\\)?\\([^/]+\\)" url)
-    (setq host2ch (match-string 1 url))
+    (string-match "http://\\([^@/]+@\\)?\\([^/]+\\)" url)
+    (when (setq authinfo (match-string 1 url))
+      (save-match-data
+	(string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)" authinfo)
+	(if (match-beginning 1)
+	    (setq user (match-string 1 authinfo)
+		  pass (match-string 2 authinfo))
+	  (setq user (match-string 2 authinfo)))))
+    (setq host2ch (match-string 2 url))
     (if proxy
         (progn
           (string-match "^\\(http://\\)?\\(.*\\):\\([0-9]+\\)" proxy)
           (list
+	   (cons 'user user)
+	   (cons 'pass pass)
            (cons 'host (match-string 2 proxy))
            (cons 'file url)
            (cons 'port (string-to-number (match-string 3 proxy)))
            (cons 'host2ch host2ch)))
-      (string-match "http://\\(?:\\([^@/]+\\)@\\)?\\([^/:]+\\)\\(?::\\([0-9]+\\)\\)?\\(.*\\)" url)
-      (when (setq authinfo (match-string 1 url))
-	(save-match-data
-	  (string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)" authinfo)
-	  (if (match-beginning 1)
-	      (setq user (match-string 1 authinfo)
-		    pass (match-string 2 authinfo))
-	    (setq user (match-string 2 authinfo)))))
+      (string-match "http://\\(?:[^@/]+@\\)?\\([^/:]+\\)\\(?::\\([0-9]+\\)\\)?\\(.*\\)" url)
       (list
        (cons 'user user)
        (cons 'pass pass)
-       (cons 'host (match-string 2 url))
-       (cons 'port (string-to-number (or (match-string 3 url)
+       (cons 'host (match-string 1 url))
+       (cons 'port (string-to-number (or (match-string 2 url)
 					 "80")))
-       (cons 'file (match-string 4 url))
+       (cons 'file (match-string 3 url))
        (cons 'host2ch host2ch)))))
 
 (defun navi2ch-net-http-basic-credentials (user pass)

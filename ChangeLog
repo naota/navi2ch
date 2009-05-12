@@ -1,3 +1,10 @@
+2009-05-13  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-net.el (navi2ch-net-split-url): user, pass の扱い方を訂正。
+	(navi2ch-net-fall-back-host): New variable.
+	(navi2ch-net-connect-check): New function.
+	(navi2ch-net-send-request): Use it.
+
 2009-05-11  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-search-reference):
