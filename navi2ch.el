@@ -425,8 +425,10 @@ DISPLAY が `article' のときは article を表示する用に分割する。
   "URL が 2ch 内の url であれば non-nil を返す。"
   (let ((host (navi2ch-url-to-host url)))
     (and host
+	 (not (string-match navi2ch-list-invalid-host-regexp host))
 	 (or (member host navi2ch-2ch-host-list)
-	     (string-match "^[a-z]+[0-9]*\\.2ch\\.net$" host)
+	     ;; (string-match "^[a-z]+[0-9]*\\.2ch\\.net$" host)
+	     (string-match navi2ch-list-valid-host-regexp host)
 	     (let (list)
 	       (setq list
 		     (mapcar (lambda (x)

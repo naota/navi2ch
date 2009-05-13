@@ -1,5 +1,10 @@
 2009-05-13  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch.el (navi2ch-2ch-url-p): navi2ch-list-invalid-host-regexp
+	に match する host は 2ch の url と見なさないように。
+	navi2ch-list-valid-host-regexp に match するものを 2ch の url と見
+	なすように。
+
 	* navi2ch-net.el (navi2ch-net-split-url): user, pass の扱い方を訂正。
 	(navi2ch-net-fall-back-host): New variable.
 	(navi2ch-net-connect-check): New function.
