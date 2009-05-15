@@ -327,7 +327,7 @@
     (setq nums
 	  (save-excursion
 	    (set-buffer (navi2ch-article-current-buffer))
-	    (if (region-active-p)
+	    (if (navi2ch-region-active-p)
 		(progn
 		  (setq from (save-excursion
 			       (goto-char (region-beginning))

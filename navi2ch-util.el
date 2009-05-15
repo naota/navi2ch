@@ -1500,7 +1500,13 @@ properties to add to the result."
   (if (listp maybe-list)
       (memq item maybe-list)
     (eq item maybe-list)))
-  
+
+(defmacro navi2ch-region-active-p ()
+  "Say whether the region is active."
+  (if (fboundp 'region-active-p)
+      (list 'region-active-p)
+    (list 'and 'transient-mark-mode 'mark-active)))
+
 (navi2ch-update-html-tag-regexp)
 
 (run-hooks 'navi2ch-util-load-hook)
