@@ -1,6 +1,6 @@
 ;;; navi2ch-p2.el --- p2 frontend for navi2ch
 
-;; Copyright (C) 2008 by Navi2ch Project
+;; Copyright (C) 2008, 2009 by Navi2ch Project
 
 ;; Authors: Naohiro Aota <naota@namazu.org>
 ;;          MIZUNUMA Yuto <mizmiz@users.sourceforge.net>

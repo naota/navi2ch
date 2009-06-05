@@ -1,6 +1,8 @@
-;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch. -*- coding: iso-2022-7bit; -*-
+;;; navi2ch-multibbs.el --- View 2ch like BBS module for Navi2ch. -*-
+;;; coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2008 by Navi2ch Project
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2008, 2009 by Navi2ch
+;; Project
 
 ;; Author:
 ;; Part5 スレの 509 の名無しさん
