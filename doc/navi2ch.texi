@@ -112,6 +112,7 @@ Board モード
 * Mark::                        マーク
 * Hide Thread::                 スレを隠す
 * Search Thread::               スレの検索
+* Web Search::                  Web を使った検索
 
 Bookmark モード
 
@@ -355,6 +356,7 @@ Navi2ch の開発に参加してほしい。
 @cindex 起動
 @cindex スプラッシュ
 @findex navi2ch
+@vindex navi2ch-display-splash-screen
 
 @file{~/.emacs} に
 
@@ -507,6 +509,7 @@ File}.
 * Mark::                        マーク
 * Hide Thread::                 スレを隠す
 * Search Thread::               スレの検索
+* Web Search::                  Web を使った検索
 @end menu
 
 @node Updated Flag
@@ -642,6 +645,56 @@ Navi2ch ではキャッシュを対象にスレ検索することができる。
 検索結果は Bookmark モードとよく似た Search モードバッファに表示される。
 @xref{List Mode}, @xref{Bookmark Mode}.
 
+また、リストモードで @kbd{?} を押すと @code{Search for: s)ubject
+a)rticle c)ache o)rphan}と聞かれたあとに @kbd{s} と押すと、次に
+@code{Search from: c)ategory l)ocal w)eb} と聞いてくる。 その時にカーソ
+ルがあるカテゴリから探すなら @kbd{c} を、すべての(キャッシュしてある)板
+から探すなら @kbd{l} を、 Web を使って 2ch 全体から検索するなら
+@kbd{w} を押す。
+
+Web を使った検索についての詳細は @xref{Web Search} を見てほしい。
+
+@node Web Search
+@subsection Web を使った検索
+@cindex Web を使った検索
+@vindex navi2ch-search-web-search-method
+@vindex navi2ch-search-union-method-list
+
+navi2ch では http://find.2ch.net/ や http://h.ula.cc/ といった 2ch の検
+索サービスを使って、全スレッドから指定したキーワードに一致するスレッド
+を検索してくることができる。
+
+検索を開始するには、リストモードで @kbd{? s w} と押すか、任意のモードで
+@kbd{C-c C-s} と押す。すると、@code{Subject search from web: } と聞かれ
+るので、検索する言葉を入力すればよい。
+
+Web 検索には多くの方法がある。navi2ch では以下のものをサポートしている。
+
+@table
+@item navi2ch-search-find-2ch-method
+http://find.2ch.net/ を使って検索する。
+
+@item navi2ch-search-hula-method 
+http://h.ula.cc/ を使って検索する。
+
+@item navi2ch-search-union-method
+navi2ch-search-union-method-list に設定されている全ての検索方式による検
+索結果を統合して表示する。
+
+@end table
+
+たとえば
+
+@lisp
+(setq navi2ch-search-web-search-method 'navi2ch-search-union-method)
+(setq navi2ch-search-union-method-list '(navi2ch-search-find-2ch-method
+                                         navi2ch-search-hula-method))
+@end lisp
+
+のようにすると、 http://find.2ch.net/ による検索結果と
+http://h.ula.cc/ による検索結果が統合されたものを検索結果として得ること
+ができる。
+
 @node Bookmark Mode
 @section Bookmark モード
 @cindex Bookmark モード
@@ -746,6 +799,7 @@ Key Bindings}) を参照のこと。
 @cindex スレッド表示
 @cindex アンカー参照
 @cindex ジャンプ先から戻る
+@vindex navi2ch-article-mode-line-format
 
 スレを開くと上下2つのペインに分かれ、上にはスレ一覧が、下にはそのスレ
 の内容が以下のように表示される。
@@ -787,20 +841,20 @@ Date: 01/12/26 13:17
 
 Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 @code{http://} で始まるリンクなどを楽に追いかけられる機能が用意されてい
-る。@kbd{@key{TAB}} を押すことで、カーソルより後にあるそれらのリンクに移動でき、
-その状態で @kbd{@key{RET}} を押すことで該当する番号のレスに飛んだり、参照して
-いる URL を引数にブラウザを呼び出したりできる。
-レス参照したのち、@kbd{l} を押すことで元のレスに戻ることができる。
-また、戻りすぎたら @kbd{L} を押すことで逆方向に戻る事ができる。
+る。@kbd{@key{TAB}} を押すことで、カーソルより後にあるそれらのリンクに
+移動でき、その状態で @kbd{@key{RET}} を押すことで該当する番号のレスに飛
+んだり、参照している URL を引数にブラウザを呼び出したりできる。レス参照
+したのち、@kbd{l} を押すことで元のレスに戻ることができる。また、戻りす
+ぎたら @kbd{L} を押すことで逆方向に戻る事ができる。
 
 レスを書きたい時は @kbd{w} (age で書く時) または @kbd{W} (sage で書く
 時) を押す。
 
-@kbd{?} を押すと、レスを検索することができる。
-名前 (name)、メール (mail)、日付 (date)、ID (id)、本文 (body) から
-検索条件を選び、検索したい文字列を入力する。
-パーズ済みのメッセージのみを検索対象とするので、あらかじめ
-検索したい範囲のメッセージを表示しておくこと。
+@kbd{?} を押すと、レスを検索することができる。名前 (name)、メール
+(mail)、日付 (date)、ID (id)、ホスト名/IP (hostname)、本文 (body)、スレ
+のタイトル (subject)、 参照レス (reference) から検索条件を選び、検索し
+たい文字列を入力する。パーズ済みのメッセージのみを検索対象とするので、
+あらかじめ検索したい範囲のメッセージを表示しておくこと。
 
 検索結果の表示バッファでは、@kbd{D} を押すと表示されているレスをまとめ
 て隠すことができ、@kbd{A} を押すと同様にまとめてブックマークすることが
@@ -945,6 +999,8 @@ Mail:
 
 @kbd{C-c C-y} と入力すると、見ていたレスを以下のように引用することがで
 きる。@kbd{C-u C-c C-y} と入力すると、見ていたレスの番号だけを引用する。
+また、この時 region を指定してあれば、その region に含まれるレスに対し
+て引用ができる。
 
 @example
 @group
@@ -1104,8 +1160,8 @@ newsplus
 @section モナーフォントを使う
 @cindex モナーフォント
 
-GNU Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
-(藁) なモナーフォントというフォントを使うことができる。
+GNU Emacs 21以降 や XEmacs ではレスを表示する際、アスキーアートフレンド
+リー(藁) なモナーフォントというフォントを使うことができる。
 
 @menu
 * What is Mona Font::           モナーフォントって何よ?
@@ -1132,7 +1188,6 @@ GNU Emacs 21 や XEmacs ではレスを表示する際、アスキーアートフレンドリー
 @vindex navi2ch-mona-disable-board-list
 @vindex navi2ch-mona-enable-article-list
 @vindex navi2ch-mona-disable-article-list
-
 
 GNU Emacs 21 や XEmacs でモナーフォントを使いたい場合は
 @file{~/.navi2ch/init.el} に以下のように書いておく。@xref{Init File}.
@@ -1250,6 +1305,10 @@ non-nil であっても、指定した板でしかモナーフォントが使われないというこ
 
 @item C-c C-l
 @code{navi2ch-be2ch-toggle-login} Be@@2chへのログイン状態の切り替え
+
+@item C-c C-s
+@code{navi2ch-search-web} Web を使ったスレッドの検索
+
 @end table
 
 Message モード以外では以下のキーバインドも使える。ただし、モードで上書

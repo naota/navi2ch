@@ -3194,7 +3194,7 @@ FUNC は (NUMBER, LIST) を引数に取る関数である事。"
 	      (concat "Search for: n)ame m)ail d)ate "
 		      (and has-id "i)d ")
 		      (and has-hostname "h)ostname ")
-		      "b)ody s)ubject r)eferece: ")
+		      "b)ody s)ubject r)eference: ")
 	      nil
 	      (append '(?n ?m ?b ?s ?d ?r)
 		      (and has-id (list ?i))
