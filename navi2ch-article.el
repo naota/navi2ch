@@ -226,6 +226,12 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-message-filter-wid-var)
 (defvar navi2ch-article-message-filter-wid-window-configuration)
 
+;; JIT
+(defvar navi2ch-article-jit-res-nums 10)
+(defvar navi2ch-article-jit-interval 1)
+(defvar navi2ch-article-jit-timer nil)
+(defvar navi2ch-article-use-jit nil)
+
 ;; local variables
 (make-variable-buffer-local 'navi2ch-article-current-article)
 (make-variable-buffer-local 'navi2ch-article-current-board)
@@ -245,6 +251,8 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-scope)
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-float)
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-var)
+
+(make-variable-buffer-local 'navi2ch-article-jit-timer)
 
 ;; add hook
 (defun navi2ch-article-kill-emacs-hook ()
@@ -677,7 +685,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	(progress 0)
 	(percent 0)
 	(navi2ch-article-link-internal (navi2ch-article-link-regexp-alist-to-internal)))
-    (message msg)
+    (unless navi2ch-article-use-jit (message msg))
     (let ((func (if navi2ch-article-message-filter-mode
 		    #'navi2ch-union
 		  #'navi2ch-set-difference)))
@@ -768,11 +776,12 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	    (navi2ch-article-insert-message num alist)
 	    (set-marker-insertion-type (cdr (assq 'point alist)) t)))
 	;; 進捗表示
-	(and (> (setq progress (+ progress 100)) 10000)
-	     (/= (/ progress len) percent)
-	     (navi2ch-no-logging-message
-	      "%s%d%%" msg (setq percent (/ progress len))))))
-    (message "%sdone" msg)))
+	(unless navi2ch-article-use-jit
+	  (and (> (setq progress (+ progress 100)) 10000)
+	       (/= (/ progress len) percent)
+	       (navi2ch-no-logging-message
+		"%s%d%%" msg (setq percent (/ progress len)))))))
+    (unless navi2ch-article-use-jit (message "%sdone" msg))))
 
 (defsubst navi2ch-article-get-message (num)
   "NUM 番目のレスを得る。"
@@ -1243,6 +1252,8 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
 (defun navi2ch-article-kill-buffer-hook ()
   ;; update であれば cache にしない
   ;; view であったものが update になった後に kill された時の対策
+  (when navi2ch-article-jit-timer
+    (cancel-timer navi2ch-article-jit-timer))
   (unless (eq (navi2ch-bm-get-state-from-article navi2ch-article-current-board
 						 navi2ch-article-current-article)
 	      'update)
@@ -1352,10 +1363,21 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 		  navi2ch-article-important-mode nil)
 	    (let ((buffer-read-only nil))
 	      (if start
-		  (navi2ch-article-reinsert-partial-messages start)
+		  (if navi2ch-article-use-jit
+		      (navi2ch-article-jit-reinsert-partial-messages (current-buffer)
+								     start)
+		    (navi2ch-article-reinsert-partial-messages start))
 		(erase-buffer)
-		(navi2ch-article-insert-messages list
-						 navi2ch-article-view-range)))
+		(if navi2ch-article-use-jit
+		    (navi2ch-article-jit-insert-messages
+		     (current-buffer)
+		     list
+		     navi2ch-article-view-range
+		     (or number
+			 (cdr (assq 'number navi2ch-article-current-article))
+			 1))
+		  (navi2ch-article-insert-messages list
+						   navi2ch-article-view-range))))
 	    (navi2ch-article-load-number)
 	    (navi2ch-article-save-info board article first)
 	    (navi2ch-article-set-mode-line)
@@ -3861,6 +3883,143 @@ PREFIX が与えられた場合は、
 				 'help-echo 
 				 (navi2ch-propertize "[image]" 'display image))
 	      (insert "\n")))))))
+
+(defun navi2ch-article-jit-reinsert-partial-messages-1 (buffer range-list)
+  (when (buffer-live-p buffer)
+    (let ((wintop-pos (and (eq (window-buffer) buffer)
+			   (- (point) (window-start)))))
+      (with-current-buffer buffer
+	(when navi2ch-article-jit-timer
+	  (cancel-timer navi2ch-article-jit-timer)
+	  (setq navi2ch-article-jit-timer nil))
+	(let ((buffer-read-only nil)
+	      (resnum (navi2ch-article-get-current-number))
+	      (next (cdr range-list))
+	      diffpos)
+	  (if (get-text-property (point) 'current-number)
+	      (setq diffpos -1)
+	    (setq diffpos 
+		  (previous-single-property-change (point) 'current-number))
+	    (when diffpos
+	      (setq diffpos (- (point) diffpos))))
+	  (navi2ch-article-reinsert-partial-messages (caar range-list) 
+						     (cdar range-list))
+	  (when (and resnum diffpos)
+	    (let ((navi2ch-article-goto-number-recenter t))
+	      (navi2ch-article-goto-number resnum))
+	    (goto-char (+ (point) diffpos 1))
+	    (when wintop-pos
+	      (set-window-start (selected-window) 
+				(- (point) wintop-pos))))
+	  (if next
+	      (setq navi2ch-article-jit-timer
+		    (run-at-time navi2ch-article-jit-interval nil
+				 'navi2ch-article-jit-reinsert-partial-messages-1
+				 buffer next))
+	    (goto-char (point))))))))
+
+(defun navi2ch-article-jit-reinsert-partial-messages (buffer start &optional end)
+  (let* ((nums (mapcar #'car navi2ch-article-message-list))
+	 (len (length nums))
+	 (last (car (last nums)))
+	 (cur-res (navi2ch-article-get-current-number))
+	 range-list)
+    (when navi2ch-article-jit-timer
+      (cancel-timer navi2ch-article-jit-timer)
+;;;   (setq range-list (nreverse (nth 2 (elt navi2ch-article-jit-timer 6))))
+      (setq navi2ch-article-jit-timer nil))
+    (when (minusp start)
+      (setq start (+ start last 1)))
+    (if (null end)
+	(setq end last)
+      (when (minusp end)
+	(setq end (+ end last 1)))
+      (when (> start end)
+	(setq start (prog1 end
+		      (setq end start)))))
+    (if (and (<= start cur-res)
+	     (<= cur-res end))
+	(let ((n cur-res))
+	  (while (<= n end)
+	    (setq range-list
+		  (cons (cons n
+			      (min (+ n (1- navi2ch-article-jit-res-nums))
+				   end))
+			range-list))
+	    (setq n (+ n navi2ch-article-jit-res-nums)))
+	  (setq n (1- cur-res))
+	  (while (<= start n)
+	    (setq range-list
+		  (cons (cons (max (- n (1- navi2ch-article-jit-res-nums))
+				   start)
+			      n)
+			range-list))
+	    (setq n (- n navi2ch-article-jit-res-nums)))
+	  (navi2ch-article-jit-reinsert-partial-messages-1
+	   buffer
+	   (nreverse range-list)))
+      (navi2ch-article-reinsert-partial-messages start end))))
+
+(defun navi2ch-article-jit-insert-messages (buffer list range number)
+  (when navi2ch-article-jit-timer
+    (cancel-timer navi2ch-article-jit-timer)
+;;; 	  (when number
+;;; 	      (setq range-list (nreverse (nth 2 (elt navi2ch-article-jit-timer 6)))))
+    (setq navi2ch-article-jit-timer nil))
+  (let* ((list navi2ch-article-message-list)
+	 (len (length list))
+	 (first-end (car range))
+	 (last-start (max (or (and (cdr range)
+				   (- len (1- (cdr range))))
+			      0)
+			  1))
+	 (count-up 
+	  (lambda (init limit range-list)
+	    (let ((n init))
+	      (while (<= limit n)
+		(setq range-list
+		      (cons (cons (max (- n (1- navi2ch-article-jit-res-nums))
+				       limit)
+				  n)
+			    range-list))
+		(setq n (- n navi2ch-article-jit-res-nums)))
+	      range-list)))
+	 (count-down 
+	  (lambda (init limit range-list)
+	    (let ((n init))
+	      (while (<= n limit)
+		(setq range-list
+		      (cons (cons n 
+				  (min (+ n (1- navi2ch-article-jit-res-nums))
+				       limit))
+			    range-list))
+		(setq n (+ n navi2ch-article-jit-res-nums))))
+	    range-list))
+	 range-list n)
+    (if (navi2ch-article-inside-range-p number range len)
+	(progn
+	  (if range
+	      (if (<= number first-end)
+		  (progn
+		    (setq range-list
+			  (funcall count-down number first-end range-list))
+		    (setq range-list 
+			  (funcall count-up (1- number) 1 range-list))
+		    (when (< first-end last-start)
+		      (setq range-list 
+			    (funcall count-down last-start len range-list))))
+		(setq range-list (funcall count-down number len range-list))
+		(setq range-list
+		      (funcall count-up (1- number) last-start range-list))
+		(unless (eq last-start 1)
+		  (setq range-list (funcall count-up first-end 1 range-list))))
+	    (setq range-list (funcall count-down number len range-list))
+	    (setq range-list (funcall count-up (1- number) 1 range-list)))
+	  (navi2ch-article-jit-reinsert-partial-messages-1
+	   buffer
+	   (nreverse range-list)))
+      ;; 表示開始場所が表示範囲にない時はまるなげ
+      (navi2ch-article-insert-messages list range))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

@@ -1,6 +1,15 @@
 2009-06-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-search): Fix typo.
+	(navi2ch-article-jit-reinsert-partial-messages-1)
+	(navi2ch-article-jit-insert-messages): New functions.
+	(navi2ch-article-sync): Use them.
+	(navi2ch-article-kill-buffer-hook): When needed, cancel JIT timer.
+	(navi2ch-article-jit-res-nums, navi2ch-article-jit-interval)
+	(navi2ch-article-jit-timer, navi2ch-article-use-jit): New
+	variables.
+	(navi2ch-article-insert-messages): When using JIT, don't show
+	messages.
 
 2009-05-15  Naohiro Aota  <naota@elisp.net>
 
