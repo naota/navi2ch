@@ -1,3 +1,11 @@
+2009-06-14  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-jit-insert-1)
+	(navi2ch-article-jit-insert): New functions.
+	(navi2ch-article-jit-interval): Change default value.
+	(navi2ch-article-jit-reinsert-partial-messages): Use it.
+	(navi2ch-article-jit-insert-messages): Ditto.
+
 2009-06-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-search): Fix typo.
