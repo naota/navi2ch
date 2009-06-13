@@ -1,5 +1,7 @@
 2009-06-14  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-article.el Reverted the previous change.
+
 	* navi2ch-article.el (navi2ch-article-jit-insert-1)
 	(navi2ch-article-jit-insert): New functions.
 	(navi2ch-article-jit-interval): Change default value.
