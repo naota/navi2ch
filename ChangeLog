@@ -1,3 +1,9 @@
+2009-06-27  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-net.el (navi2ch-net-update-file-diff): 全ファイルを取得し
+	なおした時に、前回の内容と一緒の時には update と見なさいように。 重
+	複していた cond を削除。
+
 2009-06-14  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el Reverted the previous change.

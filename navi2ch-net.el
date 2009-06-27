@@ -736,10 +736,13 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 	     (let ((cont (navi2ch-net-get-content proc)))
 	       (with-temp-file file
 		 (navi2ch-set-buffer-multibyte nil)
-		 (insert cont)))
-	     (message "%sdone" (current-message))))
-	  ((string= status "304")
-	   (setq header (navi2ch-net-add-state 'not-updated header)))
+		 (insert cont))
+	       (if (string= cont last)
+		   (progn
+		     (message "%sdone...not updated" (current-message))
+		     (setq header
+			   (navi2ch-net-add-state 'not-updated header)))
+		 (message "%sdone" (current-message))))))
 	  (t
 	   (setq header (navi2ch-net-add-state 'error header))))
     (if (not aborn-p)
