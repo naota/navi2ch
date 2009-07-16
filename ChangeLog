@@ -1,8 +1,21 @@
+2009-07-16  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-jit-reinsert-partial-messages):
+	navi2ch-article-jit-need-insert の範囲指定が間違っていたのを訂正。
+
 2009-06-27  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-net.el (navi2ch-net-update-file-diff): 全ファイルを取得し
 	なおした時に、前回の内容と一緒の時には update と見なさいように。 重
 	複していた cond を削除。
+
+2009-06-22  Naohiro Aota  <naota@elisp.net>
+	* navi2ch-article.el (navi2ch-article-jit-buffers)
+	(navi2ch-article-jit-need-insert): New variables.
+	(navi2ch-article-kill-buffer-hook, navi2ch-article-jit-insert)
+	(navi2ch-article-jit-reinsert-partial-messages)
+	(navi2ch-article-jit-insert-messages): 新方式の JIT にするために変
+	更。
 
 2009-06-14  Naohiro Aota  <naota@elisp.net>
 
