@@ -71,7 +71,7 @@
 KEY は (concat URI ARTID)")
 (defvar navi2ch-bookmark-cut-stack nil)
 (defvar navi2ch-bookmark-current-bookmark-id nil)
-(defvar navi2ch-bookmark-fetch-mark-article-check-update nil)
+(defvar navi2ch-bookmark-fetch-mark-article-check-update t)
 (defvar navi2ch-bookmark-fetch-mark-article-no-check-regexp nil)
 
 ;;; navi2ch-bm callbacks
