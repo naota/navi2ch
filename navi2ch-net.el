@@ -696,6 +696,10 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 		      (navi2ch-set-buffer-multibyte nil)
 		      (insert-file-contents file nil size)
 		      (buffer-string))))
+	 (last-all (with-temp-buffer
+		      (navi2ch-set-buffer-multibyte nil)
+		      (insert-file-contents file)
+		      (buffer-string)))
 	 proc header status aborn-p)
     (setq proc (navi2ch-net-download-file-range url (format "%d-" size) time))
     (setq header (and proc
@@ -737,7 +741,7 @@ TIME が `non-nil' ならば TIME より新しい時だけ更新する。
 	       (with-temp-file file
 		 (navi2ch-set-buffer-multibyte nil)
 		 (insert cont))
-	       (if (string= cont last)
+	       (if (string= cont last-all)
 		   (progn
 		     (message "%sdone...not updated" (current-message))
 		     (setq header
