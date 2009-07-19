@@ -1,3 +1,9 @@
+2009-07-19  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-jit-insert)
+	(navi2ch-article-kill-buffer-hook): JIT を動かすべき buffer がなく
+	なると、 timer を cancel。
+
 2009-07-18  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-net.el (navi2ch-net-update-file-diff): ファイル全体取得時
