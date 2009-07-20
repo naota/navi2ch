@@ -1257,7 +1257,7 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
   ;; view であったものが update になった後に kill された時の対策
   (setq navi2ch-article-jit-buffers (delq (current-buffer) navi2ch-article-jit-buffers))
   (unless navi2ch-article-jit-buffers
-    (unless navi2ch-article-jit-timer
+    (when navi2ch-article-jit-timer
       (cancel-timer navi2ch-article-jit-timer)
       (setq navi2ch-article-jit-timer nil)))
   (unless (eq (navi2ch-bm-get-state-from-article navi2ch-article-current-board
@@ -3939,7 +3939,7 @@ PREFIX が与えられた場合は、
 		  (setq navi2ch-article-jit-buffers
 			(delq (current-buffer) navi2ch-article-jit-buffers))
 		    (unless navi2ch-article-jit-buffers
-		      (unless navi2ch-article-jit-timer
+		      (when navi2ch-article-jit-timer
 			(cancel-timer navi2ch-article-jit-timer)
 			(setq navi2ch-article-jit-timer nil))))))))
       (setq navi2ch-article-jit-buffers

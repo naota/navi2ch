@@ -3,6 +3,8 @@
 	* navi2ch-article.el (navi2ch-article-jit-insert)
 	(navi2ch-article-kill-buffer-hook): navi2ch-article-jit-timer が
 	nil かどうかを確認。
+	(navi2ch-article-kill-buffer-hook, navi2ch-article-jit-insert): 上
+	記修正のバグを修正。
 
 2009-07-19  Naohiro Aota  <naota@elisp.net>
 
