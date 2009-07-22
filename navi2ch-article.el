@@ -1917,9 +1917,15 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	(setq num (max first (min last num)))
 	(unless (or navi2ch-article-hide-mode 
 		    navi2ch-article-important-mode
-		    (navi2ch-article-inside-range-p num range len))
+		    (if navi2ch-article-use-jit
+			(condition-case nil
+			    (cdr (assq 'point (navi2ch-article-get-message num)))
+			  (error nil))
+		      (navi2ch-article-inside-range-p num range len)))
 	  (if navi2ch-article-redraw-when-goto-number
-	      (progn
+	      (if navi2ch-article-use-jit
+		  (let (buffer-read-only)
+		    (navi2ch-article-reinsert-partial-messages num num))
 		(navi2ch-article-fix-range num)
 		(navi2ch-article-redraw))
 	    (if (or (interactive-p) pop)
