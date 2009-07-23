@@ -3940,7 +3940,7 @@ PREFIX が与えられた場合は、
 		  (navi2ch-article-jit-insert-1 (+ n i) n diffpos wintop-pos start end)
 		  (navi2ch-article-jit-insert-1 (- n i) n diffpos wintop-pos start end)
 		  (setq i (1+ i))
-		  (setq repeat (sit-for 0.1 t)))
+		  (setq repeat (not (input-pending-p))))
 		(when repeat
 		  (setq navi2ch-article-jit-buffers
 			(delq (current-buffer) navi2ch-article-jit-buffers))
