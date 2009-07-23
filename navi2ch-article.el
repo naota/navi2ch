@@ -3909,7 +3909,8 @@ PREFIX が与えられた場合は、
 	  (goto-char (+ (point) diffpos 1))
 	  (when wintop-pos
 	    (set-window-start (selected-window) 
-			      (- (point) wintop-pos))))))))
+			      (- (point) wintop-pos))))
+	(redisplay)))))
 
 (defun navi2ch-article-jit-insert ()
   (let ((buffer
@@ -3940,7 +3941,6 @@ PREFIX が与えられた場合は、
 		  (navi2ch-article-jit-insert-1 (+ n i) n diffpos wintop-pos start end)
 		  (navi2ch-article-jit-insert-1 (- n i) n diffpos wintop-pos start end)
 		  (setq i (1+ i))
-		  (redisplay)
 		  (setq repeat (not (input-pending-p))))
 		(when repeat
 		  (setq navi2ch-article-jit-buffers
