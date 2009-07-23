@@ -2,6 +2,23 @@
 
 	* navi2ch-article.el (navi2ch-article-jit-insert-1)
 	(navi2ch-article-jit-insert): Move `redisplay' place.
+	(navi2ch-article-message-filter-default-rule-alist): IDマッチの時は
+	デフォルトで date local をONに。
+	(navi2ch-article-message-filter-wid-date): New local variable.
+	(navi2ch-article-extract-date): New function.
+	(navi2ch-article-message-filter-by-name)
+	(navi2ch-article-message-filter-by-message)
+	(navi2ch-article-message-filter-by-id)
+	(navi2ch-article-message-filter-by-mail)
+	(navi2ch-article-message-filter-by-subject)
+	(navi2ch-article-message-filter-by-hostname): Use it.
+	(navi2ch-article-message-filter-subr): 引数を追加。 日付でマッチす
+	るように。
+	(navi2ch-article-add-message-filter-cus): 日付マッチのオプションを
+	指定できるように。 Undo を無効に。
+	(navi2ch-article-add-message-filter-cus-done): 日付マッチを処理する
+	ように。
+	(navi2ch-article-read-message-filter-match): Ditto.
 
 2009-07-23  Naohiro Aota  <naota@elisp.net>
 

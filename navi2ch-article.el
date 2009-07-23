@@ -202,7 +202,8 @@ last が最後からいくつ表示するか。
     (?i 
      :var navi2ch-article-message-filter-by-id-alist
      :string navi2ch-article-get-current-id
-     :scope board-local)
+     :scope board-local
+     :date t)
     (?h 
      :var navi2ch-article-message-filter-by-hostname-alist
      :string navi2ch-article-get-current-hostname)
@@ -224,6 +225,7 @@ last が最後からいくつ表示するか。
 (defvar navi2ch-article-message-filter-wid-scope)
 (defvar navi2ch-article-message-filter-wid-float)
 (defvar navi2ch-article-message-filter-wid-var)
+(defvar navi2ch-article-message-filter-wid-date)
 (defvar navi2ch-article-message-filter-wid-window-configuration)
 
 ;; JIT
@@ -252,6 +254,7 @@ last が最後からいくつ表示するか。
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-scope)
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-float)
 (make-variable-buffer-local 'navi2ch-article-message-filter-wid-var)
+(make-variable-buffer-local 'navi2ch-article-message-filter-wid-date)
 
 (make-variable-buffer-local 'navi2ch-article-jit-need-insert)
 
@@ -934,17 +937,29 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 	       navi2ch-article-message-filter-cache)))
       result)))
 
+(defun navi2ch-article-extract-date (str)
+  (cond
+   ((not (stringp str))
+    nil)
+   ((string-match "^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]" str)
+    (match-string 0 str))
+   ((string-match "^[0-9][0-9]/[0-9][0-9]/[0-9][0-9]" str)
+    (concat "20" (match-string 0 str)))
+   (t nil)))
+
 (defun navi2ch-article-message-filter-by-name (alist)
   (when navi2ch-article-message-filter-by-name-alist
     (navi2ch-article-message-filter-subr
      navi2ch-article-message-filter-by-name-alist
-     (cdr (assq 'name alist)))))
+     (cdr (assq 'name alist))
+     (navi2ch-article-extract-date (cdr (assq 'date alist))))))
 
 (defun navi2ch-article-message-filter-by-message (alist)
   (when navi2ch-article-message-filter-by-message-alist
     (navi2ch-article-message-filter-subr
      navi2ch-article-message-filter-by-message-alist
-     (cdr (assq 'data alist)))))
+     (cdr (assq 'data alist))
+     (navi2ch-article-extract-date (cdr (assq 'date alist))))))
 
 (defun navi2ch-article-message-filter-by-id (alist)
   (let ((case-fold-search nil))
@@ -953,13 +968,15 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 			     (cdr (assq 'date alist))))
       (navi2ch-article-message-filter-subr
        navi2ch-article-message-filter-by-id-alist
-       (match-string 1 (cdr (assq 'date alist)))))))
+       (match-string 1 (cdr (assq 'date alist)))
+       (navi2ch-article-extract-date (cdr (assq 'date alist)))))))
 
 (defun navi2ch-article-message-filter-by-mail (alist)
   (when navi2ch-article-message-filter-by-mail-alist
     (navi2ch-article-message-filter-subr
      navi2ch-article-message-filter-by-mail-alist
-     (cdr (assq 'mail alist)))))
+     (cdr (assq 'mail alist))
+     (navi2ch-article-extract-date (cdr (assq 'date alist))))))
 
 (defun navi2ch-article-message-filter-by-subject (alist)
   (when navi2ch-article-message-filter-by-subject-alist
@@ -967,7 +984,8 @@ BOARD non-nil ならば、その板の coding-system を使う。"
      navi2ch-article-message-filter-by-subject-alist
      (if (equal (or (cdr (assq 'subject alist)) "") "")
 	 (navi2ch-article-get-current-subject)
-       (cdr (assq 'subject alist))))))
+       (cdr (assq 'subject alist)))
+     (navi2ch-article-extract-date (cdr (assq 'date alist))))))
 
 (defun navi2ch-article-message-filter-by-hostname (alist)
   (let ((case-fold-search nil)
@@ -977,19 +995,22 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 		   (string-match "発信元:\\([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\)" date)))
       (navi2ch-article-message-filter-subr
        navi2ch-article-message-filter-by-hostname-alist
-       (match-string 1 date)))))
+       (match-string 1 date)
+       (navi2ch-article-extract-date (cdr (assq 'date alist)))))))
 
-(defun navi2ch-article-message-filter-subr (rules string)
+(defun navi2ch-article-message-filter-subr (rules string date)
   (let ((board-id (cdr (assq 'id navi2ch-article-current-board)))
 	(artid (cdr (assq 'artid navi2ch-article-current-article)))
 	score)
     (catch 'loop
       (dolist (rule rules)
 	(when (or (not (consp (car rule)))
-		  (equal (or (plist-get (car rule) :board-id) board-id)
-			 (and (equal (or (plist-get (car rule) :artid) artid)
-				     artid)
-			      board-id)))
+		  (and (equal (or (plist-get (car rule) :board-id) board-id)
+			      (and (equal (or (plist-get (car rule) :artid) artid)
+					  artid)
+				   board-id))
+		       (or (null (or date (plist-get (car rule) :date)))
+			   (equal date (plist-get (car rule) :date)))))
 	  (let* ((char (and (consp (car rule))
 			    (stringp (car (car rule)))
 			    (string-to-char (symbol-name (cadr (car rule))))))
@@ -3549,6 +3570,7 @@ PREFIX が与えられた場合は、
 		  (buffer-substring-no-properties (region-beginning) (region-end))
 		(or (plist-get rule :string)
 		    (plist-get default-rule :string))))
+	 (date (navi2ch-article-extract-date (navi2ch-article-get-current-date)))
 	 (article navi2ch-article-current-article)
 	 (board navi2ch-article-current-board))
     (setq str (cond
@@ -3560,6 +3582,7 @@ PREFIX が与えられた場合は、
     (kill-buffer (get-buffer-create "*navi2ch Add filter*"))
     (pop-to-buffer (get-buffer-create "*navi2ch Add filter*"))
     (kill-all-local-variables)
+    (buffer-disable-undo)
     (setq navi2ch-article-message-filter-wid-var (or (plist-get rule :var)
 						     (plist-get default-rule :var))
 	  navi2ch-article-current-article article
@@ -3623,6 +3646,14 @@ PREFIX が与えられた場合は、
 			 '(item :tag "never"   :value 0)
 			 '(item :tag "always"  :value 1)
 			 '(item :tag "default" :value nil)))
+    (insert "\nDate:\n")
+    (setq navi2ch-article-message-filter-wid-date
+	  (widget-create 'radio-button-choice
+			 :value (and (or (plist-get rule :date)
+					 (plist-get default-rule :date))
+				     date)
+			 `(editable-field :tag "date local" :format "%t: %v" ,date)
+			 '(item :tag "none specified"     :value nil)))
     (insert "\n")
     (widget-create 'push-button
 		   :notify 'navi2ch-article-add-message-filter-cus-done
@@ -3649,7 +3680,8 @@ PREFIX が与えられた場合は、
 		 :artid (and (eq scope 'article-local)
 			     (cdr (assq 'artid
 					navi2ch-article-current-article)))
-		 :float (widget-value navi2ch-article-message-filter-wid-float)))
+		 :float (widget-value navi2ch-article-message-filter-wid-float)
+		 :date  (widget-value navi2ch-article-message-filter-wid-date)))
 	 (res (widget-value navi2ch-article-message-filter-wid-rule))
 	 (rule-children (widget-get 
 			 navi2ch-article-message-filter-wid-rule
@@ -3764,7 +3796,7 @@ PREFIX が与えられた場合は、
     (if (null list)
 	str
       (setcar list str)
-      (let ((options '("s)cope" "f)loating")))
+      (let ((options '("s)cope" "f)loating" "d)ate")))
 	(while (and options
 		    (y-or-n-p "Set other options? "))
 	  (let ((char (navi2ch-read-char-with-retry
@@ -3805,7 +3837,15 @@ PREFIX が与えられた場合は、
 		  (setq list (plist-put list :float 0)))
 		 ((eq char ?a)
 		  (setq list (plist-put list :float 1))))
-		(setq options (delete "f)loating" options))))))))
+		(setq options (delete "f)loating" options))))
+	     ((eq char ?d)
+	      (when (y-or-n-p "Set the rule date local? ")
+		(let ((date (navi2ch-read-string "Date local: "
+						 (navi2ch-article-extract-date
+						  (navi2ch-article-get-current-date)))))
+		  (when (not (string= date ""))
+		    (setq list
+			  (plist-put list :date date))))))))))
       list)))
 
 (defun navi2ch-article-read-message-filter-result (&optional initial-input)
