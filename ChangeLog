@@ -2,6 +2,7 @@
 
 	* navi2ch-article.el (navi2ch-article-jit-insert): sit-for を使わず
 	に input-pending-p に。
+	(navi2ch-article-jit-insert): force redisplay.
 
 2009-07-22  Naohiro Aota  <naota@elisp.net>
 
