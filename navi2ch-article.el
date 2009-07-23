@@ -3940,6 +3940,7 @@ PREFIX が与えられた場合は、
 		  (navi2ch-article-jit-insert-1 (+ n i) n diffpos wintop-pos start end)
 		  (navi2ch-article-jit-insert-1 (- n i) n diffpos wintop-pos start end)
 		  (setq i (1+ i))
+		  (redisplay)
 		  (setq repeat (not (input-pending-p))))
 		(when repeat
 		  (setq navi2ch-article-jit-buffers
