@@ -1009,7 +1009,7 @@ BOARD non-nil ならば、その板の coding-system を使う。"
 			      (and (equal (or (plist-get (car rule) :artid) artid)
 					  artid)
 				   board-id))
-		       (or (null (or date (plist-get (car rule) :date)))
+		       (or (null (and date (plist-get (car rule) :date)))
 			   (equal date (plist-get (car rule) :date)))))
 	  (let* ((char (and (consp (car rule))
 			    (stringp (car (car rule)))
