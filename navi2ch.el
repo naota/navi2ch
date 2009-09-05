@@ -111,12 +111,13 @@
 	  (navi2ch-list)
 	(when (buffer-live-p splash-buffer)
 	  (kill-buffer splash-buffer))))
-    (setq navi2ch-init t))
-  (when navi2ch-mona-enable
-    (navi2ch-mona-setup))
-  (navi2ch-be2ch-login-p)
+    (setq navi2ch-init t)
+    (when navi2ch-mona-enable
+      (navi2ch-mona-setup))
+    (navi2ch-be2ch-login-p))
   (navi2ch-list)
-  (run-hooks 'navi2ch-after-startup-hook))
+  (unless navi2ch-init
+    (run-hooks 'navi2ch-after-startup-hook)))
 
 (defun navi2ch-version ()
   (interactive)

@@ -141,7 +141,7 @@ last が最後からいくつ表示するか。
 移動できたら 0、できなければ 0 以外の整数を返す関数であること。")
 
 (defvar navi2ch-article-save-info-keys
-  '(number name time hide important unfilter mail kako response))
+  '(number name time hide important unfilter mail kako response down))
 
 (defvar navi2ch-article-insert-message-separator-function
   (if (and window-system

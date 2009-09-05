@@ -235,6 +235,9 @@
 			       (gethash updated
 					(gethash state face-table))))))
 
+(defun navi2ch-bm-down-article-p (board article)
+  (assq 'down (navi2ch-article-load-info board article)))
+
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)
 	 (cond ((get-buffer (navi2ch-article-get-buffer-name
@@ -245,6 +248,8 @@
 	       (t nil)))
 	((navi2ch-bm-fetched-article-p board article)
 	 'update)
+	((navi2ch-bm-down-article-p board article)
+	 'down)
 	(t
 	 (navi2ch-article-check-cached board article))))
 

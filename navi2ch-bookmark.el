@@ -440,10 +440,9 @@ KEY は (concat URI ARTID)")
 		     ;; (bbstype (cdr (assq 'bbstype board)))
 		     (board-uri (cdr (assq 'uri board)))
 		     (art-id (cdr (assq 'artid article)))
+		     (info (navi2ch-article-load-info board article))
 		     (res (string-to-number
-			   (or (cdr (assq 'response
-					  (navi2ch-article-load-info board
-								     article)))
+			   (or (cdr (assq 'response info))
 			       "0")))
 		     new-res board-data)
 		(when (or (null navi2ch-bookmark-fetch-mark-article-no-check-regexp)
@@ -466,6 +465,8 @@ KEY は (concat URI ARTID)")
 		    (navi2ch-bm-insert-state
 		     (navi2ch-bm-get-property-internal (point))
 		     'down)
+		    (setq info (navi2ch-put-alist 'down t info))
+		    (navi2ch-article-save-info board info)
 		    (navi2ch-bm-unmark))
 		   ((and res
 			 new-res
