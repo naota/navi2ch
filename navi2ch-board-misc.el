@@ -361,8 +361,8 @@
 (defun navi2ch-bm-select-article (&optional max-line)
   (interactive "P")
   (let* ((item (navi2ch-bm-get-property-internal (point)))
-         (article (navi2ch-bm-get-article-internal item))
          (board (navi2ch-bm-get-board-internal item))
+         (article (navi2ch-article-load-info board (navi2ch-bm-get-article-internal item)))
          (buf (current-buffer))
 	 (window-configuration (current-window-configuration)))
     (unwind-protect
