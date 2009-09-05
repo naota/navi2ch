@@ -4052,10 +4052,11 @@ PREFIX が与えられた場合は、
     (when (and (not ignore) board article (not (cdr (assq 'compressed article))))
       (let* ((file (navi2ch-article-get-file-name board article))
 	     (gzfile (concat file ".gz")))
-	(with-temp-file gzfile
-	  (navi2ch-set-buffer-multibyte nil)
-	  (insert-file-contents file))
-	(delete-file file)
+	(when (file-exists-p file)
+	  (with-temp-file gzfile
+	    (navi2ch-set-buffer-multibyte nil)
+	    (insert-file-contents file))
+	  (delete-file file))
 	(setq article (navi2ch-put-alist 'compressed t article))
 	(navi2ch-article-save-info board article)))))
 

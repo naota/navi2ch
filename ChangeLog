@@ -1,5 +1,8 @@
 2009-09-05  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-article.el (navi2ch-article-compress): file が存在する時
+	にだけ書きこむ。
+
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 落ちて
 	いるスレを圧縮する。
 
