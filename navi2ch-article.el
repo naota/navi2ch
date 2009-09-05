@@ -141,7 +141,7 @@ last が最後からいくつ表示するか。
 移動できたら 0、できなければ 0 以外の整数を返す関数であること。")
 
 (defvar navi2ch-article-save-info-keys
-  '(number name time hide important unfilter mail kako response down))
+  '(number name time hide important unfilter mail kako response down compressed))
 
 (defvar navi2ch-article-insert-message-separator-function
   (if (and window-system
@@ -291,7 +291,10 @@ last が最後からいくつ表示するか。
 
 (defsubst navi2ch-article-get-file-name (board article)
   (navi2ch-board-get-file-name board
-                               (concat (cdr (assq 'artid article)) ".dat")))
+                               (concat (cdr (assq 'artid article)) 
+				       (if (cdr (assq 'compressed article))
+					   ".dat.gz"
+					 ".dat"))))
 
 (defsubst navi2ch-article-get-info-file-name (board article)
   (navi2ch-board-get-file-name board
@@ -4038,6 +4041,23 @@ PREFIX が与えられた場合は、
 				       'navi2ch-article-jit-insert))))
       ;; 表示開始場所が表示範囲にない時はまるなげ
       (navi2ch-article-insert-messages list range))))
+
+(defun navi2ch-article-compress (&optional board article)
+  (let (ignore)
+    (when (eq major-mode 'navi2ch-article-mode)
+      (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))
+	  (setq ignore t)
+	(or board (setq board navi2ch-article-current-board))
+	(or article (setq article navi2ch-article-current-article))))
+    (when (and (not ignore) board article (not (cdr (assq 'compressed article))))
+      (let* ((file (navi2ch-article-get-file-name board article))
+	     (gzfile (concat file ".gz")))
+	(with-temp-file gzfile
+	  (navi2ch-set-buffer-multibyte nil)
+	  (insert-file-contents file))
+	(delete-file file)
+	(setq article (navi2ch-put-alist 'compressed t article))
+	(navi2ch-article-save-info board article)))))
 
 (run-hooks 'navi2ch-article-load-hook)
 ;;; navi2ch-article.el ends here

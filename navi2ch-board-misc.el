@@ -236,7 +236,7 @@
 					(gethash state face-table))))))
 
 (defun navi2ch-bm-down-article-p (board article)
-  (assq 'down (navi2ch-article-load-info board article)))
+  (cdr (assq 'down (navi2ch-article-load-info board article))))
 
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)

@@ -1,6 +1,18 @@
 2009-09-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 落ちて
+	いるスレを圧縮する。
+
+	* navi2ch-board-misc.el (navi2ch-bm-down-article-p): cdr をとってい
+	なかった bug を修正。
+
+	* navi2ch-article.el (navi2ch-article-insert-message-separator-function):
+	Add compressed.
+	(navi2ch-article-get-file-name): compressed が t の時は ".dat.gz"
+	ファイルを使う。
+	(navi2ch-article-compress): New funcion.
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 落ちて
 	いるスレに down マークをつける。
 
 	* navi2ch-board-misc.el (navi2ch-bm-down-article-p): New function.

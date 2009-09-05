@@ -467,6 +467,7 @@ KEY は (concat URI ARTID)")
 		     'down)
 		    (setq info (navi2ch-put-alist 'down t info))
 		    (navi2ch-article-save-info board info)
+		    (navi2ch-article-compress board info)
 		    (navi2ch-bm-unmark))
 		   ((and res
 			 new-res
