@@ -2315,13 +2315,12 @@ Be を使いたい。
 しておくと、同じサーバへの接続を持続してくれる。
 
 @item Q.
-Emacs 23 で「〜」が投稿できない気がするんだけど。
+Emacs 23 で「〜」とかが 投稿できない気がするんだけど。
 
 @item A.
 @lisp
-(define-translation-table 'my-cp932-encode (list (cons 12316 65374)))
-(coding-system-put 'cp932 :encode-translation-table 
-		   'my-cp932-encode)
+(coding-system-put 'cp932 :encode-translation-table
+                   (get 'japanese-ucs-jis-to-cp932-map 'translation-table))
 @end lisp
 としておくといいかも。
 
