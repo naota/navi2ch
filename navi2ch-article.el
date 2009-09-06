@@ -152,7 +152,7 @@ last が最後からいくつ表示するか。
   "セパレータを挿入する関数。")
 
 (defvar navi2ch-article-summary-file-name "article-summary")
-(defvar navi2ch-article-local-dat-regexp "[0-9]+\\.dat\\'"
+(defvar navi2ch-article-local-dat-regexp "[0-9]+\\.dat\\(?:.gz\\)?\\'"
   "ローカルにある dat ファイルを表わす正規表現。
 サーバにある dat ファイルにはこの変数を使ってはいけない。")
 
@@ -302,7 +302,8 @@ last が最後からいくつ表示するか。
 
 (defsubst navi2ch-article-file-name-to-artid (filename)
   "*FILENAME をスレIDに変換する。"
-  (file-name-sans-extension (file-name-nondirectory filename)))
+  (file-name-sans-extension (file-name-sans-extension 
+			     (file-name-nondirectory filename))))
 
 
 (defsubst navi2ch-article-inside-range-p (num range len)

@@ -1,3 +1,9 @@
+2009-09-06  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-local-dat-regexp): .dat.gz に
+	対応。
+	(navi2ch-article-file-name-to-artid): Ditto.
+
 2009-09-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-compress): file が存在する時
