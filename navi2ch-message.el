@@ -116,7 +116,7 @@
   "Samba24 の規制秒数情報を保持するファイルのファイル名.")
 (defvar navi2ch-message-samba24-update-timer nil)
 
-(defun navi2ch-message-write-message (board article &optional new sage)
+(defun navi2ch-message-write-message (board article &optional new sage cite)
   (when (or (not navi2ch-message-ask-before-write)
 	    (if (functionp navi2ch-message-ask-before-write)
 		(funcall navi2ch-message-ask-before-write "Write new message? ")
@@ -142,6 +142,8 @@
       (setq navi2ch-mode-line-identification
 	    (navi2ch-message-make-mode-line-identification new))
       (navi2ch-set-mode-line-identification)
+      (when cite
+	(navi2ch-message-cite-original))
       (run-hooks 'navi2ch-message-setup-message-hook)
       (when sage
 	(run-hooks 'navi2ch-message-setup-sage-message-hook)))))

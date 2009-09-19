@@ -107,6 +107,7 @@
 	(define-key map  "\C-c\C- " 'navi2ch-article-toggle-sticky)
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
     (define-key map "u" 'navi2ch-show-url-at-point)
+    (define-key map "\C-c\C-y" 'navi2ch-article-write-cite-message)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec
@@ -1734,17 +1735,21 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
         (setq article (navi2ch-put-alist (car x) (cdr x) article)))
       article)))
 
-(defun navi2ch-article-write-message (&optional sage)
+(defun navi2ch-article-write-message (&optional sage cite)
   (interactive)
   (when (not (navi2ch-board-from-file-p navi2ch-article-current-board))
     (navi2ch-article-save-number)
     (navi2ch-message-write-message navi2ch-article-current-board
                                    navi2ch-article-current-article
-				   nil sage)))
+				   nil sage cite)))
 
 (defun navi2ch-article-write-sage-message ()
   (interactive)
   (navi2ch-article-write-message 'sage))
+
+(defun navi2ch-article-write-cite-message ()
+  (interactive)
+  (navi2ch-article-write-message 'sage 'cite))
 
 (defun navi2ch-article-str-to-num (str)
   "レス参照の文字列を数字か数字の list に変換。"
