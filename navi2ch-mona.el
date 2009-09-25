@@ -117,11 +117,16 @@ XEmacs では明示的にフォントセットを作る必要がないので、
 (defun navi2ch-mona-create-face-from-family-name (family-name)
   "VALUE で指定されるフォントセットに応じてフェイスを作成する。"
   (dolist (height '(12 14 16))
-    (ignore-errors
-      (let ((fontset (navi2ch-mona-create-fontset-from-family-name
-		      family-name height))
-	    (face (intern (format "navi2ch-mona%d-face" height))))
-	(set-face-font face fontset)))))
+    (if navi2ch-mona-use-ipa-mona
+	(let ((face (intern (format "navi2ch-mona%d-face" height))))
+	  (set-face-font face (format "%s:pixelsize=%d"
+				      family-name
+				      height)))
+      (ignore-errors
+	(let ((fontset (navi2ch-mona-create-fontset-from-family-name
+			family-name height))
+	      (face (intern (format "navi2ch-mona%d-face" height))))
+	  (set-face-font face fontset))))))
 
 (defun navi2ch-mona-set-font-family-name (symbol value)
   (navi2ch-mona-create-face-from-family-name value)
@@ -247,6 +252,27 @@ Emacs 21 では、それに加えて medium/bold なフォントを別々に作る。
 (defcustom navi2ch-mona-on-message-mode nil
   "*non-nil の場合、レスを書く時にもモナーフォントを使う。"
   :type 'boolean
+  :group 'navi2ch-mona)
+
+(defcustom navi2ch-mona-use-ipa-mona nil
+  "*non-nil なら、IPAモナーフォントを使ってスレを表示する。"
+  :set (lambda (symbol value)
+	 (navi2ch-mona-setup)
+	 (set-default symbol value))
+  :initialize 'custom-initialize-default
+  :type 'boolean
+  :group 'navi2ch-mona)
+
+(defcustom navi2ch-mona-ipa-mona-font-family-name "IPA モナー Pゴシック"
+  "*モナーフォントとして使うフォントの family 名。
+
+エラーがでたら、 (pp (font-family-list)) を評価して IPAモナーっぽ
+いのを探してね。"
+  :type '(choice (const :tag "IPA Mona Font"
+			"IPA モナー Pゴシック")
+		 (string :tag "family name"))
+  :set 'navi2ch-mona-set-font-family-name
+  :initialize 'custom-initialize-default
   :group 'navi2ch-mona)
 
 ;; defun find-face for GNU Emacs
@@ -395,7 +421,10 @@ nil の場合はデフォルトで有効になる。
   "*モナーフォントを使うためのフックを追加する。"
   (when (and (or (eq window-system 'x) (eq window-system 'w32))
 	     (or navi2ch-on-emacs21 navi2ch-on-xemacs))
-    (navi2ch-mona-create-face-from-family-name navi2ch-mona-font-family-name)
+    (navi2ch-mona-create-face-from-family-name 
+     (if navi2ch-mona-use-ipa-mona
+	 navi2ch-mona-ipa-mona-font-family-name
+       navi2ch-mona-font-family-name))
     (navi2ch-mona-set-mona-face)	; 何回呼んでも大丈夫
     (add-hook 'navi2ch-article-arrange-message-hook
 	      'navi2ch-mona-arrange-message)

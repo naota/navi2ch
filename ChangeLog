@@ -1,3 +1,10 @@
+2009-09-26  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-mona.el (navi2ch-mona-use-ipa-mona): New variable.
+	(navi2ch-mona-use-ipa-mona): Ditto.
+	(navi2ch-mona-create-face-from-family-name): Use it.
+	(navi2ch-mona-setup): Ditto.
+
 2009-09-20  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-message.el (navi2ch-message-write-message): Add new argument.
