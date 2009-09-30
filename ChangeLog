@@ -1,3 +1,8 @@
+2009-09-30  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-net.el (navi2ch-net-update-file): ID:TanpanM が立てたスレ
+	は無視。
+
 2009-09-26  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-mona.el (navi2ch-mona-use-ipa-mona): New variable.

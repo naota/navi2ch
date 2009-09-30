@@ -634,6 +634,12 @@ OTHER-HEADER は `navi2ch-net-download-file' に渡される。
 			    (goto-char (point-min))
 			    (funcall func)
 			    (buffer-string))))
+	     (when (and cont
+			(string-match 
+			 "^[^<]+<><>[0-9]+/[0-9]+/[0-9]+ [0-9]+:[0-9]+:[0-9]+ ID:TanpanM<>"
+			 cont))
+	       (setq cont nil)
+	       (setq header (navi2ch-net-add-state 'error header)))
 	     (if (and cont (not (string= cont "")))
 		 (with-temp-file file
 		   (navi2ch-set-buffer-multibyte nil)
