@@ -293,7 +293,11 @@ last が最後からいくつ表示するか。
 (defsubst navi2ch-article-get-file-name (board article)
   (navi2ch-board-get-file-name board
                                (concat (cdr (assq 'artid article)) 
-				       (if (cdr (assq 'compressed article))
+				       (if (cdr (or (assq 'compressed article)
+						    (assq 'compressed
+							  (navi2ch-article-load-info
+							   board
+							   article))))
 					   ".dat.gz"
 					 ".dat"))))
 
