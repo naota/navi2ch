@@ -1,3 +1,9 @@
+2009-11-07  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-add-message-filter-cus):
+	:auto に対応。
+	(navi2ch-article-add-message-filter-cus-done): 引数を変更。
+
 2009-10-10  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-get-file-name): article に
