@@ -1290,12 +1290,18 @@ DONT-DISPLAY が non-nil のときはスレバッファを表示せずに実行。"
     (when navi2ch-article-jit-timer
       (cancel-timer navi2ch-article-jit-timer)
       (setq navi2ch-article-jit-timer nil)))
-  (unless (eq (navi2ch-bm-get-state-from-article navi2ch-article-current-board
-						 navi2ch-article-current-article)
-	      'update)
-    (navi2ch-bm-update-article navi2ch-article-current-board
-			       navi2ch-article-current-article
-			       'cache))
+  (let ((status (navi2ch-bm-get-state-from-article navi2ch-article-current-board
+						   navi2ch-article-current-article)))
+    (cond
+     ((eq status 'update))
+     ((eq status 'down)
+      (navi2ch-bm-update-article navi2ch-article-current-board
+				 navi2ch-article-current-article
+				 'down))
+     (t
+      (navi2ch-bm-update-article navi2ch-article-current-board
+				 navi2ch-article-current-article
+				 'cache))))
   (navi2ch-article-save-info))
 
 (defun navi2ch-article-exit (&optional kill)
@@ -1352,10 +1358,11 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
       (when first
         (setq article (navi2ch-article-load-info)))
       (navi2ch-article-set-mode-line)
-      (if (and (cdr (assq 'kako article))
+      (if (and (or (cdr (assq 'kako article))
+		   (cdr (assq 'down article)))
 	       (file-exists-p file)
 	       (not (and force	  ; force が指定されない限りsyncしない
-			 (y-or-n-p "Re-sync kako article? "))))
+			 (y-or-n-p "Re-sync kako/down article? "))))
 	  (setq navi2ch-article-current-article article)
 	(let ((ret (navi2ch-article-update-file board article force)))
 	  (setq article (nth 0 ret)
@@ -1433,10 +1440,11 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
     (let (ret header file)
       (setq article (navi2ch-article-load-info board article)
 	    file (navi2ch-article-get-file-name board article))
-      (unless (and (cdr (assq 'kako article))
+      (unless (and (or (cdr (assq 'kako article))
+		       (cdr (assq 'down article)))
 		   (file-exists-p file)
 		   (not (and force ; force が指定されない限り sync しない
-			     (y-or-n-p "Re-sync kako article? "))))
+			     (y-or-n-p "Re-sync kako/down article? "))))
 	(setq ret (navi2ch-article-update-file board article force)
 	      article (nth 0 ret)
 	      header (nth 1 ret))
@@ -1547,6 +1555,11 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 					     article)))
 	  (when (navi2ch-net-get-state 'kako header)
 	    (setq article (navi2ch-put-alist 'kako t article)))
+	  (when (and (cdr (assq 'down article))
+		     (or (navi2ch-net-get-state 'not-updated header)
+			 (not (navi2ch-net-get-state 'error header))))
+	    (setq article (navi2ch-put-alist 'down nil article))
+	    (navi2ch-article-save-info board article))
 	  (when (and (file-exists-p file)
 		     (file-readable-p file))
 	    (with-temp-buffer

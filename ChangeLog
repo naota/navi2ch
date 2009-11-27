@@ -1,3 +1,12 @@
+2009-11-28  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-kill-buffer-hook): down なス
+	レを表示して閉じたさいに bookmark buffer の mark がおかしくなる問題
+	を修正。
+	(navi2ch-article-sync): down なスレは sync しない。
+	(navi2ch-article-fetch-article): Ditto.
+	(navi2ch-article-update-file): down なスレを取得できれば down を外す。
+
 2009-11-07  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-add-message-filter-cus):
