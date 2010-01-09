@@ -1,3 +1,11 @@
+2010-01-10  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-board-misc.el (navi2ch-bm-down-article-p): down 属性が不
+	明な時だけ、 article を読みこむように。
+
+	* navi2ch-board.el (navi2ch-board-get-matched-article): subject か
+	らの article は落ちていないことを明示。
+
 2009-11-28  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-article.el (navi2ch-article-kill-buffer-hook): down なス

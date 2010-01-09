@@ -1,7 +1,7 @@
 ;;; navi2ch-board-misc.el --- Miscellaneous Functions for Navi2ch Board Mode -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009 by
-;; Navi2ch Project
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009, 2010
+;; by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: 2ch, network
@@ -236,7 +236,10 @@
 					(gethash state face-table))))))
 
 (defun navi2ch-bm-down-article-p (board article)
-  (cdr (assq 'down (navi2ch-article-load-info board article))))
+  (let ((item (assq 'down article)))
+    (if item
+	(cdr item)
+      (cdr (navi2ch-article-load-info board article)))))
 
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)

@@ -1,7 +1,7 @@
 ;;; navi2ch-board.el --- subject list module for navi2ch -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 by
-;; Navi2ch Project
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2010
+;; by Navi2ch Project
 
 ;; Author: Taiki SUGAWARA <taiki@users.sourceforge.net>
 ;; Keywords: network, 2ch
@@ -201,7 +201,8 @@
       (setq str (replace-match "" nil t str)))
     (list (cons 'subject str)
 	  (cons 'response num)
-	  (cons 'artid id))))
+	  (cons 'artid id)
+	  (cons 'down nil))))
 
 (defun navi2ch-board-url-to-board (url)
   "URL から board を得る。"
