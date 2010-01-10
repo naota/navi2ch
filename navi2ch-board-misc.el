@@ -239,7 +239,7 @@
   (let ((item (assq 'down article)))
     (if item
 	(cdr item)
-      (cdr (navi2ch-article-load-info board article)))))
+      (cdr (assq 'down (navi2ch-article-load-info board article))))))
 
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)

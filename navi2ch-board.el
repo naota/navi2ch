@@ -202,7 +202,8 @@
     (list (cons 'subject str)
 	  (cons 'response num)
 	  (cons 'artid id)
-	  (cons 'down nil))))
+	  (cons 'down nil)
+	  (cons 'compressed nil))))
 
 (defun navi2ch-board-url-to-board (url)
   "URL から board を得る。"
