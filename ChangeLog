@@ -1,3 +1,42 @@
+2010-01-16  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-util.el (toplevel): Comment out autload for ucs-to-char.
+
+	* navi2ch-search.el (navi2ch-search-union-subject-list): Fix typo
+	`args' to `arg'.
+
+	* navi2ch-message.el (navi2ch-message-cite-original):
+	(navi2ch-message-cite-original-from-number)
+	(navi2ch-message-send-message): Use with-current-buffer instead of
+	save-excursion and set-buffer.
+
+	* navi2ch-oyster.el (navi2ch-oyster-get-status)
+	(navi2ch-oyster-login): Ditto.
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-change-bookmark)
+	(navi2ch-bookmark-create-bookmark): Ditto.
+
+	* navi2ch-util.el (navi2ch-get-major-mode, navi2ch-fuzzy-regexp):
+	Ditto.
+
+	* navi2ch-net.el (navi2ch-net-send-request)
+	(navi2ch-net-get-status, navi2ch-net-get-header): Ditto.
+
+	* navi2ch-article.el (navi2ch-article-get-article-length)
+	(navi2ch-article-select-view-range-subr)
+	(navi2ch-article-through-ask, navi2ch-article-cached-subject)
+	(navi2ch-article-textize-article)
+	(navi2ch-article-set-summary-element)
+	(navi2ch-article-buffer-list, navi2ch-article-current-buffer):
+	Ditto.
+
+	* navi2ch-board-misc.el (navi2ch-bm-select-article-or-scroll)
+	(navi2ch-bm-select-article, navi2ch-bm-textize-mark-article):
+	Ditto.
+
+	* navi2ch-articles.el (navi2ch-articles-get-article)
+	(navi2ch-articles-get-board): Ditto.
+
 2010-01-10  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-board.el (navi2ch-board-get-matched-article): compressed

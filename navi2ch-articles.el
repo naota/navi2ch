@@ -65,15 +65,13 @@
 (defun navi2ch-articles-get-article (item)
   (when (and item
 	     (buffer-live-p item))
-    (save-excursion
-      (set-buffer item)
+    (with-current-buffer item
       navi2ch-article-current-article)))
 
 (defun navi2ch-articles-get-board (item)
   (when (and item
 	     (buffer-live-p item))
-    (save-excursion
-      (set-buffer item)
+    (with-current-buffer item
       navi2ch-article-current-board)))
 
 (defun navi2ch-articles-exit ()

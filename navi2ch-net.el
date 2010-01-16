@@ -261,8 +261,7 @@ nil なら常に再接続する。")
 				  navi2ch-net-connection-name buf host port))
 	    (error (navi2ch-net-add-down-host host)))))
       (when proc
-	(save-excursion
-	  (set-buffer buf)
+	(with-current-buffer buf
 	  (navi2ch-set-buffer-multibyte nil)
 	  (erase-buffer))
 	(setq navi2ch-net-last-host host)
@@ -353,8 +352,7 @@ nil なら常に再接続する。")
   "PROC の接続のステータス部を返す。"
   (navi2ch-net-ignore-errors
    (or navi2ch-net-status
-       (save-excursion
-	 (set-buffer (process-buffer proc))
+       (with-current-buffer (process-buffer proc)
 	 (while (and (memq (process-status proc) '(open run))
 		     (goto-char (point-min))
 		     (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
@@ -375,8 +373,7 @@ nil なら常に再接続する。")
   (when (navi2ch-net-get-status proc)
     (navi2ch-net-ignore-errors
      (or navi2ch-net-header
-	 (save-excursion
-	   (set-buffer (process-buffer proc))
+	 (with-current-buffer (process-buffer proc)
 	   (while (and (memq (process-status proc) '(open run))
 		       (goto-char (point-min))
 		       (not (re-search-forward "\r\n\r?\n" nil t)))
@@ -478,8 +475,7 @@ chunk のサイズを返す。point は chunk の直後に移動。"
 							header))
 					     ""))))
 		p)
-	   (save-excursion
-	     (set-buffer (process-buffer proc))
+	   (with-current-buffer (process-buffer proc)
 	     (goto-char (point-min))
 	     (re-search-forward "\r\n\r?\n") ; header の後なので取れてるはず
 	     (setq p (point))

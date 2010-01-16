@@ -261,9 +261,8 @@
 	  (setq message (buffer-substring-no-properties (point) (point-max)))
 	  (let ((buffer (current-buffer))
 		(inhibit-read-only t))
-	    (save-excursion
-	      (set-buffer (get-buffer-create
-			   navi2ch-message-backup-buffer-name))
+	    (with-current-buffer (get-buffer-create
+				  navi2ch-message-backup-buffer-name)
 	      (erase-buffer)
 	      (insert-buffer-substring buffer)))
 	  (when navi2ch-message-trip
@@ -327,8 +326,7 @@
   (interactive "P")
   (let (nums from to)
     (setq nums
-	  (save-excursion
-	    (set-buffer (navi2ch-article-current-buffer))
+	  (with-current-buffer (navi2ch-article-current-buffer)
 	    (if (navi2ch-region-active-p)
 		(progn
 		  (setq from (save-excursion
@@ -356,8 +354,7 @@
   (when (< (point) (navi2ch-message-header-end))
     (error "Cannot cite in header"))
   (let (same msg board article)
-    (save-excursion
-      (set-buffer (navi2ch-article-current-buffer))
+    (with-current-buffer (navi2ch-article-current-buffer)
       (setq msg (navi2ch-article-get-message-string num))
       (setq article navi2ch-article-current-article)
       (setq board navi2ch-article-current-board)

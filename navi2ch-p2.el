@@ -382,8 +382,8 @@
 
 (defun navi2ch-p2-add-bookmark (url name &optional delete)
   (when (or (not delete)
-	    (yes-or-no-p (format "%sを削除しますか? " 
-				 name)))
+	    (or t (yes-or-no-p (format "%sを削除しますか? " 
+				 name))))
     (string-match "http://\\([^/]*\\)/\\([^/]*\\)/\\([0-9]*\\)" url)
     (let ((host (match-string 1 url))
 	  (bbs  (match-string 2 url))

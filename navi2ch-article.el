@@ -1657,8 +1657,7 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
       (unwind-protect
 	  (progn
 	    (setq buf (get-buffer-create "*select view range*"))
-	    (save-excursion
-	      (set-buffer buf)
+	    (with-current-buffer buf
 	      (erase-buffer)
 	      (insert (format "   %8s %8s\n" "first" "last"))
 	      (insert (format "0: %17s\n" "all range"))
@@ -1791,12 +1790,10 @@ FIRST $B$,(B nil $B$J$i$P!"%U%!%$%k$,99?7$5$l$F$J$1$l$P2?$b$7$J$$!#(B"
 	 (article (or navi2ch-article-current-article
 		      navi2ch-popup-article-current-article))
 	 (buffer-name (navi2ch-article-get-buffer-name board article)))
-    (save-excursion
-      (set-buffer
-       (or (get-buffer buffer-name)
-	   (progn
-	     (navi2ch-article-view-article board article nil nil nil t)
-	     buffer-name)))
+    (with-current-buffer (or (get-buffer buffer-name)
+			     (progn
+			       (navi2ch-article-view-article board article nil nil nil t)
+			       buffer-name))
       (length navi2ch-article-message-list))))
 
 (defun navi2ch-article-get-number-list (number-property &optional limit)
@@ -2141,8 +2138,7 @@ article buffer $B$+$iH4$1$k$J$i(B 'quit $B$rJV$9!#(B"
 	       (eq navi2ch-article-enable-through 'ask)))
       (funcall navi2ch-article-through-ask-function
 	       num
-	       (save-excursion
-		 (set-buffer navi2ch-board-buffer-name)
+	       (with-current-buffer navi2ch-board-buffer-name
 		 (save-excursion
 		   (when (zerop
 			  (funcall
@@ -2407,8 +2403,7 @@ NUM $B$,(B 1 $B$N$H$-$O<!!"(B-1 $B$N$H$-$OA0$N%9%l$K0\F0!#(B
   (let ((state (navi2ch-article-check-cached board article))
 	subject)
     (if (eq state 'view)
-	(save-excursion
-	  (set-buffer (navi2ch-article-get-buffer-name board article))
+	(with-current-buffer (navi2ch-article-get-buffer-name board article)
 	  (setq subject			; nil $B$K$J$k$3$H$,$"$k(B
 		(cdr (assq 'subject
 			   navi2ch-article-current-article)))))
@@ -2977,8 +2972,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
 	       (read-file-name "Write thread to file: " dir nil nil basename))
 	    (expand-file-name basename dir)))
     (and buffer
-	 (save-excursion
-	   (set-buffer buffer)
+	 (with-current-buffer buffer
 	   (goto-char (point-max))
 	   (insert (format "<a href=\"%s\">%s</a><br>\n" file subject))))
     (when navi2ch-article-view-range
@@ -3029,8 +3023,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
     (navi2ch-article-summary-element-set-seen
      element
      (unless remove-seen
-       (save-excursion
-	 (set-buffer (navi2ch-article-get-buffer-name board article))
+       (with-current-buffer (navi2ch-article-get-buffer-name board article)
 	 (length navi2ch-article-message-list))))
     (navi2ch-article-summary-element-set-access-time element (current-time))
     (setq summary (navi2ch-put-alist artid element summary))
@@ -3052,8 +3045,7 @@ ASK $B$,(B non-nil $B$@$H!"%G%3!<%I$7$?$b$N$NJ8;z%3!<%I$H05=L7A<0$rJ9$$$F$/$k
   "`navi2ch-article-mode' $B$N(B buffer $B$N(B list $B$rJV$9!#(B"
   (let (list)
     (dolist (x (buffer-list))
-      (when (save-excursion
-              (set-buffer x)
+      (when (with-current-buffer x
               (eq major-mode 'navi2ch-article-mode))
         (setq list (cons x list))))
     (nreverse list)))
@@ -3074,8 +3066,7 @@ STICKY $B$,(B non-nil $B$N$H$-$O0lHV:G=i$N(B sticky article buffer $B$rJV$9
   (let ((list (buffer-list)))
     (catch 'loop
       (while list
-        (when (save-excursion
-                (set-buffer (car list))
+        (when (with-current-buffer (car list)
 		(and (eq major-mode 'navi2ch-article-mode)
 		     (or (not sticky)
 			 navi2ch-article-sticky-mode)))

@@ -155,8 +155,7 @@ KEY は (concat URI ARTID)")
 		 bookmark-id)))
       (push (list bookmark-id name)
 	    navi2ch-bookmark-list)
-      (save-excursion
-	(set-buffer navi2ch-list-buffer-name)
+      (with-current-buffer navi2ch-list-buffer-name
 	(navi2ch-list-sync-global-bookmark-category))
       (navi2ch-bookmark-save-info))))
 
@@ -178,8 +177,7 @@ KEY は (concat URI ARTID)")
 	 (name (navi2ch-read-string "new bookmark name: " (cadr bookmark))))
     (setcar bookmark id)
     (setcar (cdr bookmark) name)
-    (save-excursion
-      (set-buffer navi2ch-list-buffer-name)
+    (with-current-buffer navi2ch-list-buffer-name
       (navi2ch-list-sync-global-bookmark-category))
     (navi2ch-bookmark-save-info)))
 
@@ -462,9 +460,10 @@ KEY は (concat URI ARTID)")
 		  (cond
 		   ;; おちてる
 		   ((not new-res)
-		    (navi2ch-bm-insert-state
-		     (navi2ch-bm-get-property-internal (point))
-		     'down)
+		    (unless (memq (navi2ch-bm-get-state) '(view update))
+		      (navi2ch-bm-insert-state
+		       (navi2ch-bm-get-property-internal (point))
+		       'down))
 		    (setq info (navi2ch-put-alist 'down t info))
 		    (navi2ch-article-save-info board info)
 		    (navi2ch-article-compress board info)

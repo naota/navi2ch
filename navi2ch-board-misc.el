@@ -236,10 +236,8 @@
 					(gethash state face-table))))))
 
 (defun navi2ch-bm-down-article-p (board article)
-  (let ((item (assq 'down article)))
-    (if item
-	(cdr item)
-      (cdr (assq 'down (navi2ch-article-load-info board article))))))
+  (cdr (or (assq 'down article)
+	   (assq 'down (navi2ch-article-load-info board article)))))
 
 (defun navi2ch-bm-get-state-from-article (board article)
   (cond ((navi2ch-board-from-file-p board)
@@ -379,8 +377,7 @@
 			   (navi2ch-article-get-file-name board article))
 			(navi2ch-article-view-article
 			 board article nil nil max-line)))
-		(save-excursion
-		  (set-buffer buf)
+		(with-current-buffer buf
 		  (when (or state
 			    (navi2ch-bm-fetched-article-p board article)
 			    (eq (navi2ch-bm-get-state) 'view))
@@ -533,8 +530,7 @@
 		  (navi2ch-bm-get-property-internal (point)))))
     (if (and (navi2ch-article-current-buffer)
              (string= (cdr (assq 'artid article))
-                      (save-excursion
-                        (set-buffer (navi2ch-article-current-buffer))
+                      (with-current-buffer (navi2ch-article-current-buffer)
                         (cdr (assq 'artid navi2ch-article-current-article))))
              (get-buffer-window (navi2ch-article-current-buffer)))
         (let ((win (selected-window)))
@@ -719,8 +715,7 @@ ARG が non-nil なら移動方向を逆にする。"
   (interactive "DDirectory: \nFList file: ")
   (let ((buffer (get-buffer-create (make-temp-name "*navi2ch "))))
     (navi2ch-bm-exec-subr 'navi2ch-bm-textize-article directory buffer)
-    (save-excursion
-      (set-buffer buffer)
+    (with-current-buffer buffer
       (when file
 	(navi2ch-write-region (point-min) (point-max) file)))
     (kill-buffer buffer)))

@@ -198,8 +198,7 @@ DIFF が non-nil ならば差分を取得する。
 (defun navi2ch-oyster-get-status (proc)
   "オイスターサーバの接続のステータス部を返す。"
   (navi2ch-net-ignore-errors
-   (or (save-excursion
-         (set-buffer (process-buffer proc))
+   (or (with-current-buffer (process-buffer proc)
          (while (and (eq (process-status proc) 'open)
                      (goto-char (point-min))
                      (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
@@ -240,8 +239,7 @@ DIFF が non-nil ならば差分を取得する。
   (let (buf proc)
     (message "オイスターのサーバにログインします")
     (setq buf (get-buffer-create (concat " *" "navi2ch oyster-ssl")))
-    (save-excursion
-      (set-buffer buf)
+    (with-current-buffer buf
       (erase-buffer))
     (setq proc (open-tls-stream "ssl" buf navi2ch-oyster-server 443))
     (let ((contents (concat "ID=" navi2ch-oyster-id

@@ -85,6 +85,13 @@ Navi2ch 終了時に自動的に変更・保存される。
 	    (append navi2ch-auto-modify-variable-list (nreverse added)))))
   (navi2ch-auto-modify-save))
 
+(eval-when-compile
+  (defmacro default-major-mode () 
+    (if (and (<= 23 emacs-major-version)
+	     (<= 1 emacs-minor-version))
+	''major-mode
+      ''default-major-mode)))
+
 (defun navi2ch-auto-modify-save ()
   (run-hooks 'navi2ch-auto-modify-save-hook)
   (navi2ch-auto-modify-truncate-lists)

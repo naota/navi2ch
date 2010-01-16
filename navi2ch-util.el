@@ -478,7 +478,7 @@ REGEXP $B$,8+$D$+$i$J$$>l9g!"(BSTRING $B$r$=$N$^$^JV$9!#(B"
   (navi2ch-defalias-maybe 'unicode-to-char 'ignore)
   (navi2ch-defalias-maybe 'decode-char 'ignore))
 (eval-and-compile
-  (autoload 'ucs-to-char "unicode")
+  ;; (autoload 'ucs-to-char "unicode")
   (defalias 'navi2ch-char-valid-p
     (if (fboundp 'characterp) #'characterp #'char-valid-p)))
 
@@ -664,8 +664,7 @@ return new alist whose car is the new pair and cdr is ALIST.
 
 (defun navi2ch-get-major-mode (buffer)
   (when (get-buffer buffer)
-    (save-excursion
-      (set-buffer buffer)
+    (with-current-buffer buffer
       major-mode)))
 
 (defun navi2ch-set-mode-line-identification ()
@@ -1119,8 +1118,7 @@ REGEXP $B$r;XDj$9$k$H!"@55,I=8=$N@8@.$K@hN)$A(B REGEXP $B$K%^%C%A$7$?J8;zNs(
 $B$=$l$K$h$j!"Nc$($P(B REGEXP $B$K(B \"[$B!!(B \\f\\t\\n\\r\\v]+\" $B$rM?$($k$H6uGr$d2~9T$N(B
 $BB?>/$rL5;k$7$F%^%C%A$9$k$h$&$J@55,I=8=$r@8@.$9$k!#(B"
   (let ((default-case-fold-search case-fold-search))
-    (save-excursion
-      (set-buffer (get-buffer-create " *Navi2ch fuzzy work*"))
+    (with-current-buffer (get-buffer-create " *Navi2ch fuzzy work*")
       (erase-buffer)
       (insert string)
       (goto-char (point-min))
