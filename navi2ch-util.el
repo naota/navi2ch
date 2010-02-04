@@ -470,7 +470,9 @@ REGEXP が見つからない場合、STRING をそのまま返す。"
 	     (string-match "&#[xX]\\([^;]+\\)" ref))
 	(let ((num))
 	  (setq num (string-to-number (match-string 1 ref) 16))
-	  (if num (navi2ch-ucs-to-str num) "〓"))
+	  (or (and num
+		   (navi2ch-ucs-to-str num))
+	      "〓"))
       ref)))
 
 ;; shut up byte-compile warnings
