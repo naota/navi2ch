@@ -226,8 +226,10 @@ key は (concat uri artid)。")
     (if pair
 	(progn
 	  (if (eobp)
-	      (setcdr (last navi2ch-history-alist)
-		      (list pair))
+	      (if navi2ch-history-alist
+		  (setcdr (last navi2ch-history-alist)
+			  (list pair))
+		(setq navi2ch-history-alist (list pair)))
 	    (let ((list (member (assoc (navi2ch-history-get-property (point))
 				       navi2ch-history-alist)
 				navi2ch-history-alist)))

@@ -740,21 +740,6 @@ URL じゃない物にリンクを貼る:
 			       (function :tag "置換に利用する関数"))))
   :group 'navi2ch-article)
 
-(defcustom navi2ch-list-filter-list nil
-  "*スレッドの分類一覧をいじるフィルターのリスト。
-それぞれのフィルターは elisp の関数ならば その symbol、
-外部プログラムを呼ぶなら
-'(\"perl\" \"2ch.pl\")
-といった感じの list を設定する。
-例えばこんな感じ。
-\(setq navi2ch-list-filter-list
-      '(navi2ch-filter
-        (\"perl\" \"2ch.pl\")
-        (\"perl\" \"filter-with-board.pl\" \"-b\" board)
-        ))"
-  :type '(repeat sexp)
-  :group 'navi2ch-list)
-
 (defcustom navi2ch-article-filter-list nil
   "*スレッドの記事をいじるフィルターのリスト。
 それぞれのフィルターは elisp の関数ならば その symbol、
