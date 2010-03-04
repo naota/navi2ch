@@ -184,8 +184,8 @@ START, END, NOFIRST で範囲を指定する" ; 効かなかったら教えてください。
 
 (defun navi2ch-machibbs-parse-subject ()
   (let ((case-fold-search t))
-    (re-search-forward navi2ch-machibbs-parse-subject-regexp nil t)
-    (match-string 1)))
+    (and (re-search-forward navi2ch-machibbs-parse-subject-regexp nil t)
+	 (match-string 1))))
 
 (defun navi2ch-machibbs-parse ()
   (let ((case-fold-search t))
