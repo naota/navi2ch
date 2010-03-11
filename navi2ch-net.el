@@ -402,9 +402,11 @@ nil なら常に再接続する。")
 	      (inhibit-file-name-handlers (cons 'jka-compr-handler
 						inhibit-file-name-handlers)))
 	  (navi2ch-write-region start end tempfngz))
-	(let ((status (call-process shell-file-name nil nil nil
-				    shell-command-switch
-				    (concat "gzip -d " tempfngz))))
+	(let ((status 
+	       (let ((default-directory (navi2ch-default-directory)))
+		 (call-process shell-file-name nil nil nil
+			       shell-command-switch
+			       (concat "gzip -d " tempfngz)))))
 	  (unless (and (numberp status) (zerop status))
 	    (error "Failed to execute gzip")))
 	(delete-region start end)
@@ -415,10 +417,12 @@ nil なら常に再接続する。")
 
 (defun navi2ch-net-get-content-subr-region (gzip-p start end)
   (if gzip-p
-      (let ((status (apply 'call-process-region
-			   start end
-			   navi2ch-net-gunzip-program t t nil
-			   navi2ch-net-gunzip-args)))
+      (let ((status 
+	     (let (default-directory (navi2ch-default-directory))
+	       (apply 'call-process-region
+		      start end
+		      navi2ch-net-gunzip-program t t nil
+		      navi2ch-net-gunzip-args))))
 	(unless (and (numberp status) (zerop status))
 	  (error "Failed to execute gzip")))))
 

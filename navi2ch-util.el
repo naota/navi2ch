@@ -648,9 +648,17 @@ return new alist whose car is the new pair and cdr is ALIST.
     (setq minor-mode-map-alist
           (cons (cons mode map) minor-mode-map-alist))))
 
+(defsubst navi2ch-default-directory ()
+  (cond ((file-directory-p navi2ch-directory)
+	 (file-name-as-directory navi2ch-directory))
+	((file-directory-p (expand-file-name "~/"))
+	 (expand-file-name "~/"))
+	(t temporary-file-directory)))
+
 (defun navi2ch-call-process-buffer (program &rest args)
   "今の buffer で PROGRAM を呼んで変更する。"
-  (apply 'call-process-region (point-min) (point-max) program t t nil args))
+  (let ((default-directory (navi2ch-default-directory)))
+    (apply 'call-process-region (point-min) (point-max) program t t nil args)))
 
 (defun navi2ch-alist-list-to-alist (list key1 &optional key2)
   (mapcar
@@ -720,11 +728,13 @@ FILENAME が指定されると、FILENAME にも書き出す。"
 				      nil t)
 	      (delete-region (match-beginning 0) (point-max)))
 	    (insert "end\n")
-	    (setq rc (apply 'call-process-region
-			    (point-min) (point-max)
-			    navi2ch-uudecode-program
-			    nil nil nil
-			    navi2ch-uudecode-args)))
+	    (setq rc 
+		  (let ((default-directory (navi2ch-default-directory)))
+		    (apply 'call-process-region
+			   (point-min) (point-max)
+			   navi2ch-uudecode-program
+			   nil nil nil
+			   navi2ch-uudecode-args))))
 	  (when (and (= rc 0)
 		     (file-exists-p file))
 	    (delete-region start end)
@@ -1389,10 +1399,11 @@ BOUND NOERROR COUNT は `re-search-forward' にそのまま渡される。"
   (let (exitcode)
     (with-temp-buffer
       (setq exitcode
-	    (call-process shell-file-name nil t nil
-			  shell-command-switch
-			  (format navi2ch-pgp-verify-command-line
-				  signature-file file)))
+	    (let ((default-directory (navi2ch-default-directory)))
+	      (call-process shell-file-name nil t nil
+			    shell-command-switch
+			    (format navi2ch-pgp-verify-command-line
+				    signature-file file))))
       (goto-char (point-min))
       ;; 後から *Message* バッファで参照できるよう、コマンド出力をすべ
       ;; て表示しておく
