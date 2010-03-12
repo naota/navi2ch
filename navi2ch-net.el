@@ -403,10 +403,9 @@ nil なら常に再接続する。")
 						inhibit-file-name-handlers)))
 	  (navi2ch-write-region start end tempfngz))
 	(let ((status 
-	       (let ((default-directory (navi2ch-default-directory)))
-		 (call-process shell-file-name nil nil nil
-			       shell-command-switch
-			       (concat "gzip -d " tempfngz)))))
+	       (call-process shell-file-name nil nil nil
+			     shell-command-switch
+			     (concat "gzip -d " tempfngz))))
 	  (unless (and (numberp status) (zerop status))
 	    (error "Failed to execute gzip")))
 	(delete-region start end)
