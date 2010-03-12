@@ -417,11 +417,10 @@ nil なら常に再接続する。")
 (defun navi2ch-net-get-content-subr-region (gzip-p start end)
   (if gzip-p
       (let ((status 
-	     (let (default-directory (navi2ch-default-directory))
-	       (apply 'call-process-region
-		      start end
-		      navi2ch-net-gunzip-program t t nil
-		      navi2ch-net-gunzip-args))))
+	     (apply 'call-process-region
+		    start end
+		    navi2ch-net-gunzip-program t t nil
+		    navi2ch-net-gunzip-args)))
 	(unless (and (numberp status) (zerop status))
 	  (error "Failed to execute gzip")))))
 

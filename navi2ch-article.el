@@ -4081,7 +4081,7 @@ PREFIX が与えられた場合は、
 	(setq article (navi2ch-put-alist 'compressed t article))
 	(navi2ch-article-save-info board article)))))
 
-(defun navi2ch-article-compress (&optional board article)
+(defun navi2ch-article-uncompress (&optional board article)
   (let (ignore)
     (when (eq major-mode 'navi2ch-article-mode)
       (if (navi2ch-board-from-file-p (or board navi2ch-article-current-board))

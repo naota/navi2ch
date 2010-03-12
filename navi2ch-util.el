@@ -728,13 +728,11 @@ FILENAME が指定されると、FILENAME にも書き出す。"
 				      nil t)
 	      (delete-region (match-beginning 0) (point-max)))
 	    (insert "end\n")
-	    (setq rc 
-		  (let ((default-directory (navi2ch-default-directory)))
-		    (apply 'call-process-region
-			   (point-min) (point-max)
-			   navi2ch-uudecode-program
-			   nil nil nil
-			   navi2ch-uudecode-args))))
+	    (setq rc (apply 'call-process-region
+			    (point-min) (point-max)
+			    navi2ch-uudecode-program
+			    nil nil nil
+			    navi2ch-uudecode-args)))
 	  (when (and (= rc 0)
 		     (file-exists-p file))
 	    (delete-region start end)

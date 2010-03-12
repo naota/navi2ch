@@ -1,5 +1,8 @@
 2010-03-12  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-net.el (navi2ch-net-get-content-subr-with-temp-file)
+	(navi2ch-net-get-content-subr-region): Revert the last change.
+
 	* navi2ch-article.el (navi2ch-article-compress): New function.
 	(navi2ch-article-update-file): Use it.
 
