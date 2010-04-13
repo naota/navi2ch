@@ -194,7 +194,7 @@
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-mail-address-alist))
 	      navi2ch-message-mail-address "")
-	  "\n"
+	  (navi2ch-read-only-string "\n" t)
 	  (navi2ch-read-only-string
 	   (navi2ch-propertize navi2ch-message-header-separator
 			       'navi2ch-message-header-separator t)))
