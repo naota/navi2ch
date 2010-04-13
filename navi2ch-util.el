@@ -1439,8 +1439,11 @@ properties to add to the result."
 			     str)
 	str))))
 
-(defsubst navi2ch-read-only-string (string)
-  (navi2ch-propertize string 'read-only t 'front-sticky t 'rear-nonsticky t))
+(defsubst navi2ch-read-only-string (string &optional front-nonsticky)
+  (navi2ch-propertize string
+		      'read-only t 
+		      'front-sticky (not front-nonsticky)
+		      'rear-nonsticky t))
 
 (defsubst navi2ch-file-mtime (filename)
   (nth 5 (file-attributes filename)))

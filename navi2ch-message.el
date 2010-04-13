@@ -180,15 +180,14 @@
 (defun navi2ch-message-insert-header (new sage)
   (and sage (setq sage "sage"))
   (when new
-    (insert (navi2ch-read-only-string "Subject: ") "\n"))
+    (insert (navi2ch-read-only-string "Subject: \n" t)))
   (insert (navi2ch-read-only-string "From: ")
 	  (or (and navi2ch-message-remember-user-name
 		   (cdr (assq 'name navi2ch-message-current-article)))
 	      (cdr (assoc (cdr (assq 'id navi2ch-message-current-board))
 			  navi2ch-message-user-name-alist))
 	      navi2ch-message-user-name "")
-	  "\n"
-	  (navi2ch-read-only-string "Mail: ")
+	  (navi2ch-read-only-string "\nMail: " t)
 	  (or sage
 	      (and navi2ch-message-remember-user-name
 		   (cdr (assq 'mail navi2ch-message-current-article)))
