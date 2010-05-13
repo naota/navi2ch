@@ -139,8 +139,10 @@
 
 (defun navi2ch-p2-p (uri)
   "p2経由で書き込むならnon-nilを返す。"
-  navi2ch-p2-use-p2
-  )
+  (and navi2ch-p2-use-p2
+       (string-match
+	"^http://[^.]+\\.\\(?:2ch\\.net\\|machi\\.to\\|bbspink\\.com\\)/"
+	uri)))
 
 (defun navi2ch-p2-send-message-success-p (proc)
   (when proc
