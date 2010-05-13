@@ -505,9 +505,14 @@ CHANGED-LIST については `navi2ch-list-get-changed-status' を参照。"
   (interactive)
   (navi2ch-net-cleanup)
   (setq navi2ch-offline (not navi2ch-offline))
+  (when (and (eq last-command 'navi2ch-toggle-offline)
+	     (not navi2ch-offline))
+    (setq navi2ch-net-down-host-alist nil))
   (message (if navi2ch-offline
                "Now offline"
-             "Now online"))
+	     (if (eq last-command 'navi2ch-toggle-offline)
+		 "Now online (reset down host)"
+	       "Now online")))
   (navi2ch-set-mode-line-identification))
 
 (defun navi2ch-unload ()
