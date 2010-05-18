@@ -1,3 +1,8 @@
+2010-05-18  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-net.el (navi2ch-net-split-url): password に "@" まで含ま
+	れていたバグを修正。
+
 2010-05-14  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch.el (navi2ch-toggle-offline): 二連続で呼び出され、 online

@@ -306,7 +306,7 @@ nil なら常に再接続する。")
     (string-match "http://\\([^@/]+@\\)?\\([^/]+\\)" url)
     (when (setq authinfo (match-string 1 url))
       (save-match-data
-	(string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)" authinfo)
+	(string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)@" authinfo)
 	(if (match-beginning 1)
 	    (setq user (match-string 1 authinfo)
 		  pass (match-string 2 authinfo))
