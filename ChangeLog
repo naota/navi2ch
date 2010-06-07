@@ -2,6 +2,8 @@
 
 	* navi2ch-p2.el (navi2ch-p2-add-bookmark): 条件が "(or t " になって
 	いたので削除。
+	(navi2ch-p2-board, navi2ch-p2-board-regexp)
+	(navi2ch-p2-all-board): New variables.
 
 2010-05-18  Naohiro Aota  <naota@elisp.net>
 

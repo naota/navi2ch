@@ -137,6 +137,10 @@
 (defvar navi2ch-p2-login-flag nil)
 (defvar navi2ch-p2-csrfid nil)
 
+(defvar navi2ch-p2-board nil)
+(defvar navi2ch-p2-board-regexp nil)
+(defvar navi2ch-p2-all-board nil)
+
 (defun navi2ch-p2-p (uri)
   "p2経由で書き込むならnon-nilを返す。"
   (and navi2ch-p2-use-p2
