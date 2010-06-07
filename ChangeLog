@@ -5,6 +5,9 @@
 
 2010-05-14  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-p2.el (navi2ch-p2-p): p2 で書きこみ可能なサイトでだけ p2
+	で書きこむように。
+
 	* navi2ch.el (navi2ch-toggle-offline): 二連続で呼び出され、 online
 	になった時に落ちているホストの情報をリセット。
 
