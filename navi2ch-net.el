@@ -584,6 +584,12 @@ OTHER-HEADER が `non-nil' ならばリクエストにこのヘッダを追加する。
 		     "yes"
 		     header))
 
+(defun navi2ch-net-is-tanpan-thread-p (cont)
+  (and cont
+       (string-match 
+	"\\`[^\n<]+<><>[0-9]+/[0-9]+/[0-9]+ [0-9]+:[0-9]+:[0-9]+ ID:TanpanM<>"
+	cont)))
+
 (defun navi2ch-net-update-file (url file 
 				&optional time func location diff other-header)
   "FILE を更新する。
@@ -635,10 +641,7 @@ OTHER-HEADER は `navi2ch-net-download-file' に渡される。
 			    (goto-char (point-min))
 			    (funcall func)
 			    (buffer-string))))
-	     (when (and cont
-			(string-match 
-			 "^[^<]+<><>[0-9]+/[0-9]+/[0-9]+ [0-9]+:[0-9]+:[0-9]+ ID:TanpanM<>"
-			 cont))
+	     (when (navi2ch-net-is-tanpan-thread-p cont)
 	       (setq cont nil)
 	       (setq header (navi2ch-net-add-state 'error header)))
 	     (if (and cont (not (string= cont "")))

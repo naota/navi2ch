@@ -15,6 +15,7 @@
 	    load-path))
 (require 'navi2ch-util)
 (require 'navi2ch-http-date)
+(require 'navi2ch-net)
 
 ;;; define tests
 
@@ -39,6 +40,11 @@
     (should (string= expected (navi2ch-http-date-encode
 			       (navi2ch-http-date-decode
 				"Sun Nov  6 08:49:37 1994"))))))
+
+(ert-deftest tanpan-check-1 ()
+  (should (navi2ch-net-is-tanpan-thread-p 
+	   "短パンマン ★<><>2010/09/15 01:09:42 ID:TanpanM<>いろいろあるさ ＠bg r.so ver 2008/02/19<br>ERROR = 5656 <br>(e_mes = []) <br> <>名古屋はエ〜エ〜で ♪
+")))
 
 ;;; run the tests
 
