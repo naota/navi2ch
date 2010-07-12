@@ -143,30 +143,22 @@
 
 (defun navi2ch-p2-p (uri)
   "p2経由で書き込むならnon-nilを返す。"
-  (and navi2ch-p2-use-p2
-       (string-match
-	"^http://[^.]+\\.\\(?:2ch\\.net\\|machi\\.to\\|bbspink\\.com\\)/"
-	uri)))
+  (message "p2:uri:%s" uri)
+  (when (string-match "http://\\([^/]+\\)/\\([^/]+\\)" uri)
+    (let ((board (match-string 2 uri)))
+      (and navi2ch-p2-use-p2
+	    (or navi2ch-p2-all-board
+		(member board navi2ch-p2-board)
+		(and navi2ch-p2-board-regexp
+		     (if (string-match "^live.*" board) t)))))))
 
-(defun navi2ch-p2-send-message-success-p (proc)
-  (when proc
-    (let ((str (decode-coding-string (navi2ch-net-get-content proc)
-				     navi2ch-p2-coding-system)))
-      (cond ((or (string-match "書きこみました。" str)
-		 (string-match "書きこみが終わりました。" str))
-	     t)
-	    ;;おそらくcsrfidの期限切など
-	    ((or (string-match "Cookie認証時にIPの同一性をチェックしない" str)
-		 (string-match "<b>書きこみ＆クッキー確認</b>" str))
-	     ;;再取得
-	     ;;	     (message "reget-csrfid")
-	     (navi2ch-p2-get-csrfid)
-	     'retry)
-	    ((or  (string-match "p2 error: 引数の指定が変です" str))
-	     (error str))
-	    (t
-	     (message "p2 error::%s" str)
-	     nil)))))
+(defun navi2ch-p2-board-p (board)
+;  (message "p2-board-p %s" board)
+  (and navi2ch-p2-use-p2
+       (or navi2ch-p2-all-board
+           (member board navi2ch-p2-board)
+           (and navi2ch-p2-board-regexp
+                (if (string-match "^live.*" board) t)))))
 
 (defun navi2ch-p2-login-p ()
   (let ((cookies (navi2ch-net-match-cookies navi2ch-p2-login-url)))
@@ -175,14 +167,76 @@
 		      (mapcar (lambda (name) (assoc name cookies))
 			      navi2ch-p2-cookie-names))))))
 
+(defun navi2ch-p2-send-message-success-p (proc)
+  (when proc
+    (let ((str (navi2ch-net-get-content proc)))
+      (setq str (decode-coding-string str navi2ch-p2-coding-system))
+      (cond ((or (string-match "書きこみました。" str)
+                 (string-match "書きこみが終わりました。" str))
+             (message "P2で書き込みました")
+             t)
+	      ;;おそらくcsrfidの期限切など
+            ((or (string-match "Cookie認証時にIPの同一性をチェックしない" str)
+                 (string-match "<b>書きこみ＆クッキー確認</b>" str)
+                 (string-match "p2 error: ページ遷移の妥当性を確認できませんでした。" str)
+                 )
+	       ;;再取得
+             (message "reget-csrfid %s end" str)
+	       (navi2ch-p2-get-csrfid)
+	       'retry)
+	      ((or  (string-match "p2 error: 引数の指定が変です" str))
+	       (error str))
+	      (t
+	       (message "p2 error::%s" str)
+	       nil)))))
+
+(defun navi2ch-p2-make-deny-list ()
+  "http://qb6.2ch.net/_403/madakana.cgiからアクセス禁止状態を取得する"
+  (let (content str navi2ch-net-accept-gzip-org)
+    (setq navi2ch-p2-all-board nil)
+    (setq navi2ch-p2-board nil)
+    (setq navi2ch-p2-board-regexp nil)
+    (setq navi2ch-net-accept-gzip-org navi2ch-net-accept-gzip)
+    (setq navi2ch-p2-all-board nil)
+    (if (featurep 'meadow)
+	(setq navi2ch-net-accept-gzip nil))
+    (setq content (navi2ch-net-get-content (navi2ch-net-download-file "http://qb6.2ch.net/_403/madakana.cgi")))
+    (setq navi2ch-net-accept-gzip navi2ch-net-accept-gzip-org)
+    (with-temp-buffer
+      (if (not content)
+	  (message "データ取得に失敗しました")
+	(insert content)
+	(goto-char (point-min))
+	(while (re-search-forward "<font color=red><b>\\(.*[^>]\\)$" nil t)
+	  (setq str (match-string 1))
+	  (let (board host)
+	    (cond
+	     ((string-match "_BBS_\\(.*\\)_\\(.*\\)" str)
+	      (progn
+		(setq board (match-string 1 str))
+		(setq host (match-string 2 str))
+		(unless (member board navi2ch-p2-board)
+		  (setq navi2ch-p2-board (cons board navi2ch-p2-board)))
+		(message "deny board:%s host:%s" board host)))
+	     ((string-match "_SRV_\\(.*\\)_\\(.*\\)" str)
+	      (setq board (match-string 1 str))
+	      (setq host (match-string 2 str))
+	      (unless (member board navi2ch-p2-board-regexp)
+		(setq navi2ch-p2-board-regexp (cons board navi2ch-p2-board-regexp)))
+		     (message "deny regexp board:%s host:%s" board host))
+	      (t
+	       (setq navi2ch-p2-all-board t)
+	       (message "all deny:%s" str)))
+	    ))))))
+
 (defun navi2ch-p2-send-message
   (from mail message subject bbs key time board article &optional post)
   (unless navi2ch-p2-csrfid
       (navi2ch-p2-get-csrfid))
-
-  (let* ((url "http://p2.2ch.net/p2/post.php?guid=ON")
-	 (referer "http://p2.2ch.net/p2/menu.php")
-	 (param-alist (list
+  (when (navi2ch-message-samba24-check board)
+    (let* ((url "http://p2.2ch.net/p2/post.php?guid=ON")
+	   (referer "http://p2.2ch.net/p2/menu.php")
+	   (param-alist (list
 			 (cons "submit" "書き込む")
 			 (cons "FROM"   (or from ""))
 			 (cons "mail"   (or mail ""))
@@ -193,13 +247,15 @@
 			 (cons "MESSAGE" message)
 			 (cons "csrfid" navi2ch-p2-csrfid)
 			 (cons "tepo" "don")
-			 (if subject
-			     (cons "subject" subject)
-			   (cons "key"    key))))
+			 (cons "kuno" "ichi")
+			 ))
 	   (coding-system (navi2ch-board-get-coding-system board))
 	   (cookies (navi2ch-net-match-cookies url)))
-    ;;      (message "p2:not expired cookie:%s" (navi2ch-net-expire-cookies (navi2ch-net-match-cookies url)))
-    ;;      (message "p2:sending cookie:%s" (navi2ch-net-cookie-string cookies coding-system))
+      (if (not subject)
+	  (push (cons "key"    key) param-alist)
+	(push (cons "newthread"   "1") param-alist)
+	(push (cons "subject" subject) param-alist))
+      
       (dolist (param post)
 	(unless (assoc (car param) param-alist)
 	  (push param param-alist)))
@@ -215,7 +271,7 @@
 					    coding-system))))
 	(navi2ch-net-update-cookies url proc coding-system)
 	(navi2ch-net-save-cookies)
-	proc)))
+	proc))))
 
 (defun navi2ch-p2-get-csrfid ()
   (message "navi2ch-p2-get-csrfid")
