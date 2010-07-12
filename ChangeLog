@@ -1,5 +1,3 @@
-
-
 2010-06-08  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-p2.el (navi2ch-p2-add-bookmark): 条件が "(or t " になって
