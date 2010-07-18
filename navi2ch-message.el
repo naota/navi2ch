@@ -718,11 +718,17 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
 
 ;; FIXME: defsubst にしたい。
 (defun navi2ch-message-samba24-search-samba (url id)
-  "サーバ名、板名から連続投稿規制時間を得る."
-  (when (and (stringp url)
-	     (string-match "http://\\([^/]+\\)" url))
-    (or (cdr (assoc id navi2ch-message-samba24-samba-data))
-	(cdr (assoc (match-string 1 url) navi2ch-message-samba24-samba-data)))))
+  "サーバ名、板名から連続投稿規制時間を得る.p2での書き込みの場合、10秒プラスのペナルティがある"
+  (let (samba-time
+        (samba-p2-time 0))
+    (when (and (stringp url)
+               (string-match "http://\\([^/]+\\)" url))
+      (when (navi2ch-p2-board-p id)
+        (setq samba-p2-time 10))
+      (setq samba-time (or (cdr (assoc id navi2ch-message-samba24-samba-data))
+                           (cdr (assoc (match-string 1 url) navi2ch-message-samba24-samba-data))))
+      (when samba-time
+         (+ samba-time samba-p2-time)))))
 
 (defun navi2ch-message-samba24-update ()
   "samba24 の規制情報を更新."
@@ -745,9 +751,16 @@ samba.txt は http://nullpo.s101.xrea.com/samba24/ から取得."
 	       (diff-time (- (+ last-write-time samba-time)
 			     cur-time)))
 	  (or (<= diff-time 0)
+	      (if navi2ch-message-samba24-wait-sleep
+		  (progn
+		    (while (> diff-time 0)
+		      (message "samba遅延書き込みフリーズ中 %s sec %s %s" diff-time (current-time-string) samba-time)
+		      (sleep-for 1)
+		      (setq diff-time (1- diff-time)))
+		    (message "samba遅延書き込みフリーズ終了 %s" (current-time-string)))
 	      (yes-or-no-p (format 
 			    "あと %d 秒待ったほうがいいと思うけど、本当に書きこむ? "
-			    diff-time)))))))
+			    diff-time))))))))
 
 (defun navi2ch-message-samba24-modify-by-error (id error)
   "サーバから受け取ったエラーメッセージからsamba秒数を設定"
