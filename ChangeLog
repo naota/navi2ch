@@ -22,6 +22,9 @@
 	
 2010-06-08  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-oyster.el (navi2ch-oyster-get-status): sit-for を
+	sleep-for に変更。
+
 	* navi2ch-p2.el (navi2ch-p2-add-bookmark): 条件が "(or t " になって
 	いたので削除。
 	(navi2ch-p2-board, navi2ch-p2-board-regexp)
