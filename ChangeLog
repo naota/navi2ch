@@ -1,3 +1,13 @@
+2010-07-15  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
+
+	* navi2ch-message.el (navi2ch-message-samba24-check):
+	* navi2ch-vars.el:
+	変数navi2ch-message-samba24-wait-sleep追加。
+	non-nil ならsamba規制時間の解除までsleep(フリーズ)する。
+
+	* navi2ch-message.el (navi2ch-message-samba24-search-samba)
+	p2の場合、samba時間に10秒プラスされる仕様追加に追従
+
 2010-06-28  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 
 	* navi2ch-p2.el 

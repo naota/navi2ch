@@ -2252,6 +2252,11 @@ to force the image format."
   :type 'boolean
   :group 'navi2ch-message)
 
+(defcustom navi2ch-message-samba24-wait-sleep nil
+  "* non-nil ならsamba規制時間の解除までsleepする"
+  :type 'boolean
+  :group 'navi2ch-message)
+
 ;; p2
 (defcustom navi2ch-p2-use-p2 nil
   "* non-nil ならp2利用"
