@@ -127,11 +127,13 @@
 (defvar navi2ch-p2-password ""
   "*p2のパスワード。")
 
-(defvar navi2ch-p2-login-url "http://p2.2ch.net/p2/"
+(defvar navi2ch-p2-domain "p2.2ch.net")
+
+(defvar navi2ch-p2-login-url (concat "http://" navi2ch-p2-domain "/p2/")
   "*p2のログインURL。")
 
 (defconst navi2ch-p2-cookie-names '("PS" "cid"))
-(defconst navi2ch-p2-cookie-domain 'p2.2ch.net)
+(defconst navi2ch-p2-cookie-domain navi2ch-p2-domain)
 (defconst navi2ch-p2-cookie-path '/p2)
 
 (defvar navi2ch-p2-login-flag nil)
@@ -234,8 +236,8 @@
   (unless navi2ch-p2-csrfid
       (navi2ch-p2-get-csrfid))
   (when (navi2ch-message-samba24-check board)
-    (let* ((url "http://p2.2ch.net/p2/post.php?guid=ON")
-	   (referer "http://p2.2ch.net/p2/menu.php")
+    (let* ((url (concat navi2ch-p2-login-url "post.php?guid=ON"))
+	   (referer (concat navi2ch-p2-login-url "menu.php"))
 	   (param-alist (list
 			 (cons "submit" "書き込む")
 			 (cons "FROM"   (or from ""))
@@ -279,7 +281,7 @@
     (unless navi2ch-p2-login-flag
       (navi2ch-p2-login))
     (let ((proc (navi2ch-net-send-request
-		 "http://p2.2ch.net/p2/menu.php"
+		 (concat navi2ch-p2-login-url "menu.php")
 		 "GET"
 		 (list
 		  (cons "Cookie"
