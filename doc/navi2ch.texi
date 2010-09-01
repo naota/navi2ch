@@ -670,7 +670,7 @@ navi2ch では http://find.2ch.net/ や http://h.ula.cc/ といった 2ch の検
 
 Web 検索には多くの方法がある。navi2ch では以下のものをサポートしている。
 
-@table
+@table @code
 @item navi2ch-search-find-2ch-method
 http://find.2ch.net/ を使って検索する。
 
@@ -866,7 +866,7 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 て設定される。普通の文字はそのまま出力され、'%' に続く文字は以下のよう
 に置換される。
 
-@table
+@table @samp
 @item %a
 スレッド名
 @item %b
