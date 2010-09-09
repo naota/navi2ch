@@ -2,6 +2,11 @@
 
 	* navi2ch-http-date.el : テストコードを test/test.el に移動。
 
+2010-09-10  MIZUNUMA Yuto  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-thumbnail.el:
+	新規ファイル　サムネイル機能追加
+
 2010-08-11  MIZUNUMA Yuto  <mizmiz@users.sourceforge.net>
 
 	* navi2ch-p2.el (navi2ch-p2-login-url, navi2ch-p2-cookie-domain)

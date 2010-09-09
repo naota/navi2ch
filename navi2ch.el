@@ -65,6 +65,7 @@
 (require 'navi2ch-localfile)
 (require 'navi2ch-auto-modify)
 (require 'navi2ch-p2)
+(require 'navi2ch-thumbnail)
 
 (defgroup navi2ch nil
   "Navigator for 2ch."
