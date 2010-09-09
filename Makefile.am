@@ -12,7 +12,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
 	navi2ch-futaba.el navi2ch-megabbs.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
-	navi2ch-auto-modify.el navi2ch-p2.el
+	navi2ch-auto-modify.el navi2ch-p2.el navi2ch-thumbnail.el
 lisp_DATA = navi2ch-config.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
