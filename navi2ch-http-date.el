@@ -112,17 +112,4 @@
 		 (aref now 2) (aref now 1) (aref now 0)
 		 (aref now 6))))
 
-;; テスト
-(eval-when-compile
-  (let ((expected "Sun, 06 Nov 1994 08:49:37 GMT"))
-    (assert (string= expected (navi2ch-http-date-encode
-			       (navi2ch-http-date-decode
-				"Sun, 06 Nov 1994 08:49:37 GMT"))))
-    (assert (string= expected (navi2ch-http-date-encode
-			       (navi2ch-http-date-decode
-				"Sunday, 06-Nov-94 08:49:37 GMT"))))
-    (assert (string= expected (navi2ch-http-date-encode
-			       (navi2ch-http-date-decode
-				"Sun Nov  6 08:49:37 1994"))))))
-
 ;;; navi2ch-http-date.el ends here
