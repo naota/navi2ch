@@ -12,13 +12,13 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
 	navi2ch-futaba.el navi2ch-megabbs.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
-	navi2ch-auto-modify.el
+	navi2ch-auto-modify.el navi2ch-p2.el
 lisp_DATA = navi2ch-config.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
 	bcomp.el.in navi2ch-version.el.in ChangeLog.1 ChangeLog.2
 BUILT_SOURCES = $(srcdir)/navi2ch-version.el $(srcdir)/bcomp.el
-SUBDIRS = contrib doc icons
+SUBDIRS = contrib doc icons test
 
 $(srcdir)/navi2ch-version.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/navi2ch-version.el.in $(srcdir)/configure.in
 	rm -f $@.tmp && \
@@ -55,3 +55,5 @@ Makefiles: $(top_builddir)/config.status
 update:
 	( cd $(srcdir); $(CVS) update -P -d ) && \
 	$(MAKE) $(AM_MAKEFLAGS) Makefiles
+
+check: $(ELCFILES)
