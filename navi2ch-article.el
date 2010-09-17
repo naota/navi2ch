@@ -108,6 +108,11 @@
       (define-key map [(control c) (control ? )] 'navi2ch-article-toggle-sticky))
     (define-key map "u" 'navi2ch-show-url-at-point)
     (define-key map "\C-c\C-y" 'navi2ch-article-write-cite-message)
+    (define-key map "," 'navi2ch-thumbnail-select-current-link)
+    (define-key map "v" 'navi2ch-thumbnail-save-content)
+    (define-key map "\e\r" 'navi2ch-article-select-current-link)
+    (define-key map "D" 'navi2ch-thumbnail-image-delete-cache)
+    (define-key map "T" 'navi2ch-thumbnail-all-show)
     (setq navi2ch-article-mode-map map)))
 
 (defvar navi2ch-article-mode-menu-spec

@@ -65,7 +65,7 @@
 ;; 定されてると、そのURLを開くのでリモートなファイルを開けるビューアー
 ;; が必要(元々その動作)
 ;;
-;; サムネイルにカーソルがある状態で'd'を押すとキャッシュ画像を削除. 既
+;; サムネイルにカーソルがある状態で'D'を押すとキャッシュ画像を削除. 既
 ;; にキーバインドがダブってるが、分かりやすさでオーバーライド(要検討)
 ;;
 ;; 'T'を押すとカーソルがあるレス1個のレス内のURLを全取得
@@ -73,32 +73,6 @@
 ;;; Code
 
 (provide 'navi2ch-thumbnail)
-
-;;使い方、兼キーバインド
-
-;; URLにカーソルがある状態で','を押すとサムネイル挿入
-;; サムネイルにカーソルがある状態で','を押すと外部ビューアーでオリジナル画像表示
-;;(本当はenterキーでやるほうが奇麗な気もする)
-(define-key navi2ch-article-mode-map "," 'navi2ch-thumbnail-select-current-link)
-(define-key navi2ch-popup-article-mode-map "," 'navi2ch-thumbnail-select-current-link)
-
-;;サムネイルにカーソルがある状態で'v'で画像を保存(サムネイルではなく、元の大きい画像)
-(define-key navi2ch-article-mode-map "v" 'navi2ch-thumbnail-save-content)
-(define-key navi2ch-popup-article-mode-map "v" 'navi2ch-thumbnail-save-content)
-
-;;Esc+EnterでURLをブラウザで開く(既存機能に丸投げ)。
-;;画像ビューアーが指定されてると、そのURLを開くのでリモートなファイルを開けるビューアーが必要(元々その動作)
-(define-key navi2ch-article-mode-map "\e\r" 'navi2ch-article-select-current-link)
-(define-key navi2ch-popup-article-mode-map "\e\r" 'navi2ch-article-select-current-link)
-
-;;サムネイルにカーソルがある状態で'd'を押すとキャッシュ画像を削除
-;;既にキーバインドがダブってるが、分かりやすさでオーバーライド(要検討)
-(define-key navi2ch-article-mode-map "d" 'navi2ch-thumbnail-image-delete-cache)
-(define-key navi2ch-popup-article-mode-map "d" 'navi2ch-thumbnail-image-delete-cache)
-
-;;'T'を押すとカーソルがあるレス1個のレス内のURLを全取得
-(define-key navi2ch-article-mode-map "T" 'navi2ch-thumbnail-all-show)
-(define-key navi2ch-popup-article-mode-map "T" 'navi2ch-thumbnail-all-show)
 
 (defcustom navi2ch-thumbnail-thumbnail-directory (concat navi2ch-directory "/navi2ch-thumbnails/")
   "* 画像キャッシュディレクトリ"
