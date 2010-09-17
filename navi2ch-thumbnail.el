@@ -25,30 +25,50 @@
 ;; サムネイルを表示する機能です
 ;; 画像表示に対応したemacsで動きます
 
-;; 画像リンクURL上で','を押すとサムネイル画像を挿入表示します。
-;; 自動取得、自動表示はしません。基本的にキーで駆動です。
-;; キャッシュを持っている画像は自動表示されます
-;; キャッシュの自動削除機能はありません。
-;; 基本的にコマンドはImageMagick依存です
+;; 画像リンクURL上で','を押すとサムネイル画像を挿入表示します。自動取得、
+;; 自動表示はしません。基本的にキーで駆動です。キャッシュを持っている画
+;; 像は自動表示されます。キャッシュの自動削除機能はありません。基本的に
+;; コマンドはImageMagick依存です。
 ;;
-;; 参考にしたコード(navi2chスレのどこかで見た)は非同期だったり外部シェル叩きだったりと複雑なので、
-;; なるべくシンプルに再構成しました
+;; 参考にしたコード(navi2chスレのどこかで見た)は非同期だったり外部シェ
+;; ル叩きだったりと複雑なので、なるべくシンプルに再構成しました
 
-;;To Do
-;;どこか(全体?)を(display-images-p)で囲むべきだが要検討
-;;キーバインド調整
-;;スレ再描画時にサムネを読まなかったり読んだりがあるかも
-;; emacs付属のimage.elを参考にして画像ファイルのヘッダをバイナリ読みすればidentifyコールしなくて済むかも
+;; To Do
+;; - どこか(全体?)を(display-images-p)で囲むべきだが要検討
+;; - キーバインド調整
+;; - スレ再描画時にサムネを読まなかったり読んだりがあるかも
+;; - emacs付属のimage.elを参考にして画像ファイルのヘッダをバイナリ読み
+;;   すればidentifyコールしなくて済むかも
 
 ;; 設定例
 ;; Windows
-;;   (setq navi2ch-thumbnail-image-convert-program "C:/Program Files/ImageMagick-6.2.8-Q16/convert.exe")
-;;   (setq navi2ch-thumbnail-image-identify-program "C:/Program Files/ImageMagick-6.2.8-Q16/identify.exe")
-;;   (setq navi2ch-browse-url-image-program "c:/win/iview425j/i_view32.exe") ;;IrfanView
+;;   (setq navi2ch-thumbnail-image-convert-program
+;;         "C:/Program Files/ImageMagick-6.2.8-Q16/convert.exe")
+;;   (setq navi2ch-thumbnail-image-identify-program
+;;         "C:/Program Files/ImageMagick-6.2.8-Q16/identify.exe")
+;;   (setq navi2ch-browse-url-image-program "c:/win/iview425j/i_view32.exe") ;; IrfanView
 ;; MacOSX
 ;;   (setq navi2ch-browse-url-image-program "/Applications/Preview.app/Contents/MacOS/Preview")
-;;   (setq navi2ch-thumbnail-image-convert-program "/opt/local/bin/convert") ;;MacPort ImageMagick 
+;;   (setq navi2ch-thumbnail-image-convert-program "/opt/local/bin/convert") ;; MacPort ImageMagick
 ;;   (setq navi2ch-thumbnail-image-identify-program "/opt/local/bin/identify")
+
+;; 使い方、兼キーバインド
+;;
+;; URLにカーソルがある状態で','を押すとサムネイル挿入. サムネイルにカー
+;; ソルがある状態で','を押すと外部ビューアーでオリジナル画像表示(本当は
+;; enterキーでやるほうが奇麗な気もする)
+;;
+;; サムネイルにカーソルがある状態で'v'で画像を保存(サムネイルではなく、
+;; 元の大きい画像)
+;;
+;; Esc+EnterでURLをブラウザで開く(既存機能に丸投げ)。画像ビューアーが指
+;; 定されてると、そのURLを開くのでリモートなファイルを開けるビューアー
+;; が必要(元々その動作)
+;;
+;; サムネイルにカーソルがある状態で'd'を押すとキャッシュ画像を削除. 既
+;; にキーバインドがダブってるが、分かりやすさでオーバーライド(要検討)
+;;
+;; 'T'を押すとカーソルがあるレス1個のレス内のURLを全取得
 
 ;;; Code
 
