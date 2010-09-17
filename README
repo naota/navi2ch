@@ -1,37 +1,37 @@
--*- mode: outline; coding: iso-2022-7bit -*-
+-*- mode: outline; coding: utf-8 -*-
 Copyright (C) 2000-2004 Navi2ch Project
 
-Navi2ch $B$O!"(BGNU Emacs$B!"(BXEmacs$B!"(BMeadow $B$J$I$N(B Emacsen $B$GF0:n$9$k!"#2$A$c(B
-$B$s$M$k%J%S%2!<%?$G$9!#(B
+Navi2ch は、GNU Emacs、XEmacs、Meadow などの Emacsen で動作する、２ちゃ
+んねるナビゲータです。
 
-$B%$%s%9%H!<%kJ}K!!";H$$J}$K$D$$$F$O%^%K%e%"%k$r$*FI$_$/$@$5$$!#(B
+インストール方法、使い方についてはマニュアルをお読みください。
 
-$B%^%K%e%"%k$rFI$`$K$O(B Emacs $B$+$i(B C-u M-x info RET doc/navi2ch.info $B$H$9(B
-$B$k$+!"%&%'%V%V%V%i%&%6$+$i(B http://navi2ch.sourceforge.net/ $B$r3+$$$F$/(B
-$B$@$5$$!#(B
+マニュアルを読むには Emacs から C-u M-x info RET doc/navi2ch.info とす
+るか、ウェブブブラウザから http://navi2ch.sourceforge.net/ を開いてく
+ださい。
 
-* $B%&%'%V%5%$%H(B
+* ウェブサイト
   Navi2ch Project Home Page <http://navi2ch.sourceforge.net/>
-  UNIX$B!w(B2ch$B7G<(HD(B <http://pc11.2ch.net/unix/>
+  UNIX＠2ch掲示板 <http://pc11.2ch.net/unix/>
 
-* $B%U%!%$%k9=@.(B
-** $B%H%C%W%G%#%l%/%H%j(B
-   elisp $B%U%!%$%k!"$$$/$D$+$N%I%-%e%a%s%H$,F~$C$F$$$^$9!#(B
+* ファイル構成
+** トップディレクトリ
+   elisp ファイル、いくつかのドキュメントが入っています。
 ** contrib
-   Navi2ch $B$H$$$C$7$g$K;H$&$HJXMx$J%U%!%$%k$,F~$C$F$$$^$9!#(B
-   $B$"$^$jG.?4$K%a%s%F%J%s%9$5$l$F$J$$$N$GCm0U!#(B
+   Navi2ch といっしょに使うと便利なファイルが入っています。
+   あまり熱心にメンテナンスされてないので注意。
 ** doc
-   $B%^%K%e%"%k$,F~$C$F$$$^$9!#(B
+   マニュアルが入っています。
 ** icons
-   $B%$%a!<%8%U%!%$%k$,F~$C$F$$$^$9!#(B
+   イメージファイルが入っています。
 
-* $BCm0U(B
-  Windows $B$J$I$G$O4D6-JQ?t(B TZ $B$r(B JST-9 $B$H$+$K$7$H$$$?J}$,$$$$$G$9!#(B
-  GNU Emacs 21 $B0J9_!"(BXEmacs 21.4 $B0J9_$G$J$$$HF0$-$^$;$s!#(B
-  XEmacs $B$G$O(B mail-lib $B%Q%C%1!<%8$r%$%s%9%H!<%k$7$F$/$@$5$$!#(B
+* 注意
+  Windows などでは環境変数 TZ を JST-9 とかにしといた方がいいです。
+  GNU Emacs 21 以降、XEmacs 21.4 以降でないと動きません。
+  XEmacs では mail-lib パッケージをインストールしてください。
 
-* $B<U<-(B
-  $B:G=i$K(B perl $BHG$r:n$C$?(B hc2ivan $B$5$s$K46<U$G$9!#(B
-  Navi2ch $B$O(B APEL$B!"(BWanderlust $B$N0lIt$r;HMQ$7$F$$$^$9!#:n<T$NJ}!9$K46<U!#(B
+* 謝辞
+  最初に perl 版を作った hc2ivan さんに感謝です。
+  Navi2ch は APEL、Wanderlust の一部を使用しています。作者の方々に感謝。
 
 $Id$
