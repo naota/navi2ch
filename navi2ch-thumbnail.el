@@ -84,12 +84,12 @@
   :type 'string
   :group 'navi2ch)
 
-(defcustom navi2ch-thumbnail-image-convert-program "/opt/local/bin/convert"
+(defcustom navi2ch-thumbnail-image-convert-program (executable-find "convert")
   "* サムネイル作成プログラム"
   :type 'string
   :group 'navi2ch)
 
-(defcustom navi2ch-thumbnail-image-identify-program "/opt/local/bin/identify"
+(defcustom navi2ch-thumbnail-image-identify-program (executable-find "identify")
   "* サムネイル画像判別プログラム"
   :type 'string
   :group 'navi2ch)
@@ -285,15 +285,17 @@
          (prop  (get-text-property point 'my-navi2ch))
          (ext (when url
                 (file-name-extension url))))
+    (when (not (member (downcase ext) navi2ch-browse-url-image-extentions))
+      (error "画像ファイルではありません %s" url))
     (when (or (and ext
                    (not (string= prop "shown"))
-                   (member (downcase ext) navi2ch-browse-url-image-extentions))
+                   )
               alturl)
-    (if alturl
-        (navi2ch-thumbnail-show-image-subr url alturl)
-      (string-match "\\(http://.+\\)/.+" url)
-      (setq alturl (match-string 1 url))
-      (navi2ch-thumbnail-show-image-subr url alturl)))
+      (if alturl
+          (navi2ch-thumbnail-show-image-subr url alturl)
+        (string-match "\\(http://.+\\)/.+" url)
+        (setq alturl (match-string 1 url))
+        (navi2ch-thumbnail-show-image-subr url alturl)))
     ))
 
 (defun navi2ch-thumbnail-show-image-subr (url &optional referer)
