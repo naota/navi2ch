@@ -194,14 +194,19 @@
       (setq thumb file))
     (let ((buffer-read-only nil))
       (when (file-exists-p thumb)
-	(message "file is exist:%s" thumb)
+;	(message "file is exist:%s" thumb)
 	(move-beginning-of-line nil)
 	(insert-image (create-image thumb))
 	(add-text-properties
 	 (1- (point)) (point)
 	 (list 'link t 'link-head t
 	       'url file'help-echo file 'navi2ch-link-type 'image 'navi2ch-link file 'file-name file))
-	(insert " ")
+        (setq image-attr (navi2ch-image-identify file))
+	(insert (format " (%sx%s:%sk%s)" (nth 0 image-attr) (nth 1 image-attr) (round (/ (nth 7 (file-attributes file)) 1024))
+                                                                                  (if (nth 2 image-attr)
+                                                                                      " GIF ANIME"
+                                                                                    "")))
+;	(insert " ")
 	(move-end-of-line nil)
 	t))))
 
@@ -370,7 +375,14 @@
                   (end (match-end 0)))
               (add-text-properties beg end '(my-navi2ch "shown")))))
       ))))
-      
+
+(setq navi2ch-thumbnail-404-list
+      (list
+	    "/404\.s?html$"
+;	    "http://sys.dotup.org/\\?e=404"
+;	    "/404_\.\*\\.s?html$"
+            ))
+
 (defun navi2ch-thumbnail-select-current-link (&optional browse-p)
   (interactive "P")
   (let ((type (get-text-property (point) 'navi2ch-link-type))
@@ -389,14 +401,15 @@
                   (member (downcase (file-name-extension prop))
                           navi2ch-browse-url-image-extentions))
              (when (not (navi2ch-thumbnail-insert-image-cache (substring prop 7 nil)))
-                 (if (string-match "http://\\([^/]+\\)" prop)
-                     (setq prop (navi2ch-thumbnail-url-status-check prop)))
-                 (navi2ch-thumbnail-show-image prop)))))
+               (setq prop (navi2ch-thumbnail-url-status-check prop))
+               (dolist (l navi2ch-thumbnail-404-list)
+                 (if (string-match l prop)
+                     (error "ファイルが404 url=%s" prop)))
+               (navi2ch-thumbnail-show-image prop)))))
 
           ((eq type 'image)
            (navi2ch-thumbnail-show-image-external))
           )))
-
 
 (setq navi2ch-thumbnail-enable-status-check t)
 
