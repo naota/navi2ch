@@ -202,11 +202,20 @@
 	 (list 'link t 'link-head t
 	       'url file'help-echo file 'navi2ch-link-type 'image 'navi2ch-link file 'file-name file))
         (setq image-attr (navi2ch-image-identify file))
-	(insert (format " (%sx%s:%sk%s)" (nth 0 image-attr) (nth 1 image-attr) (round (/ (nth 7 (file-attributes file)) 1024))
-                                                                                  (if (nth 2 image-attr)
-                                                                                      " GIF ANIME"
-                                                                                    "")))
+	(insert (format " (%sx%s:%sk%s)" (nth 0 image-attr)
+                        (nth 1 image-attr) (round (/ (nth 7 (file-attributes file)) 1024))
+                        (if (nth 2 image-attr) " GIF ANIME" "")))
 ;	(insert " ")
+      (if (re-search-forward
+           (concat "h?ttp://\\([^ \t\n\r]+\\.\\("
+                   (mapconcat (lambda (s) s)
+                              navi2ch-browse-url-image-extentions "\\|")
+                   "\\)\\)") nil t)
+          (save-excursion
+            (let ((url (concat "http://" (match-string 1)))
+                  (beg (match-beginning 0))
+                  (end (match-end 0)))
+              (add-text-properties beg end '(my-navi2ch "shown")))))
 	(move-end-of-line nil)
 	t))))
 
@@ -274,7 +283,9 @@
             ;既に表示済みの画像は無視
             (when (not (string= prop "shown"))
               (goto-char beg)
-              (navi2ch-thumbnail-show-image url))
+              (navi2ch-thumbnail-select-current-link)
+;(navi2ch-thumbnail-show-image url)
+              )
             ))))))
 
 (defun navi2ch-thumbnail-image-escape-filename (filename)
@@ -290,65 +301,81 @@
          (prop  (get-text-property point 'my-navi2ch))
          (ext (when url
                 (file-name-extension url))))
-    (when (not (member (downcase ext) navi2ch-browse-url-image-extentions))
-      (error "画像ファイルではありません %s" url))
-    (when (or (and ext
-                   (not (string= prop "shown"))
-                   )
-              alturl)
+;    (when (not (member (downcase ext) navi2ch-browse-url-image-extentions))
+;      (error "画像ファイルではありません %s" url))
+    (when (not (string= prop "shown"))
+;    (when (or (and ext (not (string= prop "shown"))) alturl)
       (if alturl
           (navi2ch-thumbnail-show-image-subr url alturl)
-        (string-match "\\(http://.+\\)/.+" url)
-        (setq alturl (match-string 1 url))
+;        (string-match "\\(http://.+\\)/.+" url)
+;        (setq alturl (match-string 1 url))
         (navi2ch-thumbnail-show-image-subr url alturl)))
     ))
 
-(defun navi2ch-thumbnail-show-image-subr (url &optional referer)
+(defun navi2ch-thumbnail-show-image-subr (url &optional org-url)
   (save-excursion
     (let ((buffer-read-only nil)
           (thumb-dir navi2ch-thumbnail-thumbnail-directory)
           thumb-file file width height size anime filename)
-      (string-match "tp://\\(.+\\)$" url)
-      (setq file (concat thumb-dir (navi2ch-thumbnail-image-escape-filename (match-string 1 url))))
+      (string-match "tp://\\(.+\\)$" org-url)
+      (setq file (concat thumb-dir (navi2ch-thumbnail-image-escape-filename (match-string 1 org-url))))
       (setq thumb-file (concat file ".jpg"))
-      (when (if referer
-                (navi2ch-net-update-file  url file nil nil nil nil (list (cons "Referer" referer)))
+      (when (if org-url
+                (navi2ch-net-update-file  url file nil nil nil nil (list (cons "Referer" org-url)))
               (navi2ch-net-update-file url file))
         (if (not (file-exists-p file))
             (error "ファイルがありません %s" file))
         (when (not (image-type-from-file-header file))
+          (with-temp-buffer
+            (insert-file-contents file nil 0 500)
+            (setq buffer-error (buffer-string)))
 ;          (copy-file file "c:/")
           (delete-file file)
-          (error "画像ファイルではありません %s" file))
+          (error "画像ファイルではありません %s %s" file buffer-error))
         (string-match "/\\([^/]+\\)$" file)
         (setq filename (match-string 1 file))
-        (with-temp-buffer
-          (call-process navi2ch-thumbnail-image-identify-program nil t nil
-                        "-quiet" "-format" "\"%n %w %h %b\"" file)
-          (goto-char (point-min))
-          (when (re-search-forward "\\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\)")
-            (setq anime (match-string 1))
-            (setq width (match-string 2))
-            (setq height (match-string 3))
-            (setq size (match-string 4))))
+        ;; (with-temp-buffer
+        ;;   (call-process navi2ch-thumbnail-image-identify-program nil t nil
+        ;;                 "-quiet" "-format" "\"%n %w %h %b\"" file)
+        ;;   (goto-char (point-min))
+        ;;   (when (re-search-forward "\\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\)")
+        ;;     (setq anime (match-string 1))
+        ;;     (setq width (match-string 2))
+        ;;     (setq height (match-string 3))
+        ;;     (setq size (match-string 4))))
 
-      (if (or (> (string-to-number width) navi2ch-thumbnail-thumbsize-width)
-              (> (string-to-number height) navi2ch-thumbnail-thumbsize-height))
+        (setq image-attr (navi2ch-image-identify file))
+        (if (not image-attr)
+            (error "画像ファイルを識別できません %s" file))
+        (setq anime (nth 2 image-attr))
+        (setq width (nth 0 image-attr))
+        (setq height (nth 1 image-attr))
+        (setq size (nth 7 (file-attributes file)))
+            
+      (if (or (> width navi2ch-thumbnail-thumbsize-width)
+              (> height navi2ch-thumbnail-thumbsize-height))
           (progn 
             (with-temp-buffer
-              (if (string= anime "1")
+              (if (not anime)
                   (call-process navi2ch-thumbnail-image-convert-program nil t nil
                                 "-sample" (format "%sx%s" navi2ch-thumbnail-thumbsize-width navi2ch-thumbnail-thumbsize-height) file thumb-file)
                 ;;GIFアニメは1フレームだけを使う
                 (call-process navi2ch-thumbnail-image-convert-program nil "real buffer" nil
                               "-scene" "0" "-sample" (format "%sx%s" navi2ch-thumbnail-thumbsize-width navi2ch-thumbnail-thumbsize-height) file (concat  file ".jpg"))
                 (rename-file (concat (concat file "-0") ".jpg") thumb-file)
-                (let ((anime-num (string-to-number anime)) (count 1) delfile)
-                  (while (< count anime-num) ; 判定条件
-                    (setq delfile (format "%s-%s.jpg" file count))
-                    (delete-file delfile)
-                    (message "delete %s" delfile)
-                    (setq count (1+ count)))) ; 1増やす
+                
+;                (let ((anime-num (string-to-number anime)) (count 1) delfile)
+                (setq delete-taraget-file-list (directory-files (file-name-directory thumb-file) t (concat (file-name-nondirectory file) "-.+\.jpg")))
+;                (message "delete target file %s" delete-taraget-file-list)
+                (while (setq delfile (pop delete-taraget-file-list))
+                  (delete-file delfile)
+;                  (message "delete %s" delfile)
+                  )
+;                  (while (< count anime-num) ; 判定条件
+;                    (setq delfile (format "%s-%s.jpg" file count))
+;                    (delete-file delfile)
+;                    (message "delete %s" delfile)
+;                    (setq count (1+ count)))) ; 1増やす
                 (message "gif anime %s" anime)))
 
             (insert-image (create-image thumb-file))
@@ -360,9 +387,10 @@
                              (list 'link t 'link-head t 
                                    'url file 'help-echo file 'navi2ch-link-type 'image 'navi2ch-link file 'file-name filename 'width width 'height height 'size size)))
 		
-      (if (not (string= anime "1"))
-          (insert (format " (%s x %s : GIF ANIME %sk) " width height (round (/ (string-to-number size) 1024))))
-        (insert (format " (%s x %s : %sk) " width height (/ (string-to-number size) 1024))))
+;      (if (not (string= anime "1"))
+;          (insert (format " (%s x %s : GIF ANIME %sk) " width height (round (/ (string-to-number size) 1024))))
+;        (insert (format " (%s x %s : %sk) " width height (/ (string-to-number size) 1024))))
+          (insert (format " (%s x %s :%s%sk) " width height (if anime " GIF ANIME" "") (round (/ size 1024))))
 
       (if (re-search-forward
            (concat "h?ttp://\\([^ \t\n\r]+\\.\\("
@@ -379,7 +407,7 @@
 (setq navi2ch-thumbnail-404-list
       (list
 	    "/404\.s?html$"
-;	    "http://sys.dotup.org/\\?e=404"
+            "10mai_404\.html$"
 ;	    "/404_\.\*\\.s?html$"
             ))
 
@@ -387,10 +415,12 @@
   (interactive "P")
   (let ((type (get-text-property (point) 'navi2ch-link-type))
 	(prop (get-text-property (point) 'navi2ch-link)))
-    (cond ((eq type 'number)
-	   (navi2ch-article-select-current-link-number 
-	    (navi2ch-article-get-number-list prop)
-	    browse-p))
+    (cond
+;     (
+;           (eq type 'number)
+;	   (navi2ch-article-select-current-link-number 
+;	    (navi2ch-article-get-number-list prop)
+;	    browse-p))
 
 	  ((eq type 'url)
            (cond
@@ -401,11 +431,14 @@
                   (member (downcase (file-name-extension prop))
                           navi2ch-browse-url-image-extentions))
              (when (not (navi2ch-thumbnail-insert-image-cache (substring prop 7 nil)))
-               (setq prop (navi2ch-thumbnail-url-status-check prop))
+               (setq url (navi2ch-thumbnail-url-status-check prop))
                (dolist (l navi2ch-thumbnail-404-list)
-                 (if (string-match l prop)
-                     (error "ファイルが404 url=%s" prop)))
-               (navi2ch-thumbnail-show-image prop)))))
+                 (if (string-match l url)
+                     (error "ファイルが404 url=%s" url)))
+;               (if (eq url prop)
+;                   (navi2ch-thumbnail-show-image url)
+                 (navi2ch-thumbnail-show-image url prop)
+                 ))))
 
           ((eq type 'image)
            (navi2ch-thumbnail-show-image-external))
@@ -451,3 +484,176 @@
 	       (message "loacation %s" url))
 	      ))))
   url)
+
+(defun navi2ch-thumbnail-image-jpeg-identify (data)
+  (let ((len (length data)) (i 2) (anime nil))
+    (catch 'jfif
+      (while (< i len)
+;      (setq i (1+ i))
+        (let ((nbytes (+ (lsh (aref data (+ i 2)) 8)
+                         (aref data (+ i 3))))
+              (code (aref data (1+ i))))
+          (cond
+           ((= code #xc4)
+            ;; DHT
+;	      (message "code FFC4 DHT")
+            )
+           ((and (>= code #xc0) (<= code #xcF))
+            ;; SOF0 DCT
+            ;; SOF2
+            (if (= code #xc2)
+                (message "navi2ch-thumbnail-image-jpeg-identify:SOF2"))
+            (let (
+                  (sample (aref data (+ i 4)))
+                  (ysize (+ (lsh (aref data (+ i 5)) 8)
+                            (aref data (+ i 6))))
+                  (xsize (+ (lsh (aref data (+ i 7)) 8)
+                            (aref data (+ i 8)))))
+              (throw 'jfif (list xsize ysize anime))
+              )))
+          ;;skip x00(end marker) xff(start marker)
+          (setq i (+ i 2 nbytes)))))))
+
+;(navi2ch-thumbnail-image-identify "c:/Documents and Settings/r40/My Documents/My Dropbox/image/up29468.jpg")
+;(navi2ch-thumbnail-image-identify "x:/navi2ch-thumbnails/img.20ch.net/anime/s/anime20ch67703.jpg")
+(defun navi2ch-thumbnail-image-png-identify (data)
+    (let ((i 8)
+          (anime nil))
+      ;;magic number
+      (when (string-match "\\`\x49\x48\x44\x52"
+                            (substring data (+ i 4)))
+        (let (
+              ;;4byte
+              (xsize
+               (+
+                (lsh (aref data (+ i 8)) 24)
+                (lsh (aref data (+ i 9)) 16)
+                (lsh (aref data (+ i 10)) 8)
+                (aref data (+ i 11))))
+              ;;4byte
+              (ysize
+               (+
+                (lsh (aref data (+ i 12)) 24)
+                (lsh (aref data (+ i 13)) 16)
+                (lsh (aref data (+ i 14)) 8)
+                (aref data (+ i 15)))))
+          (list xsize ysize anime)
+          ))))
+
+(defun navi2ch-thumbnail-image-gif-identify (data)
+    (let ((i 0)
+          (len (length data))
+          xsize
+          ysize
+          (anime nil)
+          sgct)
+      (setq i (+ i 6))
+
+      ;;GIF Header
+      ;;2byte
+      (setq xsize (+
+                   (lsh (aref data (+ i 1)) 8)
+                   (aref data i)))
+      (setq i (+ i 2))
+      ;;2byte
+      (setq ysize (+
+                   (lsh (aref data (+ i 1)) 8)
+                   (aref data (+ i 0))))
+      (setq i (+ i 2))
+      ;;Size of Global Color Table(3 Bits)
+      (setq sgct (+ 1 (logand (aref data i) 7)))
+      (setq i (+ i 3))
+
+      ;;skip Global Color Table
+      (setq i (+ i (* (expt 2 sgct) 3)))
+
+      ;;Block
+      (while (< i len)
+        (cond
+         ((= (aref data (+ i 0)) #x21)
+          (setq i (+ i 1))
+          (cond
+           ;;Graphic Control Extension
+           ((= (aref data (+ i 0)) #xf9)
+            (message "Graphic Control Extension")
+            (setq i (+ i 7)))
+
+           ;;maybe GIF Anime
+           ((= (aref data (+ i 0)) #xff)
+            (message "Application Extension GIF ANIME")
+            (setq anime t)
+            (setq i (+ i 7)))
+
+           ((= (aref data (+ i 0)) #xfe)
+            (message "Comment Extension")
+            (setq i (+ i 1))
+            (setq i (+ i (aref data i)))
+            (setq i (+ i 2))
+            )))
+         
+         ;;image block table
+         ((= (aref data (+ i 0)) #x2c)
+          (message "Image Block")
+          (setq i (+ i 9))
+          (setq slct (+ 1(logand (aref data i) 7)))
+          (setq i (+ i (* (expt 2 slct) 3)))
+          (setq i (+ i (aref data i)))
+          (setq i (+ i 1))
+          (message "last i:%s" i)
+          )
+         (t
+          (setq i (+ i 1024)))
+        ))
+      (list xsize ysize anime)))
+
+;(navi2ch-thumbnail-image-identify "x:/navi2ch-thumbnails/pa.dip.jp/jlab/ren/r/pa1284715401154.gif")
+;(navi2ch-thumbnail-image-identify "c:/Documents and Settings/r40/My Documents/GIF_40094.gif")
+
+(defun navi2ch-thumbnail-image-identify (file &optional size)
+  "画像ファイルから幅,高さ,GIFアニメか？を取得してlistで返す。
+取得できなかった場合は外部プログラム(navi2ch-thumbnail-image-identify-program)に頼る。
+それでもダメならnilを返す"
+  (let ((file-size (nth 7 (file-attributes file))))
+    (catch 'identify
+      (when (file-readable-p file)
+;      (setq file (image-search-load-path file))
+      (with-temp-buffer
+        (set-buffer-multibyte nil)
+        (unless size
+          (setq size 1024))
+        (insert-file-contents-literally file nil 0 size)
+        (setq data (buffer-substring (point-min) (min (point-max)
+					      (+ (point-min) size))))
+        (cond
+         ;;gif
+         ((string-match "^GIF" data)
+          (setq rtn (navi2ch-thumbnail-image-gif-identify data)))
+         ;;png
+         ((string-match "\\`\x89\x50\x4E\x47\x0D\x0A\x1A\x0A" data)
+          (setq rtn (navi2ch-thumbnail-image-png-identify data)))
+         ;;jpeg
+         ((string-match "\\`\xff\xd8" data)
+          (setq rtn (navi2ch-thumbnail-image-jpeg-identify data))))
+        (if rtn (throw 'identify rtn)))
+      
+      ;;情報が取得できなかった場合はヘッダをさらに読み込む
+      (setq size (* size 10))
+      (if (> size file-size)
+          (setq size file-size))
+      (message "navi2ch-thumbnail-image-identify:re-read size=%s %s" size file)
+      (setq rtn (navi2ch-thumbnail-image-identify file size))
+      (if rtn (throw 'identify rtn))
+      ;;それでも無理なら外部プログラムに頼る
+      (when (and (= size file-size)
+                 navi2ch-thumbnail-image-identify-program)
+        (message "identify called %s" file)
+        (with-temp-buffer
+          (call-process navi2ch-thumbnail-image-identify-program nil t nil
+                        "-quiet" "-format" "\"%n %w %h %b\"" file)
+          (goto-char (point-min))
+          (when (re-search-forward "\\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\) \\([0-9]+\\)")
+            (list (string-to-number (match-string 2))
+                  (string-to-number (match-string 3))
+                  (> (string-to-number (match-string 1)) 1)
+                  ))))
+         ))))
