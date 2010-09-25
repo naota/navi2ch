@@ -1,3 +1,34 @@
+2010-09-26  MIZUNUMA Yuto  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-article.el (navi2ch-article-insert-message):
+	(navi2ch-thumbnail-insert-image-reload)追加
+	サムネイル画像のキャッシュがあったら表示
+	副作用があるかもしれないので注意して見守りたい
+
+2010-09-25  MIZUNUMA Yuto  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-image-identify)
+	(navi2ch-thumbnail-image-gif-identify)
+	(navi2ch-thumbnail-image-jpeg-identify)
+	(navi2ch-thumbnail-image-png-identify)
+	(navi2ch-thumbnail-show-image-subr)
+	(navi2ch-thumbnail-insert-image-cache):
+	外部プログラム(identify)を呼ばずにemacs独自で画像の情報を判別するロジックの導入
+
+	(navi2ch-thumbnail-show-image-subr):
+	画像ファイルが取得できなかった場合、何が取得できたのかをmessage表示して対応を考える
+
+	(navi2ch-thumbnail-show-image-subr):
+	GIFサムネイル作成時のtempファイルの削除ロジック変更
+
+	(navi2ch-thumbnail-url-status-check):
+	画像取得前に302や404のチェック。302の場合移動先URLを返す。
+
+	(navi2ch-thumbnail-select-current-link):
+	ファイルが無いにも関わらず404を返さないサーバへの対応。
+	ブラックリスト(navi2ch-thumbnail-404-list)とマッチング
+
+
 2010-09-14  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-http-date.el : テストコードを test/test.el に移動。

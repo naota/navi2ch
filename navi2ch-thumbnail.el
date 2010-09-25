@@ -37,8 +37,6 @@
 ;; - どこか(全体?)を(display-images-p)で囲むべきだが要検討
 ;; - キーバインド調整
 ;; - スレ再描画時にサムネを読まなかったり読んだりがあるかも
-;; - emacs付属のimage.elを参考にして画像ファイルのヘッダをバイナリ読み
-;;   すればidentifyコールしなくて済むかも
 
 ;; 設定例
 ;; Windows
@@ -139,7 +137,8 @@
    ((string-match "h?ttp://w*\.?imepita.jp/\\([0-9/]+\\)" url)
     (setq alturl (format "http://imepita.jp/image/%s" (match-string 1 url)))
     (message "imepita:%s %s" url alturl)
-    (if (navi2ch-thumbnail-insert-image-cache alturl)
+    (if (navi2ch-thumbnail-insert-image-cache url)
+;    (if (navi2ch-thumbnail-insert-image-cache alturl)
 	(message "cache read")
       (if force
 	  (progn
@@ -201,7 +200,7 @@
 	 (1- (point)) (point)
 	 (list 'link t 'link-head t
 	       'url file'help-echo file 'navi2ch-link-type 'image 'navi2ch-link file 'file-name file))
-        (setq image-attr (navi2ch-image-identify file))
+        (setq image-attr (navi2ch-thumbnail-image-identify file))
 	(insert (format " (%sx%s:%sk%s)" (nth 0 image-attr)
                         (nth 1 image-attr) (round (/ (nth 7 (file-attributes file)) 1024))
                         (if (nth 2 image-attr) " GIF ANIME" "")))
@@ -226,6 +225,7 @@
     (if (display-images-p)
 	(save-excursion
 	  (let ((buffer-read-only nil))
+            (goto-char (point-min))
 	    (while (re-search-forward
 		    (concat "\\(h?t?tps?://imepita.jp/[0-9/]+\\|h?t?tps?://i-bbs.sijex.net/imageDisp.jsp\\?id=watahiki&file=[0-9o]+\.jpg\\|"
 			    (concat "h?t?tps?://[^ \t\n\r]+\\."
@@ -344,7 +344,7 @@
         ;;     (setq height (match-string 3))
         ;;     (setq size (match-string 4))))
 
-        (setq image-attr (navi2ch-image-identify file))
+        (setq image-attr (navi2ch-thumbnail-image-identify file))
         (if (not image-attr)
             (error "画像ファイルを識別できません %s" file))
         (setq anime (nth 2 image-attr))
@@ -416,12 +416,6 @@
   (let ((type (get-text-property (point) 'navi2ch-link-type))
 	(prop (get-text-property (point) 'navi2ch-link)))
     (cond
-;     (
-;           (eq type 'number)
-;	   (navi2ch-article-select-current-link-number 
-;	    (navi2ch-article-get-number-list prop)
-;	    browse-p))
-
 	  ((eq type 'url)
            (cond
             ((navi2ch-thumbnail-show-image-not-image-url prop t)
@@ -489,14 +483,13 @@
   (let ((len (length data)) (i 2) (anime nil))
     (catch 'jfif
       (while (< i len)
-;      (setq i (1+ i))
         (let ((nbytes (+ (lsh (aref data (+ i 2)) 8)
                          (aref data (+ i 3))))
               (code (aref data (1+ i))))
           (cond
            ((= code #xc4)
             ;; DHT
-;	      (message "code FFC4 DHT")
+	      (message "navi2ch-thumbnail-image-jpeg-identify:code FFC4 DHT")
             )
            ((and (>= code #xc0) (<= code #xcF))
             ;; SOF0 DCT
@@ -514,8 +507,6 @@
           ;;skip x00(end marker) xff(start marker)
           (setq i (+ i 2 nbytes)))))))
 
-;(navi2ch-thumbnail-image-identify "c:/Documents and Settings/r40/My Documents/My Dropbox/image/up29468.jpg")
-;(navi2ch-thumbnail-image-identify "x:/navi2ch-thumbnails/img.20ch.net/anime/s/anime20ch67703.jpg")
 (defun navi2ch-thumbnail-image-png-identify (data)
     (let ((i 8)
           (anime nil))
@@ -606,13 +597,10 @@
         ))
       (list xsize ysize anime)))
 
-;(navi2ch-thumbnail-image-identify "x:/navi2ch-thumbnails/pa.dip.jp/jlab/ren/r/pa1284715401154.gif")
-;(navi2ch-thumbnail-image-identify "c:/Documents and Settings/r40/My Documents/GIF_40094.gif")
-
 (defun navi2ch-thumbnail-image-identify (file &optional size)
   "画像ファイルから幅,高さ,GIFアニメか？を取得してlistで返す。
 取得できなかった場合は外部プログラム(navi2ch-thumbnail-image-identify-program)に頼る。
-それでもダメならnilを返す"
+それでもダメならnilを返す。sizeで読み込むサイズを指定もできる"
   (let ((file-size (nth 7 (file-attributes file))))
     (catch 'identify
       (when (file-readable-p file)
