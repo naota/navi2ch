@@ -1,25 +1,36 @@
+2010-09-14  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-http-date.el : テストコードを test/test.el に移動。
+
+2010-08-11  MIZUNUMA Yuto  <mizmiz@users.sourceforge.net>
+
+	* navi2ch-p2.el (navi2ch-p2-login-url, navi2ch-p2-cookie-domain)
+	(navi2ch-p2-send-message): Navi2ch for Emacs (Part 20)
+	http://hibari.2ch.net/test/read.cgi/unix/1265413075/97で指摘された
+	バグの修正。p2関連ドメインで即値の廃止。
+	(navi2ch-p2-domain): 新規追加
+	'http://w2.p2.2ch.net/p2'に関しては未テスト
+
 2010-07-15  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 
 	* navi2ch-message.el (navi2ch-message-samba24-check):
-	* navi2ch-vars.el:
-	変数navi2ch-message-samba24-wait-sleep追加。
-	non-nil ならsamba規制時間の解除までsleep(フリーズ)する。
+	* navi2ch-vars.el: 変数 navi2ch-message-samba24-wait-sleep 追加。
+	non-nil なら samba規制時間の解除までsleep (フリーズ)する。
 
-	* navi2ch-message.el (navi2ch-message-samba24-search-samba)
-	p2の場合、samba時間に10秒プラスされる仕様追加に追従
+	* navi2ch-message.el (navi2ch-message-samba24-search-samba) p2の場
+	合、samba時間に10秒プラスされる仕様追加に追従
 
 2010-06-28  MIZUNUMA Yuto <mizmiz@users.sourceforge.net>
 
-	* navi2ch-p2.el 
-	(navi2ch-p2-make-deny-list):new
-	init.el等で(navi2ch-p2-make-deny-list)を呼べば、規制されてる板を
+	* navi2ch-p2.el (navi2ch-p2-make-deny-list): new init.el等で
+	(navi2ch-p2-make-deny-list)を呼べば、規制されてる板を
 	http://qb6.2ch.net/_403/madakana.cgiから取得する。
 	(navi2ch-p2-p): p2で書き込む板を判別論理追加。
 	(navi2ch-p2-board-p): new navi2ch-p2-pのsub
 	(navi2ch-p2-send-message-success-p):エラーリトライ条件追加
 	(navi2ch-p2-send-message):samba待ち追加
 	(navi2ch-p2-send-message): 2ch側仕様変更によりパラメーター追加 kuno=ichi
-	
+
 2010-06-08  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-oyster.el (navi2ch-oyster-get-status): sit-for を

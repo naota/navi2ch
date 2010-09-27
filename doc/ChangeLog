@@ -1,3 +1,7 @@
+2010-09-01  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* navi2ch.texi: @table の引数忘れの修正。
+
 2008-07-20  Naohiro Aota  <nao.aota@gmail.com>
 
 	* releng.txt: Update.

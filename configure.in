@@ -81,5 +81,5 @@ fi
 
 AC_SUBST(icondir)
 
-AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile
+AC_OUTPUT([Makefile contrib/Makefile doc/Makefile icons/Makefile test/Makefile
 navi2ch-config.el])

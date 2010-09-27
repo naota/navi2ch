@@ -670,11 +670,11 @@ navi2ch では http://find.2ch.net/ や http://h.ula.cc/ といった 2ch の検
 
 Web 検索には多くの方法がある。navi2ch では以下のものをサポートしている。
 
-@table
+@table @code
 @item navi2ch-search-find-2ch-method
 http://find.2ch.net/ を使って検索する。
 
-@item navi2ch-search-hula-method 
+@item navi2ch-search-hula-method
 http://h.ula.cc/ を使って検索する。
 
 @item navi2ch-search-union-method
@@ -866,7 +866,7 @@ Navi2ch には、@code{>>1} などのように記述された他のレス参照や、
 て設定される。普通の文字はそのまま出力され、'%' に続く文字は以下のよう
 に置換される。
 
-@table
+@table @samp
 @item %a
 スレッド名
 @item %b
@@ -2409,9 +2409,9 @@ Emacs 23 で「〜」とかが 投稿できない気がするんだけど。
 @end ignore
 @end table
 
-@c @node Concept Index        
+@c @node Concept Index
 @c @unnumbered 概念索引
-@c @printindex cp             
+@c @printindex cp
 
 @node Thanks
 @appendix 謝辞
