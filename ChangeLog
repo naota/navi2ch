@@ -1,3 +1,9 @@
+2010-10-05  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-vars.el (navi2ch-2ch-mimizun-negative-list): Fix
+	typo. Suggested by
+	http://hibari.2ch.net/test/read.cgi/unix/1265413075/149
+
 2010-09-14  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-http-date.el : テストコードを test/test.el に移動。
