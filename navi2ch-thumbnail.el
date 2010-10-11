@@ -288,9 +288,9 @@
 
 (defun navi2ch-thumbnail-image-escape-filename (filename)
   "ファイル名に使えない文字をエスケープ"
-  (navi2ch-replace-string-regexp-alist '(("-" "%2d")
-					 (":" "%3a")
-					 ("?" "%63"))
+  (navi2ch-replace-string-regexp-alist '(("-" . "%2d")
+					 (":" . "%3a")
+					 ("\\?" . "%63"))
 				       filename
 				       t))
 
@@ -339,10 +339,10 @@
 	 ((and (< width navi2ch-thumbnail-thumbsize-width)
 	       (< height navi2ch-thumbnail-thumbsize-height))
 	  (insert-image (navi2ch-create-image file)))
-	 ((fboundp 'imagemagick-register-types)
+	 ((fboundp 'imagemagick-types)
 	  (insert-image (navi2ch-create-image
 			 file
-			 'imagemagick
+			 'imagemagick nil
 			 :width navi2ch-thumbnail-thumbsize-width
 			 :height navi2ch-thumbnail-thumbsize-height)))
 	 (t
