@@ -688,9 +688,8 @@ BOARD non-nil ならば、その板の coding-system を使う。"
         (if navi2ch-article-auto-decode-p
             (navi2ch-article-auto-decode-encoded-section))
 	(navi2ch-article-arrange-message)
-        ;;サムネイル画像のキャッシュがあったら表示
-	(navi2ch-thumbnail-insert-image-reload)
-        )))
+        ;; サムネイル画像のキャッシュがあったら表示
+	(navi2ch-thumbnail-insert-image-reload))))
   (navi2ch-article-insert-message-separator num))
 
 (defun navi2ch-article-insert-messages (list range)
