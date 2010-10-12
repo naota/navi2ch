@@ -77,8 +77,8 @@ am__ELFILES = navi2ch-article.el navi2ch-articles.el \
 	navi2ch-message.el navi2ch-mona.el navi2ch-multibbs.el \
 	navi2ch-net.el navi2ch-oyster.el navi2ch-p2.el \
 	navi2ch-popup-article.el navi2ch-search.el navi2ch-splash.el \
-	navi2ch-util.el navi2ch-vars.el navi2ch-version.el \
-	navi2ch-xmas.el navi2ch.el
+	navi2ch-thumbnail.el navi2ch-util.el navi2ch-vars.el \
+	navi2ch-version.el navi2ch-xmas.el navi2ch.el
 am__ELCFILES = $(am__ELFILES:.el=.elc)
 ELCFILES = $(LISP:.el=.elc)
 elisp_comp = $(top_srcdir)/elisp-comp
@@ -181,7 +181,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
 	navi2ch-futaba.el navi2ch-megabbs.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
-	navi2ch-auto-modify.el navi2ch-p2.el
+	navi2ch-auto-modify.el navi2ch-p2.el navi2ch-thumbnail.el
 
 lisp_DATA = navi2ch-config.el
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
@@ -691,7 +691,7 @@ elcdist: $(ELCFILES)
 $(srcdir)/bcomp.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
-	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
+	sed -e "s/@\(lisp_LISP\)@/$$list/;" < $(srcdir)/bcomp.el.in > $@ || rm $@
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) && \
@@ -704,8 +704,6 @@ Makefiles: $(top_builddir)/config.status
 update:
 	( cd $(srcdir); $(CVS) update -P -d ) && \
 	$(MAKE) $(AM_MAKEFLAGS) Makefiles
-
-check: $(ELCFILES)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

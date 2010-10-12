@@ -12,7 +12,7 @@ lisp_LISP = navi2ch-version.el \
 	navi2ch-jbbs-net.el navi2ch-jbbs-shitaraba.el navi2ch-machibbs.el \
 	navi2ch-futaba.el navi2ch-megabbs.el \
 	navi2ch-http-date.el navi2ch-localfile.el navi2ch-oyster.el \
-	navi2ch-auto-modify.el navi2ch-p2.el
+	navi2ch-auto-modify.el navi2ch-p2.el navi2ch-thumbnail.el
 lisp_DATA = navi2ch-config.el
 
 EXTRA_DIST = Makefile.old bcomp.el $(lisp_LISP) \
@@ -42,7 +42,7 @@ elcdist: $(ELCFILES)
 $(srcdir)/bcomp.el: @MAINTAINER_MODE_TRUE@ $(srcdir)/bcomp.el.in $(srcdir)/Makefile.am
 	rm -f $@ && \
 	list=`for file in $(lisp_LISP); do echo -n "\"$$file\" "; done` && \
-	sed -e "s/@\(lisp_LISP\)@/$$list/" < $(srcdir)/bcomp.el.in > $@
+	sed -e "s/@\(lisp_LISP\)@/$$list/;" < $(srcdir)/bcomp.el.in > $@ || rm $@
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) && \
@@ -56,4 +56,3 @@ update:
 	( cd $(srcdir); $(CVS) update -P -d ) && \
 	$(MAKE) $(AM_MAKEFLAGS) Makefiles
 
-check: $(ELCFILES)

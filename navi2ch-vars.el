@@ -1800,7 +1800,8 @@ important	レスをブックマークに登録する
   :type 'boolean
   :group 'navi2ch-article)
 
-(defvar navi2ch-2ch-mimizun-negative-list '("livebase" "livetbs" "livnhk" "livecx")
+(defvar navi2ch-2ch-mimizun-negative-list
+  '("livebase" "livetbs" "livenhk" "livecx")
   "みみずんから取得しない板のリスト")
 
 ;;; message variables
