@@ -233,7 +233,7 @@
 (defun navi2ch-thumbnail-insert-image-reload ()
   "スレが再描画される時にサムネも再描画"
   (interactive)
-  (let (url file thumb_dir)
+  (let (url file)
     (when (display-images-p)
       (save-excursion
 	(let ((buffer-read-only nil)
