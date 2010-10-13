@@ -5,6 +5,10 @@
 	navi2ch-thumbnail-use-mac-sipsをt or nilで
 	MacOSXでは標準コマンドのsipsをサムネイル作成に使用
 
+2010-10-13  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-p2.el (navi2ch-p2-p): Supress p2 messages.
+
 2010-10-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-vars.el (navi2ch-2ch-mimizun-negative-list): Fix

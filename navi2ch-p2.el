@@ -145,14 +145,13 @@
 
 (defun navi2ch-p2-p (uri)
   "p2経由で書き込むならnon-nilを返す。"
-  (message "p2:uri:%s" uri)
-  (when (string-match "http://\\([^/]+\\)/\\([^/]+\\)" uri)
+  (when (and navi2ch-p2-use-p2
+	     (string-match "http://\\([^/]+\\)/\\([^/]+\\)" uri))
     (let ((board (match-string 2 uri)))
-      (and navi2ch-p2-use-p2
-	    (or navi2ch-p2-all-board
-		(member board navi2ch-p2-board)
-		(and navi2ch-p2-board-regexp
-		     (if (string-match "^live.*" board) t)))))))
+      (or navi2ch-p2-all-board
+	  (member board navi2ch-p2-board)
+	  (and navi2ch-p2-board-regexp
+	       (if (string-match "^live.*" board) t))))))
 
 (defun navi2ch-p2-board-p (board)
 ;  (message "p2-board-p %s" board)

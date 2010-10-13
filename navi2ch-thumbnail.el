@@ -238,19 +238,18 @@
 (defun navi2ch-thumbnail-insert-image-reload ()
   "スレが再描画される時にサムネも再描画"
   (interactive)
-  (let (url file thumb_dir)
+  (let (url file)
     (when (display-images-p)
       (save-excursion
-	(let ((buffer-read-only nil))
+	(let ((buffer-read-only nil)
+	      (regex (concat "\\(h?t?tps?://imepita.jp/[0-9/]+\\|"
+			     "h?t?tps?://i-bbs.sijex.net/imageDisp.jsp"
+			     "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
+			     "h?t?tps?://[^ \t\n\r]+\\."
+			     "\\(gif\\|jpg\\|jpeg\\|png\\)"
+			     "\\)")))
 	  (goto-char (point-min))
-	  (while (re-search-forward
-		  (concat "\\(h?t?tps?://imepita.jp/[0-9/]+\\|"
-			  "h?t?tps?://i-bbs.sijex.net/imageDisp.jsp"
-			  "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
-			  "h?t?tps?://[^ \t\n\r]+\\."
-			  "\\(gif\\|jpg\\|jpeg\\|png\\)"
-			  "\\)")
-		  nil t)
+	  (while (re-search-forward regex nil t)
 	    (setq url (match-string 1))
 	    (if  (string-match "\\(h?t?tps?://imepita.jp/[0-9/]+\\|h?t?tps?://i-bbs.sijex.net/imageDisp.jsp\\?id=watahiki&file=[0-9o]+\.jpg\\)" url)
 		(navi2ch-thumbnail-show-image-not-image-url url)
