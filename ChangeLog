@@ -1,3 +1,10 @@
+2010-10-14  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr):
+	(navi2ch-thumbnail-image-identify): 
+	navi2ch-thumbnail-use-mac-sipsをt or nilで
+	MacOSXでは標準コマンドのsipsをサムネイル作成に使用
+
 2010-10-05  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-vars.el (navi2ch-2ch-mimizun-negative-list): Fix
