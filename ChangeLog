@@ -4,6 +4,12 @@
 	(navi2ch-thumbnail-image-show-region)
 	(navi2ch-thumbnail-show-image-subr): Always need paren.
 
+2010-10-14  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr):
+	(navi2ch-thumbnail-image-identify): navi2ch-thumbnail-use-mac-sips
+	をt or nilでMacOSXでは標準コマンドのsipsをサムネイル作成に使用
+
 2010-10-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-p2.el (navi2ch-p2-p): Supress p2 messages.
