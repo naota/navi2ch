@@ -161,6 +161,9 @@
      ;; imepita
      ((string-match "h?ttp://w*\\.?imepita\\.jp/\\([0-9/]+\\)" url)
       (setq alturl (concat "http://imepita.jp/image/" (match-string 1 url)))
+      ;;拡張子の無い画像は外部ビューアーが認識に失敗する場合があるので
+      ;;拡張子を強制付加する
+      (setq url (concat url ".jpg"))
       (message "imepita: %s %s" url alturl)
       (if (navi2ch-thumbnail-insert-image-cache url)
 	  (message "cache read")
