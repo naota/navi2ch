@@ -225,7 +225,7 @@
 			(if (nth 2 image-attr) " GIF ANIME" "")))
       (if (re-search-forward
 	   (concat "h?ttp://\\([^ \t\n\r]+\\."
-		   (regexp-opt navi2ch-browse-url-image-extentions)
+		   (regexp-opt navi2ch-browse-url-image-extentions t)
 		   "\\)") nil t)
 	  (save-excursion
 	    (let ((url (concat "http://" (match-string 1)))
@@ -277,7 +277,7 @@
       (let ((num (navi2ch-article-get-current-number))
 	    (board (cdr (assq 'uri navi2ch-article-current-board)))
 	    (regex (concat "h?ttp://\\([^ \t\n\r]+\\."
-			   (regexp-opt navi2ch-browse-url-image-extentions)
+			   (regexp-opt navi2ch-browse-url-image-extentions t)
 			   "\\)")))
 	(narrow-to-region begin end)
 	(goto-char begin)
@@ -400,7 +400,7 @@
 
 	(when (re-search-forward
 	       (concat "h?ttp://\\([^ \t\n\r]+\\."
-		       (regexp-opt navi2ch-browse-url-image-extentions)
+		       (regexp-opt navi2ch-browse-url-image-extentions t)
 		       "\\)") nil t)
 	  (save-excursion
 	    (let ((url (concat "http://" (match-string 1)))
