@@ -1,3 +1,9 @@
+2010-10-21  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-insert-image-cache)
+	(navi2ch-thumbnail-image-show-region)
+	(navi2ch-thumbnail-show-image-subr): Always need paren.
+
 2010-10-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-p2.el (navi2ch-p2-p): Supress p2 messages.
