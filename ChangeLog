@@ -1,5 +1,10 @@
 2010-10-21  Naohiro Aota  <naota@elisp.net>
 
+	* navi2ch-article.el (navi2ch-article-mode-map): Change
+	navi2ch-thumbnail-save-content to `V'.
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): Ditto.
+
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-insert-image-cache)
 	(navi2ch-thumbnail-image-show-region)
 	(navi2ch-thumbnail-show-image-subr): Always need paren.
