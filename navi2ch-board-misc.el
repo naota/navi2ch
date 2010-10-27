@@ -797,8 +797,15 @@ ARG が non-nil なら移動方向を逆にする。"
   (interactive "P")
   (navi2ch-bm-sort-subr
    rev
-   'beginning-of-line
-   'navi2ch-bm-goto-state-column))
+   (lambda ()
+     (beginning-of-line)
+     (save-match-data
+       (if (looking-at "^ *\\([0-9]+\\)")
+	   (string-to-number
+	    (buffer-substring (match-beginning 1) (match-end 1)))
+	 ;; not a number
+	 -1)))
+   nil))
 
 (defun navi2ch-bm-sort-by-state (&optional rev)
   (interactive "P")
