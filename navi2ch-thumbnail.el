@@ -622,15 +622,16 @@
 	(with-temp-buffer
           (cond
            (navi2ch-thumbnail-use-mac-sips
-            (call-process 'sips' nil t nil "-g" "-all" file)
-            (when (re-search-forward
-                   "pixelWidth: \\([0-9]+\\)")
-              (setq width (string-to-number (match-string 1))))
-            (when (re-search-forward
-                   "pixelHeight: \\([0-9]+\\)")
-              (setq height (string-to-number (match-string 1))))
-            ;;anime gifはあきらめる
-              (list width height nil))
+	    (let (width height)
+	      (call-process 'sips' nil t nil "-g" "-all" file)
+	      (when (re-search-forward
+		     "pixelWidth: \\([0-9]+\\)")
+		(setq width (string-to-number (match-string 1))))
+	      (when (re-search-forward
+		     "pixelHeight: \\([0-9]+\\)")
+		(setq height (string-to-number (match-string 1))))
+	      ;;anime gifはあきらめる
+              (list width height nil)))
            (t
             (call-process navi2ch-thumbnail-image-identify-program nil t nil
                           "-quiet" "-format" "\"%n %w %h %b\"" file)
