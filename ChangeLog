@@ -2,6 +2,8 @@
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-thumbnail-directory):
 	Change default value.
+	(navi2ch-thumbanil-imagemagick-resize-option): New variable.
+	(navi2ch-thumbnail-show-image-subr): Use it.
 
 2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 

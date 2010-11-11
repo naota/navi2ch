@@ -113,6 +113,11 @@
   :type 'bool
   :group 'navi2ch)
 
+(defcustom navi2ch-thumbanil-imagemagick-resize-option "-sample"
+  "* ImageMagick で拡大縮小を行なうさいのオプション"
+  :type '(radio (const :format "-sample (高速)"  "-sample")
+		(const :format "-resize (高画質)" "-resize")))
+
 (defvar navi2ch-thumbnail-404-list
   (list "/404\.s?html$"
 	"10mai_404\.html$"))
@@ -365,7 +370,7 @@
               (if (or (not anime) (not (fboundp 'create-animated-image)))
                   (call-process navi2ch-thumbnail-image-convert-program
                                 nil t nil
-                                "-sample"
+				navi2ch-thumbanil-imagemagick-resize-option
                                 (format "%sx%s"
                                         navi2ch-thumbnail-thumbsize-width
                                         navi2ch-thumbnail-thumbsize-height)
@@ -374,7 +379,7 @@
                 (call-process navi2ch-thumbnail-image-convert-program
                               nil t nil
                               "-scene" "0"
-                              "-sample"
+			      navi2ch-thumbanil-imagemagick-resize-option
                               (format "%sx%s"
                                       navi2ch-thumbnail-thumbsize-width
                                       navi2ch-thumbnail-thumbsize-height)
