@@ -5,6 +5,7 @@
 	(navi2ch-thumbanil-imagemagick-resize-option): New variable.
 	(navi2ch-thumbnail-show-image-subr): Use it.
 	(navi2ch-thumbnail-image-identify): Supress warnings.
+	(toplevel): Add coding cookie.
 
 2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 
