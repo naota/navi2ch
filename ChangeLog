@@ -1,3 +1,8 @@
+2010-11-11  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-thumbnail-directory):
+	Change default value.
+
 2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 
 	* navi2ch-board-misc.el (navi2ch-bm-sort-by-number): Use numeric

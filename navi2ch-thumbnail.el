@@ -76,7 +76,7 @@
 (provide 'navi2ch-thumbnail)
 
 (defcustom navi2ch-thumbnail-thumbnail-directory
-  (expand-file-name "/navi2ch-thumbnails/" navi2ch-directory)
+  (expand-file-name "navi2ch-thumbnails/" navi2ch-directory)
   "* 画像キャッシュディレクトリ"
   :type 'string
   :group 'navi2ch)
