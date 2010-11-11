@@ -115,6 +115,7 @@
 
 (defcustom navi2ch-thumbanil-imagemagick-resize-option "-sample"
   "* ImageMagick で拡大縮小を行なうさいのオプション"
+  :group 'navi2ch
   :type '(radio (const :format "-sample (高速)"  "-sample")
 		(const :format "-resize (高画質)" "-resize")))
 
