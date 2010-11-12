@@ -1,3 +1,8 @@
+2010-11-12  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-message.el (navi2ch-message-send-message): preserve send
+	message buffer on error.
+
 2010-11-11  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-thumbnail-directory):
