@@ -224,6 +224,29 @@
 	(if (re-search-forward "[ \t\n]+\\'" nil t)
 	    (replace-match ""))))))
 
+(defun navi2ch-message-insert-notice (msg)
+  "メッセージ投稿バッファに解説やエラーメッセージなど `msg' を表示する。
+
+条件: メッセージ投稿バッファ内で呼ばれること。"
+  (let ((inhibit-read-only t)
+	(end (navi2ch-message-header-end))
+	pos)
+    (when end
+      (save-excursion
+	;; (point-min) では text-property `navi2ch-message-notice' がない、
+	;; または nil であることが保証される。 また、 text-property
+	;; `navi2ch-message-notice' が non-nil である点から
+	;; (navi2ch-message-header-end) までは notice のみが入るとする。
+	(when (setq pos (next-single-property-change (point-min)
+						     'navi2ch-message-notice))
+	  (delete-region pos end))
+	(goto-char (navi2ch-message-header-end))
+	(insert
+	 (navi2ch-read-only-string
+	  (navi2ch-propertize navi2ch-message-header-separator
+			      'navi2ch-message-notice t))
+	 (navi2ch-read-only-string (concat msg "\n")))))))
+
 (defun navi2ch-message-send-message ()
   (interactive)
   (if navi2ch-offline
