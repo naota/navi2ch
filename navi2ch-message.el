@@ -319,8 +319,13 @@
 		(bury-buffer navi2ch-message-backup-buffer-name)))))
 	(navi2ch-message-samba24)
 	(run-hooks 'navi2ch-message-after-send-hook)
-	(when result
-	  (navi2ch-message-exit 'after-send))))))
+	(if result
+	    (navi2ch-message-exit 'after-send)
+	  (let ((errmsg (current-message)))
+	    (when (and errmsg
+		       (string-match ": " errmsg))
+	      (setq errmsg (substring errmsg (match-end 0)))
+	      (navi2ch-message-insert-notice (concat "投稿エラー: " errmsg)))))))))
 
 (defun navi2ch-message-set-name (name)
   (save-excursion

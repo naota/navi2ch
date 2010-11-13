@@ -2,6 +2,7 @@
 
 	* navi2ch-message.el (navi2ch-message-insert-notice): New
 	function.
+	(navi2ch-message-send-message): Use it.
 
 2010-11-12  Naohiro Aota  <naota@elisp.net>
 
