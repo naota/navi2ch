@@ -1,4 +1,4 @@
-;;; navi2ch-thumbnail.el --- thumbnail view for navi2ch
+;;; navi2ch-thumbnail.el --- thumbnail view for navi2ch -*- coding: iso-2022-7bit; -*-
 
 ;; Copyright (C) 2010 by Navi2ch Project
 
@@ -22,23 +22,23 @@
 
 ;;; Commentary:
 
-;; サムネイルを表示する機能です
-;; 画像表示に対応したemacsで動きます
+;; $B%5%`%M%$%k$rI=<($9$k5!G=$G$9(B
+;; $B2hA|I=<($KBP1~$7$?(Bemacs$B$GF0$-$^$9(B
 
-;; 画像リンクURL上で','を押すとサムネイル画像を挿入表示します。自動取得、
-;; 自動表示はしません。基本的にキーで駆動です。キャッシュを持っている画
-;; 像は自動表示されます。キャッシュの自動削除機能はありません。基本的に
-;; コマンドはImageMagick依存です。
+;; $B2hA|%j%s%/(BURL$B>e$G(B','$B$r2!$9$H%5%`%M%$%k2hA|$rA^F~I=<($7$^$9!#<+F0<hF@!"(B
+;; $B<+F0I=<($O$7$^$;$s!#4pK\E*$K%-!<$G6nF0$G$9!#%-%c%C%7%e$r;}$C$F$$$k2h(B
+;; $BA|$O<+F0I=<($5$l$^$9!#%-%c%C%7%e$N<+F0:o=|5!G=$O$"$j$^$;$s!#4pK\E*$K(B
+;; $B%3%^%s%I$O(BImageMagick$B0MB8$G$9!#(B
 ;;
-;; 参考にしたコード(navi2chスレのどこかで見た)は非同期だったり外部シェ
-;; ル叩きだったりと複雑なので、なるべくシンプルに再構成しました
+;; $B;29M$K$7$?%3!<%I(B(navi2ch$B%9%l$N$I$3$+$G8+$?(B)$B$OHsF14|$@$C$?$j30It%7%'(B
+;; $B%kC!$-$@$C$?$j$HJ#;($J$N$G!"$J$k$Y$/%7%s%W%k$K:F9=@.$7$^$7$?(B
 
 ;; To Do
-;; - どこか(全体?)を(display-images-p)で囲むべきだが要検討
-;; - キーバインド調整
-;; - スレ再描画時にサムネを読まなかったり読んだりがあるかも
+;; - $B$I$3$+(B($BA4BN(B?)$B$r(B(display-images-p)$B$G0O$`$Y$-$@$,MW8!F$(B
+;; - $B%-!<%P%$%s%ID4@0(B
+;; - $B%9%l:FIA2h;~$K%5%`%M$rFI$^$J$+$C$?$jFI$s$@$j$,$"$k$+$b(B
 
-;; 設定例
+;; $B@_DjNc(B
 ;; Windows
 ;;   (setq navi2ch-thumbnail-image-convert-program
 ;;         "C:/Program Files/ImageMagick-6.2.8-Q16/convert.exe")
@@ -53,65 +53,71 @@
 ;;         "/opt/local/bin/convert") ;; MacPort ImageMagick
 ;;   (setq navi2ch-thumbnail-image-identify-program "/opt/local/bin/identify")
 
-;; 使い方、兼キーバインド
+;; $B;H$$J}!"7s%-!<%P%$%s%I(B
 ;;
-;; URLにカーソルがある状態で','を押すとサムネイル挿入. サムネイルにカー
-;; ソルがある状態で','を押すと外部ビューアーでオリジナル画像表示(本当は
-;; enterキーでやるほうが奇麗な気もする)
+;; URL$B$K%+!<%=%k$,$"$k>uBV$G(B','$B$r2!$9$H%5%`%M%$%kA^F~(B. $B%5%`%M%$%k$K%+!<(B
+;; $B%=%k$,$"$k>uBV$G(B','$B$r2!$9$H30It%S%e!<%"!<$G%*%j%8%J%k2hA|I=<((B($BK\Ev$O(B
+;; enter$B%-!<$G$d$k$[$&$,4qNo$J5$$b$9$k(B)
 ;;
-;; サムネイルにカーソルがある状態で'v'で画像を保存(サムネイルではなく、
-;; 元の大きい画像)
+;; $B%5%`%M%$%k$K%+!<%=%k$,$"$k>uBV$G(B'v'$B$G2hA|$rJ]B8(B($B%5%`%M%$%k$G$O$J$/!"(B
+;; $B85$NBg$-$$2hA|(B)
 ;;
-;; Esc+EnterでURLをブラウザで開く(既存機能に丸投げ)。画像ビューアーが指
-;; 定されてると、そのURLを開くのでリモートなファイルを開けるビューアー
-;; が必要(元々その動作)
+;; Esc+Enter$B$G(BURL$B$r%V%i%&%6$G3+$/(B($B4{B85!G=$K4]Ej$2(B)$B!#2hA|%S%e!<%"!<$,;X(B
+;; $BDj$5$l$F$k$H!"$=$N(BURL$B$r3+$/$N$G%j%b!<%H$J%U%!%$%k$r3+$1$k%S%e!<%"!<(B
+;; $B$,I,MW(B($B85!9$=$NF0:n(B)
 ;;
-;; サムネイルにカーソルがある状態で'D'を押すとキャッシュ画像を削除. 既
-;; にキーバインドがダブってるが、分かりやすさでオーバーライド(要検討)
+;; $B%5%`%M%$%k$K%+!<%=%k$,$"$k>uBV$G(B'D'$B$r2!$9$H%-%c%C%7%e2hA|$r:o=|(B. $B4{(B
+;; $B$K%-!<%P%$%s%I$,%@%V$C$F$k$,!"J,$+$j$d$9$5$G%*!<%P!<%i%$%I(B($BMW8!F$(B)
 ;;
-;; 'T'を押すとカーソルがあるレス1個のレス内のURLを全取得
+;; 'T'$B$r2!$9$H%+!<%=%k$,$"$k%l%9(B1$B8D$N%l%9Fb$N(BURL$B$rA4<hF@(B
 
 ;;; Code
 
 (provide 'navi2ch-thumbnail)
 
 (defcustom navi2ch-thumbnail-thumbnail-directory
-  (expand-file-name "/navi2ch-thumbnails/" navi2ch-directory)
-  "* 画像キャッシュディレクトリ"
+  (expand-file-name "navi2ch-thumbnails/" navi2ch-directory)
+  "* $B2hA|%-%c%C%7%e%G%#%l%/%H%j(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-save-content-dir "~/"
-  "* 画像保存時のディフォルトディレクトリ"
+  "* $B2hA|J]B8;~$N%G%#%U%)%k%H%G%#%l%/%H%j(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-image-convert-program
   (executable-find "convert")
-  "* サムネイル作成プログラム"
+  "* $B%5%`%M%$%k:n@.%W%m%0%i%`(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-image-identify-program
   (executable-find "identify")
-  "* サムネイル画像判別プログラム"
+  "* $B%5%`%M%$%k2hA|H=JL%W%m%0%i%`(B"
   :type 'string
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-thumbsize-width 300
-  "* サムネイル表示サイズ横(等倍縮小でアスペクト比保持)"
+  "* $B%5%`%M%$%kI=<(%5%$%:2#(B($BEyG\=L>.$G%"%9%Z%/%HHfJ];}(B)"
   :type 'integer
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-thumbsize-height 150
-  "* サムネイル表示サイズ縦(等倍縮小でアスペクト比保持)"
+  "* $B%5%`%M%$%kI=<(%5%$%:=D(B($BEyG\=L>.$G%"%9%Z%/%HHfJ];}(B)"
   :type 'integer
   :group 'navi2ch)
 
 (defcustom navi2ch-thumbnail-use-mac-sips nil
-  "* サムネイル作成にMacOSXの標準ツールであるsipsを使う"
+  "* $B%5%`%M%$%k:n@.$K(BMacOSX$B$NI8=`%D!<%k$G$"$k(Bsips$B$r;H$&(B"
   :type 'bool
   :group 'navi2ch)
+
+(defcustom navi2ch-thumbanil-imagemagick-resize-option "-sample"
+  "* ImageMagick $B$G3HBg=L>.$r9T$J$&$5$$$N%*%W%7%g%s(B"
+  :group 'navi2ch
+  :type '(radio (const :format "-sample ($B9bB.(B)"  "-sample")
+		(const :format "-resize ($B9b2h<A(B)" "-resize")))
 
 (defvar navi2ch-thumbnail-404-list
   (list "/404\.s?html$"
@@ -126,7 +132,7 @@
 
 (defun navi2ch-thumbnail-save-content
   (cache-filename filename &optional overwrite)
-  "キャッシュから画像を保存(サムネイルではなく元画像)"
+  "$B%-%c%C%7%e$+$i2hA|$rJ]B8(B($B%5%`%M%$%k$G$O$J$/852hA|(B)"
   (interactive
    (let* ((prop-filename (get-text-property (point) 'file-name))
 	  (default-filename (and prop-filename
@@ -149,7 +155,7 @@
   (copy-file cache-filename filename overwrite))
 
 (defun navi2ch-thumbnail-show-image-not-image-url (url &optional force)
-  "imepita等のURLが画像っぽくない場合の処理"
+  "imepita$BEy$N(BURL$B$,2hA|$C$]$/$J$$>l9g$N=hM}(B"
   (let (alturl rtn)
     (cond
      ;; imepita
@@ -168,14 +174,14 @@
       (setq alturl (concat "http://image.i-bbs.sijex.net/bbs/watahiki/"
 			   (match-string 1 url)))
       (if (navi2ch-thumbnail-insert-image-cache alturl)
-	  (message "sijex キャッシュから読み込みました")
+	  (message "sijex $B%-%c%C%7%e$+$iFI$_9~$_$^$7$?(B")
 	(message "sijex: %s %s" url alturl)
 	(if force
 	    (navi2ch-thumbnail-show-image alturl url))))
      (t nil))))
 
 (defun navi2ch-thumbnail-show-image-external ()
-  "外部ビューアーで表示"
+  "$B30It%S%e!<%"!<$GI=<((B"
   (interactive)
   (let ((type (car (get-text-property (point) 'display)))
 	(prop (get-text-property (point) 'navi2ch-link)))
@@ -186,7 +192,7 @@
 	 prop)))))
 
 (defun navi2ch-thumbnail-image-delete-cache ()
-  "取得した画像を削除。キャッシュが無くなるの表示されなくなる"
+  "$B<hF@$7$?2hA|$r:o=|!#%-%c%C%7%e$,L5$/$J$k$NI=<($5$l$J$/$J$k(B"
   (interactive)
   (let* ((type (car (get-text-property (point) 'display)))
 	 (file (get-text-property (point) 'navi2ch-link))
@@ -236,7 +242,7 @@
 	t))))
 
 (defun navi2ch-thumbnail-insert-image-reload ()
-  "スレが再描画される時にサムネも再描画"
+  "$B%9%l$,:FIA2h$5$l$k;~$K%5%`%M$b:FIA2h(B"
   (interactive)
   (let (url file)
     (when (display-images-p)
@@ -256,7 +262,7 @@
 	      (navi2ch-thumbnail-insert-image-cache url))))))))
 
 (defun navi2ch-thumbnail-all-show ()
-  "1レス内の画像を連続取得表示"
+  "1$B%l%9Fb$N2hA|$rO"B3<hF@I=<((B"
   (interactive)
   (let* ((prop (get-text-property (point) 'current-number))
 	 (beg (if prop
@@ -270,7 +276,7 @@
      end)))
 
 (defun navi2ch-thumbnail-image-show-region (begin end &optional force)
-  "リージョン内の画像URLを表示"
+  "$B%j!<%8%g%sFb$N2hA|(BURL$B$rI=<((B"
   (interactive "rP")
   (save-restriction
     (save-excursion
@@ -285,13 +291,13 @@
 	  (let ((beg (match-beginning 0))
 		(prop (get-text-property (match-beginning 1)
 					 'my-navi2ch)))
-	    ;; 既に表示済みの画像は無視
+	    ;; $B4{$KI=<(:Q$_$N2hA|$OL5;k(B
 	    (unless (string= prop "shown")
 	      (goto-char beg)
 	      (navi2ch-thumbnail-select-current-link))))))))
 
 (defun navi2ch-thumbnail-image-escape-filename (filename)
-  "ファイル名に使えない文字をエスケープ"
+  "$B%U%!%$%kL>$K;H$($J$$J8;z$r%(%9%1!<%W(B"
   (navi2ch-replace-string-regexp-alist '(("-" . "%2d")
 					 (":" . "%3a")
 					 ("\\?" . "%63"))
@@ -299,7 +305,7 @@
 				       t))
 
 (defun navi2ch-thumbnail-show-image (url alturl)
-  "画像を縮小しインラインに表示する．"
+  "$B2hA|$r=L>.$7%$%s%i%$%s$KI=<($9$k!%(B"
   (let ((prop  (get-text-property (point) 'my-navi2ch)))
     (unless (string= prop "shown")
       (navi2ch-thumbnail-show-image-subr url alturl))))
@@ -322,18 +328,18 @@
 				     (when org-url
 				       (list (cons "Referer" org-url))))
 	(unless (file-exists-p file)
-	  (error "ファイルがありません %s" file))
+	  (error "$B%U%!%$%k$,$"$j$^$;$s(B %s" file))
 	(unless (image-type-from-file-header file)
 	  (let (buffer-error)
 	    (with-temp-buffer
 	      (insert-file-contents file nil 0 500)
 	      (setq buffer-error (buffer-string)))
 	    (delete-file file)
-	    (error "画像ファイルではありません %s %s" file buffer-error)))
+	    (error "$B2hA|%U%!%$%k$G$O$"$j$^$;$s(B %s %s" file buffer-error)))
 	(setq filename (file-name-nondirectory file))
 	(setq image-attr (navi2ch-thumbnail-image-identify file))
 	(if (not image-attr)
-	    (error "画像ファイルを識別できません %s" file))
+	    (error "$B2hA|%U%!%$%k$r<1JL$G$-$^$;$s(B %s" file))
 	(setq anime (nth 2 image-attr))
 	(setq width (nth 0 image-attr))
 	(setq height (nth 1 image-attr))
@@ -352,8 +358,8 @@
 	 (t
 	  (with-temp-buffer
             (cond
-             ;;MacOSXはsipsという標準ツールで画像変換できる
-             ;;GIFアニメ処理は縮小だけでできる(？)
+             ;;MacOSX$B$O(Bsips$B$H$$$&I8=`%D!<%k$G2hA|JQ49$G$-$k(B
+             ;;GIF$B%"%K%a=hM}$O=L>.$@$1$G$G$-$k(B($B!)(B)
              (navi2ch-thumbnail-use-mac-sips
               (call-process "sips" nil t nil
                             "-s" "format" "jpeg" file "--out" thumb-file)
@@ -365,16 +371,16 @@
               (if (or (not anime) (not (fboundp 'create-animated-image)))
                   (call-process navi2ch-thumbnail-image-convert-program
                                 nil t nil
-                                "-sample"
+				navi2ch-thumbanil-imagemagick-resize-option
                                 (format "%sx%s"
                                         navi2ch-thumbnail-thumbsize-width
                                         navi2ch-thumbnail-thumbsize-height)
                                 file thumb-file)
-                ;; GIFアニメは1フレームだけを使う
+                ;; GIF$B%"%K%a$O(B1$B%U%l!<%`$@$1$r;H$&(B
                 (call-process navi2ch-thumbnail-image-convert-program
                               nil t nil
                               "-scene" "0"
-                              "-sample"
+			      navi2ch-thumbanil-imagemagick-resize-option
                               (format "%sx%s"
                                       navi2ch-thumbnail-thumbsize-width
                                       navi2ch-thumbnail-thumbsize-height)
@@ -427,13 +433,13 @@
 	  (setq url (navi2ch-thumbnail-url-status-check prop))
 	  (dolist (l navi2ch-thumbnail-404-list)
 	    (when (string-match l url)
-	      (error "ファイルが404 url=%s" url)))
+	      (error "$B%U%!%$%k$,(B404 url=%s" url)))
 	  (navi2ch-thumbnail-show-image url prop)))))
      ((eq type 'image)
       (navi2ch-thumbnail-show-image-external)))))
 
 (defun navi2ch-thumbnail-url-status-check (url)
-  "画像取得前に302や404のチェック。302の場合移動先URLを返す"
+  "$B2hA|<hF@A0$K(B302$B$d(B404$B$N%A%'%C%/!#(B302$B$N>l9g0\F0@h(BURL$B$rJV$9(B"
   (when navi2ch-thumbnail-enable-status-check
     (let (header status md5 proc)
       (while (not (or (string= status "200")
@@ -444,9 +450,9 @@
 		    url "HEAD"
 		    (list (cons "User-Agent:" navi2ch-net-user-agent)
 			  (cons "Referer" url ))))
-	(unless proc (error "サーバに接続できません url=%s" url))
+	(unless proc (error "$B%5!<%P$K@\B3$G$-$^$;$s(B url=%s" url))
 	(setq status (navi2ch-net-get-status proc))
-	(unless status (error "サーバに接続できません url=%s" url))
+	(unless status (error "$B%5!<%P$K@\B3$G$-$^$;$s(B url=%s" url))
 	(message "status %s" status)
 
 	;; (setq header (navi2ch-net-get-header proc))	
@@ -457,7 +463,7 @@
 		   (string= status "403")
 		   (string= status "408")
 		   (string= status "503"))
-	       (error "ブラウズするのやめました return code %s" status))
+	       (error "$B%V%i%&%:$9$k$N$d$a$^$7$?(B return code %s" status))
 	      ((or (string= status "301")
 		   (string= status "302")
 		   (string= status "303"))
@@ -575,9 +581,9 @@
     (list xsize ysize anime)))
 
 (defun navi2ch-thumbnail-image-identify (file &optional size)
-  "画像ファイルから幅,高さ,GIFアニメか？を取得してlistで返す。
-取得できなかった場合は外部プログラム(navi2ch-thumbnail-image-identify-program)に頼る。
-それでもダメならnilを返す。sizeで読み込むサイズを指定もできる"
+  "$B2hA|%U%!%$%k$+$iI}(B,$B9b$5(B,GIF$B%"%K%a$+!)$r<hF@$7$F(Blist$B$GJV$9!#(B
+$B<hF@$G$-$J$+$C$?>l9g$O30It%W%m%0%i%`(B(navi2ch-thumbnail-image-identify-program)$B$KMj$k!#(B
+$B$=$l$G$b%@%a$J$i(Bnil$B$rJV$9!#(Bsize$B$GFI$_9~$`%5%$%:$r;XDj$b$G$-$k(B"
   (let ((file-size (nth 7 (file-attributes file)))
 	data rtn)
     (catch 'identify
@@ -602,29 +608,30 @@
 	  (setq rtn (navi2ch-thumbnail-image-jpeg-identify data))))
 	(if rtn (throw 'identify rtn)))
       
-      ;; 情報が取得できなかった場合はヘッダをさらに読み込む
+      ;; $B>pJs$,<hF@$G$-$J$+$C$?>l9g$O%X%C%@$r$5$i$KFI$_9~$`(B
       (setq size (* size 10))
       (if (> size file-size)
 	  (setq size file-size))
       (message "navi2ch-thumbnail-image-identify:re-read size=%s %s" size file)
       (setq rtn (navi2ch-thumbnail-image-identify file size))
       (if rtn (throw 'identify rtn))
-      ;; それでも無理なら外部プログラムに頼る
+      ;; $B$=$l$G$bL5M}$J$i30It%W%m%0%i%`$KMj$k(B
       (when (and (= size file-size)
 		 navi2ch-thumbnail-image-identify-program)
 	(message "identify called %s" file)
 	(with-temp-buffer
           (cond
            (navi2ch-thumbnail-use-mac-sips
-            (call-process 'sips' nil t nil "-g" "-all" file)
-            (when (re-search-forward
-                   "pixelWidth: \\([0-9]+\\)")
-              (setq width (string-to-number (match-string 1))))
-            (when (re-search-forward
-                   "pixelHeight: \\([0-9]+\\)")
-              (setq height (string-to-number (match-string 1))))
-            ;;anime gifはあきらめる
-              (list width height nil))
+	    (let (width height)
+	      (call-process 'sips' nil t nil "-g" "-all" file)
+	      (when (re-search-forward
+		     "pixelWidth: \\([0-9]+\\)")
+		(setq width (string-to-number (match-string 1))))
+	      (when (re-search-forward
+		     "pixelHeight: \\([0-9]+\\)")
+		(setq height (string-to-number (match-string 1))))
+	      ;;anime gif$B$O$"$-$i$a$k(B
+              (list width height nil)))
            (t
             (call-process navi2ch-thumbnail-image-identify-program nil t nil
                           "-quiet" "-format" "\"%n %w %h %b\"" file)

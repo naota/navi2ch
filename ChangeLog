@@ -1,4 +1,34 @@
+2010-11-13  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-message.el (navi2ch-message-insert-notice): New
+	function.
+	(navi2ch-message-send-message): Use it.
+
+2010-11-12  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-message.el (navi2ch-message-send-message): preserve send
+	message buffer on error.
+
+2010-11-11  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-thumbnail-directory):
+	Change default value.
+	(navi2ch-thumbanil-imagemagick-resize-option): New variable.
+	(navi2ch-thumbnail-show-image-subr): Use it.
+	(navi2ch-thumbnail-image-identify): Supress warnings.
+	(toplevel): Add coding cookie.
+
+2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-number): Use numeric
+	sort instead of text sort; For little `navi2ch-bm-number-width'.
+
 2010-10-21  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-map): Change
+	navi2ch-thumbnail-save-content to `V'.
+
+	* navi2ch-popup-article.el (navi2ch-popup-article-mode-map): Ditto.
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-insert-image-cache)
 	(navi2ch-thumbnail-image-show-region)
