@@ -348,13 +348,20 @@
 	(cond
 	 ((and (< width navi2ch-thumbnail-thumbsize-width)
 	       (< height navi2ch-thumbnail-thumbsize-height))
+	  (copy-file file thumb-file)
 	  (insert-image (navi2ch-create-image file)))
 	 ((fboundp 'imagemagick-types)
-	  (insert-image (navi2ch-create-image
+	  (let ((thumb (navi2ch-create-image
 			 file
 			 'imagemagick nil
 			 :width navi2ch-thumbnail-thumbsize-width
 			 :height navi2ch-thumbnail-thumbsize-height)))
+	    (with-temp-buffer
+	      (set-buffer-multibyte nil)
+	      (insert (plist-get (cdr thumb) :data))
+	      (write-region (point-min) (point-max)
+			    thumb-file))
+	    (insert-image thumb)))
 	 (t
 	  (with-temp-buffer
             (cond
@@ -368,7 +375,7 @@
                             (number-to-string navi2ch-thumbnail-thumbsize-height)
                             thumb-file "--out" thumb-file))
              (t
-              (if (or (not anime) (not (fboundp 'create-animated-image)))
+              (if (or (not anime) (fboundp 'create-animated-image))
                   (call-process navi2ch-thumbnail-image-convert-program
                                 nil t nil
 				navi2ch-thumbanil-imagemagick-resize-option

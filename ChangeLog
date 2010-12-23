@@ -1,3 +1,9 @@
+2010-12-24  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): Fix
+	condition logical; Save thumb file when using Emacs internal
+	imagemagick binding.
+
 2010-11-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-message.el (navi2ch-message-insert-notice): New
