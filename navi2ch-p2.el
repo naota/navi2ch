@@ -199,7 +199,7 @@
     (setq navi2ch-p2-board-regexp nil)
     (setq navi2ch-net-accept-gzip-org navi2ch-net-accept-gzip)
     (setq navi2ch-p2-all-board nil)
-    (if (featurep 'meadow)
+    (if (equal system-type 'windows-nt)
 	(setq navi2ch-net-accept-gzip nil))
     (setq content (navi2ch-net-get-content (navi2ch-net-download-file "http://qb6.2ch.net/_403/madakana.cgi")))
     (setq navi2ch-net-accept-gzip navi2ch-net-accept-gzip-org)
