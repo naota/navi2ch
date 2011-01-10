@@ -1,3 +1,8 @@
+2011-01-12  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic-url2img):
+	http://twitpic.comに対応
+
 2010-12-24  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): Fix
