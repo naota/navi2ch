@@ -178,7 +178,27 @@
 	(message "sijex: %s %s" url alturl)
 	(if force
 	    (navi2ch-thumbnail-show-image alturl url))))
+     ((string-match
+       "h?t?tp://twitpic.com/[0-9a-z]+" url)
+      (if (navi2ch-thumbnail-insert-image-cache url)
+	  (message "cache read")
+	(when force
+          (setq alturl (navi2ch-thumbnail-twitpic-url2img url))
+          (message "twitpic: %s %s" url alturl)
+	  (setq rtn (navi2ch-thumbnail-show-image alturl url))
+	  (message "return %s" rtn))))
      (t nil))))
+
+(defun navi2ch-thumbnail-twitpic-url2img (twitpic-url)
+  "twitpicの場合の画像を取得"
+  (let ((proc (navi2ch-net-send-request
+               twitpic-url
+               "GET"))
+        cont)
+    (setq cont (navi2ch-net-get-content proc))
+    (if (string-match "\\(http://s3\.amazonaws\.com/twitpic/photos/large.+\\)\" alt" cont)
+        (setq twitpic-img (match-string 1 cont))
+      (error "can't get image url from %s" twitpic-url))))
 
 (defun navi2ch-thumbnail-show-image-external ()
   "外部ビューアーで表示"
@@ -249,6 +269,7 @@
       (save-excursion
 	(let ((buffer-read-only nil)
 	      (regex (concat "\\(h?t?tps?://imepita.jp/[0-9/]+\\|"
+                             "h?t?tp://twitpic.com/[0-9a-z]+\\|"
 			     "h?t?tps?://i-bbs.sijex.net/imageDisp.jsp"
 			     "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
 			     "h?t?tps?://[^ \t\n\r]+\\."
@@ -257,7 +278,7 @@
 	  (goto-char (point-min))
 	  (while (re-search-forward regex nil t)
 	    (setq url (match-string 1))
-	    (if  (string-match "\\(h?t?tps?://imepita.jp/[0-9/]+\\|h?t?tps?://i-bbs.sijex.net/imageDisp.jsp\\?id=watahiki&file=[0-9o]+\.jpg\\)" url)
+	    (if  (string-match "\\(h?t?tp://twitpic.com/[0-9a-z]+\\|h?t?tps?://imepita.jp/[0-9/]+\\|h?t?tps?://i-bbs.sijex.net/imageDisp.jsp\\?id=watahiki&file=[0-9o]+\.jpg\\)" url)
 		(navi2ch-thumbnail-show-image-not-image-url url)
 	      (navi2ch-thumbnail-insert-image-cache url))))))))
 
