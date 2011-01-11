@@ -137,6 +137,13 @@
 	   (navi2ch-thumbnail-save-content file file nil)))
       (delete-directory workdir t))))
 
+(ert-deftest bm-sort-by-number ()
+  (should (string=
+	   "1\n2\n 12\n1000\n"
+	   (with-temp-buffer
+	     (insert "1\n1000\n2\n 12\n")
+	     (navi2ch-bm-sort-by-number)
+	     (buffer-substring-no-properties (point-min) (point-max))))))
 
 ;;; run the tests
 

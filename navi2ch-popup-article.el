@@ -73,7 +73,7 @@
     (define-key map "A" 'navi2ch-popup-article-add-important-messages)
     (define-key map "u" 'navi2ch-show-url-at-point)
     (define-key map "," 'navi2ch-thumbnail-select-current-link)
-    (define-key map "v" 'navi2ch-thumbnail-save-content)
+    (define-key map "V" 'navi2ch-thumbnail-save-content)
     (define-key map "\e\r" 'navi2ch-article-select-current-link)
     (define-key map "D" 'navi2ch-thumbnail-image-delete-cache)
     (define-key map "T" 'navi2ch-thumbnail-all-show)

@@ -224,6 +224,29 @@
 	(if (re-search-forward "[ \t\n]+\\'" nil t)
 	    (replace-match ""))))))
 
+(defun navi2ch-message-insert-notice (msg)
+  "メッセージ投稿バッファに解説やエラーメッセージなど `msg' を表示する。
+
+条件: メッセージ投稿バッファ内で呼ばれること。"
+  (let ((inhibit-read-only t)
+	(end (navi2ch-message-header-end))
+	pos)
+    (when end
+      (save-excursion
+	;; (point-min) では text-property `navi2ch-message-notice' がない、
+	;; または nil であることが保証される。 また、 text-property
+	;; `navi2ch-message-notice' が non-nil である点から
+	;; (navi2ch-message-header-end) までは notice のみが入るとする。
+	(when (setq pos (next-single-property-change (point-min)
+						     'navi2ch-message-notice))
+	  (delete-region pos end))
+	(goto-char (navi2ch-message-header-end))
+	(insert
+	 (navi2ch-read-only-string
+	  (navi2ch-propertize navi2ch-message-header-separator
+			      'navi2ch-message-notice t))
+	 (navi2ch-read-only-string (concat msg "\n")))))))
+
 (defun navi2ch-message-send-message ()
   (interactive)
   (if navi2ch-offline
@@ -235,68 +258,74 @@
       (widen)
       (run-hooks 'navi2ch-message-before-send-hook)
       (navi2ch-message-cleanup-message)
-      (save-excursion
-        (let ((end (navi2ch-message-header-end))
-	      (from "")
-	      (mail "")
-	      subject message)
-	  (goto-char (point-min))
-	  (when navi2ch-message-new-message-p
-	    (if (re-search-forward "^Subject: ?\\(.*\\)" end t)
-		(setq subject (match-string 1))
-	      (setq subject "")))
-	  (goto-char (point-min))
-	  (when (re-search-forward "^From: ?\\(.*\\)" end t)
-	    (setq from (match-string 1))
-	    (when (and (not navi2ch-message-new-message-p)
-		       navi2ch-message-remember-user-name)
-	      (navi2ch-message-set-name from)))
-	  (goto-char (point-min))
-	  (when (re-search-forward "^Mail: ?\\(.*\\)" end t)
-	    (setq mail (match-string 1))
-	    (when (and (not navi2ch-message-new-message-p)
-		       navi2ch-message-remember-user-name)
-	      (navi2ch-message-set-mail mail)))
-	  (goto-char end)
-	  (forward-line)
-	  (setq message (buffer-substring-no-properties (point) (point-max)))
-	  (let ((buffer (current-buffer))
-		(inhibit-read-only t))
-	    (with-current-buffer (get-buffer-create
-				  navi2ch-message-backup-buffer-name)
-	      (erase-buffer)
-	      (insert-buffer-substring buffer)))
-	  (when navi2ch-message-trip
-	    (setq from (concat from "#" navi2ch-message-trip)))
-	  (let ((board navi2ch-message-current-board)
-		(article navi2ch-message-current-article)
-		result)
-	    (navi2ch-net-cleanup)
-	    ;; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
-	    ;; ↓   navi2ch-2ch-send-message で処理する。
-	    (setq result (navi2ch-multibbs-send-message
-			  from mail message subject board article))
-	    (navi2ch-net-cleanup)
-	    (when result
-	      (when navi2ch-message-save-sendlog
-		(navi2ch-message-add-sendlog from mail message subject
-					     board article))
-	      (message "Waiting new message...")
-	      (sleep-for navi2ch-message-wait-time)
-	      (message "%s%s" (current-message) "done")
-	      (save-excursion
-		(if navi2ch-message-new-message-p
-		    (progn
-		      (set-buffer navi2ch-board-buffer-name)
-		      (navi2ch-board-sync))
-		  (when (buffer-live-p navi2ch-message-current-article-buffer)
-		    (set-buffer navi2ch-message-current-article-buffer)
-		    (navi2ch-article-sync navi2ch-message-force-sync)))))
-	    (when (get-buffer navi2ch-message-backup-buffer-name)
-	      (bury-buffer navi2ch-message-backup-buffer-name)))))
-      (navi2ch-message-samba24)
-      (run-hooks 'navi2ch-message-after-send-hook)
-      (navi2ch-message-exit 'after-send))))
+      (let (result)
+	(save-excursion
+	  (let ((end (navi2ch-message-header-end))
+		(from "")
+		(mail "")
+		subject message)
+	    (goto-char (point-min))
+	    (when navi2ch-message-new-message-p
+	      (if (re-search-forward "^Subject: ?\\(.*\\)" end t)
+		  (setq subject (match-string 1))
+		(setq subject "")))
+	    (goto-char (point-min))
+	    (when (re-search-forward "^From: ?\\(.*\\)" end t)
+	      (setq from (match-string 1))
+	      (when (and (not navi2ch-message-new-message-p)
+			 navi2ch-message-remember-user-name)
+		(navi2ch-message-set-name from)))
+	    (goto-char (point-min))
+	    (when (re-search-forward "^Mail: ?\\(.*\\)" end t)
+	      (setq mail (match-string 1))
+	      (when (and (not navi2ch-message-new-message-p)
+			 navi2ch-message-remember-user-name)
+		(navi2ch-message-set-mail mail)))
+	    (goto-char end)
+	    (forward-line)
+	    (setq message (buffer-substring-no-properties (point) (point-max)))
+	    (let ((buffer (current-buffer))
+		  (inhibit-read-only t))
+	      (with-current-buffer (get-buffer-create
+				    navi2ch-message-backup-buffer-name)
+		(erase-buffer)
+		(insert-buffer-substring buffer)))
+	    (when navi2ch-message-trip
+	      (setq from (concat from "#" navi2ch-message-trip)))
+	    (let ((board navi2ch-message-current-board)
+		  (article navi2ch-message-current-article))
+	      (navi2ch-net-cleanup)
+	      ;; ↓resultを古い仕様に戻した。spidは、navi2ch-multibbs.elの
+	      ;; ↓   navi2ch-2ch-send-message で処理する。
+	      (setq result (navi2ch-multibbs-send-message
+			    from mail message subject board article))
+	      (navi2ch-net-cleanup)
+	      (when result
+		(when navi2ch-message-save-sendlog
+		  (navi2ch-message-add-sendlog from mail message subject
+					       board article))
+		(message "Waiting new message...")
+		(sleep-for navi2ch-message-wait-time)
+		(message "%s%s" (current-message) "done")
+		(save-excursion
+		  (if navi2ch-message-new-message-p
+		      (progn
+			(set-buffer navi2ch-board-buffer-name)
+			(navi2ch-board-sync))
+		    (when (buffer-live-p navi2ch-message-current-article-buffer)
+		      (set-buffer navi2ch-message-current-article-buffer)
+		      (navi2ch-article-sync navi2ch-message-force-sync)))))
+	      (when (get-buffer navi2ch-message-backup-buffer-name)
+		(bury-buffer navi2ch-message-backup-buffer-name)))))
+	(navi2ch-message-samba24)
+	(run-hooks 'navi2ch-message-after-send-hook)
+	(if result
+	    (navi2ch-message-exit 'after-send)
+	  (let ((errmsg (current-message)))
+	    (when (and errmsg
+		       (string-match ": " errmsg))
+	      (setq errmsg (substring errmsg (match-end 0)))
+	      (navi2ch-message-insert-notice (concat "投稿エラー: " errmsg)))))))))
 
 (defun navi2ch-message-set-name (name)
   (save-excursion
