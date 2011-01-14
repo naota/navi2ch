@@ -1,3 +1,14 @@
+2011-01-12  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic-url2img):
+	http://twitpic.comに対応
+
+2010-12-24  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): Fix
+	condition logical; Save thumb file when using Emacs internal
+	imagemagick binding.
+
 2010-11-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-message.el (navi2ch-message-insert-notice): New
@@ -33,6 +44,13 @@
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-insert-image-cache)
 	(navi2ch-thumbnail-image-show-region)
 	(navi2ch-thumbnail-show-image-subr): Always need paren.
+
+2010-10-17  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el
+	(navi2ch-thumbnail-show-image-not-image-url): imepitaの拡張子の無い
+	画像は外部ビューアーが認識に失敗する場合があるので、拡張子を強制付
+	加する。今回はimepitaだけだが、他の対応も必要かも
 
 2010-10-14  MIZUNUMA Yuto  <mizmiz@sf.net>
 
