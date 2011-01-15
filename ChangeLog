@@ -1,3 +1,10 @@
+2011-01-16  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-p2.el (navi2ch-p2-make-deny-list): アクセス禁止リスト取得
+	URL(madakana.cgi)の即値をやめて変数化。サーバ移転qb6->qb7に対応。
+	(navi2ch-p2-make-deny-list): windowsOSではgzipedなデータを上手くデ
+	コードできないようなので、gzip取得しない(gzip.exeの問題?)
+
 2011-01-12  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic-url2img):
