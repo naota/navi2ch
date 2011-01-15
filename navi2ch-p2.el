@@ -118,6 +118,9 @@
 			 navi2ch-p2-func-alist
 			 navi2ch-p2-variable-alist)
 
+(defvar navi2ch-p2-madakana-url
+    "http://qb7.2ch.net/_403/madakana.cgi")
+
 ;;-------------
 
 (defvar navi2ch-p2-use-p2 nil	; 変数名は要検討。
@@ -192,7 +195,7 @@
 	       nil)))))
 
 (defun navi2ch-p2-make-deny-list ()
-  "http://qb6.2ch.net/_403/madakana.cgiからアクセス禁止状態を取得する"
+  "madakana.cgiからアクセス禁止状態を取得する"
   (let (content str navi2ch-net-accept-gzip-org)
     (setq navi2ch-p2-all-board nil)
     (setq navi2ch-p2-board nil)
@@ -201,7 +204,7 @@
     (setq navi2ch-p2-all-board nil)
     (if (equal system-type 'windows-nt)
 	(setq navi2ch-net-accept-gzip nil))
-    (setq content (navi2ch-net-get-content (navi2ch-net-download-file "http://qb6.2ch.net/_403/madakana.cgi")))
+    (setq content (navi2ch-net-get-content (navi2ch-net-download-file navi2ch-p2-madakana-url)))
     (setq navi2ch-net-accept-gzip navi2ch-net-accept-gzip-org)
     (with-temp-buffer
       (if (not content)
