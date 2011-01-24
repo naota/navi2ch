@@ -371,11 +371,8 @@ START が non-nil ならばレス番号 START からの差分を取得する。
 		 navi2ch-2ch-mimizun
 		 (y-or-n-p "みみずんからdatを取得しますか？"))
 	(let* ((boardid (cdr (assq 'id board)))
-	       (artid (cdr (assq 'artid article)))
-	       (server (cdr (assq 'uri board)))
-	       (id4 (substring artid 0 4))
-	       (id5 (substring artid 0 5)))
-	  (setq url (concat "http://mimizun.com/log/2ch/" boardid "/" (substring server 7) "kako/" id4 "/" id5 "/" artid ".dat"))
+	       (artid (cdr (assq 'artid article))))
+	  (setq url (concat "http://mimizun.com/log/2ch/" boardid "/" artid ".dat"))
 	  (message "mimizun url:%s" url)
 	  (setq header (navi2ch-net-update-file url file))
 	  (if (navi2ch-net-get-state 'error header)
