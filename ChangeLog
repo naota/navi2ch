@@ -1,3 +1,7 @@
+2011-01-17  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-multibbs.el: みみずんのアドレス変更に対応
+
 2011-01-16  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-p2.el (navi2ch-p2-make-deny-list): アクセス禁止リスト取得
