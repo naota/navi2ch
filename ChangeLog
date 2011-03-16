@@ -1,3 +1,8 @@
+2011-03-17  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 落ちて
+	たと思っていたスレが復活した時の処理を追加。
+
 2011-01-17  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-multibbs.el: みみずんのアドレス変更に対応
