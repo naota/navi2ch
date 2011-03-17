@@ -469,8 +469,9 @@ KEY は (concat URI ARTID)")
 		    (navi2ch-article-compress board info)
 		    (navi2ch-bm-unmark))
 		   ((and res new-res)
-		    ;; 新しいレスはない
-		    (when (<= new-res res)
+		    ;; 取得したことがあり新しいレスはない
+		    (when (and (navi2ch-bm-get-state)
+			       (<= new-res res))
 		      (navi2ch-bm-unmark))
 		    ;; おちてたスレの復活
 		    (when (eq (navi2ch-bm-get-state) 'down)

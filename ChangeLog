@@ -2,6 +2,8 @@
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 落ちて
 	たと思っていたスレが復活した時の処理を追加。
+	(navi2ch-bookmark-fetch-mark-article): 未取得のスレを I で取得する
+	ように変更。
 
 2011-01-17  MIZUNUMA Yuto  <mizmiz@sf.net>
 
