@@ -1,3 +1,8 @@
+2011-03-20  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 未取得
+	のスレを I で取得するように変更。
+
 2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 
 	* navi2ch-board-misc.el (navi2ch-bm-sort-by-number): Use numeric

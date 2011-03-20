@@ -459,6 +459,7 @@ KEY は (concat URI ARTID)")
 					   board-data-cache))
 		  (when (and res
 			     (setq new-res (cdr (assoc art-id board-data)))
+			     (navi2ch-bm-get-state)
 			     (<= new-res res))
 		    (navi2ch-bm-unmark)))))
 	    (forward-line)))))
