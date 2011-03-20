@@ -1,3 +1,8 @@
+2010-06-08  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-get-status): sit-for を
+	sleep-for に変更。
+
 2010-03-05  mami  <mami@users.sourceforge.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-parse-subject): subject が

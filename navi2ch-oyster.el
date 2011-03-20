@@ -205,11 +205,11 @@ DIFF が non-nil ならば差分を取得する。
                      (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
            (accept-process-output proc)
            (message "Retrying")
-           (sit-for 3))
+           (sleep-for 3))
          (let ((i 10))
            (catch 'loop
              (while (>= (setq i (1- i)) 0)
-               (sit-for 1)	  ; 何だかうまく動かないのでwait入れた
+               (sleep-for 1)	  ; 何だかうまく動かないのでwait入れた
                (goto-char (point-min))
                ;; 最後まで見つからないままだとエラー
                (when (search-forward "SESSION-ID=" nil (> i 0))
