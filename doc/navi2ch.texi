@@ -2333,9 +2333,9 @@ Emacs 23 で「〜」とかが 投稿できない気がするんだけど。
 @end ignore
 @end table
 
-@c @node Concept Index        
+@c @node Concept Index
 @c @unnumbered 概念索引
-@c @printindex cp             
+@c @printindex cp
 
 @node Thanks
 @appendix 謝辞
