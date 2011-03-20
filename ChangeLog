@@ -1,3 +1,8 @@
+2010-10-27  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* navi2ch-board-misc.el (navi2ch-bm-sort-by-number): Use numeric
+	sort instead of text sort; For little `navi2ch-bm-number-width'.
+
 2010-06-08  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-oyster.el (navi2ch-oyster-get-status): sit-for を
