@@ -220,10 +220,10 @@
   (let* ((type (car (get-text-property (point) 'display)))
 	 (file (get-text-property (point) 'navi2ch-link))
 	 (thumb (concat file ".jpg")))
-    (when (file-exists-p file)
+    (when (and file (file-exists-p file))
       (delete-file file)
       (message "deleting file:%s " file))
-    (when (file-exists-p thumb)
+    (when (and thumb (file-exists-p thumb))
       (delete-file thumb)
       (message "deleting thumbnail:%s " thumb))))
 
