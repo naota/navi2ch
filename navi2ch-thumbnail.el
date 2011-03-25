@@ -139,13 +139,15 @@
 				 (file-name-nondirectory prop-filename))))
      (list (or (get-text-property (point) 'navi2ch-link)
 	       (error "No file to save."))
-	   (let ((filename (read-file-name
-			    (if default-filename
-				(format "Save file (default `%s'): "
-					default-filename)
-			      "Save file: ")
-			    navi2ch-thumbnail-save-content-dir
-			    default-filename)))
+	   (let ((filename
+		  (read-file-name
+		   (if default-filename
+		       (format "Save file (default `%s'): "
+			       default-filename)
+		     "Save file: ")
+		   navi2ch-thumbnail-save-content-dir
+		   (expand-file-name default-filename
+				     navi2ch-thumbnail-save-content-dir))))
 	     (if (file-directory-p filename)
 		 (if default-filename
 		     (expand-file-name default-filename filename)
