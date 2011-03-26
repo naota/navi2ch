@@ -468,10 +468,16 @@ KEY は (concat URI ARTID)")
 		    (navi2ch-article-save-info board info)
 		    (navi2ch-article-compress board info)
 		    (navi2ch-bm-unmark))
-		   ((and res
-			 new-res
-			 (<= new-res res))
-		    (navi2ch-bm-unmark))))))
+		   ((and res new-res)
+		    ;; 取得したことがあり新しいレスはない
+		    (when (and (navi2ch-bm-get-state)
+			       (<= new-res res))
+		      (navi2ch-bm-unmark))
+		    ;; おちてたスレの復活
+		    (when (eq (navi2ch-bm-get-state) 'down)
+		      (setq info (navi2ch-put-alist 'down nil info))
+		      (navi2ch-article-save-info board info)
+		      (navi2ch-article-uncompress board info)))))))
 	    (forward-line)))))
     (navi2ch-bm-exec-subr #'navi2ch-bookmark-fetch-article force)))
 

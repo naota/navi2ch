@@ -139,13 +139,15 @@
 				 (file-name-nondirectory prop-filename))))
      (list (or (get-text-property (point) 'navi2ch-link)
 	       (error "No file to save."))
-	   (let ((filename (read-file-name
-			    (if default-filename
-				(format "Save file (default `%s'): "
-					default-filename)
-			      "Save file: ")
-			    navi2ch-thumbnail-save-content-dir
-			    default-filename)))
+	   (let ((filename
+		  (read-file-name
+		   (if default-filename
+		       (format "Save file (default `%s'): "
+			       default-filename)
+		     "Save file: ")
+		   navi2ch-thumbnail-save-content-dir
+		   (expand-file-name default-filename
+				     navi2ch-thumbnail-save-content-dir))))
 	     (if (file-directory-p filename)
 		 (if default-filename
 		     (expand-file-name default-filename filename)
@@ -161,8 +163,8 @@
      ;; imepita
      ((string-match "h?ttp://w*\\.?imepita\\.jp/\\([0-9/]+\\)" url)
       (setq alturl (concat "http://imepita.jp/image/" (match-string 1 url)))
-      ;;拡張子の無い画像は外部ビューアーが認識に失敗する場合があるので
-      ;;拡張子を強制付加する
+      ;;$B3HD%;R$NL5$$2hA|$O30It%S%e!<%"!<$,G'<1$K<:GT$9$k>l9g$,$"$k$N$G(B
+      ;;$B3HD%;R$r6/@)IU2C$9$k(B
       (setq url (concat url ".jpg"))
       (message "imepita: %s %s" url alturl)
       (if (navi2ch-thumbnail-insert-image-cache url)
@@ -220,10 +222,10 @@
   (let* ((type (car (get-text-property (point) 'display)))
 	 (file (get-text-property (point) 'navi2ch-link))
 	 (thumb (concat file ".jpg")))
-    (when (file-exists-p file)
+    (when (and file (file-exists-p file))
       (delete-file file)
       (message "deleting file:%s " file))
-    (when (file-exists-p thumb)
+    (when (and thumb (file-exists-p thumb))
       (delete-file thumb)
       (message "deleting thumbnail:%s " thumb))))
 
