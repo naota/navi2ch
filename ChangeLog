@@ -1,3 +1,7 @@
+2011-03-29  Naohiro Aota  <naota@elisp.net>
+
+	1.8.4 リリース
+
 2011-03-20  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-bookmark.el (navi2ch-bookmark-fetch-mark-article): 未取得
