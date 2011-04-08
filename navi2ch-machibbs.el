@@ -159,7 +159,7 @@ START, END, NOFIRST で範囲を指定する"
 		       (cons "MAIL" (or mail ""))
 		       (cons "MESSAGE" message)
 		       (cons "BBS" bbs)
-		       (cons "KEY" key)
+		       (cons "KEY" (or key ""))
 		       (cons "TIME" time))))
     (navi2ch-net-send-request
      url "POST"
