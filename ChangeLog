@@ -1,3 +1,14 @@
+2011-05-12  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-send-message): スレ立て時の
+	エラーを解消 Suggested by
+	http://hibari.2ch.net/test/read.cgi/unix/1265413075/353
+
+2011-04-08  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-machibbs.el (navi2ch-machibbs-send-message): スレ立て時に
+	は key=nil になる様子。
+
 2011-03-24  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-save-content): Fix
