@@ -137,7 +137,7 @@
         ;; http://imepic.jp/20111231/11111 ->
         ;; http://img1.imepic.jp/image/20111231/11111.jpg?550e3768ff8455488ae8d5582f55db6d
         ("h?ttp://imepic\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-imepic "http://img1.imepic.jp/image/")
-        ("h?t?tp://twitpic.com/[0-9a-z]+" ".jpg" navi2ch-thumbnail-twitpic-url2img nil)
+        ("h?t?tp://twitpic.com/[0-9a-z]+" ".jpg" navi2ch-thumbnail-twitpic nil)
   ))
 
 (defun navi2ch-thumbnail-image-pre (url &optional force)
@@ -187,16 +187,16 @@
 ;  (message "imepic:%s" img-url)
   img-url)
 
-(defun navi2ch-thumbnail-twitpic-url2img (twitpic-url &optional dummy0 dummy1)
+(defun navi2ch-thumbnail-twitpic (url &optional dummy0 dummy1)
   "twitpicの場合の画像を取得"
   (let ((proc (navi2ch-net-send-request
-               twitpic-url
+               url
                "GET"))
         cont)
     (setq cont (navi2ch-net-get-content proc))
     (if (string-match "\\(http://s3\.amazonaws\.com/twitpic/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
         (setq twitpic-img (match-string 1 cont))
-      (error "can't get image url from %s" twitpic-url))))
+      (error "can't get image url from %s" url))))
 
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
