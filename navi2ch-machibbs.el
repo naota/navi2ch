@@ -154,12 +154,12 @@ START, END, NOFIRST で範囲を指定する"
   (let ((url          (navi2ch-machibbs-get-writecgi-url board))
 	(referer      (navi2ch-board-get-uri board))
 	(param-alist  (list
-		       (cons "submit" "書き込む")
+		       (cons "submit" (if subject "書き込む" "新規書き込み"))
 		       (cons "NAME" (or from ""))
 		       (cons "MAIL" (or mail ""))
 		       (cons "MESSAGE" message)
 		       (cons "BBS" bbs)
-		       (cons "KEY" (or key ""))
+		       (if subject (cons "SUBJECT" subject ) (cons "KEY" key))
 		       (cons "TIME" time))))
     (navi2ch-net-send-request
      url "POST"
