@@ -125,20 +125,23 @@
 
 (defvar navi2ch-thumbnail-enable-status-check t)
 
-(setq navi2ch-thumbnail-url-coversion-table
-      ;;リスト構造
-      ;;0:対象URL正規表現
-      ;;1:必要ならば付加拡張子(拡張子無しだと画像ビューアーが種類の判別ミスをする)
-      ;;2:置換処理関数(2段階の取得プロセスが必要な場合)
-      ;;3:置換正規表現(上記0で拾った正規表現を末尾に付加)
+(defvar navi2ch-thumbnail-url-coversion-table
       '(
         ;;imepitaはサービス停止
         ("h?ttp://w*\\.?imepita\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-url-replace "http://imepita.jp/image/")
         ;; http://imepic.jp/20111231/11111 ->
         ;; http://img1.imepic.jp/image/20111231/11111.jpg?550e3768ff8455488ae8d5582f55db6d
         ("h?ttp://imepic\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-imepic "http://img1.imepic.jp/image/")
+        ("h?ttp://[a-z].pic.to/.+" ".jpg" navi2ch-thumbnail-picto nil)
         ("h?t?tp://twitpic.com/[0-9a-z]+" ".jpg" navi2ch-thumbnail-twitpic nil)
-  ))
+  )
+      "リスト構造
+  0:対象URL正規表現
+  1:必要ならば付加拡張子(拡張子無しだと画像ビューアーが種類の判別ミスをする)
+  2:置換処理関数(2段階の取得プロセスが必要な場合)
+  3:置換正規表現(上記0で拾った正規表現を末尾に付加)"
+)
+
 
 (defun navi2ch-thumbnail-image-pre (url &optional force)
   "forceはスレ再描画ではnil"
@@ -174,6 +177,19 @@
   (message "%s" regex-dist-url)
   (concat regex-dist-url (match-string 1 url)))
 
+(defun navi2ch-thumbnail-picto (url &optional dummy0 dummy1)
+  "pic.toの場合の画像を取得"
+  (let ((proc (navi2ch-net-send-request
+               url
+               "GET"))
+        cont)
+    (setq cont (navi2ch-net-get-content proc))
+    (if (string-match "\n<hr><center><img src='.+\\(-.+-.+\.jpg\\)' alt=" cont)
+        (setq img-url (concat url (match-string 1 cont)))
+      (error "can't get image url from %s" url)))
+  (message "picto:%s" img-url)
+  img-url)
+
 (defun navi2ch-thumbnail-imepic (url regex-src-url regex-dist-url)
   "imepicの場合の画像を取得"
   (let ((proc (navi2ch-net-send-request
@@ -201,19 +217,29 @@
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
 
+;; (defun navi2ch-thumbnail-image-url-regex-build ()
+;;   "articleから画像らしきリンクを探すregexを1行にまとめる"
+;;   (setq navi2ch-thumbnail-image-url-regex "\\(")
+;;   (dolist (l navi2ch-thumbnail-url-coversion-table)
+;;     (setq target-url (nth 0 l))
+;;     (setq navi2ch-thumbnail-image-url-regex (concat navi2ch-thumbnail-image-url-regex target-url "\\|")))
+;;     (setq navi2ch-thumbnail-image-url-regex
+;;      (concat navi2ch-thumbnail-image-url-regex
+;;              "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
+;;              "h?t?tps?://[^ \t\n\r]+\\."
+;;              "\\(gif\\|jpg\\|jpeg\\|png\\)"
+;;              "\\)")))
+
 (defun navi2ch-thumbnail-image-url-regex-build ()
   "articleから画像らしきリンクを探すregexを1行にまとめる"
-  (setq navi2ch-thumbnail-image-url-regex "\\(")
-  (dolist (l navi2ch-thumbnail-url-coversion-table)
-    (setq target-url (nth 0 l))
-    (setq navi2ch-thumbnail-image-url-regex (concat navi2ch-thumbnail-image-url-regex target-url "\\|")))
-    (setq navi2ch-thumbnail-image-url-regex
-     (concat navi2ch-thumbnail-image-url-regex
-             "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
-             "h?t?tps?://[^ \t\n\r]+\\."
-             "\\(gif\\|jpg\\|jpeg\\|png\\)"
-             "\\)")))
-  
+  (setq navi2ch-thumbnail-image-url-regex
+        (concat "\\("
+                (mapconcat (function (lambda (x) (nth 0 x)))
+                           navi2ch-thumbnail-url-coversion-table "\\|")
+                "\\|\\?id=watahiki&file=[0-9o]+\.jpg"
+                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpg\\|jpeg\\|png\\)"
+                "\\)")))
+
 (defun navi2ch-thumbnail-insert-image-reload ()
   "スレが再描画される時にサムネも再描画"
   (interactive)
