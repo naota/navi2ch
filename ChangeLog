@@ -1,3 +1,21 @@
+2011-05-16  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-picto): pic.to対応追加
+	(navi2ch-thumbnail-url-coversion-table): defvar化
+	(navi2ch-thumbnail-image-url-regex-build): mapconcatで綺麗に
+
+2011-05-12  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-image-pre): 複雑なURLの場
+	合の解析を根本的に見直し。正規表現テーブルを一箇所
+	(navi2ch-thumbnail-url-coversion-table)にまとめて、そこから個別処理
+	関数をfuncallしてやる形式にする。新規の画像アップローダー等のURLを
+	追加するにはこのテーブルにリストを追加し、処理関数が必要な場合はそ
+	れも新規作成
+	(navi2ch-thumbnail-url-replace): 単純置換関数
+	(navi2ch-thumbnail-imepic): for http://imepic.jp
+	(navi2ch-thumbnail-twitpic): for http://twitpic.com
+
 2011-05-12  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-machibbs.el (navi2ch-machibbs-send-message): スレ立て時の
