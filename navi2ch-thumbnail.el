@@ -573,8 +573,9 @@
     (cond
      ((eq type 'url)
       (cond
-       ((navi2ch-thumbnail-image-pre prop t)
-	(message "not image url but image")
+       ((string-match navi2ch-thumbnail-image-url-regex prop)
+        (navi2ch-thumbnail-image-pre prop t)
+;	(message "not image url but image")
         )
 
        ((and (file-name-extension prop)
