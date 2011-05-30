@@ -1430,6 +1430,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 						   navi2ch-article-view-range))))
 	    (navi2ch-article-load-number)
 	    (navi2ch-article-save-info board article first)
+            (navi2ch-article-thread-stop-p)
 	    (navi2ch-article-set-mode-line)
 	    (run-hooks 'navi2ch-article-after-sync-hook)
 	    list)
@@ -1610,7 +1611,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
           (navi2ch-article-make-mode-line-identification article)))
   (navi2ch-set-mode-line-identification))
 
-(defvar navi2ch-article-mode-line-format "%a (%n/%N) [%b]"
+(defvar navi2ch-article-mode-line-format "%a (%n/%N) [%b] %s"
   "スレ表示バッファの mode-line のフォーマット
 
 以下のものが置き換えられる。
@@ -1625,6 +1626,10 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
    (lambda (str)
      (let ((char (aref str 1)))
        (cond
+	((eq char ?s)
+	 (if (cdr (assq 'stop article))
+         "[スレスト]"
+	      ""))
 	((eq char ?a)
 	 (or (cdr (assq 'subject article))
 	      navi2ch-bm-empty-subject))
@@ -1641,6 +1646,15 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 	((eq char ?%) "%")
 	(t ""))))
    navi2ch-article-mode-line-format t t t))
+
+(defun navi2ch-article-thread-stop-p ()
+  (if (cdr (assq 'stop navi2ch-article-current-article))
+      t
+    ;;スレストされているスレ(日付欄=停止で判断)
+    (when (string-match "^停止" (cdr (assq 'date (navi2ch-article-get-message (length navi2ch-article-message-list)))))
+      (setq navi2ch-article-current-article
+            (navi2ch-put-alist 'stop t navi2ch-article-current-article))
+      (navi2ch-article-save-info navi2ch-article-current-board navi2ch-article-current-article))))
 
 (defun navi2ch-article-sync-disable-diff (&optional force)
   (interactive "P")
@@ -1761,11 +1775,13 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 
 (defun navi2ch-article-write-message (&optional sage cite)
   (interactive)
+  (if (cdr (assq 'stop navi2ch-article-current-article))
+      (error "スレストされたスレには書き込めません"))
   (when (not (navi2ch-board-from-file-p navi2ch-article-current-board))
     (navi2ch-article-save-number)
     (navi2ch-message-write-message navi2ch-article-current-board
                                    navi2ch-article-current-article
-				   nil sage cite)))
+                                   nil sage cite)))
 
 (defun navi2ch-article-write-sage-message ()
   (interactive)
