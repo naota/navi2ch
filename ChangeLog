@@ -1,5 +1,9 @@
 2011-05-30  MIZUNUMA Yuto  <mizmiz@sf.net>
 
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): httpsにも対応
+
+	* navi2ch-net.el (navi2ch-net-split-url): httpsにも対応
+
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-image-jpeg-identify):
 	bugfix 読み込みが8byte多かった
 	(navi2ch-thumbnail-select-current-link): 踏んだリンクが画像かどうかのチェックを追加

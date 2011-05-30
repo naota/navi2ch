@@ -461,7 +461,7 @@
 	  thumb-file file width height size anime filename
 	  image-attr)
       (unless (and (stringp org-url)
-		   (string-match "tp://\\(.+\\)$" org-url))
+		   (string-match "tps?://\\(.+\\)$" org-url))
 	(error "URL not match"))
       (setq file (expand-file-name
 		  (navi2ch-thumbnail-image-escape-filename
@@ -556,7 +556,7 @@
 			(if anime " GIF ANIME" "") (round (/ size 1024))))
 
 	(when (re-search-forward
-	       (concat "h?ttp://\\([^ \t\n\r]+\\."
+	       (concat "h?ttps?://\\([^ \t\n\r]+\\."
 		       (regexp-opt navi2ch-browse-url-image-extentions t)
 		       "\\)") nil t)
 	  (save-excursion
