@@ -237,7 +237,7 @@
                 (mapconcat (function (lambda (x) (nth 0 x)))
                            navi2ch-thumbnail-url-coversion-table "\\|")
                 "\\|\\?id=watahiki&file=[0-9o]+\.jpg"
-                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpg\\|jpeg\\|png\\)"
+                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpg\\|JPG\\|jpeg\\|png\\)"
                 "\\)")))
 
 (defun navi2ch-thumbnail-insert-image-reload ()
