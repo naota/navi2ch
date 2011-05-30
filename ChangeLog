@@ -1,3 +1,8 @@
+2011-05-30  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-image-jpeg-identify):
+	bugfix 読み込みが8byte多かった
+
 2011-05-16  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-picto): pic.to対応追加

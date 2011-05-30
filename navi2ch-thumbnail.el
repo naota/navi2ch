@@ -630,7 +630,9 @@
 (defun navi2ch-thumbnail-image-jpeg-identify (data)
   (let ((len (length data)) (i 2) (anime nil))
     (catch 'jfif
-      (while (< i len)
+;      (while (< i len)
+      ;;read more 8 byte in loop
+      (while (< i (- len 8))
 	(let ((nbytes (+ (lsh (aref data (+ i 2)) 8)
 			 (aref data (+ i 3))))
 	      (code (aref data (1+ i))))
