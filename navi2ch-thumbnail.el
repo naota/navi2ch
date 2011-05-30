@@ -348,7 +348,7 @@
       (message "deleting thumbnail:%s " thumb))))
 
 (defun navi2ch-thumbnail-insert-image-cache (url)
-  (if (string-match "h?ttp://\\(.+\\)$" url)
+  (if (string-match "h?ttps?://\\(.+\\)$" url)
       (setq url (match-string 1 url)))
   (let ((thumb_dir navi2ch-thumbnail-thumbnail-directory)
 	file thumb image-attr)
@@ -373,11 +373,11 @@
 			(round (/ (nth 7 (file-attributes file)) 1024))
 			(if (nth 2 image-attr) " GIF ANIME" "")))
       (if (re-search-forward
-	   (concat "h?ttp://\\([^ \t\n\r]+\\."
+	   (concat "h?ttps?://\\([^ \t\n\r]+\\."
 		   (regexp-opt navi2ch-browse-url-image-extentions t)
 		   "\\)") nil t)
 	  (save-excursion
-	    (let ((url (concat "http://" (match-string 1)))
+	    (let ((url (concat "https?://" (match-string 1)))
 		  (beg (match-beginning 0))
 		  (end (match-end 0)))
 	      (add-text-properties beg end '(my-navi2ch "shown")))))
