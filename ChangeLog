@@ -2,6 +2,7 @@
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): httpsにも対応
 	(navi2ch-thumbnail-image-url-regex-build): add 'JPG'(本格的にcase-insensitiveに移行すべきか)
+	説明文修正
 
 	* navi2ch-net.el (navi2ch-net-split-url): httpsにも対応
 
