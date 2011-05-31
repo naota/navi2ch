@@ -1,3 +1,7 @@
+2011-06-01  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-url-status-check): add HTTP code 307
+
 2011-05-31  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image):
