@@ -379,7 +379,7 @@
 	    (let ((url (concat "https?://" (match-string 1)))
 		  (beg (match-beginning 0))
 		  (end (match-end 0)))
-	      (add-text-properties beg end '(my-navi2ch "shown")))))
+	      (add-text-properties beg end '(navi2ch-image-shown "shown")))))
 	(move-end-of-line nil)
 	t))))
 
@@ -431,13 +431,17 @@
 	(narrow-to-region begin end)
 	(goto-char begin)
 	(while (re-search-forward regex nil t)
-	  (let ((beg (match-beginning 0))
-		(prop (get-text-property (match-beginning 1)
-					 'my-navi2ch)))
-	    ;; 既に表示済みの画像は無視
-	    (unless (string= prop "shown")
-	      (goto-char beg)
-	      (navi2ch-thumbnail-select-current-link))))))))
+          (goto-char (match-beginning 0))
+          (navi2ch-thumbnail-select-current-link))))))
+	    ;;     (prop (get-text-property (match-beginning 1)
+	    ;;     			 'navi2ch-image-shown)))
+	    ;; ;; 既に表示済みの画像は無視
+	    ;; (unless (string= prop "shown")
+	    ;;   (goto-char beg)
+	    ;;   (navi2ch-thumbnail-select-current-link))))))))
+
+(defun navi2ch-thumbnail-image-shown-p ()
+  (string= (get-text-property (point) 'navi2ch-image-shown) "shown"))
 
 (defun navi2ch-thumbnail-image-escape-filename (filename)
   "ファイル名に使えない文字をエスケープ"
@@ -447,13 +451,13 @@
 				       filename
 				       t))
 
-(defun navi2ch-thumbnail-show-image (url alturl &optional referer)
-  "画像を縮小しインラインに表示する．"
-  (let ((prop  (get-text-property (point) 'my-navi2ch)))
-    (unless (string= prop "shown")
-      (navi2ch-thumbnail-show-image-subr url alturl referer))))
+;; (defun navi2ch-thumbnail-show-image (url alturl &optional referer)
+;;   "画像を縮小しインラインに表示する．"
+;;   (let ((prop  (get-text-property (point) 'navi2ch-image-shown)))
+;;     (unless (string= prop "shown")
+;;       (navi2ch-thumbnail-show-image-subr url alturl referer))))
 
-(defun navi2ch-thumbnail-show-image-subr (url org-url &optional referer)
+(defun navi2ch-thumbnail-show-image (url org-url &optional referer)
   (save-excursion
     (let ((buffer-read-only nil)
 	  (thumb-dir navi2ch-thumbnail-thumbnail-directory)
@@ -562,7 +566,7 @@
 	    (let ((url (concat "http://" (match-string 1)))
 		  (beg (match-beginning 0))
 		  (end (match-end 0)))
-	      (add-text-properties beg end '(my-navi2ch "shown"))))))))
+	      (add-text-properties beg end '(navi2ch-image-shown "shown"))))))))
 
 (defun navi2ch-thumbnail-select-current-link (&optional browse-p)
   (interactive "P")
@@ -572,7 +576,8 @@
     (cond
      ((eq type 'url)
       (cond
-       ((string-match navi2ch-thumbnail-image-url-regex prop)
+       ((and (not (navi2ch-thumbnail-image-shown-p))
+             (string-match navi2ch-thumbnail-image-url-regex prop))
         (navi2ch-thumbnail-image-pre prop t)
 ;	(message "not image url but image")
         )

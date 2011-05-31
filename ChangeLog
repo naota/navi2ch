@@ -1,3 +1,10 @@
+2011-05-31  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image):
+	無駄な処理だったnavi2ch-thumbnail-show-image-subrの廃止
+	shownフラグのmy-navi2chをまともな名前のnavi2ch-image-shownに
+	(navi2ch-thumbnail-image-shown-p): 新規 shownフラグのチェック
+
 2011-05-30  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-show-image-subr): httpsにも対応
