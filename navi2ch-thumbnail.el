@@ -418,7 +418,7 @@
      (if beg (max (1- beg) (point-min)) (point-min))
      end)))
 
-(defun navi2ch-thumbnail-image-show-region (begin end &optional force)
+(defun navi2ch-thumbnail-image-show-region (begin end)
   "リージョン内の画像URLを表示"
   (interactive "rP")
   (save-restriction
@@ -432,7 +432,8 @@
 	(goto-char begin)
 	(while (re-search-forward regex nil t)
           (goto-char (match-beginning 0))
-          (navi2ch-thumbnail-select-current-link))))))
+          (navi2ch-thumbnail-select-current-link)
+          (goto-char (match-end 0)))))))
 	    ;;     (prop (get-text-property (match-beginning 1)
 	    ;;     			 'navi2ch-image-shown)))
 	    ;; ;; 既に表示済みの画像は無視
@@ -613,7 +614,7 @@
 	(unless proc (error "サーバに接続できません url=%s" url))
 	(setq status (navi2ch-net-get-status proc))
 	(unless status (error "サーバに接続できません url=%s" url))
-;	(message "status %s" status)
+	(message "status %s" status)
 
 	;; (setq header (navi2ch-net-get-header proc))	
 	;; (when (setq md5 (cdr (assq 'Content-MD5 header)))
@@ -626,7 +627,9 @@
 	       (error "ブラウズするのやめました return code %s" status))
 	      ((or (string= status "301")
 		   (string= status "302")
-		   (string= status "303"))
+		   (string= status "303")
+		   (string= status "307")
+                   )
 	       (setq header (navi2ch-net-get-header proc))
 	       (setq url (cdr (assq 'location header)))
 	       (message "loacation %s" url))))))
