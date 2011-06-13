@@ -1,3 +1,15 @@
+2011-06-13  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-logout): 新規ログアウト
+	(navi2ch-oyster-send-message-success-p):
+	アクセス禁止のエラーを受けてログインする構造
+	(navi2ch-oyster-id): 無意味な初期設定撤廃
+	(navi2ch-oyster-password): 無意味な初期設定撤廃
+	
+	メッセージの名称変更 オイスター -> ●
+	簡単なインストール、使用例ドキュメントコメント追加
+	コメントアウトした関数削除
+
 2011-06-01  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-url-status-check): add HTTP code 307

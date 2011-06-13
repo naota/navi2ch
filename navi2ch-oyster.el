@@ -22,7 +22,24 @@
 
 ;;; Commentary:
 
-;; see http://kage.monazilla.org/system_DOLIB100.html
+;; ２ちゃんねるビューア(通称●)を使って書き込みしたり過去ログを取得できるようになります。
+;; oysterという単語は●の初期の開発コードネームみたいなものでした。
+;; ●の正式な商品名は黒豆というらしいです(コンビニ決済領収書より)。
+;; 仕様 http://kage.monazilla.org/system_DOLIB100.html
+;;
+;; インストール：
+;; ●SESSION-ID取得のために、SSLアクセスできるライブラリ(gnu-tlsなど)が必要
+;; Windows: cygwinのgnutlsをインストール。gnutls-cli.exeがパスに入っていること。
+;; Linux: gnutlsをaptなどでインストール
+;;
+;; 使用例：
+;; M-x navi2ch-oyster-login でログイン。
+;; 書き込み時にアクセス禁止のエラーを受けて、'y'でログインも可。
+;; ●ログイン状態にあれば、過去ログ取得する(y-or-nで聞かれる)
+;; M-x navi2ch-oyster-logout でログアウト
+;;
+;; ●のSESSION-IDの生存期間は噂では24時間と言われていますが、
+;; 仕様に明記されていないのでnavi2ch側でexpireはせず、エラーでリトライ取得します。
 
 ;;; Code:
 
@@ -40,7 +57,9 @@
   '((bbs-p		. navi2ch-oyster-p)
     (article-update 	. navi2ch-oyster-article-update)
     (send-message   	. navi2ch-oyster-send-message)
-    (extract-post	. navi2ch-2ch-extract-post)))
+    (send-success-p	. navi2ch-oyster-send-message-success-p)
+;    (extract-post	. navi2ch-2ch-extract-post)
+    ))
 ;; navi2ch-net-user-agent も multibbs 化する必要あり?
 
 (defvar navi2ch-oyster-variable-alist
@@ -53,21 +72,21 @@
 ;;-------------
 
 (defvar navi2ch-oyster-use-oyster nil	; 変数名は要検討。
-  "*オイスターするかどうか。")
-(defvar navi2ch-oyster-id "odebu@tora3.net"
-  "*オイスターの ID。")
-(defvar navi2ch-oyster-password "odebuchan"
-  "*オイスターのパスワード。")
+  "*●を使うかどうか。")
+(defvar navi2ch-oyster-id nil
+  "*●のID(おそらくメールアドレス)")
+(defvar navi2ch-oyster-password nil
+  "*●のパスワード。")
 (defvar navi2ch-oyster-server "2chv.tora3.net"
-  "*オイスターの ID 取得サーバ。")
+  "*●ID 取得サーバ。")
 (defvar navi2ch-oyster-cgi "/futen.cgi"
-  "*オイスターの ID 取得 CGI。")
+  "*●ID 取得 CGI。")
 
 (defvar navi2ch-oyster-session-id nil
-  "オイスターサーバから取得したセッション ID。")
+  "●サーバから取得したセッション ID。")
 
 (defun navi2ch-oyster-p (uri)
-  "オイスター作戦に対応する URI なら non-nilを返す。"
+  "●に対応する URI なら non-nilを返す。"
   (and navi2ch-oyster-use-oyster
        (or (string-match "http://.*\\.2ch\\.net/" uri)
 	   (string-match "http://.*\\.bbspink\\.com/" uri))))
@@ -92,32 +111,55 @@ START からじゃないかもしれないけど・・・。
       ;; やっぱりダメだったら ID を使って過去ログを取得
       (if (not (navi2ch-net-get-state 'error header))
 	  (setq header (navi2ch-net-add-state 'kako header))
-	(unless navi2ch-oyster-session-id
-	  (navi2ch-oyster-login))
-	(setq url (navi2ch-oyster-get-offlaw-url
-		   board article navi2ch-oyster-session-id file))
-	(message "offlaw url %s" url)
-	(setq header
-	      (if start
-		  (progn
-		    (message "article %s" article)
-		    (navi2ch-oyster-update-file-with-offlaw url file time t))
-		(prog1
-		    (navi2ch-oyster-update-file-with-offlaw url file time nil)
-		  (message "Getting from 0 offlaw.cgi"))))
-	(unless (navi2ch-net-get-state 'error header)
-	  (setq header (navi2ch-net-add-state 'kako header)))))
+        (when (y-or-n-p "●を使って過去ログを取得しますか？")
+          (unless navi2ch-oyster-session-id
+            (navi2ch-oyster-login))
+          (setq url (navi2ch-oyster-get-offlaw-url
+                     board article navi2ch-oyster-session-id file))
+;         (message "offlaw url %s" url)
+          (setq header
+                (if start
+                    (progn
+                      (message "article %s" article)
+                      (navi2ch-oyster-update-file-with-offlaw url file time t))
+                  (prog1
+                      (navi2ch-oyster-update-file-with-offlaw url file time nil)
+;                    (message "Getting from 0 offlaw.cgi")
+                    )))
+          (unless (navi2ch-net-get-state 'error header)
+            (setq header (navi2ch-net-add-state 'kako header))))))
     header))
 
 (defun navi2ch-oyster-send-message
   (from mail message subject bbs key time board article &optional post)
   (let ((post (navi2ch-put-alist "sid"
-				 ;;セッションID取得済みであれば●カキコ
-				 ;;y-n で聞きたいなぁ
+				 ;;セッションID取得済みであれば●で書き込み
 				 (or navi2ch-oyster-session-id "")
 				 post)))
     (navi2ch-2ch-send-message from mail message subject bbs key
 			      time board article post)))
+
+(defun navi2ch-oyster-send-message-success-p (proc)
+  (when proc
+    (let ((str (navi2ch-net-get-content proc)))
+      (setq str (decode-coding-string str navi2ch-p2-coding-system))
+      (cond ((or (string-match "書きこみました。" str)
+                 (string-match "書きこみが終わりました。" str))
+             t)
+	    ((or (string-match "<b>クッキーがないか期限切れです！</b>" str)
+		 (string-match "<b>書きこみ＆クッキー確認</b>" str))
+	     'retry)
+            ((string-match "ＥＲＲＯＲ：アクセス規制中です！！" str)
+             (if (not (y-or-n-p "アクセス規制中ですが●ログインしますか？"))
+                 nil
+               (message "●login..")
+               (navi2ch-oyster-login)
+               (if navi2ch-oyster-session-id
+                   'retry
+                 nil)))
+            (t
+             (message "●error::%s" str)
+             nil)))))
 
 (defun navi2ch-oyster-get-offlaw-url (board article session-id file)
   "BOARD, ARTICLE, SESSION-ID, FILE から offlaw url に変換。"
@@ -125,7 +167,6 @@ START からじゃないかもしれないけど・・・。
 	(artid (cdr (assq 'artid article)))
 	(size 0)
 	encoded-s)
-    ;; (setq encoded-s (w3m-url-encode-string session-id))
     (setq encoded-s (navi2ch-net-url-hexify-string session-id))
     (when (file-exists-p file)
       (setq size (max 0 (navi2ch-file-size file))))
@@ -216,28 +257,11 @@ DIFF が non-nil ならば差分を取得する。
                         (if (looking-at "\\(.*\\)\n")
                             (match-string 1)))))))))))
 
-;; (defun navi2ch-oyster-get-status (proc)
-;;   "オイスターサーバの接続のステータス部を返す。"
-;;   (navi2ch-net-ignore-errors
-;;    (or (save-excursion
-;; 	 (set-buffer (process-buffer proc))
-;; 	 (while (and (eq (process-status proc) 'open)
-;; 		     (goto-char (point-min))
-;; 		     (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
-;; 	   (accept-process-output proc)
-;; 	   (message "Retrying")
-;; 	   (sit-for 3))
-;; 	 (sit-for 5)		  ; 何だかうまく動かないのでwait入れた
-;; 	 (goto-char (point-min))
-;; 	 (search-forward "SESSION-ID=")
-;; 	 (if (looking-at "\\(.*\\)\n")
-;; 	     (match-string 1))))))
-
 (defun navi2ch-oyster-login ()
-  "オイスターのサーバにログインして session-id を取得する。"
+  "●のサーバにログインして session-id を取得する。"
   (interactive)
   (let (buf proc)
-    (message "オイスターのサーバにログインします")
+    (message "●のサーバにログインします")
     (setq buf (get-buffer-create (concat " *" "navi2ch oyster-ssl")))
     (with-current-buffer buf
       (erase-buffer))
@@ -255,9 +279,16 @@ DIFF が non-nil ならば差分を取得する。
 			    "\n"
 			    contents "\n")))
     (setq navi2ch-oyster-session-id (navi2ch-oyster-get-status proc))
-    (message "IDを取得しますた ID= %s" navi2ch-oyster-session-id)
-    (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
-	 (message "ID取得に失敗しますた ID= %s" navi2ch-oyster-session-id)
-	 (setq navi2ch-oyster-session-id nil))))
+    (if (not navi2ch-oyster-session-id)
+        (message "●ID取得 ERROR")
+      (message "●ID取得 ID= %s" navi2ch-oyster-session-id)
+      (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
+           (message "●ID取得ERROR ID= %s" navi2ch-oyster-session-id)
+           (setq navi2ch-oyster-session-id nil)))))
 
+(defun navi2ch-oyster-logout ()
+  "●のログアウト"
+  (interactive)
+  (setq navi2ch-oyster-session-id nil))
+  
 ;;; navi2ch-oyster.el ends here
