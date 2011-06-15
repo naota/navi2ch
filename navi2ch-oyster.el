@@ -230,65 +230,103 @@ DIFF が non-nil ならば差分を取得する。
 		   (when (string= "-ERR" state)
 		     (let ((err-msg (decode-coding-string
 				     data navi2ch-coding-system)))
-		       (message "Error! %s" err-msg)))
-		   (setq header (navi2ch-net-add-state 'error header))))))))
+		       (message "Error! %s" err-msg)
+                       (when (string-match "指定時間が過ぎました。" err-msg)
+                         (if (not (y-or-n-p "●SESSION-IDの有効期限が切れましたログインしますか？"))
+                             (setq header (navi2ch-net-add-state 'error header))
+                           (message "●login..")
+                           (navi2ch-oyster-login)
+                             )))                   )))))))
 	  (t
 	   (setq header (navi2ch-net-add-state 'error header))))
     header))
 
-(defun navi2ch-oyster-get-status (proc)
-  "オイスターサーバの接続のステータス部を返す。"
-  (navi2ch-net-ignore-errors
+(defun navi2ch-oyster-get-status-from-proc (proc)
+  "PROC接続のHTTPステータス部を返す。"
+  (with-current-buffer (process-buffer proc)
+	 (while (and (memq (process-status proc) '(open run))
+		     (goto-char (point-min))
+		     (not (looking-at "HTTP/1\\.[01] \\([0-9]+\\)")))
+	   (accept-process-output proc))
+         (sleep-for 1)
+	 (goto-char (point-min))
+         (let ((i 3))
+           (catch 'loop
+             (while (>= (setq i (1- i)) 0)
+;               (sleep-for 1)	  ; 何だかうまく動かないのでwait入れた
+               (accept-process-output proc 1)
+               (goto-char (point-min))
+               ;; 最後まで見つからないままだとエラー
+               (when (search-forward "HTTP/1\." nil (> i 0))
+                 (throw 'loop
+                        (if (looking-at "[01] \\([0-9]+\\).+\n")
+                            (match-string 1)))))))))
+
+(defun navi2ch-oyster-get-session-id-from-proc (proc)
+  "procから●のSESSIOIN-IDを取得"
    (or (with-current-buffer (process-buffer proc)
          (while (and (eq (process-status proc) 'open)
                      (goto-char (point-min))
                      (not (search-forward "HTTP/1\\.[01] \\([0-9]+\\)")))
            (accept-process-output proc)
            (message "Retrying")
-           (sleep-for 3))
+           (sleep-for 2))
          (let ((i 10))
            (catch 'loop
              (while (>= (setq i (1- i)) 0)
-               (sleep-for 1)	  ; 何だかうまく動かないのでwait入れた
+;               (sleep-for 1)	  ; 何だかうまく動かないのでwait入れた
+               (accept-process-output proc 1)
                (goto-char (point-min))
                ;; 最後まで見つからないままだとエラー
                (when (search-forward "SESSION-ID=" nil (> i 0))
                  (throw 'loop
                         (if (looking-at "\\(.*\\)\n")
-                            (match-string 1)))))))))))
+                            (match-string 1))))))))))
 
 (defun navi2ch-oyster-login ()
   "●のサーバにログインして session-id を取得する。"
   (interactive)
-  (let (buf proc)
+  (let (buf proc strus)
     (message "●のサーバにログインします")
     (setq buf (get-buffer-create (concat " *" "navi2ch oyster-ssl")))
     (with-current-buffer buf
-      (erase-buffer))
-    (setq proc (open-tls-stream "ssl" buf navi2ch-oyster-server 443))
-    (let ((contents (concat "ID=" navi2ch-oyster-id
+      (erase-buffer)
+      (setq proc (open-tls-stream "ssl" buf navi2ch-oyster-server 443))
+      (let ((contents (concat "ID=" navi2ch-oyster-id
 			    "&PW=" navi2ch-oyster-password)))
       (process-send-string proc
 			   (concat
-			    (concat "POST " navi2ch-oyster-cgi " HTTP/1.0\n")
+			    (concat "POST " navi2ch-oyster-cgi " HTTP/1.1\n")
+                            (concat "Host: " navi2ch-oyster-server "\n")
+                            "Accept: */*\n"
+                            (concat "Referer: https://" navi2ch-oyster-server "/\n")
 			    "User-Agent: DOLIB/1.00\n"
 			    "X-2ch-UA: "
 			    (format "Navigator for 2ch %s" navi2ch-version) "\n"
 			    "Content-Length: "
 			    (number-to-string (length contents)) "\n"
+                            "Connection: close\n"
 			    "\n"
 			    contents "\n")))
-    (setq navi2ch-oyster-session-id (navi2ch-oyster-get-status proc))
-    (if (not navi2ch-oyster-session-id)
-        (message "●ID取得 ERROR")
-      (message "●ID取得 ID= %s" navi2ch-oyster-session-id)
-      (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
-           (message "●ID取得ERROR ID= %s" navi2ch-oyster-session-id)
-           (setq navi2ch-oyster-session-id nil)))))
+    (setq status (navi2ch-oyster-get-status-from-proc proc))
+    (cond
+          ((string= status "200")
+           (setq navi2ch-oyster-session-id (navi2ch-oyster-get-session-id-from-proc proc))
+           (if (not navi2ch-oyster-session-id)
+               (message "●ID取得 ERROR")
+             (message "●ID取得 ID= %s" navi2ch-oyster-session-id)
+             (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
+                  (message "●ID取得ERROR ID= %s" navi2ch-oyster-session-id)
+           (setq navi2ch-oyster-session-id nil))))
+          ((string= status "400")
+           (message "●ID取得ERROR サーバ不調 %s" status))
+          )
+    (kill-buffer buf))))
 
 (defun navi2ch-oyster-logout ()
   "●のログアウト"
   (interactive)
-  (setq navi2ch-oyster-session-id nil))
+  (setq navi2ch-oyster-session-id nil)
+  (message "●のサーバからログアウトしました"))
   
 ;;; navi2ch-oyster.el ends here
