@@ -303,7 +303,7 @@ nil なら常に再接続する。")
 
 (defun navi2ch-net-split-url (url &optional proxy)
   (let (host2ch authinfo user pass)
-    (string-match "http://\\([^@/]+@\\)?\\([^/]+\\)" url)
+    (string-match "https?://\\([^@/]+@\\)?\\([^/]+\\)" url)
     (when (setq authinfo (match-string 1 url))
       (save-match-data
 	(string-match "\\(?:\\([^:]+\\):\\)?\\(.*\\)@" authinfo)
@@ -314,7 +314,7 @@ nil なら常に再接続する。")
     (setq host2ch (match-string 2 url))
     (if proxy
         (progn
-          (string-match "^\\(http://\\)?\\(.*\\):\\([0-9]+\\)" proxy)
+          (string-match "^\\(https?://\\)?\\(.*\\):\\([0-9]+\\)" proxy)
           (list
 	   (cons 'user user)
 	   (cons 'pass pass)
@@ -322,7 +322,7 @@ nil なら常に再接続する。")
            (cons 'file url)
            (cons 'port (string-to-number (match-string 3 proxy)))
            (cons 'host2ch host2ch)))
-      (string-match "http://\\(?:[^@/]+@\\)?\\([^/:]+\\)\\(?::\\([0-9]+\\)\\)?\\(.*\\)" url)
+      (string-match "https?://\\(?:[^@/]+@\\)?\\([^/:]+\\)\\(?::\\([0-9]+\\)\\)?\\(.*\\)" url)
       (list
        (cons 'user user)
        (cons 'pass pass)
