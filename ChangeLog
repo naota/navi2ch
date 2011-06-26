@@ -1,3 +1,30 @@
+2011-06-16  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-get-status-from-proc):
+	(navi2ch-oyster-get-session-id-from-proc): 
+	http://hibari.2ch.net/test/read.cgi/unix/1265413075/405 パッチ適用(様子見)
+
+2011-06-14  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-login): header追加。より仕様に沿う形に。
+	HTTP statusをきちんと把握
+	(navi2ch-oyster-get-session-id-from-proc): navi2ch-oyster-get-session-idから名称変更
+	(navi2ch-oyster-get-status-from-proc): HTTP status取得。
+	2ch用のは使わない形に(機能してなかった)	。
+	(navi2ch-oyster-func-alist): extract-post削除。2chデフォルトで問題無い.
+
+2011-06-13  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-logout): ログアウト用func
+	(navi2ch-oyster-send-message-success-p):
+	アクセス禁止のエラーを受けてログインする構造
+	(navi2ch-oyster-id): 無意味な初期設定撤廃
+	(navi2ch-oyster-password): 無意味な初期設定撤廃
+	
+	メッセージの名称変更 オイスター -> ●
+	簡単なインストール、使用例ドキュメントコメント追加
+	コメントアウトした関数削除
+
 2011-06-01  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-url-status-check): add HTTP code 307
