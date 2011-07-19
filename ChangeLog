@@ -1,3 +1,9 @@
+2011-07-19  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch.el (navi2ch-split-window): enlarge-window は必ず別の
+	window を残してしまうようになったので、 delete-other-windows を使う
+	ように切り替え。
+
 2011-06-16  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-oyster.el (navi2ch-oyster-get-status-from-proc):
