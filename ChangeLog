@@ -1,3 +1,10 @@
+2011-10-08  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-article.el (navi2ch-article-thread-stop-p): 新規
+	スレが止められてるかどうかP
+	(navi2ch-article-make-mode-line-identification): スレスト状態をモードラインに表示
+	(navi2ch-article-write-message): スレストされたスレには書きこませない
+
 2011-07-19  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch.el (navi2ch-split-window): enlarge-window は必ず別の
