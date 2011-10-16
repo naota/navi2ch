@@ -1,3 +1,7 @@
+2011-10-17  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-article.el (navi2ch-article-mode-line-format): docstring更新
+
 2011-10-08  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-article.el (navi2ch-article-thread-stop-p): 新規

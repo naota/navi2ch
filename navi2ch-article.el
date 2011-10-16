@@ -1611,7 +1611,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
           (navi2ch-article-make-mode-line-identification article)))
   (navi2ch-set-mode-line-identification))
 
-(defvar navi2ch-article-mode-line-format "%a (%n/%N) [%b] %s"
+(defvar navi2ch-article-mode-line-format "%a (%n/%N) [%b] [%s]"
   "スレ表示バッファの mode-line のフォーマット
 
 以下のものが置き換えられる。
@@ -1619,6 +1619,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
 %b - 板名
 %n - 実際のレス数
 %N - スレ一覧から取得したレス数
+%s - スレスト
 %% - %")
 (defun navi2ch-article-make-mode-line-identification (article)
   (navi2ch-replace-string
@@ -1628,7 +1629,7 @@ FIRST が nil ならば、ファイルが更新されてなければ何もしない。"
        (cond
 	((eq char ?s)
 	 (if (cdr (assq 'stop article))
-         "[スレスト]"
+         "スレスト"
 	      ""))
 	((eq char ?a)
 	 (or (cdr (assq 'subject article))
