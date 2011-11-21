@@ -217,19 +217,6 @@
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
 
-;; (defun navi2ch-thumbnail-image-url-regex-build ()
-;;   "articleから画像らしきリンクを探すregexを1行にまとめる"
-;;   (setq navi2ch-thumbnail-image-url-regex "\\(")
-;;   (dolist (l navi2ch-thumbnail-url-coversion-table)
-;;     (setq target-url (nth 0 l))
-;;     (setq navi2ch-thumbnail-image-url-regex (concat navi2ch-thumbnail-image-url-regex target-url "\\|")))
-;;     (setq navi2ch-thumbnail-image-url-regex
-;;      (concat navi2ch-thumbnail-image-url-regex
-;;              "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
-;;              "h?t?tps?://[^ \t\n\r]+\\."
-;;              "\\(gif\\|jpg\\|jpeg\\|png\\)"
-;;              "\\)")))
-
 (defun navi2ch-thumbnail-image-url-regex-build ()
   "articleから画像らしきリンクを探すregexを1行にまとめる"
   (setq navi2ch-thumbnail-image-url-regex
@@ -284,44 +271,6 @@
 	       filename))
 	   0)))
   (copy-file cache-filename filename overwrite))
-
-;; (defun navi2ch-thumbnail-show-image-not-image-url (url &optional force)
-;;   "imepita等のURLが画像っぽくない場合の処理"
-;;   (let (alturl rtn)
-;;     (cond
-;;      ;; imepita
-;;      ((string-match "h?ttp://w*\\.?imepita\\.jp/\\([0-9/]+\\)" url)
-;;       (setq alturl (concat "http://imepita.jp/image/" (match-string 1 url)))
-;;       ;;拡張子の無い画像は外部ビューアーが認識に失敗する場合があるので
-;;       ;;拡張子を強制付加する
-;;       (setq url (concat url ".jpg"))
-;;       (message "imepita: %s %s" url alturl)
-;;       (if (navi2ch-thumbnail-insert-image-cache url)
-;; 	  (message "cache read")
-;; 	(when force
-;; 	  (setq rtn (navi2ch-thumbnail-show-image alturl url))
-;; 	  (message "return %s" rtn))))
-;;      ((string-match
-;;        "h?ttp://i-bbs\\.sijex\\.net/imageDisp\\.jsp\\?id=watahiki&file=\\([0-9o]+\\.jpg\\)"
-;;        url)
-;;       (message "sjex: %s" url)
-;;       (setq alturl (concat "http://image.i-bbs.sijex.net/bbs/watahiki/"
-;; 			   (match-string 1 url)))
-;;       (if (navi2ch-thumbnail-insert-image-cache alturl)
-;; 	  (message "sijex キャッシュから読み込みました")
-;; 	(message "sijex: %s %s" url alturl)
-;; 	(if force
-;; 	    (navi2ch-thumbnail-show-image alturl url))))
-;;      ((string-match
-;;        "h?t?tp://twitpic.com/[0-9a-z]+" url)
-;;       (if (navi2ch-thumbnail-insert-image-cache url)
-;; 	  (message "cache read")
-;; 	(when force
-;;           (setq alturl (navi2ch-thumbnail-twitpic-url2img url))
-;;           (message "twitpic: %s %s" url alturl)
-;; 	  (setq rtn (navi2ch-thumbnail-show-image alturl url))
-;; 	  (message "return %s" rtn))))
-;;      (t nil))))
 
 (defun navi2ch-thumbnail-show-image-external ()
   "外部ビューアーで表示"
@@ -384,27 +333,6 @@
 	(move-end-of-line nil)
 	t))))
 
-;; (defun navi2ch-thumbnail-insert-image-reload ()
-;;   "スレが再描画される時にサムネも再描画"
-;;   (interactive)
-;;   (let (url file)
-;;     (when (display-images-p)
-;;       (save-excursion
-;; 	(let ((buffer-read-only nil)
-;; 	      (regex (concat "\\(h?t?tps?://imepita.jp/[0-9/]+\\|"
-;;                              "h?t?tp://twitpic.com/[0-9a-z]+\\|"
-;; 			     "h?t?tps?://i-bbs.sijex.net/imageDisp.jsp"
-;; 			     "\\?id=watahiki&file=[0-9o]+\.jpg\\|"
-;; 			     "h?t?tps?://[^ \t\n\r]+\\."
-;; 			     "\\(gif\\|jpg\\|jpeg\\|png\\)"
-;; 			     "\\)")))
-;; 	  (goto-char (point-min))
-;; 	  (while (re-search-forward regex nil t)
-;; 	    (setq url (match-string 1))
-;; 	    (if  (string-match "\\(h?t?tp://twitpic.com/[0-9a-z]+\\|h?t?tps?://imepita.jp/[0-9/]+\\|h?t?tps?://i-bbs.sijex.net/imageDisp.jsp\\?id=watahiki&file=[0-9o]+\.jpg\\)" url)
-;; 		(navi2ch-thumbnail-show-image-not-image-url url)
-;; 	      (navi2ch-thumbnail-insert-image-cache url))))))))
-
 (defun navi2ch-thumbnail-all-show ()
   "1レス内の画像を連続取得表示"
   (interactive)
@@ -435,12 +363,6 @@
           (goto-char (match-beginning 0))
           (navi2ch-thumbnail-select-current-link)
           (goto-char (match-end 0)))))))
-	    ;;     (prop (get-text-property (match-beginning 1)
-	    ;;     			 'navi2ch-image-shown)))
-	    ;; ;; 既に表示済みの画像は無視
-	    ;; (unless (string= prop "shown")
-	    ;;   (goto-char beg)
-	    ;;   (navi2ch-thumbnail-select-current-link))))))))
 
 (defun navi2ch-thumbnail-image-shown-p ()
   (string= (get-text-property (point) 'navi2ch-image-shown) "shown"))
@@ -452,12 +374,6 @@
 					 ("\\?" . "%63"))
 				       filename
 				       t))
-
-;; (defun navi2ch-thumbnail-show-image (url alturl &optional referer)
-;;   "画像を縮小しインラインに表示する．"
-;;   (let ((prop  (get-text-property (point) 'navi2ch-image-shown)))
-;;     (unless (string= prop "shown")
-;;       (navi2ch-thumbnail-show-image-subr url alturl referer))))
 
 (defun navi2ch-thumbnail-show-image (url org-url &optional referer)
   (save-excursion
