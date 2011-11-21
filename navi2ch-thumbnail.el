@@ -209,7 +209,8 @@
                "GET"))
         cont)
     (setq cont (navi2ch-net-get-content proc))
-    (if (string-match "\\(http://s3\.amazonaws\.com/twitpic/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
+    (if (or (string-match "\\(http://s3\.amazonaws\.com/twitpic/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
+             (string-match "\\(http://s1-05.twitpicproxy.com/photos/\\(large\\|full\\)/.+\\)\" alt" cont))
         (setq twitpic-img (match-string 1 cont))
       (error "can't get image url from %s" url))))
 
