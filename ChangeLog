@@ -1,3 +1,8 @@
+2011-11-21  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic):
+	twitpicの画像サーバ http://s1-05.twitpicproxy.com/ に対応
+
 2011-10-17  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-article.el (navi2ch-article-mode-line-format): docstring更新
