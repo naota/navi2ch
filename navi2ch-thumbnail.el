@@ -210,7 +210,7 @@
         cont)
     (setq cont (navi2ch-net-get-content proc))
     (if (or (string-match "\\(http://s3\.amazonaws\.com/twitpic/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
-             (string-match "\\(http://s1-05.twitpicproxy.com/photos/\\(large\\|full\\)/.+\\)\" alt" cont))
+             (string-match "\\(http://s1-[0-9]+.twitpicproxy.com/photos/\\(large\\|full\\)/.+\\)\" alt" cont))
         (setq twitpic-img (match-string 1 cont))
       (error "can't get image url from %s" url))))
 
@@ -223,8 +223,9 @@
         (concat "\\("
                 (mapconcat (function (lambda (x) (nth 0 x)))
                            navi2ch-thumbnail-url-coversion-table "\\|")
-                "\\|\\?id=watahiki&file=[0-9o]+\.jpg"
-                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpg\\|JPG\\|jpeg\\|png\\)"
+;                "\\|\\?id=watahiki&file=[0-9o]+\.jpg"
+                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpe?g\\|png\\)"
+;                "\\|h?t?tps?://[^ \t\n\r]+\\.\\(gif\\|jpg\\|JPG\\|jpeg\\|png\\)"
                 "\\)")))
 
 (defun navi2ch-thumbnail-insert-image-reload ()
