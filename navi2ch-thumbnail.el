@@ -556,22 +556,21 @@
 (defun navi2ch-thumbnail-image-jpeg-identify (data)
   (let ((len (length data)) (i 2) (anime nil))
     (catch 'jfif
-;      (while (< i len)
       ;;read more 8 byte in loop
       (while (< i (- len 8))
 	(let ((nbytes (+ (lsh (aref data (+ i 2)) 8)
 			 (aref data (+ i 3))))
-	      (code (aref data (1+ i))))
+              (code (+ (lsh (aref data i) 8)
+			 (aref data (+ i 1)))))
 	  (cond
-;	   (
-;            (= code #xc4)
-	    ;; DHT
-;	    (message "navi2ch-thumbnail-image-jpeg-identify:code FFC4 DHT"))
-	   ((and (>= code #xc0) (<= code #xcF))
-	    ;; SOF0 DCT
-	    ;; SOF2
-;	    (if (= code #xc2)
-;		(message "navi2ch-thumbnail-image-jpeg-identify:SOF2"))
+           ;; DHT
+	   ((= code #xffc4))
+           ;; APP
+           ((and (>= code #xffe0) (<= code #xffed)))
+           ;; SOF2
+           ((= code #xffc2))
+           ;; SOF0 DCT
+	   ((and (>= code #xffc0) (<= code #xffcF))
 	    (let ((sample (aref data (+ i 4)))
 		  (ysize (+ (lsh (aref data (+ i 5)) 8)
 			    (aref data (+ i 6))))
