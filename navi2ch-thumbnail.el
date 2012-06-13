@@ -244,6 +244,32 @@
 				      'create-animated-image
 				    'create-image)))
 
+(defun navi2ch-plist-drop (props drops)
+  (let (new-props)
+    (while props
+      (unless (memq (car props) drops)
+	(setq new-props (nconc new-props (list (car props) (cadr props)))))
+      (setq props (cddr props)))
+    new-props))
+
+(defun navi2ch-create-scaled-image (file-or-data &optional type data-p &rest props)
+  (setq file-or-data (substring-no-properties file-or-data))
+  (when (and (plist-member props :width)
+	     (plist-member props :height))
+    (let* ((new-props (navi2ch-plist-drop props '(:width :height)))
+	   (image (apply 'navi2ch-create-image
+			 file-or-data type data-p new-props))
+	   (size (image-size image))
+	   (width (car size))
+	   (height (cdr size)))
+      (setq props
+	    (if (< (/ (float height) navi2ch-thumbnail-thumbsize-height)
+		   (/ (float width) navi2ch-thumbnail-thumbsize-width))
+		(plist-put new-props :width navi2ch-thumbnail-thumbsize-width)
+	      (plist-put new-props :height navi2ch-thumbnail-thumbsize-height)))))
+  (apply 'navi2ch-create-image
+	 file-or-data type data-p props))
+
 (defun navi2ch-thumbnail-save-content
   (cache-filename filename &optional overwrite)
   "キャッシュから画像を保存(サムネイルではなく元画像)"
@@ -307,7 +333,13 @@
     (let ((buffer-read-only nil))
       (when (file-exists-p thumb)
 	(move-beginning-of-line nil)
-	(insert-image (navi2ch-create-image thumb))
+	(insert-image
+	 (if (fboundp 'imagemagick-types)
+	     (navi2ch-create-scaled-image thumb
+					  'imagemagick nil
+					  :width navi2ch-thumbnail-thumbsize-width
+					  :height navi2ch-thumbnail-thumbsize-height)
+	   (navi2ch-create-image thumb)))
 	(add-text-properties
 	 (1- (point)) (point)
 	 (list 'link t 'link-head t
@@ -414,16 +446,11 @@
 	  (copy-file file thumb-file)
 	  (insert-image (navi2ch-create-image file)))
 	 ((fboundp 'imagemagick-types)
-	  (let ((thumb (navi2ch-create-image
+	  (let ((thumb (navi2ch-create-scaled-image
 			 file
 			 'imagemagick nil
 			 :width navi2ch-thumbnail-thumbsize-width
 			 :height navi2ch-thumbnail-thumbsize-height)))
-	    (with-temp-buffer
-	      (set-buffer-multibyte nil)
-	      (insert (plist-get (cdr thumb) :data))
-	      (write-region (point-min) (point-max)
-			    thumb-file))
 	    (insert-image thumb)))
 	 (t
 	  (with-temp-buffer

@@ -1,3 +1,12 @@
+2012-06-13  Naohiro Aota  <naota@elisp.net>
+
+	* navi2ch-thumbnail.el (navi2ch-plist-drop): New function. Drop
+	specified properties.
+	(navi2ch-create-scaled-image): New function. Scale the image using
+	larger aspect.
+	(navi2ch-thumbnail-insert-image-cache)
+	(navi2ch-thumbnail-show-image): Use it.
+
 2012-05-04  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic): string-match()の正規表現をまとめながら新サーバ対応。
