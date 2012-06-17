@@ -591,9 +591,7 @@
 	   ((= code #xffc4))
            ;; APP
            ((and (>= code #xffe0) (<= code #xffed)))
-           ;; SOF2
-           ((= code #xffc2))
-           ;; SOF0 DCT
+           ;; SOF0(baseline) or SOF2(progressive)
 	   ((and (>= code #xffc0) (<= code #xffcF))
 	    (let ((sample (aref data (+ i 4)))
 		  (ysize (+ (lsh (aref data (+ i 5)) 8)
@@ -717,15 +715,15 @@
 	(if rtn (throw 'identify rtn)))
       
       ;; 情報が取得できなかった場合はヘッダをさらに読み込む
-      (setq size (* size 10))
-      (if (> size file-size)
-	  (setq size file-size))
-;      (message "navi2ch-thumbnail-image-identify:re-read size=%s %s" size file)
-      (setq rtn (navi2ch-thumbnail-image-identify file size))
-      (if rtn (throw 'identify rtn))
+      (when (not (= size file-size))
+        (setq size (* size 10))
+        (if (> size file-size)
+            (setq size file-size))
+        (setq rtn (navi2ch-thumbnail-image-identify file size))
+        (if rtn (throw 'identify rtn)))
+
       ;; それでも無理なら外部プログラムに頼る
-      (when (and (= size file-size)
-		 navi2ch-thumbnail-image-identify-program)
+      (when navi2ch-thumbnail-image-identify-program
 	(message "identify called %s" file)
 	(with-temp-buffer
           (cond
