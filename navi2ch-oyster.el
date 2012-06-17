@@ -293,35 +293,33 @@ DIFF が non-nil ならば差分を取得する。
       (erase-buffer)
       (setq proc (open-tls-stream "ssl" buf navi2ch-oyster-server 443))
       (let ((contents (concat "ID=" navi2ch-oyster-id
-			    "&PW=" navi2ch-oyster-password)))
-      (process-send-string proc
-			   (concat
-			    (concat "POST " navi2ch-oyster-cgi " HTTP/1.1\n")
-                            (concat "Host: " navi2ch-oyster-server "\n")
-                            "Accept: */*\n"
-                            (concat "Referer: https://" navi2ch-oyster-server "/\n")
-			    "User-Agent: DOLIB/1.00\n"
-			    "X-2ch-UA: "
-			    (format "Navigator for 2ch %s" navi2ch-version) "\n"
-			    "Content-Length: "
-			    (number-to-string (length contents)) "\n"
-                            "Connection: close\n"
-			    "\n"
-			    contents "\n")))
-    (setq status (navi2ch-oyster-get-status-from-proc proc))
-    (cond
-          ((string= status "200")
-           (setq navi2ch-oyster-session-id (navi2ch-oyster-get-session-id-from-proc proc))
-           (if (not navi2ch-oyster-session-id)
-               (message "●ID取得 ERROR")
-             (message "●ID取得 ID= %s" navi2ch-oyster-session-id)
-             (and (string-match "ERROR(.*)" navi2ch-oyster-session-id)
-                  (message "●ID取得ERROR ID= %s" navi2ch-oyster-session-id)
-           (setq navi2ch-oyster-session-id nil))))
-          ((string= status "400")
-           (message "●ID取得ERROR サーバ不調 %s" status))
-          )
-    (kill-buffer buf))))
+                              "&PW=" navi2ch-oyster-password)))
+        (process-send-string proc
+                             (concat
+                              (concat "POST " navi2ch-oyster-cgi " HTTP/1.1\n")
+                              (concat "Host: " navi2ch-oyster-server "\n")
+                              "Accept: */*\n"
+                              (concat "Referer: https://" navi2ch-oyster-server "/\n")
+                              "User-Agent: DOLIB/1.00\n"
+                              "X-2ch-UA: "
+                              (format "Navigator for 2ch %s" navi2ch-version) "\n"
+                              "Content-Length: "
+                              (number-to-string (length contents)) "\n"
+                              "Connection: close\n"
+                              "\n"
+                              contents "\n")))
+      (setq status (navi2ch-oyster-get-status-from-proc proc))
+      (cond
+       ((string= status "200")
+        (setq navi2ch-oyster-session-id (navi2ch-oyster-get-session-id-from-proc proc))
+        (when (or (not navi2ch-oyster-session-id)
+                  (string-match "ERROR:.+" navi2ch-oyster-session-id))
+            (error "●ID取得ERROR おそらく期限切れ")
+            (setq navi2ch-oyster-session-id nil))
+        (message "●ID取得 ID=%s" navi2ch-oyster-session-id))
+       ((string= status "400")
+        (message "●ID取得ERROR サーバ不調 %s" status)))
+      (kill-buffer buf))))
 
 (defun navi2ch-oyster-logout ()
   "●のログアウト"
