@@ -1,3 +1,8 @@
+2012-06-18  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-login): ID取得エラー表示の簡素化と厳密化
+	インデントの整理
+
 2012-06-13  Naohiro Aota  <naota@elisp.net>
 
 	* navi2ch-thumbnail.el (navi2ch-plist-drop): New function. Drop
