@@ -1,3 +1,7 @@
+2012-06-19  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-oyster.el (navi2ch-oyster-login): bugfix
+
 2012-06-18  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-oyster.el (navi2ch-oyster-login): ID取得エラー表示の簡素化と厳密化
