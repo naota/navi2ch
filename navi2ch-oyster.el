@@ -312,12 +312,12 @@ DIFF が non-nil ならば差分を取得する。
       (cond
        ((string= status "200")
         (setq navi2ch-oyster-session-id (navi2ch-oyster-get-session-id-from-proc proc))
-        (when (or (not navi2ch-oyster-session-id)
-                  (string-match "ERROR:.+" navi2ch-oyster-session-id))
-            (error "●ID取得ERROR おそらく期限切れ")
-            (setq navi2ch-oyster-session-id nil))
-        (message "●ID取得 ID=%s" navi2ch-oyster-session-id))
-       ((string= status "400")
+        (if (and navi2ch-oyster-session-id
+                 (not (string-match "ERROR:.+" navi2ch-oyster-session-id)))
+            (message "●ID取得 ID=%s" navi2ch-oyster-session-id)
+          (setq navi2ch-oyster-session-id nil)
+          (error "●ID取得ERROR おそらく期限切れ")))
+       ((String= status "400")
         (message "●ID取得ERROR サーバ不調 %s" status)))
       (kill-buffer buf))))
 
