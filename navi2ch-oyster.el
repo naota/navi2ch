@@ -317,7 +317,7 @@ DIFF が non-nil ならば差分を取得する。
             (message "●ID取得 ID=%s" navi2ch-oyster-session-id)
           (setq navi2ch-oyster-session-id nil)
           (error "●ID取得ERROR おそらく期限切れ")))
-       ((String= status "400")
+       ((string= status "400")
         (message "●ID取得ERROR サーバ不調 %s" status)))
       (kill-buffer buf))))
 
