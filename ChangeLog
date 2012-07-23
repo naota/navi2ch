@@ -8,6 +8,10 @@
 
 2012-06-18  MIZUNUMA Yuto  <mizmiz@sf.net>
 
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-image-jpeg-identify):
+	SOF2で画像サイズ取得
+	(navi2ch-thumbnail-image-identify): filereadサイズで無限ループに入っていた
+
 	* navi2ch-oyster.el (navi2ch-oyster-login): ID取得エラー表示の簡素化と厳密化
 	インデントの整理
 
