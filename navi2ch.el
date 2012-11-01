@@ -380,7 +380,7 @@ DISPLAY が `article' のときは article を表示する用に分割する。
 	   (select-window board-win)
 	   (when (and (eq display 'article)
 		      navi2ch-bm-stay-board-window)
-	     (delete-other-windows)
+	     (delete-other-windows-vertically)
 	     (split-window-vertically navi2ch-board-window-height)
 	     (other-window 1)))
           (list-win
