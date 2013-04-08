@@ -419,7 +419,8 @@ nil の場合はデフォルトで有効になる。
 
 (defun navi2ch-mona-setup ()
   "*モナーフォントを使うためのフックを追加する。"
-  (when (and (or (eq window-system 'x) (eq window-system 'w32))
+  (when (and (or (eq window-system 'x) (eq window-system 'w32)
+                 (eq window-system 'mac))
 	     (or navi2ch-on-emacs21 navi2ch-on-xemacs))
     (navi2ch-mona-create-face-from-family-name 
      (if navi2ch-mona-use-ipa-mona
