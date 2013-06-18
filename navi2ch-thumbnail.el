@@ -209,9 +209,13 @@
                "GET"))
         cont)
     (setq cont (navi2ch-net-get-content proc))
-    (if (string-match "\\(http://\\(s3\.amazonaws\.com/twitpic\\|[a-z][0-9]-[0-9]+.twitpicproxy.com\\)/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
-        (setq twitpic-img (match-string 1 cont))
-      (error "can't get image url from %s" url))))
+    (cond ((string-match "\\(http://\\(s3\.amazonaws\.com/twitpic\\|[a-z][0-9]-[0-9]+.twitpicproxy.com\\)/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
+           (setq twitpic-img (match-string 1 cont)))
+          ((string-match "href=\"\\(http://twitpic.com/show/thumb/.+\\)\"" cont)
+           (setq twitpic-img (match-string 1 cont)))
+          (t
+           (error "can't get image url from %s" url)))
+          (message "twitpic:%s" twitpic-img)))
 
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
