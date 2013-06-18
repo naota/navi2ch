@@ -217,9 +217,6 @@
            (error "can't get image url from %s" url)))
           (message "twitpic:%s" twitpic-img)))
 
-;http://twitpic.com/bd4txl
-;"http://twitpic.com/show/thumb/bd4txl.jpg"
-
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
 
