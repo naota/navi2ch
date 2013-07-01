@@ -1,3 +1,8 @@
+2013-06-19  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic): twitter仕様変更対応
+	コメントアウト削除
+
 2012-06-22  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-oyster.el (navi2ch-oyster-login): String -> string
