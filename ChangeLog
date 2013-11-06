@@ -1,3 +1,7 @@
+2013-08-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* doc/navi2ch.texi (Getting): スレッド検索をfind.2ch.netに変更
+
 2013-06-19  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic): twitter仕様変更対応
