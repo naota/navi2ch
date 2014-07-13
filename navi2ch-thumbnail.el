@@ -126,12 +126,9 @@
 
 (defvar navi2ch-thumbnail-url-coversion-table
       '(
-        ;;imepitaはサービス停止
-        ("h?ttp://w*\\.?imepita\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-url-replace "http://imepita.jp/image/")
         ;; http://imepic.jp/20111231/11111 ->
         ;; http://img1.imepic.jp/image/20111231/11111.jpg?550e3768ff8455488ae8d5582f55db6d
         ("h?ttp://imepic\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-imepic "http://img1.imepic.jp/image/")
-        ("h?ttp://[a-z].pic.to/.+" ".jpg" navi2ch-thumbnail-picto nil)
         ("h?t?tps?://twitter.com/.+/status/[0-9]+/photo/1" ".jpg" navi2ch-thumbnail-twitpic nil)
   )
       "リスト構造
@@ -146,7 +143,7 @@
   "forceはスレ再描画ではnil"
   (let ((rtn nil) (real-image-url url) (target-list nil) (cache-url url))
     
-    ;;imepita等のURLが画像っぽくない場合の処理
+    ;;imepic等のURLが画像っぽくない場合の処理
     (dolist (l navi2ch-thumbnail-url-coversion-table)
       (setq url-regex (nth 0 l))
       (setq ext (nth 1 l))
@@ -175,19 +172,6 @@
   (string-match regex-src-url url)
   (message "%s" regex-dist-url)
   (concat regex-dist-url (match-string 1 url)))
-
-(defun navi2ch-thumbnail-picto (url &optional dummy0 dummy1)
-  "pic.toの場合の画像を取得"
-  (let ((proc (navi2ch-net-send-request
-               url
-               "GET"))
-        cont)
-    (setq cont (navi2ch-net-get-content proc))
-    (if (string-match "\n<hr><center><img src='.+\\(-.+-.+\.jpg\\)' alt=" cont)
-        (setq img-url (concat url (match-string 1 cont)))
-      (error "can't get image url from %s" url)))
-  (message "picto:%s" img-url)
-  img-url)
 
 (defun navi2ch-thumbnail-imepic (url regex-src-url regex-dist-url)
   "imepicの場合の画像を取得"
