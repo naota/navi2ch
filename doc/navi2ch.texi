@@ -192,7 +192,7 @@ Summary Page}も要チェック。
 @c (全部 sourceforge に移した方がいいかな。)
 
 ２ちゃんねる UNIX 板、@uref{Navi2ch スレ,
-http://h.u.la/dance/?P=1&kenken=Navi2ch}も参照のこと。
+http://find.2ch.net/?STR=navi2ch}も参照のこと。
 
 @node Compile
 @section コンパイル方法

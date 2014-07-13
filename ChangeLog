@@ -1,4 +1,4 @@
-2013-07-13  MIZUNUMA Yuto  <mizmiz@sf.net>
+2014-07-13  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic):
 	twitter画像の仕様変更対応 amazonaws.com -> pbs.twimg.com
@@ -6,6 +6,15 @@
 
 	* navi2ch-net.el (navi2ch-net-send-request): https対応
 	標準ライブラリのtls.el(gnu-tls)を使ってport443アクセスする
+
+2013-08-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* doc/navi2ch.texi (Getting): スレッド検索をfind.2ch.netに変更
+
+2013-06-19  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic): twitter仕様変更対応
+	コメントアウト削除
 
 2012-06-22  MIZUNUMA Yuto  <mizmiz@sf.net>
 
