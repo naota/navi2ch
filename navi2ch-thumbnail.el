@@ -132,7 +132,7 @@
         ;; http://img1.imepic.jp/image/20111231/11111.jpg?550e3768ff8455488ae8d5582f55db6d
         ("h?ttp://imepic\\.jp/\\([0-9/]+\\)" ".jpg" navi2ch-thumbnail-imepic "http://img1.imepic.jp/image/")
         ("h?ttp://[a-z].pic.to/.+" ".jpg" navi2ch-thumbnail-picto nil)
-        ("h?t?tp://twitpic.com/[0-9a-z]+" ".jpg" navi2ch-thumbnail-twitpic nil)
+        ("h?t?tps?://twitter.com/.+/status/[0-9]+/photo/1" ".jpg" navi2ch-thumbnail-twitpic nil)
   )
       "リスト構造
   0:対象URL正規表現
@@ -209,13 +209,9 @@
                "GET"))
         cont)
     (setq cont (navi2ch-net-get-content proc))
-    (cond ((string-match "\\(http://\\(s3\.amazonaws\.com/twitpic\\|[a-z][0-9]-[0-9]+.twitpicproxy.com\\)/photos/\\(large\\|full\\)/.+\\)\" alt" cont)
-           (setq twitpic-img (match-string 1 cont)))
-          ((string-match "href=\"\\(http://twitpic.com/show/thumb/.+\\)\"" cont)
-           (setq twitpic-img (match-string 1 cont)))
-          (t
-           (error "can't get image url from %s" url)))
-          (message "twitpic:%s" twitpic-img)))
+    (if (string-match "src=\"\\(http://pbs\.twimg\.com/media/.+\.jpg\\)\"" cont)
+        (setq twitpic-img (match-string 1 cont))
+      (error "can't get image url from %s" url))))
 
 ;;articleから画像らしきリンクを探すregexを1行にまとめる
 (defvar navi2ch-thumbnail-image-url-regex nil)
