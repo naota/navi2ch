@@ -257,7 +257,7 @@ nil なら常に再接続する。")
 	(setq proc nil)
 	(unless (navi2ch-net-down-p host)
 	  (condition-case nil
-              (if (string-match "^https" url)
+              (if (string-match "^https://" url)
                   (setq proc (funcall 'open-tls-stream
                                       navi2ch-net-connection-name buf host "443"))
                 (setq proc (funcall navi2ch-open-network-stream-function

@@ -1,3 +1,7 @@
+2014-07-16  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-net.el (navi2ch-net-send-request): https -> https://
+
 2014-07-14  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-url-coversion-table):
