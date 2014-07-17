@@ -1,3 +1,22 @@
+2014-07-16  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-net.el (navi2ch-net-send-request): https -> https://
+
+2014-07-14  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-url-coversion-table):
+	imepita.jpサービス終了でコード削除
+	pic.toサービス終了でコード削除
+
+2014-07-13  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic):
+	twitter画像の仕様変更対応 amazonaws.com -> pbs.twimg.com
+	httpsでのアクセスが必須になったので以下対応
+
+	* navi2ch-net.el (navi2ch-net-send-request): https対応
+	標準ライブラリのtls.el(gnu-tls)を使ってport443アクセスする
+
 2013-08-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi (Getting): スレッド検索をfind.2ch.netに変更
