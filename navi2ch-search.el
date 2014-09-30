@@ -330,7 +330,16 @@
 (defvar navi2ch-search-web-current-end 0)
 (defvar navi2ch-search-web-total-hit 0
   "検索総ヒット数")
-(defvar navi2ch-search-web-search-method 'navi2ch-search-find-2ch-method)
+
+;; find.2ch.net is dead
+;(defvar navi2ch-search-web-search-method 'navi2ch-search-find-2ch-method)
+
+;; hula search is case sensitive
+;(defvar navi2ch-search-web-search-method 'navi2ch-search-hula-method)
+
+;; dig will be a standard?
+(defvar navi2ch-search-web-search-method 'navi2ch-search-dig-method)
+
 (defsubst navi2ch-search-web-method ()
   (if (symbolp navi2ch-search-web-search-method)
       (symbol-value navi2ch-search-web-search-method)
@@ -407,20 +416,20 @@ find.2ch.net の仕様上、最大は50件")
   "find.2ch.net に文字列 `query' でリクエスト。
 `offset' は「次の10件」とか表示させたいときに使う。"
   (setq offset
-	(if offset
-	    (+ (or navi2ch-search-find-2ch-last-search-num 0) offset)
-	  0))
+        (if offset
+            (+ (or navi2ch-search-find-2ch-last-search-num 0) offset)
+          0))
   (setq navi2ch-search-find-2ch-last-search-num offset)
   (let* ((query (navi2ch-url-encode-string query 
-					   navi2ch-search-find-2ch-coding t))
-	 ;; 意味も分からず使ってるパラメータ多し。内部仕様が分かり次第改善予定
-	 (url (format 
-	       "http://find.2ch.net/?STR=%s&SCEND=A&SORT=MODIFIED&COUNT=%s&TYPE=TITLE&BBS=ALL&OFFSET=%s" 
-	       query navi2ch-search-find-2ch-search-num offset))
-	 (proc (navi2ch-net-download-file url))
-	 (cont (decode-coding-string (navi2ch-net-get-content proc) 
-				     navi2ch-search-find-2ch-coding))
-	 subject-list)
+                                           navi2ch-search-find-2ch-coding t))
+         ;; 意味も分からず使ってるパラメータ多し。内部仕様が分かり次第改善予定
+         (url (format
+               "http://find.2ch.net/?STR=%s&SCEND=A&SORT=MODIFIED&COUNT=%s&TYPE=TITLE&BBS=ALL&OFFSET=%s" 
+               query navi2ch-search-find-2ch-search-num offset))
+         (proc (navi2ch-net-download-file url))
+         (cont (decode-coding-string (navi2ch-net-get-content proc)
+                                     navi2ch-search-find-2ch-coding))
+         subject-list)
     (with-temp-buffer
       (insert cont)
       (goto-char (point-min))
@@ -455,6 +464,58 @@ find.2ch.net の仕様上、最大は50件")
 (defun navi2ch-search-find-2ch-previous ()
   (- (min navi2ch-search-find-2ch-search-num 50)))
 
+;;; navi2ch dig.2ch.net
+(defvar navi2ch-search-dig-method
+    '(navi2ch-search-dig-subject-list 1 -1))
+(defvar navi2ch-search-dig-current-page nil)
+(defvar navi2ch-search-dig-coding 'utf-8)
+(defconst navi2ch-search-dig-thread-regexp
+  "<br><a href=\"\\(http://.+.2ch.net/test/read.cgi/.+/[0-9]+/\\)l5\">\\(.+\\) (\\([0-9]+\\))</a>")
+
+(defun navi2ch-search-dig-subject-list (query arg)
+  "dig.2ch.net に文字列 `query' でリクエスト。"
+;;; sample url http://dig.2ch.net/?keywords=navi2ch&AndOr=0&maxResult=50&atLeast=1&Sort=5&Link=1&Bbs=all&924=1
+  (setq navi2ch-search-dig-current-page
+        (if arg
+            (+ navi2ch-search-dig-current-page
+               (if (< arg 0) -1 1))
+          1))
+  (let* ((query (navi2ch-url-encode-string query
+                                           navi2ch-search-dig-coding t))
+         (url (format
+               "http://dig.2ch.net/?P=%d&keywords=%s&maxResult=50&atLeast=1&Sort=5&Link=1&Bbs=all&924=1"
+               navi2ch-search-dig-current-page query))
+         (proc (navi2ch-net-download-file url))
+         (cont (decode-coding-string (navi2ch-net-get-content proc)
+                                     navi2ch-search-dig-coding))
+         subject-list)
+    (with-temp-buffer
+      (insert cont)
+      (goto-char (point-min))
+      (if (re-search-forward "\\([0-9,]+\\)件見つかりました"
+			     nil t)
+	  (progn
+	    (setq navi2ch-search-web-total-hit
+		  (string-to-number (navi2ch-replace-string "," ""
+							    (match-string 1))))
+	    (while (re-search-forward
+		    navi2ch-search-dig-thread-regexp
+		    nil t)
+	      (let ((url (match-string 1))
+		    (title (navi2ch-replace-html-tag (match-string 2)))
+		    (num  (match-string 3)))
+		(push (navi2ch-search-web-make-list url title num)
+		      subject-list))))
+	(setq navi2ch-search-web-total-hit 0)
+	(message "No match")))
+    (setq navi2ch-search-web-current-start
+	  (min (1+ (* (1- navi2ch-search-dig-current-page) 50))
+	       navi2ch-search-web-total-hit)
+	  navi2ch-search-web-current-end
+	  (min (* navi2ch-search-dig-current-page 50)
+	       navi2ch-search-web-total-hit))
+    (nreverse subject-list)))
+
 ;;; navi2ch h.ula.cc
 (defvar navi2ch-search-hula-method
     '(navi2ch-search-hula-subject-list 1 -1))
@@ -471,26 +532,26 @@ find.2ch.net の仕様上、最大は50件")
 	       (if (< arg 0) -1 1))
 	  1))
   (let* ((query (navi2ch-url-encode-string query 
-					   navi2ch-search-hula-coding t))
-	 (url (format 
-	       "http://h.ula.cc/dance/?P=%d&kenken=%s"
-	       navi2ch-search-hula-current-page query))
-	 (proc (navi2ch-net-download-file url))
-	 (cont (decode-coding-string (navi2ch-net-get-content proc) 
-				     navi2ch-search-hula-coding))
-	 subject-list)
+                                           navi2ch-search-hula-coding t))
+         (url (format
+               "http://h.ula.cc/dance/?P=%d&kenken=%s"
+               navi2ch-search-hula-current-page query))
+         (proc (navi2ch-net-download-file url))
+         (cont (decode-coding-string (navi2ch-net-get-content proc) 
+                                     navi2ch-search-hula-coding))
+         subject-list)
     (with-temp-buffer
       (insert cont)
       (goto-char (point-min))
       (if (re-search-forward "<font color=red face=\"Arial\"><b>\\([0-9,]+\\)</b></font>"
-			     nil t)
+                             nil t)
 	  (progn
 	    (setq navi2ch-search-web-total-hit
 		  (string-to-number (navi2ch-replace-string "," "" 
 							    (match-string 1))))
 	    (while (re-search-forward
 		    navi2ch-search-hula-thread-regexp
-		    nil t)
+                    nil t)
 	      (let ((url (format "http://%s/test/read.cgi/%s/%s/"
 				 (match-string 1)
 				 (match-string 2)
