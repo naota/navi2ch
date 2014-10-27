@@ -1,3 +1,8 @@
+2014-10-28  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* elisp-comp: load-pathの修正
+	http://peace.2ch.net/test/read.cgi/unix/1405127170/58-60
+
 2013-08-21  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* doc/navi2ch.texi (Getting): スレッド検索をfind.2ch.netに変更
