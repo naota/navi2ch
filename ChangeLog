@@ -1,3 +1,12 @@
+2014-09-30  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-search.el (navi2ch-search-dig-subject-list):
+	スレタイ検索にdig.2ch.netを追加。いちおう本家の開発元なので標準になる予感。
+	navi2ch-search-web-search-methodをdigに。
+	少なくともfind.2ch.netは消滅したっぽいので(数ヶ月動きが無ければコード削除)。
+	hulaは大文字小文字区別なので使いづらいのでデフォルトからは保留。
+	navi2ch-search-union-methodを使うべきかは保留。一カ所からとるのが理想。
+
 2014-07-16  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-net.el (navi2ch-net-send-request): https -> https://
