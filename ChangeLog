@@ -1,3 +1,8 @@
+2014-10-28  NOKUBI Takatsugu  <knok@daionet.gr.jp>
+
+	* elisp-comp: load-pathの修正
+	http://peace.2ch.net/test/read.cgi/unix/1405127170/58-60
+
 2014-07-16  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-net.el (navi2ch-net-send-request): https -> https://
