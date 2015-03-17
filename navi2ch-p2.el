@@ -789,4 +789,4 @@
     (decode-coding-string
      (base64-decode-string text)
      navi2ch-p2-coding-system)))
-
+;;; navi2ch-p2.el ends here
