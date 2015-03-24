@@ -731,3 +731,4 @@
               (list (string-to-number (match-string 2))
                     (string-to-number (match-string 3))
                     (> (string-to-number (match-string 1)) 1))))))))))
+;;; navi2ch-thumbnail.el ends here
