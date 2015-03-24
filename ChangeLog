@@ -1,3 +1,8 @@
+2015-02-20  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* icons/unplugged.xpm: 現行Wanderlustのものに置き換え
+	http://comments.gmane.org/gmane.mail.wanderlust.general.japanese/7328
+
 2014-10-28  NOKUBI Takatsugu  <knok@daionet.gr.jp>
 
 	* elisp-comp: load-pathの修正
