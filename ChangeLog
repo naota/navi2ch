@@ -1,3 +1,10 @@
+2015-03-31  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-imepic):
+	imepicのサーバがimg1->img3に変更したので一桁サーバ全てにマッチ
+	delete comment
+
+
 2015-03-30  MIZUNUMA Yuto  <mizmiz@sf.net>
 
 	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic):
