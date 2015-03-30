@@ -180,10 +180,9 @@
                "GET"))
         cont)
     (setq cont (navi2ch-net-get-content proc))
-    (if (string-match "\\(http://img1\.imepic\.jp/image/[0-9]+/[0-9]+\.jpg\?.+\\)\"" cont)
+    (if (string-match "\\(http://img[0-9]\.imepic\.jp/image/[0-9]+/[0-9]+\.jpg\?.+\\)\"" cont)
         (setq img-url (match-string 1 cont))
       (error "can't get image url from %s" url)))
-;  (message "imepic:%s" img-url)
   img-url)
 
 (defun navi2ch-thumbnail-twitpic (url &optional dummy0 dummy1)
