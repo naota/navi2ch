@@ -1,3 +1,8 @@
+2015-03-30  MIZUNUMA Yuto  <mizmiz@sf.net>
+
+	* navi2ch-thumbnail.el (navi2ch-thumbnail-twitpic):
+	twitter画像はhttpsも使う
+
 2015-03-17  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 
 	* navi2ch-p2.el: 最終行に .el ends here を追加
