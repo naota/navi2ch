@@ -2350,7 +2350,7 @@ NUM が 1 のときは次、-1 のときは前のスレに移動。
 (defun navi2ch-article-copy-title (board article)
   "メニューを表示して、タイトルを得る。"
   (let* ((char (navi2ch-read-char-with-retry
-		"b)oard a)rticle B)oard&url A)rtile&url: "
+		"b)oard a)rticle B)oard&url A)rticle&url: "
 		nil '(?b ?a ?B ?A)))
 	 (title (cond ((eq char ?b)
 		       (cdr (assq 'name board)))
